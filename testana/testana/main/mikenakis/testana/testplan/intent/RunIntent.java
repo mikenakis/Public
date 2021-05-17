@@ -1,0 +1,18 @@
+package mikenakis.testana.testplan.intent;
+
+/**
+ * "Test Class will run" {@link Intent}.
+ *
+ * @author Michael Belivanakis (michael.gr)
+ */
+public abstract class RunIntent extends Intent
+{
+	protected RunIntent()
+	{
+	}
+
+	@Override public final boolean isToRun()
+	{
+		return true;
+	}
+}

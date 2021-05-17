@@ -1,0 +1,26 @@
+version: 2.1
+
+workflows:
+  my-workflow:
+    jobs:
+      - build:
+          context: my-context
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:15.0.1
+    steps:
+      - checkout
+#      - restore_cache:
+#          keys:
+#          - v1-dependencies-{{ checksum "pom.xml" }}
+#          - v1-dependencies-
+#      - run: mvn dependency:go-offline
+#      - save_cache:
+#          paths:
+#            - ~/.m2
+#          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run: mvn -s .circleci/mvn-settings.xml clean | grep -Ev "Download(ing|ed)"
+      - run: mvn -s .circleci/mvn-settings.xml install | grep -Ev "Download(ing|ed)"
+      - run: mvn -s .circleci/mvn-settings.xml deploy -DskipTests -Dmaven.install.skip=true

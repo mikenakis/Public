@@ -1,0 +1,3 @@
+It appears to be necessary to have this empty directory, because
+it appears to be necessary to have a <sourceDirectory>main</sourceDirectory> clause in pom.xml, because
+otherwise IntellijIdea refuses to see the test classes under test/.
