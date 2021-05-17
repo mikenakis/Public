@@ -1,91 +1,18 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>mikenakis</groupId>
+	<parent>
+		<groupId>mikenakis</groupId>
+		<artifactId>public-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 	<artifactId>benchmark</artifactId>
 	<version>1.0-SNAPSHOT</version>
-
-	<url>http://www.github.com/mikenakis/mikenakis-benchmark</url>
-
-	<licenses>
-		<license>
-			<name>No Permission License - All Rights Reserved</name>
-			<url>https://choosealicense.com/no-permission/</url>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<name>Mike Nakis</name>
-			<email>pom.xml@michael.gr</email>
-			<organization>michael.gr</organization>
-			<organizationUrl>http://michael.gr</organizationUrl>
-		</developer>
-	</developers>
-
-	<scm>
-		<url>git://git@github.com:mikenakis/mikenakis-benchmark.git</url>
-		<connection>scm:git:git@github.com:mikenakis/mikenakis-benchmark.git</connection>
-		<developerConnection>scm:git:git@github.com:mikenakis/mikenakis-benchmark.git</developerConnection>
-	</scm>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 
 	<build>
 		<sourceDirectory>main</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
-		<directory>${env.OUT}/${project.groupId}/${project.artifactId}</directory>
-		<resources>
-			<resource>
-				<directory>resources</directory>
-				<includes>
-					<include>*</include>
-				</includes>
-			</resource>
-		</resources>
-
-		<plugins>
-
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>15</source>
-					<target>15</target>
-					<!-- When the packaging is 'jar', IntellijIdea insists on creating a 'target/generated-sources/annotations' directory in our source tree
-					     each time we build. The only way that I have found for preventing this is by explicitly disabling annotation processing with -proc:none -->
-					<compilerArgs>
-						<arg>-parameters</arg>
-						<arg>-Xlint</arg>
-						<arg>-Xlint:-try</arg>
-						<arg>-Xlint:-serial</arg>
-						<arg>-Xlint:-overrides</arg>
-						<arg>-Xlint:-overloads</arg>
-						<arg>-Xlint:-cast</arg>
-						<arg>-proc:none</arg>
-						<arg>-Werror</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-
-		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>repsy-mikenakis-public</id>
-			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>repsy-mikenakis-public</id>
-			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
-		</repository>
-	</distributionManagement>
 
 	<dependencies>
 

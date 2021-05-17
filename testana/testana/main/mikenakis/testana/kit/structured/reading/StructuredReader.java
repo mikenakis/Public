@@ -1,8 +1,9 @@
 package mikenakis.testana.kit.structured.reading;
 
+import mikenakis.kit.functional.Function1;
+import mikenakis.kit.functional.Procedure1;
+
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public interface StructuredReader
 {
@@ -10,19 +11,25 @@ public interface StructuredReader
 
 	Optional<String> readOptionalValue();
 
-	<T> T readObject( Function<ObjectReader,T> objectReaderConsumer );
+	@SuppressWarnings( "overloads" ) <T> T readObject( Function1<T,ObjectReader> objectReaderConsumer );
 
-	<T> T readArray( String elementName, Function<ArrayReader,T> arrayReaderConsumer );
+	@SuppressWarnings( "overloads" ) <T> T readArray( String elementName, Function1<T,ArrayReader> arrayReaderConsumer );
 
-	default void readObject( Consumer<ObjectReader> objectReaderConsumer )
+	@SuppressWarnings( "overloads" ) default void readObject( Procedure1<ObjectReader> objectReaderConsumer )
 	{
-		Object result = readObject( arrayReader -> { objectReaderConsumer.accept( arrayReader ); return null; } );
+		Object result = readObject( arrayReader -> {
+			objectReaderConsumer.invoke( arrayReader );
+			return null;
+		} );
 		assert result == null;
 	}
 
-	default void readArray( String elementName, Consumer<ArrayReader> arrayReaderConsumer )
+	@SuppressWarnings( "overloads" ) default void readArray( String elementName, Procedure1<ArrayReader> arrayReaderConsumer )
 	{
-		Object result = readArray( elementName, arrayReader -> { arrayReaderConsumer.accept( arrayReader ); return null; } );
+		Object result = readArray( elementName, arrayReader -> {
+			arrayReaderConsumer.invoke( arrayReader );
+			return null;
+		} );
 		assert result == null;
 	}
 }

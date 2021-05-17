@@ -15,14 +15,14 @@ import java.util.Locale;
  */
 public class TimeMeasurement
 {
-	public static void run( String message, String formatString, Procedure1<TimeMeasurement> code )
+	@SuppressWarnings( "overloads" ) public static void run( String message, String formatString, Procedure1<TimeMeasurement> code )
 	{
 		TimeMeasurement timeMeasurement = new TimeMeasurement( 1, message, formatString );
 		code.invoke( timeMeasurement );
 		timeMeasurement.end();
 	}
 
-	public static <R> R run( String message, String formatString, Function1<R,TimeMeasurement> code )
+	@SuppressWarnings( "overloads" ) public static <R> R run( String message, String formatString, Function1<R,TimeMeasurement> code )
 	{
 		TimeMeasurement timeMeasurement = new TimeMeasurement( 1, message, formatString );
 		R result = code.invoke( timeMeasurement );

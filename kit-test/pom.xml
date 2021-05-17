@@ -3,111 +3,17 @@
 		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>mikenakis</groupId>
+	<parent>
+		<groupId>mikenakis</groupId>
+		<artifactId>public-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 	<artifactId>kit-test</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
-	<url>http://www.github.com/mikenakis/mikenakis-kit-test</url>
-
-	<licenses>
-		<license>
-			<name>No Permission License - All Rights Reserved</name>
-			<url>https://choosealicense.com/no-permission/</url>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<name>Mike Nakis</name>
-			<email>pom.xml@michael.gr</email>
-			<organization>michael.gr</organization>
-			<organizationUrl>http://michael.gr</organizationUrl>
-		</developer>
-	</developers>
-
-	<scm>
-		<url>git://git@github.com:mikenakis/mikenakis-kit-test.git</url>
-		<connection>scm:git:git@github.com:mikenakis/mikenakis-kit-test</connection>
-		<developerConnection>scm:git:git@github.com:mikenakis/mikenakis-kit-test.git</developerConnection>
-	</scm>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<build>
-
 		<sourceDirectory>main</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
-		<directory>${env.OUT}/${project.groupId}/${project.artifactId}</directory>
-
-		<plugins>
-
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>15</source>
-					<target>15</target>
-					<!-- When the packaging is 'jar', IntellijIdea insists on creating a 'target/generated-sources/annotations' directory in our source tree
-					     each time we build. The only way that I have found for preventing this is by explicitly disabling annotation processing with -proc:none -->
-					<compilerArgs>
-						<arg>-parameters</arg>
-						<arg>-Xlint</arg>
-						<arg>-Xlint:-try</arg>
-						<arg>-Xlint:-serial</arg>
-						<arg>-Xlint:-overrides</arg>
-						<arg>-Xlint:-overloads</arg>
-						<arg>-Xlint:-cast</arg>
-						<arg>-proc:none</arg>
-						<arg>-Werror</arg>
-					</compilerArgs>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
-				<executions>
-					<execution>
-						<id>enforce-property</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireProperty>
-									<property>env.OUT</property>
-									<message>
-Environment variable 'OUT' is missing.
-The 'OUT' environment variable must be specified
-and it must point to the directory where output files will be stored.
-(for example, ~/temp/out)
-									</message>
-								</requireProperty>
-							</rules>
-							<fail>true</fail>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.0</version>
-				<configuration>
-					<includes>
-						<!-- PEARL: the maven-surefire-plugin:
-						    1. unnecessarily complicates things with a useless concept of inclusions and exclusions
-							2. sabotages the developer with default inclusions that pretty much require test class names to contain the word "Test".
-							(That's what you always achieve when you unnecessarily complicate things: you sabotage people.)
-							We correct this problem here by annihilating the plugin's concept of inclusions. -->
-						<include>**/*.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-
-		</plugins>
 	</build>
 
 	<dependencies>
@@ -134,19 +40,5 @@ and it must point to the directory where output files will be stored.
 		</dependency>
 
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>repsy-mikenakis-public</id>
-			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>repsy-mikenakis-public</id>
-			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
-		</repository>
-	</distributionManagement>
 
 </project>

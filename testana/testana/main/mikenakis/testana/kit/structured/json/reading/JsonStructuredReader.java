@@ -1,5 +1,6 @@
 package mikenakis.testana.kit.structured.json.reading;
 
+import mikenakis.kit.functional.Function1;
 import mikenakis.testana.kit.structured.json.JsonEmitter;
 import mikenakis.testana.kit.structured.json.JsonParser;
 import mikenakis.testana.kit.structured.reading.ArrayReader;
@@ -7,7 +8,6 @@ import mikenakis.testana.kit.structured.reading.ObjectReader;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public class JsonStructuredReader implements StructuredReader
 {
@@ -39,26 +39,26 @@ public class JsonStructuredReader implements StructuredReader
 		return Optional.of( jsonParser.skip( JsonParser.TokenType.String ) );
 	}
 
-	@Override public <T> T readObject( Function<ObjectReader,T> objectReaderConsumer )
+	@Override public <T> T readObject( Function1<T,ObjectReader> objectReaderConsumer )
 	{
 		assert !done;
 		jsonParser.skip( JsonParser.TokenType.ObjectBegin );
 		int depth = jsonParser.depth();
-		JsonObjectReader objectReader = new JsonObjectReader( jsonParser );
-		T result = objectReaderConsumer.apply( objectReader );
+		ObjectReader objectReader = new JsonObjectReader( jsonParser );
+		T result = objectReaderConsumer.invoke( objectReader );
 		assert jsonParser.depth() == depth;
 		jsonParser.skip( JsonParser.TokenType.ObjectEnd );
 		done = true;
 		return result;
 	}
 
-	@Override public <T> T readArray( String elementName, Function<ArrayReader,T> arrayReaderConsumer )
+	@Override public <T> T readArray( String elementName, Function1<T,ArrayReader> arrayReaderConsumer )
 	{
 		assert !done;
 		jsonParser.skip( JsonParser.TokenType.ArrayBegin );
 		int depth = jsonParser.depth();
-		JsonArrayReader arrayReader = new JsonArrayReader( jsonParser );
-		T result = arrayReaderConsumer.apply( arrayReader );
+		ArrayReader arrayReader = new JsonArrayReader( jsonParser );
+		T result = arrayReaderConsumer.invoke( arrayReader );
 		assert jsonParser.depth() == depth;
 		jsonParser.skip( JsonParser.TokenType.ArrayEnd );
 		done = true;
