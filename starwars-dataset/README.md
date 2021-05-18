@@ -11,9 +11,9 @@ Created by Arthur Shlain from the Noun Project, used under <a href="https://crea
 When writing general purpose software that deals with the storage, retrieval, and manipulation of data, 
 (say, when writing an ORM,) 
 it is convenient to have a dataset for testing purposes 
-which strikes a good balance between:
-- on one hand, richness and complexity
-- on the other hand, familiarity of the content
+which strikes a good balance between complexity and familiarity.
+- Complexity means that the dataset should be rich, and it should contain all different kinds of relationships, so that all different modes of operation of the software can be tested.
+- Familiarity means that the developer should already know most of the subject matter by heart, so that any errors that may occur can easily be spotted. 
 
 The dataset describing the Star Wars universe does strike such a good balance: it is relatively rich,
 and most of us are intimately familiar with it.  
@@ -54,10 +54,10 @@ but when I last checked (on 2021-05-18)
 I found that swapi.dev has at least a couple of serious issues:
 
 - It has one less film entity, while it should have at least one more.
-- It has lost the contents of the "species" field of several persons. (All these persons appear to be humans; however, the few additional persons do have their "species" set correctly, and they are humans so, go figure.)
+- It has lost the contents of the "species" field of several person entities.
 
 Note that I have not checked everything, so there may be more issues with swapi.dev, but the issues that I found
-were already enough to warrant not using it.
+were already enough to warrant not using it, so I did not check further.
 
 As a result, I am not downloading data from the web API anymore, and instead the text files that were once downloaded from swapi.co now live as resources within the project.
 
