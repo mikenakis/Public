@@ -1415,7 +1415,7 @@ public final class Kit
 	 * @param tryProcedure a {@link Procedure1} which receives the closeable object and does something with it.
 	 * @param <C>          the type of the {@link Closeable}. (Must extend {@link Closeable}.)
 	 */
-	public static <C extends Closeable> void tryWithResources( C closeable, Procedure1<C> tryProcedure )
+	public static <C extends Closeable> void tryWithResources( C closeable, Procedure1<? super C> tryProcedure )
 	{
 		if( areAssertionsEnabled() )
 		{
@@ -1547,7 +1547,7 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWithResources( ThrowingFunction0<C,E> closeableFactory, //
+	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWithResources( ThrowingFunction0<? super C,E> closeableFactory, //
 		ThrowingProcedure1<? super C,E> tryProcedure )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
