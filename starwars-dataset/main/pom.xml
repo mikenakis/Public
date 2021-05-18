@@ -1,0 +1,32 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>swapi</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<parent>
+		<groupId>mikenakis</groupId>
+		<artifactId>starwars-dataset-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mikenakis</groupId>
+			<artifactId>kit</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

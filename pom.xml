@@ -41,6 +41,7 @@
 		<module>kit-test</module>
 		<module>rumination</module>
 		<module>slf4j-to-kit</module>
+		<module>starwars-dataset</module>
 		<module>testana</module>
 	</modules>
 
