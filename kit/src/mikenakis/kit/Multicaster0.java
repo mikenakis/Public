@@ -10,12 +10,12 @@ public class Multicaster0
 	{
 		@Override public void add( Procedure0 procedure )
 		{
-			procedures = Kit.array.add( procedures, procedure, Procedure0[]::new, equalityComparator() );
+			procedures = Kit.array.add( procedures, procedure, equalityComparator() );
 		}
 
 		@Override public void remove( Procedure0 procedure )
 		{
-			procedures = Kit.array.remove( procedures, procedure, Procedure0[]::new, equalityComparator() );
+			procedures = Kit.array.remove( procedures, procedure, equalityComparator() );
 		}
 
 		@Override public boolean contains( Procedure0 procedure )

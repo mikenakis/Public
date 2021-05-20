@@ -18,6 +18,7 @@ import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Array;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,6 +31,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -1849,11 +1851,6 @@ public final class Kit
 
 	public static final class array
 	{
-		public interface ArrayFactory<T>
-		{
-			T[] newArray( int length );
-		}
-
 		/**
 		 * Checks whether two arrays are deeply equal.
 		 *
@@ -1899,34 +1896,34 @@ public final class Kit
 		/**
 		 * Creates a new array, from a given array plus an element appended at the end.  The element must not already exist.
 		 */
-		public static <T> T[] add( T[] array, T element, ArrayFactory<T> arrayFactory )
+		public static <T> T[] add( T[] array, T element )
 		{
-			return add( array, element, arrayFactory, Objects::equals );
+			return add( array, element, Objects::equals );
 		}
 
 		/**
 		 * Creates a new array, from a given array plus an element appended at the end, using a given {@link EqualityComparator}. The element must not already exist.
 		 */
-		public static <T> T[] add( T[] array, T element, ArrayFactory<T> arrayFactory, EqualityComparator<T> comparator )
+		public static <T> T[] add( T[] array, T element, EqualityComparator<T> comparator )
 		{
-			return insertAt( array, array.length, element, arrayFactory, comparator );
+			return insertAt( array, array.length, element, comparator );
 		}
 
 		/**
 		 * Creates a new array, from a given array plus an element inserted at a given index. The element must not already exist.
 		 */
-		public static <T> T[] insertAt( T[] array, int index, T element, ArrayFactory<T> arrayFactory )
+		public static <T> T[] insertAt( T[] array, int index, T element )
 		{
-			return insertAt( array, index, element, arrayFactory, Objects::equals );
+			return insertAt( array, index, element, Objects::equals );
 		}
 
 		/**
 		 * Creates a new array, from a given array plus an element inserted at a given index, using a given {@link EqualityComparator}. The element must not already exist.
 		 */
-		public static <T> T[] insertAt( T[] array, int index, T element, ArrayFactory<T> arrayFactory, EqualityComparator<T> comparator )
+		public static <T> T[] insertAt( T[] array, int index, T element, EqualityComparator<T> comparator )
 		{
 			assert !contains( array, element, comparator );
-			T[] newArray = arrayFactory.newArray( array.length + 1 );
+			T[] newArray = newArrayLike( array, array.length + 1 );
 			if( index > 0 )
 				System.arraycopy( array, 0, newArray, 0, index );
 			newArray[index] = element;
@@ -1938,27 +1935,27 @@ public final class Kit
 		/**
 		 * Creates a new array, from a given array minus a given element. The element must exist.
 		 */
-		public static <T> T[] remove( T[] array, T element, ArrayFactory<T> arrayFactory )
+		public static <T> T[] remove( T[] array, T element )
 		{
-			return remove( array, element, arrayFactory, Objects::equals );
+			return remove( array, element, Objects::equals );
 		}
 
 		/**
 		 * Creates a new array, from a given array minus a given element, using a given {@link EqualityComparator}. The element must exist.
 		 */
-		public static <T> T[] remove( T[] array, T element, ArrayFactory<T> arrayFactory, EqualityComparator<T> comparator )
+		public static <T> T[] remove( T[] array, T element, EqualityComparator<T> comparator )
 		{
 			int index = indexOf( array, element, comparator );
-			return removeAt( array, index, arrayFactory );
+			return removeAt( array, index );
 		}
 
 		/**
 		 * Creates a new array, from a given array minus the element at a given index.
 		 */
-		public static <T> T[] removeAt( T[] array, int index, ArrayFactory<T> arrayFactory )
+		public static <T> T[] removeAt( T[] array, int index )
 		{
 			assert 0 <= index && index < array.length;
-			T[] newArray = arrayFactory.newArray( array.length - 1 );
+			T[] newArray = newArrayLike( array, array.length - 1 );
 			if( index > 0 )
 				System.arraycopy( array, 0, newArray, 0, index );
 			if( index < newArray.length )
@@ -1980,6 +1977,17 @@ public final class Kit
 		public static <T> boolean contains( T[] array, T element, EqualityComparator<T> comparator )
 		{
 			return indexOf( array, element, comparator ) != -1;
+		}
+
+		public static <T> T[] clone( T[] source )
+		{
+			return Arrays.copyOf( source, source.length );
+		}
+
+		private static <T> T[] newArrayLike( T[] array, int length )
+		{
+			@SuppressWarnings( "unchecked" ) T[] result = (T[])Array.newInstance( array.getClass().getComponentType(), length );
+			return result;
 		}
 	}
 
