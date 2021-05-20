@@ -15,11 +15,11 @@ which strikes a good balance between complexity and familiarity.
 - Complexity means that the dataset should be rich, and it should contain all different kinds of relationships, so that all different modes of operation of the software can be tested.
 - Familiarity means that the developer should already know most of the subject matter by heart, so that any errors that may occur can easily be spotted. 
 
-The dataset describing the Star Wars universe does strike such a good balance: it is relatively rich,
-and most of us are intimately familiar with it.  
+The Star Wars universe dataset does strike such a good balance: 
+it is relatively rich, and most of us are intimately familiar with it.  
 
 (Of course, it is a cultural thing, as well as a personal preference thing, 
-so there may inevitably be people out there who are not familiar at all with the Star Wars universe, 
+so there will inevitably be people out there who are not familiar at all with the Star Wars universe, 
 and I do not think the slightest bit less of them, 
 I am actually quite close to being personally fed-up with Star Wars, 
 but the truth remains that most people know a big part of it by heart.)

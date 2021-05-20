@@ -2,11 +2,11 @@ package mikenakis.kit;
 
 import mikenakis.kit.functional.Procedure0;
 
-public class Multicaster
+public class Multicaster0
 {
 	private final ThreadGuard threadGuard = ThreadGuard.create();
 	private Procedure0[] procedures = new Procedure0[0];
-	public final Multicast multicast = new Multicast.Defaults()
+	public final Multicast0 multicast = new Multicast0.Defaults()
 	{
 		@Override public void add( Procedure0 procedure )
 		{
@@ -29,7 +29,7 @@ public class Multicaster
 		return EqualityComparator.byReference();
 	}
 
-	public Multicaster()
+	public Multicaster0()
 	{
 	}
 

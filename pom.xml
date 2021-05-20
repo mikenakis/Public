@@ -69,10 +69,6 @@
 						<!-- The "-parameters" option "Generates metadata for reflection on method parameters." That's good, we want this. -->
 						<arg>-parameters</arg>
 
-						<!-- The "-g" option "Generates all debugging information, including local variables."
-						     I am giving this a try to see if it makes any difference in anything. -->
-						<arg>-g</arg>
-
 						<!-- The "-Xlint" option enables all recommended warnings. We will then suppress some that we have no use for. -->
 						<arg>-Xlint</arg>
 
