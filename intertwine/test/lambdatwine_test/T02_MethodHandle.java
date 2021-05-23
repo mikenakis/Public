@@ -9,10 +9,8 @@ public final class T02_MethodHandle extends Client
 	{
 	}
 
-	private final LambdatwineFactory lambdatwineFactory = new MethodHandleLambdatwineFactory();
-
 	@Override protected LambdatwineFactory getLambdatwineFactory()
 	{
-		return lambdatwineFactory;
+		return MethodHandleLambdatwineFactory.instance;
 	}
 }

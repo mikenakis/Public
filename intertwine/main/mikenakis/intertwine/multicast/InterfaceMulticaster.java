@@ -20,8 +20,8 @@ public class InterfaceMulticaster<T>
 	{
 		@Override public void add( T observer )
 		{
-			AnyCall<T> anyLambda = intertwine.newUntwiner( observer );
-			Kit.map.add( observers, observer, anyLambda );
+			AnyCall<T> anyCall = intertwine.newUntwiner( observer );
+			Kit.map.add( observers, observer, anyCall );
 		}
 
 		@Override public void remove( T observer )
@@ -38,9 +38,9 @@ public class InterfaceMulticaster<T>
 	{
 		@Override public Object anyCall( Intertwine.Key<T> key, Object[] arguments )
 		{
-			for( AnyCall<T> anyLambda : observers.values() )
+			for( AnyCall<T> anyCall : observers.values().stream().toList() )
 			{
-				Object result = anyLambda.anyCall( key, arguments );
+				Object result = anyCall.anyCall( key, arguments );
 				assert result == null;
 			}
 			return null;

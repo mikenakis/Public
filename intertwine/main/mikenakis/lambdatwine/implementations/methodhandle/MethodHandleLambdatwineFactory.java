@@ -10,7 +10,9 @@ import mikenakis.lambdatwine.LambdatwineFactory;
  */
 public class MethodHandleLambdatwineFactory implements LambdatwineFactory
 {
-	public MethodHandleLambdatwineFactory()
+	public static final LambdatwineFactory instance = new MethodHandleLambdatwineFactory();
+
+	private MethodHandleLambdatwineFactory()
 	{
 	}
 

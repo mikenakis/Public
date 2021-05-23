@@ -21,7 +21,7 @@ public class ThreadGuard
 	 */
 	public boolean inThreadAssertion()
 	{
-		assert Thread.currentThread() == thread;
+		assert Thread.currentThread().equals( thread ) : Thread.currentThread().getName() + " (" + Integer.toHexString( System.identityHashCode( Thread.currentThread() ) ) + ") " + thread.getName() + " (" + Integer.toHexString( System.identityHashCode( thread ) ) + ")";
 		return true;
 	}
 

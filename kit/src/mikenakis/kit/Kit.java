@@ -1,6 +1,8 @@
 package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import mikenakis.kit.functional.BooleanFunction1;
+import mikenakis.kit.functional.BooleanFunction1Double;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure0;
@@ -1979,15 +1981,52 @@ public final class Kit
 			return indexOf( array, element, comparator ) != -1;
 		}
 
-		public static <T> T[] clone( T[] source )
+		public static <T> T[] clone( T[] array )
 		{
-			return Arrays.copyOf( source, source.length );
+			return Arrays.copyOf( array, array.length );
 		}
 
 		private static <T> T[] newArrayLike( T[] array, int length )
 		{
 			@SuppressWarnings( "unchecked" ) T[] result = (T[])Array.newInstance( array.getClass().getComponentType(), length );
 			return result;
+		}
+
+		public static double[] clone( double[] array )
+		{
+			return Arrays.copyOf( array, array.length );
+		}
+
+		public static <T> boolean trueForAll( T[] array, BooleanFunction1<T> predicate )
+		{
+			for( T element : array )
+				if( !predicate.invoke( element ) )
+					return false;
+			return true;
+		}
+
+		public static <T> boolean trueForAny( T[] array, BooleanFunction1<T> predicate )
+		{
+			for( T element : array )
+				if( predicate.invoke( element ) )
+					return true;
+			return false;
+		}
+
+		public static boolean trueForAll( double[] array, BooleanFunction1Double predicate )
+		{
+			for( double element : array )
+				if( !predicate.invoke( element ) )
+					return false;
+			return true;
+		}
+
+		public static boolean trueForAny( double[] array, BooleanFunction1Double predicate )
+		{
+			for( double element : array )
+				if( predicate.invoke( element ) )
+					return true;
+			return false;
 		}
 	}
 

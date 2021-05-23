@@ -39,7 +39,10 @@ public class UncheckedException extends RuntimeException
 	{
 		//NOTE: we are not adding the message of the base class because we have not set a value to it, so super.getMessage() would return the message of the
 		// cause exception, which is useless, since there will be a "caused by" message anyway.
-		return Arrays.stream( getClass().getFields() ).filter( field -> UncheckedException.class.isAssignableFrom( field.getDeclaringClass() ) ).map( field -> field.getName() + "=" + fieldValueToString( field ) ).collect( Collectors.joining( "; " ) );
+		return Arrays.stream( getClass().getFields() ) //
+			.filter( field -> UncheckedException.class.isAssignableFrom( field.getDeclaringClass() ) ) //
+			.map( field -> field.getName() + "=" + fieldValueToString( field ) ) //
+			.collect( Collectors.joining( "; " ) );
 	}
 
 	private String fieldValueToString( Field field )

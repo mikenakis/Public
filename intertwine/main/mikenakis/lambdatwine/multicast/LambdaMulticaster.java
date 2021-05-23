@@ -38,7 +38,7 @@ public class LambdaMulticaster<T>
 	{
 		@Override public Object anyLambda( Object[] arguments )
 		{
-			for( AnyLambda<T> anyLambda : observers.values() )
+			for( AnyLambda<T> anyLambda : observers.values().stream().toList() )
 			{
 				Object result = anyLambda.anyLambda( arguments );
 				assert result == null;

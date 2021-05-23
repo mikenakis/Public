@@ -155,7 +155,7 @@ public final class P1IntertwineBenchmark
 	{
 		MethodHandleLambdatwineBenchmarkable()
 		{
-			super( new MethodHandleLambdatwineFactory() );
+			super( MethodHandleLambdatwineFactory.instance );
 		}
 	}
 
