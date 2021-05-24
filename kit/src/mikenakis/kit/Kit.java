@@ -12,6 +12,7 @@ import mikenakis.kit.functional.ThrowingFunction1;
 import mikenakis.kit.functional.ThrowingProcedure0;
 import mikenakis.kit.functional.ThrowingProcedure1;
 import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.logging.Log;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -1095,6 +1096,18 @@ public final class Kit
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debugging helpers (try-catch, try-finally, etc.)
+
+	public static void trySwallow( Procedure0 procedure0 )
+	{
+		try
+		{
+			procedure0.invoke();
+		}
+		catch( Throwable throwable )
+		{
+			Log.error( throwable );
+		}
+	}
 
 	/**
 	 * <p>Performs a debugger-friendly {@code try-catch} which returns a result.</p>

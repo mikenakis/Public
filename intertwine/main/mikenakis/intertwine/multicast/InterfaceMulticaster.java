@@ -58,4 +58,9 @@ public class InterfaceMulticaster<T>
 		assert threadGuard.inThreadAssertion();
 		return entryPoint;
 	}
+
+	public boolean isEmpty()
+	{
+		return observers.isEmpty();
+	}
 }
