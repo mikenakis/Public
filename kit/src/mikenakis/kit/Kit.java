@@ -36,14 +36,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -296,28 +300,29 @@ public final class Kit
 		 */
 		public static void append( StringBuilder stringBuilder, Object object )
 		{
-			if( object == null )
-			{
-				stringBuilder.append( "null" );
-				return;
-			}
-
-			/* if the object is a string, append its value surrounded in quotes and escaped. */
-			if( object.getClass() == String.class )
-			{
-				String s = (String)object;
-				appendEscapedForJava( stringBuilder, s );
-				return;
-			}
-
-			/* otherwise, invoke toString() on the object. */
-			String s = object.toString();
+			String s = string.of( object );
 			stringBuilder.append( s );
 		}
 	}
 
 	public static class string
 	{
+		public static String of( Object object )
+		{
+			if( object == null )
+				return "null";
+			if( object instanceof String s )
+				return escapeForJava( s );
+			return object.toString();
+		}
+
+		public static String of( String s )
+		{
+			if( s == null )
+				return "null";
+			return escapeForJava( s );
+		}
+
 		/**
 		 * Splits a string in parts using a given character as delimiter.
 		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
@@ -367,15 +372,26 @@ public final class Kit
 		 */
 		public static <E> String make( String delimiter, Iterable<E> iterable )
 		{
+			return make( false, delimiter, iterable );
+		}
+
+		/**
+		 * Build a string.
+		 */
+		public static <E> String make( boolean skipEmpties, String delimiter, Iterable<E> iterable )
+		{
 			StringBuilder stringBuilder = new StringBuilder();
 			boolean first = true;
 			for( E element : iterable )
 			{
+				String string = String.valueOf( element );
+				if( string.isEmpty() && skipEmpties )
+					continue;
 				if( first )
 					first = false;
 				else
 					stringBuilder.append( delimiter );
-				stringBuilder.append( element );
+				stringBuilder.append( string );
 			}
 			return stringBuilder.toString();
 		}
@@ -755,6 +771,81 @@ public final class Kit
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Java Iterable<T>
+
+	public static final class iterable
+	{
+		public static <T, D extends T> Iterable<T> downCast( Iterable<D> iterable )
+		{
+			@SuppressWarnings( "unchecked" ) Iterable<T> result = (Iterable<T>)iterable;
+			return result;
+		}
+
+		public static <T> Iterable<T> concat( Iterable<T> iterable, T element )
+		{
+			return concat( iterable, List.of( element ) );
+		}
+
+		@SafeVarargs @SuppressWarnings( "varargs" ) public static <T> Iterable<T> concat( Iterable<T> iterable, T... elements )
+		{
+			return concat( iterable, List.of( elements ) );
+		}
+
+		public static <T> Iterable<T> concat( Iterable<T> iterable, Iterable<T> other )
+		{
+			return fromStream( Stream.concat( collection.stream.fromIterable( iterable ), collection.stream.fromIterable( other ) ) );
+		}
+
+		public static <T> Iterable<T> fromStream( Stream<T> stream )
+		{
+			return () -> stream.iterator();
+		}
+
+		public static <T> boolean trueForAll( Iterable<T> iterable, Predicate<T> predicate )
+		{
+			for( var element : iterable )
+				if( !predicate.test( element ) )
+					return false;
+			return true;
+		}
+
+		public static <T> boolean trueForAny( Iterable<T> iterable, Predicate<T> predicate )
+		{
+			for( var element : iterable )
+				if( predicate.test( element ) )
+					return true;
+			return false;
+		}
+
+		public static <T> boolean falseForAll( Iterable<T> iterable, Predicate<T> predicate )
+		{
+			for( var element : iterable )
+				if( predicate.test( element ) )
+					return false;
+			return true;
+		}
+
+		public static <T> boolean falseForAny( Iterable<T> iterable, Predicate<T> predicate )
+		{
+			for( var element : iterable )
+				if( !predicate.test( element ) )
+					return true;
+			return false;
+		}
+
+		public static <T> Iterable<T> reversed( Iterable<T> iterable )
+		{
+			//TODO: optimize
+			return collection.stream.fromIterable( iterable ) //
+				.collect( Collectors.collectingAndThen( Collectors.toList(), l -> //
+				{
+					Collections.reverse( l );
+					return l;
+				} ) );
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Java Collection<T>
 
 	public static final class collection
@@ -766,7 +857,7 @@ public final class Kit
 			 * Because Java makes it awfully difficult, whereas it should have been so easy as to not even require a cast. (Ideally, Stream would extend Iterable. I
 			 * know, it can't. But ideally, it would.)
 			 */
-			public static <T> Stream<T> streamFromIterable( Iterable<T> iterable )
+			public static <T> Stream<T> fromIterable( Iterable<T> iterable )
 			{
 				return StreamSupport.stream( iterable.spliterator(), false );
 			}
@@ -1030,6 +1121,17 @@ public final class Kit
 			T temp = list.get( i );
 			list.set( i, list.get( j ) );
 			list.set( j, temp );
+		}
+
+		/**
+		 * Returns a new {@link ArrayList} containing the elements of the given {@link Collection} in reverse order.
+		 * Important note: the returned list is a new mutable {@link ArrayList}, it is not just a reverse mapping onto the original collection.
+		 */
+		public static <T> ArrayList<T> reversed( Collection<T> list )
+		{
+			ArrayList<T> newList = new ArrayList<>( list );
+			Collections.reverse( newList );
+			return newList;
 		}
 	}
 
@@ -2135,5 +2237,52 @@ public final class Kit
 	@SuppressWarnings( "unchecked" ) public static <T extends Throwable> RuntimeException sneakyException( Throwable t ) throws T
 	{
 		throw (T)t;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private static class Step<T>
+	{
+		final Step<T> previous;
+		final T element;
+
+		private Step( Step<T> previous, T element )
+		{
+			this.previous = previous;
+			this.element = element;
+		}
+
+		boolean contains( T element )
+		{
+			if( element == this.element )
+				return true;
+			if( previous != null )
+				return previous.contains( element );
+			return false;
+		}
+	}
+
+	public static <T> void treeDump( T node, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
+	{
+		emitter.invoke( stringizer.invoke( node ) );
+		treeDumpRecursive( node, "", breeder, stringizer, emitter, null );
+	}
+
+	private static final String[][] PREFIXES = { { " ├─ ", " │  " }, { " └─ ", "    " } };
+
+	private static <T> void treeDumpRecursive( T node, String parentPrefix, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter, Step<T> previous )
+	{
+		Step<T> step = new Step<>( previous, node );
+		Iterable<T> children = breeder.invoke( node );
+		for( Iterator<? extends T> iterator = children.iterator(); iterator.hasNext(); )
+		{
+			T childNode = iterator.next();
+			String[] prefixes = PREFIXES[iterator.hasNext() ? 0 : 1];
+			boolean cycle = step.contains( childNode );
+			emitter.invoke( parentPrefix + prefixes[0] + stringizer.invoke( childNode ) + (cycle ? " <-- CYCLE!" : "") );
+			if( cycle )
+				continue;
+			treeDumpRecursive( childNode, parentPrefix + prefixes[1], breeder, stringizer, emitter, step );
+		}
 	}
 }

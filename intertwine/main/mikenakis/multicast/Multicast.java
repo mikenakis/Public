@@ -2,20 +2,20 @@ package mikenakis.multicast;
 
 public interface Multicast<T>
 {
-	void add( T procedure );
-	void remove( T procedure );
-	boolean contains( T procedure );
+	void add( T observer );
+	void remove( T observer );
+	boolean contains( T observer );
 
-	void register( boolean register, T procedure );
+	void register( boolean register, T observer );
 
 	interface Defaults<T> extends Multicast<T>
 	{
-		@Override default void register( boolean register, T procedure )
+		@Override default void register( boolean register, T observer )
 		{
 			if( register )
-				add( procedure );
+				add( observer );
 			else
-				remove( procedure );
+				remove( observer );
 		}
 	}
 }

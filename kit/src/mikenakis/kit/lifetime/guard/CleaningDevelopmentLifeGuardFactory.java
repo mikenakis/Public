@@ -62,7 +62,7 @@ public class CleaningDevelopmentLifeGuardFactory extends DevelopmentLifeGuardFac
 
 		@Override public String toString()
 		{
-			return closed ? "closed" : "open";
+			return closed ? "CLOSED" : "";
 		}
 	}
 
