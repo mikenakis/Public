@@ -229,6 +229,22 @@ public final class Kit
 		return stringWriter.toString();
 	}
 
+	public static boolean assertWeakly( boolean value, Function0<String> messageBuilder )
+	{
+		if( areAssertionsEnabled() && !value )
+		{
+			String message = messageBuilder.invoke();
+			Log.message( Log.Level.ERROR, 1, "Assertion failure" + (message.isEmpty()? "" : ": " + message) );
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean assertWeakly( boolean value )
+	{
+		return assertWeakly( value, () -> "" );
+	}
+
 	public static class stringBuilder
 	{
 		/**
@@ -959,6 +975,17 @@ public final class Kit
 					return true;
 			return false;
 		}
+
+		/**
+		 * Returns a new {@link ArrayList} containing the elements of the given {@link Collection} in reverse order.
+		 * Important note: the returned list is a new mutable {@link ArrayList}, it is not just a reverse mapping onto the original collection.
+		 */
+		public static <T> ArrayList<T> reversed( Collection<T> list )
+		{
+			ArrayList<T> newList = new ArrayList<>( list );
+			Collections.reverse( newList );
+			return newList;
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1121,17 +1148,6 @@ public final class Kit
 			T temp = list.get( i );
 			list.set( i, list.get( j ) );
 			list.set( j, temp );
-		}
-
-		/**
-		 * Returns a new {@link ArrayList} containing the elements of the given {@link Collection} in reverse order.
-		 * Important note: the returned list is a new mutable {@link ArrayList}, it is not just a reverse mapping onto the original collection.
-		 */
-		public static <T> ArrayList<T> reversed( Collection<T> list )
-		{
-			ArrayList<T> newList = new ArrayList<>( list );
-			Collections.reverse( newList );
-			return newList;
 		}
 	}
 
