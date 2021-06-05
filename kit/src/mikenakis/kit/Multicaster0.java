@@ -36,19 +36,6 @@ public class Multicaster0
 	public void invoke()
 	{
 		assert threadGuard.inThreadAssertion();
-		invoke( procedures );
-	}
-
-	public void invokeAndClear()
-	{
-		assert threadGuard.inThreadAssertion();
-		Procedure0[] procedures = this.procedures;
-		this.procedures = new Procedure0[0];
-		invoke( procedures );
-	}
-
-	private static void invoke( Procedure0[] procedures )
-	{
 		for( Procedure0 procedure : procedures )
 			Kit.tryCatch( procedure, throwable -> throwable.printStackTrace( System.err ) );
 	}

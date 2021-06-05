@@ -1,4 +1,4 @@
-package mikenakis.kit;
+package mikenakis.kit.collections;
 
 import java.util.Iterator;
 
@@ -9,7 +9,7 @@ import java.util.Iterator;
  */
 public class UnmodifiableIterator<E> implements Iterator<E>
 {
-	private final Iterator<? extends E> delegee;
+	protected final Iterator<? extends E> delegee;
 
 	public UnmodifiableIterator( Iterator<? extends E> delegee )
 	{

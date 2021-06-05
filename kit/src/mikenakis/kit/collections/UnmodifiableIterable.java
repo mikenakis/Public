@@ -1,4 +1,4 @@
-package mikenakis.kit;
+package mikenakis.kit.collections;
 
 import java.util.Iterator;
 

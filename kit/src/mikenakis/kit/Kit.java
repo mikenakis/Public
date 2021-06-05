@@ -1,6 +1,8 @@
 package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import mikenakis.kit.collections.ConvertingIterable;
+import mikenakis.kit.collections.FilteringIterable;
 import mikenakis.kit.functional.BooleanFunction1;
 import mikenakis.kit.functional.BooleanFunction1Double;
 import mikenakis.kit.functional.Function0;
@@ -234,7 +236,7 @@ public final class Kit
 		if( areAssertionsEnabled() && !value )
 		{
 			String message = messageBuilder.invoke();
-			Log.message( Log.Level.ERROR, 1, "Assertion failure" + (message.isEmpty()? "" : ": " + message) );
+			Log.message( Log.Level.ERROR, 1, "Assertion failure" + (message.isEmpty() ? "" : ": " + message) );
 			return false;
 		}
 		return true;
@@ -859,6 +861,21 @@ public final class Kit
 					return l;
 				} ) );
 		}
+
+		public static <T> Iterable<T> filtered( Iterable<T> iterable, BooleanFunction1<T> filter )
+		{
+			return new FilteringIterable<>( iterable, filter );
+		}
+
+		public static <T, F> Iterable<T> converted( Iterable<F> iterable, Function1<T,F> converter )
+		{
+			return new ConvertingIterable<>( iterable, converter );
+		}
+
+		public static <T> List<T> toList( Iterable<T> iterable )
+		{
+			return collection.stream.fromIterable( iterable ).collect( Collectors.toList() );
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1126,12 +1143,11 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * performing this very odd and rarely used operation, allowing the key to either exist or not exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> boolean addOrReplace( Map<K,V> map, K key, V value )
+		@SuppressWarnings( "deprecation" ) public static <K, V> V addOrReplace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
-			Object old = map.put( key, value );
-			return old != null;
+			return map.put( key, value );
 		}
 	}
 
@@ -2079,6 +2095,7 @@ public final class Kit
 		public static <T> T[] remove( T[] array, T element, EqualityComparator<T> comparator )
 		{
 			int index = indexOf( array, element, comparator );
+			assert index != -1;
 			return removeAt( array, index );
 		}
 
