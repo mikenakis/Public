@@ -21,4 +21,29 @@ public class UnmodifiableIterable<E> implements Iterable<E>
 		Iterator<? extends E> modifiableIterator = delegee.iterator();
 		return new UnmodifiableIterator<>( modifiableIterator );
 	}
+
+	static class UnmodifiableIterator<E> implements Iterator<E>
+	{
+		protected final Iterator<? extends E> delegee;
+
+		public UnmodifiableIterator( Iterator<? extends E> delegee )
+		{
+			this.delegee = delegee;
+		}
+
+		@Override public boolean hasNext()
+		{
+			return delegee.hasNext();
+		}
+
+		@Override public E next()
+		{
+			return delegee.next();
+		}
+
+		@Deprecated @Override public final void remove()
+		{
+			throw new UnsupportedOperationException();
+		}
+	}
 }

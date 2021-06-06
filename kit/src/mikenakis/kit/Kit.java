@@ -874,7 +874,17 @@ public final class Kit
 
 		public static <T> List<T> toList( Iterable<T> iterable )
 		{
-			return collection.stream.fromIterable( iterable ).collect( Collectors.toList() );
+			List<T> result = new ArrayList<>();
+			for( T element : iterable )
+				result.add( element );
+			return Collections.unmodifiableList( result );
+			//return collection.stream.fromIterable( iterable ).collect( Collectors.toList() );
+		}
+
+		public static <T,F> Iterable<T> filteredAndCast( Iterable<F> iterable, Class<T> elementClass )
+		{
+			Iterable<F> filtered = filtered( iterable, e -> elementClass.isInstance( e ) );
+			return converted( filtered, e -> elementClass.cast( e ) );
 		}
 	}
 

@@ -20,4 +20,44 @@ public class FilteringIterable<E> implements Iterable<E>
 		Iterator<? extends E> unfilteredIterator = delegee.iterator();
 		return new FilteringIterator<>( unfilteredIterator, filter );
 	}
+
+	private static class FilteringIterator<E> extends UnmodifiableIterable.UnmodifiableIterator<E>
+	{
+		private final BooleanFunction1<E> filter;
+		private E current = null;
+
+		public FilteringIterator( Iterator<? extends E> delegee, BooleanFunction1<E> filter )
+		{
+			super( delegee );
+			this.filter = filter;
+			skipToMatch();
+		}
+
+		@Override public boolean hasNext()
+		{
+			return current != null;
+		}
+
+		@Override public E next()
+		{
+			E result = current;
+			skipToMatch();
+			return result;
+		}
+
+		private void skipToMatch()
+		{
+			for(; ; )
+			{
+				if( !delegee.hasNext() )
+				{
+					current = null;
+					break;
+				}
+				current = delegee.next();
+				if( filter.invoke( current ) )
+					break;
+			}
+		}
+	}
 }
