@@ -1159,6 +1159,33 @@ public final class Kit
 			assert value != null;
 			return map.put( key, value );
 		}
+
+		public static <K,V> Stream<K> getKeys( Map<K,V> map, V value )
+		{
+			return map.entrySet().stream() //
+				.filter( entry -> value.equals( entry.getValue() ) ) //
+				.map( Map.Entry::getKey );
+		}
+
+		public static <K,V> K tryGetKey( Map<K,V> map, V value )
+		{
+			List<K> keys = getKeys( map, value ).collect( Collectors.toList());
+			if( keys.isEmpty() )
+				return null;
+			return keys.get( 0 );
+		}
+
+		public static <K,V> Optional<K> getKeyOptional( Map<K,V> map, V value )
+		{
+			return Optional.ofNullable( tryGetKey( map, value ) );
+		}
+
+		public static <K,V> K getKey( Map<K,V> map, V value )
+		{
+			K key = tryGetKey( map, value );
+			assert key != null;
+			return key;
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
