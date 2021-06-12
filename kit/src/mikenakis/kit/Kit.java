@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -2353,6 +2354,51 @@ public final class Kit
 			if( cycle )
 				continue;
 			treeDumpRecursive( childNode, parentPrefix + prefixes[1], breeder, stringizer, emitter, step );
+		}
+	}
+
+	public static void synchronize( Lock lock, Procedure0 procedure )
+	{
+		if( areAssertionsEnabled() )
+		{
+			lock.lock();
+			procedure.invoke();
+			lock.unlock();
+		}
+		else
+		{
+			lock.lock();
+			try
+			{
+				procedure.invoke();
+			}
+			finally
+			{
+				lock.unlock();
+			}
+		}
+	}
+
+	public static <T> T synchronize( Lock lock, Function0<T> function )
+	{
+		if( areAssertionsEnabled() )
+		{
+			lock.lock();
+			T result = function.invoke();
+			lock.unlock();
+			return result;
+		}
+		else
+		{
+			lock.lock();
+			try
+			{
+				return function.invoke();
+			}
+			finally
+			{
+				lock.unlock();
+			}
 		}
 	}
 }
