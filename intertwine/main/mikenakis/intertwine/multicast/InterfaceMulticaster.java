@@ -4,7 +4,7 @@ import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.kit.Kit;
-import mikenakis.kit.ThreadGuard;
+import mikenakis.kit.ExecutionContext;
 import mikenakis.multicast.Multicast;
 
 import java.util.LinkedHashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class InterfaceMulticaster<T>
 {
-	private final ThreadGuard threadGuard = ThreadGuard.create();
+	private final ExecutionContext executionContext;
 	private final Map<T,AnyCall<T>> observers = new LinkedHashMap<>();
 	private final Intertwine<T> intertwine;
 	private final T entryPoint;
@@ -47,15 +47,17 @@ public class InterfaceMulticaster<T>
 		}
 	};
 
-	public InterfaceMulticaster( IntertwineFactory intertwineFactory, Class<T> interfaceType )
+	public InterfaceMulticaster( ExecutionContext executionContext, IntertwineFactory intertwineFactory, Class<T> interfaceType )
 	{
+		assert executionContext.inContextAssertion();
+		this.executionContext = executionContext;
 		intertwine = intertwineFactory.getIntertwine( interfaceType );
 		entryPoint = intertwine.newEntwiner( anyCall );
 	}
 
 	public T entryPoint()
 	{
-		assert threadGuard.inThreadAssertion();
+		assert executionContext.inContextAssertion();
 		return entryPoint;
 	}
 

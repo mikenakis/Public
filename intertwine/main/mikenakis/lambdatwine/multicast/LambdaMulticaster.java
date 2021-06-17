@@ -1,7 +1,7 @@
 package mikenakis.lambdatwine.multicast;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.ThreadGuard;
+import mikenakis.kit.ExecutionContext;
 import mikenakis.lambdatwine.AnyLambda;
 import mikenakis.lambdatwine.Lambdatwine;
 import mikenakis.lambdatwine.LambdatwineFactory;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class LambdaMulticaster<T>
 {
-	private final ThreadGuard threadGuard = ThreadGuard.create();
+	private final ExecutionContext executionContext;
 	private final Map<T,AnyLambda<T>> observers = new LinkedHashMap<>();
 	private final Lambdatwine<T> lambdatwine;
 	private final T entryPoint;
@@ -47,15 +47,17 @@ public class LambdaMulticaster<T>
 		}
 	};
 
-	public LambdaMulticaster( LambdatwineFactory lambdatwineFactory, Class<T> lambdaType )
+	public LambdaMulticaster( ExecutionContext executionContext, LambdatwineFactory lambdatwineFactory, Class<T> lambdaType )
 	{
+		assert executionContext.inContextAssertion();
+		this.executionContext = executionContext;
 		lambdatwine = lambdatwineFactory.getLambdatwine( lambdaType );
 		entryPoint = lambdatwine.newEntwiner( anyLambda );
 	}
 
 	public T entryPoint()
 	{
-		assert threadGuard.inThreadAssertion();
+		assert executionContext.inContextAssertion();
 		return entryPoint;
 	}
 }
