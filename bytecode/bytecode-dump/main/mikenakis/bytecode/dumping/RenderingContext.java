@@ -226,7 +226,7 @@ public final class RenderingContext
 				Data data = new Data( label, sourceLines.map( s -> s.get( lineNumber.get() - 1 ).trim() ) );
 				Kit.map.add( dataFromInstructionMap, instruction, data );
 			}
-			else if( targets.contains( instruction ) )
+			else if( Kit.collection.contains( targets, instruction ) )
 			{
 				String label = "T" + targetInstructionLabelNumberSeed++; //'T' stands for 'Target'
 				Data data = new Data( label, Optional.empty() );

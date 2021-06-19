@@ -48,7 +48,7 @@ public class ObservableCollection<E> extends AbstractCollection<E>
 		return true;
 	}
 
-	@Override public boolean contains( Object o )
+	@SuppressWarnings( "deprecation" ) @Override public boolean contains( Object o )
 	{
 		return delegee.contains( o );
 	}

@@ -86,7 +86,8 @@ public final class MethodHandleConstant extends Constant
 		referenceKind = bufferReader.readUnsignedByte();
 		assert ReferenceKind.tryFromNumber( referenceKind ).isPresent();
 		referenceConstant = constantPool.readIndexAndGetConstant( bufferReader ).asReferenceConstant();
-		assert referenceConstant.kind == PlainMethodReferenceConstant.KIND || referenceConstant.kind == InterfaceMethodReferenceConstant.KIND;
+		assert referenceConstant.kind == PlainMethodReferenceConstant.KIND || referenceConstant.kind == InterfaceMethodReferenceConstant.KIND ||
+			referenceConstant.kind == FieldReferenceConstant.KIND;
 	}
 
 	@Override public void intern( ConstantPool constantPool )
@@ -115,9 +116,8 @@ public final class MethodHandleConstant extends Constant
 
 	@Override public boolean equals( Object other )
 	{
-		if( other instanceof MethodHandleConstant )
+		if( other instanceof MethodHandleConstant methodHandleConstant )
 		{
-			MethodHandleConstant methodHandleConstant = (MethodHandleConstant)other;
 			if( referenceKind != methodHandleConstant.referenceKind )
 				return false;
 			if( !referenceConstant.equalsReferenceConstant( methodHandleConstant.referenceConstant ) )

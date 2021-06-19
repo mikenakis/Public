@@ -17,24 +17,12 @@ public class ThreadExecutionContext extends ExecutionContext
 		this.thread = thread;
 	}
 
-	@Override public Thread thread()
+	@Override public boolean entered()
 	{
-		return thread;
+		return Thread.currentThread().equals( thread );
 	}
 
-	@Override public boolean inContextAssertion()
-	{
-		assert Thread.currentThread().equals( thread ) : toString( Thread.currentThread() ) + " " + toString( thread );
-		return true;
-	}
-
-	@Override public boolean outOfContextAssertion()
-	{
-		assert Thread.currentThread() != thread : toString( Thread.currentThread() ) + " " + toString( thread );
-		return true;
-	}
-
-	private static String toString( Thread thread )
+	@Override public String toString()
 	{
 		return thread.getName() + " (" + Integer.toHexString( System.identityHashCode( thread ) ) + ")";
 	}

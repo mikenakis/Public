@@ -36,7 +36,7 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 	private boolean isInvestigatedCloseable( Class<? extends Closeable> closeableClass )
 	{
 		assert !closeableClass.isInterface();
-		return investigatedCloseableClassNames.contains( closeableClass.getName() );
+		return Kit.collection.contains( investigatedCloseableClassNames, closeableClass.getName() );
 	}
 
 	FinalizationHandler getFinalizationHandler()

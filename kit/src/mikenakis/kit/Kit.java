@@ -173,7 +173,8 @@ public final class Kit
 	/**
 	 * Gets the class of an object as a generic class parametrized with the type of that object.
 	 * <p>
-	 * Useful because {@link Object#getClass()} returns a generic class parametrized with a wildcard, not with the actual type of the object on which getClass() was called.
+	 * Useful because {@link Object#getClass()} returns a generic class parametrized with a wildcard, not with the actual type of the object on which getClass()
+	 * was called.
 	 *
 	 * @param object the object whose class is to be obtained.
 	 * @param <T>    the type of the object.
@@ -349,7 +350,8 @@ public final class Kit
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
 		 *
-		 * @return A {@link List} of {@link String}s. If the delimiter is not found, the list will contain a single element, which will be the entire source string.
+		 * @return A {@link List} of {@link String}s. If the delimiter is not found, the list will contain a single element, which will be the entire source
+		 * 	string.
 		 */
 		public static List<String> splitAtCharacter( String stringToSplit, char delimiter )
 		{
@@ -364,7 +366,8 @@ public final class Kit
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
 		 *
-		 * @return A {@link List} of {@link String}s. If the delimiter is not found, the list will contain a single element, which will be the entire source string.
+		 * @return A {@link List} of {@link String}s. If the delimiter is not found, the list will contain a single element, which will be the entire source
+		 * 	string.
 		 */
 		public static List<String> splitAtCharacter( String stringToSplit, char delimiter, boolean includeDelimiter )
 		{
@@ -882,7 +885,7 @@ public final class Kit
 			//return collection.stream.fromIterable( iterable ).collect( Collectors.toList() );
 		}
 
-		public static <T,F> Iterable<T> filteredAndCast( Iterable<F> iterable, Class<T> elementClass )
+		public static <T, F> Iterable<T> filteredAndCast( Iterable<F> iterable, Class<T> elementClass )
 		{
 			Iterable<F> filtered = filtered( iterable, e -> elementClass.isInstance( e ) );
 			return converted( filtered, e -> elementClass.cast( e ) );
@@ -898,8 +901,8 @@ public final class Kit
 		{
 			/***
 			 * Obtains a {@link Stream} from an {@link Iterable}.
-			 * Because Java makes it awfully difficult, whereas it should have been so easy as to not even require a cast. (Ideally, Stream would extend Iterable. I
-			 * know, it can't. But ideally, it would.)
+			 * Because Java makes it awfully difficult, whereas it should have been so easy as to not even require a cast. (Ideally, Stream would extend
+			 * Iterable. I know, it can't. But ideally, it would.)
 			 */
 			public static <T> Stream<T> fromIterable( Iterable<T> iterable )
 			{
@@ -923,7 +926,8 @@ public final class Kit
 
 		/**
 		 * Adds an item to a {@link Collection}. The item must not already exist.
-		 * Corresponds to Java's {@link Collection#add(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item already exists.
+		 * Corresponds to Java's {@link Collection#add(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
+		 * already exists.
 		 */
 		@SuppressWarnings( "deprecation" ) public static <T> void add( Collection<T> collection, T item )
 		{
@@ -945,7 +949,8 @@ public final class Kit
 
 		/**
 		 * Removes an item from a {@link Collection}. The item must already exist.
-		 * Corresponds to Java's {@link Collection#remove(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item does not exist.
+		 * Corresponds to Java's {@link Collection#remove(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
+		 * does not exist.
 		 */
 		@SuppressWarnings( "deprecation" ) public static <T> void remove( Collection<T> collection, T item )
 		{
@@ -996,10 +1001,16 @@ public final class Kit
 			return result;
 		}
 
+		@SuppressWarnings( "deprecation" ) public static <T> boolean contains( Collection<T> collection, T item )
+		{
+			assert item != null;
+			return collection.contains( item );
+		}
+
 		public static <T> boolean containsAny( Collection<T> a, Collection<T> b )
 		{
 			for( T element : b )
-				if( a.contains( element ) )
+				if( contains( a, element ) )
 					return true;
 			return false;
 		}
@@ -1023,7 +1034,8 @@ public final class Kit
 	{
 		/**
 		 * Gets a value by key from a {@link Map}. The key must exist.
-		 * Corresponds to Java's {@link Map#get(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not exist.
+		 * Corresponds to Java's {@link Map#get(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
+		 * exist.
 		 */
 		@SuppressWarnings( "deprecation" ) public static <K, V> V get( Map<K,V> map, K key )
 		{
@@ -1054,7 +1066,8 @@ public final class Kit
 
 		/**
 		 * Adds a key-value pair to a {@link Map}. The key must not already exist.
-		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key already exists.
+		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key already
+		 * exists.
 		 */
 		@SuppressWarnings( "deprecation" ) public static <K, V> void add( Map<K,V> map, K key, V value )
 		{
@@ -1066,13 +1079,25 @@ public final class Kit
 
 		/**
 		 * Removes a key-value pair from a {@link Map}. The key must already exist.
-		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not exist.
+		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
+		 * exist.
 		 */
 		@SuppressWarnings( "deprecation" ) public static <K, V> V remove( Map<K,V> map, K key )
 		{
 			V previous = map.remove( key );
 			assert previous != null;
 			return previous;
+		}
+
+		/**
+		 * Removes a key-value pair from a {@link Map}. The key must already exist and must map to the given value.
+		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
+		 * exist or when the key is not mapped to the expected value.
+		 */
+		@SuppressWarnings( "deprecation" ) public static <K, V> void remove( Map<K,V> map, K key, V value )
+		{
+			V previous = remove( map, key );
+			assert previous.equals( value );
 		}
 
 		/**
@@ -1139,7 +1164,8 @@ public final class Kit
 
 		/**
 		 * Replaces the value associated with a given key. The key must already exist.
-		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not exist.
+		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
+		 * exist.
 		 */
 		@SuppressWarnings( "deprecation" ) public static <K, V> void replace( Map<K,V> map, K key, V value )
 		{
@@ -1161,27 +1187,27 @@ public final class Kit
 			return map.put( key, value );
 		}
 
-		public static <K,V> Stream<K> getKeys( Map<K,V> map, V value )
+		public static <K, V> Stream<K> getKeys( Map<K,V> map, V value )
 		{
 			return map.entrySet().stream() //
 				.filter( entry -> value.equals( entry.getValue() ) ) //
 				.map( Map.Entry::getKey );
 		}
 
-		public static <K,V> K tryGetKey( Map<K,V> map, V value )
+		public static <K, V> K tryGetKey( Map<K,V> map, V value )
 		{
-			List<K> keys = getKeys( map, value ).collect( Collectors.toList());
+			List<K> keys = getKeys( map, value ).collect( Collectors.toList() );
 			if( keys.isEmpty() )
 				return null;
 			return keys.get( 0 );
 		}
 
-		public static <K,V> Optional<K> getKeyOptional( Map<K,V> map, V value )
+		public static <K, V> Optional<K> getKeyOptional( Map<K,V> map, V value )
 		{
 			return Optional.ofNullable( tryGetKey( map, value ) );
 		}
 
-		public static <K,V> K getKey( Map<K,V> map, V value )
+		public static <K, V> K getKey( Map<K,V> map, V value )
 		{
 			K key = tryGetKey( map, value );
 			assert key != null;
@@ -1694,15 +1720,15 @@ public final class Kit
 	 * and {@code MethodHandle.invokeExact()}.
 	 * This method allows us to invoke methods declared with {@code throws Throwable} without having to do anything about the {@code Throwable}.
 	 *
-	 * @param throwingThrowableFunction the {@link ThrowableThrowingFunction} to invoke.
-	 * @param <R>                       the type of result returned by the function.
-	 * @param <E>                       the type of throwable declared by the {@link ThrowableThrowingFunction}.
+	 * @param function the {@link ThrowableThrowingFunction} to invoke.
+	 * @param <R>      the type of result returned by the function.
+	 * @param <E>      the type of throwable declared by the {@link ThrowableThrowingFunction}.
 	 *
 	 * @return the result of the function.
 	 */
-	public static <R, E extends Throwable> R invokeThrowableThrowingFunction( ThrowableThrowingFunction<R,E> throwingThrowableFunction )
+	public static <R, E extends Throwable> R invokeThrowableThrowingFunction( ThrowableThrowingFunction<R,E> function )
 	{
-		@SuppressWarnings( "unchecked" ) ThrowableThrowingFunction<R,RuntimeException> f = (ThrowableThrowingFunction<R,RuntimeException>)throwingThrowableFunction;
+		@SuppressWarnings( "unchecked" ) ThrowableThrowingFunction<R,RuntimeException> f = (ThrowableThrowingFunction<R,RuntimeException>)function;
 		return f.invoke();
 	}
 
@@ -2089,7 +2115,8 @@ public final class Kit
 		}
 
 		/**
-		 * Creates a new array, from a given array plus an element appended at the end, using a given {@link EqualityComparator}. The element must not already exist.
+		 * Creates a new array, from a given array plus an element appended at the end, using a given {@link EqualityComparator}. The element must not already
+		 * exist.
 		 */
 		public static <T> T[] add( T[] array, T element, EqualityComparator<T> comparator )
 		{
@@ -2105,7 +2132,8 @@ public final class Kit
 		}
 
 		/**
-		 * Creates a new array, from a given array plus an element inserted at a given index, using a given {@link EqualityComparator}. The element must not already exist.
+		 * Creates a new array, from a given array plus an element inserted at a given index, using a given {@link EqualityComparator}. The element must not
+		 * already exist.
 		 */
 		public static <T> T[] insertAt( T[] array, int index, T element, EqualityComparator<T> comparator )
 		{
@@ -2311,6 +2339,7 @@ public final class Kit
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Tree
 
 	private static class Step<T>
 	{
@@ -2341,7 +2370,8 @@ public final class Kit
 
 	private static final String[][] PREFIXES = { { " ├─ ", " │  " }, { " └─ ", "    " } };
 
-	private static <T> void treeDumpRecursive( T node, String parentPrefix, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter, Step<T> previous )
+	private static <T> void treeDumpRecursive( T node, String parentPrefix, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, //
+		Procedure1<String> emitter, Step<T> previous )
 	{
 		Step<T> step = new Step<>( previous, node );
 		Iterable<T> children = breeder.invoke( node );
@@ -2356,6 +2386,9 @@ public final class Kit
 			treeDumpRecursive( childNode, parentPrefix + prefixes[1], breeder, stringizer, emitter, step );
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Synchronization
 
 	public static void synchronize( Lock lock, Procedure0 procedure )
 	{
