@@ -24,13 +24,18 @@ public class ThreadExecutionContext extends ExecutionContext
 
 	@Override public boolean inContextAssertion()
 	{
-		assert Thread.currentThread().equals( thread ) : Thread.currentThread().getName() + " (" + Integer.toHexString( System.identityHashCode( Thread.currentThread() ) ) + ") " + thread.getName() + " (" + Integer.toHexString( System.identityHashCode( thread ) ) + ")";
+		assert Thread.currentThread().equals( thread ) : toString( Thread.currentThread() ) + " " + toString( thread );
 		return true;
 	}
 
 	@Override public boolean outOfContextAssertion()
 	{
-		assert Thread.currentThread() != thread;
+		assert Thread.currentThread() != thread : toString( Thread.currentThread() ) + " " + toString( thread );
 		return true;
+	}
+
+	private static String toString( Thread thread )
+	{
+		return thread.getName() + " (" + Integer.toHexString( System.identityHashCode( thread ) ) + ")";
 	}
 }

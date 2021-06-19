@@ -4,7 +4,6 @@ import mikenakis.kit.functional.Procedure0;
 
 public class Multicaster0
 {
-	private final ExecutionContext executionContext;
 	private Procedure0[] procedures = new Procedure0[0];
 	public final Multicast0 multicast = new Multicast0.Defaults()
 	{
@@ -29,15 +28,12 @@ public class Multicaster0
 		return EqualityComparator.byReference();
 	}
 
-	public Multicaster0( ExecutionContext executionContext )
+	public Multicaster0()
 	{
-		assert executionContext.inContextAssertion();
-		this.executionContext = executionContext;
 	}
 
 	public void invoke()
 	{
-		assert executionContext.inContextAssertion();
 		for( Procedure0 procedure : procedures )
 			Kit.tryCatch( procedure, throwable -> throwable.printStackTrace( System.err ) );
 	}
