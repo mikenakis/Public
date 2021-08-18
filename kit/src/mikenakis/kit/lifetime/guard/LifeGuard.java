@@ -18,8 +18,7 @@ public interface LifeGuard extends Closeable
 
 	static LifeGuardFactory factory()
 	{
-		boolean development = Kit.areAssertionsEnabled();
-		return development ? CleaningDevelopmentLifeGuardFactory.instance : ProductionLifeGuardFactory.instance;
+		return Kit.areAssertionsEnabled() ? CleaningDevelopmentLifeGuardFactory.instance : ProductionLifeGuardFactory.instance;
 	}
 
 	void open();

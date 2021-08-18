@@ -17,7 +17,8 @@ public interface StructuredReader
 
 	@SuppressWarnings( "overloads" ) default void readObject( Procedure1<ObjectReader> objectReaderConsumer )
 	{
-		Object result = readObject( arrayReader -> {
+		Object result = readObject( arrayReader -> //
+		{
 			objectReaderConsumer.invoke( arrayReader );
 			return null;
 		} );
@@ -26,7 +27,8 @@ public interface StructuredReader
 
 	@SuppressWarnings( "overloads" ) default void readArray( String elementName, Procedure1<ArrayReader> arrayReaderConsumer )
 	{
-		Object result = readArray( elementName, arrayReader -> {
+		Object result = readArray( elementName, arrayReader -> //
+		{
 			arrayReaderConsumer.invoke( arrayReader );
 			return null;
 		} );

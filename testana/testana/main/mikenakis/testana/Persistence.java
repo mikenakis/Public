@@ -9,7 +9,6 @@ import mikenakis.testana.kit.structured.json.writing.JsonStructuredWriter;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
 import mikenakis.testana.kit.structured.writing.StructuredWriter;
 
-import java.io.BufferedReader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,25 +55,33 @@ public final class Persistence
 		this.persistencePathName = persistencePathName;
 		this.autoSave = autoSave;
 		if( skipLoad )
+		{
 			dirty = true;
-		else if( Files.exists( persistencePathName ) )
-			entryFromNameMap.putAll( Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( persistencePathName ), ( BufferedReader bufferedReader ) -> //
+			return;
+		}
+		if( !Files.exists( persistencePathName ) )
+			return;
+		Map<String,TestClassInfo> map = Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
+		{
+			JsonParser jsonParser = new JsonParser( bufferedReader, true );
+			StructuredReader rootReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Object );
+			return rootReader.readArray( "elementName", arrayReader -> //
 			{
-				JsonParser jsonParser = new JsonParser( bufferedReader, true );
-				StructuredReader rootReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Object );
-				return rootReader.readArray( "elementName", arrayReader -> {
-					Map<String,TestClassInfo> entryFromNameMap1 = new LinkedHashMap<>();
-					arrayReader.readElements( elementReader -> {
-						TestClassInfo entry = elementReader.readObject( elementObjectReader -> {
-							String name = elementObjectReader.readMember( "name", StructuredReader::readValue );
-							Instant timeOfLastRun = Instant.parse( elementObjectReader.readMember( "timeOfLastRun", StructuredReader::readValue ) );
-							return new TestClassInfo( name, timeOfLastRun );
-						} );
-						Kit.map.add( entryFromNameMap1, entry.testClassName, entry );
+				Map<String,TestClassInfo> mutableMap = new LinkedHashMap<>();
+				arrayReader.readElements( elementReader -> //
+				{
+					TestClassInfo entry = elementReader.readObject( elementObjectReader -> //
+					{
+						String name = elementObjectReader.readMember( "name", StructuredReader::readValue );
+						Instant timeOfLastRun = Instant.parse( elementObjectReader.readMember( "timeOfLastRun", StructuredReader::readValue ) );
+						return new TestClassInfo( name, timeOfLastRun );
 					} );
-					return entryFromNameMap1;
+					Kit.map.add( mutableMap, entry.testClassName, entry );
 				} );
-			} ) );
+				return mutableMap;
+			} );
+		} );
+		entryFromNameMap.putAll( map );
 	}
 
 	public boolean isDirty()
