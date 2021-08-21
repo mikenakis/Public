@@ -465,7 +465,7 @@ public final class Kit
 					switch( nextChar )
 					{
 						case '\\':
-							ch = '\\';
+							//ch = '\\';
 							break;
 						case 'b':
 							ch = '\b';
@@ -929,7 +929,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Collection#add(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
 		 * already exists.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <T> void add( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/ public static <T> void add( Collection<T> collection, T item )
 		{
 			assert item != null;
 			boolean ok = collection.add( item );
@@ -942,7 +942,7 @@ public final class Kit
 		 *
 		 * @return {@code true} if the item was added; {@code false} if the item was not added because it already existed.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <T> boolean tryAdd( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/ public static <T> boolean tryAdd( Collection<T> collection, T item )
 		{
 			return collection.add( item );
 		}
@@ -952,7 +952,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Collection#remove(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
 		 * does not exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <T> void remove( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/ public static <T> void remove( Collection<T> collection, T item )
 		{
 			boolean ok = collection.remove( item );
 			assert ok;
@@ -964,7 +964,7 @@ public final class Kit
 		 *
 		 * @return {@code true} if the item was removed; {@code false} if the item was not removed because it did not exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <T> boolean tryRemove( Collection<? extends T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/ public static <T> boolean tryRemove( Collection<? extends T> collection, T item )
 		{
 			return collection.remove( item );
 		}
@@ -1001,7 +1001,7 @@ public final class Kit
 			return result;
 		}
 
-		@SuppressWarnings( "deprecation" ) public static <T> boolean contains( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/ public static <T> boolean contains( Collection<T> collection, T item )
 		{
 			assert item != null;
 			return collection.contains( item );
@@ -1037,7 +1037,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#get(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> V get( Map<K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V get( Map<K,V> map, K key )
 		{
 			assert key != null;
 			V value = map.get( key ); //delegation
@@ -1050,7 +1050,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#get(K)}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * allowing the key to potentially not exist and that {@code null} may be returned.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> V tryGet( Map<? extends K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V tryGet( Map<? extends K,V> map, K key )
 		{
 			assert key != null;
 			return map.get( key ); //delegation
@@ -1069,7 +1069,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key already
 		 * exists.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> void add( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void add( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1082,7 +1082,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> V remove( Map<K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V remove( Map<K,V> map, K key )
 		{
 			V previous = map.remove( key );
 			assert previous != null;
@@ -1094,7 +1094,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist or when the key is not mapped to the expected value.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> void remove( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void remove( Map<K,V> map, K key, V value )
 		{
 			V previous = remove( map, key );
 			assert previous.equals( value );
@@ -1106,7 +1106,7 @@ public final class Kit
 		 *
 		 * @return the value that was previously associated with the given key, or {@code null} if the key was not in the map.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> V tryRemove( Map<? extends K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V tryRemove( Map<? extends K,V> map, K key )
 		{
 			return map.remove( key );
 		}
@@ -1116,7 +1116,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#remove(K)}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * allowing the key to potentially not exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> void removeIfPresent( Map<K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void removeIfPresent( Map<K,V> map, K key )
 		{
 			map.remove( key );
 		}
@@ -1128,7 +1128,7 @@ public final class Kit
 		 *
 		 * @return {@link true} if the pair was successfully added; {@link false} if the key was already present.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> boolean tryAdd( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> boolean tryAdd( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1152,7 +1152,7 @@ public final class Kit
 		 *
 		 * @return {@code true} if successful; {@code false} otherwise.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> boolean tryReplace( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> boolean tryReplace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1167,7 +1167,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> void replace( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void replace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1180,7 +1180,7 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * performing this very odd and rarely used operation, allowing the key to either exist or not exist.
 		 */
-		@SuppressWarnings( "deprecation" ) public static <K, V> V addOrReplace( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V addOrReplace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1544,9 +1544,13 @@ public final class Kit
 	 *                      <li><p>It returns the result of invoking try-function.</p></li>
 	 *                  </ul></p></li>
 	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-with-resources} to use curly braces
-	 *     even when the code block consists of a single-statement. (You supply the {@code try} code in a lambda, so you get to decide whether to use
-	 *     curly braces or not.)</p></li>
+	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
+	 *         <ul>
+	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
+	 *              (You supply the {@code try} code in a lambda, so you get to decide whether to use curly braces or not)</p></li>
+	 *             <li><p>it forces you to declare a variable, complete with its type, for the closeable object
+	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
+	 *        </ul></p></li>
 	 * </ul>
 	 *
 	 * @param closeable   the {@link Closeable} to close when done.
@@ -1621,9 +1625,13 @@ public final class Kit
 	 *                      <li><p>It invokes {@link Closeable#close()} on the closeable object.</p></li>
 	 *                  </ul></p></li>
 	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-with-resources} to use curly braces
-	 *     even when the code block consists of a single-statement. (You supply the {@code try} code in a lambda, so you get to decide whether to use
-	 *     curly braces or not.)</p></li>
+	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
+	 *         <ul>
+	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
+	 *              (You supply the {@code try} code in a lambda, so you get to decide whether to use curly braces or not)</p></li>
+	 *             <li><p>it forces you to declare a variable, complete with its type, for the closeable object
+	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
+	 *        </ul></p></li>
 	 * </ul>
 	 *
 	 * @param closeable    the {@link Closeable} to close when done.
