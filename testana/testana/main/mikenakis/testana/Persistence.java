@@ -61,7 +61,7 @@ public final class Persistence
 		}
 		if( !Files.exists( persistencePathName ) )
 			return;
-		Map<String,TestClassInfo> map = Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
+		Map<String,TestClassInfo> map = Kit.uncheckedTryGetWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
 		{
 			JsonParser jsonParser = new JsonParser( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Object );

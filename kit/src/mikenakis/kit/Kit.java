@@ -1560,7 +1560,7 @@ public final class Kit
 	 *
 	 * @return the result of the try-function.
 	 */
-	public static <C extends Closeable, R> R tryWithResources( C closeable, Function1<R,? super C> tryFunction )
+	public static <C extends Closeable, R> R tryGetWithResources( C closeable, Function1<R,? super C> tryFunction )
 	{
 		assert closeable != null;
 		if( areAssertionsEnabled() )
@@ -1579,7 +1579,7 @@ public final class Kit
 	}
 
 	/**
-	 * Same as {@link #tryWithResources(C, Function1)} but with a {@link Function0}.
+	 * Same as {@link #tryGetWithResources(C, Function1)} but with a {@link Function0}.
 	 * Avoids Java's deplorable dumbfuckery of forcing you to declare a variable for the closeable, even when you have no use for it.
 	 *
 	 * @param closeable   the {@link Closeable} to close when done.
@@ -1589,7 +1589,7 @@ public final class Kit
 	 *
 	 * @return the result of the try-function.
 	 */
-	public static <C extends Closeable, R> R tryWithResources( C closeable, Function0<R> tryFunction )
+	public static <C extends Closeable, R> R tryGetWithResources( C closeable, Function0<R> tryFunction )
 	{
 		assert closeable != null;
 		if( areAssertionsEnabled() )
@@ -1744,7 +1744,7 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryWithResources( ThrowingFunction0<C,E> closeableFactory, //
+	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryGetWithResources( ThrowingFunction0<C,E> closeableFactory, //
 		ThrowingFunction1<R,C,E> tryFunction )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;

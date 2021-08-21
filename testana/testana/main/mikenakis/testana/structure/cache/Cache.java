@@ -35,7 +35,7 @@ public class Cache
 
 	public static Cache fromFile( Path cachePathName )
 	{
-		Map<String,CacheModule> modules = Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
+		Map<String,CacheModule> modules = Kit.uncheckedTryGetWithResources( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
 		{
 			JsonParser jsonParser = new JsonParser( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Object );
