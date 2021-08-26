@@ -59,6 +59,7 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 			return;
 		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuardFactory::stackFramesToString ).orElse( "Allocation stack trace not available. (This is not an investigated Closeable.)" );
 		System.out.println( "Closeable class not closed: " + closeableClass + "\n" + stackTraceText ); //TODO: use logging.
+		Kit.debugging.breakPoint();
 	}
 
 	protected abstract LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, boolean initiallyAlive, Optional<StackWalker.StackFrame[]> stackTrace );

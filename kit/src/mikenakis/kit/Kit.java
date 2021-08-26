@@ -1726,7 +1726,8 @@ public final class Kit
 	 * that {@link Throwable} is not a checked exception.
 	 * And sure enough, the JDK makes use of this weird feature in at least a few places that I am aware of, e.g. in {@code MethodHandle.invoke()}
 	 * and {@code MethodHandle.invokeExact()}.
-	 * This method allows us to invoke methods declared with {@code throws Throwable} without having to do anything about the {@code Throwable}.
+	 * The following method allows us to invoke methods declared with {@code throws Throwable} without having to handle or in any other way deal
+	 * with the {@code Throwable}.
 	 *
 	 * @param function the {@link ThrowableThrowingFunction} to invoke.
 	 * @param <R>      the type of result returned by the function.
@@ -2335,6 +2336,23 @@ public final class Kit
 		public static PrintStream nullPrintStream()
 		{
 			return new PrintStream( OutputStream.nullOutputStream() );
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Debugging
+
+	public static final class debugging
+	{
+		public static void breakPoint()
+		{
+			try
+			{
+				throw new BreakpointException();
+			}
+			catch( BreakpointException ignored )
+			{
+			}
 		}
 	}
 

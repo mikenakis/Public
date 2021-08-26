@@ -76,6 +76,7 @@ public class TestanaConsoleMain
 		{
 			Persistence persistence = new Persistence( persistencePathNameArgument.get(), true, false );
 			persistence.save();
+			TestanaLog.report( "History cleared." );
 		}
 		else
 		{

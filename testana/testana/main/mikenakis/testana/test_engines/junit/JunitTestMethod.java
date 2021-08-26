@@ -74,7 +74,7 @@ class JunitTestMethod extends TestMethod
 		assert !Modifier.isStatic( method.getModifiers() );
 		MethodHandle handle = Kit.unchecked( () -> junitTestClass.junitTestEngine.lookup.unreflect( method ) );
 		Object returnValue = Kit.invokeThrowableThrowingFunction( () -> handle.invoke( instance ) );
-		assert returnValue == null;
+		assert returnValue == null; //a method handle of a method with return type void is always expected to return null.
 	}
 
 	private static <T> T withRedirectedOutput( Function0<T> procedure )
