@@ -1,4 +1,4 @@
-package mikenakis.kit.io;
+package mikenakis.kit.io.stream.binary;
 
 /**
  * Synchronous Binary Stream Writer.

@@ -24,6 +24,7 @@ import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
+import java.nio.ByteOrder;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -249,6 +250,366 @@ public final class Kit
 		return assertWeakly( value, () -> "" );
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Bytes stuff
+
+	public static class bytes
+	{
+		private static final boolean isBigEndian = Function0.invoke( () -> //
+		{
+			ByteOrder nativeByteOrder = ByteOrder.nativeOrder();
+			assert nativeByteOrder == ByteOrder.BIG_ENDIAN || nativeByteOrder == ByteOrder.LITTLE_ENDIAN;
+			return nativeByteOrder == ByteOrder.BIG_ENDIAN;
+		} );
+
+		public static int compare( byte[] aBytes, int aOffset, byte[] bBytes, int bOffset, int length )
+		{
+			//return Arrays.compare( aBytes, aOffset, aOffset + length, bBytes, bOffset, bOffset + length );
+			for( int i = 0; i < length; i++ )
+			{
+				int difference = aBytes[aOffset + i] - bBytes[bOffset + i];
+				if( difference != 0 )
+					return difference;
+			}
+			return 0;
+		}
+
+		public static int compare( byte[] aBytes, byte[] bBytes )
+		{
+			int commonLength = Math.min( aBytes.length, bBytes.length );
+			int difference = compare( aBytes, 0, bBytes, 0, commonLength );
+			if( difference != 0 )
+				return difference;
+			return Integer.compare( aBytes.length, bBytes.length );
+		}
+
+		public static int indexOf( byte[] data, int offset, int length, byte byteToFind )
+		{
+			assert offset >= 0;
+			assert offset < data.length;
+			assert length >= 0;
+			int end = offset + length;
+			for( int i = offset; i < end; i++ )
+				if( data[i] == byteToFind )
+					return i;
+			return -1;
+		}
+
+		public static int lastIndexOf( byte[] data, int offset, int length, byte byteToFind )
+		{
+			assert offset >= 0;
+			assert offset < data.length;
+			assert length >= 0;
+			int end = offset + length;
+			for( int i = end - 1; i >= offset; i-- )
+				if( data[i] == byteToFind )
+					return i;
+			return -1;
+		}
+
+		public static int indexOfAnyOf( byte[] data, int offset, int length, byte[] bytes )
+		{
+			assert offset >= 0;
+			assert offset < data.length;
+			assert length >= 0;
+			int end = offset + length;
+			for( int i = offset; i < end; i++ )
+			{
+				byte b = data[i];
+				if( indexOf( bytes, 0, bytes.length, b ) != -1 )
+					return i;
+			}
+			return -1;
+		}
+
+		public static int indexOf( byte[] data, int offset, int length, byte[] pattern )
+		{
+			assert offset >= 0;
+			assert offset <= data.length;
+			assert length >= 0;
+			if( length < pattern.length )
+				return -1;
+			for( ; ; )
+			{
+				int i = indexOf( data, offset, length - pattern.length + 1, pattern[0] );
+				if( i == -1 )
+					break;
+				if( compare( data, i, pattern, 0, pattern.length ) == 0 )
+					return i;
+				int n = i - offset + 1;
+				offset += n;
+				length -= n;
+			}
+			return -1;
+		}
+
+		public static int lastIndexOf( byte[] data, int offset, int length, byte[] pattern )
+		{
+			assert offset >= 0;
+			assert offset < data.length;
+			assert length >= 0;
+			if( length < pattern.length )
+				return -1;
+			for( ; ; )
+			{
+				int i = lastIndexOf( data, offset, length - pattern.length + 1, pattern[0] );
+				if( i == -1 )
+					break;
+				if( compare( data, i, pattern, 0, pattern.length ) == 0 )
+					return i;
+				int n = i - offset + 1;
+				offset -= n;
+				length -= n;
+			}
+			return -1;
+		}
+
+		public static int indexOfAnyOf( byte[] data, int offset, int length, byte[][] patterns )
+		{
+			assert offset >= 0;
+			assert offset < data.length;
+			assert length >= 0;
+			byte[] firstBytes = new byte[patterns.length];
+			for( int i = 0; i < firstBytes.length; i++ )
+				firstBytes[i] = patterns[i][0]; //TODO: eliminate duplicates
+			for( ; ; )
+			{
+				int i = indexOfAnyOf( data, offset, length, firstBytes );
+				if( i == -1 )
+					break;
+				for( byte[] pattern : patterns )
+				{
+					if( i + pattern.length > offset + length )
+						continue;
+					if( compare( data, i, pattern, 0, pattern.length ) == 0 )
+						return i;
+				}
+				int n = i - offset;
+				offset += n;
+				length -= n;
+			}
+			return -1;
+		}
+
+		@SuppressWarnings( "SpellCheckingInspection" ) private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+
+		public static String hexString( byte[] bytes )
+		{
+			if( bytes == null )
+				return null;
+			char[] hexChars = new char[bytes.length * 2];
+			for( int j = 0; j < bytes.length; j++ )
+			{
+				int v = bytes[j] & 0xFF;
+				hexChars[j * 2] = HEX_DIGITS[v >>> 4];
+				hexChars[j * 2 + 1] = HEX_DIGITS[v & 0x0F];
+			}
+			return new String( hexChars );
+		}
+
+		public static boolean isFirstIdentifier( byte b )
+		{
+			return b == '_' || (b >= 'a' && b <= 'z') || (b >= 'A' && b <= 'Z');
+		}
+
+		public static boolean isNonFirstIdentifier( byte b )
+		{
+			if( isFirstIdentifier( b ) )
+				return true;
+			return b >= '0' && b <= '9';
+		}
+
+		public static boolean isWhitespace( byte b )
+		{
+			return switch( b )
+				{
+					case ' ', '\t', '\n', '\r' -> true;
+					default -> false;
+				};
+		}
+
+		public static class ArgumentsException extends UncheckedException
+		{
+			public final byte[] buffer;
+			public final int offset;
+			public final int count;
+
+			ArgumentsException( byte[] buffer, int offset, int count )
+			{
+				this.buffer = buffer;
+				this.offset = offset;
+				this.count = count;
+			}
+		}
+
+		public static class NegativeOffsetException extends ArgumentsException
+		{
+			public NegativeOffsetException( byte[] buffer, int index, int count )
+			{
+				super( buffer, index, count );
+			}
+		}
+
+		public static class NonPositiveCountException extends ArgumentsException
+		{
+			public NonPositiveCountException( byte[] buffer, int index, int count )
+			{
+				super( buffer, index, count );
+			}
+		}
+
+		public static class OffsetOutOfRangeException extends ArgumentsException
+		{
+			public OffsetOutOfRangeException( byte[] buffer, int index, int count )
+			{
+				super( buffer, index, count );
+			}
+		}
+
+		public static class OffsetPlusCountOutOfRangeException extends ArgumentsException
+		{
+			public OffsetPlusCountOutOfRangeException( byte[] buffer, int index, int count )
+			{
+				super( buffer, index, count );
+			}
+		}
+
+		public static Optional<ArgumentsException> validateArguments( byte[] bytes, int offset, int count )
+		{
+			if( !(count > 0) )
+				return Optional.of( new NonPositiveCountException( bytes, offset, count ) );
+			if( !(offset >= 0) )
+				return Optional.of( new NegativeOffsetException( bytes, offset, count ) );
+			if( !(offset < bytes.length) )
+				return Optional.of( new OffsetOutOfRangeException( bytes, offset, count ) );
+			if( !(offset + count <= bytes.length) )
+				return Optional.of( new OffsetPlusCountOutOfRangeException( bytes, offset, count ) );
+			return Optional.empty();
+		}
+
+		public static boolean validArgumentsAssertion( byte[] bytes, int offset, int count )
+		{
+			validateArguments( bytes, offset, count ).ifPresent( e -> { throw e; } );
+			return true;
+		}
+
+		public static char charFromBytes( byte[] bytes )
+		{
+			return (char)shortFromBytes( bytes );
+		}
+
+		public static byte[] bytesFromChar( char value )
+		{
+			return bytesFromShort( (short)value );
+		}
+
+		public static short shortFromBytes( byte[] bytes )
+		{
+			assert bytes.length == 2;
+			if( isBigEndian )
+			{
+				return (short)((((int)bytes[0]) & 0xFF) + (((int)bytes[1]) & 0xFF) << 8);
+			}
+			else
+			{
+				return (short)(((((int)bytes[0]) & 0xFF) << 8) + (((int)bytes[1]) & 0xFF));
+			}
+		}
+
+		public static byte[] bytesFromShort( short value )
+		{
+			byte[] bytes = new byte[2];
+			if( isBigEndian )
+			{
+				bytes[0] = (byte)(value & 0xFF);
+				bytes[1] = (byte)((value >>> 8) & 0xFF);
+			}
+			else
+			{
+				bytes[0] = (byte)((value >>> 8) & 0xFF);
+				bytes[1] = (byte)(value & 0xFF);
+			}
+			return bytes;
+		}
+
+		public static int intFromBytes( byte[] bytes )
+		{
+			assert bytes.length == 4;
+			if( isBigEndian )
+			{
+				return ((int)bytes[0]) + ((int)bytes[1] << 8) + ((int)bytes[2] << 16) + ((int)bytes[3] << 24);
+			}
+			else
+			{
+				return ((((int)bytes[0]) & 0xFF) << 24) + ((((int)bytes[1]) & 0xFF) << 16) + ((((int)bytes[2]) & 0xFF) << 8) + (((int)bytes[3]) & 0xFF);
+			}
+		}
+
+		public static byte[] bytesFromInt( int value )
+		{
+			byte[] bytes = new byte[4];
+			if( isBigEndian )
+			{
+				bytes[0] = (byte)(value & 0xFF);
+				bytes[1] = (byte)((value >>> 8) & 0xFF);
+				bytes[2] = (byte)((value >>> 16) & 0xFF);
+				bytes[3] = (byte)((value >>> 24) & 0xFF);
+			}
+			else
+			{
+				bytes[0] = (byte)((value >>> 24) & 0xFF);
+				bytes[1] = (byte)((value >>> 16) & 0xFF);
+				bytes[2] = (byte)((value >>> 8) & 0xFF);
+				bytes[3] = (byte)(value & 0xFF);
+			}
+			return bytes;
+		}
+
+		public static Long longFromBytes( byte[] bytes )
+		{
+			assert bytes.length == 8;
+			if( isBigEndian )
+			{
+				return ((long)bytes[0]) + ((long)bytes[1] << 8) + ((long)bytes[2] << 16) + ((long)bytes[3] << 24) + ((long)bytes[4] << 32) + ((long)bytes[5] << 40) + ((long)bytes[6] << 48) + ((long)bytes[7] << 56);
+			}
+			else
+			{
+				return ((((long)bytes[0]) & 0xFF) << 56) + ((((long)bytes[1]) & 0xFF) << 48) + ((((long)bytes[2]) & 0xFF) << 40) + ((((long)bytes[3]) & 0xFF) << 32) + ((((long)bytes[4]) & 0xFF) << 24) + ((((long)bytes[5]) & 0xFF) << 16) + ((((long)bytes[6]) & 0xFF) << 8) + (((long)bytes[7]) & 0xFF);
+			}
+		}
+
+		public static byte[] bytesFromLong( long value )
+		{
+			byte[] bytes = new byte[8];
+			if( isBigEndian )
+			{
+				bytes[0] = (byte)(value & 0xFF);
+				bytes[1] = (byte)((value >>> 8) & 0xFF);
+				bytes[2] = (byte)((value >>> 16) & 0xFF);
+				bytes[3] = (byte)((value >>> 24) & 0xFF);
+				bytes[4] = (byte)((value >>> 32) & 0xFF);
+				bytes[5] = (byte)((value >>> 40) & 0xFF);
+				bytes[6] = (byte)((value >>> 48) & 0xFF);
+				bytes[7] = (byte)((value >>> 56) & 0xFF);
+			}
+			else
+			{
+				bytes[0] = (byte)((value >>> 56) & 0xFF);
+				bytes[1] = (byte)((value >>> 48) & 0xFF);
+				bytes[2] = (byte)((value >>> 40) & 0xFF);
+				bytes[3] = (byte)((value >>> 32) & 0xFF);
+				bytes[4] = (byte)((value >>> 24) & 0xFF);
+				bytes[5] = (byte)((value >>> 16) & 0xFF);
+				bytes[6] = (byte)((value >>> 8) & 0xFF);
+				bytes[7] = (byte)(value & 0xFF);
+			}
+			return bytes;
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// StringBuilder stuff
+
 	public static class stringBuilder
 	{
 		/**
@@ -324,6 +685,9 @@ public final class Kit
 			stringBuilder.append( s );
 		}
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// String stuff
 
 	public static class string
 	{
