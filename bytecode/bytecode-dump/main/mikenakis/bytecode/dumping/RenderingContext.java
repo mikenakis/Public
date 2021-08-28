@@ -5,7 +5,7 @@ import mikenakis.bytecode.AnnotationValue;
 import mikenakis.bytecode.Attribute;
 import mikenakis.bytecode.Attributes;
 import mikenakis.bytecode.ByteCodeAnnotation;
-import mikenakis.bytecode.ByteCodeField;
+import mikenakis.bytecode.ByteCodeMember;
 import mikenakis.bytecode.ByteCodeMethod;
 import mikenakis.bytecode.ByteCodeType;
 import mikenakis.bytecode.Constant;
@@ -58,8 +58,7 @@ import mikenakis.bytecode.dumping.printers.BootstrapMethodPrinter;
 import mikenakis.bytecode.dumping.printers.BootstrapMethodsAttributePrinter;
 import mikenakis.bytecode.dumping.printers.BranchInstructionPrinter;
 import mikenakis.bytecode.dumping.printers.ByteCodeAnnotationPrinter;
-import mikenakis.bytecode.dumping.printers.ByteCodeFieldPrinter;
-import mikenakis.bytecode.dumping.printers.ByteCodeMethodPrinter;
+import mikenakis.bytecode.dumping.printers.ByteCodeMemberPrinter;
 import mikenakis.bytecode.dumping.printers.ChopFramePrinter;
 import mikenakis.bytecode.dumping.printers.ClassAnnotationValuePrinter;
 import mikenakis.bytecode.dumping.printers.ClassConstantPrinter;
@@ -168,7 +167,7 @@ public final class RenderingContext
 
 	public final Style style;
 	public final ByteCodeType byteCodeType;
-	public final Optional<List<String>> sourceLines;
+	private final Optional<List<String>> sourceLines;
 	private final Map<Instruction,Data> dataFromInstructionMap = new HashMap<>();
 
 	public RenderingContext( Style style, ByteCodeType byteCodeType )
@@ -207,7 +206,7 @@ public final class RenderingContext
 	{
 		Map<Instruction,Integer> lineNumberFromInstructionMap = getLineNumberFromInstructionMap( codeAttribute );
 		Collection<Instruction> targets = new HashSet<>();
-		codeAttribute.collectTargets( instruction ->
+		codeAttribute.collectTargets( instruction -> //
 		{
 			assert instruction != null;
 			if( instruction == InstructionReference.END_INSTRUCTION )
@@ -252,12 +251,12 @@ public final class RenderingContext
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public TypeAnnotationsAttributeEntryPrinter newPrinter( TypeAnnotationsAttribute.Entry entry )
+	public static TypeAnnotationsAttributeEntryPrinter newPrinter( TypeAnnotationsAttribute.Entry entry )
 	{
 		return new TypeAnnotationsAttributeEntryPrinter( entry );
 	}
 
-	public Printer newPrinter( TypeAnnotationsAttribute.Target target )
+	public static Printer newPrinter( TypeAnnotationsAttribute.Target target )
 	{
 		if( target instanceof TypeAnnotationsAttribute.CatchTarget )
 			return new TypeAnnotationsAttributeTargetPrinter( target );
@@ -282,68 +281,54 @@ public final class RenderingContext
 		throw new AssertionError();
 	}
 
-	public Printer newPrinter( TypeAnnotationsAttribute.LocalVariableTarget.Entry entry )
+	public static Printer newPrinter( TypeAnnotationsAttribute.LocalVariableTarget.Entry entry )
 	{
 		return new TypeAnnotationsAttributeLocalVariableTargetEntryPrinter( entry );
 	}
 
-//	public ValueConstantPrinter newPrinter( ValueConstant<?> valueConstant )
-//	{
-//		return new ValueConstantPrinter( valueConstant );
-//	}
+	//	public ValueConstantPrinter newPrinter( ValueConstant<?> valueConstant )
+	//	{
+	//		return new ValueConstantPrinter( valueConstant );
+	//	}
 
-	public ConstantPrinter newPrinter( Constant constant )
+	public static ConstantPrinter newPrinter( Constant constant )
 	{
-		switch( constant.kind.tag )
-		{
-			case ClassConstant.TAG:
-				return new ClassConstantPrinter( constant.asClassConstant() );
-			case StringConstant.TAG:
-				return new StringConstantPrinter( constant.asStringConstant() );
-			case MethodTypeConstant.TAG:
-				return new MethodTypeConstantPrinter( constant.asMethodTypeConstant() );
-			case FieldReferenceConstant.TAG:
-			case InterfaceMethodReferenceConstant.TAG:
-			case PlainMethodReferenceConstant.TAG:
-				return new ReferenceConstantPrinter( constant.asReferenceConstant() );
-			case InvokeDynamicConstant.TAG:
-				return new InvokeDynamicConstantPrinter( constant.asInvokeDynamicConstant() );
-			case DoubleConstant.TAG:
-			case FloatConstant.TAG:
-			case IntegerConstant.TAG:
-			case LongConstant.TAG:
-			case Utf8Constant.TAG:
-				return new ValueConstantPrinter( constant.asValueConstant() );
-			case NameAndTypeConstant.TAG:
-				return new NameAndTypeConstantPrinter( constant.asNameAndTypeConstant() );
-			case MethodHandleConstant.TAG:
-				return new MethodHandleConstantPrinter( constant.asMethodHandleConstant() );
-			default:
-				throw new AssertionError();
-		}
+		return switch( constant.kind.tag )
+			{
+				case ClassConstant.TAG -> new ClassConstantPrinter( constant.asClassConstant() );
+				case StringConstant.TAG -> new StringConstantPrinter( constant.asStringConstant() );
+				case MethodTypeConstant.TAG -> new MethodTypeConstantPrinter( constant.asMethodTypeConstant() );
+				case FieldReferenceConstant.TAG, //
+					InterfaceMethodReferenceConstant.TAG, //
+					PlainMethodReferenceConstant.TAG -> new ReferenceConstantPrinter( constant.asReferenceConstant() );
+				case InvokeDynamicConstant.TAG -> new InvokeDynamicConstantPrinter( constant.asInvokeDynamicConstant() );
+				case DoubleConstant.TAG, //
+					FloatConstant.TAG, //
+					IntegerConstant.TAG, //
+					LongConstant.TAG, //
+					Utf8Constant.TAG -> new ValueConstantPrinter( constant.asValueConstant() );
+				case NameAndTypeConstant.TAG -> new NameAndTypeConstantPrinter( constant.asNameAndTypeConstant() );
+				case MethodHandleConstant.TAG -> new MethodHandleConstantPrinter( constant.asMethodHandleConstant() );
+				default -> throw new AssertionError();
+			};
 	}
 
-	public Printer newPrinter( ByteCodeField byteCodeField )
+	public static Printer newPrinter( ByteCodeMember byteCodeMember )
 	{
-		return new ByteCodeFieldPrinter( byteCodeField );
+		return new ByteCodeMemberPrinter( byteCodeMember );
 	}
 
-	public Printer newPrinter( ByteCodeMethod byteCodeMethod )
-	{
-		return new ByteCodeMethodPrinter( byteCodeMethod );
-	}
-
-	public AttributesPrinter newPrinter( Attributes attributes )
+	public static AttributesPrinter newPrinter( Attributes attributes )
 	{
 		return new AttributesPrinter( attributes );
 	}
 
-	public BootstrapMethodPrinter newPrinter( BootstrapMethod bootstrapMethod )
+	public static BootstrapMethodPrinter newPrinter( BootstrapMethod bootstrapMethod )
 	{
 		return new BootstrapMethodPrinter( bootstrapMethod );
 	}
 
-	public InstructionPrinter newPrinter( Instruction instruction )
+	public static InstructionPrinter newPrinter( Instruction instruction )
 	{
 		if( instruction.isTableSwitchInstruction() )
 			return new TableSwitchInstructionPrinter( instruction.asTableSwitchInstruction() );
@@ -378,7 +363,7 @@ public final class RenderingContext
 		throw new AssertionError();
 	}
 
-	public AttributePrinter newPrinter( Attribute attribute )
+	public static AttributePrinter newPrinter( Attribute attribute )
 	{
 		if( attribute.isBootstrapMethodsAttribute() )
 			return new BootstrapMethodsAttributePrinter( attribute.asBootstrapMethodsAttribute() );
@@ -425,12 +410,12 @@ public final class RenderingContext
 		throw new AssertionError();
 	}
 
-	public Printer newPrinter( AnnotationParameter annotationParameter )
+	public static Printer newPrinter( AnnotationParameter annotationParameter )
 	{
 		return new AnnotationParameterPrinter( annotationParameter );
 	}
 
-	public AnnotationValuePrinter newPrinter( AnnotationValue annotationValue )
+	public static AnnotationValuePrinter newPrinter( AnnotationValue annotationValue )
 	{
 		if( annotationValue.isArrayAnnotationValue() )
 			return new ArrayAnnotationValuePrinter( annotationValue.asArrayAnnotationValue() );
@@ -445,72 +430,72 @@ public final class RenderingContext
 		throw new AssertionError();
 	}
 
-	public ByteCodeAnnotationPrinter newPrinter( ByteCodeAnnotation byteCodeAnnotation )
+	public static ByteCodeAnnotationPrinter newPrinter( ByteCodeAnnotation byteCodeAnnotation )
 	{
 		return new ByteCodeAnnotationPrinter( byteCodeAnnotation );
 	}
 
-	public MethodParameterPrinter newPrinter( MethodParameter methodParameter )
+	public static MethodParameterPrinter newPrinter( MethodParameter methodParameter )
 	{
 		return new MethodParameterPrinter( methodParameter );
 	}
 
-	public ExceptionInfoPrinter newPrinter( ExceptionInfo exceptionInfo )
+	public static ExceptionInfoPrinter newPrinter( ExceptionInfo exceptionInfo )
 	{
 		return new ExceptionInfoPrinter( exceptionInfo );
 	}
 
-	public LocalVariableTypePrinter newPrinter( LocalVariableType localVariableType )
+	public static LocalVariableTypePrinter newPrinter( LocalVariableType localVariableType )
 	{
 		return new LocalVariableTypePrinter( localVariableType );
 	}
 
-	public LocalVariablePrinter newPrinter( LocalVariable localVariable )
+	public static LocalVariablePrinter newPrinter( LocalVariable localVariable )
 	{
 		return new LocalVariablePrinter( localVariable );
 	}
 
-	public LineNumberPrinter newPrinter( LineNumber lineNumber )
+	public static LineNumberPrinter newPrinter( LineNumber lineNumber )
 	{
 		return new LineNumberPrinter( lineNumber );
 	}
 
-	public Printer newPrinter( ParameterAnnotationsAttribute.Entry entry )
+	public static Printer newPrinter( ParameterAnnotationsAttribute.Entry entry )
 	{
 		return new ParameterAnnotationsAttributeEntryPrinter( entry );
 	}
 
-	public InnerClassPrinter newPrinter( InnerClass innerClass )
+	public static InnerClassPrinter newPrinter( InnerClass innerClass )
 	{
 		return new InnerClassPrinter( innerClass );
 	}
 
-	public InstructionReferencePrinter newPrinter( InstructionReference instructionReference )
+	public static InstructionReferencePrinter newPrinter( InstructionReference instructionReference )
 	{
 		return new InstructionReferencePrinter( instructionReference );
 	}
 
-	public Printer newPrinter( LookupSwitchInstruction.Entry entry )
+	public static Printer newPrinter( LookupSwitchInstruction.Entry entry )
 	{
 		return new LookupSwitchInstructionEntryPrinter( entry );
 	}
 
-	public Printer newPrinter( TypeAnnotationsAttribute.TypePath typePath )
+	public static Printer newPrinter( TypeAnnotationsAttribute.TypePath typePath )
 	{
 		return new TypeAnnotationsAttributeTypePathPrinter( typePath );
 	}
 
-	public Printer newPrinter( TypeAnnotationsAttribute.TypePath.Entry entry )
+	public static Printer newPrinter( TypeAnnotationsAttribute.TypePath.Entry entry )
 	{
 		return new TypeAnnotationsAttributeTypePathEntryPrinter( entry );
 	}
 
-	public Printer newPrinter( TypeAnnotationsAttribute.ElementValuePair elementValuePair )
+	public static Printer newPrinter( TypeAnnotationsAttribute.ElementValuePair elementValuePair )
 	{
 		return new TypeAnnotationsAttributeElementValuePairPrinter( elementValuePair );
 	}
 
-	public Printer newPrinter( Frame frame, Optional<Frame> previousFrame )
+	public static Printer newPrinter( Frame frame, Optional<Frame> previousFrame )
 	{
 		if( frame instanceof ChopFrame )
 			return new ChopFramePrinter( (ChopFrame)frame, previousFrame );
@@ -525,7 +510,7 @@ public final class RenderingContext
 		throw new AssertionError();
 	}
 
-	public VerificationTypePrinter newPrinter( VerificationType verificationType )
+	public static VerificationTypePrinter newPrinter( VerificationType verificationType )
 	{
 		return new VerificationTypePrinter( verificationType );
 	}
@@ -578,28 +563,7 @@ public final class RenderingContext
 		}
 	}
 
-	public static String getByteCodeTypeAccessFlagName( int flag )
-	{
-		assert Integer.bitCount( flag ) == 1;
-		switch( flag )
-		{
-			//@formatter:off
-			case ByteCodeType.ACC_PUBLIC     : return "public";
-			case ByteCodeType.ACC_FINAL      : return "final";
-			case ByteCodeType.ACC_SUPER      : return "super";
-			case ByteCodeType.ACC_INTERFACE  : return "interface";
-			case ByteCodeType.ACC_ABSTRACT   : return "abstract";
-			case ByteCodeType.ACC_SYNTHETIC  : return "synthetic";
-			case ByteCodeType.ACC_ANNOTATION : return "annotation";
-			case ByteCodeType.ACC_ENUM       : return "enum";
-			//@formatter:on
-			default:
-				assert false;
-				return null;
-		}
-	}
-
-	public static void appendDescriptorTo( Descriptor descriptor, StringBuilder builder, String name )
+	private static void appendDescriptorTo( Descriptor descriptor, StringBuilder builder, String name )
 	{
 		appendDescriptorTo( descriptor, builder, name, Optional.empty() );
 	}

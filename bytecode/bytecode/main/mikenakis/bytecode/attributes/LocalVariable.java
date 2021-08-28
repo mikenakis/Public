@@ -42,8 +42,8 @@ public final class LocalVariable extends Printable
 		int endPc = startInstructionReference.getPc() + length;
 		Instruction endInstruction = codeAttribute.getInstructionByPc( endPc );
 		endInstructionReference = new AbsoluteInstructionReference( codeAttribute, endInstruction );
-		nameConstant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-		descriptorConstant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		nameConstant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		descriptorConstant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
 		index = bufferReader.readUnsignedShort();
 	}
 

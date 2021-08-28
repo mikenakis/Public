@@ -28,8 +28,8 @@ public final class FullFramePrinter extends FramePrinter
 	{
 		return List.of(
 			Twig.of( "localVerificationTypes (" + fullFrame.localVerificationTypes.size() + " entries)",
-				fullFrame.localVerificationTypes.stream().map( t -> renderingContext.newPrinter( t ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ),
+				fullFrame.localVerificationTypes.stream().map( t -> RenderingContext.newPrinter( t ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ),
 			Twig.of( "stackVerificationTypes (" + fullFrame.stackVerificationTypes.size() + " entries)",
-				fullFrame.stackVerificationTypes.stream().map( t -> renderingContext.newPrinter( t ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
+				fullFrame.stackVerificationTypes.stream().map( t -> RenderingContext.newPrinter( t ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
 	}
 }

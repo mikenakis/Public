@@ -35,7 +35,7 @@ public final class ExceptionsAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return exceptionsAttribute.exceptionClassConstants.stream().map( ci -> renderingContext.newPrinter( ci ).toTwig( renderingContext, "exception " ) ).collect(
+		return exceptionsAttribute.exceptionClassConstants.stream().map( ci -> RenderingContext.newPrinter( ci ).toTwig( renderingContext, "exception " ) ).collect(
 			Collectors.toList() );
 	}
 }

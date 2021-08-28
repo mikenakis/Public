@@ -30,6 +30,6 @@ public final class ParameterAnnotationsAttributeEntryPrinter extends Printer
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return entry.annotations.stream().map( a -> renderingContext.newPrinter( a ).toTwig( renderingContext, "annotation" ) ).collect( Collectors.toList() );
+		return entry.annotations.stream().map( a -> RenderingContext.newPrinter( a ).toTwig( renderingContext, "annotation" ) ).collect( Collectors.toList() );
 	}
 }

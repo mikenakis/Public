@@ -22,6 +22,6 @@ public final class ObjectVerificationTypePrinter extends VerificationTypePrinter
 	{
 		super.appendTo( renderingContext, builder );
 		builder.append( ' ' );
-		renderingContext.newPrinter( objectVerificationType.classConstant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( objectVerificationType.classConstant ).appendIndexTo( renderingContext, builder );
 	}
 }

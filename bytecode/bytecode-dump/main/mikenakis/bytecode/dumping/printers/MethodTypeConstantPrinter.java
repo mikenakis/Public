@@ -21,11 +21,11 @@ public final class MethodTypeConstantPrinter extends ConstantPrinter
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "descriptor = " );
-		renderingContext.newPrinter( methodTypeConstant.descriptorConstant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( methodTypeConstant.descriptorConstant ).appendIndexTo( renderingContext, builder );
 	}
 
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( methodTypeConstant.descriptorConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( methodTypeConstant.descriptorConstant ).appendGildedTo( renderingContext, builder );
 	}
 }

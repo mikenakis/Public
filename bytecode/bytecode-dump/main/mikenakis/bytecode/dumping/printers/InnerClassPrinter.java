@@ -26,15 +26,15 @@ public final class InnerClassPrinter extends Printer
 			if( innerClass.outerClassConstant.isPresent() )
 			{
 				builder.append( "outerClass = " );
-				renderingContext.newPrinter( innerClass.outerClassConstant.get() ).appendRawIndexTo( renderingContext, builder );
+				RenderingContext.newPrinter( innerClass.outerClassConstant.get() ).appendRawIndexTo( renderingContext, builder );
 			}
 			builder.append( " innerClassAccessFlags = 0x" ).append( Integer.toHexString( innerClass.innerClassAccessFlags ) );
 			builder.append( " innerClass = " );
-			renderingContext.newPrinter( innerClass.innerClassConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( innerClass.innerClassConstant ).appendRawIndexTo( renderingContext, builder );
 			if( innerClass.innerNameConstant.isPresent() )
 			{
 				builder.append( ", innerName = " );
-				renderingContext.newPrinter( innerClass.innerNameConstant.get() ).appendRawIndexTo( renderingContext, builder );
+				RenderingContext.newPrinter( innerClass.innerNameConstant.get() ).appendRawIndexTo( renderingContext, builder );
 			}
 		}
 		if( renderingContext.style == Style.MIXED )
@@ -51,16 +51,16 @@ public final class InnerClassPrinter extends Printer
 	{
 		if( innerClass.outerClassConstant.isPresent() )
 		{
-			renderingContext.newPrinter( innerClass.outerClassConstant.get() ).appendGildedTo( renderingContext, builder );
+			RenderingContext.newPrinter( innerClass.outerClassConstant.get() ).appendGildedTo( renderingContext, builder );
 			builder.append( " : " );
 		}
 		RenderingContext.appendBitsAsString( builder, innerClass.innerClassAccessFlags, InnerClassPrinter::getAccessFlagName, " " );
 		builder.append( ' ' );
-		renderingContext.newPrinter( innerClass.innerClassConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( innerClass.innerClassConstant ).appendGildedTo( renderingContext, builder );
 		if( innerClass.innerNameConstant.isPresent() )
 		{
 			builder.append( ' ' );
-			renderingContext.newPrinter( innerClass.innerNameConstant.get() ).appendGildedTo( renderingContext, builder );
+			RenderingContext.newPrinter( innerClass.innerNameConstant.get() ).appendGildedTo( renderingContext, builder );
 		}
 	}
 

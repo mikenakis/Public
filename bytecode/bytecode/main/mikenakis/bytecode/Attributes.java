@@ -26,27 +26,32 @@ public class Attributes extends Printable implements Iterable<Attribute>
 		Attribute newAttribute( String attributeName, BufferReader bufferReader );
 	}
 
-	private final Map<String,AttributeBuffer> attributeBuffersFromNames;
-	private final Runnable observer;
-
-	public Attributes( Runnable observer )
+	public static Attributes read( Runnable observer, ConstantPool constantPool, Factory attributeFactory, BufferReader bufferReader )
 	{
-		this.observer = observer;
-		attributeBuffersFromNames = newMap( 0 );
-	}
-
-	public Attributes( Runnable observer, ConstantPool constantPool, Factory attributeFactory, BufferReader bufferReader )
-	{
-		this.observer = observer;
 		int count = bufferReader.readUnsignedShort();
-		attributeBuffersFromNames = newMap( count );
+		Attributes attributes = new Attributes( observer, count );
 		for( int i = 0; i < count; i++ )
 		{
 			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
 			String attributeName = nameConstant.getStringValue();
 			AttributeBuffer attributeBuffer = new AttributeBuffer( attributeName, attributeFactory, bufferReader );
-			Kit.map.add( attributeBuffersFromNames, attributeName, attributeBuffer );
+			Kit.map.add( attributes.attributeBuffersFromNames, attributeName, attributeBuffer );
 		}
+		return attributes;
+	}
+
+	private final Map<String,AttributeBuffer> attributeBuffersFromNames;
+	private final Runnable observer;
+
+	public Attributes( Runnable observer )
+	{
+		this( observer, 0 );
+	}
+
+	private Attributes( Runnable observer, int attributeCount )
+	{
+		this.observer = observer;
+		attributeBuffersFromNames = newMap( attributeCount );
 	}
 
 	public void intern( ConstantPool constantPool )
@@ -120,7 +125,7 @@ public class Attributes extends Printable implements Iterable<Attribute>
 	 *
 	 * @author Michael Belivanakis (michael.gr)
 	 */
-	static class AttributeBuffer
+	private static class AttributeBuffer
 	{
 		private final String attributeName;
 		private final Utf8Constant nameConstant;

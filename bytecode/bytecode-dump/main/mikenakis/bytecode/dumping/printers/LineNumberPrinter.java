@@ -21,6 +21,6 @@ public final class LineNumberPrinter extends Printer
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "lineNumber = " ).append( lineNumber ).append( ", startPc = " );
-		renderingContext.newPrinter( lineNumber.startPc ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( lineNumber.startPc ).appendTo( renderingContext, builder );
 	}
 }

@@ -24,7 +24,7 @@ public final class MultiANewArrayInstructionPrinter extends InstructionPrinter
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( multiANewArrayInstruction.model.opCode ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( multiANewArrayInstruction.constant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( multiANewArrayInstruction.constant ).appendIndexTo( renderingContext, builder );
 		builder.append( ' ' ).append( multiANewArrayInstruction.dimensionCount ).append( " dimensions" );
 	}
 }

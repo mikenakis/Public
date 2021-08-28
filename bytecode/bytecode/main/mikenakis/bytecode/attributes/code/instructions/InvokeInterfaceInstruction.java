@@ -49,7 +49,7 @@ public final class InvokeInterfaceInstruction extends Instruction
 		super( Optional.of( pc ) );
 		assert !wide;
 		this.model = model;
-		constant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader );
+		constant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader );
 		argumentCount = bufferReader.readUnsignedByte();
 		int extraByte = bufferReader.readUnsignedByte(); //one extra byte, unused.
 		assert extraByte == 0;

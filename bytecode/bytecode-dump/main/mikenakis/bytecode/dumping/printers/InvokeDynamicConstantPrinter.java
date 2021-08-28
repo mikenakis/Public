@@ -29,7 +29,7 @@ public final class InvokeDynamicConstantPrinter extends ConstantPrinter
 		if( renderingContext.style.gild )
 		{
 			builder.append( RenderingContext.GILDING_PREFIX );
-			renderingContext.newPrinter( invokeDynamicConstant.getBootstrapMethod() ).appendGildedTo( renderingContext, builder );
+			RenderingContext.newPrinter( invokeDynamicConstant.getBootstrapMethod() ).appendGildedTo( renderingContext, builder );
 			builder.append( RenderingContext.GILDING_SUFFIX );
 		}
 
@@ -39,7 +39,7 @@ public final class InvokeDynamicConstantPrinter extends ConstantPrinter
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 //		builder.append( "bootstrapMethod = [" ).append( bootstrapMethodIndex ).append( "] { " );
-		renderingContext.newPrinter( invokeDynamicConstant.getBootstrapMethod() ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( invokeDynamicConstant.getBootstrapMethod() ).appendGildedTo( renderingContext, builder );
 		builder.append( " " );
 		RenderingContext.appendGildedNameAndTypeAndDescriptor( builder, invokeDynamicConstant.nameAndTypeConstant.nameConstant,
 			invokeDynamicConstant.nameAndTypeConstant.descriptorConstant );

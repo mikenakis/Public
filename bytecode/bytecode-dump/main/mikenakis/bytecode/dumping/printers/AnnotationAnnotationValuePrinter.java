@@ -25,6 +25,6 @@ public final class AnnotationAnnotationValuePrinter extends AnnotationValuePrint
 
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( annotationAnnotationValue.annotation ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( annotationAnnotationValue.annotation ).appendTo( renderingContext, builder );
 	}
 }

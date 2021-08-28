@@ -38,7 +38,7 @@ public final class CodeAttribute extends Attribute
 		return Attribute.tryFrom( attributes, NAME ).map( attribute -> attribute.asCodeAttribute() );
 	}
 
-	public final ByteCodeMethod method;
+	public final ConstantPool constantPool;
 	public int maxStack;
 	public final int maxLocals;
 	public final List<ExceptionInfo> exceptionInfos;
@@ -46,10 +46,10 @@ public final class CodeAttribute extends Attribute
 	public final ArrayList<Instruction> instructions = new ArrayList<>();
 	private int endPc;
 
-	public CodeAttribute( Runnable observer, ByteCodeMethod method )
+	public CodeAttribute( Runnable observer, ConstantPool constantPool )
 	{
 		super( observer, NAME );
-		this.method = method;
+		this.constantPool = constantPool;
 		maxStack = 0;
 		maxLocals = 0;
 		exceptionInfos = new ArrayList<>();
@@ -57,10 +57,10 @@ public final class CodeAttribute extends Attribute
 		endPc = 0;
 	}
 
-	public CodeAttribute( Runnable observer, ByteCodeMethod method, BufferReader bufferReader )
+	public CodeAttribute( Runnable observer, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		super( observer, NAME );
-		this.method = method;
+		this.constantPool = constantPool;
 		maxStack = bufferReader.readUnsignedShort();
 		maxLocals = bufferReader.readUnsignedShort();
 
@@ -76,7 +76,7 @@ public final class CodeAttribute extends Attribute
 			ExceptionInfo exceptionInfo = new ExceptionInfo( this, bufferReader );
 			exceptionInfos.add( exceptionInfo );
 		}
-		attributes = new Attributes( this::markAsDirty, method.declaringType.constantPool, this::newAttribute, bufferReader );
+		attributes = Attributes.read( this::markAsDirty, constantPool, this::newAttribute, bufferReader );
 	}
 
 	private void readInstructions( Buffer codeBuffer )

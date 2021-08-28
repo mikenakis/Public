@@ -39,8 +39,8 @@ public final class CodeAttributePrinter extends AttributePrinter
 		return List.of(
 			Twig.of( "instructions (" + codeAttribute.instructions.size() + " entries)", getInstructionTwigs( renderingContext ) ),
 			Twig.of( "exceptionInfos (" + codeAttribute.exceptionInfos.size() + " entries)",
-				codeAttribute.exceptionInfos.stream().map( e -> renderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ),
-			renderingContext.newPrinter( codeAttribute.attributes ).toTwig( renderingContext, "attributes" ) );
+				codeAttribute.exceptionInfos.stream().map( e -> RenderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ),
+			RenderingContext.newPrinter( codeAttribute.attributes ).toTwig( renderingContext, "attributes" ) );
 	}
 
 	private List<Twig> getInstructionTwigs( RenderingContext renderingContext )
@@ -57,7 +57,7 @@ public final class CodeAttributePrinter extends AttributePrinter
 				data.get().source.ifPresent( s -> builder.append( " // " ).append( s ) );
 				twigs.add( Twig.of( builder.toString() ) );
 			}
-			twigs.add( renderingContext.newPrinter( instruction ).toTwig( renderingContext, "" ) );
+			twigs.add( RenderingContext.newPrinter( instruction ).toTwig( renderingContext, "" ) );
 		}
 		return twigs;
 	}

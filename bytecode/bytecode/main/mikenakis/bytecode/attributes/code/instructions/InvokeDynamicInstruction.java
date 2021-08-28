@@ -47,7 +47,7 @@ public final class InvokeDynamicInstruction extends Instruction
 		super( Optional.of( pc ) );
 		assert !wide;
 		this.model = model;
-		invokeDynamicConstant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader ).asInvokeDynamicConstant();
+		invokeDynamicConstant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader ).asInvokeDynamicConstant();
 		int operand2 = bufferReader.readUnsignedByte();
 		assert operand2 == 0;
 		int operand3 = bufferReader.readUnsignedByte();

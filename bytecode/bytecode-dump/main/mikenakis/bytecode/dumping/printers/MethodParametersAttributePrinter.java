@@ -35,6 +35,6 @@ public final class MethodParametersAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return methodParametersAttribute.entries.stream().map( p -> renderingContext.newPrinter( p ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return methodParametersAttribute.entries.stream().map( p -> RenderingContext.newPrinter( p ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

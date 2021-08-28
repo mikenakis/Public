@@ -132,7 +132,7 @@ public final class Ruminizer
 		//remove local variable tables as they are not valid anymore
 		codeAttribute.attributes.removeAttributeByNameIfPresent( LocalVariableTableAttribute.NAME );
 		codeAttribute.attributes.removeAttributeByNameIfPresent( LocalVariableTypeTableAttribute.NAME );
-		codeAttribute.intern( codeAttribute.method.declaringType.constantPool );
+		codeAttribute.intern( codeAttribute.constantPool );
 
 		//fix the stack map table attribute
 		StackMapTableAttribute stackMapTableAttribute = byteCodeMethod.getCodeAttribute().getOrCreateStackMapTableAttribute();

@@ -22,11 +22,11 @@ public final class ConstAnnotationValuePrinter extends AnnotationValuePrinter
 	{
 		builder.append( constAnnotationValue.kind.name );
 		builder.append( " value = " );
-		renderingContext.newPrinter( constAnnotationValue.valueConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( constAnnotationValue.valueConstant ).appendGildedTo( renderingContext, builder );
 	}
 
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( constAnnotationValue.valueConstant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( constAnnotationValue.valueConstant ).appendIndexTo( renderingContext, builder );
 	}
 }

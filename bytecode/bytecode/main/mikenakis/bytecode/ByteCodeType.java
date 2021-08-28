@@ -23,7 +23,9 @@ import mikenakis.kit.Kit;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -51,11 +53,33 @@ import java.util.function.Function;
  */
 public final class ByteCodeType implements Annotatable
 {
-	public static ByteCodeType create( int accessFlags, String className, Optional<String> superClassName )
+	public enum Access
+	{
+		Public,
+		Final,
+		Super,
+		Interface,
+		Abstract,
+		Synthetic,
+		Annotation,
+		Enum
+	}
+
+	public static final FlagEnum<Access> accessFlagEnum = FlagEnum.of( Access.class,
+		Map.entry( Access.Public, 0x0001 ),     // ACC_PUBLIC = 0x0001; //bit 0 : Declared public; may be accessed from outside its package.
+		Map.entry( Access.Final, 0x0010 ),      // ACC_FINAL = 0x0010; //bit 4: Declared final; no subclasses allowed.
+		Map.entry( Access.Super, 0x0020 ),      // ACC_SUPER = 0x0020; //bit 5: Treat superclass methods specially when invoked by the invokespecial instruction.
+		Map.entry( Access.Interface, 0x0200 ),  // ACC_INTERFACE = 0x0200; //bit 9: Is an interface, not a class.
+		Map.entry( Access.Abstract, 0x0400 ),   // ACC_ABSTRACT = 0x0400; //bit 10: Declared abstract; must not be instantiated.
+		Map.entry( Access.Synthetic, 0x1000 ),  // ACC_SYNTHETIC = 0x1000; //bit 12: Declared synthetic; not present in the source code.
+		Map.entry( Access.Annotation, 0x2000 ), // ACC_ANNOTATION = 0x2000; //bit 13: Declared as an annotation type.
+		Map.entry( Access.Enum, 0x4000 ) );     // ACC_ENUM = 0x4000; //bit 14: Declared as an enum type.
+
+	public static ByteCodeType create( EnumSet<Access> access, String className, Optional<String> superClassName )
 	{
 		int majorVersion = Runtime.version().feature();
 		int minorVersion = Runtime.version().interim();
-		return new ByteCodeType( minorVersion, majorVersion, accessFlags, className, superClassName );
+		return new ByteCodeType( minorVersion, majorVersion, access, className, superClassName );
 	}
 
 	public static ByteCodeType create( Buffer buffer, Path classFilePathName )
@@ -91,17 +115,6 @@ public final class ByteCodeType implements Annotatable
 		return create( buffer, Optional.of( classFilePathName ), sourcePath );
 	}
 
-	/* Access flags */
-	public static final int ACC_PUBLIC = 0x0001; //bit 0 : Declared public; may be accessed from outside its package.
-	public static final int ACC_FINAL = 0x0010; //bit 4: Declared final; no subclasses allowed.
-	public static final int ACC_SUPER = 0x0020; //bit 5: Treat superclass methods specially when invoked by the invokespecial instruction.
-	public static final int ACC_INTERFACE = 0x0200; //bit 9: Is an interface, not a class.
-	public static final int ACC_ABSTRACT = 0x0400; //bit 10: Declared abstract; must not be instantiated.
-	public static final int ACC_SYNTHETIC = 0x1000; //bit 12: Declared synthetic; not present in the source code.
-	public static final int ACC_ANNOTATION = 0x2000; //bit 13: Declared as an annotation type.
-	public static final int ACC_ENUM = 0x4000; //bit 14: Declared as an enum type.
-	public static final int ACC_MASK = ACC_PUBLIC | ACC_FINAL | ACC_SUPER | ACC_INTERFACE | ACC_ABSTRACT | ACC_SYNTHETIC | ACC_ANNOTATION | ACC_ENUM;
-
 	private static final int MAGIC = 0xCAFEBABE;
 
 	private Buffer buffer;
@@ -111,7 +124,7 @@ public final class ByteCodeType implements Annotatable
 	public final int minorVersion;
 	public final int majorVersion;
 	public final ConstantPool constantPool;
-	public final int accessFlags;
+	public final EnumSet<Access> access;
 	public final ClassConstant thisClassConstant;
 	public final Optional<ClassConstant> superClassConstant;
 	public final Collection<ClassConstant> interfaceClassConstants;
@@ -119,14 +132,14 @@ public final class ByteCodeType implements Annotatable
 	public final Collection<ByteCodeMethod> methods;
 	public final Attributes attributes;
 
-	private ByteCodeType( int minorVersion, int majorVersion, int accessFlags, String className, Optional<String> superClassName )
+	private ByteCodeType( int minorVersion, int majorVersion, EnumSet<Access> access, String className, Optional<String> superClassName )
 	{
 		buffer = Buffer.EMPTY;
 		classFilePathName = Optional.empty();
 		sourcePath = Optional.empty();
 		this.minorVersion = minorVersion;
 		this.majorVersion = majorVersion;
-		this.accessFlags = accessFlags;
+		this.access = access;
 		constantPool = new ConstantPool( this::markAsDirty, this );
 		thisClassConstant = new ClassConstant( className );
 		superClassConstant = superClassName.map( s -> new ClassConstant( s ) );
@@ -147,7 +160,8 @@ public final class ByteCodeType implements Annotatable
 		minorVersion = bufferReader.readUnsignedShort();
 		majorVersion = bufferReader.readUnsignedShort();
 		constantPool = new ConstantPool( this::markAsDirty, this, bufferReader );
-		accessFlags = bufferReader.readUnsignedShort();
+		int accessFlags = bufferReader.readUnsignedShort();
+		access = accessFlagEnum.fromInt( accessFlags );
 		thisClassConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
 		superClassConstant = constantPool.tryReadIndexAndGetConstant( bufferReader ).map( constant -> constant.asClassConstant() );
 		int interfaceCount = bufferReader.readUnsignedShort();
@@ -161,17 +175,17 @@ public final class ByteCodeType implements Annotatable
 		fields = newSet( fieldCount );
 		for( int i = 0; i < fieldCount; i++ )
 		{
-			ByteCodeField byteCodeField = new ByteCodeField( this::markAsDirty, this, bufferReader );
+			ByteCodeField byteCodeField = ByteCodeField.read( this::markAsDirty, this, bufferReader );
 			Kit.collection.add( fields, byteCodeField );
 		}
 		int methodCount = bufferReader.readUnsignedShort();
 		methods = newSet( methodCount );
 		for( int i = 0; i < methodCount; i++ )
 		{
-			ByteCodeMethod byteCodeMethod = new ByteCodeMethod( this::markAsDirty, this, bufferReader );
+			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( this::markAsDirty, this, bufferReader );
 			Kit.collection.add( methods, byteCodeMethod );
 		}
-		attributes = new Attributes( this::markAsDirty, constantPool, this::newAttribute, bufferReader );
+		attributes = Attributes.read( this::markAsDirty, constantPool, this::newAttribute, bufferReader );
 		assert sourcePathIsOkAssertion();
 		assert bufferReader.isAtEnd();
 	}
@@ -200,7 +214,7 @@ public final class ByteCodeType implements Annotatable
 		bufferWriter.writeUnsignedShort( minorVersion );
 		bufferWriter.writeUnsignedShort( majorVersion );
 		constantPool.write( bufferWriter );
-		bufferWriter.writeUnsignedShort( accessFlags );
+		bufferWriter.writeUnsignedShort( accessFlagEnum.toInt( access ) );
 		thisClassConstant.writeIndex( constantPool, bufferWriter );
 		bufferWriter.writeUnsignedShort( superClassConstant.isEmpty() ? 0 : constantPool.getIndex( superClassConstant.get() ) );
 		bufferWriter.writeUnsignedShort( interfaceClassConstants.size() );
@@ -250,7 +264,7 @@ public final class ByteCodeType implements Annotatable
 
 	public boolean isInterface()
 	{
-		return (accessFlags & ACC_INTERFACE) != 0;
+		return access.contains( Access.Interface );
 	}
 
 	public Buffer getBuffer()
@@ -263,17 +277,6 @@ public final class ByteCodeType implements Annotatable
 			dirty = false;
 		}
 		return buffer;
-	}
-
-	public boolean hasAccessFlag( int flag )
-	{
-		assert Integer.bitCount( flag ) == 1;
-		return (accessFlags & flag) != 0;
-	}
-
-	public boolean hasAnyAccessFlag( int flag )
-	{
-		return (accessFlags & flag) != 0;
 	}
 
 	private Attribute newAttribute( String attributeName, BufferReader bufferReader )
@@ -332,7 +335,7 @@ public final class ByteCodeType implements Annotatable
 
 	public boolean isAnnotation()
 	{
-		return (accessFlags & ACC_ANNOTATION) != 0;
+		return access.contains( Access.Annotation );
 	}
 
 	private <E> Collection<E> newSet( int capacity )

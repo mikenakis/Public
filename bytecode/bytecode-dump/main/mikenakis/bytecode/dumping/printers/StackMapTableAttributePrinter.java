@@ -41,7 +41,7 @@ public final class StackMapTableAttributePrinter extends AttributePrinter
 		Optional<Frame> previousFrame = Optional.empty();
 		for( Frame frame : stackMapTableAttribute.frames )
 		{
-			Twig twig = renderingContext.newPrinter( frame, previousFrame ).toTwig( renderingContext, "" );
+			Twig twig = RenderingContext.newPrinter( frame, previousFrame ).toTwig( renderingContext, "" );
 			twigs.add( twig );
 			previousFrame = Optional.of( frame );
 		}

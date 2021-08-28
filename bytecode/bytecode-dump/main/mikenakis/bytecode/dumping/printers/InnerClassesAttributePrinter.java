@@ -35,6 +35,6 @@ public final class InnerClassesAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return innerClassesAttribute.innerClasses.stream().map( c -> renderingContext.newPrinter( c ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return innerClassesAttribute.innerClasses.stream().map( c -> RenderingContext.newPrinter( c ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

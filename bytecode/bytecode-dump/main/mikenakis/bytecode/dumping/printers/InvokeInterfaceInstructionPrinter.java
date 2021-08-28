@@ -24,7 +24,7 @@ public final class InvokeInterfaceInstructionPrinter extends InstructionPrinter
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( invokeInterfaceInstruction.model.opCode ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( invokeInterfaceInstruction.constant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( invokeInterfaceInstruction.constant ).appendIndexTo( renderingContext, builder );
 		builder.append( ' ' ).append( invokeInterfaceInstruction.argumentCount ).append( " arguments" );
 	}
 }

@@ -36,8 +36,8 @@ public final class LocalVariableType extends Printable
 	{
 		startPc = new AbsoluteInstructionReference( codeAttribute, false, bufferReader );
 		length = bufferReader.readUnsignedShort();
-		nameConstant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-		signatureConstant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		nameConstant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		signatureConstant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
 		index = bufferReader.readUnsignedShort();
 	}
 

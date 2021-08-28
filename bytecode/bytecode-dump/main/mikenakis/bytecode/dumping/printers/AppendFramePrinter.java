@@ -27,6 +27,6 @@ public final class AppendFramePrinter extends FramePrinter
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
 		return List.of( Twig.of( "localVerificationTypes (" + appendFrame.localVerificationTypes.size() + " entries)",
-			appendFrame.localVerificationTypes.stream().map( t -> renderingContext.newPrinter( t ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
+			appendFrame.localVerificationTypes.stream().map( t -> RenderingContext.newPrinter( t ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
 	}
 }

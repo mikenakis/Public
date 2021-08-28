@@ -24,6 +24,6 @@ public final class ConstantReferencingInstructionPrinter extends InstructionPrin
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( constantReferencingInstruction.model.opCode ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( constantReferencingInstruction.constant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( constantReferencingInstruction.constant ).appendIndexTo( renderingContext, builder );
 	}
 }

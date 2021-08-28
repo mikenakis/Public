@@ -24,6 +24,6 @@ public final class BranchInstructionPrinter extends InstructionPrinter
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( branchInstruction.getOpCode() ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( branchInstruction.instructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( branchInstruction.instructionReference ).appendTo( renderingContext, builder );
 	}
 }

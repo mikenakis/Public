@@ -12,6 +12,7 @@ import mikenakis.kit.Kit;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,10 +38,10 @@ public final class ByteCodePrinter
 		if( renderingContext.style.raw )
 			children.add( constantPoolToTwig( renderingContext, byteCodeType.constantPool, "constantPool" ) );
 		children.add( Twig.of( "fields (" + byteCodeType.fields.size() + " entries)",
-			byteCodeType.fields.stream().map( field -> renderingContext.newPrinter( field ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
+			byteCodeType.fields.stream().map( field -> RenderingContext.newPrinter( field ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
 		children.add( Twig.of( "methods (" + byteCodeType.methods.size() + " entries)",
-			byteCodeType.methods.stream().map( method -> renderingContext.newPrinter( method ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
-		children.add( renderingContext.newPrinter( byteCodeType.attributes ).toTwig( renderingContext, "attributes" ) );
+			byteCodeType.methods.stream().map( method -> RenderingContext.newPrinter( method ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() ) ) );
+		children.add( RenderingContext.newPrinter( byteCodeType.attributes ).toTwig( renderingContext, "attributes" ) );
 		Twig rootNode = Twig.of( toString( renderingContext ), children );
 		var builder = new StringBuilder( 1024 * 100 );
 		RenderingContext.treeDump( rootNode, Twig::getChildren, Twig::getPayload, s -> emit( builder, s ) );
@@ -53,20 +54,20 @@ public final class ByteCodePrinter
 		builder.append( getKeyword() ).append( " version = " ).append( byteCodeType.majorVersion ).append( '.' ).append( byteCodeType.minorVersion );
 		if( renderingContext.style.raw )
 		{
-			builder.append( " accessFlags = 0x" ).append( Integer.toHexString( byteCodeType.accessFlags ) );
+			builder.append( " accessFlags = 0x" ).append( Integer.toHexString( ByteCodeType.accessFlagEnum.toInt( byteCodeType.access ) ) );
 			builder.append( ", thisClass = " );
-			renderingContext.newPrinter( byteCodeType.thisClassConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( byteCodeType.thisClassConstant ).appendRawIndexTo( renderingContext, builder );
 			if( byteCodeType.superClassConstant.isPresent() )
 			{
 				builder.append( ", superClass = " );
-				renderingContext.newPrinter( byteCodeType.superClassConstant.get() ).appendRawIndexTo( renderingContext, builder );
+				RenderingContext.newPrinter( byteCodeType.superClassConstant.get() ).appendRawIndexTo( renderingContext, builder );
 			}
 			builder.append( ", interfaces = [" );
 			boolean first = true;
 			for( ClassConstant interfaceClassConstant : byteCodeType.interfaceClassConstants )
 			{
 				first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-				renderingContext.newPrinter( interfaceClassConstant ).appendRawIndexTo( renderingContext, builder );
+				RenderingContext.newPrinter( interfaceClassConstant ).appendRawIndexTo( renderingContext, builder );
 			}
 			builder.append( "] " );
 		}
@@ -83,12 +84,18 @@ public final class ByteCodePrinter
 
 	private void appendGildedTo( StringBuilder builder )
 	{
-		int adjustedAccessFlags = byteCodeType.accessFlags;
+		EnumSet<ByteCodeType.Access> adjustedAccess = EnumSet.copyOf( byteCodeType.access );
 		if( byteCodeType.isInterface() )
-			adjustedAccessFlags &= ~(ByteCodeType.ACC_INTERFACE | ByteCodeType.ACC_ABSTRACT);
+		{
+			Kit.collection.tryRemove( adjustedAccess, ByteCodeType.Access.Interface );
+			Kit.collection.tryRemove( adjustedAccess, ByteCodeType.Access.Abstract );
+		}
 		else
-			adjustedAccessFlags &= ~(ByteCodeType.ACC_SUPER | ByteCodeType.ACC_ENUM);
-		RenderingContext.appendAccessFlags( builder, adjustedAccessFlags, RenderingContext::getByteCodeTypeAccessFlagName );
+		{
+			Kit.collection.tryRemove( adjustedAccess, ByteCodeType.Access.Super );
+			Kit.collection.tryRemove( adjustedAccess, ByteCodeType.Access.Enum );
+		}
+		ByteCodeType.accessFlagEnum.toStringBuilder( builder, adjustedAccess );
 		builder.append( getKeyword() ).append( ' ' ).append( byteCodeType.getName() );
 		Optional<String> superClassName = byteCodeType.getSuperClassName();
 		if( superClassName.isPresent() && !superClassName.get().equals( Object.class.getName() ) )
@@ -113,9 +120,9 @@ public final class ByteCodePrinter
 
 	private String getKeyword()
 	{
-		if( (byteCodeType.accessFlags & ByteCodeType.ACC_INTERFACE) != 0 )
+		if( byteCodeType.access.contains( ByteCodeType.Access.Interface ) )
 			return "interface";
-		if( (byteCodeType.accessFlags & ByteCodeType.ACC_ENUM) != 0 )
+		if( byteCodeType.access.contains( ByteCodeType.Access.Enum ) )
 			return "enum";
 		return "class";
 	}
@@ -132,7 +139,7 @@ public final class ByteCodePrinter
 			else
 			{
 				Constant constant = constantPool.getConstant( i );
-				twig = renderingContext.newPrinter( constant ).toTwig( renderingContext, childPrefix + constant.kind.name + ' ' );
+				twig = RenderingContext.newPrinter( constant ).toTwig( renderingContext, childPrefix + constant.kind.name + ' ' );
 			}
 			children.add( twig );
 		}

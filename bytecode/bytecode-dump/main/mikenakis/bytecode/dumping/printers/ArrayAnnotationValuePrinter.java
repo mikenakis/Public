@@ -35,6 +35,6 @@ public final class ArrayAnnotationValuePrinter extends AnnotationValuePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return arrayAnnotationValue.annotationValues.stream().map( a -> renderingContext.newPrinter( a ).toTwig( renderingContext, "element" ) ).collect( Collectors.toList() );
+		return arrayAnnotationValue.annotationValues.stream().map( a -> RenderingContext.newPrinter( a ).toTwig( renderingContext, "element" ) ).collect( Collectors.toList() );
 	}
 }

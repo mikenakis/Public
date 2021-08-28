@@ -25,13 +25,13 @@ public final class LookupSwitchInstructionPrinter extends InstructionPrinter
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( lookupSwitchInstruction.model.opCode ) );
 		builder.append( " default: " );
-		renderingContext.newPrinter( lookupSwitchInstruction.defaultInstructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( lookupSwitchInstruction.defaultInstructionReference ).appendTo( renderingContext, builder );
 		builder.append( " value-offset-pairs: [" );
 		boolean first = true;
 		for( LookupSwitchInstruction.Entry entry : lookupSwitchInstruction.entries )
 		{
 			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			renderingContext.newPrinter( entry ).appendTo( renderingContext, builder );
+			RenderingContext.newPrinter( entry ).appendTo( renderingContext, builder );
 		}
 		builder.append( ']' );
 	}

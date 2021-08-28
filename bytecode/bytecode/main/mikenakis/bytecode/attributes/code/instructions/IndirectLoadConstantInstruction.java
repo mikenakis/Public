@@ -63,14 +63,14 @@ public final class IndirectLoadConstantInstruction extends LoadConstantInstructi
 			case OpCode.LDC:
 			{
 				int constantIndexValue = bufferReader.readUnsignedByte();
-				constant = codeAttribute.method.declaringType.constantPool.getConstant( constantIndexValue );
+				constant = codeAttribute.constantPool.getConstant( constantIndexValue );
 				break;
 			}
 			case OpCode.LDC_W:
 			case OpCode.LDC2_W:
 			{
 				int constantIndexValue = bufferReader.readUnsignedShort();
-				constant = codeAttribute.method.declaringType.constantPool.getConstant( constantIndexValue );
+				constant = codeAttribute.constantPool.getConstant( constantIndexValue );
 				break;
 			}
 			default:

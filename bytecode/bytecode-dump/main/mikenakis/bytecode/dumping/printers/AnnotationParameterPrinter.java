@@ -24,12 +24,12 @@ public final class AnnotationParameterPrinter extends Printer
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "name = " );
-		renderingContext.newPrinter( annotationParameter.nameConstant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( annotationParameter.nameConstant ).appendIndexTo( renderingContext, builder );
 	}
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return List.of( renderingContext.newPrinter( annotationParameter.annotationValue )
+		return List.of( RenderingContext.newPrinter( annotationParameter.annotationValue )
 			.toTwig( renderingContext, annotationParameter.annotationValue.kind.name + " value = " ) );
 	}
 }

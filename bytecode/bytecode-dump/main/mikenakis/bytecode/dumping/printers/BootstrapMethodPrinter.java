@@ -25,7 +25,7 @@ public final class BootstrapMethodPrinter extends Printer
 		if( renderingContext.style.raw )
 		{
 			builder.append( " methodHandle = " );
-			renderingContext.newPrinter( bootstrapMethod.methodHandleConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( bootstrapMethod.methodHandleConstant ).appendRawIndexTo( renderingContext, builder );
 			if( !bootstrapMethod.argumentConstants.isEmpty() )
 			{
 				builder.append( " arguments: " );
@@ -33,7 +33,7 @@ public final class BootstrapMethodPrinter extends Printer
 				for( Constant argumentConstant : bootstrapMethod.argumentConstants )
 				{
 					first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-					renderingContext.newPrinter( argumentConstant ).appendRawIndexTo( renderingContext, builder );
+					RenderingContext.newPrinter( argumentConstant ).appendRawIndexTo( renderingContext, builder );
 				}
 			}
 		}
@@ -46,7 +46,7 @@ public final class BootstrapMethodPrinter extends Printer
 
 	public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( bootstrapMethod.methodHandleConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( bootstrapMethod.methodHandleConstant ).appendGildedTo( renderingContext, builder );
 		if( !bootstrapMethod.argumentConstants.isEmpty() )
 		{
 			builder.append( ' ' );
@@ -54,7 +54,7 @@ public final class BootstrapMethodPrinter extends Printer
 			for( Constant argumentConstant : bootstrapMethod.argumentConstants )
 			{
 				first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-				renderingContext.newPrinter( argumentConstant ).appendGildedTo( renderingContext, builder );
+				RenderingContext.newPrinter( argumentConstant ).appendGildedTo( renderingContext, builder );
 			}
 		}
 	}

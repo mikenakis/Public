@@ -17,7 +17,7 @@ public final class ObjectVerificationType extends VerificationType
 	{
 		@Override public VerificationType newVerificationType( CodeAttribute codeAttribute, BufferReader bufferReader )
 		{
-			return new ObjectVerificationType( codeAttribute.method.declaringType.constantPool, bufferReader );
+			return new ObjectVerificationType( codeAttribute.constantPool, bufferReader );
 		}
 	};
 

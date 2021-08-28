@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -36,8 +37,7 @@ public class T002_Parsing
 	{
 		Path classFilePathName = Helpers.getPathToClassFile( Class1.class );
 		ByteCodeType type = ByteCodeType.create( classFilePathName );
-		assert (type.accessFlags & ByteCodeType.ACC_MASK) == (ByteCodeType.ACC_PUBLIC | ByteCodeType.ACC_SUPER | ByteCodeType.ACC_ABSTRACT);
-		assert (type.accessFlags & ~ByteCodeType.ACC_MASK) == 0; //if this fails, then the access flags contain unknown, reserved bits.
+		assert type.access.equals( EnumSet.of( ByteCodeType.Access.Public, ByteCodeType.Access.Super, ByteCodeType.Access.Abstract ) );
 		String className = type.getName();
 		assert className.equals( Class1.class.getName() );
 		Optional<String> superClassName = type.getSuperClassName();

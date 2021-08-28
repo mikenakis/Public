@@ -22,7 +22,7 @@ public final class StringConstantPrinter extends ConstantPrinter
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		if( renderingContext.style.raw )
-			renderingContext.newPrinter( stringConstant.valueUtf8Constant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( stringConstant.valueUtf8Constant ).appendRawIndexTo( renderingContext, builder );
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );
 		if( renderingContext.style.gild )
@@ -35,6 +35,6 @@ public final class StringConstantPrinter extends ConstantPrinter
 
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( stringConstant.valueUtf8Constant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( stringConstant.valueUtf8Constant ).appendGildedTo( renderingContext, builder );
 	}
 }

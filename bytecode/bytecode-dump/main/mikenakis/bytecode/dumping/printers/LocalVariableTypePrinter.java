@@ -23,14 +23,14 @@ public final class LocalVariableTypePrinter extends Printer
 	{
 		builder.append( "index = " ).append( localVariableType.index );
 		builder.append( ", startPc = " );
-		renderingContext.newPrinter( localVariableType.startPc ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( localVariableType.startPc ).appendTo( renderingContext, builder );
 		builder.append( ", length = " ).append( localVariableType.length );
 		if( renderingContext.style.raw )
 		{
 			builder.append( ", name = " );
-			renderingContext.newPrinter( localVariableType.nameConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( localVariableType.nameConstant ).appendRawIndexTo( renderingContext, builder );
 			builder.append( ", signature = " );
-			renderingContext.newPrinter( localVariableType.signatureConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( localVariableType.signatureConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );

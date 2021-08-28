@@ -37,7 +37,7 @@ public final class ExceptionInfo extends Printable
 		startPc = new AbsoluteInstructionReference( codeAttribute, false, bufferReader );
 		endPc = new AbsoluteInstructionReference( codeAttribute, false, bufferReader );
 		handlerPc = new AbsoluteInstructionReference( codeAttribute, false, bufferReader );
-		catchTypeConstant = Kit.upCast( codeAttribute.method.declaringType.constantPool.tryReadIndexAndGetConstant( bufferReader ) );
+		catchTypeConstant = Kit.upCast( codeAttribute.constantPool.tryReadIndexAndGetConstant( bufferReader ) );
 	}
 
 	public void intern( ConstantPool constantPool )

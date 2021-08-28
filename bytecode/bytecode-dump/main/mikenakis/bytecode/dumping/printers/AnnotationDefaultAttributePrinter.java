@@ -23,7 +23,7 @@ public final class AnnotationDefaultAttributePrinter extends AttributePrinter
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "value = " );
-		renderingContext.newPrinter( annotationDefaultAttribute.annotationValue ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( annotationDefaultAttribute.annotationValue ).appendGildedTo( renderingContext, builder );
 	}
 
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
@@ -33,7 +33,7 @@ public final class AnnotationDefaultAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return List.of( renderingContext.newPrinter( annotationDefaultAttribute.annotationValue )
+		return List.of( RenderingContext.newPrinter( annotationDefaultAttribute.annotationValue )
 			.toTwig( renderingContext, annotationDefaultAttribute.annotationValue.kind.name + " value = " ) );
 	}
 }

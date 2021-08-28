@@ -26,7 +26,7 @@ public final class TableSwitchInstructionPrinter extends InstructionPrinter
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( tableSwitchInstruction.model.opCode ) );
 		builder.append( " default: " );
-		renderingContext.newPrinter( tableSwitchInstruction.defaultInstructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( tableSwitchInstruction.defaultInstructionReference ).appendTo( renderingContext, builder );
 		builder.append( " range: " ).append( tableSwitchInstruction.lowValue );
 		builder.append( " - " ).append( tableSwitchInstruction.lowValue + tableSwitchInstruction.instructionReferences.size() - 1 );
 		builder.append( " offsets: [" );
@@ -34,7 +34,7 @@ public final class TableSwitchInstructionPrinter extends InstructionPrinter
 		for( RelativeInstructionReference instructionReference : tableSwitchInstruction.instructionReferences )
 		{
 			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			renderingContext.newPrinter( instructionReference ).appendTo( renderingContext, builder );
+			RenderingContext.newPrinter( instructionReference ).appendTo( renderingContext, builder );
 		}
 		builder.append( ']' );
 	}

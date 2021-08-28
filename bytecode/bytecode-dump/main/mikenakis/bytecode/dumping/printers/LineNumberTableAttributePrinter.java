@@ -35,6 +35,6 @@ public final class LineNumberTableAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return lineNumberTableAttribute.entries.stream().map( n -> renderingContext.newPrinter( n ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return lineNumberTableAttribute.entries.stream().map( n -> RenderingContext.newPrinter( n ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

@@ -24,9 +24,9 @@ public final class ReferenceConstantPrinter extends ConstantPrinter
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "type = " );
-		renderingContext.newPrinter( referenceConstant.typeConstant ).appendRawIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( referenceConstant.typeConstant ).appendRawIndexTo( renderingContext, builder );
 		builder.append( ", nameAndType = " );
-		renderingContext.newPrinter( referenceConstant.nameAndTypeConstant ).appendRawIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( referenceConstant.nameAndTypeConstant ).appendRawIndexTo( renderingContext, builder );
 		builder.append( ' ' );
 		if( renderingContext.style.gild )
 		{

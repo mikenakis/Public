@@ -22,6 +22,6 @@ public final class UninitializedVerificationTypePrinter extends VerificationType
 	{
 		super.appendTo( renderingContext, builder );
 		builder.append( ' ' );
-		renderingContext.newPrinter( uninitializedVerificationType.instructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( uninitializedVerificationType.instructionReference ).appendTo( renderingContext, builder );
 	}
 }

@@ -21,7 +21,7 @@ public final class ClassConstantPrinter extends ConstantPrinter
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "name = " );
-		renderingContext.newPrinter( classConstant.nameConstant.orElseThrow() ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( classConstant.nameConstant.orElseThrow() ).appendIndexTo( renderingContext, builder );
 		builder.append( ' ' );
 	}
 

@@ -23,7 +23,7 @@ public final class LocalVariablePrinter extends Printer
 	{
 		builder.append( "index = " ).append( localVariable.index );
 		builder.append( ", startPc = " );
-		renderingContext.newPrinter( localVariable.startInstructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( localVariable.startInstructionReference ).appendTo( renderingContext, builder );
 		if( renderingContext.style.raw )
 			builder.append( ", length = " ).append( localVariable.getLength() );
 		if( renderingContext.style == Style.MIXED )
@@ -32,7 +32,7 @@ public final class LocalVariablePrinter extends Printer
 		{
 			builder.append( RenderingContext.GILDING_PREFIX );
 			builder.append( "endPc = " );
-			renderingContext.newPrinter( localVariable.endInstructionReference ).appendGildedTo( renderingContext, builder );
+			RenderingContext.newPrinter( localVariable.endInstructionReference ).appendGildedTo( renderingContext, builder );
 			builder.append( RenderingContext.GILDING_SUFFIX );
 		}
 		renderingContext.appendNameAndDescriptor( builder, localVariable.nameConstant, localVariable.descriptorConstant );

@@ -30,9 +30,9 @@ public final class EnumAnnotationValuePrinter extends AnnotationValuePrinter
 		if( renderingContext.style.raw )
 		{
 			builder.append( "type = " );
-			renderingContext.newPrinter( enumAnnotationValue.typeNameConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( enumAnnotationValue.typeNameConstant ).appendRawIndexTo( renderingContext, builder );
 			builder.append( ", value = " );
-			renderingContext.newPrinter( enumAnnotationValue.valueNameConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( enumAnnotationValue.valueNameConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );

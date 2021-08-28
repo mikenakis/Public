@@ -21,19 +21,19 @@ public final class ConstantValueAttributePrinter extends AttributePrinter
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "value = " );
-		renderingContext.newPrinter( constantValueAttribute.valueConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( constantValueAttribute.valueConstant ).appendGildedTo( renderingContext, builder );
 	}
 
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		if( renderingContext.style.raw )
-			renderingContext.newPrinter( constantValueAttribute.valueConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( constantValueAttribute.valueConstant ).appendRawIndexTo( renderingContext, builder );
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );
 		if( renderingContext.style.gild )
 		{
 			builder.append( RenderingContext.GILDING_PREFIX );
-			renderingContext.newPrinter( constantValueAttribute.valueConstant ).appendGildedTo( renderingContext, builder );
+			RenderingContext.newPrinter( constantValueAttribute.valueConstant ).appendGildedTo( renderingContext, builder );
 			builder.append( RenderingContext.GILDING_SUFFIX );
 		}
 	}

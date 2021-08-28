@@ -46,7 +46,7 @@ public final class ConstantReferencingInstruction extends Instruction
 	{
 		super( Optional.of( pc ) );
 		this.model = model;
-		constant = codeAttribute.method.declaringType.constantPool.readIndexAndGetConstant( bufferReader );
+		constant = codeAttribute.constantPool.readIndexAndGetConstant( bufferReader );
 	}
 
 	@Override public Optional<ConstantReferencingInstruction> tryAsConstantReferencingInstruction()

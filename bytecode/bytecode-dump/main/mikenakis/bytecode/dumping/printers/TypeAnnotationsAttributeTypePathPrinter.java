@@ -29,6 +29,6 @@ public final class TypeAnnotationsAttributeTypePathPrinter extends Printer
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return typePath.entries.stream().map( e -> renderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return typePath.entries.stream().map( e -> RenderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

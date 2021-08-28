@@ -35,7 +35,7 @@ public final class AttributesPrinter extends Printer
 		List<Twig> children = new ArrayList<>();
 		for( Attribute attribute : attributes )
 		{
-			Twig twig = renderingContext.newPrinter( attribute ).toTwig( renderingContext, attribute.name + ' ' );
+			Twig twig = RenderingContext.newPrinter( attribute ).toTwig( renderingContext, attribute.name + ' ' );
 			children.add( twig );
 		}
 		return children;

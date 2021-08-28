@@ -35,6 +35,6 @@ public final class BootstrapMethodsAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return bootstrapMethodsAttribute.entries.stream().map( m -> renderingContext.newPrinter( m ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return bootstrapMethodsAttribute.entries.stream().map( m -> RenderingContext.newPrinter( m ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

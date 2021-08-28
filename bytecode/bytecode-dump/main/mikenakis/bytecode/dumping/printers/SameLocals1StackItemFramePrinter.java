@@ -27,6 +27,6 @@ public final class SameLocals1StackItemFramePrinter extends FramePrinter
 	{
 		return List.of(
 			Twig.of( "stackVerificationType",
-				List.of( renderingContext.newPrinter( sameLocals1StackItemFrame.stackVerificationType ).toTwig( renderingContext, "" ) ) ) );
+				List.of( RenderingContext.newPrinter( sameLocals1StackItemFrame.stackVerificationType ).toTwig( renderingContext, "" ) ) ) );
 	}
 }

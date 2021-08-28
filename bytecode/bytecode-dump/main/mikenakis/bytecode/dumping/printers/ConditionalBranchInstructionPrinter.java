@@ -24,6 +24,6 @@ public final class ConditionalBranchInstructionPrinter extends InstructionPrinte
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( conditionalBranchInstruction.model.kind.opCode ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( conditionalBranchInstruction.instructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( conditionalBranchInstruction.instructionReference ).appendTo( renderingContext, builder );
 	}
 }

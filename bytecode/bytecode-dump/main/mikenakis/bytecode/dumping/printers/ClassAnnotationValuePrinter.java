@@ -25,6 +25,6 @@ public final class ClassAnnotationValuePrinter extends AnnotationValuePrinter
 
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( classAnnotationValue.classConstant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( classAnnotationValue.classConstant ).appendIndexTo( renderingContext, builder );
 	}
 }

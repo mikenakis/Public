@@ -24,6 +24,6 @@ public final class InvokeDynamicInstructionPrinter extends InstructionPrinter
 		super.appendTo( renderingContext, builder );
 		builder.append( OpCode.getOpCodeName( invokeDynamicInstruction.model.opCode ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( invokeDynamicInstruction.invokeDynamicConstant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( invokeDynamicInstruction.invokeDynamicConstant ).appendIndexTo( renderingContext, builder );
 	}
 }

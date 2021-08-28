@@ -28,7 +28,7 @@ public final class ByteCodeAnnotationPrinter extends Printer
 		builder.append( "name = " );
 		if( renderingContext.style.raw )
 		{
-			renderingContext.newPrinter( byteCodeAnnotation.nameConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( byteCodeAnnotation.nameConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );
@@ -44,7 +44,7 @@ public final class ByteCodeAnnotationPrinter extends Printer
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return byteCodeAnnotation.getAnnotationParameters().stream().map( p -> renderingContext.newPrinter( p ).toTwig( renderingContext, "parameter " ) ).collect(
+		return byteCodeAnnotation.getAnnotationParameters().stream().map( p -> RenderingContext.newPrinter( p ).toTwig( renderingContext, "parameter " ) ).collect(
 			Collectors.toList() );
 	}
 }

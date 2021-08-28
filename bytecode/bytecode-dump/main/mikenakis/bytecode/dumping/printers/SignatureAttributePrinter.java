@@ -28,7 +28,7 @@ public final class SignatureAttributePrinter extends AttributePrinter
 		if( renderingContext.style.raw )
 		{
 			builder.append( "utf8 = " );
-			renderingContext.newPrinter( signatureAttribute.signatureConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( signatureAttribute.signatureConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );

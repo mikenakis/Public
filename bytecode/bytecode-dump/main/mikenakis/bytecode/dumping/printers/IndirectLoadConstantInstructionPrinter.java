@@ -24,6 +24,6 @@ public final class IndirectLoadConstantInstructionPrinter extends InstructionPri
 		super.appendTo( renderingContext, builder );
 		builder.append( !renderingContext.style.raw ? "LDCx" : OpCode.getOpCodeName( indirectLoadConstantInstruction.model.opCode ) );
 		builder.append( ' ' );
-		renderingContext.newPrinter( indirectLoadConstantInstruction.constant ).appendIndexTo( renderingContext, builder );
+		RenderingContext.newPrinter( indirectLoadConstantInstruction.constant ).appendIndexTo( renderingContext, builder );
 	}
 }

@@ -25,7 +25,7 @@ public final class MethodHandleConstantPrinter extends ConstantPrinter
 		{
 			builder.append( MethodHandleConstant.ReferenceKind.fromNumber( methodHandleConstant.referenceKind ).name() );
 			builder.append( ' ' );
-			renderingContext.newPrinter( methodHandleConstant.referenceConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( methodHandleConstant.referenceConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );
@@ -41,6 +41,6 @@ public final class MethodHandleConstantPrinter extends ConstantPrinter
 	{
 		builder.append( MethodHandleConstant.ReferenceKind.fromNumber( methodHandleConstant.referenceKind ).name() );
 		builder.append( ' ' ); //", referenceConstant = " );
-		renderingContext.newPrinter( methodHandleConstant.referenceConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( methodHandleConstant.referenceConstant ).appendGildedTo( renderingContext, builder );
 	}
 }

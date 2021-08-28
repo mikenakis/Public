@@ -35,6 +35,6 @@ public final class LocalVariableTypeTableAttributePrinter extends AttributePrint
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return localVariableTypeTableAttribute.entries.stream().map( e -> renderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return localVariableTypeTableAttribute.entries.stream().map( e -> RenderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

@@ -35,6 +35,6 @@ public final class AnnotationsAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return annotationsAttribute.getAnnotations().stream().map( a -> renderingContext.newPrinter( a ).toTwig( renderingContext, "annotation " ) ).collect( Collectors.toList() );
+		return annotationsAttribute.getAnnotations().stream().map( a -> RenderingContext.newPrinter( a ).toTwig( renderingContext, "annotation " ) ).collect( Collectors.toList() );
 	}
 }

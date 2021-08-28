@@ -30,7 +30,7 @@ public final class ParameterAnnotationsAttributePrinter extends AttributePrinter
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return parameterAnnotationsAttribute.entries.stream().map( a -> renderingContext.newPrinter( a ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return parameterAnnotationsAttribute.entries.stream().map( a -> RenderingContext.newPrinter( a ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )

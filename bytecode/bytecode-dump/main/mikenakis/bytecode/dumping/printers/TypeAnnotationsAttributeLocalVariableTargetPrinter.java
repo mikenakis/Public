@@ -24,6 +24,6 @@ public final class TypeAnnotationsAttributeLocalVariableTargetPrinter extends Ty
 
 	@Override public List<Twig> getTwigChildren( RenderingContext renderingContext )
 	{
-		return localVariableTarget.entries.stream().map( e -> renderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
+		return localVariableTarget.entries.stream().map( e -> RenderingContext.newPrinter( e ).toTwig( renderingContext, "" ) ).collect( Collectors.toList() );
 	}
 }

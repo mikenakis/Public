@@ -25,7 +25,7 @@ public final class MethodParameterPrinter extends Printer
 		{
 			builder.append( "accessFlags = 0x" ).append( Integer.toHexString( methodParameter.accessFlags ) );
 			builder.append( ", name = " );
-			renderingContext.newPrinter( methodParameter.nameConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( methodParameter.nameConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );

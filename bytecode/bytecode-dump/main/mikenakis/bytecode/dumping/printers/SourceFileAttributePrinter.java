@@ -23,7 +23,7 @@ public final class SourceFileAttributePrinter extends AttributePrinter
 		if( renderingContext.style.raw )
 		{
 			builder.append( "value = " );
-			renderingContext.newPrinter( sourceFileAttribute.valueConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( sourceFileAttribute.valueConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );
@@ -37,6 +37,6 @@ public final class SourceFileAttributePrinter extends AttributePrinter
 
 	@Override public void appendGildedTo( RenderingContext renderingContext, StringBuilder builder )
 	{
-		renderingContext.newPrinter( sourceFileAttribute.valueConstant ).appendGildedTo( renderingContext, builder );
+		RenderingContext.newPrinter( sourceFileAttribute.valueConstant ).appendGildedTo( renderingContext, builder );
 	}
 }

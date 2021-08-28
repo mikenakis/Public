@@ -21,15 +21,15 @@ public final class ExceptionInfoPrinter extends Printer
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( "startPc = " );
-		renderingContext.newPrinter( exceptionInfo.startPc ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( exceptionInfo.startPc ).appendTo( renderingContext, builder );
 		builder.append( " endPc = " );
-		renderingContext.newPrinter( exceptionInfo.endPc ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( exceptionInfo.endPc ).appendTo( renderingContext, builder );
 		builder.append( " handlerPc = " );
-		renderingContext.newPrinter( exceptionInfo.handlerPc ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( exceptionInfo.handlerPc ).appendTo( renderingContext, builder );
 		if( exceptionInfo.catchTypeConstant.isPresent() )
 		{
 			builder.append( " catchType = " );
-			renderingContext.newPrinter( exceptionInfo.catchTypeConstant.get() ).appendIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( exceptionInfo.catchTypeConstant.get() ).appendIndexTo( renderingContext, builder );
 		}
 	}
 }

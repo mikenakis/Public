@@ -21,6 +21,6 @@ public final class LookupSwitchInstructionEntryPrinter extends Printer
 	@Override public void appendTo( RenderingContext renderingContext, StringBuilder builder )
 	{
 		builder.append( entry.value ).append( ":" );
-		renderingContext.newPrinter( entry.instructionReference ).appendTo( renderingContext, builder );
+		RenderingContext.newPrinter( entry.instructionReference ).appendTo( renderingContext, builder );
 	}
 }

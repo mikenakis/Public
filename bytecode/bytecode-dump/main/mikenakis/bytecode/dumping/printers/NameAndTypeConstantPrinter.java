@@ -24,9 +24,9 @@ public final class NameAndTypeConstantPrinter extends ConstantPrinter
 		if( renderingContext.style.raw )
 		{
 			builder.append( "name = " );
-			renderingContext.newPrinter( nameAndTypeConstant.nameConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( nameAndTypeConstant.nameConstant ).appendRawIndexTo( renderingContext, builder );
 			builder.append( ", descriptor = " );
-			renderingContext.newPrinter( nameAndTypeConstant.descriptorConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( nameAndTypeConstant.descriptorConstant ).appendRawIndexTo( renderingContext, builder );
 		}
 		if( renderingContext.style == Style.MIXED )
 			builder.append( ' ' );

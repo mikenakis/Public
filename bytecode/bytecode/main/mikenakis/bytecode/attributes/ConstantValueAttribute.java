@@ -37,10 +37,10 @@ public final class ConstantValueAttribute extends Attribute
 		valueConstant = new IntegerConstant( 0 );
 	}
 
-	public ConstantValueAttribute( Runnable observer, ByteCodeField field, BufferReader bufferReader )
+	public ConstantValueAttribute( Runnable observer, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		super( observer, NAME );
-		valueConstant = field.declaringType.constantPool.readIndexAndGetConstant( bufferReader );
+		valueConstant = constantPool.readIndexAndGetConstant( bufferReader );
 	}
 
 	@Override public void intern( ConstantPool constantPool )

@@ -24,7 +24,7 @@ public final class EnclosingMethodAttributePrinter extends AttributePrinter
 		if( enclosingMethodAttribute.methodNameAndTypeConstant.isPresent() )
 		{
 			builder.append( ", methodNameAndType = { " );
-			renderingContext.newPrinter( enclosingMethodAttribute.methodNameAndTypeConstant.get() ).appendGildedTo( renderingContext, builder );
+			RenderingContext.newPrinter( enclosingMethodAttribute.methodNameAndTypeConstant.get() ).appendGildedTo( renderingContext, builder );
 			builder.append( " }" );
 		}
 	}
@@ -34,11 +34,11 @@ public final class EnclosingMethodAttributePrinter extends AttributePrinter
 		if( renderingContext.style.raw )
 		{
 			builder.append( "class = " );
-			renderingContext.newPrinter( enclosingMethodAttribute.classConstant ).appendRawIndexTo( renderingContext, builder );
+			RenderingContext.newPrinter( enclosingMethodAttribute.classConstant ).appendRawIndexTo( renderingContext, builder );
 			if( enclosingMethodAttribute.methodNameAndTypeConstant.isPresent() )
 			{
 				builder.append( ", method = " );
-				renderingContext.newPrinter( enclosingMethodAttribute.methodNameAndTypeConstant.get() ).appendRawIndexTo( renderingContext, builder );
+				RenderingContext.newPrinter( enclosingMethodAttribute.methodNameAndTypeConstant.get() ).appendRawIndexTo( renderingContext, builder );
 			}
 		}
 		if( renderingContext.style == Style.MIXED )
