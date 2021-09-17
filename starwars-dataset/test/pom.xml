@@ -10,7 +10,7 @@
 	</parent>
 
 	<build>
-		<testSourceDirectory>src</testSourceDirectory>
+		<testSourceDirectory>test</testSourceDirectory>
 	</build>
 
 	<dependencies>

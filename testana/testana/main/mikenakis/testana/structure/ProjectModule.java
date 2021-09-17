@@ -1,6 +1,6 @@
 package mikenakis.testana.structure;
 
-import mikenakis.bytecode.ByteCodeType;
+import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.kit.Kit;
 import mikenakis.testana.discovery.DiscoveryModule;
 import mikenakis.testana.discovery.OutputDirectory;
@@ -17,14 +17,16 @@ public final class ProjectModule
 {
 	private final ProjectStructure projectStructure;
 	private final DiscoveryModule discoveryModule;
-	private final ClassAndByteCodeLoader classAndByteCodeLoader;
+	private final ClassLoader classLoader;
+	private final ByteCodeLoader classAndByteCodeLoader;
 	private final Map<String,ProjectType> projectTypeFromNameMap;
 
-	ProjectModule( ProjectStructure projectStructure, DiscoveryModule discoveryModule, ClassAndByteCodeLoader classAndByteCodeLoader, //
+	ProjectModule( ProjectStructure projectStructure, DiscoveryModule discoveryModule, ClassLoader classLoader, ByteCodeLoader classAndByteCodeLoader, //
 		Map<String,ProjectType> projectTypeFromNameMap )
 	{
 		this.projectStructure = projectStructure;
 		this.discoveryModule = discoveryModule;
+		this.classLoader = classLoader;
 		this.classAndByteCodeLoader = classAndByteCodeLoader;
 		this.projectTypeFromNameMap = projectTypeFromNameMap;
 	}
@@ -70,10 +72,15 @@ public final class ProjectModule
 			return Optional.of( this );
 		for( ProjectModule projectModule : projectDependencies() )
 		{
-			Optional<ProjectType> projectType = projectModule.tryGetProjectTypeByName( typeName );
-			if( projectType.isPresent() )
-				return Optional.of( projectModule );
+			Optional<ProjectModule> result = projectModule.tryGetProjectModuleByTypeNameTransitively( typeName );
+			if( result.isPresent() )
+				return result;
 		}
+//		{
+//			Optional<ProjectType> projectType = projectModule.tryGetProjectTypeByName( typeName );
+//			if( projectType.isPresent() )
+//				return Optional.of( projectModule );
+//		}
 		return Optional.empty();
 	}
 
@@ -84,12 +91,12 @@ public final class ProjectModule
 
 	ByteCodeType getProjectByteCodeTypeByNameTransitively( String typeName )
 	{
-		return tryGetProjectModuleByTypeNameTransitively( typeName ).flatMap( m -> m.classAndByteCodeLoader.tryGetByteCodeTypeByName( typeName ) ).orElseThrow();
+		return tryGetProjectModuleByTypeNameTransitively( typeName ).map( m -> m.classAndByteCodeLoader.getByteCodeTypeByName( typeName ) ).orElseThrow();
 	}
 
 	Class<?> getProjectClassByNameTransitively( String typeName )
 	{
-		return tryGetProjectModuleByTypeNameTransitively( typeName ).map( m -> m.classAndByteCodeLoader.getClassByName( typeName ) ).orElseThrow();
+		return tryGetProjectModuleByTypeNameTransitively( typeName ).map( m -> Kit.unchecked( () -> m.classLoader.loadClass( typeName ) ) ).orElseThrow();
 	}
 
 	boolean isProjectTypeTransitively( String typeName )

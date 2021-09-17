@@ -7,7 +7,7 @@ import mikenakis.clio.Clio;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class ClioException extends Exception
+public abstract class ClioException extends RuntimeException
 {
 	protected ClioException()
 	{

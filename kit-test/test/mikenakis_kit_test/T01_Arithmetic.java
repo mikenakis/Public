@@ -1,8 +1,8 @@
 package mikenakis_kit_test;
 
+import mikenakis.benchmark.Benchmarkable;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
-import mikenakis.benchmark.BenchmarkMeasurement;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
 
@@ -52,8 +52,8 @@ public class T01_Arithmetic
 	public void Fast_mod1_is_much_faster_than_jdk_mod1()
 	{
 		Benchmark benchmark = new Benchmark();
-		double t1 = benchmark.measure( BenchmarkMeasurement.of( () -> (int)jdkMod1( π ) ) );
-		double t2 = benchmark.measure( BenchmarkMeasurement.of( () -> (int)Kit.math.mod1( π ) ) );
+		double t1 = benchmark.measure( Benchmarkable.of( () -> (int)jdkMod1( π ) ) );
+		double t2 = benchmark.measure( Benchmarkable.of( () -> (int)Kit.math.mod1( π ) ) );
 		double r = t1 / t2;
 		Log.info( String.format( Locale.ROOT, "Jdk %%: %f nanoseconds;  Kit.mod1(): %f nanoseconds (%.2f times faster)\n", //
 			Kit.time.nanosecondsFromSeconds( t1 ), Kit.time.nanosecondsFromSeconds( t2 ), r ) );

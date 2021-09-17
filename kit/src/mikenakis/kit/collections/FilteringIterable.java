@@ -21,7 +21,7 @@ public class FilteringIterable<E> implements Iterable<E>
 		return new FilteringIterator<>( unfilteredIterator, filter );
 	}
 
-	private static class FilteringIterator<E> extends UnmodifiableIterable.UnmodifiableIterator<E>
+	private static class FilteringIterator<E> extends UnmodifiableIterator<E>
 	{
 		private final BooleanFunction1<E> filter;
 		private E current = null;

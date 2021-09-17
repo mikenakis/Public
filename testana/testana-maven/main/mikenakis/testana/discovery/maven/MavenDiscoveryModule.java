@@ -27,6 +27,7 @@ final class MavenDiscoveryModule extends DiscoveryModule
 	private final Model mavenModel;
 	private final Collection<DiscoveryModule> projectDependencies = new LinkedHashSet<>();
 	private final Collection<Path> externalDependencies = new LinkedHashSet<>();
+	private boolean dependenciesResolved; // TODO FIXME restructure things so that it is unnecessary to have this state.
 
 	MavenDiscoveryModule( Path localRepositoryPath, Model mavenModel )
 	{
@@ -51,11 +52,13 @@ final class MavenDiscoveryModule extends DiscoveryModule
 
 	@Override public Collection<DiscoveryModule> projectDependencies()
 	{
+		assert dependenciesResolved;
 		return projectDependencies;
 	}
 
 	@Override public Collection<Path> externalDependencyPaths()
 	{
+		assert dependenciesResolved;
 		return externalDependencies;
 	}
 
@@ -87,6 +90,8 @@ final class MavenDiscoveryModule extends DiscoveryModule
 
 	@Override public void resolveDependencies( Map<String,DiscoveryModule> nameToModuleMap )
 	{
+		assert !dependenciesResolved;
+		dependenciesResolved = true;
 		for( Dependency mavenDependency : mavenModel.getDependencies() )
 		{
 			if( !isMavenDependencyOfInterest( mavenDependency ) )

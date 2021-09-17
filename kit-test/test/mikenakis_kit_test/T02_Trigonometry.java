@@ -1,8 +1,8 @@
 package mikenakis_kit_test;
 
+import mikenakis.benchmark.Benchmarkable;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
-import mikenakis.benchmark.BenchmarkMeasurement;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
 
@@ -113,27 +113,27 @@ public class T02_Trigonometry
 	public void Kit_sin_is_considerably_faster_than_jdk_sin()
 	{
 		/* benchmark built-in sin() vs fast sin() */
-		BenchmarkMeasurement dryRunMeasurement = BenchmarkMeasurement.of( ( int startIndex, int endIndex ) -> //
+		Benchmarkable dryRunMeasurement = ( int startIndex, int endIndex ) -> //
 		{
 			double result = startIndex;
 			for( int i = startIndex; i < endIndex; i++ )
 				result += i;
 			return (int)result;
-		} );
-		BenchmarkMeasurement jdkSinMeasurement = BenchmarkMeasurement.of( ( int startIndex, int endIndex ) -> //
+		};
+		Benchmarkable jdkSinMeasurement = ( int startIndex, int endIndex ) -> //
 		{
 			double result = startIndex;
 			for( int i = startIndex; i < endIndex; i++ )
 				result += Math.sin( i );
 			return (int)result;
-		} );
-		BenchmarkMeasurement kitSinMeasurement = BenchmarkMeasurement.of( ( int startIndex, int endIndex ) -> //
+		};
+		Benchmarkable kitSinMeasurement = ( int startIndex, int endIndex ) -> //
 		{
 			double result = startIndex;
 			for( int i = startIndex; i < endIndex; i++ )
 				result += Kit.math.sin( i );
 			return (int)result;
-		} );
+		};
 		Benchmark benchmark = new Benchmark( 1e-6, 1000 );
 		double t0 = benchmark.measure( dryRunMeasurement );
 		double t1 = benchmark.measure( jdkSinMeasurement ) - t0;

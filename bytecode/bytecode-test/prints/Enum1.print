@@ -1,0 +1,124 @@
+ version = 60.0, accessFlags = [public, final, super, enum], thisClass = mikenakis.bytecode.test.model.Enum1, superClass = java.lang.Enum, interfaces = []
+ ├─ extra constants (0 entries)
+ ├─ fields (4 entries)
+ │   ├─  accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_A
+ │   ├─  accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_B
+ │   ├─  accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_C
+ │   └─  accessFlags = [private, static, final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Enum1[] $VALUES
+ ├─ methods (5 entries)
+ │   ├─  accessFlags = [public, static], name+descriptor = mikenakis.bytecode.test.model.Enum1[] values()
+ │   │   └─ attributes (1 entries)
+ │   │       └─ Code maxStack = 1, maxLocals = 0, 4 instructions, 0 exceptionInfos, 1 attributes
+ │   │           ├─ instructions (4 entries)
+ │   │           │   ├─ L8:
+ │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
+ │   │           │   ├─      INVOKEVIRTUAL java.lang.Object mikenakis.bytecode.test.model.Enum1[].clone()
+ │   │           │   ├─      CHECKCAST mikenakis.bytecode.test.model.Enum1[]
+ │   │           │   └─      ARETURN
+ │   │           ├─ exceptionInfos (0 entries)
+ │   │           └─ attributes (1 entries)
+ │   │               └─ LineNumberTable (1 entries)
+ │   │                   └─  lineNumber = 8, startPc = L8
+ │   ├─  accessFlags = [public, static], name+descriptor = mikenakis.bytecode.test.model.Enum1 valueOf( java.lang.String )
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 2, maxLocals = 1, 5 instructions, 0 exceptionInfos, 2 attributes
+ │   │       │   ├─ instructions (5 entries)
+ │   │       │   │   ├─ L8:
+ │   │       │   │   ├─      LDCx mikenakis.bytecode.test.model.Enum1
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      INVOKESTATIC java.lang.Enum java.lang.Enum.valueOf( java.lang.Class, java.lang.String )
+ │   │       │   │   ├─      CHECKCAST mikenakis.bytecode.test.model.Enum1
+ │   │       │   │   └─      ARETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 8, startPc = L8
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, startPc = L8, endPc = @end, name+descriptor = java.lang.String name
+ │   │       └─ MethodParameters (1 entries)
+ │   │           └─  accessFlags = [mandated], name = name
+ │   ├─  accessFlags = [private], name+descriptor = void <init>( java.lang.String, int )
+ │   │   └─ attributes (3 entries)
+ │   │       ├─ Code maxStack = 3, maxLocals = 3, 5 instructions, 0 exceptionInfos, 2 attributes
+ │   │       │   ├─ instructions (5 entries)
+ │   │       │   │   ├─ L16:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ALOAD_1
+ │   │       │   │   ├─      ILOAD_2
+ │   │       │   │   ├─      INVOKESPECIAL void java.lang.Enum.<init>( java.lang.String, int )
+ │   │       │   │   ├─ L17:
+ │   │       │   │   └─      RETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (2 entries)
+ │   │       │       │   ├─  lineNumber = 16, startPc = L16
+ │   │       │       │   └─  lineNumber = 17, startPc = L17
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, startPc = L16, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Enum1 this
+ │   │       ├─ MethodParameters (2 entries)
+ │   │       │   ├─  accessFlags = [synthetic], name = $enum$name
+ │   │       │   └─  accessFlags = [synthetic], name = $enum$ordinal
+ │   │       └─ Signature ()V
+ │   ├─  accessFlags = [private, static, synthetic], name+descriptor = mikenakis.bytecode.test.model.Enum1[] $values()
+ │   │   └─ attributes (1 entries)
+ │   │       └─ Code maxStack = 4, maxLocals = 0, 15 instructions, 0 exceptionInfos, 1 attributes
+ │   │           ├─ instructions (15 entries)
+ │   │           │   ├─ L8:
+ │   │           │   ├─      ICONST_3
+ │   │           │   ├─      ANEWARRAY mikenakis.bytecode.test.model.Enum1
+ │   │           │   ├─      DUP
+ │   │           │   ├─      ICONST_0
+ │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
+ │   │           │   ├─      AASTORE
+ │   │           │   ├─      DUP
+ │   │           │   ├─      ICONST_1
+ │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_B
+ │   │           │   ├─      AASTORE
+ │   │           │   ├─      DUP
+ │   │           │   ├─      ICONST_2
+ │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_C
+ │   │           │   ├─      AASTORE
+ │   │           │   └─      ARETURN
+ │   │           ├─ exceptionInfos (0 entries)
+ │   │           └─ attributes (1 entries)
+ │   │               └─ LineNumberTable (1 entries)
+ │   │                   └─  lineNumber = 8, startPc = L8
+ │   └─  accessFlags = [static], name+descriptor = void <clinit>()
+ │       └─ attributes (1 entries)
+ │           └─ Code maxStack = 4, maxLocals = 0, 21 instructions, 0 exceptionInfos, 1 attributes
+ │               ├─ instructions (21 entries)
+ │               │   ├─ L11:
+ │               │   ├─      NEW mikenakis.bytecode.test.model.Enum1
+ │               │   ├─      DUP
+ │               │   ├─      LDCx "ENUM_CONSTANT_A"
+ │               │   ├─      ICONST_0
+ │               │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
+ │               │   ├─      PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
+ │               │   ├─ L12:
+ │               │   ├─      NEW mikenakis.bytecode.test.model.Enum1
+ │               │   ├─      DUP
+ │               │   ├─      LDCx "ENUM_CONSTANT_B"
+ │               │   ├─      ICONST_1
+ │               │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
+ │               │   ├─      PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_B
+ │               │   ├─ L13:
+ │               │   ├─      NEW mikenakis.bytecode.test.model.Enum1
+ │               │   ├─      DUP
+ │               │   ├─      LDCx "ENUM_CONSTANT_C"
+ │               │   ├─      ICONST_2
+ │               │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
+ │               │   ├─      PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_C
+ │               │   ├─ L8:
+ │               │   ├─      INVOKESTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$values()
+ │               │   ├─      PUTSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
+ │               │   └─      RETURN
+ │               ├─ exceptionInfos (0 entries)
+ │               └─ attributes (1 entries)
+ │                   └─ LineNumberTable (4 entries)
+ │                       ├─  lineNumber = 11, startPc = L11
+ │                       ├─  lineNumber = 12, startPc = L12
+ │                       ├─  lineNumber = 13, startPc = L13
+ │                       └─  lineNumber = 8, startPc = L8
+ └─ attributes (2 entries)
+     ├─ Signature Ljava/lang/Enum<Lmikenakis/bytecode/test/model/Enum1;>;
+     └─ SourceFile value = "Enum1.java"

@@ -1,15 +1,13 @@
 package mikenakis.testana.structure;
 
-import mikenakis.bytecode.ByteCodeHelpers;
-import mikenakis.bytecode.ByteCodeMethod;
-import mikenakis.bytecode.ByteCodeType;
+import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.testana.TestEngine;
 import mikenakis.testana.discovery.OutputFile;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,20 +18,30 @@ import java.util.stream.Collectors;
  */
 public class ProjectType
 {
+	public static ProjectType of( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine, Collection<String> dependencyNames )
+	{
+		return new ProjectType( projectModule, outputFile, testEngine, Optional.of( dependencyNames ) );
+	}
+
+	public static ProjectType of( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine )
+	{
+		return new ProjectType( projectModule, outputFile, testEngine, Optional.empty() );
+	}
+
 	private final ProjectModule projectModule;
 	private final OutputFile outputFile;
 	private Instant lastModifiedTime;
-	private Optional<Collection<String>> dependencyNames;
-	private Optional<Class<?>> javaClass = Optional.empty();
-	private Optional<ByteCodeType> byteCodeType = Optional.empty();
+	private Optional<Collection<String>> lazyDependencyNames;
+	@SuppressWarnings( "FieldNamingConvention" ) private Optional<Class<?>> _javaClass = Optional.empty();
+	@SuppressWarnings( "FieldNamingConvention" ) private Optional<ByteCodeInfo> _byteCodeInfo = Optional.empty();
 	private final Optional<TestEngine> testEngine;
 
-	ProjectType( ProjectModule projectModule, OutputFile outputFile, Optional<Collection<String>> dependencyNames, Optional<TestEngine> testEngine )
+	private ProjectType( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine, Optional<Collection<String>> lazyDependencyNames )
 	{
 		this.projectModule = projectModule;
 		this.outputFile = outputFile;
 		lastModifiedTime = outputFile.lastModifiedTime;
-		this.dependencyNames = dependencyNames;
+		this.lazyDependencyNames = lazyDependencyNames;
 		this.testEngine = testEngine;
 	}
 
@@ -44,18 +52,21 @@ public class ProjectType
 
 	public Collection<String> dependencyNames()
 	{
-		if( dependencyNames.isEmpty() )
+		if( lazyDependencyNames.isEmpty() )
 		{
-			ensureClassAndByteCodeAreLoaded();
-			String className = className();
-			dependencyNames = Optional.of( byteCodeType.orElseThrow().getDependencyNames().stream().filter( t -> !t.equals( className ) && projectModule.isProjectTypeTransitively( t ) ).collect( Collectors.toList() ) );
+			Collection<String> allDependencyNames = byteCodeInfo().getDependencyNames();
+			LinkedHashSet<String> dependencyNames = allDependencyNames.stream() //
+				.filter( t -> projectModule.isProjectTypeTransitively( t ) ) //
+				.sorted() //
+				.collect( Collectors.toCollection( () -> new LinkedHashSet<>() ) );
+			lazyDependencyNames = Optional.of( dependencyNames );
 		}
-		return dependencyNames.orElseThrow();
+		return lazyDependencyNames.orElseThrow();
 	}
 
 	public Collection<ProjectType> dependencies()
 	{
-		List<ProjectType> result = new ArrayList<>();
+		Collection<ProjectType> result = new ArrayList<>();
 		for( String dependencyName : dependencyNames() )
 		{
 			ProjectType projectType = projectModule.tryGetProjectTypeByNameTransitively( dependencyName ).orElseThrow();
@@ -79,37 +90,36 @@ public class ProjectType
 		return className();
 	}
 
-	private void ensureClassAndByteCodeAreLoaded()
-	{
-		if( javaClass.isEmpty() )
-		{
-			javaClass = Optional.of( projectModule.getProjectClassByNameTransitively( className() ) );
-			byteCodeType = Optional.of( projectModule.getProjectByteCodeTypeByNameTransitively( className() ) );
-		}
-	}
-
 	public Class<?> javaClass()
 	{
-		ensureClassAndByteCodeAreLoaded();
-		return javaClass.orElseThrow();
+		if( _javaClass.isEmpty() )
+			_javaClass = Optional.of( projectModule.getProjectClassByNameTransitively( className() ) );
+		return _javaClass.orElseThrow();
+	}
+
+	private ByteCodeInfo byteCodeInfo()
+	{
+		if( _byteCodeInfo.isEmpty() )
+		{
+			ByteCodeType byteCodeType = projectModule.getProjectByteCodeTypeByNameTransitively( className() );
+			_byteCodeInfo = Optional.of( new ByteCodeInfo( byteCodeType ) );
+		}
+		return _byteCodeInfo.orElseThrow();
 	}
 
 	public final String getClassSourceLocation()
 	{
-		return ByteCodeHelpers.getClassSourceLocation( byteCodeType.orElseThrow() );
+		return byteCodeInfo().getClassSourceLocation();
 	}
 
 	public String getMethodSourceLocation( String methodName )
 	{
-		ensureClassAndByteCodeAreLoaded();
-		ByteCodeMethod byteCodeMethod = byteCodeType.orElseThrow().getMethodByNameAndDescriptor( methodName, "()V", projectModule::getProjectByteCodeTypeByNameTransitively );
-		return ByteCodeHelpers.getMethodSourceLocation( byteCodeMethod );
+		return byteCodeInfo().getMethodSourceLocation( methodName, "()V", projectModule::getProjectByteCodeTypeByNameTransitively );
 	}
 
 	public int getDeclaredMethodIndex( String methodName )
 	{
-		ensureClassAndByteCodeAreLoaded();
-		return byteCodeType.orElseThrow().findDeclaredMethodByNameAndDescriptor( methodName, "()V" );
+		return byteCodeInfo().getDeclaredMethodIndex( methodName, "()V" );
 	}
 
 	public Optional<TestEngine> testEngine()

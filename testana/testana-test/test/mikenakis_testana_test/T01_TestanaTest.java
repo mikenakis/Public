@@ -1,5 +1,6 @@
 package mikenakis_testana_test;
 
+import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.testana.AncestryOrdering;
 import mikenakis.testana.ClassOrdering;
@@ -29,7 +30,6 @@ import mikenakis.testana.testplan.intent.UpdateRunIntent;
 import org.junit.Test;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
@@ -235,7 +235,7 @@ public class T01_TestanaTest
 			.flatMap( testModule -> testModule.testClasses().stream() ) //
 			.flatMap( testClass -> testClass.testMethods().stream() ) //
 			.map( testMethod -> testMethod.name() ) //
-			.collect( Collectors.toUnmodifiableList() );
+			.collect( Collectors.toList() );
 	}
 
 	private static List<Node> collectNodes( TestPlan testPlan )
@@ -261,8 +261,8 @@ public class T01_TestanaTest
 
 	private static Path getProjectDirectory()
 	{
-		Path path = Paths.get( System.getProperty( "user.dir" ) ).toAbsolutePath().normalize();
-		Log.debug( "Current directory: " + path );
+		Path path = Kit.path.getWorkingDirectory();
+		Log.debug( "Working directory: " + path );
 		assert path.resolve( "test/mikenakis_testana_test/T01_TestanaTest.java" ).toFile().exists(); //Current directory is not ${project.basedir}
 		return path;
 	}

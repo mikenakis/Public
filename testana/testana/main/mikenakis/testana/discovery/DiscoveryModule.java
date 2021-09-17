@@ -41,12 +41,12 @@ public abstract class DiscoveryModule
 		return mutablePaths;
 	}
 
-	private static void allOutputPathsRecursive( DiscoveryModule module, Collection<Path> mutablePaths )
+	private static void allOutputPathsRecursive( DiscoveryModule discoveryModule, Collection<Path> mutableOutputPaths )
 	{
-		for( var outputDirectory : module.outputDirectories() )
-			Kit.collection.tryAdd( mutablePaths, outputDirectory.path );
-		mutablePaths.addAll( module.externalDependencyPaths() );
-		for( DiscoveryModule dependency : module.projectDependencies() )
-			allOutputPathsRecursive( dependency, mutablePaths );
+		for( OutputDirectory outputDirectory : discoveryModule.outputDirectories() )
+			Kit.collection.tryAdd( mutableOutputPaths, outputDirectory.path );
+		mutableOutputPaths.addAll( discoveryModule.externalDependencyPaths() );
+		for( DiscoveryModule dependency : discoveryModule.projectDependencies() )
+			allOutputPathsRecursive( dependency, mutableOutputPaths );
 	}
 }

@@ -3,7 +3,6 @@ package intertwine_test_programs;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
-import mikenakis.benchmark.BenchmarkMeasurement;
 
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;
@@ -61,22 +60,23 @@ public final class P0InvocationBenchmark
 			}
 		};
 
-		Map<String,BenchmarkMeasurement> benchmarkables = new LinkedHashMap<>();
-		Kit.map.add( benchmarkables, "Static Direct", benchmarkableAndDryRun( staticDirectInvoker() ) );
-		Kit.map.add( benchmarkables, "Static Reflection", benchmarkableAndDryRun( staticReflectionInvoker() ) );
-		Kit.map.add( benchmarkables, "Static MethodHandle", benchmarkableAndDryRun( staticMethodHandleInvoker() ) );
-		Kit.map.add( benchmarkables, "Static Lambda", benchmarkableAndDryRun( staticLambdaInvoker() ) );
-		Kit.map.add( benchmarkables, "Instance Direct", benchmarkableAndDryRun( instanceDirectInvoker( invokableInstance ) ) );
-		Kit.map.add( benchmarkables, "Instance Reflection", benchmarkableAndDryRun( instanceReflectionInvoker( invokableInstance ) ) );
-		Kit.map.add( benchmarkables, "Instance MethodHandle", benchmarkableAndDryRun( instanceMethodHandleInvoker( invokableInstance ) ) );
-		Kit.map.add( benchmarkables, "Instance Lambda", benchmarkableAndDryRun( instanceLambdaInvoker( invokableInstance ) ) );
+		Map<String,Benchmarkable> benchmarkables = new LinkedHashMap<>();
+		Kit.map.add( benchmarkables, "Static Direct", newBenchmarkMeasurement( staticDirectInvoker() ) );
+		Kit.map.add( benchmarkables, "Static Reflection", newBenchmarkMeasurement( staticReflectionInvoker() ) );
+		Kit.map.add( benchmarkables, "Static MethodHandle", newBenchmarkMeasurement( staticMethodHandleInvoker() ) );
+		Kit.map.add( benchmarkables, "Static Lambda", newBenchmarkMeasurement( staticLambdaInvoker() ) );
+		Kit.map.add( benchmarkables, "Instance Direct", newBenchmarkMeasurement( instanceDirectInvoker( invokableInstance ) ) );
+		Kit.map.add( benchmarkables, "Instance Reflection", newBenchmarkMeasurement( instanceReflectionInvoker( invokableInstance ) ) );
+		Kit.map.add( benchmarkables, "Instance MethodHandle", newBenchmarkMeasurement( instanceMethodHandleInvoker( invokableInstance ) ) );
+		Kit.map.add( benchmarkables, "Instance Lambda", newBenchmarkMeasurement( instanceLambdaInvoker( invokableInstance ) ) );
+		Kit.map.add( benchmarkables, "Dry Run", newBenchmarkMeasurement( nullInvoker() ) );
 
-		Map<Duration,Map<BenchmarkMeasurement,Duration>> benchmarkDurationsToMeasurements = new LinkedHashMap<>();
+		Map<Duration,Map<Benchmarkable,Duration>> benchmarkDurationsToMeasurements = new LinkedHashMap<>();
 		for( int i = 10; i <= 150; i += 10 )
 		{
 			var benchmarkDuration = Duration.ofMillis( i );
 			System.out.printf( "%d ms benchmarks...\n", i );
-			Map<BenchmarkMeasurement,Duration> measurement = benchmark( benchmarkables );
+			Map<Benchmarkable,Duration> measurement = benchmark( benchmarkables );
 			Kit.map.add( benchmarkDurationsToMeasurements, benchmarkDuration, measurement );
 		}
 
@@ -88,10 +88,10 @@ public final class P0InvocationBenchmark
 		for( String name : benchmarkables.keySet() )
 		{
 			System.out.printf( "%24s", name );
-			BenchmarkMeasurement benchmarkable = Kit.map.get( benchmarkables, name );
+			Benchmarkable benchmarkable = Kit.map.get( benchmarkables, name );
 			for( Duration benchmarkDuration : benchmarkDurationsToMeasurements.keySet() )
 			{
-				Map<BenchmarkMeasurement,Duration> measurement = Kit.map.get( benchmarkDurationsToMeasurements, benchmarkDuration );
+				Map<Benchmarkable,Duration> measurement = Kit.map.get( benchmarkDurationsToMeasurements, benchmarkDuration );
 				Duration measuredDuration = Kit.map.get( measurement, benchmarkable );
 				System.out.printf( "%5d", measuredDuration.toNanos() );
 			}
@@ -100,7 +100,7 @@ public final class P0InvocationBenchmark
 		System.out.println();
 	}
 
-	private static Map<BenchmarkMeasurement,Duration> benchmark( Map<String,BenchmarkMeasurement> benchmarkables )
+	private static Map<Benchmarkable,Duration> benchmark( Map<String,Benchmarkable> benchmarkables )
 	{
 		Benchmark benchmark = new Benchmark();
 		return benchmarkables.values().stream().collect( Collectors.toMap( b -> b, b -> Kit.time.durationFromSeconds( benchmark.measure( b ) ) ) );
@@ -148,9 +148,9 @@ public final class P0InvocationBenchmark
 		};
 	}
 
-	private static BenchmarkMeasurement benchmarkableAndDryRun( Invoker invoker )
+	private static Benchmarkable newBenchmarkMeasurement( Invoker invoker )
 	{
-		return new BenchmarkMeasurement( benchmarkable( invoker ), benchmarkable( nullInvoker() ) );
+		return benchmarkable( invoker );
 	}
 
 	private interface Invoker

@@ -41,34 +41,36 @@ public final class ProjectStructure
 		return Kit.map.get( projectModuleMap, discoveryModule );
 	}
 
-	public void show( ShowOption showStructureOption )
+	public void show( ShowOption showOption )
 	{
-		if( showStructureOption != ShowOption.None )
+		if( showOption != ShowOption.None )
 		{
 			TextTree textTree = new TextTree( "Project Structure", TestanaLog::report );
-			textTree.print( rootDiscoveryModules, projectModule -> "Module: " + projectModule.name(), ( parent, projectModule ) -> handleModule( parent, projectModule, showStructureOption ) );
+			textTree.print( rootDiscoveryModules, discoveryModule -> "Module: " + discoveryModule.name(), //
+				( parent, discoveryModule ) -> showModule( parent, discoveryModule, showOption ) );
 		}
 	}
 
-	private static void handleModule( TextTree textTree, DiscoveryModule parentModule, ShowOption showOption )
+	private static void showModule( TextTree textTree, DiscoveryModule discoveryModule, ShowOption showOption )
 	{
+		// TODO FIXME this is intractable. Branch.close() does stuff. Simplify this.
 		try( Branch branch = new Branch( textTree ) )
 		{
 			if( showOption.ordinal() > ShowOption.Terse.ordinal() )
 			{
-				branch.add( parentModule.projectDependencies(), projectDependency -> "Project Dependency: " + projectDependency.name() );
+				branch.add( discoveryModule.projectDependencies(), projectDependency -> "Project Dependency: " + projectDependency.name() );
 				if( showOption.ordinal() > ShowOption.Medium.ordinal() )
 				{
-					branch.add( parentModule.externalDependencyPaths(), externalDependency -> "External dependency: " + externalDependency.toString() );
-					BiConsumer<TextTree,OutputDirectory> outputDirectoryBreeder = showOption == ShowOption.Verbose ? ProjectStructure::handleOutputDirectory : null;
-					branch.add( parentModule.outputDirectories(), outputDirectory -> "Output Directory: " + outputDirectory.path, outputDirectoryBreeder );
+					branch.add( discoveryModule.externalDependencyPaths(), externalDependency -> "External dependency: " + externalDependency.toString() );
+					BiConsumer<TextTree,OutputDirectory> outputDirectoryBreeder = showOption == ShowOption.Verbose ? ProjectStructure::showOutputDirectory : null;
+					branch.add( discoveryModule.outputDirectories(), outputDirectory -> "Output Directory: " + outputDirectory.path, outputDirectoryBreeder );
 				}
 			}
-			branch.add( parentModule.nestedModules(), nestedModule -> "SubModule: " + nestedModule.name(), ( parentTextTree, childModule ) -> handleModule( parentTextTree, childModule, showOption ) );
+			branch.add( discoveryModule.nestedModules(), nestedModule -> "SubModule: " + nestedModule.name(), ( parentTextTree, childModule ) -> showModule( parentTextTree, childModule, showOption ) );
 		}
 	}
 
-	private static void handleOutputDirectory( TextTree textTree, OutputDirectory outputDirectory )
+	private static void showOutputDirectory( TextTree textTree, OutputDirectory outputDirectory )
 	{
 		textTree.print( outputDirectory.files(), OutputFile::toString );
 	}

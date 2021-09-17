@@ -25,13 +25,19 @@
 
 		<dependency>
 			<groupId>mikenakis</groupId>
-			<artifactId>bytecode</artifactId>
+			<artifactId>bytecode-model</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>mikenakis</groupId>
-			<artifactId>bytecode-dump</artifactId>
+			<artifactId>bytecode-reading</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mikenakis</groupId>
+			<artifactId>bytecode-printing</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 

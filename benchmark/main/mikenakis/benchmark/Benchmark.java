@@ -115,23 +115,16 @@ public class Benchmark
 	/**
 	 * Performs a measurement.
 	 *
-	 * @param benchmarkableAndDryRun the code to measure.
+	 * @param benchmarkable the code to measure.
 	 *
 	 * @return the amount of time, in seconds, that it takes to execute the given piece of code.
 	 */
-	public double measure( BenchmarkMeasurement benchmarkableAndDryRun )
+	public double measure( Benchmarkable benchmarkable )
 	{
-		double durationNanoseconds = measure0( benchmarkableAndDryRun.benchmarkable );
-		if( benchmarkableAndDryRun.dryRun != null )
-		{
-			double dryRunDurationNanoseconds = measure0( benchmarkableAndDryRun.dryRun );
-			if( dryRunDurationNanoseconds < durationNanoseconds )
-				durationNanoseconds -= dryRunDurationNanoseconds;
-		}
-		return durationNanoseconds * 1e-9;
+		return measureNanoseconds( benchmarkable ) * 1e-9;
 	}
 
-	private double measure0( Benchmarkable benchmarkable )
+	private double measureNanoseconds( Benchmarkable benchmarkable )
 	{
 		/**
 		 * We begin with a batch length of 1, and we perform the following steps:

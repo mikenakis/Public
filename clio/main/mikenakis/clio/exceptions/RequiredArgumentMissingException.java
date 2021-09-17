@@ -1,6 +1,6 @@
 package mikenakis.clio.exceptions;
 
-import mikenakis.clio.arguments.Option;
+import mikenakis.clio.arguments.Argument;
 
 /**
  * "Required argument missing" {@link ClioException}.
@@ -9,15 +9,15 @@ import mikenakis.clio.arguments.Option;
  */
 public class RequiredArgumentMissingException extends ClioException
 {
-	public final Option<?> option;
+	public final Argument<?> argument;
 
-	public RequiredArgumentMissingException( Option<?> option )
+	public RequiredArgumentMissingException( Argument<?> argument )
 	{
-		this.option = option;
+		this.argument = argument;
 	}
 
 	@Override public String getMessage()
 	{
-		return "Required argument missing: " + option.name;
+		return "Required argument missing: " + argument.name();
 	}
 }

@@ -1,5 +1,7 @@
 package mikenakis.benchmark;
 
+import mikenakis.kit.functional.IntFunction0;
+
 /**
  * Provides access to a piece of code which is to be benchmarked. See {@link Benchmarkable#invoke}
  */
@@ -25,4 +27,15 @@ public interface Benchmarkable
 	 * @return anything; it is ignored.
 	 */
 	int invoke( int startIndex, int endIndex );
+
+	static Benchmarkable of( IntFunction0 function )
+	{
+		return ( int startIndex, int endIndex ) -> //
+		{
+			int result = 0;
+			for( int i = startIndex; i < endIndex; i++ )
+				result += function.invoke();
+			return result;
+		};
+	}
 }

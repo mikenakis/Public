@@ -1,0 +1,24 @@
+ version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class7WithInnerClass, superClass = java.lang.Object, interfaces = []
+ ├─ extra constants (0 entries)
+ ├─ fields (0 entries)
+ ├─ methods (1 entries)
+ │   └─  accessFlags = [public], name+descriptor = void <init>()
+ │       └─ attributes (1 entries)
+ │           └─ Code maxStack = 1, maxLocals = 1, 3 instructions, 0 exceptionInfos, 2 attributes
+ │               ├─ instructions (3 entries)
+ │               │   ├─ L9:
+ │               │   ├─      ALOAD_0
+ │               │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │               │   └─      RETURN
+ │               ├─ exceptionInfos (0 entries)
+ │               └─ attributes (2 entries)
+ │                   ├─ LineNumberTable (1 entries)
+ │                   │   └─  lineNumber = 9, startPc = L9
+ │                   └─ LocalVariableTable (1 entries)
+ │                       └─  index = 0, startPc = L9, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass this
+ └─ attributes (3 entries)
+     ├─ SourceFile value = "Class7WithInnerClass.java"
+     ├─ NestMembers (1 entries)
+     │   └─ member = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
+     └─ InnerClasses (1 entries)
+         └─  outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, , accessFlags = [public], innerClass=mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, innerName = "InnerClass"

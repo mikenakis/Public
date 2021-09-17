@@ -1,0 +1,13 @@
+ version = 60.0, accessFlags = [interface, abstract], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, superClass = java.lang.Object, interfaces = []
+ ├─ extra constants (0 entries)
+ ├─ fields (0 entries)
+ ├─ methods (1 entries)
+ │   └─  accessFlags = [public, abstract], name+descriptor = java.lang.String x( java.lang.String )
+ │       └─ attributes (1 entries)
+ │           └─ MethodParameters (1 entries)
+ │               └─  accessFlags = [], name = s
+ └─ attributes (3 entries)
+     ├─ SourceFile value = "Class4ExtendingClass3.java"
+     ├─ NestHost class = mikenakis.bytecode.test.model.Class4ExtendingClass3
+     └─ InnerClasses (1 entries)
+         └─  outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, , accessFlags = [static, interface, abstract], innerClass=mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, innerName = "Foo"

@@ -2,18 +2,18 @@ package mikenakis.testana.structure;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
-import mikenakis.services.bytecode.ByteCodeService;
 import mikenakis.testana.StructureSettings;
 import mikenakis.testana.TestEngine;
 import mikenakis.testana.discovery.Discoverer;
 import mikenakis.testana.discovery.DiscoveryModule;
 import mikenakis.testana.discovery.OutputDirectory;
 import mikenakis.testana.discovery.OutputFile;
-import mikenakis.testana.kit.TimeMeasurement;
 import mikenakis.testana.kit.TestanaLog;
+import mikenakis.testana.kit.TimeMeasurement;
 import mikenakis.testana.structure.cache.Cache;
-import mikenakis.testana.structure.cache.CacheType;
 
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -40,7 +40,7 @@ public final class ProjectStructureBuilder
 		StructureSettings settings, Optional<Path> cachePathName, Iterable<TestEngine> testEngines )
 	{
 		assert Kit.path.isAbsoluteNormalizedDirectory( sourceDirectory ) : sourceDirectory;
-		Collection<DiscoveryModule> rootDiscoveryModules = collectRootDiscoveryModules( sourceDirectory, discoverers, settings );
+		Collection<DiscoveryModule> rootDiscoveryModules = collectDiscoveryModules( sourceDirectory, discoverers, settings );
 		resolveDependencies( rootDiscoveryModules );
 
 		Map<String,TestEngine> testEngineMap = Kit.collection.stream.fromIterable( testEngines ).collect( Collectors.toMap( testEngine -> testEngine.name(), testEngine -> testEngine ) );
@@ -52,9 +52,10 @@ public final class ProjectStructureBuilder
 		{
 			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
 			{
-				ClassAndByteCodeLoader classAndByteCodeLoader = new ClassAndByteCodeLoader( discoveryModule.allOutputPaths() );
+				ClassLoader classLoader = createClassLoader( discoveryModule.allOutputPaths() );
+				ByteCodeLoader classAndByteCodeLoader = new ByteCodeLoader( classLoader );
 				Map<String,ProjectType> projectTypeFromNameMap = new LinkedHashMap<>();
-				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classAndByteCodeLoader, projectTypeFromNameMap );
+				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classLoader, classAndByteCodeLoader, projectTypeFromNameMap );
 				Kit.map.add( projectModuleMap, discoveryModule, projectModule );
 				for( OutputDirectory outputDirectory : discoveryModule.outputDirectories() )
 				{
@@ -64,31 +65,48 @@ public final class ProjectStructureBuilder
 						if( !extension.equals( classExtension ) )
 						{
 							Log.warning( "TODO: handle resources! (resource file: " + outputFile.relativePath + ")" );
+							continue;
 						}
-						else
-						{
-							ProjectType projectType = fromCache( cache, projectModule, outputDirectory, outputFile, testEngineMap );
-							if( projectType == null )
-							{
-								Optional<Class<?>> jvmClass = classAndByteCodeLoader.tryGetClassByName( outputFile.className() );
-								if( jvmClass.isEmpty() )
-									continue;
-								Optional<TestEngine> testEngine = findTestEngine( jvmClass.get(), testEngineMap.values() );
-								projectType = new ProjectType( projectModule, outputFile, Optional.empty(), testEngine );
-							}
-							Kit.map.add( projectTypeFromNameMap, projectType.className(), projectType );
-						}
+						fromCache( cache, projectModule, outputDirectory, outputFile, testEngineMap ) //
+							.or( () -> fromClass( classLoader, outputFile, testEngineMap, projectModule ) ) //
+							.ifPresent( projectType -> Kit.map.add( projectTypeFromNameMap, projectType.className(), projectType ) );
 					}
 				}
 			}
 			timeMeasurement.setArguments( projectStructure.projectModules().size(), projectStructure.typeCount(), cache.hits(), cache.misses() );
 		} );
 
-		TestanaLog.report( "ByteCodeService: " + ByteCodeService.instance.getStatsString() );
-
 		if( cachePathName.isPresent() && cache.hits() != projectStructure.typeCount() )
 			saveCache( cachePathName, projectStructure );
 		return projectStructure;
+	}
+
+	private static Optional<ProjectType> fromClass( ClassLoader classLoader, OutputFile outputFile, Map<String,TestEngine> testEngineMap, ProjectModule projectModule )
+	{
+		return tryLoadClass( classLoader, outputFile.className() ).map( jvmClass -> //
+		{
+			Optional<TestEngine> testEngine = findTestEngine( jvmClass, testEngineMap.values() );
+			return ProjectType.of( projectModule, outputFile, testEngine );
+		} );
+	}
+
+	private static Optional<Class<?>> tryLoadClass( ClassLoader classLoader, String className )
+	{
+		try
+		{
+			return Optional.of( classLoader.loadClass( className ) );
+		}
+		catch( Throwable e )
+		{
+			Log.warning( "could not load class '" + className + "': " + e.getClass() + ": " + e.getMessage() );
+			return Optional.empty();
+		}
+	}
+
+	private static ClassLoader createClassLoader( Collection<Path> classPath )
+	{
+		URL[] urls = classPath.stream().map( path -> Kit.unchecked( () -> path.toUri().toURL() ) ).toArray( URL[]::new );
+		return new URLClassLoader( urls, ProjectStructureBuilder.class.getClassLoader() );
 	}
 
 	private static Collection<DiscoveryModule> allDiscoveryModules( Iterable<DiscoveryModule> rootDiscoveryModules )
@@ -115,28 +133,28 @@ public final class ProjectStructureBuilder
 			discoveryModule.resolveDependencies( nameToModuleMap );
 	}
 
-	private static Collection<DiscoveryModule> collectRootDiscoveryModules( Path projectSourceDirectory, Iterable<Discoverer> discoverers, //
+	private static Collection<DiscoveryModule> collectDiscoveryModules( Path projectSourceDirectory, Iterable<Discoverer> discoverers, //
 		StructureSettings settings )
 	{
 		return TimeMeasurement.run( "Looking for modules under " + projectSourceDirectory, "Found %d root modules, %d leaf modules with a total of %d classes, %d resources", timeMeasurement -> {
-			Collection<DiscoveryModule> rootModules = new LinkedHashSet<>();
-			if( !discoverRootModulesRecursive( projectSourceDirectory, discoverers, settings, rootModules ) )
+			Collection<DiscoveryModule> discoveryModules = new LinkedHashSet<>();
+			if( !collectDiscoveryModulesRecursive( projectSourceDirectory, discoverers, settings, discoveryModules ) )
 				Log.error( "No projects found." );
-			int resourceFileCount = countFilesRecursive( rootModules, OutputFile.Type.Resource );
-			int classFileCount = countFilesRecursive( rootModules, OutputFile.Type.Class );
-			int leafModuleCount = countLeafModulesRecursive( rootModules );
-			timeMeasurement.setArguments( rootModules.size(), leafModuleCount, classFileCount, resourceFileCount );
-			return rootModules;
+			int resourceFileCount = countFilesRecursive( discoveryModules, OutputFile.Type.Resource );
+			int classFileCount = countFilesRecursive( discoveryModules, OutputFile.Type.Class );
+			int leafModuleCount = countLeafModulesRecursive( discoveryModules );
+			timeMeasurement.setArguments( discoveryModules.size(), leafModuleCount, classFileCount, resourceFileCount );
+			return discoveryModules;
 		} );
 	}
 
-	private static boolean discoverRootModulesRecursive( Path directory, Iterable<Discoverer> discoverers, //
-		StructureSettings settings, Collection<DiscoveryModule> rootDiscoveryModules )
+	private static boolean collectDiscoveryModulesRecursive( Path directory, Iterable<Discoverer> discoverers, //
+		StructureSettings settings, Collection<DiscoveryModule> discoveryModules )
 	{
-		Optional<DiscoveryModule> module = discoverModule( directory, discoverers );
-		if( module.isPresent() )
+		Optional<DiscoveryModule> discoveryModule = tryCollectDiscoveryModule( directory, discoverers );
+		if( discoveryModule.isPresent() )
 		{
-			Kit.collection.add( rootDiscoveryModules, module.get() );
+			Kit.collection.add( discoveryModules, discoveryModule.get() );
 			return true;
 		}
 		boolean foundSomething = false;
@@ -145,7 +163,7 @@ public final class ProjectStructureBuilder
 			assert subDirectory.startsWith( directory );
 			if( settings.shouldExcludeDirectory( subDirectory ) )
 				continue;
-			if( discoverRootModulesRecursive( subDirectory, discoverers, settings, rootDiscoveryModules ) )
+			if( collectDiscoveryModulesRecursive( subDirectory, discoverers, settings, discoveryModules ) )
 				foundSomething = true;
 		}
 		if( !foundSomething )
@@ -153,7 +171,7 @@ public final class ProjectStructureBuilder
 		return foundSomething;
 	}
 
-	private static Optional<DiscoveryModule> discoverModule( Path directory, Iterable<Discoverer> discoverers )
+	private static Optional<DiscoveryModule> tryCollectDiscoveryModule( Path directory, Iterable<Discoverer> discoverers )
 	{
 		for( Discoverer discoverer : discoverers )
 		{
@@ -197,26 +215,34 @@ public final class ProjectStructureBuilder
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private static ProjectType fromCache( Cache cache, ProjectModule projectModule, OutputDirectory outputDirectory, OutputFile outputFile, //
+	private static Optional<ProjectType> fromCache( Cache cache, ProjectModule projectModule, OutputDirectory outputDirectory, OutputFile outputFile, //
 		Map<String,TestEngine> testEngines )
 	{
-		Optional<CacheType> cacheType = cache.tryGetType( projectModule.name(), outputDirectory, outputFile.className(), outputFile.lastModifiedTime );
-		if( cacheType.isEmpty() )
-			return null;
-		Optional<TestEngine> testEngine = cacheType.get().testEngineName.map( name -> Kit.map.get( testEngines, name ) );
-		return new ProjectType( projectModule, outputFile, Optional.of( cacheType.get().dependencyNames ), testEngine );
+		return cache.tryGetType( projectModule.name(), outputDirectory, outputFile.className(), outputFile.lastModifiedTime ).map( c -> //
+		{
+			Optional<TestEngine> testEngine = c.testEngineName.map( name -> Kit.map.get( testEngines, name ) );
+			return ProjectType.of( projectModule, outputFile, testEngine, c.dependencyNames );
+		} );
 	}
 
 	private static Cache loadCache( Optional<Path> cachePathName )
 	{
 		if( cachePathName.isEmpty() || !Files.exists( cachePathName.get() ) )
 			return Cache.empty();
-		return TimeMeasurement.run( "Loading cache from '" + cachePathName.get() + "'", "Loaded %d modules, %d types from cache", timeMeasurement -> //
+		try
 		{
-			Cache cache = Cache.fromFile( cachePathName.get() );
-			timeMeasurement.setArguments( cache.moduleCount(), cache.typeCount() );
-			return cache;
-		} );
+			return TimeMeasurement.run( "Loading cache from '" + cachePathName.get() + "'", "Loaded %d modules, %d types from cache", timeMeasurement -> //
+			{
+				Cache cache = Cache.fromFile( cachePathName.get() );
+				timeMeasurement.setArguments( cache.moduleCount(), cache.typeCount() );
+				return cache;
+			} );
+		}
+		catch( RuntimeException | Error e )
+		{
+			TestanaLog.report( "Cache could not be loaded." );
+			return Cache.empty();
+		}
 	}
 
 	private static void saveCache( Optional<Path> cachePathName, ProjectStructure projectStructure )

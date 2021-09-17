@@ -1,13 +1,17 @@
 package mikenakis.clio;
 
-import mikenakis.clio.arguments.EnumChoiceParameterOption;
-import mikenakis.clio.arguments.Option;
-import mikenakis.clio.arguments.PathPositionalOption;
-import mikenakis.clio.arguments.PositionalOption;
-import mikenakis.clio.arguments.StringParameterOption;
-import mikenakis.clio.arguments.StringPositionalOption;
-import mikenakis.clio.arguments.SwitchOption;
-import mikenakis.clio.exceptions.ClioException;
+import mikenakis.clio.arguments.Argument;
+import mikenakis.clio.arguments.DefaultingArgument;
+import mikenakis.clio.arguments.NamedValueArgument;
+import mikenakis.clio.arguments.OptionalArgument;
+import mikenakis.clio.arguments.PositionalValueArgument;
+import mikenakis.clio.arguments.SwitchArgument;
+import mikenakis.clio.exceptions.RequiredArgumentMissingException;
+import mikenakis.clio.exceptions.UnrecognizedTokenException;
+import mikenakis.clio.parsers.EnumChoiceValueParser;
+import mikenakis.clio.parsers.PathValueParser;
+import mikenakis.clio.parsers.StringValueParser;
+import mikenakis.clio.parsers.ValueParser;
 import mikenakis.kit.Kit;
 
 import java.io.PrintStream;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -27,7 +32,7 @@ public final class Clio
 {
 	public final String programName;
 	private final Supplier<Boolean> helpSwitch;
-	private final List<Option<?>> options = new ArrayList<>();
+	private final List<Argument<?>> arguments = new ArrayList<>();
 
 	/**
 	 * Initializes a new instance of {@link Clio} with a default help switch.
@@ -43,171 +48,253 @@ public final class Clio
 	 * Initializes a new instance of {@link Clio} with a custom help switch.
 	 *
 	 * @param programName           the name of the program, used for displaying usage help.
-	 * @param helpSwitchName        the name of the 'help' switch.  (Usually, "-help" or "--help | -h")
+	 * @param helpSwitchNames       the argument names of the 'help' switch.  (Usually, "-help" or "--help | -h")
 	 * @param helpSwitchDescription the description of the 'help' switch, used for displaying usage help.
 	 */
-	public Clio( String programName, String helpSwitchName, String helpSwitchDescription )
+	public Clio( String programName, String helpSwitchNames, String helpSwitchDescription )
 	{
 		this.programName = programName;
-		helpSwitch = helpSwitchName == null ? null : add( new SwitchOption( this, helpSwitchName, helpSwitchDescription ) );
+		helpSwitch = helpSwitchNames == null ? null : add( new SwitchArgument( splitSwitchNames( helpSwitchNames ), helpSwitchDescription ) );
 	}
 
 	/**
-	 * Adds a switch option.
+	 * Adds an optional {@link SwitchArgument}.
 	 *
-	 * @param name        the name of the switch. (For example, "--all | -a")
-	 * @param description the description of the switch, used for displaying usage help.
+	 * @param switchNamesString the "|"-separated names of the switches. (For example, "--all | -a")
+	 * @param description       the description of the switch, used for displaying usage help.
 	 *
 	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])}; will return {@code true} if the switch was present in the command line,
 	 *    {@code false} otherwise.
 	 */
-	public Supplier<Boolean> addSwitchOption( String name, String description )
+	public Supplier<Boolean> addOptionalSwitchArgument( String switchNamesString, String description )
 	{
-		return add( new SwitchOption( this, name, description ) );
+		return add( new SwitchArgument( splitSwitchNames( switchNamesString ), description ) );
 	}
 
 	/**
-	 * Adds a {@link String}-parameter option with a default value.
+	 * Adds an optional {@link String} {@link NamedValueArgument}.
 	 *
-	 * @param name                  the name of the option. (For example, "--output | -o")
-	 * @param parameterName         the name of the parameter of the option, used for displaying usage help.
-	 * @param defaultParameterValue the default value that will be used for the parameter if the option is not present in the command line.
-	 * @param description           the description of the option, used for displaying usage help.
+	 * @param switchNamesString the name of the argument. (For example, "--output | -o")
+	 * @param description       the description of the argument, used for displaying usage help.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the parameter of the option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public Supplier<String> addStringParameterOption( String name, String parameterName, String defaultParameterValue, String description )
+	public Supplier<Optional<String>> addOptionalStringNamedArgument( String switchNamesString, String description )
 	{
-		assert defaultParameterValue != null;
-		return add( new StringParameterOption( this, name, parameterName, defaultParameterValue, description ) );
+		ValueParser<String> valueParser = StringValueParser.instance;
+		Argument<String> mandatoryArgument = new NamedValueArgument<>( splitSwitchNames( switchNamesString ), description, valueParser );
+		Argument<Optional<String>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		return add( optionalArgument );
 	}
 
 	/**
-	 * Adds a mandatory {@link String}-parameter option.
+	 * Adds an optional {@link String} {@link NamedValueArgument} with a default value.
 	 *
-	 * @param name                  the name of the option. (For example, "--output | -o")
-	 * @param parameterName         the name of the parameter of the option, used for displaying usage help.
-	 * @param description           the description of the option, used for displaying usage help.
+	 * @param switchNamesString the name of the argument. (For example, "--output | -o")
+	 * @param defaultValue      the default value that will be used if the argument is not supplied in the command line.
+	 * @param description       the description of the argument, used for displaying usage help.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the parameter of the option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public Supplier<String> addMandatoryStringParameterOption( String name, String parameterName, String description )
+	public Supplier<String> addOptionalStringNamedArgumentWithDefault( String switchNamesString, String defaultValue, String description )
 	{
-		return add( new StringParameterOption( this, name, parameterName, null, description ) );
+		ValueParser<String> valueParser = StringValueParser.instance;
+		Argument<String> mandatoryArgument = new NamedValueArgument<>( splitSwitchNames( switchNamesString ), description, valueParser );
+		Argument<Optional<String>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		Argument<String> defaultingArgument = new DefaultingArgument<>( optionalArgument, defaultValue );
+		return add( defaultingArgument );
 	}
 
 	/**
-	 * Adds an {@link Enum}-parameter option with a default value.
+	 * Adds a mandatory {@link String} {@link NamedValueArgument}.
 	 *
-	 * @param name                  the name of the option. (For example, "--mode | -m")
-	 * @param parameterName         the name of the parameter of the option, used for displaying usage help.
-	 * @param enumClass             the {@link Class} of the parameter of the option.
-	 * @param defaultParameterValue the default value that will be used for the parameter if the option is not given in the command line.
-	 * @param description           the description of the option, used for displaying usage help.
-	 * @param <T>                   the type of the parameter.
+	 * @param switchNamesString the name of the argument. (For example, "--output | -o")
+	 * @param description       the description of the argument, used for displaying usage help.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the parameter of the option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public <T extends Enum<T>> Supplier<T> addEnumParameterOption( String name, String parameterName, Class<T> enumClass, T defaultParameterValue, String description )
+	public Supplier<String> addMandatoryStringNamedArgument( String switchNamesString, String description )
 	{
-		assert defaultParameterValue != null;
-		return add( new EnumChoiceParameterOption<>( this, name, parameterName, enumClass, defaultParameterValue, description ) );
+		ValueParser<String> valueParser = StringValueParser.instance;
+		Argument<String> mandatoryArgument = new NamedValueArgument<>( splitSwitchNames( switchNamesString ), description, valueParser );
+		return add( mandatoryArgument );
 	}
 
 	/**
-	 * Adds a mandatory {@link Enum}-parameter option.
+	 * Adds an optional {@link Enum} {@link NamedValueArgument}.
 	 *
-	 * @param name                  the name of the option. (For example, "--mode | -m")
-	 * @param parameterName         the name of the parameter of the option, used for displaying usage help.
-	 * @param enumClass             the {@link Class} of the parameter of the option.
-	 * @param description           the description of the option, used for displaying usage help.
-	 * @param <T>                   the type of the parameter.
+	 * @param switchNamesString the name of the argument. (For example, "--mode | -m")
+	 * @param enumClass         the {@link Class} of the argument value.
+	 * @param description       the description of the argument, used for displaying usage help.
+	 * @param <T>               the type of the argument value.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the parameter of the option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public <T extends Enum<T>> Supplier<T> addMandatoryEnumParameterOption( String name, String parameterName, Class<T> enumClass, String description )
+	public <T extends Enum<T>> Supplier<Optional<T>> addOptionalEnumNamedArgument( String switchNamesString, Class<T> enumClass, String description )
 	{
-		return add( new EnumChoiceParameterOption<>( this, name, parameterName, enumClass, null, description ) );
+		ValueParser<T> valueParser = new EnumChoiceValueParser<>( enumClass );
+		Argument<T> mandatoryArgument = new NamedValueArgument<>( splitSwitchNames( switchNamesString ), description, valueParser );
+		Argument<Optional<T>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		return add( optionalArgument );
 	}
 
 	/**
-	 * Adds a {@link String} positional option with a default value.
+	 * Adds an optional {@link Enum} {@link NamedValueArgument} with a default value.
 	 *
-	 * @param name         the name of the positional option, used for displaying usage help.
-	 * @param defaultValue the default value of the positional option.
-	 * @param description  the description of the positional option, used for displaying usage help.
+	 * @param switchNamesString the name of the argument. (For example, "--mode | -m")
+	 * @param enumClass         the {@link Class} of the argument value.
+	 * @param defaultValue      the value that will be used if the argument is not given in the command line.
+	 * @param description       the description of the argument, used for displaying usage help.
+	 * @param <T>               the type of the argument value.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the positional option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public Supplier<String> addStringPositionalOption( String name, String defaultValue, String description )
+	public <T extends Enum<T>> Supplier<T> addOptionalEnumNamedArgumentWithDefault( String switchNamesString, Class<T> enumClass, T defaultValue, String description )
 	{
-		assert defaultValue != null;
-		return add( new StringPositionalOption( this, name, defaultValue, description ) );
+		ValueParser<T> valueParser = new EnumChoiceValueParser<>( enumClass );
+		Argument<T> mandatoryArgument = new NamedValueArgument<>( splitSwitchNames( switchNamesString ), description, valueParser );
+		Argument<Optional<T>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		Argument<T> defaultingArgument = new DefaultingArgument<>( optionalArgument, defaultValue );
+		return add( defaultingArgument );
 	}
 
 	/**
-	 * Adds a mandatory {@link String} positional option.
+	 * Adds a mandatory {@link Enum} {@link NamedValueArgument}.
 	 *
-	 * @param name         the name of the positional option, used for displaying usage help.
-	 * @param description  the description of the positional option, used for displaying usage help.
+	 * @param switchNamesString the name of the argument. (For example, "--mode | -m")
+	 * @param enumClass         the {@link Class} of the argument value.
+	 * @param description       the description of the argument, used for displaying usage help.
+	 * @param <T>               the type of the argument value.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the positional option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public Supplier<String> addMandatoryStringPositionalOption( String name, String description )
+	public <T extends Enum<T>> Supplier<T> addMandatoryEnumNamedArgument( String switchNamesString, Class<T> enumClass, String description )
 	{
-		return add( new StringPositionalOption( this, name, null, description ) );
+		ValueParser<T> valueParser = new EnumChoiceValueParser<>( enumClass );
+		Argument<T> mandatoryArgument = new NamedValueArgument<>( splitSwitchNames( switchNamesString ), description, valueParser );
+		return add( mandatoryArgument );
 	}
 
 	/**
-	 * Adds a {@link Path} positional option with a default value.
+	 * Adds an optional {@link String} {@link PositionalValueArgument}.
 	 *
-	 * @param name         the name of the positional option, used for displaying usage help.
-	 * @param defaultValue the default value of the positional option.
-	 * @param description  the description of the positional option, used for displaying usage help.
+	 * @param name        the name of the argument, used for displaying usage help.
+	 * @param description the description of the argument, used for displaying usage help.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the positional option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public Supplier<Path> addPathPositionalOption( String name, String defaultValue, String description )
+	public Supplier<Optional<String>> addOptionalStringPositionalArgument( String name, String description )
 	{
-		assert defaultValue != null;
-		return add( new PathPositionalOption( this, name, defaultValue, description ) );
+		ValueParser<String> valueParser = StringValueParser.instance;
+		Argument<String> mandatoryArgument = new PositionalValueArgument<>( name, description, valueParser );
+		Argument<Optional<String>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		return add( optionalArgument );
 	}
 
 	/**
-	 * Adds a mandatory {@link Path} positional option.
+	 * Adds an optional {@link String} {@link PositionalValueArgument} with a default value.
 	 *
-	 * @param name         the name of the positional option, used for displaying usage help.
-	 * @param description  the description of the positional option, used for displaying usage help.
+	 * @param name         the name of the argument, used for displaying usage help.
+	 * @param defaultValue the value that will be used if the argument is not given in the command line.
+	 * @param description  the description of the argument, used for displaying usage help.
 	 *
-	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the value of the positional option.
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
 	 */
-	public Supplier<Path> addPathPositionalOption( String name, String description )
+	public Supplier<String> addOptionalStringPositionalArgumentWithDefault( String name, String defaultValue, String description )
 	{
-		return add( new PathPositionalOption( this, name, null, description ) );
+		ValueParser<String> valueParser = StringValueParser.instance;
+		Argument<String> mandatoryArgument = new PositionalValueArgument<>( name, description, valueParser );
+		Argument<Optional<String>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		Argument<String> defaultingArgument = new DefaultingArgument<>( optionalArgument, defaultValue );
+		return add( defaultingArgument );
 	}
 
-	private <T> Supplier<T> add( Option<T> option )
+	/**
+	 * Adds a mandatory {@link String} {@link PositionalValueArgument}.
+	 *
+	 * @param name        the name of the argument, used for displaying usage help.
+	 * @param description the description of the argument, used for displaying usage help.
+	 *
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
+	 */
+	public Supplier<String> addMandatoryStringPositionalArgument( String name, String description )
 	{
-		assert argumentIsOkAssertion( option );
-		options.add( option );
-		return option;
+		ValueParser<String> valueParser = StringValueParser.instance;
+		Argument<String> mandatoryArgument = new PositionalValueArgument<>( name, description, valueParser );
+		return add( mandatoryArgument );
 	}
 
-	private boolean argumentIsOkAssertion( Option<?> option )
+	/**
+	 * Adds an optional {@link Path} {@link PositionalValueArgument}.
+	 *
+	 * @param name        the name of the argument, used for displaying usage help.
+	 * @param description the description of the argument, used for displaying usage help.
+	 *
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
+	 */
+	public Supplier<Optional<Path>> addOptionalPathPositionalArgument( String name, String description )
 	{
-		if( !(option instanceof PositionalOption) )
+		ValueParser<Path> valueParser = PathValueParser.instance;
+		Argument<Path> mandatoryArgument = new PositionalValueArgument<>( name, description, valueParser );
+		Argument<Optional<Path>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		return add( optionalArgument );
+	}
+
+	/**
+	 * Adds an optional {@link Path} {@link PositionalValueArgument} with a default value.
+	 *
+	 * @param name         the name of the argument, used for displaying usage help.
+	 * @param defaultValue the default value of the argument.
+	 * @param description  the description of the argument, used for displaying usage help.
+	 *
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
+	 */
+	public Supplier<Path> addOptionalPathPositionalArgumentWithDefault( String name, Path defaultValue, String description )
+	{
+		ValueParser<Path> valueParser = PathValueParser.instance;
+		Argument<Path> mandatoryArgument = new PositionalValueArgument<>( name, description, valueParser );
+		Argument<Optional<Path>> optionalArgument = new OptionalArgument<>( mandatoryArgument );
+		Argument<Path> defaultingArgument = new DefaultingArgument<>( optionalArgument, defaultValue );
+		return add( defaultingArgument );
+	}
+
+	/**
+	 * Adds a mandatory {@link Path} {@link PositionalValueArgument}.
+	 *
+	 * @param name        the name of the argument, used for displaying usage help.
+	 * @param description the description of the argument, used for displaying usage help.
+	 *
+	 * @return a {@link Supplier} that can be invoked after {@link #parse(String[])} to return the argument value.
+	 */
+	public Supplier<Path> addMandatoryPathPositionalArgument( String name, String description )
+	{
+		ValueParser<Path> valueParser = PathValueParser.instance;
+		Argument<Path> mandatoryArgument = new PositionalValueArgument<>( name, description, valueParser );
+		return add( mandatoryArgument );
+	}
+
+	private <T> Supplier<T> add( Argument<T> argument )
+	{
+		assert argumentIsOkAssertion( argument );
+		arguments.add( argument );
+		return argument;
+	}
+
+	private boolean argumentIsOkAssertion( Argument<?> argument )
+	{
+		if( !argument.isPositional() )
 		{
-			PositionalOption<?> positionalArgument = findFirstPositionalArgument();
-			assert positionalArgument == null : "non-positional argument '" + option.name + "' must appear before positional argument '" + positionalArgument.name + "'.";
+			Argument<?> positionalArgument = findFirstPositionalArgument();
+			assert positionalArgument == null : "non-positional argument '" + argument.name() + "' must appear before positional argument '" + positionalArgument.name() + "'.";
 		}
 		return true;
 	}
 
-	private PositionalOption<?> findFirstPositionalArgument()
+	private Argument<?> findFirstPositionalArgument()
 	{
-		for( Option<?> option : options )
-			if( option instanceof PositionalOption )
-				return (PositionalOption<?>)option;
+		for( Argument<?> argument : arguments )
+			if( argument.isPositional() )
+				return argument;
 		return null;
 	}
 
@@ -216,7 +303,7 @@ public final class Clio
 	 *
 	 * @param commandLineArguments the command line arguments to parse.
 	 *
-	 * @return {@code true} if everything went ok; {@code false} if errors have been reported and the calling program should terminate.
+	 * @return {@code true} if everything went ok; {@code false} if help was requested, in which case help has been shown and the calling program should now terminate.
 	 */
 	public boolean parse( String[] commandLineArguments )
 	{
@@ -226,46 +313,51 @@ public final class Clio
 	/**
 	 * Parses a list of command line arguments and reports any errors.
 	 *
-	 * @param commandLineArguments the command line arguments to parse.
+	 * @param commandLineTokens the command line arguments to parse.
 	 *
-	 * @return {@code true} if there were any errors; {@code false} otherwise.
+	 * @return {@code true} if everything went ok; {@code false} if help was requested, in which case help has been shown and the calling program should now terminate.
 	 */
-	public boolean parse( List<String> commandLineArguments )
+	public boolean parse( List<String> commandLineTokens )
 	{
-		List<String> remainingArguments = new ArrayList<>( commandLineArguments );
-		Collection<Option<?>> remainingOptions = new ArrayList<>( options );
-		while( !remainingArguments.isEmpty() )
+		List<String> remainingTokens = new ArrayList<>( commandLineTokens );
+		Collection<Argument<?>> remainingArguments = new ArrayList<>( arguments );
+		while( !remainingTokens.isEmpty() )
 		{
-			Option<?> foundOption;
-			try
-			{
-				foundOption = tryFindArgument( remainingArguments, remainingOptions );
-			}
-			catch( ClioException exception )
-			{
-				System.err.println( exception.getMessage() );
-				return false;
-			}
-			if( foundOption == null )
-			{
-				System.err.println( "Unrecognized token: " + remainingArguments.get( 0 ) );
-				help( System.out );
-				return false;
-			}
-			if( foundOption == helpSwitch )
+			Argument<?> foundArgument = tryFindArgument( remainingTokens, remainingArguments );
+			if( foundArgument == null )
+				throw new UnrecognizedTokenException( remainingTokens.get( 0 ) );
+			if( foundArgument == helpSwitch )
 			{
 				help( System.out );
 				return false;
 			}
-			Kit.collection.remove( remainingOptions, foundOption );
+			Kit.collection.remove( remainingArguments, foundArgument );
 		}
-		for( Option<?> remainingOption : remainingOptions )
-			if( !remainingOption.optional )
-			{
-				System.err.println( "Required argument missing: " + remainingOption.name );
-				return false;
-			}
+		for( Argument<?> remainingArgument : remainingArguments )
+			if( !remainingArgument.isOptional() )
+				throw new RequiredArgumentMissingException( remainingArgument );
 		return true;
+	}
+
+	private static Argument<?> tryFindArgument( List<String> remainingTokens, Iterable<? extends Argument<?>> remainingArguments )
+	{
+		boolean lookForPositional = !remainingTokens.get( 0 ).startsWith( "-" );
+		for( Argument<?> argument : remainingArguments )
+		{
+			if( argument.isPositional() != lookForPositional )
+				continue;
+			if( tryParseArgument( argument, remainingTokens ) )
+				return argument;
+		}
+		return null;
+	}
+
+	private static boolean tryParseArgument( Argument<?> argument, List<String> remainingTokens )
+	{
+		int length = remainingTokens.size();
+		boolean ok = argument.tryParse( remainingTokens );
+		assert ok == remainingTokens.size() < length;
+		return ok;
 	}
 
 	private void help( PrintStream printStream )
@@ -279,14 +371,14 @@ public final class Clio
 	private int printShortUsagesAndGetMaxLength( PrintStream printStream )
 	{
 		int maxShortUsageLength = 0;
-		for( Option<?> option : options )
+		for( Argument<?> argument : arguments )
 		{
-			String shortUsage = option.getShortUsage();
+			String shortUsage = argument.getShortUsage();
 			maxShortUsageLength = Math.max( maxShortUsageLength, shortUsage.length() );
-			if( option.optional )
+			if( argument.isOptional() )
 				printStream.print( '[' );
 			printStream.print( shortUsage );
-			if( option.optional )
+			if( argument.isOptional() )
 				printStream.print( ']' );
 			printStream.print( ' ' );
 		}
@@ -295,36 +387,14 @@ public final class Clio
 
 	private void printLongUsages( int maxShortUsageLength, PrintStream printStream )
 	{
-		for( Option<?> option : options )
+		for( Argument<?> argument : arguments )
 		{
 			printStream.print( "    " );
-			printStream.print( padLeft( option.getShortUsage(), maxShortUsageLength ) );
+			printStream.print( padLeft( argument.getShortUsage(), maxShortUsageLength ) );
 			printStream.print( ' ' );
-			printStream.print( option.getLongUsage() );
+			printStream.print( argument.getLongUsage() );
 			printStream.println();
 		}
-	}
-
-	private static Option<?> tryFindArgument( List<String> remainingTokens, Iterable<? extends Option<?>> remainingOptions ) throws ClioException
-	{
-		boolean lookForPositional = !remainingTokens.get( 0 ).startsWith( "-" );
-		for( Option<?> option : remainingOptions )
-		{
-			boolean positional = option instanceof PositionalOption;
-			if( positional != lookForPositional )
-				continue;
-			if( tryParseArgument( option, remainingTokens ) )
-				return option;
-		}
-		return null;
-	}
-
-	private static boolean tryParseArgument( Option<?> option, List<String> remainingTokens ) throws ClioException
-	{
-		int length = remainingTokens.size();
-		boolean ok = option.tryParse( remainingTokens );
-		assert ok == remainingTokens.size() < length;
-		return ok;
 	}
 
 	private static String padLeft( String s, int width )
@@ -334,5 +404,29 @@ public final class Clio
 		while( builder.length() < width )
 			builder.append( ' ' );
 		return builder.toString();
+	}
+
+	private static List<String> splitSwitchNames( String switchNamesString )
+	{
+		List<String> switchNames = Arrays.stream( switchNamesString.split( "\\|" ) ).map( s -> s.trim() ).toList();
+		assert !switchNames.isEmpty();
+		assert Kit.iterable.trueForAll( switchNames, n -> nameIsOkAssertion( n ) );
+		return switchNames;
+	}
+
+	private static boolean nameIsOkAssertion( String part )
+	{
+		if( part.startsWith( "--" ) )
+			assert matches( part, "--[a-z][a-zA-Z0-9_-]+" ) : part;
+		else if( part.startsWith( "-" ) )
+			assert matches( part, "-[a-z]+" ) : part;
+		else
+			assert matches( part, "[a-z][a-zA-Z0-9_-]+" ) : part;
+		return true;
+	}
+
+	private static boolean matches( String part, String pattern )
+	{
+		return part.matches( pattern );
 	}
 }

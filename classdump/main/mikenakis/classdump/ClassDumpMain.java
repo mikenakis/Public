@@ -1,9 +1,8 @@
 package mikenakis.classdump;
 
-import mikenakis.bytecode.ByteCodeType;
-import mikenakis.bytecode.dumping.Style;
-import mikenakis.bytecode.dumping.printers.ByteCodePrinter;
-import mikenakis.bytecode.kit.Buffer;
+import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.printing.ByteCodePrinter;
+import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.classdump.kit.Helpers;
 import mikenakis.clio.Clio;
 import mikenakis.kit.Kit;
@@ -29,91 +28,114 @@ public class ClassDumpMain
 	public static void main( String[] commandLineArguments )
 	{
 		Clio clio = new Clio( "classDump" );
-		Supplier<Style> styleOption = clio.addEnumParameterOption( "--style", "display-style", Style.class, Style.RAW_ONLY, "the style of the output." );
-		Supplier<Boolean> loopOption = clio.addSwitchOption( "--loop", "run in an endless loop (for profiling.)" );
-		Supplier<String> outputOption = clio.addStringParameterOption( "--output | --out | -o", "output-file", "", "output file, defaults to standard output." );
-		Supplier<String> sourcesRootDirectoryOption = clio.addStringParameterOption( "--sources | -s", "sources-root-directory", "", "the root directory of sources (for locating .java files)." );
-		Supplier<Path> binariesRootPathArgument = clio.addPathPositionalOption( "binaries-root-directory", "the root directory of binaries (for locating .class files) or path to single .class file to dump." );
-		Supplier<String> classArgument = clio.addStringPositionalOption( "class-name", "", "fully qualified class name (or package name, or prefix thereof) of class(es) to dump. (Default is to dump everything under the binaries root directory.)" );
+		Supplier<Boolean> loop = clio.addOptionalSwitchArgument( "--loop", "run in an endless loop (for profiling.)" );
+		Supplier<Optional<String>> output = clio.addOptionalStringNamedArgument( "--output | --out | -o", "output file, defaults to standard output. Useful for obtaining a class dump without classDump's own logging entries." );
+		Supplier<Optional<String>> sources = clio.addOptionalStringNamedArgument( "--sources | -s", "the root directory of sources (for locating .java files)." );
+		Supplier<Path> binaries = clio.addMandatoryPathPositionalArgument( "binaries-path", "root directory of binaries (for locating .class files) or path to single .class file to dump." );
+		Supplier<Optional<String>> className = clio.addOptionalStringPositionalArgument( "class-name", "fully qualified class name (or package name, or prefix thereof) of class(es) to dump. (Default is to dump everything.)" );
 		if( !clio.parse( commandLineArguments ) )
+		{
+			System.out.println( "example: " + clio.programName + " --sources C:\\Users\\MBV\\Personal\\IdeaProjects\\mikenakis-personal\\public\\bytecode\\bytecode-test\\test C:\\Users\\MBV\\Out\\mikenakis\\bytecode-test\\test-classes bytecode_tests.model.Class1" );
 			System.exit( -1 );
+		}
 
 		ClassDumpMain classDumpMain = new ClassDumpMain();
-		try
+		Kit.tryCatch( () ->
 		{
-			int result = classDumpMain.run( styleOption.get(), loopOption.get(), outputOption.get(),
-				sourcesRootDirectoryOption.get(), binariesRootPathArgument.get(),
-				classArgument.get() );
-			System.exit( result );
-		}
-		catch( Throwable throwable )
-		{
-			System.err.println( clio.programName + ": " + throwable.getMessage() );
-		}
+			classDumpMain.run( loop.get(), output.get(), sources.get(), binaries.get(), className.get() );
+			System.exit( 0 );
+		}, throwable ->	handleThrowable( throwable, clio.programName ) );
 	}
 
-	public ClassDumpMain()
+	private static void handleThrowable( Throwable throwable, String programName )
+	{
+		if( throwable instanceof AssertionError assertionError && assertionError.getCause() != null )
+			throwable = assertionError.getCause();
+		if( throwable instanceof ApplicationException applicationException )
+			System.err.println( programName + ": " + applicationException.getMessage() );
+		else
+			Log.error( throwable );
+		System.exit( 1 );
+	}
+
+	private ClassDumpMain()
 	{
 	}
 
-	private int run( Style style, boolean loop, String output, String sourcesRootDirectory, Path binariesRootPath, String className )
+	private void run( boolean loop, Optional<String> output, Optional<String> sources, Path binaries, Optional<String> className )
 	{
 		for( ; ; )
 		{
 			PrintStream printStream = getPrintStream( output );
-
-			Optional<Path> sourcesRootPath = sourcesRootDirectory.isEmpty() ? Optional.empty() : Optional.of( Paths.get( sourcesRootDirectory ).toAbsolutePath().normalize() );
-			if( binariesRootPath.toFile().isFile() )
-			{
-				if( !className.isEmpty() )
-				{
-					System.out.println( "target is a file, so class argument should be omitted." );
-					return -1;
-				}
-				classDump( binariesRootPath, sourcesRootPath, style, printStream );
-			}
-			else
-			{
-				assert binariesRootPath.toFile().isDirectory();
-				assert sourcesRootPath.isEmpty() || sourcesRootPath.get().toFile().isDirectory();
-				assert binariesRootPath.resolve( className.replace( '.', '/' ) + ".class" ).toFile().isFile();
-				assert sourcesRootPath.isEmpty() || sourcesRootPath.get().resolve( className.replace( '.', '/' ) + ".java" ).toFile().isFile();
-				for( ; ; )
-				{
-					int i = className.indexOf( '.' );
-					if( i == -1 )
-						break;
-					String packagePart = className.substring( 0, i );
-					binariesRootPath = binariesRootPath.resolve( packagePart );
-					sourcesRootPath = sourcesRootPath.isEmpty() ? Optional.empty() : Optional.of( sourcesRootPath.get().resolve( packagePart ) );
-					className = className.substring( i + 1 );
-					assert binariesRootPath.resolve( className.replace( '.', '/' ) + ".class" ).toFile().isFile();
-					assert sourcesRootPath.isEmpty() || sourcesRootPath.get().resolve( className.replace( '.', '/' ) + ".java" ).toFile().isFile();
-				}
-				Path finalBinariesRootPath = binariesRootPath;
-				Optional<Path> finalSourcesRootPath = sourcesRootPath;
-				String finalClassName = className;
-				Helpers.forEachFile( binariesRootPath, ".class", classFilePathName ->
-				{
-					Path relativePath = finalBinariesRootPath.relativize( classFilePathName );
-					String relativePathName = relativePath.toString();
-					assert relativePathName.endsWith( ".class" );
-					//relativePathName = relativePathName.substring( 0, relativePathName.length() - ".class".length() );
-					if( !relativePathName.startsWith( finalClassName ) )
-						return;
-					Optional<Path> sourcePath = finalSourcesRootPath.isEmpty() ? Optional.empty() : Optional.of( resolveToParentOf( finalSourcesRootPath.get(), relativePath ) );
-					classDump( classFilePathName, sourcePath, style, printStream );
-				} );
-			}
-
+			run1( printStream, sources, binaries, className );
 			if( printStream != System.out )
 				printStream.close();
-
 			if( !loop )
 				break;
 		}
+	}
 
-		return 0;
+	private void run1( PrintStream printStream, Optional<String> sources, Path binaries, Optional<String> className )
+	{
+		Optional<Path> sourcesRootPath = sources.isEmpty() ? Optional.empty() : Optional.of( Paths.get( sources.get() ).toAbsolutePath().normalize() );
+		Optional<Path> sourcesRootPath2 = sources.map( s -> Paths.get( s ).toAbsolutePath().normalize() );
+		assert sourcesRootPath.equals( sourcesRootPath2 );
+		if( binaries.toFile().isFile() )
+		{
+			if( className.isPresent() )
+				throw new ApplicationException( "binaries-path '" + binaries.toString() + "' is a file, so class-name argument should not be given." );
+			classDump( binaries, sourcesRootPath, printStream );
+		}
+		else
+		{
+			assert className.isPresent();
+			if( !binaries.toFile().exists() )
+				throw new ApplicationException( "binaries-path '" + binaries + "' does not exist." );
+			if( !binaries.toFile().isDirectory() )
+				throw new ApplicationException( "binaries-path '" + binaries + "' is not a directory." );
+			if( sourcesRootPath.isPresent() && !sourcesRootPath.get().toFile().isDirectory() )
+				throw new ApplicationException( "Sources root path should be a directory" );
+			String classFileName = className.get().replace( '.', '/' ) + ".class";
+			String sourceFileName = className.get().replace( '.', '/' ) + ".java";
+			Path classFilePath = binaries.resolve( classFileName );
+			if( !classFilePath.toFile().exists() )
+				throw new ApplicationException( "Class file " + classFilePath + " does not exist." );
+			if( !classFilePath.toFile().isFile() )
+				throw new ApplicationException( "Class file " + classFilePath + " is not a file." );
+			Optional<Path> sourceFilePath = sourcesRootPath.map( p -> p.resolve( sourceFileName ) );
+			if( sourcesRootPath.isPresent() )
+			{
+				if( !sourceFilePath.get().toFile().exists() )
+					throw new ApplicationException( "Source file " + sourceFilePath.get() + " does not exist." );
+				if( !sourceFilePath.get().toFile().isFile() )
+					throw new ApplicationException( "Source file " + sourceFilePath.get() + " is not a file." );
+			}
+			for( ; ; )
+			{
+				int i = className.get().indexOf( '.' );
+				if( i == -1 )
+					break;
+				String packagePart = className.get().substring( 0, i );
+				binaries = binaries.resolve( packagePart );
+				sourcesRootPath = sourcesRootPath.isEmpty() ? Optional.empty() : Optional.of( sourcesRootPath.get().resolve( packagePart ) );
+				className = Optional.of( className.get().substring( i + 1 ) );
+				assert binaries.resolve( className.get().replace( '.', '/' ) + ".class" ).toFile().isFile();
+				assert sourcesRootPath.isEmpty() || sourcesRootPath.get().resolve( className.get().replace( '.', '/' ) + ".java" ).toFile().isFile();
+			}
+			Path finalBinariesRootPath = binaries;
+			Optional<Path> finalSourcesRootPath = sourcesRootPath;
+			String finalClassName = className.get();
+			Helpers.forEachFile( binaries, ".class", classFilePathName -> {
+				Path relativePath = finalBinariesRootPath.relativize( classFilePathName );
+				String relativePathName = relativePath.toString();
+				assert relativePathName.endsWith( ".class" );
+				//relativePathName = relativePathName.substring( 0, relativePathName.length() - ".class".length() );
+				if( !relativePathName.startsWith( finalClassName ) )
+					return;
+				Optional<Path> sourcePath = finalSourcesRootPath.isEmpty() ? Optional.empty() : Optional.of( resolveToParentOf( finalSourcesRootPath.get(), relativePath ) );
+				classDump( classFilePathName, sourcePath, printStream );
+			} );
+		}
 	}
 
 	private static Path resolveToParentOf( Path path, Path relativePath )
@@ -124,41 +146,20 @@ public class ClassDumpMain
 		return path.resolve( parent );
 	}
 
-	private void classDump( Path classFilePathName, Optional<Path> sourcePath, Style style, PrintStream printStream )
+	private void classDump( Path classFilePathName, Optional<Path> sourcePath, PrintStream printStream )
 	{
 		Log.debug( "Dumping " + classFilePathName + (sourcePath.isEmpty() ? "" : " (" + sourcePath + ")") );
-		ByteCodeType type = ByteCodeType.create( classFilePathName, sourcePath );
-		ByteCodePrinter byteCodePrinter = new ByteCodePrinter( type );
-		String text = byteCodePrinter.toLongString( style );
+		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
+		ByteCodeType type = ByteCodeReader.read( bytes );
+		String text = ByteCodePrinter.printByteCodeType( type, sourcePath );
 		printStream.println( text );
-		verify( type );
 	}
 
-	private static void verify( ByteCodeType type )
-	{
-		ByteCodePrinter byteCodePrinter = new ByteCodePrinter( type );
-		String s1 = byteCodePrinter.toLongString( Style.GILDED_ONLY );
-		String s2 = byteCodePrinter.toLongString( Style.GILDED_ONLY );
-		assert s2.equals( s1 );
-		//noinspection unused
-		String sBefore = byteCodePrinter.toLongString( Style.MIXED );
-		type.rebuild();
-		//noinspection unused
-		String sAfter = byteCodePrinter.toLongString( Style.MIXED );
-		String s3 = byteCodePrinter.toLongString( Style.GILDED_ONLY );
-		assert s3.equals( s1 );
-		Buffer buffer2 = type.getBuffer();
-		ByteCodeType type2 = ByteCodeType.create( buffer2, type.classFilePathName, type.sourcePath );
-		ByteCodePrinter byteCodePrinter2 = new ByteCodePrinter( type2 );
-		String s4 = byteCodePrinter2.toLongString( Style.GILDED_ONLY );
-		assert s4.equals( s1 );
-	}
-
-	private static PrintStream getPrintStream( String output )
+	private static PrintStream getPrintStream( Optional<String> output )
 	{
 		if( output.isEmpty() )
 			return System.out;
-		OutputStream outputStream = Kit.unchecked( () -> Files.newOutputStream( Paths.get( output ) ) );
+		OutputStream outputStream = Kit.unchecked( () -> Files.newOutputStream( Paths.get( output.get() ) ) );
 		outputStream = new BufferedOutputStream( outputStream, 1024 * 1024 );
 		return new PrintStream( outputStream, true, StandardCharsets.UTF_8 );
 	}

@@ -68,7 +68,7 @@ public final class TestPlanBuilder
 			//List<TestModule> testModules = new ArrayList<>( testModules1 );
 			List<TestModule> testModules = new ArrayList<>( unorderedTestModules );
 			Collection<ProjectModule> projectModules = getProjectModules( testModules );
-			DependencyMatrix<ProjectModule> dependencyMatrix = new DependencyMatrix<>( projectModules, m -> m.projectDependencies() );
+			DependencyMatrix<ProjectModule> dependencyMatrix = new DependencyMatrix<>( projectModules, m -> m.allProjectDependencies() );
 			Kit.sort.quickSort( testModules, ( a, b ) -> compare( a, b, dependencyMatrix ) );
 			return testModules;
 		} );

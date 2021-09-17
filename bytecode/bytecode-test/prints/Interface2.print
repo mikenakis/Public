@@ -1,0 +1,15 @@
+ version = 60.0, accessFlags = [public, interface, abstract], thisClass = mikenakis.bytecode.test.model.Interface2, superClass = java.lang.Object, interfaces = [mikenakis.bytecode.test.model.Interface1]
+ ├─ extra constants (0 entries)
+ ├─ fields (0 entries)
+ ├─ methods (3 entries)
+ │   ├─  accessFlags = [public, abstract], name+descriptor = mikenakis.bytecode.test.model.Interface1 getInterface1()
+ │   ├─  accessFlags = [public, abstract], name+descriptor = long getLong( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+ │   │   └─ attributes (1 entries)
+ │   │       └─ MethodParameters (1 entries)
+ │   │           └─  accessFlags = [], name = class3ImplementingInterface
+ │   └─  accessFlags = [public, abstract], name+descriptor = void setDouble( double )
+ │       └─ attributes (1 entries)
+ │           └─ MethodParameters (1 entries)
+ │               └─  accessFlags = [], name = d
+ └─ attributes (1 entries)
+     └─ SourceFile value = "Interface2.java"

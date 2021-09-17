@@ -24,5 +24,4 @@ More information: [michael.gr - On Coding Style](http://blog.michael.gr/2018/04/
 
 ## To Do
 
-- Eliminate string descriptors and string signatures from the interface, always expose them via the `Descriptor` class (already exists) and a `Signature` class (does not exist
-  yet.)
+- Eliminate string descriptors and string signatures from the interface, always expose them via the `Descriptor` class (already exists) and a `Signature` class (does not exist yet.)

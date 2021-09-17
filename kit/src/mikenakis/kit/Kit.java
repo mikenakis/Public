@@ -1,8 +1,12 @@
 package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.collections.ConvertingAndFilteringIterable;
 import mikenakis.kit.collections.ConvertingIterable;
 import mikenakis.kit.collections.FilteringIterable;
+import mikenakis.kit.collections.UnmodifiableIterable;
+import mikenakis.kit.collections.UnmodifiableIterator;
 import mikenakis.kit.functional.BooleanFunction1;
 import mikenakis.kit.functional.BooleanFunction1Double;
 import mikenakis.kit.functional.Function0;
@@ -24,10 +28,16 @@ import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URL;
 import java.nio.ByteOrder;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.Duration;
@@ -43,6 +53,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +127,7 @@ public final class Kit
 	 *
 	 * @return does not return.
 	 */
-	public static <T> T fail()
+	@ExcludeFromJacocoGeneratedReport public static <T> T fail()
 	{
 		throw new AssertionError();
 	}
@@ -643,14 +654,14 @@ public final class Kit
 			return false;
 		}
 
-		public static void appendEscapedForJava( StringBuilder stringBuilder, String s )
+		public static void appendEscapedForJava( StringBuilder stringBuilder, String s, char quote )
 		{
 			if( s == null )
 			{
 				stringBuilder.append( "null" );
 				return;
 			}
-			stringBuilder.append( '"' );
+			stringBuilder.append( quote );
 			for( char c : s.toCharArray() )
 			{
 				if( c == '"' )
@@ -668,7 +679,7 @@ public final class Kit
 				else
 					stringBuilder.append( c );
 			}
-			stringBuilder.append( '"' );
+			stringBuilder.append( quote );
 		}
 
 		/**
@@ -876,7 +887,7 @@ public final class Kit
 		public static String escapeForJava( String s )
 		{
 			var builder = new StringBuilder();
-			stringBuilder.appendEscapedForJava( builder, s );
+			stringBuilder.appendEscapedForJava( builder, s, '"' );
 			return builder.toString();
 		}
 
@@ -1089,6 +1100,18 @@ public final class Kit
 			pathNames.sort( Path::compareTo );
 			return pathNames;
 		}
+
+		// NOTE: Windows very stupidly has a notion of a "current directory", which is a mutable global variable of process-wide scope.
+		//       This means that any thread can modify it, and all other threads will be affected by the modification.
+		//       (And if you are in a DotNet process, any AppDomain can modify it, and all other AppDomain's will be affected! So much for isolation!)
+		//       Java very rightfully does not have such a notion, but it does have something similar to it: the "user.dir" system property.
+		//       When maven is running tests, it sets that variable to the root directory of the current module being tested.
+		//       When testana is running tests, it does the same.
+		//       Thus, when running tests we can obtain the path to the root directory of the current module.
+		public static Path getWorkingDirectory()
+		{
+			return Paths.get( System.getProperty( "user.dir" ) ).toAbsolutePath().normalize();
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1240,6 +1263,11 @@ public final class Kit
 			return new ConvertingIterable<>( iterable, converter );
 		}
 
+		public static <T, F> Iterable<T> convertedAndFiltered( Iterable<F> iterable, Function1<Optional<T>,F> converterAndFilterer )
+		{
+			return new ConvertingAndFilteringIterable<>( iterable, converterAndFilterer );
+		}
+
 		public static <T> List<T> toList( Iterable<T> iterable )
 		{
 			List<T> result = new ArrayList<>();
@@ -1253,6 +1281,48 @@ public final class Kit
 		{
 			Iterable<F> filtered = filtered( iterable, e -> elementClass.isInstance( e ) );
 			return converted( filtered, e -> elementClass.cast( e ) );
+		}
+
+		public static <T> Iterable<T> unmodifiable( Iterable<T> delegee )
+		{
+			return new UnmodifiableIterable<>( delegee );
+		}
+
+		public static <K,V,T> Map<K,V> toMap( Iterable<T> iterable, Function1<K,T> keyExtractor, Function1<V,T> valueExtractor )
+		{
+			return collection.stream.fromIterable( iterable ).collect( Collectors.toMap( t -> keyExtractor.invoke( t ), t -> valueExtractor.invoke( t ), Kit::dummyMergeFunction, LinkedHashMap::new ) );
+		}
+
+		public static <K,V> Map<K,V> keysToMap( Iterable<K> iterable, Function1<V,K> valueExtractor )
+		{
+			return toMap( iterable, k -> k, valueExtractor );
+		}
+
+		public static <K,V> Map<K,V> valuesToMap( Iterable<V> iterable, Function1<K,V> keyExtractor )
+		{
+			return toMap( iterable, keyExtractor, v -> v );
+		}
+
+		public static <T> String makeString( Iterable<T> iterable, String delimiter )
+		{
+			return collection.stream.fromIterable( iterable ).map( e -> e.toString() ).collect( Collectors.joining( delimiter ) );
+		}
+	}
+
+	private static <T> T dummyMergeFunction( T a, T b )
+	{
+		assert false;
+		return a;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Java Iterator<T>
+
+	public static final class iterator
+	{
+		public static <T> Iterator<T> unmodifiable( Iterator<T> delegee )
+		{
+			return new UnmodifiableIterator<>( delegee );
 		}
 	}
 
@@ -1293,7 +1363,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Collection#add(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
 		 * already exists.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <T> void add( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <T> void add( Collection<T> collection, T item )
 		{
 			assert item != null;
 			boolean ok = collection.add( item );
@@ -1301,14 +1372,27 @@ public final class Kit
 		}
 
 		/**
-		 * Adds an item to a {@link Collection} if it does not already exist.
+		 * Tries to add an item to a {@link Collection}.
 		 * Corresponds to Java's {@link Collection#add(T)}.
 		 *
 		 * @return {@code true} if the item was added; {@code false} if the item was not added because it already existed.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <T> boolean tryAdd( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <T> boolean tryAdd( Collection<T> collection, T item )
 		{
+			assert !(collection instanceof List);
 			return collection.add( item );
+		}
+
+		/**
+		 * Adds an item in a {@link Collection} or replaces it if it already exists.
+		 * Corresponds to Java's {@link Collection#add(T)}.
+		 */
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <T> void addOrReplace( Collection<T> collection, T item )
+		{
+			assert !(collection instanceof List);
+			collection.add( item );
 		}
 
 		/**
@@ -1316,7 +1400,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Collection#remove(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
 		 * does not exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <T> void remove( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <T> void remove( Collection<T> collection, T item )
 		{
 			boolean ok = collection.remove( item );
 			assert ok;
@@ -1328,7 +1413,8 @@ public final class Kit
 		 *
 		 * @return {@code true} if the item was removed; {@code false} if the item was not removed because it did not exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <T> boolean tryRemove( Collection<? extends T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <T> boolean tryRemove( Collection<? extends T> collection, T item )
 		{
 			return collection.remove( item );
 		}
@@ -1365,7 +1451,8 @@ public final class Kit
 			return result;
 		}
 
-		/*@SuppressWarnings( "deprecation" )*/ public static <T> boolean contains( Collection<T> collection, T item )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <T> boolean contains( Collection<T> collection, T item )
 		{
 			assert item != null;
 			return collection.contains( item );
@@ -1389,6 +1476,11 @@ public final class Kit
 			Collections.reverse( newList );
 			return newList;
 		}
+
+		public static <T> boolean equal( Collection<T> a, Collection<T> b )
+		{
+			return a.size() == b.size() && a.containsAll( b ) && b.containsAll( a );
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1401,7 +1493,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#get(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V get( Map<K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> V get( Map<K,V> map, K key )
 		{
 			assert key != null;
 			V value = map.get( key ); //delegation
@@ -1414,7 +1507,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#get(K)}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * allowing the key to potentially not exist and that {@code null} may be returned.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V tryGet( Map<? extends K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> V tryGet( Map<? extends K,V> map, K key )
 		{
 			assert key != null;
 			return map.get( key ); //delegation
@@ -1433,7 +1527,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key already
 		 * exists.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void add( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> void add( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1446,7 +1541,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V remove( Map<K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> V remove( Map<K,V> map, K key )
 		{
 			V previous = map.remove( key );
 			assert previous != null;
@@ -1458,7 +1554,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist or when the key is not mapped to the expected value.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void remove( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> void remove( Map<K,V> map, K key, V value )
 		{
 			V previous = remove( map, key );
 			assert previous.equals( value );
@@ -1470,7 +1567,8 @@ public final class Kit
 		 *
 		 * @return the value that was previously associated with the given key, or {@code null} if the key was not in the map.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V tryRemove( Map<? extends K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> V tryRemove( Map<? extends K,V> map, K key )
 		{
 			return map.remove( key );
 		}
@@ -1480,7 +1578,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#remove(K)}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * allowing the key to potentially not exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void removeIfPresent( Map<K,V> map, K key )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> void removeIfPresent( Map<K,V> map, K key )
 		{
 			map.remove( key );
 		}
@@ -1492,7 +1591,8 @@ public final class Kit
 		 *
 		 * @return {@link true} if the pair was successfully added; {@link false} if the key was already present.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> boolean tryAdd( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> boolean tryAdd( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1516,7 +1616,8 @@ public final class Kit
 		 *
 		 * @return {@code true} if successful; {@code false} otherwise.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> boolean tryReplace( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> boolean tryReplace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1531,7 +1632,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
 		 * exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> void replace( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> void replace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -1544,7 +1646,8 @@ public final class Kit
 		 * Corresponds to Java's {@link Map#put}, the difference being that by using this method we are documenting the fact that we are intentionally
 		 * performing this very odd and rarely used operation, allowing the key to either exist or not exist.
 		 */
-		/*@SuppressWarnings( "deprecation" )*/ public static <K, V> V addOrReplace( Map<K,V> map, K key, V value )
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> V addOrReplace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
@@ -2728,6 +2831,68 @@ public final class Kit
 		throw (T)t;
 	}
 
+	////////////////////////////
+
+	public static final class classLoading
+	{
+		public static Path getPathFromClassLoaderAndTypeName( ClassLoader classLoader, String typeName )
+		{
+			URL url = classLoader.getResource( typeName.replace( '.', '/' ) + ".class" );
+			assert url != null;
+			return getPathFromUrl( url );
+		}
+
+		public static Path getPathFromUrl( URL url )
+		{
+			URI uri = unchecked( url::toURI );
+			String scheme = uri.getScheme();
+			if( scheme.equals( "jar" ) )
+			{
+				FileSystem fileSystem = getOrCreateFileSystem( uri );
+				String jarPath = uri.getSchemeSpecificPart();
+				int i = jarPath.indexOf( '!' );
+				assert i >= 0;
+				String subPath = jarPath.substring( i + 1 );
+				return fileSystem.getPath( subPath );
+			}
+			if( scheme.equals( "jrt" ) )
+			{
+				FileSystem fileSystem = FileSystems.getFileSystem( URI.create( "jrt:/" ) );
+				return fileSystem.getPath( "modules", uri.getPath() );
+			}
+			return Paths.get( uri );
+		}
+
+		private static FileSystem getOrCreateFileSystem( URI uri )
+		{
+			Optional<FileSystem> fileSystem = tryGetFileSystem( uri );
+			return fileSystem.orElseGet( () -> newFileSystem( uri ) );
+		}
+
+		private static FileSystem newFileSystem( URI uri )
+		{
+			return unchecked( () -> FileSystems.newFileSystem( uri, Collections.emptyMap() ) );
+		}
+
+		private static Optional<FileSystem> tryGetFileSystem( URI uri )
+		{
+			try
+			{
+				/**
+				 * NOTE: if you see this failing with a {@link FileSystemNotFoundException}
+				 * it is probably because you have an exception breakpoint;
+				 * just let it run, it will probably recover.
+				 */
+				FileSystem fileSystem = FileSystems.getFileSystem( uri );
+				return Optional.of( fileSystem );
+			}
+			catch( FileSystemNotFoundException ignore )
+			{
+				return Optional.empty();
+			}
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Tree
 
@@ -2823,5 +2988,10 @@ public final class Kit
 				lock.unlock();
 			}
 		}
+	}
+
+	public static <R> R invoke( Function0<R> function )
+	{
+		return function.invoke();
 	}
 }

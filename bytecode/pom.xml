@@ -8,14 +8,16 @@
 		<artifactId>public-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>bytecode-parent</artifactId>
+	<artifactId>bytecode</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>bytecode</module>
-		<module>bytecode-dump</module>
+		<module>bytecode-model</module>
+		<module>bytecode-printing</module>
+		<module>bytecode-reading</module>
 		<module>bytecode-test</module>
+		<module>bytecode-writing</module>
 	</modules>
 
 </project>
