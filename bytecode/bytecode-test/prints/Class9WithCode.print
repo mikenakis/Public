@@ -1,13 +1,14 @@
- version = 60.0, accessFlags = [public, super], thisClass = mikenakis.bytecode.test.model.Class9WithCode, superClass = java.lang.Object, interfaces = []
+ version = 60.0, accessFlags = [public, super], thisClass = mikenakis.bytecode.test.model.Class9WithCode, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (3 entries)
- │   ├─  accessFlags = [private, final], name+descriptor = java.lang.String str
- │   ├─  accessFlags = [private], name+descriptor = int pos
- │   └─  accessFlags = [private], name+descriptor = int ch
+ │   ├─  accessFlags = [private, final], name = "str", descriptor = "Ljava/lang/String;" (java.lang.String str)
+ │   ├─  accessFlags = [private], name = "pos", descriptor = "I" (int pos)
+ │   └─  accessFlags = [private], name = "ch", descriptor = "I" (int ch)
  ├─ methods (8 entries)
- │   ├─  accessFlags = [public, static], name+descriptor = double eval( java.lang.String )
+ │   ├─  accessFlags = [public, static], name = "eval", descriptor = "(Ljava/lang/String;)D" (double eval( java.lang.String ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 3, maxLocals = 2, 8 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 3, maxLocals = 2
  │   │       │   ├─ instructions (8 entries)
  │   │       │   │   ├─ L9:
  │   │       │   │   ├─      NEW mikenakis.bytecode.test.model.Class9WithCode
@@ -25,13 +26,13 @@
  │   │       │       │   ├─  lineNumber = 9, startPc = L9
  │   │       │       │   └─  lineNumber = 10, startPc = L10
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L9, endPc = @end, name+descriptor = java.lang.String str
- │   │       │           └─  index = 1, startPc = L10, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode parser
+ │   │       │           ├─  index = 0, startPc = L9, endPc = @end, name = "str", descriptor = "Ljava/lang/String;" (java.lang.String str)
+ │   │       │           └─  index = 1, startPc = L10, endPc = @end, name = "parser", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode parser)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = str
- │   ├─  accessFlags = [public], name+descriptor = void <init>( java.lang.String )
+ │   ├─  accessFlags = [public], name = "<init>", descriptor = "(Ljava/lang/String;)V" (void <init>( java.lang.String ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 2, 9 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (9 entries)
  │   │       │   │   ├─ L18:
  │   │       │   │   ├─      ALOAD_0
@@ -54,13 +55,13 @@
  │   │       │       │   ├─  lineNumber = 19, startPc = L19
  │   │       │       │   └─  lineNumber = 20, startPc = L20
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L18, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
- │   │       │           └─  index = 1, startPc = L18, endPc = @end, name+descriptor = java.lang.String str
+ │   │       │           ├─  index = 0, startPc = L18, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
+ │   │       │           └─  index = 1, startPc = L18, endPc = @end, name = "str", descriptor = "Ljava/lang/String;" (java.lang.String str)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = str
- │   ├─  accessFlags = [private], name+descriptor = void nextChar()
+ │   ├─  accessFlags = [private], name = "nextChar", descriptor = "()V" (void nextChar())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 4, maxLocals = 1, 21 instructions, 0 exceptionInfos, 3 attributes
+ │   │       └─ Code maxStack = 4, maxLocals = 1
  │   │           ├─ instructions (21 entries)
  │   │           │   ├─ L24:
  │   │           │   ├─      ALOAD_0
@@ -93,7 +94,7 @@
  │   │               │   ├─  lineNumber = 24, startPc = L24
  │   │               │   └─  lineNumber = 25, startPc = L25
  │   │               ├─ LocalVariableTable (1 entries)
- │   │               │   └─  index = 0, startPc = L24, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
+ │   │               │   └─  index = 0, startPc = L24, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
  │   │               └─ StackMapTable (2 entries)
  │   │                   ├─  SameLocals1StackItemFrame target = T1
  │   │                   │   └─ stackVerificationType
@@ -104,9 +105,9 @@
  │   │                       └─ stackVerificationTypes (2 entries)
  │   │                           ├─  Object mikenakis.bytecode.test.model.Class9WithCode
  │   │                           └─  Integer
- │   ├─  accessFlags = [private], name+descriptor = boolean eat( int )
+ │   ├─  accessFlags = [private], name = "eat", descriptor = "(I)Z" (boolean eat( int ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 2, 17 instructions, 0 exceptionInfos, 3 attributes
+ │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (17 entries)
  │   │       │   │   ├─ L30:
  │   │       │   │   ├─      ALOAD_0
@@ -141,17 +142,17 @@
  │   │       │       │   ├─  lineNumber = 35, startPc = L35
  │   │       │       │   └─  lineNumber = 37, startPc = L37
  │   │       │       ├─ LocalVariableTable (2 entries)
- │   │       │       │   ├─  index = 0, startPc = L30, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
- │   │       │       │   └─  index = 1, startPc = L30, endPc = @end, name+descriptor = int charToEat
+ │   │       │       │   ├─  index = 0, startPc = L30, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
+ │   │       │       │   └─  index = 1, startPc = L30, endPc = @end, name = "charToEat", descriptor = "I" (int charToEat)
  │   │       │       └─ StackMapTable (3 entries)
  │   │       │           ├─  SameFrame target = L30
  │   │       │           ├─  SameFrame target = L32
  │   │       │           └─  SameFrame target = L37
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = charToEat
- │   ├─  accessFlags = [public], name+descriptor = double parse()
+ │   ├─  accessFlags = [public], name = "parse", descriptor = "()D" (double parse())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 3, maxLocals = 3, 21 instructions, 0 exceptionInfos, 3 attributes
+ │   │       └─ Code maxStack = 3, maxLocals = 3
  │   │           ├─ instructions (21 entries)
  │   │           │   ├─ L42:
  │   │           │   ├─      ALOAD_0
@@ -173,7 +174,7 @@
  │   │           │   ├─      ALOAD_0
  │   │           │   ├─      GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
  │   │           │   ├─      I2C
- │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "Unexpected: \x01"}, name+descriptor = java.lang.String makeConcatWithConstants( char )
+ │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "Unexpected: \x01"}, name = "makeConcatWithConstants", descriptor = "(C)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( char ))
  │   │           │   ├─      INVOKESPECIAL void java.lang.RuntimeException.<init>( java.lang.String )
  │   │           │   ├─      ATHROW
  │   │           │   ├─ L46:
@@ -188,15 +189,15 @@
  │   │               │   ├─  lineNumber = 45, startPc = L45
  │   │               │   └─  lineNumber = 46, startPc = L46
  │   │               ├─ LocalVariableTable (2 entries)
- │   │               │   ├─  index = 0, startPc = L42, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
- │   │               │   └─  index = 1, startPc = L44, endPc = @end, name+descriptor = double x
+ │   │               │   ├─  index = 0, startPc = L42, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
+ │   │               │   └─  index = 1, startPc = L44, endPc = @end, name = "x", descriptor = "D" (double x)
  │   │               └─ StackMapTable (1 entries)
  │   │                   └─  AppendFrame target = L46
  │   │                       └─ localVerificationTypes (1 entries)
  │   │                           └─  Double
- │   ├─  accessFlags = [private], name+descriptor = double parseExpression()
+ │   ├─  accessFlags = [private], name = "parseExpression", descriptor = "()D" (double parseExpression())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 4, maxLocals = 3, 25 instructions, 0 exceptionInfos, 3 attributes
+ │   │       └─ Code maxStack = 4, maxLocals = 3
  │   │           ├─ instructions (25 entries)
  │   │           │   ├─ L57:
  │   │           │   ├─      ALOAD_0
@@ -239,17 +240,17 @@
  │   │               │   ├─  lineNumber = 63, startPc = L63
  │   │               │   └─  lineNumber = 65, startPc = L65
  │   │               ├─ LocalVariableTable (2 entries)
- │   │               │   ├─  index = 0, startPc = L57, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
- │   │               │   └─  index = 1, startPc = L60, endPc = @end, name+descriptor = double x
+ │   │               │   ├─  index = 0, startPc = L57, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
+ │   │               │   └─  index = 1, startPc = L60, endPc = @end, name = "x", descriptor = "D" (double x)
  │   │               └─ StackMapTable (3 entries)
  │   │                   ├─  AppendFrame target = L60
  │   │                   │   └─ localVerificationTypes (1 entries)
  │   │                   │       └─  Double
  │   │                   ├─  SameFrame target = L62
  │   │                   └─  SameFrame target = L65
- │   ├─  accessFlags = [private], name+descriptor = double parseTerm()
+ │   ├─  accessFlags = [private], name = "parseTerm", descriptor = "()D" (double parseTerm())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 4, maxLocals = 3, 25 instructions, 0 exceptionInfos, 3 attributes
+ │   │       └─ Code maxStack = 4, maxLocals = 3
  │   │           ├─ instructions (25 entries)
  │   │           │   ├─ L71:
  │   │           │   ├─      ALOAD_0
@@ -292,17 +293,17 @@
  │   │               │   ├─  lineNumber = 77, startPc = L77
  │   │               │   └─  lineNumber = 79, startPc = L79
  │   │               ├─ LocalVariableTable (2 entries)
- │   │               │   ├─  index = 0, startPc = L71, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
- │   │               │   └─  index = 1, startPc = L74, endPc = @end, name+descriptor = double x
+ │   │               │   ├─  index = 0, startPc = L71, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
+ │   │               │   └─  index = 1, startPc = L74, endPc = @end, name = "x", descriptor = "D" (double x)
  │   │               └─ StackMapTable (3 entries)
  │   │                   ├─  AppendFrame target = L74
  │   │                   │   └─ localVerificationTypes (1 entries)
  │   │                   │       └─  Double
  │   │                   ├─  SameFrame target = L76
  │   │                   └─  SameFrame target = L79
- │   └─  accessFlags = [private], name+descriptor = double parseFactor()
+ │   └─  accessFlags = [private], name = "parseFactor", descriptor = "()D" (double parseFactor())
  │       └─ attributes (1 entries)
- │           └─ Code maxStack = 4, maxLocals = 7, 190 instructions, 0 exceptionInfos, 3 attributes
+ │           └─ Code maxStack = 4, maxLocals = 7
  │               ├─ instructions (190 entries)
  │               │   ├─ L85:
  │               │   ├─      ALOAD_0
@@ -505,7 +506,7 @@
  │               │   ├─      NEW java.lang.RuntimeException
  │               │   ├─      DUP
  │               │   ├─      ALOAD 4
- │               │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "Unknown function: \x01"}, name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String )
+ │               │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "Unknown function: \x01"}, name = "makeConcatWithConstants", descriptor = "(Ljava/lang/String;)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( java.lang.String ))
  │               │   ├─      INVOKESPECIAL void java.lang.RuntimeException.<init>( java.lang.String )
  │               │   ├─      ATHROW
  │               │   ├─ T11:
@@ -518,7 +519,7 @@
  │               │   ├─      ALOAD_0
  │               │   ├─      GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
  │               │   ├─      I2C
- │               │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "Unexpected: \x01"}, name+descriptor = java.lang.String makeConcatWithConstants( char )
+ │               │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "Unexpected: \x01"}, name = "makeConcatWithConstants", descriptor = "(C)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( char ))
  │               │   ├─      INVOKESPECIAL void java.lang.RuntimeException.<init>( java.lang.String )
  │               │   ├─      ATHROW
  │               │   ├─ L128:
@@ -569,13 +570,13 @@
  │                   │   ├─  lineNumber = 129, startPc = L129
  │                   │   └─  lineNumber = 131, startPc = L131
  │                   ├─ LocalVariableTable (7 entries)
- │                   │   ├─  index = 1, startPc = L96, endPc = L98, name+descriptor = double x
- │                   │   ├─  index = 1, startPc = T3, endPc = L105, name+descriptor = double x
- │                   │   ├─  index = 4, startPc = L111, endPc = L122, name+descriptor = java.lang.String func
- │                   │   ├─  index = 1, startPc = L112, endPc = L125, name+descriptor = double x
- │                   │   ├─  index = 0, startPc = L85, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class9WithCode this
- │                   │   ├─  index = 1, startPc = L128, endPc = @end, name+descriptor = double x
- │                   │   └─  index = 3, startPc = L92, endPc = @end, name+descriptor = int startPos
+ │                   │   ├─  index = 1, startPc = L96, endPc = L98, name = "x", descriptor = "D" (double x)
+ │                   │   ├─  index = 1, startPc = T3, endPc = L105, name = "x", descriptor = "D" (double x)
+ │                   │   ├─  index = 4, startPc = L111, endPc = L122, name = "func", descriptor = "Ljava/lang/String;" (java.lang.String func)
+ │                   │   ├─  index = 1, startPc = L112, endPc = L125, name = "x", descriptor = "D" (double x)
+ │                   │   ├─  index = 0, startPc = L85, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class9WithCode;" (mikenakis.bytecode.test.model.Class9WithCode this)
+ │                   │   ├─  index = 1, startPc = L128, endPc = @end, name = "x", descriptor = "D" (double x)
+ │                   │   └─  index = 3, startPc = L92, endPc = @end, name = "startPos", descriptor = "I" (int startPos)
  │                   └─ StackMapTable (29 entries)
  │                       ├─  SameFrame target = L87
  │                       ├─  SameFrame target = L91

@@ -732,7 +732,7 @@ public class ByteCodeWriter
 	private static void writeAnnotationAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationAnnotationValue annotationAnnotationValue )
 	{
 		ByteCodeAnnotation annotation = annotationAnnotationValue.annotation();
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotation.nameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotation.typeConstant ) );
 		bufferWriter.writeUnsignedShort( annotation.annotationParameters().size() );
 		for( AnnotationParameter annotationParameter : annotation.annotationParameters() )
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
@@ -1055,7 +1055,7 @@ public class ByteCodeWriter
 
 	private static void writeAnnotation( ConstantPool constantPool, BufferWriter bufferWriter, ByteCodeAnnotation byteCodeAnnotation )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeAnnotation.nameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeAnnotation.typeConstant ) );
 		List<AnnotationParameter> annotationParameters = byteCodeAnnotation.annotationParameters();
 		bufferWriter.writeUnsignedShort( annotationParameters.size() );
 		for( AnnotationParameter annotationParameter : annotationParameters )

@@ -136,7 +136,8 @@ public class Benchmark
 		DoubleRef minimumDurationNanosecondsRef = new DoubleRef( Double.MAX_VALUE );
 		//Log.debug( "calculateBatchLength()..." );
 		Kit.testing.runGarbageCollection();
-		converge( accuracy, sampleGroupSize, () -> {
+		converge( accuracy, sampleGroupSize, () -> //
+		{
 			double durationNanoseconds = measureOneBatchNanoseconds( benchmarkable, batchLengthRef.value, unpredictability );
 			//Log.debug( String.format( Locale.ROOT, "    converging: %d iterations per batch -> %f nanoseconds per iteration", batchLengthRef.value, durationNanoseconds ) );
 			batchLengthRef.value = calculateBatchLengthForIdealBatchDuration( durationNanoseconds );
@@ -226,7 +227,8 @@ public class Benchmark
 		Kit.testing.runGarbageCollection();
 		long[] readings = new long[100];
 		DoubleRef minimumOverheadNanosecondsRef = new DoubleRef( Double.POSITIVE_INFINITY );
-		converge( 0.001, 1000, () -> {
+		converge( 0.001, 1000, () -> //
+		{
 			getClockReadingsNanoseconds( readings );
 			double thisClockOverheadNanoseconds = (readings[readings.length - 1] - readings[0]) / (double)(readings.length - 1);
 			minimumOverheadNanosecondsRef.value = Math.min( minimumOverheadNanosecondsRef.value, thisClockOverheadNanoseconds );

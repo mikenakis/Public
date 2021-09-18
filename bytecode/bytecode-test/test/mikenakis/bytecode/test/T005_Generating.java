@@ -1,5 +1,6 @@
 package mikenakis.bytecode.test;
 
+import mikenakis.bytecode.model.FlagSet;
 import mikenakis.bytecode.test.model.Class9WithCode;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeMethod;
@@ -44,18 +45,23 @@ public class T005_Generating
 
 	@Test public void Test2()
 	{
-		Utf8Constant thisClassName = Utf8Constant.of( "Evaluator" );
+		Utf8Constant thisClassName = Utf8Constant.of( "HelloWorld" );
 		ClassConstant thisClassConstant = ClassConstant.of( thisClassName );
-		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of( ByteCodeType.Modifier.Public ), thisClassConstant, Optional.empty() );
-		Utf8Constant evalMethodNameConstant = Utf8Constant.of( "eval" );
+		FlagSet<ByteCodeType.Modifier> classModifiers = ByteCodeType.modifierFlagsEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Super, ByteCodeType.Modifier.Abstract );
+		ByteCodeType byteCodeType = ByteCodeType.of( classModifiers, thisClassConstant, Optional.empty() );
+
+
+		FlagSet<ByteCodeMethod.Modifier> initMethodModifiers = ByteCodeMethod.modifierFlagsEnum.of( ByteCodeMethod.Modifier.Public );
+		Utf8Constant evalMethodNameConstant = Utf8Constant.of( "<init>" );
 		Utf8Constant evalMethodDescriptorConstant = Utf8Constant.of( "(Ljava/lang/String;)D" );
-		ByteCodeMethod evalMethod = ByteCodeMethod.of( ByteCodeMethod.modifierFlagsEnum.of( ByteCodeMethod.Modifier.Public, ByteCodeMethod.Modifier.Static ), //
+		ByteCodeMethod initMethod = ByteCodeMethod.of( initMethodModifiers, //
 			evalMethodNameConstant, evalMethodDescriptorConstant, AttributeSet.of() );
-		byteCodeType.addMethod( evalMethod );
+		byteCodeType.addMethod( initMethod );
+
 		CodeAttribute codeAttribute = CodeAttribute.of();
 		codeAttribute.setMaxStack( 2 );
 		codeAttribute.setMaxLocals( 2 );
-		evalMethod.attributeSet.addAttribute( codeAttribute );
+		//evalMethod.attributeSet.addAttribute( codeAttribute );
 
 		codeAttribute.addNew( thisClassConstant );
 		codeAttribute.addDup();

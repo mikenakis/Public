@@ -128,7 +128,8 @@ public final class Persistence
 
 	public void setTimeOfLastRun( String name, Instant instant )
 	{
-		TestClassInfo entry = Optional.ofNullable( Kit.map.tryGet( entryFromNameMap, name ) ).orElseGet( () -> {
+		TestClassInfo entry = Optional.ofNullable( Kit.map.tryGet( entryFromNameMap, name ) ).orElseGet( () -> //
+		{
 			TestClassInfo e = new TestClassInfo( name, Instant.EPOCH );
 			Kit.map.add( entryFromNameMap, name, e );
 			return e;

@@ -9,7 +9,8 @@ public interface ObjectReader
 
 	@SuppressWarnings( "overloads" ) default void readMember( String memberName, Consumer<StructuredReader> structuredReaderConsumer )
 	{
-		Object result = readMember( memberName, structuredReader -> {
+		Object result = readMember( memberName, structuredReader -> //
+		{
 			structuredReaderConsumer.accept( structuredReader );
 			return null;
 		} );

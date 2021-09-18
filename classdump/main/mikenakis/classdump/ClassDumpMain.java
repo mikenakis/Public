@@ -125,7 +125,8 @@ public class ClassDumpMain
 			Path finalBinariesRootPath = binaries;
 			Optional<Path> finalSourcesRootPath = sourcesRootPath;
 			String finalClassName = className.get();
-			Helpers.forEachFile( binaries, ".class", classFilePathName -> {
+			Helpers.forEachFile( binaries, ".class", classFilePathName -> //
+			{
 				Path relativePath = finalBinariesRootPath.relativize( classFilePathName );
 				String relativePathName = relativePath.toString();
 				assert relativePathName.endsWith( ".class" );

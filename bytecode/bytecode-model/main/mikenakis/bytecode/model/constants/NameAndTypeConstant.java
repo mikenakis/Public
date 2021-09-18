@@ -20,7 +20,7 @@ public final class NameAndTypeConstant extends Constant
 
 	public static NameAndTypeConstant of( String name, Descriptor descriptor )
 	{
-		return of( Utf8Constant.of( name ), Utf8Constant.of( descriptor.toUtf8Constant() ) );
+		return of( Utf8Constant.of( name ), Utf8Constant.of( descriptor.stringValue() ) );
 	}
 
 	public static NameAndTypeConstant of( String name, String descriptor )
@@ -73,10 +73,5 @@ public final class NameAndTypeConstant extends Constant
 	@Override public int hashCode()
 	{
 		return Objects.hash( tag, nameConstant, descriptorConstant );
-	}
-
-	public Descriptor getDescriptor()
-	{
-		return Descriptor.from( descriptorConstant.value() );
 	}
 }

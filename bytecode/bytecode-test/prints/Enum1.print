@@ -1,14 +1,15 @@
- version = 60.0, accessFlags = [public, final, super, enum], thisClass = mikenakis.bytecode.test.model.Enum1, superClass = java.lang.Enum, interfaces = []
+ version = 60.0, accessFlags = [public, final, super, enum], thisClass = mikenakis.bytecode.test.model.Enum1, superClass = java.lang.Enum
+ ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (4 entries)
- │   ├─  accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_A
- │   ├─  accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_B
- │   ├─  accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_C
- │   └─  accessFlags = [private, static, final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Enum1[] $VALUES
+ │   ├─  accessFlags = [public, static, final, enum], name = "ENUM_CONSTANT_A", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_A)
+ │   ├─  accessFlags = [public, static, final, enum], name = "ENUM_CONSTANT_B", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_B)
+ │   ├─  accessFlags = [public, static, final, enum], name = "ENUM_CONSTANT_C", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_C)
+ │   └─  accessFlags = [private, static, final, synthetic], name = "$VALUES", descriptor = "[Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1[] $VALUES)
  ├─ methods (5 entries)
- │   ├─  accessFlags = [public, static], name+descriptor = mikenakis.bytecode.test.model.Enum1[] values()
+ │   ├─  accessFlags = [public, static], name = "values", descriptor = "()[Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1[] values())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 0, 4 instructions, 0 exceptionInfos, 1 attributes
+ │   │       └─ Code maxStack = 1, maxLocals = 0
  │   │           ├─ instructions (4 entries)
  │   │           │   ├─ L8:
  │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
@@ -19,9 +20,9 @@
  │   │           └─ attributes (1 entries)
  │   │               └─ LineNumberTable (1 entries)
  │   │                   └─  lineNumber = 8, startPc = L8
- │   ├─  accessFlags = [public, static], name+descriptor = mikenakis.bytecode.test.model.Enum1 valueOf( java.lang.String )
+ │   ├─  accessFlags = [public, static], name = "valueOf", descriptor = "(Ljava/lang/String;)Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 valueOf( java.lang.String ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 1, 5 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions (5 entries)
  │   │       │   │   ├─ L8:
  │   │       │   │   ├─      LDCx mikenakis.bytecode.test.model.Enum1
@@ -34,12 +35,12 @@
  │   │       │       ├─ LineNumberTable (1 entries)
  │   │       │       │   └─  lineNumber = 8, startPc = L8
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L8, endPc = @end, name+descriptor = java.lang.String name
+ │   │       │           └─  index = 0, startPc = L8, endPc = @end, name = "name", descriptor = "Ljava/lang/String;" (java.lang.String name)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [mandated], name = name
- │   ├─  accessFlags = [private], name+descriptor = void <init>( java.lang.String, int )
+ │   ├─  accessFlags = [private], name = "<init>", descriptor = "(Ljava/lang/String;I)V" (void <init>( java.lang.String, int ))
  │   │   └─ attributes (3 entries)
- │   │       ├─ Code maxStack = 3, maxLocals = 3, 5 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 3, maxLocals = 3
  │   │       │   ├─ instructions (5 entries)
  │   │       │   │   ├─ L16:
  │   │       │   │   ├─      ALOAD_0
@@ -54,14 +55,14 @@
  │   │       │       │   ├─  lineNumber = 16, startPc = L16
  │   │       │       │   └─  lineNumber = 17, startPc = L17
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L16, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Enum1 this
+ │   │       │           └─  index = 0, startPc = L16, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 this)
  │   │       ├─ MethodParameters (2 entries)
  │   │       │   ├─  accessFlags = [synthetic], name = $enum$name
  │   │       │   └─  accessFlags = [synthetic], name = $enum$ordinal
  │   │       └─ Signature ()V
- │   ├─  accessFlags = [private, static, synthetic], name+descriptor = mikenakis.bytecode.test.model.Enum1[] $values()
+ │   ├─  accessFlags = [private, static, synthetic], name = "$values", descriptor = "()[Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1[] $values())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 4, maxLocals = 0, 15 instructions, 0 exceptionInfos, 1 attributes
+ │   │       └─ Code maxStack = 4, maxLocals = 0
  │   │           ├─ instructions (15 entries)
  │   │           │   ├─ L8:
  │   │           │   ├─      ICONST_3
@@ -83,9 +84,9 @@
  │   │           └─ attributes (1 entries)
  │   │               └─ LineNumberTable (1 entries)
  │   │                   └─  lineNumber = 8, startPc = L8
- │   └─  accessFlags = [static], name+descriptor = void <clinit>()
+ │   └─  accessFlags = [static], name = "<clinit>", descriptor = "()V" (void <clinit>())
  │       └─ attributes (1 entries)
- │           └─ Code maxStack = 4, maxLocals = 0, 21 instructions, 0 exceptionInfos, 1 attributes
+ │           └─ Code maxStack = 4, maxLocals = 0
  │               ├─ instructions (21 entries)
  │               │   ├─ L11:
  │               │   ├─      NEW mikenakis.bytecode.test.model.Enum1

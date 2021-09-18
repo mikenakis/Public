@@ -15,6 +15,7 @@ import mikenakis.testana.structure.ProjectModule;
 import mikenakis.testana.structure.ProjectStructure;
 import mikenakis.testana.structure.ProjectStructureBuilder;
 import mikenakis.testana.structure.ProjectType;
+import mikenakis.testana.structure.cache.Cache;
 import mikenakis.testana.test.rig1.Alice;
 import mikenakis.testana.test.rig1.Claire;
 import mikenakis.testana.test.rig2.T01_ClaireTest;
@@ -252,7 +253,7 @@ public class T01_TestanaTest
 		Collection<Discoverer> discoverers = List.of( new MavenDiscoverer() );
 		StructureSettings settings = new StructureSettings();
 		Iterable<TestEngine> testEngines = List.of( new JunitTestEngine( methodOrdering, ancestryOrdering ) );
-		ProjectStructure structure = ProjectStructureBuilder.build( sourceDirectory, discoverers, settings, Optional.empty(), testEngines );
+		ProjectStructure structure = ProjectStructureBuilder.build( sourceDirectory, discoverers, settings, Cache.empty(), testEngines );
 		for( ProjectModule projectModule : structure.projectModules() )
 			for( ProjectType projectType : projectModule.getProjectTypes() )
 				projectType.setLastModifiedTime( T0 );

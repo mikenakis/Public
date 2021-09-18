@@ -80,7 +80,7 @@ public final class ProjectStructure
 		return projectModuleMap.values();
 	}
 
-	int typeCount()
+	public int typeCount()
 	{
 		return projectModuleMap.values().stream().map( m -> m.getProjectTypes().size() ).reduce( 0, ( a, b ) -> a + b );
 	}

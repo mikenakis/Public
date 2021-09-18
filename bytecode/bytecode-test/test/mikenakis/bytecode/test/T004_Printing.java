@@ -40,7 +40,7 @@ public class T004_Printing
 		Path modelPath = outputPath.resolve( "model" );
 		Path printPath = workingDirectory.resolve( "prints" );
 		List<Path> classFilePathNames = TestKit.collectResourcePaths( modelPath, false, ".class" );
-		assert classFilePathNames.size() == 19;
+		assert classFilePathNames.size() == 20;
 		int mismatchCount = 0;
 		for( Path classFilePathName : classFilePathNames )
 		{

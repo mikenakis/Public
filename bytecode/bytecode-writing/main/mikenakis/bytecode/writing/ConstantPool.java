@@ -468,7 +468,7 @@ final class ConstantPool
 
 	private void internAnnotation( ByteCodeAnnotation annotation )
 	{
-		internConstant( annotation.nameConstant() );
+		internConstant( annotation.typeConstant );
 		for( AnnotationParameter annotationParameter : annotation.annotationParameters() )
 		{
 			internConstant( annotationParameter.nameConstant() );

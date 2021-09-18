@@ -1,15 +1,17 @@
- version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1, superClass = java.lang.Object, interfaces = [java.lang.annotation.Annotation]
+ version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1, superClass = java.lang.Object
+ ├─ interfaces (1 entries)
+ │   └─ Class name = "java/lang/annotation/Annotation"
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (1 entries)
- │   └─  accessFlags = [public, abstract], name+descriptor = int value()
+ │   └─  accessFlags = [public, abstract], name = "value", descriptor = "()I" (int value())
  │       └─ attributes (1 entries)
  │           └─ AnnotationDefault 
  │               └─ Integer value =  5
  └─ attributes (2 entries)
      ├─ SourceFile value = "RuntimeInvisibleAnnotation1.java"
      └─ RuntimeVisibleAnnotations (2 entries)
-         ├─ annotation  name = java.lang.annotation.Target, 1 parameters
+         ├─ annotation  type = java.lang.annotation.Target, 1 parameters
          │   └─ parameter name = "value"
          │       └─ array value =  6 elements
          │           ├─ element type = java.lang.annotation.ElementType, value = TYPE
@@ -18,6 +20,6 @@
          │           ├─ element type = java.lang.annotation.ElementType, value = PARAMETER
          │           ├─ element type = java.lang.annotation.ElementType, value = CONSTRUCTOR
          │           └─ element type = java.lang.annotation.ElementType, value = LOCAL_VARIABLE
-         └─ annotation  name = java.lang.annotation.Retention, 1 parameters
+         └─ annotation  type = java.lang.annotation.Retention, 1 parameters
              └─ parameter name = "value"
                  └─ enum value =  type = java.lang.annotation.RetentionPolicy, value = CLASS

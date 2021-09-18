@@ -15,7 +15,8 @@ public class T03_Converting_And_Filtering_Iterable
 			throw new AssertionError();
 	}
 
-	private static final Function1<Optional<String>,Integer> converterAndFilterer = i -> {
+	private static final Function1<Optional<String>,Integer> converterAndFilterer = i -> //
+	{
 		if( (i % 2) == 1 )
 			return Optional.empty();
 		return Optional.of( String.valueOf( i ) );

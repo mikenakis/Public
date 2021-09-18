@@ -26,7 +26,8 @@ public final class TestRunner
 {
 	public static TestResult run( TestPlan testPlan, Persistence persistence )
 	{
-		return TimeMeasurement.run( "Running tests", "Ran %d tests in %d classes", timeMeasurement -> {
+		return TimeMeasurement.run( "Running tests", "Ran %d tests in %d classes", timeMeasurement -> //
+		{
 			List<TestResult> testResults = new ArrayList<>();
 			for( TestModule testModule : testPlan.testModules() )
 			{

@@ -1,43 +1,44 @@
- version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class1, superClass = java.lang.Object, interfaces = []
+ version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class1, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (13 entries)
- │   ├─  accessFlags = [public, static, final], name+descriptor = java.lang.String PublicConstant
+ │   ├─  accessFlags = [public, static, final], name = "PublicConstant", descriptor = "Ljava/lang/String;" (java.lang.String PublicConstant)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue "publicConstantValue"
- │   ├─  accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Enum1 enum1
- │   ├─  accessFlags = [private, final], name+descriptor = boolean booleanMember
+ │   ├─  accessFlags = [private, final], name = "enum1", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 enum1)
+ │   ├─  accessFlags = [private, final], name = "booleanMember", descriptor = "Z" (boolean booleanMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 1
- │   ├─  accessFlags = [private, final], name+descriptor = byte byteMember
+ │   ├─  accessFlags = [private, final], name = "byteMember", descriptor = "B" (byte byteMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 1
- │   ├─  accessFlags = [private, final], name+descriptor = char charMember
+ │   ├─  accessFlags = [private, final], name = "charMember", descriptor = "C" (char charMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 99
- │   ├─  accessFlags = [private, final], name+descriptor = double doubleMember
+ │   ├─  accessFlags = [private, final], name = "doubleMember", descriptor = "D" (double doubleMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 0.5
- │   ├─  accessFlags = [private, final], name+descriptor = float floatMember
+ │   ├─  accessFlags = [private, final], name = "floatMember", descriptor = "F" (float floatMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 0.25f
- │   ├─  accessFlags = [private, final], name+descriptor = int intMember
+ │   ├─  accessFlags = [private, final], name = "intMember", descriptor = "I" (int intMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 2
- │   ├─  accessFlags = [private, final], name+descriptor = long longMember
+ │   ├─  accessFlags = [private, final], name = "longMember", descriptor = "J" (long longMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 3L
- │   ├─  accessFlags = [private, final], name+descriptor = short shortVar
+ │   ├─  accessFlags = [private, final], name = "shortVar", descriptor = "S" (short shortVar)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 4
- │   ├─  accessFlags = [private, final], name+descriptor = java.lang.String stringMember
+ │   ├─  accessFlags = [private, final], name = "stringMember", descriptor = "Ljava/lang/String;" (java.lang.String stringMember)
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue "x"
- │   ├─  accessFlags = [private, final], name+descriptor = int[] arrayOfPrimitiveMember
- │   └─  accessFlags = [private, final], name+descriptor = java.lang.String[] arrayOfObjectMember
+ │   ├─  accessFlags = [private, final], name = "arrayOfPrimitiveMember", descriptor = "[I" (int[] arrayOfPrimitiveMember)
+ │   └─  accessFlags = [private, final], name = "arrayOfObjectMember", descriptor = "[Ljava/lang/String;" (java.lang.String[] arrayOfObjectMember)
  ├─ methods (3 entries)
- │   ├─  accessFlags = [protected], name+descriptor = void <init>()
+ │   ├─  accessFlags = [protected], name = "<init>", descriptor = "()V" (void <init>())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 2, maxLocals = 1, 4 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 2, maxLocals = 1
  │   │           ├─ instructions (4 entries)
  │   │           │   ├─ L28:
  │   │           │   ├─      ALOAD_0
@@ -51,10 +52,10 @@
  │   │               │   ├─  lineNumber = 28, startPc = L28
  │   │               │   └─  lineNumber = 29, startPc = L29
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L28, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class1 this
- │   ├─  accessFlags = [protected], name+descriptor = void <init>( mikenakis.bytecode.test.model.Enum1 )
+ │   │                   └─  index = 0, startPc = L28, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class1;" (mikenakis.bytecode.test.model.Class1 this)
+ │   ├─  accessFlags = [protected], name = "<init>", descriptor = "(Lmikenakis/bytecode/test/model/Enum1;)V" (void <init>( mikenakis.bytecode.test.model.Enum1 ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 5, maxLocals = 2, 49 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 5, maxLocals = 2
  │   │       │   ├─ instructions (49 entries)
  │   │       │   │   ├─ L32:
  │   │       │   │   ├─      ALOAD_0
@@ -137,13 +138,13 @@
  │   │       │       │   ├─  lineNumber = 33, startPc = L33
  │   │       │       │   └─  lineNumber = 34, startPc = L34
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L32, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class1 this
- │   │       │           └─  index = 1, startPc = L32, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Enum1 enum1
+ │   │       │           ├─  index = 0, startPc = L32, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class1;" (mikenakis.bytecode.test.model.Class1 this)
+ │   │       │           └─  index = 1, startPc = L32, endPc = @end, name = "enum1", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 enum1)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = enum1
- │   └─  accessFlags = [public], name+descriptor = java.lang.String toString()
+ │   └─  accessFlags = [public], name = "toString", descriptor = "()Ljava/lang/String;" (java.lang.String toString())
  │       └─ attributes (1 entries)
- │           └─ Code maxStack = 2, maxLocals = 1, 7 instructions, 0 exceptionInfos, 2 attributes
+ │           └─ Code maxStack = 2, maxLocals = 1
  │               ├─ instructions (7 entries)
  │               │   ├─ L38:
  │               │   ├─      ALOAD_0
@@ -151,14 +152,14 @@
  │               │   ├─      INVOKEVIRTUAL java.lang.String java.lang.Class.getName()
  │               │   ├─      ALOAD_0
  │               │   ├─      GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1.enum1
- │               │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01 \x01"}, name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
+ │               │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01 \x01"}, name = "makeConcatWithConstants", descriptor = "(Ljava/lang/String;Lmikenakis/bytecode/test/model/Enum1;)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 ))
  │               │   └─      ARETURN
  │               ├─ exceptionInfos (0 entries)
  │               └─ attributes (2 entries)
  │                   ├─ LineNumberTable (1 entries)
  │                   │   └─  lineNumber = 38, startPc = L38
  │                   └─ LocalVariableTable (1 entries)
- │                       └─  index = 0, startPc = L38, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class1 this
+ │                       └─  index = 0, startPc = L38, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class1;" (mikenakis.bytecode.test.model.Class1 this)
  └─ attributes (3 entries)
      ├─ SourceFile value = "Class1.java"
      ├─ BootstrapMethods (1 entries)

@@ -8,13 +8,11 @@ import mikenakis.testana.discovery.Discoverer;
 import mikenakis.testana.discovery.DiscoveryModule;
 import mikenakis.testana.discovery.OutputDirectory;
 import mikenakis.testana.discovery.OutputFile;
-import mikenakis.testana.kit.TestanaLog;
 import mikenakis.testana.kit.TimeMeasurement;
 import mikenakis.testana.structure.cache.Cache;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -37,7 +35,7 @@ public final class ProjectStructureBuilder
 	}
 
 	public static ProjectStructure build( Path sourceDirectory, Iterable<Discoverer> discoverers, //
-		StructureSettings settings, Optional<Path> cachePathName, Iterable<TestEngine> testEngines )
+		StructureSettings settings, Cache cache, Iterable<TestEngine> testEngines )
 	{
 		assert Kit.path.isAbsoluteNormalizedDirectory( sourceDirectory ) : sourceDirectory;
 		Collection<DiscoveryModule> rootDiscoveryModules = collectDiscoveryModules( sourceDirectory, discoverers, settings );
@@ -47,7 +45,6 @@ public final class ProjectStructureBuilder
 
 		LinkedHashMap<DiscoveryModule,ProjectModule> projectModuleMap = new LinkedHashMap<>();
 		ProjectStructure projectStructure = new ProjectStructure( rootDiscoveryModules, projectModuleMap );
-		Cache cache = loadCache( cachePathName );
 		TimeMeasurement.run( "Parsing types", "%d types (cache: %d hits, %d misses)", timeMeasurement -> //
 		{
 			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
@@ -76,8 +73,6 @@ public final class ProjectStructureBuilder
 			timeMeasurement.setArguments( projectStructure.projectModules().size(), projectStructure.typeCount(), cache.hits(), cache.misses() );
 		} );
 
-		if( cachePathName.isPresent() && cache.hits() != projectStructure.typeCount() )
-			saveCache( cachePathName, projectStructure );
 		return projectStructure;
 	}
 
@@ -136,7 +131,8 @@ public final class ProjectStructureBuilder
 	private static Collection<DiscoveryModule> collectDiscoveryModules( Path projectSourceDirectory, Iterable<Discoverer> discoverers, //
 		StructureSettings settings )
 	{
-		return TimeMeasurement.run( "Looking for modules under " + projectSourceDirectory, "Found %d root modules, %d leaf modules with a total of %d classes, %d resources", timeMeasurement -> {
+		return TimeMeasurement.run( "Looking for modules under " + projectSourceDirectory, "Found %d root modules, %d leaf modules with a total of %d classes, %d resources", timeMeasurement -> //
+		{
 			Collection<DiscoveryModule> discoveryModules = new LinkedHashSet<>();
 			if( !collectDiscoveryModulesRecursive( projectSourceDirectory, discoverers, settings, discoveryModules ) )
 				Log.error( "No projects found." );
@@ -222,38 +218,6 @@ public final class ProjectStructureBuilder
 		{
 			Optional<TestEngine> testEngine = c.testEngineName.map( name -> Kit.map.get( testEngines, name ) );
 			return ProjectType.of( projectModule, outputFile, testEngine, c.dependencyNames );
-		} );
-	}
-
-	private static Cache loadCache( Optional<Path> cachePathName )
-	{
-		if( cachePathName.isEmpty() || !Files.exists( cachePathName.get() ) )
-			return Cache.empty();
-		try
-		{
-			return TimeMeasurement.run( "Loading cache from '" + cachePathName.get() + "'", "Loaded %d modules, %d types from cache", timeMeasurement -> //
-			{
-				Cache cache = Cache.fromFile( cachePathName.get() );
-				timeMeasurement.setArguments( cache.moduleCount(), cache.typeCount() );
-				return cache;
-			} );
-		}
-		catch( RuntimeException | Error e )
-		{
-			TestanaLog.report( "Cache could not be loaded." );
-			return Cache.empty();
-		}
-	}
-
-	private static void saveCache( Optional<Path> cachePathName, ProjectStructure projectStructure )
-	{
-		if( cachePathName.isEmpty() )
-			return;
-		TimeMeasurement.run( "Saving cache", "Saved %d modules, %d types into cache", timeMeasurement -> //
-		{
-			Cache cache = Cache.fromProjectStructure( projectStructure );
-			cache.save( cachePathName.get() );
-			timeMeasurement.setArguments( cache.moduleCount(), cache.typeCount() );
 		} );
 	}
 

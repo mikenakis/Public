@@ -1,12 +1,14 @@
- version = 60.0, accessFlags = [public, final, super], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, superClass = mikenakis.bytecode.test.model.Class3ImplementingInterface, interfaces = [mikenakis.bytecode.test.model.Interface2]
+ version = 60.0, accessFlags = [public, final, super], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, superClass = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ ├─ interfaces (1 entries)
+ │   └─ Class name = "mikenakis/bytecode/test/model/Interface2"
  ├─ extra constants (0 entries)
  ├─ fields (2 entries)
- │   ├─  accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Interface1 interface1
- │   └─  accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass nestedObject
+ │   ├─  accessFlags = [private, final], name = "interface1", descriptor = "Lmikenakis/bytecode/test/model/Interface1;" (mikenakis.bytecode.test.model.Interface1 interface1)
+ │   └─  accessFlags = [private, final], name = "nestedObject", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3$NestedClass;" (mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass nestedObject)
  ├─ methods (9 entries)
- │   ├─  accessFlags = [public], name+descriptor = void <init>()
+ │   ├─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 3, maxLocals = 1, 11 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 3, maxLocals = 1
  │   │           ├─ instructions (11 entries)
  │   │           │   ├─ L20:
  │   │           │   ├─      ALOAD_0
@@ -31,10 +33,10 @@
  │   │               │   ├─  lineNumber = 17, startPc = L17
  │   │               │   └─  lineNumber = 21, startPc = L21
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L20, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   ├─  accessFlags = [public], name+descriptor = mikenakis.bytecode.test.model.Interface1 getInterface1()
+ │   │                   └─  index = 0, startPc = L20, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   ├─  accessFlags = [public], name = "getInterface1", descriptor = "()Lmikenakis/bytecode/test/model/Interface1;" (mikenakis.bytecode.test.model.Interface1 getInterface1())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 1, 3 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
  │   │           │   ├─ L25:
  │   │           │   ├─      ALOAD_0
@@ -45,10 +47,10 @@
  │   │               ├─ LineNumberTable (1 entries)
  │   │               │   └─  lineNumber = 25, startPc = L25
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L25, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   ├─  accessFlags = [public], name+descriptor = long getLong( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+ │   │                   └─  index = 0, startPc = L25, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   ├─  accessFlags = [public], name = "getLong", descriptor = "(Lmikenakis/bytecode/test/model/Class3ImplementingInterface;)J" (long getLong( mikenakis.bytecode.test.model.Class3ImplementingInterface ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 2, 3 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (3 entries)
  │   │       │   │   ├─ L30:
  │   │       │   │   ├─      INVOKESTATIC java.lang.Thread java.lang.Thread.currentThread()
@@ -59,16 +61,16 @@
  │   │       │       ├─ LineNumberTable (1 entries)
  │   │       │       │   └─  lineNumber = 30, startPc = L30
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L30, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   │       │           └─  index = 1, startPc = L30, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
+ │   │       │           ├─  index = 0, startPc = L30, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   │       │           └─  index = 1, startPc = L30, endPc = @end, name = "class3ImplementingInterface", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = class3ImplementingInterface
- │   ├─  accessFlags = [public], name+descriptor = void testMethodHandle()
+ │   ├─  accessFlags = [public], name = "testMethodHandle", descriptor = "()V" (void testMethodHandle())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 2, 5 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 1, maxLocals = 2
  │   │           ├─ instructions (5 entries)
  │   │           │   ├─ L35:
- │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "()V", InvokeStatic, referenceConstant = void mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testMethodHandle$0(), "()V"}, name+descriptor = java.lang.Runnable run()
+ │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "()V", InvokeStatic, referenceConstant = void mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testMethodHandle$0(), "()V"}, name = "run", descriptor = "()Ljava/lang/Runnable;" (java.lang.Runnable run())
  │   │           │   ├─      ASTORE_1
  │   │           │   ├─ L36:
  │   │           │   ├─      ALOAD_1
@@ -82,14 +84,14 @@
  │   │               │   ├─  lineNumber = 36, startPc = L36
  │   │               │   └─  lineNumber = 37, startPc = L37
  │   │               └─ LocalVariableTable (2 entries)
- │   │                   ├─  index = 0, startPc = L35, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   │                   └─  index = 1, startPc = L36, endPc = @end, name+descriptor = java.lang.Runnable runnable
- │   ├─  accessFlags = [public], name+descriptor = void testInvokeDynamic()
+ │   │                   ├─  index = 0, startPc = L35, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   │                   └─  index = 1, startPc = L36, endPc = @end, name = "runnable", descriptor = "Ljava/lang/Runnable;" (java.lang.Runnable runnable)
+ │   ├─  accessFlags = [public], name = "testInvokeDynamic", descriptor = "()V" (void testInvokeDynamic())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 2, maxLocals = 2, 7 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 2, maxLocals = 2
  │   │           ├─ instructions (7 entries)
  │   │           │   ├─ L46:
- │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "(Ljava/lang/String;)Ljava/lang/String;", InvokeStatic, referenceConstant = java.lang.String mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testInvokeDynamic$1( java.lang.String ), "(Ljava/lang/String;)Ljava/lang/String;"}, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo x()
+ │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "(Ljava/lang/String;)Ljava/lang/String;", InvokeStatic, referenceConstant = java.lang.String mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testInvokeDynamic$1( java.lang.String ), "(Ljava/lang/String;)Ljava/lang/String;"}, name = "x", descriptor = "()Lmikenakis/bytecode/test/model/Class4ExtendingClass3$Foo;" (mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo x())
  │   │           │   ├─      ASTORE_1
  │   │           │   ├─ L47:
  │   │           │   ├─      ALOAD_1
@@ -105,11 +107,11 @@
  │   │               │   ├─  lineNumber = 47, startPc = L47
  │   │               │   └─  lineNumber = 48, startPc = L48
  │   │               └─ LocalVariableTable (2 entries)
- │   │                   ├─  index = 0, startPc = L46, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   │                   └─  index = 1, startPc = L47, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo foo
- │   ├─  accessFlags = [public], name+descriptor = boolean testSyntheticMethod1()
+ │   │                   ├─  index = 0, startPc = L46, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   │                   └─  index = 1, startPc = L47, endPc = @end, name = "foo", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3$Foo;" (mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo foo)
+ │   ├─  accessFlags = [public], name = "testSyntheticMethod1", descriptor = "()Z" (boolean testSyntheticMethod1())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 1, 4 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (4 entries)
  │   │           │   ├─ L52:
  │   │           │   ├─      ALOAD_0
@@ -121,10 +123,10 @@
  │   │               ├─ LineNumberTable (1 entries)
  │   │               │   └─  lineNumber = 52, startPc = L52
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L52, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   ├─  accessFlags = [public], name+descriptor = void testSyntheticMethod2( boolean )
+ │   │                   └─  index = 0, startPc = L52, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   ├─  accessFlags = [public], name = "testSyntheticMethod2", descriptor = "(Z)V" (void testSyntheticMethod2( boolean ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 2, 5 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (5 entries)
  │   │       │   │   ├─ L57:
  │   │       │   │   ├─      ALOAD_0
@@ -139,27 +141,27 @@
  │   │       │       │   ├─  lineNumber = 57, startPc = L57
  │   │       │       │   └─  lineNumber = 58, startPc = L58
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L57, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
- │   │       │           └─  index = 1, startPc = L57, endPc = @end, name+descriptor = boolean foo
+ │   │       │           ├─  index = 0, startPc = L57, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3;" (mikenakis.bytecode.test.model.Class4ExtendingClass3 this)
+ │   │       │           └─  index = 1, startPc = L57, endPc = @end, name = "foo", descriptor = "Z" (boolean foo)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = foo
- │   ├─  accessFlags = [private, static, synthetic], name+descriptor = java.lang.String lambda$testInvokeDynamic$1( java.lang.String )
+ │   ├─  accessFlags = [private, static, synthetic], name = "lambda$testInvokeDynamic$1", descriptor = "(Ljava/lang/String;)Ljava/lang/String;" (java.lang.String lambda$testInvokeDynamic$1( java.lang.String ))
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 1, 3 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
  │   │           │   ├─ L46:
  │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01x"}, name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String )
+ │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01x"}, name = "makeConcatWithConstants", descriptor = "(Ljava/lang/String;)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( java.lang.String ))
  │   │           │   └─      ARETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
  │   │               │   └─  lineNumber = 46, startPc = L46
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L46, endPc = @end, name+descriptor = java.lang.String s
- │   └─  accessFlags = [private, static, synthetic], name+descriptor = void lambda$testMethodHandle$0()
+ │   │                   └─  index = 0, startPc = L46, endPc = @end, name = "s", descriptor = "Ljava/lang/String;" (java.lang.String s)
+ │   └─  accessFlags = [private, static, synthetic], name = "lambda$testMethodHandle$0", descriptor = "()V" (void lambda$testMethodHandle$0())
  │       └─ attributes (1 entries)
- │           └─ Code maxStack = 2, maxLocals = 0, 5 instructions, 0 exceptionInfos, 1 attributes
+ │           └─ Code maxStack = 2, maxLocals = 0
  │               ├─ instructions (5 entries)
  │               │   ├─ L35:
  │               │   ├─      NEW mikenakis.bytecode.test.model.Class4ExtendingClass3

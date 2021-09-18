@@ -1,11 +1,12 @@
- version = 60.0, accessFlags = [final, super], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, superClass = java.lang.Object, interfaces = []
+ version = 60.0, accessFlags = [final, super], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (1 entries)
- │   └─  accessFlags = [private], name+descriptor = boolean foo
+ │   └─  accessFlags = [private], name = "foo", descriptor = "Z" (boolean foo)
  ├─ methods (1 entries)
- │   └─  accessFlags = [private], name+descriptor = void <init>()
+ │   └─  accessFlags = [private], name = "<init>", descriptor = "()V" (void <init>())
  │       └─ attributes (1 entries)
- │           └─ Code maxStack = 2, maxLocals = 1, 6 instructions, 0 exceptionInfos, 2 attributes
+ │           └─ Code maxStack = 2, maxLocals = 1
  │               ├─ instructions (6 entries)
  │               │   ├─ L11:
  │               │   ├─      ALOAD_0
@@ -21,7 +22,7 @@
  │                   │   ├─  lineNumber = 11, startPc = L11
  │                   │   └─  lineNumber = 13, startPc = L13
  │                   └─ LocalVariableTable (1 entries)
- │                       └─  index = 0, startPc = L11, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass this
+ │                       └─  index = 0, startPc = L11, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class4ExtendingClass3$NestedClass;" (mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass this)
  └─ attributes (3 entries)
      ├─ SourceFile value = "Class4ExtendingClass3.java"
      ├─ NestHost class = mikenakis.bytecode.test.model.Class4ExtendingClass3

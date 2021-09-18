@@ -1,67 +1,69 @@
- version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, superClass = java.lang.Object, interfaces = [java.lang.annotation.Annotation]
+ version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, superClass = java.lang.Object
+ ├─ interfaces (1 entries)
+ │   └─ Class name = "java/lang/annotation/Annotation"
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (13 entries)
- │   ├─  accessFlags = [public, abstract], name+descriptor = java.lang.SuppressWarnings annotationParameter()
+ │   ├─  accessFlags = [public, abstract], name = "annotationParameter", descriptor = "()Ljava/lang/SuppressWarnings;" (java.lang.SuppressWarnings annotationParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
- │   │           └─ annotation value =  name = java.lang.SuppressWarnings, 1 parameters
- │   ├─  accessFlags = [public, abstract], name+descriptor = java.lang.String[] arrayParameter()
+ │   │           └─ annotation value =  type = java.lang.SuppressWarnings, 1 parameters
+ │   ├─  accessFlags = [public, abstract], name = "arrayParameter", descriptor = "()[Ljava/lang/String;" (java.lang.String[] arrayParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ array value =  3 elements
  │   │               ├─ element "a"
  │   │               ├─ element "b"
  │   │               └─ element "c"
- │   ├─  accessFlags = [public, abstract], name+descriptor = boolean booleanParameter()
+ │   ├─  accessFlags = [public, abstract], name = "booleanParameter", descriptor = "()Z" (boolean booleanParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Boolean value =  1
- │   ├─  accessFlags = [public, abstract], name+descriptor = byte byteParameter()
+ │   ├─  accessFlags = [public, abstract], name = "byteParameter", descriptor = "()B" (byte byteParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Byte value =  1
- │   ├─  accessFlags = [public, abstract], name+descriptor = char charParameter()
+ │   ├─  accessFlags = [public, abstract], name = "charParameter", descriptor = "()C" (char charParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Character value =  99
- │   ├─  accessFlags = [public, abstract], name+descriptor = double doubleParameter()
+ │   ├─  accessFlags = [public, abstract], name = "doubleParameter", descriptor = "()D" (double doubleParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Double value =  0.5
- │   ├─  accessFlags = [public, abstract], name+descriptor = float floatParameter()
+ │   ├─  accessFlags = [public, abstract], name = "floatParameter", descriptor = "()F" (float floatParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Float value =  0.25f
- │   ├─  accessFlags = [public, abstract], name+descriptor = int intParameter()
+ │   ├─  accessFlags = [public, abstract], name = "intParameter", descriptor = "()I" (int intParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Integer value =  2
- │   ├─  accessFlags = [public, abstract], name+descriptor = long longParameter()
+ │   ├─  accessFlags = [public, abstract], name = "longParameter", descriptor = "()J" (long longParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Long value =  3L
- │   ├─  accessFlags = [public, abstract], name+descriptor = short shortParameter()
+ │   ├─  accessFlags = [public, abstract], name = "shortParameter", descriptor = "()S" (short shortParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Short value =  4
- │   ├─  accessFlags = [public, abstract], name+descriptor = java.lang.String stringParameter()
+ │   ├─  accessFlags = [public, abstract], name = "stringParameter", descriptor = "()Ljava/lang/String;" (java.lang.String stringParameter())
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ String value =  "x"
- │   ├─  accessFlags = [public, abstract], name+descriptor = java.lang.Class classParameter()
+ │   ├─  accessFlags = [public, abstract], name = "classParameter", descriptor = "()Ljava/lang/Class;" (java.lang.Class classParameter())
  │   │   └─ attributes (2 entries)
  │   │       ├─ AnnotationDefault 
  │   │       │   └─ class value =  "Ljava/lang/Object;"
  │   │       └─ Signature ()Ljava/lang/Class<*>;
- │   └─  accessFlags = [public, abstract], name+descriptor = int value()
+ │   └─  accessFlags = [public, abstract], name = "value", descriptor = "()I" (int value())
  │       └─ attributes (1 entries)
  │           └─ AnnotationDefault 
  │               └─ Integer value =  5
  └─ attributes (2 entries)
      ├─ SourceFile value = "RuntimeVisibleAnnotation1.java"
      └─ RuntimeVisibleAnnotations (2 entries)
-         ├─ annotation  name = java.lang.annotation.Target, 1 parameters
+         ├─ annotation  type = java.lang.annotation.Target, 1 parameters
          │   └─ parameter name = "value"
          │       └─ array value =  7 elements
          │           ├─ element type = java.lang.annotation.ElementType, value = TYPE
@@ -71,6 +73,6 @@
          │           ├─ element type = java.lang.annotation.ElementType, value = CONSTRUCTOR
          │           ├─ element type = java.lang.annotation.ElementType, value = LOCAL_VARIABLE
          │           └─ element type = java.lang.annotation.ElementType, value = TYPE_PARAMETER
-         └─ annotation  name = java.lang.annotation.Retention, 1 parameters
+         └─ annotation  type = java.lang.annotation.Retention, 1 parameters
              └─ parameter name = "value"
                  └─ enum value =  type = java.lang.annotation.RetentionPolicy, value = RUNTIME

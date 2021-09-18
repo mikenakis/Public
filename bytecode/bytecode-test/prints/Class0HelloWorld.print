@@ -1,0 +1,40 @@
+ version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class0HelloWorld, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
+ ├─ extra constants (0 entries)
+ ├─ fields (0 entries)
+ ├─ methods (2 entries)
+ │   ├─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
+ │   │   └─ attributes (1 entries)
+ │   │       └─ Code maxStack = 1, maxLocals = 1
+ │   │           ├─ instructions (3 entries)
+ │   │           │   ├─ L9:
+ │   │           │   ├─      ALOAD_0
+ │   │           │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │   │           │   └─      RETURN
+ │   │           ├─ exceptionInfos (0 entries)
+ │   │           └─ attributes (2 entries)
+ │   │               ├─ LineNumberTable (1 entries)
+ │   │               │   └─  lineNumber = 9, startPc = L9
+ │   │               └─ LocalVariableTable (1 entries)
+ │   │                   └─  index = 0, startPc = L9, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class0HelloWorld;" (mikenakis.bytecode.test.model.Class0HelloWorld this)
+ │   └─  accessFlags = [public, static], name = "main", descriptor = "([Ljava/lang/String;)V" (void main( java.lang.String[] ))
+ │       └─ attributes (2 entries)
+ │           ├─ Code maxStack = 2, maxLocals = 1
+ │           │   ├─ instructions (4 entries)
+ │           │   │   ├─ L13:
+ │           │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
+ │           │   │   ├─      LDCx "Hello, world!"
+ │           │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │           │   │   ├─ L14:
+ │           │   │   └─      RETURN
+ │           │   ├─ exceptionInfos (0 entries)
+ │           │   └─ attributes (2 entries)
+ │           │       ├─ LineNumberTable (2 entries)
+ │           │       │   ├─  lineNumber = 13, startPc = L13
+ │           │       │   └─  lineNumber = 14, startPc = L14
+ │           │       └─ LocalVariableTable (1 entries)
+ │           │           └─  index = 0, startPc = L13, endPc = @end, name = "args", descriptor = "[Ljava/lang/String;" (java.lang.String[] args)
+ │           └─ MethodParameters (1 entries)
+ │               └─  accessFlags = [], name = args
+ └─ attributes (1 entries)
+     └─ SourceFile value = "Class0HelloWorld.java"

@@ -546,7 +546,7 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromAnnotation( ByteCodeType byteCodeType, ByteCodeAnnotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromClassTypeSignatureString( byteCodeAnnotation.nameConstant().value(), mutableDependencyNames );
+		addDependencyTypeNamesFromClassTypeSignatureString( byteCodeAnnotation.typeConstant.value(), mutableDependencyNames );
 		for( AnnotationParameter annotationParameter : byteCodeAnnotation.annotationParameters() )
 			addDependencyTypeNamesFromAnnotationValue( byteCodeType, annotationParameter.annotationValue(), mutableDependencyNames );
 	}
@@ -555,20 +555,24 @@ final class ByteCodeInfo
 	{
 		ObjectSignature parsedSignature = SignatureParser.make().parseFieldSig( signature ); // parseFieldTypeSignature() {
 		if( parsedSignature instanceof ClassSignature classSignature )
-			addDependencyTypeNamesFromClassTypeSignature( classSignature, mutableDependencyNames );
+			addDependencyTypeNamesFromClassSignature( classSignature, mutableDependencyNames );
 		else if( parsedSignature instanceof TypeVariableSignature )
 			Kit.get( 1 );
 		else if( parsedSignature instanceof ArrayTypeSignature arrayTypeSignature )
 			addDependencyTypeNamesFromArrayTypeSignature( arrayTypeSignature, mutableDependencyNames );
+		else if( parsedSignature instanceof ClassTypeSignature classTypeSignature )
+			addDependencyTypeNamesFromClassTypeSignature( classTypeSignature, mutableDependencyNames );
+		else
+			assert false;
 	}
 
 	private static void addDependencyTypeNamesFromClassTypeSignatureString( String signature, Collection<String> mutableDependencyNames )
 	{
 		ClassSignature parsedSignature = SignatureParser.make().parseClassSig( signature );
-		addDependencyTypeNamesFromClassTypeSignature( parsedSignature, mutableDependencyNames );
+		addDependencyTypeNamesFromClassSignature( parsedSignature, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromClassTypeSignature( ClassSignature parsedSignature, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromClassSignature( ClassSignature parsedSignature, Collection<String> mutableDependencyNames )
 	{
 		addDependencyTypeNamesFromSignaturePath( parsedSignature.getSuperclass().getPath(), mutableDependencyNames );
 		for( var superInterface : parsedSignature.getSuperInterfaces() )
@@ -586,7 +590,7 @@ final class ByteCodeInfo
 			addDependencyTypeNamesFromArrayTypeSignature( arrayTypeSignature, mutableDependencyNames );
 		else if( typeSignature instanceof ClassTypeSignature classTypeSignature )
 			addDependencyTypeNamesFromClassTypeSignature( classTypeSignature, mutableDependencyNames );
-		else if( typeSignature instanceof TypeVariableSignature typeVariableSignature )
+		else if( typeSignature instanceof TypeVariableSignature )
 			Kit.get( 1 );
 		else
 			assert false;

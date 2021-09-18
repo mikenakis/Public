@@ -1,7 +1,6 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.ByteCodeMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +8,6 @@ import java.util.List;
 /**
  * Represents the "RuntimeInvisibleParameterAnnotations" {@link Attribute} of a java class file.
  * <p>
- * According to JVMS Table 4.7-C, this attribute is applicable to:
- * <p>
- * {@link ByteCodeMethod}
- *
  * @author Michael Belivanakis (michael.gr)
  */
 public final class RuntimeInvisibleParameterAnnotationsAttribute extends ParameterAnnotationsAttribute

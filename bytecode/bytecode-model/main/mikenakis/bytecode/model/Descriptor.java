@@ -31,7 +31,9 @@ public class Descriptor
 			descriptorString = descriptorString.substring( i + 1 );
 		}
 		String typeName = ByteCodeHelpers.getJavaTypeNameFromDescriptorTypeName( descriptorString );
-		return new Descriptor( typeName, argumentTypeNames );
+		Descriptor descriptor = new Descriptor( typeName, argumentTypeNames );
+		//assert descriptor.stringValue().equals( descriptorString );
+		return descriptor;
 	}
 
 	public final String typeName;
@@ -49,10 +51,10 @@ public class Descriptor
 		this.argumentTypeNames = argumentTypeNames;
 	}
 
-	public String toUtf8Constant()
+	public String stringValue()
 	{
 		var builder = new StringBuilder();
-		if( !argumentTypeNames.isEmpty() )
+		if( argumentTypeNames != null )
 		{
 			builder.append( '(' );
 			for( String argumentTypeName : argumentTypeNames )
@@ -62,6 +64,12 @@ public class Descriptor
 			}
 			builder.append( ')' );
 		}
+		builder.append( typeName );
 		return builder.toString();
+	}
+
+	@Override public String toString()
+	{
+		return stringValue();
 	}
 }

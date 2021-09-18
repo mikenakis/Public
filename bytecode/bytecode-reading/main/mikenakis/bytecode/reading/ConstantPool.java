@@ -126,7 +126,8 @@ final class ConstantPool
 		return entries.size();
 	}
 
-	private final Function1<Optional<Constant>,Entry> converterAndFilterer = ( Entry constantEntry ) -> {
+	private final Function1<Optional<Constant>,Entry> converterAndFilterer = ( Entry constantEntry ) -> //
+	{
 		if( constantEntry == null )
 			return Optional.empty();
 		Constant constant = constantEntry.getConstant( this );

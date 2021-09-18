@@ -218,7 +218,8 @@ public final class TestPlanBuilder
 	private static Collection<TestModule> collectTestModules( ProjectStructure projectStructure )
 	{
 		Log.warning( "TODO: do not involve the test engines at this stage; involve them only when running the tests, and only for the tests that need to run." );
-		return TimeMeasurement.run( "Collecting test modules, classes, and methods", "Collected %d test modules, %d test classes", timeMeasurement -> {
+		return TimeMeasurement.run( "Collecting test modules, classes, and methods", "Collected %d test modules, %d test classes", timeMeasurement -> //
+		{
 			Collection<TestModule> testModules = new LinkedHashSet<>();
 			for( ProjectModule projectModule : projectStructure.projectModules() )
 			{

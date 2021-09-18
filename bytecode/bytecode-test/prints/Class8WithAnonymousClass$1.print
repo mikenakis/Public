@@ -1,11 +1,13 @@
- version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, superClass = java.lang.Object, interfaces = [mikenakis.bytecode.test.model.Interface1]
+ version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, superClass = java.lang.Object
+ ├─ interfaces (1 entries)
+ │   └─ Class name = "mikenakis/bytecode/test/model/Interface1"
  ├─ extra constants (0 entries)
  ├─ fields (1 entries)
- │   └─  accessFlags = [final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
+ │   └─  accessFlags = [final, synthetic], name = "this$0", descriptor = "Lmikenakis/bytecode/test/model/Class8WithAnonymousClass;" (mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0)
  ├─ methods (3 entries)
- │   ├─  accessFlags = [], name+descriptor = void <init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+ │   ├─  accessFlags = [], name = "<init>", descriptor = "(Lmikenakis/bytecode/test/model/Class8WithAnonymousClass;)V" (void <init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass ))
  │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 2, 6 instructions, 0 exceptionInfos, 2 attributes
+ │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (6 entries)
  │   │       │   │   ├─ L12:
  │   │       │   │   ├─      ALOAD_0
@@ -19,13 +21,13 @@
  │   │       │       ├─ LineNumberTable (1 entries)
  │   │       │       │   └─  lineNumber = 12, startPc = L12
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L12, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
- │   │       │           └─  index = 1, startPc = L12, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
+ │   │       │           ├─  index = 0, startPc = L12, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class8WithAnonymousClass$1;" (mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this)
+ │   │       │           └─  index = 1, startPc = L12, endPc = @end, name = "this$0", descriptor = "Lmikenakis/bytecode/test/model/Class8WithAnonymousClass;" (mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0)
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [final, mandated], name = this$0
- │   ├─  accessFlags = [public], name+descriptor = mikenakis.bytecode.test.model.Enum1 getEnum1()
+ │   ├─  accessFlags = [public], name = "getEnum1", descriptor = "()Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 getEnum1())
  │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 1, 2 instructions, 0 exceptionInfos, 2 attributes
+ │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (2 entries)
  │   │           │   ├─ L15:
  │   │           │   ├─      ACONST_NULL
@@ -35,10 +37,10 @@
  │   │               ├─ LineNumberTable (1 entries)
  │   │               │   └─  lineNumber = 15, startPc = L15
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L15, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
- │   └─  accessFlags = [public], name+descriptor = int getInteger( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+ │   │                   └─  index = 0, startPc = L15, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class8WithAnonymousClass$1;" (mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this)
+ │   └─  accessFlags = [public], name = "getInteger", descriptor = "(Lmikenakis/bytecode/test/model/Class3ImplementingInterface;)I" (int getInteger( mikenakis.bytecode.test.model.Class3ImplementingInterface ))
  │       └─ attributes (2 entries)
- │           ├─ Code maxStack = 1, maxLocals = 2, 2 instructions, 0 exceptionInfos, 2 attributes
+ │           ├─ Code maxStack = 1, maxLocals = 2
  │           │   ├─ instructions (2 entries)
  │           │   │   ├─ L19:
  │           │   │   ├─      ICONST_0
@@ -48,8 +50,8 @@
  │           │       ├─ LineNumberTable (1 entries)
  │           │       │   └─  lineNumber = 19, startPc = L19
  │           │       └─ LocalVariableTable (2 entries)
- │           │           ├─  index = 0, startPc = L19, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
- │           │           └─  index = 1, startPc = L19, endPc = @end, name+descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
+ │           │           ├─  index = 0, startPc = L19, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class8WithAnonymousClass$1;" (mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this)
+ │           │           └─  index = 1, startPc = L19, endPc = @end, name = "class3ImplementingInterface", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface)
  │           └─ MethodParameters (1 entries)
  │               └─  accessFlags = [], name = class3ImplementingInterface
  └─ attributes (4 entries)

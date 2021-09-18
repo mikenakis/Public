@@ -1,8 +1,9 @@
- version = 60.0, accessFlags = [interface, abstract], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, superClass = java.lang.Object, interfaces = []
+ version = 60.0, accessFlags = [interface, abstract], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (1 entries)
- │   └─  accessFlags = [public, abstract], name+descriptor = java.lang.String x( java.lang.String )
+ │   └─  accessFlags = [public, abstract], name = "x", descriptor = "(Ljava/lang/String;)Ljava/lang/String;" (java.lang.String x( java.lang.String ))
  │       └─ attributes (1 entries)
  │           └─ MethodParameters (1 entries)
  │               └─  accessFlags = [], name = s

@@ -2,9 +2,6 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeAnnotation;
-import mikenakis.bytecode.model.ByteCodeField;
-import mikenakis.bytecode.model.ByteCodeMethod;
-import mikenakis.bytecode.model.ByteCodeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +9,7 @@ import java.util.List;
 /**
  * Represents the "RuntimeVisibleAnnotations" {@link Attribute} of a java class file.
  * <p>
- * According to JVMS Table 4.7-C, this attribute is applicable to:
- * <p>
- * {@link ByteCodeType}
- * {@link ByteCodeField}
- * {@link ByteCodeMethod}
+ * See JVMS 4.7.17 "The RuntimeInvisibleAnnotations attribute", https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.7.17
  *
  * @author Michael Belivanakis (michael.gr)
  */
