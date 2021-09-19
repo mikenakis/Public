@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -13,27 +13,27 @@ public final class EnumAnnotationValue extends AnnotationValue
 {
 	public static final String NAME = "enum";
 
-	public static EnumAnnotationValue of( Utf8Constant typeNameConstant, Utf8Constant valueNameConstant )
+	public static EnumAnnotationValue of( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
 	{
 		return new EnumAnnotationValue( typeNameConstant, valueNameConstant );
 	}
 
-	private final Utf8Constant typeNameConstant;
-	private final Utf8Constant valueNameConstant;
+	private final Mutf8Constant typeNameConstant;
+	private final Mutf8Constant valueNameConstant;
 
-	private EnumAnnotationValue( Utf8Constant typeNameConstant, Utf8Constant valueNameConstant )
+	private EnumAnnotationValue( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
 	{
 		super( EnumTag );
 		this.typeNameConstant = typeNameConstant;
 		this.valueNameConstant = valueNameConstant;
 	}
 
-	public Utf8Constant typeNameConstant()
+	public Mutf8Constant typeNameConstant()
 	{
 		return typeNameConstant;
 	}
 
-	public Utf8Constant valueNameConstant()
+	public Mutf8Constant valueNameConstant()
 	{
 		return valueNameConstant;
 	}

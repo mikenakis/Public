@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public class Descriptor
+public class Descriptor //TODO get rid of
 {
 	public static Descriptor from( String descriptorString )
 	{

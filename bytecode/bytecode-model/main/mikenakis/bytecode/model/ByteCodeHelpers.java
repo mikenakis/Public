@@ -26,14 +26,14 @@ public final class ByteCodeHelpers
 
 	public static String getMethodSourceLocation( ByteCodeType byteCodeType, ByteCodeMethod byteCodeMethod )
 	{
-		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetAttributeByName( CodeAttribute.kind.utf8Name ) //
+		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetAttributeByName( CodeAttribute.kind.mutf8Name ) //
 			.map( a -> a.asCodeAttribute() );
 		Optional<LineNumberTableAttribute> lineNumberTableAttribute = codeAttribute //
-			.flatMap( a -> a.attributeSet().tryGetAttributeByName( LineNumberTableAttribute.kind.utf8Name ) ) //
+			.flatMap( a -> a.attributeSet().tryGetAttributeByName( LineNumberTableAttribute.kind.mutf8Name ) ) //
 			.map( a -> a.asLineNumberTableAttribute() );
 		int lineNumber = lineNumberTableAttribute.map( a -> a.lineNumbers().get( 0 ).lineNumber() ).orElse( 0 );
 		String typeName = byteCodeType.thisClassConstant.getClassName();
-		String methodName = byteCodeMethod.nameConstant.value();
+		String methodName = byteCodeMethod.nameConstant.stringValue();
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
 		return typeName + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";
 	}

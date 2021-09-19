@@ -12,22 +12,21 @@ import java.util.Objects;
  */
 public final class MethodTypeConstant extends Constant
 {
-	public static MethodTypeConstant of( Utf8Constant descriptorConstant )
+	public static MethodTypeConstant of( Mutf8Constant descriptorConstant )
 	{
 		return new MethodTypeConstant( descriptorConstant );
 	}
 
 	public static MethodTypeConstant of( String descriptor )
 	{
-		return of( Utf8Constant.of( descriptor ) );
+		return of( Mutf8Constant.of( descriptor ) );
 	}
 
 	public static final int TAG = 16; // JVMS::CONSTANT_MethodType_info
-	public static final String tagName = "MethodType";
 
-	public final Utf8Constant descriptorConstant;
+	public final Mutf8Constant descriptorConstant;
 
-	private MethodTypeConstant( Utf8Constant descriptorConstant )
+	private MethodTypeConstant( Mutf8Constant descriptorConstant )
 	{
 		super( TAG );
 		this.descriptorConstant = descriptorConstant;
@@ -46,7 +45,7 @@ public final class MethodTypeConstant extends Constant
 	@Override public boolean equals( Object other )
 	{
 		if( other instanceof MethodTypeConstant otherMethodTypeConstant )
-			return descriptorConstant.equalsUtf8Constant( otherMethodTypeConstant.descriptorConstant );
+			return descriptorConstant.equalsMutf8Constant( otherMethodTypeConstant.descriptorConstant );
 		return false;
 	}
 

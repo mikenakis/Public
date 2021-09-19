@@ -5,7 +5,7 @@ import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -64,7 +64,7 @@ public final class ConstAnnotationValue extends AnnotationValue
 				case 'J' -> /* long */ LongConstant.TAG;
 				case 'D' -> /* double */ DoubleConstant.TAG;
 				case 'F' -> /* float */ FloatConstant.TAG;
-				case 's' -> /* string */ Utf8Constant.TAG;
+				case 's' -> /* string */ Mutf8Constant.TAG;
 				default -> throw new AssertionError();
 			};
 	}

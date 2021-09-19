@@ -1,7 +1,7 @@
  version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, superClass = java.lang.Object
  ├─ interfaces (0 entries)
  ├─ extra constants (2 entries)
- │   ├─ Utf8 "mikenakis/bytecode/test/model/Class1"
+ │   ├─ Mutf8 "mikenakis/bytecode/test/model/Class1"
  │   └─ Class name = "mikenakis/bytecode/test/model/Class1"
  ├─ fields (0 entries)
  ├─ methods (8 entries)

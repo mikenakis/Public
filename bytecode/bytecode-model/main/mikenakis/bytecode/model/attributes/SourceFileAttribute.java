@@ -2,7 +2,7 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -18,11 +18,11 @@ public final class SourceFileAttribute extends Attribute
 {
 	public static SourceFileAttribute of( String sourceFile )
 	{
-		Utf8Constant valueConstant = Utf8Constant.of( sourceFile );
+		Mutf8Constant valueConstant = Mutf8Constant.of( sourceFile );
 		return of( valueConstant );
 	}
 
-	public static SourceFileAttribute of( Utf8Constant sourceFileConstant )
+	public static SourceFileAttribute of( Mutf8Constant sourceFileConstant )
 	{
 		return new SourceFileAttribute( sourceFileConstant );
 	}
@@ -30,15 +30,15 @@ public final class SourceFileAttribute extends Attribute
 	public static final String name = "SourceFile";
 	public static final Kind kind = new Kind( name );
 
-	private final Utf8Constant valueConstant;
+	private final Mutf8Constant valueConstant;
 
-	private SourceFileAttribute( Utf8Constant valueConstant )
+	private SourceFileAttribute( Mutf8Constant valueConstant )
 	{
 		super( kind );
 		this.valueConstant = valueConstant;
 	}
 
-	public Utf8Constant valueConstant() { return valueConstant; }
+	public Mutf8Constant valueConstant() { return valueConstant; }
 
 	@Deprecated @Override public SourceFileAttribute asSourceFileAttribute()
 	{

@@ -17,7 +17,6 @@ public final class FloatConstant extends ValueConstant<Float>
 	}
 
 	public static final int TAG = 4; // JVMS::CONSTANT_Float_info
-	public static final String tagName = "Float";
 
 	public final float value;
 
@@ -49,7 +48,7 @@ public final class FloatConstant extends ValueConstant<Float>
 		return Objects.hash( tag, value );
 	}
 
-	@Override public Float value()
+	@Deprecated @Override public Float value()
 	{
 		return value;
 	}

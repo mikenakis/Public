@@ -15,26 +15,25 @@ public final class ClassConstant extends Constant
 {
 	public static ClassConstant of( String name )
 	{
-		return of( Utf8Constant.of( name ) );
+		return of( Mutf8Constant.of( name ) );
 	}
 
-	public static ClassConstant of( Utf8Constant nameConstant )
+	public static ClassConstant of( Mutf8Constant nameConstant )
 	{
 		return new ClassConstant( nameConstant );
 	}
 
 	public static final int TAG = 7; // JVMS::CONSTANT_Class_info
-	public static final String tagName = "Class";
 
-	private final Utf8Constant nameConstant;
+	private final Mutf8Constant nameConstant;
 
-	private ClassConstant( Utf8Constant nameConstant )
+	private ClassConstant( Mutf8Constant nameConstant )
 	{
 		super( TAG );
 		this.nameConstant = nameConstant;
 	}
 
-	public Utf8Constant nameConstant() { return nameConstant; }
+	public Mutf8Constant nameConstant() { return nameConstant; }
 
 //	@Override public void intern( ConstantPool constantPool )
 //	{
@@ -66,7 +65,7 @@ public final class ClassConstant extends Constant
 
 	public boolean equalsClassConstant( ClassConstant other )
 	{
-		return nameConstant.equals( other.nameConstant );
+		return nameConstant.equalsMutf8Constant( other.nameConstant );
 	}
 
 	@Override public int hashCode()
@@ -76,6 +75,6 @@ public final class ClassConstant extends Constant
 
 	public String getClassName()
 	{
-		return ByteCodeHelpers.getJavaTypeNameFromJvmTypeName( nameConstant.value() );
+		return ByteCodeHelpers.getJavaTypeNameFromJvmTypeName( nameConstant.stringValue() );
 	}
 }

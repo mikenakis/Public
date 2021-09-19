@@ -4,7 +4,7 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -22,10 +22,10 @@ public final class SignatureAttribute extends Attribute
 {
 	public static SignatureAttribute of( String signature )
 	{
-		return of( Utf8Constant.of( signature ) );
+		return of( Mutf8Constant.of( signature ) );
 	}
 
-	public static SignatureAttribute of( Utf8Constant signatureConstant )
+	public static SignatureAttribute of( Mutf8Constant signatureConstant )
 	{
 		return new SignatureAttribute( signatureConstant );
 	}
@@ -33,15 +33,15 @@ public final class SignatureAttribute extends Attribute
 	public static final String name = "Signature";
 	public static final Kind kind = new Kind( name );
 
-	private final Utf8Constant signatureConstant;
+	private final Mutf8Constant signatureConstant;
 
-	private SignatureAttribute( Utf8Constant signatureConstant )
+	private SignatureAttribute( Mutf8Constant signatureConstant )
 	{
 		super( kind );
 		this.signatureConstant = signatureConstant;
 	}
 
-	public Utf8Constant signatureConstant()
+	public Mutf8Constant signatureConstant()
 	{
 		return signatureConstant;
 	}
@@ -53,6 +53,6 @@ public final class SignatureAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "signature = " + signatureConstant.value();
+		return "signature = " + signatureConstant.stringValue();
 	}
 }

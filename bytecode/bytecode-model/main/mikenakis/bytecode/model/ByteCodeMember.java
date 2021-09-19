@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 
 /**
  * Represents a Member. (Field or Method.)
@@ -9,16 +9,16 @@ import mikenakis.bytecode.model.constants.Utf8Constant;
  */
 public abstract class ByteCodeMember
 {
-	public final Utf8Constant nameConstant;
-	public final Utf8Constant descriptorConstant;
+	public final Mutf8Constant nameConstant;
 	public final AttributeSet attributeSet;
 
-	protected ByteCodeMember( Utf8Constant nameConstant, Utf8Constant descriptorConstant, AttributeSet attributeSet )
+	protected ByteCodeMember( Mutf8Constant nameConstant, AttributeSet attributeSet )
 	{
 		this.nameConstant = nameConstant;
-		this.descriptorConstant = descriptorConstant;
 		this.attributeSet = attributeSet;
 	}
 
 	public abstract FlagSet<?> modifierSet();
+
+	public abstract Mutf8Constant descriptorConstant();
 }

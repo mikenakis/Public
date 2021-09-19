@@ -3,7 +3,7 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.FlagSet;
 import mikenakis.bytecode.model.FlagEnum;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 public final class InnerClass
 {
-	public static InnerClass of( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Utf8Constant> innerNameConstant, //
+	public static InnerClass of( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
 		FlagSet<InnerClassModifier> modifierSet )
 	{
 		return new InnerClass( innerClassConstant, outerClassConstant, innerNameConstant, modifierSet );
@@ -64,10 +64,10 @@ public final class InnerClass
 
 	private final ClassConstant innerClassConstant;
 	private final Optional<ClassConstant> outerClassConstant;
-	private final Optional<Utf8Constant> innerNameConstant;
+	private final Optional<Mutf8Constant> innerNameConstant;
 	private final FlagSet<InnerClassModifier> modifierSet;
 
-	private InnerClass( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Utf8Constant> innerNameConstant, //
+	private InnerClass( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
 		FlagSet<InnerClassModifier> modifierSet )
 	{
 		this.innerClassConstant = innerClassConstant;
@@ -86,7 +86,7 @@ public final class InnerClass
 		return outerClassConstant;
 	}
 
-	public Optional<Utf8Constant> innerNameConstant()
+	public Optional<Mutf8Constant> innerNameConstant()
 	{
 		return innerNameConstant;
 	}

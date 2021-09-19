@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -12,16 +12,16 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class UnknownAttribute extends Attribute
 {
-	public static UnknownAttribute of( Utf8Constant name, Buffer buffer )
+	public static UnknownAttribute of( Mutf8Constant name, Buffer buffer )
 	{
 		return new UnknownAttribute( name, buffer );
 	}
 
 	private final Buffer buffer;
 
-	private UnknownAttribute( Utf8Constant name, Buffer buffer )
+	private UnknownAttribute( Mutf8Constant name, Buffer buffer )
 	{
-		super( new Kind( name.value() ) );
+		super( new Kind( name.stringValue() ) );
 		this.buffer = buffer;
 	}
 

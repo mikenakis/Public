@@ -17,7 +17,6 @@ public final class DoubleConstant extends ValueConstant<Double>
 	}
 
 	public static final int TAG = 6; // JVMS::CONSTANT_Double_info
-	public static final String tagName = "Double";
 
 	public final double value;
 
@@ -44,7 +43,7 @@ public final class DoubleConstant extends ValueConstant<Double>
 		return Double.doubleToLongBits( value ) == Double.doubleToLongBits( other.value );
 	}
 
-	@Override public Double value()
+	@Deprecated @Override public Double value()
 	{
 		return value;
 	}

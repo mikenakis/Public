@@ -13,33 +13,32 @@ public final class StringConstant extends ValueConstant<String>
 {
 	public static StringConstant of( String value )
 	{
-		return of( Utf8Constant.of( value ) );
+		return of( Mutf8Constant.of( value ) );
 	}
 
-	public static StringConstant of( Utf8Constant value )
+	public static StringConstant of( Mutf8Constant value )
 	{
 		return new StringConstant( value );
 	}
 
 	public static final int TAG = 8; // JVMS::CONSTANT_String_info
-	public static final String tagName = "String";
 
-	private final Utf8Constant valueUtf8Constant;
+	private final Mutf8Constant valueConstant;
 
-	private StringConstant( Utf8Constant value )
+	private StringConstant( Mutf8Constant value )
 	{
 		super( TAG );
-		valueUtf8Constant = value;
+		valueConstant = value;
 	}
 
-	public Utf8Constant valueUtf8Constant()
+	public Mutf8Constant valueConstant()
 	{
-		return valueUtf8Constant;
+		return valueConstant;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "utf8 = " + valueUtf8Constant.toString();
+		return "value = " + valueConstant.toString();
 	}
 
 	@Deprecated @Override public StringConstant asStringConstant()
@@ -50,17 +49,17 @@ public final class StringConstant extends ValueConstant<String>
 	@Override public boolean equals( Object other )
 	{
 		if( other instanceof StringConstant stringConstant )
-			return valueUtf8Constant.equals( stringConstant.valueUtf8Constant );
+			return valueConstant.equalsMutf8Constant( stringConstant.valueConstant );
 		return false;
 	}
 
-	@Override public String value()
+	@Deprecated @Override public String value()
 	{
-		return valueUtf8Constant.toString();
+		return valueConstant.toString();
 	}
 
 	@Override public int hashCode()
 	{
-		return Objects.hash( tag, valueUtf8Constant );
+		return Objects.hash( tag, valueConstant );
 	}
 }

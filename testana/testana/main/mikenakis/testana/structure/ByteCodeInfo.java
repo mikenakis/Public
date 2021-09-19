@@ -63,31 +63,31 @@ import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
-import mikenakis.bytecode.model.oracle.ArrayTypeSignature;
-import mikenakis.bytecode.model.oracle.BooleanSignature;
-import mikenakis.bytecode.model.oracle.ByteSignature;
-import mikenakis.bytecode.model.oracle.CharSignature;
-import mikenakis.bytecode.model.oracle.ClassSignature;
-import mikenakis.bytecode.model.oracle.ClassTypeSignature;
-import mikenakis.bytecode.model.oracle.DoubleSignature;
-import mikenakis.bytecode.model.oracle.FloatSignature;
-import mikenakis.bytecode.model.oracle.IntSignature;
-import mikenakis.bytecode.model.oracle.LongSignature;
-import mikenakis.bytecode.model.oracle.MethodTypeSignature;
-import mikenakis.bytecode.model.oracle.ObjectSignature;
-import mikenakis.bytecode.model.oracle.ReturnType;
-import mikenakis.bytecode.model.oracle.ShortSignature;
-import mikenakis.bytecode.model.oracle.SignatureParser;
-import mikenakis.bytecode.model.oracle.SimpleClassTypeSignature;
-import mikenakis.bytecode.model.oracle.TypeSignature;
-import mikenakis.bytecode.model.oracle.TypeTree;
-import mikenakis.bytecode.model.oracle.TypeVariableSignature;
-import mikenakis.bytecode.model.oracle.VoidDescriptor;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.signature.ArrayTypeSignature;
+import mikenakis.bytecode.model.signature.BooleanSignature;
+import mikenakis.bytecode.model.signature.ByteSignature;
+import mikenakis.bytecode.model.signature.CharSignature;
+import mikenakis.bytecode.model.signature.ClassSignature;
+import mikenakis.bytecode.model.signature.ClassTypeSignature;
+import mikenakis.bytecode.model.signature.DoubleSignature;
+import mikenakis.bytecode.model.signature.FloatSignature;
+import mikenakis.bytecode.model.signature.IntSignature;
+import mikenakis.bytecode.model.signature.LongSignature;
+import mikenakis.bytecode.model.signature.MethodTypeSignature;
+import mikenakis.bytecode.model.signature.ObjectSignature;
+import mikenakis.bytecode.model.signature.ReturnType;
+import mikenakis.bytecode.model.signature.ShortSignature;
+import mikenakis.bytecode.model.signature.SignatureParser;
+import mikenakis.bytecode.model.signature.SimpleClassTypeSignature;
+import mikenakis.bytecode.model.signature.TypeSignature;
+import mikenakis.bytecode.model.signature.TypeTree;
+import mikenakis.bytecode.model.signature.TypeVariableSignature;
+import mikenakis.bytecode.model.signature.VoidDescriptor;
 import mikenakis.kit.Kit;
 
 import java.lang.invoke.CallSite;
@@ -185,7 +185,7 @@ final class ByteCodeInfo
 			addDependencyTypeNameFromClassConstant( classConstant, mutableDependencyNames );
 		for( ByteCodeField byteCodeField : byteCodeType.fields() )
 		{
-			addDependencyTypeNamesFromDescriptorString( byteCodeField.descriptorConstant.value() /* TODO: avoid conversion! */, mutableDependencyNames );
+			addDependencyTypeNamesFromDescriptorString( byteCodeField.descriptorConstant.stringValue(), mutableDependencyNames );
 			for( Attribute attribute : byteCodeField.attributeSet )
 			{
 				switch( attribute.kind.name )
@@ -209,7 +209,7 @@ final class ByteCodeInfo
 						addDependencyTypeNamesFromTypeAnnotationsAttribute( byteCodeType, attribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
 						break;
 					case SignatureAttribute.name:
-						addDependencyTypeNamesFromFieldTypeSignature( attribute.asSignatureAttribute().signatureConstant().value(), mutableDependencyNames );
+						addDependencyTypeNamesFromFieldTypeSignature( attribute.asSignatureAttribute().signatureConstant().stringValue(), mutableDependencyNames );
 						break;
 					case SyntheticAttribute.name:
 						Kit.get( 2 );
@@ -222,7 +222,7 @@ final class ByteCodeInfo
 		}
 		for( ByteCodeMethod byteCodeMethod : byteCodeType.methods() )
 		{
-			addDependencyTypeNamesFromDescriptorString( byteCodeMethod.descriptorConstant.value() /* TODO: avoid conversion! */, mutableDependencyNames );
+			addDependencyTypeNamesFromDescriptorString( byteCodeMethod.descriptorConstant.stringValue(), mutableDependencyNames );
 			for( Attribute attribute : byteCodeMethod.attributeSet )
 			{
 				switch( attribute.kind.name )
@@ -261,7 +261,7 @@ final class ByteCodeInfo
 						addDependencyTypeNamesFromTypeAnnotationsAttribute( byteCodeType, attribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
 						break;
 					case SignatureAttribute.name:
-						addDependencyTypeNamesFromMethodTypeSignatureAttribute( attribute.asSignatureAttribute().signatureConstant().value(), mutableDependencyNames );
+						addDependencyTypeNamesFromMethodTypeSignatureAttribute( attribute.asSignatureAttribute().signatureConstant().stringValue(), mutableDependencyNames );
 						break;
 					case SyntheticAttribute.name:
 						Kit.get( 3 );
@@ -318,7 +318,7 @@ final class ByteCodeInfo
 					addDependencyTypeNamesFromTypeAnnotationsAttribute( byteCodeType, attribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
 					break;
 				case SignatureAttribute.name:
-					addDependencyTypeNamesFromClassTypeSignatureString( attribute.asSignatureAttribute().signatureConstant().value(), mutableDependencyNames );
+					addDependencyTypeNamesFromClassTypeSignatureString( attribute.asSignatureAttribute().signatureConstant().stringValue(), mutableDependencyNames );
 					break;
 				//SourceDebugExtension
 				case SourceFileAttribute.name:
@@ -344,7 +344,7 @@ final class ByteCodeInfo
 		for( BootstrapMethod bootstrapMethod : attribute.bootstrapMethods() )
 		{
 			addDependencyTypeNamesFromConstant( byteCodeType, bootstrapMethod.methodHandleConstant().referenceConstant().typeConstant(), mutableDependencyNames );
-			addDependencyTypeNamesFromConstant( byteCodeType, bootstrapMethod.methodHandleConstant().referenceConstant().nameAndTypeConstant(), mutableDependencyNames );
+			addDependencyTypeNamesFromConstant( byteCodeType, bootstrapMethod.methodHandleConstant().referenceConstant().nameAndDescriptorConstant(), mutableDependencyNames );
 			for( var constant : bootstrapMethod.argumentConstants() )
 				addDependencyTypeNamesFromConstant( byteCodeType, constant, mutableDependencyNames );
 		}
@@ -461,7 +461,7 @@ final class ByteCodeInfo
 	private static void addDependencyTypeNamesFromEnclosingMethodAttribute( ByteCodeType byteCodeType, EnclosingMethodAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		addDependencyTypeNamesFromConstant( byteCodeType, attribute.classConstant(), mutableDependencyNames );
-		attribute.methodNameAndTypeConstant().ifPresent( c -> addDependencyTypeNamesFromConstant( byteCodeType, c, mutableDependencyNames ) );
+		attribute.methodNameAndDescriptorConstant().ifPresent( c -> addDependencyTypeNamesFromConstant( byteCodeType, c, mutableDependencyNames ) );
 	}
 
 	private static void addDependencyTypeNamesFromExceptionsAttribute( ByteCodeType byteCodeType, ExceptionsAttribute attribute, Collection<String> mutableDependencyNames )
@@ -488,7 +488,7 @@ final class ByteCodeInfo
 	private static void addDependencyTypeNamesFromLocalVariableTypeTableAttribute( LocalVariableTypeTableAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( LocalVariableType localVariableType : attribute.localVariableTypes() )
-			addDependencyTypeNamesFromFieldTypeSignature( localVariableType.signatureConstant.value() /* TODO: avoid conversion to string! */, mutableDependencyNames );
+			addDependencyTypeNamesFromFieldTypeSignature( localVariableType.signatureConstant.stringValue(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromAnnotationsAttribute( ByteCodeType byteCodeType, AnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
@@ -530,7 +530,7 @@ final class ByteCodeInfo
 				addDependencyTypeNamesFromConstant( byteCodeType, annotationValue.asEnumAnnotationValue().typeNameConstant(), mutableDependencyNames );
 				break;
 			case 'c':
-				addDependencyTypeNamesFromConstant( byteCodeType, annotationValue.asClassAnnotationValue().utf8Constant(), mutableDependencyNames );
+				addDependencyTypeNamesFromConstant( byteCodeType, annotationValue.asClassAnnotationValue().nameConstant(), mutableDependencyNames );
 				break;
 			case '@':
 				addDependencyTypeNamesFromAnnotation( byteCodeType, annotationValue.asAnnotationAnnotationValue().annotation(), mutableDependencyNames );
@@ -546,7 +546,7 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromAnnotation( ByteCodeType byteCodeType, ByteCodeAnnotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromClassTypeSignatureString( byteCodeAnnotation.typeConstant.value(), mutableDependencyNames );
+		addDependencyTypeNamesFromClassTypeSignatureString( byteCodeAnnotation.typeConstant.stringValue(), mutableDependencyNames );
 		for( AnnotationParameter annotationParameter : byteCodeAnnotation.annotationParameters() )
 			addDependencyTypeNamesFromAnnotationValue( byteCodeType, annotationParameter.annotationValue(), mutableDependencyNames );
 	}
@@ -671,7 +671,7 @@ final class ByteCodeInfo
 	{
 		switch( constant.tag )
 		{
-			case Utf8Constant.TAG:
+			case Mutf8Constant.TAG:
 			case IntegerConstant.TAG:
 			case FloatConstant.TAG:
 			case LongConstant.TAG:
@@ -686,10 +686,10 @@ final class ByteCodeInfo
 			case InterfaceMethodReferenceConstant.TAG:
 				addDependencyTypeNamesFromReferenceConstant( constant.asReferenceConstant(), mutableDependencyNames );
 				break;
-			case NameAndTypeConstant.TAG:
+			case NameAndDescriptorConstant.TAG:
 			{
-				NameAndTypeConstant nameAndTypeConstant = constant.asNameAndTypeConstant();
-				String descriptor = nameAndTypeConstant.descriptorConstant().value();
+				NameAndDescriptorConstant nameAndDescriptorConstant = constant.asNameAndDescriptorConstant();
+				String descriptor = nameAndDescriptorConstant.descriptorConstant().stringValue();
 				addDependencyTypeNamesFromDescriptorString( descriptor, mutableDependencyNames );
 				break;
 			}
@@ -702,7 +702,7 @@ final class ByteCodeInfo
 			case MethodTypeConstant.TAG:
 			{
 				MethodTypeConstant methodTypeConstant = constant.asMethodTypeConstant();
-				String descriptor = methodTypeConstant.descriptorConstant.value();
+				String descriptor = methodTypeConstant.descriptorConstant.stringValue();
 				addDependencyTypeNamesFromDescriptorString( descriptor, mutableDependencyNames );
 				break;
 			}
@@ -723,7 +723,7 @@ final class ByteCodeInfo
 	private static void addDependencyTypeNamesFromReferenceConstant( ReferenceConstant referenceConstant, Collection<String> mutableDependencyNames )
 	{
 		addDependencyTypeNameFromClassConstant( referenceConstant.typeConstant(), mutableDependencyNames );
-		addDependencyTypeNamesFromDescriptorString( referenceConstant.nameAndTypeConstant().descriptorConstant().value(), mutableDependencyNames );
+		addDependencyTypeNamesFromDescriptorString( referenceConstant.nameAndDescriptorConstant().descriptorConstant().stringValue(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromInvokeDynamicConstant( ByteCodeType byteCodeType, InvokeDynamicConstant invokeDynamicConstant, Collection<String> mutableDependencyNames )
@@ -732,7 +732,7 @@ final class ByteCodeInfo
 		addDependencyTypeNamesFromReferenceConstant( bootstrapMethod.methodHandleConstant().referenceConstant(), mutableDependencyNames );
 		for( Constant argumentConstant : bootstrapMethod.argumentConstants() )
 			addDependencyTypeNamesFromConstant( byteCodeType, argumentConstant, mutableDependencyNames );
-		addDependencyTypeNamesFromDescriptorString( invokeDynamicConstant.nameAndTypeConstant().descriptorConstant().value(), mutableDependencyNames );
+		addDependencyTypeNamesFromDescriptorString( invokeDynamicConstant.nameAndDescriptorConstant().descriptorConstant().stringValue(), mutableDependencyNames );
 	}
 
 	// TODO: check whether it is necessary to include types from descriptor strings.

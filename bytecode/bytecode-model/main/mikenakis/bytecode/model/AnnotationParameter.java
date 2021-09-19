@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -10,21 +10,21 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationParameter // "element_value" in the jvms
 {
-	public static AnnotationParameter of( Utf8Constant nameConstant, AnnotationValue annotationValue )
+	public static AnnotationParameter of( Mutf8Constant nameConstant, AnnotationValue annotationValue )
 	{
 		return new AnnotationParameter( nameConstant, annotationValue );
 	}
 
-	private final Utf8Constant nameConstant;
+	private final Mutf8Constant nameConstant;
 	private final AnnotationValue annotationValue;
 
-	private AnnotationParameter( Utf8Constant nameConstant, AnnotationValue annotationValue )
+	private AnnotationParameter( Mutf8Constant nameConstant, AnnotationValue annotationValue )
 	{
 		this.nameConstant = nameConstant;
 		this.annotationValue = annotationValue;
 	}
 
-	public Utf8Constant nameConstant() { return nameConstant; }
+	public Mutf8Constant nameConstant() { return nameConstant; }
 	public AnnotationValue annotationValue() { return annotationValue; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

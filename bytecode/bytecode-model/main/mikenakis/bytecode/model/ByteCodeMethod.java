@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Map;
@@ -32,22 +32,29 @@ public final class ByteCodeMethod extends ByteCodeMember
 		Map.entry( Modifier.Synthetic    /**/, 0x1000 )  // ACC_SYNTHETIC    = 0x1000
 	);
 
-	public static ByteCodeMethod of( FlagSet<Modifier> modifierSet, Utf8Constant nameConstant, Utf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeMethod of( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		return new ByteCodeMethod( modifierSet, nameConstant, descriptorConstant, attributeSet );
 	}
 
-	private final FlagSet<Modifier> modifierSet;
+	public final FlagSet<Modifier> modifierSet;
+	public final Mutf8Constant descriptorConstant;
 
-	private ByteCodeMethod( FlagSet<Modifier> modifierSet, Utf8Constant nameConstant, Utf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeMethod( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, descriptorConstant, attributeSet );
+		super( nameConstant, attributeSet );
 		this.modifierSet = modifierSet;
+		this.descriptorConstant = descriptorConstant;
 	}
 
-	@Override public FlagSet<?> modifierSet()
+	@Deprecated @Override public FlagSet<?> modifierSet()
 	{
 		return modifierSet;
+	}
+
+	@Deprecated @Override public Mutf8Constant descriptorConstant()
+	{
+		return descriptorConstant;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

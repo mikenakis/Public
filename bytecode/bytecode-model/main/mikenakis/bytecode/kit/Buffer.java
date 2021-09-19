@@ -53,7 +53,7 @@ public class Buffer
 		@Override public String toString()
 		{
 			var builder = new StringBuilder();
-			BufferReader bufferReader = new BufferReader( Buffer.this );
+			BufferReader bufferReader = BufferReader.of( Buffer.this );
 			while( !bufferReader.isAtEnd() )
 			{
 				int value = bufferReader.readUnsignedByte();
@@ -74,9 +74,11 @@ public class Buffer
 		}
 	};
 
-	final byte[] bytes;
-	final int offset;
-	final int length;
+	private final byte[] bytes;
+	private final int offset;
+	private final int length;
+	private boolean isHashCodeComputed;
+	private int hashCode;
 
 	Buffer( byte[] bytes, int offset, int length )
 	{
@@ -133,12 +135,20 @@ public class Buffer
 	{
 		if( length != other.length )
 			return false;
+		if( isHashCodeComputed && other.isHashCodeComputed )
+			if( hashCode != other.hashCode )
+				return false;
 		return Arrays.compare( bytes, offset, offset + length, other.bytes, other.offset, other.offset + other.length ) == 0;
 	}
 
 	@Override public int hashCode()
 	{
-		return Objects.hash( hashCode( bytes, offset, length ), length );
+		if( !isHashCodeComputed )
+		{
+			hashCode = Objects.hash( hashCode( bytes, offset, length ), length );
+			isHashCodeComputed = true;
+		}
+		return hashCode;
 	}
 
 	private static int hashCode( byte[] bytes, int offset, int length )
@@ -150,5 +160,10 @@ public class Buffer
 			result = 31 * result + element;
 		}
 		return result;
+	}
+
+	public BufferReader newReader()
+	{
+		return BufferReader.of( bytes, offset, length );
 	}
 }

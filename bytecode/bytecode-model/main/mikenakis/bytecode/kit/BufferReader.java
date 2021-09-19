@@ -7,17 +7,27 @@ package mikenakis.bytecode.kit;
  */
 public class BufferReader
 {
+	public static BufferReader of( Buffer buffer )
+	{
+		return buffer.newReader();
+	}
+
+	public static BufferReader of( byte[] bytes, int offset, int length )
+	{
+		return new BufferReader( bytes, offset, length );
+	}
+
 	private final byte[] bytes;
 	private final int offset;
 	private int position;
 	private final int endPosition;
 
-	public BufferReader( Buffer buffer )
+	private BufferReader( byte[] bytes, int offset, int length )
 	{
-		bytes = buffer.bytes;
-		offset = buffer.offset;
+		this.bytes = bytes;
+		this.offset = offset;
 		position = offset;
-		endPosition = offset + buffer.length;
+		endPosition = offset + length;
 	}
 
 	public int getPosition()
@@ -35,27 +45,6 @@ public class BufferReader
 	{
 		assert position + count <= endPosition : new ReadPastEndException();
 		position += count;
-	}
-
-	public int readUnsignedByteOrShort( boolean wide )
-	{
-		if( wide )
-			return readUnsignedShort();
-		return readUnsignedByte();
-	}
-
-	public int readSignedByteOrShort( boolean wide )
-	{
-		if( wide )
-			return readSignedShort();
-		return readSignedByte();
-	}
-
-	public int readSignedShortOrInt( boolean wide )
-	{
-		if( wide )
-			return readInt();
-		return readSignedShort();
 	}
 
 	public int readUnsignedByte()

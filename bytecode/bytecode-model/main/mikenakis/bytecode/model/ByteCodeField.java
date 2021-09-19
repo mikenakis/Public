@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Map;
@@ -14,10 +14,10 @@ public final class ByteCodeField extends ByteCodeMember
 {
 	public static ByteCodeField of( FlagSet<Modifier> modifierSet, String name, String descriptor )
 	{
-		return of( modifierSet, Utf8Constant.of( name ), Utf8Constant.of( descriptor ), AttributeSet.of() );
+		return of( modifierSet, Mutf8Constant.of( name ), Mutf8Constant.of( descriptor ), AttributeSet.of() );
 	}
 
-	public static ByteCodeField of( FlagSet<Modifier> modifierSet, Utf8Constant nameConstant, Utf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeField of( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		return new ByteCodeField( modifierSet, nameConstant, descriptorConstant, attributeSet );
 	}
@@ -39,16 +39,23 @@ public final class ByteCodeField extends ByteCodeMember
 		Map.entry( Modifier.Enum      /**/, 0x4000 ) ); // ACC_ENUM      = 0x4000;
 
 	private final FlagSet<Modifier> modifierSet;
+	public final Mutf8Constant descriptorConstant;
 
-	private ByteCodeField( FlagSet<Modifier> modifierSet, Utf8Constant nameConstant, Utf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeField( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, descriptorConstant, attributeSet );
+		super( nameConstant, attributeSet );
 		this.modifierSet = modifierSet;
+		this.descriptorConstant = descriptorConstant;
 	}
 
-	@Override public FlagSet<?> modifierSet()
+	@Deprecated @Override public FlagSet<?> modifierSet()
 	{
 		return modifierSet;
+	}
+
+	@Deprecated @Override public Mutf8Constant descriptorConstant()
+	{
+		return descriptorConstant;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

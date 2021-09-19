@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.List;
@@ -12,15 +12,15 @@ import java.util.List;
  */
 public final class ByteCodeAnnotation
 {
-	public static ByteCodeAnnotation of( Utf8Constant typeConstant, List<AnnotationParameter> annotationParameters )
+	public static ByteCodeAnnotation of( Mutf8Constant typeConstant, List<AnnotationParameter> annotationParameters )
 	{
 		return new ByteCodeAnnotation( typeConstant, annotationParameters );
 	}
 
-	public final Utf8Constant typeConstant;
+	public final Mutf8Constant typeConstant;
 	private final List<AnnotationParameter> annotationParameters;
 
-	private ByteCodeAnnotation( Utf8Constant typeConstant, List<AnnotationParameter> annotationParameters )
+	private ByteCodeAnnotation( Mutf8Constant typeConstant, List<AnnotationParameter> annotationParameters )
 	{
 		this.typeConstant = typeConstant;
 		this.annotationParameters = annotationParameters;

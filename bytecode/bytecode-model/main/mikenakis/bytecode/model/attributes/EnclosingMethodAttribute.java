@@ -3,7 +3,7 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -19,26 +19,26 @@ import java.util.Optional;
  */
 public final class EnclosingMethodAttribute extends Attribute
 {
-	public static EnclosingMethodAttribute of( ClassConstant classConstant, Optional<NameAndTypeConstant> methodNameAndTypeConstant )
+	public static EnclosingMethodAttribute of( ClassConstant classConstant, Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant )
 	{
-		return new EnclosingMethodAttribute( classConstant, methodNameAndTypeConstant );
+		return new EnclosingMethodAttribute( classConstant, methodNameAndDescriptorConstant );
 	}
 
 	public static final String name = "EnclosingMethod";
 	public static final Kind kind = new Kind( name );
 
 	private final ClassConstant classConstant;
-	private final Optional<NameAndTypeConstant> methodNameAndTypeConstant;
+	private final Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant;
 
-	private EnclosingMethodAttribute( ClassConstant classConstant, Optional<NameAndTypeConstant> methodNameAndTypeConstant )
+	private EnclosingMethodAttribute( ClassConstant classConstant, Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant )
 	{
 		super( kind );
 		this.classConstant = classConstant;
-		this.methodNameAndTypeConstant = methodNameAndTypeConstant;
+		this.methodNameAndDescriptorConstant = methodNameAndDescriptorConstant;
 	}
 
 	public ClassConstant classConstant() { return classConstant; }
-	public Optional<NameAndTypeConstant> methodNameAndTypeConstant() { return methodNameAndTypeConstant; }
+	public Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant() { return methodNameAndDescriptorConstant; }
 
 	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute()
 	{
@@ -47,6 +47,6 @@ public final class EnclosingMethodAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "class = " + classConstant + ", methodNameAndType = { " + methodNameAndTypeConstant + " }";
+		return "class = " + classConstant + ", methodNameAndDescriptor = { " + methodNameAndDescriptorConstant + " }";
 	}
 }

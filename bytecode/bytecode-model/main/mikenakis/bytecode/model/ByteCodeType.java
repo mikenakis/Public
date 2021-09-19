@@ -135,9 +135,9 @@ public final class ByteCodeType
 
 	public Optional<String> tryGetSourceFileName()
 	{
-		return attributeSet.tryGetAttributeByName( SourceFileAttribute.kind.utf8Name ) //
+		return attributeSet.tryGetAttributeByName( SourceFileAttribute.kind.mutf8Name ) //
 			.map( a -> a.asSourceFileAttribute() ) //
-			.map( a -> a.valueConstant().value() );
+			.map( a -> a.valueConstant().stringValue() );
 	}
 
 	public boolean isInterface()
@@ -152,7 +152,7 @@ public final class ByteCodeType
 
 	public BootstrapMethodsAttribute createOrGetBootstrapMethodsAttribute()
 	{
-		return attributeSet.tryGetAttributeByName( BootstrapMethodsAttribute.kind.utf8Name ) //
+		return attributeSet.tryGetAttributeByName( BootstrapMethodsAttribute.kind.mutf8Name ) //
 			.map( a -> a.asBootstrapMethodsAttribute() ) //
 			.orElseGet( () ->
 			{
@@ -218,9 +218,9 @@ public final class ByteCodeType
 
 	private static boolean match( ByteCodeMethod method, String name, String descriptor )
 	{
-		if( !method.nameConstant.value().equals( name ) )
+		if( !method.nameConstant.stringValue().equals( name ) )
 			return false;
-		if( !method.descriptorConstant.value().equals( descriptor ) )
+		if( !method.descriptorConstant.stringValue().equals( descriptor ) )
 			return false;
 		return true;
 	}

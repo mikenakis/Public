@@ -7,17 +7,16 @@ package mikenakis.bytecode.model.constants;
  */
 public final class FieldReferenceConstant extends ReferenceConstant
 {
-	public static FieldReferenceConstant of( ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	public static FieldReferenceConstant of( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		return new FieldReferenceConstant( typeConstant, nameAndTypeConstant );
+		return new FieldReferenceConstant( typeConstant, nameAndDescriptorConstant );
 	}
 
 	public static final int TAG = 9; // JVMS::CONSTANT_Fieldref_info
-	public static final String tagName = "FieldReference";
 
-	private FieldReferenceConstant( ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	private FieldReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( TAG, typeConstant, nameAndTypeConstant );
+		super( TAG, typeConstant, nameAndDescriptorConstant );
 	}
 
 	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant()

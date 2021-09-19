@@ -17,7 +17,6 @@ public final class IntegerConstant extends ValueConstant<Integer>
 	}
 
 	public static final int TAG = 3; // JVMS::CONSTANT_Integer_info
-	public static final String tagName = "Integer";
 
 	public final int value;
 
@@ -39,7 +38,7 @@ public final class IntegerConstant extends ValueConstant<Integer>
 		return false;
 	}
 
-	@Override public Integer value()
+	@Deprecated @Override public Integer value()
 	{
 		return value;
 	}

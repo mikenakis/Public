@@ -111,11 +111,11 @@ import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.Kit;
 
@@ -249,7 +249,7 @@ public final class ByteCodePrinter
 		sourceLines = sourcePathName.map( p -> Kit.unchecked( () -> Files.readAllLines( p ) ) );
 		for( ByteCodeMethod byteCodeMethod : byteCodeType.methods() )
 		{
-			Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetAttributeByName( CodeAttribute.kind.utf8Name ) //
+			Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetAttributeByName( CodeAttribute.kind.mutf8Name ) //
 				.map( a -> a.asCodeAttribute() );
 			if( codeAttribute.isEmpty() )
 				continue;
@@ -270,13 +270,13 @@ public final class ByteCodePrinter
 		return data.label;
 	}
 
-	private static final OmniSwitch3<Void,Utf8Constant,Attribute,Consumer<Optional<Instruction>>> updateCodeAttributeLabelsSwitch = //
-		OmniSwitch3.<Void,Utf8Constant,Attribute,Consumer<Optional<Instruction>>>newBuilder() //
-			.with( BootstrapMethodsAttribute.kind.utf8Name, ByteCodePrinter::updateLineNumberTableAttributeLabels )              //
-			.with( LocalVariableTableAttribute.kind.utf8Name, ByteCodePrinter::updateLocalVariableTableAttributeLabels )         //
-			.with( LocalVariableTypeTableAttribute.kind.utf8Name, ByteCodePrinter::updateLocalVariableTypeTableAttributeLabels ) //
-			.with( StackMapTableAttribute.kind.utf8Name, ByteCodePrinter::updateStackMapTableAttributeAttributeLabels )          //
-			.with( LineNumberTableAttribute.kind.utf8Name, ByteCodePrinter::updateLineNumberTableAttributeLabels )               //
+	private static final OmniSwitch3<Void,Mutf8Constant,Attribute,Consumer<Optional<Instruction>>> updateCodeAttributeLabelsSwitch = //
+		OmniSwitch3.<Void,Mutf8Constant,Attribute,Consumer<Optional<Instruction>>>newBuilder() //
+			.with( BootstrapMethodsAttribute.kind.mutf8Name, ByteCodePrinter::updateLineNumberTableAttributeLabels )              //
+			.with( LocalVariableTableAttribute.kind.mutf8Name, ByteCodePrinter::updateLocalVariableTableAttributeLabels )         //
+			.with( LocalVariableTypeTableAttribute.kind.mutf8Name, ByteCodePrinter::updateLocalVariableTypeTableAttributeLabels ) //
+			.with( StackMapTableAttribute.kind.mutf8Name, ByteCodePrinter::updateStackMapTableAttributeAttributeLabels )          //
+			.with( LineNumberTableAttribute.kind.mutf8Name, ByteCodePrinter::updateLineNumberTableAttributeLabels )               //
 			.withDefault( ByteCodePrinter::updateUnknownAttributeLabels )                                                        //
 			.build();
 
@@ -370,7 +370,7 @@ public final class ByteCodePrinter
 		}
 		for( Attribute attribute : codeAttribute.attributeSet() )
 		{
-			updateCodeAttributeLabelsSwitch.on( attribute.kind.utf8Name, attribute, targetInstructionConsumer );
+			updateCodeAttributeLabelsSwitch.on( attribute.kind.mutf8Name, attribute, targetInstructionConsumer );
 		}
 
 		int targetInstructionLabelNumberSeed = 1;
@@ -392,9 +392,9 @@ public final class ByteCodePrinter
 		}
 	}
 
-	private static Void updateLocalVariableTableAttributeLabels( Utf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
+	private static Void updateLocalVariableTableAttributeLabels( Mutf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
 	{
-		assert attributeNameConstant == LocalVariableTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == LocalVariableTableAttribute.kind.mutf8Name;
 		LocalVariableTableAttribute localVariableTableAttribute = attribute.asLocalVariableTableAttribute();
 		for( LocalVariable localVariable : localVariableTableAttribute.localVariables() )
 		{
@@ -404,18 +404,18 @@ public final class ByteCodePrinter
 		return null;
 	}
 
-	private static Void updateLocalVariableTypeTableAttributeLabels( Utf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
+	private static Void updateLocalVariableTypeTableAttributeLabels( Mutf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
 	{
-		assert attributeNameConstant == LocalVariableTypeTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == LocalVariableTypeTableAttribute.kind.mutf8Name;
 		LocalVariableTypeTableAttribute localVariableTypeTableAttribute = attribute.asLocalVariableTypeTableAttribute();
 		for( LocalVariableType entry : localVariableTypeTableAttribute.localVariableTypes() )
 			targetInstructionConsumer.accept( entry.startInstructionReference.targetInstruction() );
 		return null;
 	}
 
-	private static Void updateStackMapTableAttributeAttributeLabels( Utf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
+	private static Void updateStackMapTableAttributeAttributeLabels( Mutf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
 	{
-		assert attributeNameConstant == StackMapTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == StackMapTableAttribute.kind.mutf8Name;
 		StackMapTableAttribute stackMapTableAttribute = attribute.asStackMapTableAttribute();
 		for( StackMapFrame frame : stackMapTableAttribute.frames() )
 		{
@@ -440,13 +440,13 @@ public final class ByteCodePrinter
 		return null;
 	}
 
-	private static Void updateLineNumberTableAttributeLabels( Utf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
+	private static Void updateLineNumberTableAttributeLabels( Mutf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
 	{
-		assert attributeNameConstant == LineNumberTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == LineNumberTableAttribute.kind.mutf8Name;
 		return null;
 	}
 
-	private static Void updateUnknownAttributeLabels( Utf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
+	private static Void updateUnknownAttributeLabels( Mutf8Constant attributeNameConstant, Attribute attribute, Consumer<Optional<Instruction>> targetInstructionConsumer )
 	{
 		return null;
 	}
@@ -469,7 +469,7 @@ public final class ByteCodePrinter
 	private static Map<Instruction,Integer> getLineNumberFromInstructionMap( CodeAttribute codeAttribute )
 	{
 		Map<Instruction,Integer> lineNumberFromInstructionMap = new HashMap<>();
-		codeAttribute.attributeSet().tryGetAttributeByName( LineNumberTableAttribute.kind.utf8Name ) //
+		codeAttribute.attributeSet().tryGetAttributeByName( LineNumberTableAttribute.kind.mutf8Name ) //
 			.map( a -> a.asLineNumberTableAttribute() ) //
 			.ifPresent( lineNumberTableAttribute -> //
 			{
@@ -484,24 +484,24 @@ public final class ByteCodePrinter
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private static void appendNameAndDescriptor( StringBuilder builder, Utf8Constant nameConstant, Utf8Constant descriptorConstant )
+	private static void appendNameAndDescriptor( StringBuilder builder, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant )
 	{
-		Descriptor descriptor = Descriptor.from( descriptorConstant.value() );
-		appendNameAndDescriptor( descriptor, builder, nameConstant.value() );
+		Descriptor descriptor = Descriptor.from( descriptorConstant.stringValue() );
+		appendNameAndDescriptor( descriptor, builder, nameConstant.stringValue() );
 	}
 
-	private static void appendNameAndTypeAndDescriptor( StringBuilder builder, Utf8Constant nameConstant, Utf8Constant descriptorConstant, ClassConstant typeConstant )
+	private static void appendNameAndTypeAndDescriptor( StringBuilder builder, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, ClassConstant typeConstant )
 	{
-		Descriptor descriptor = Descriptor.from( descriptorConstant.value() );
-		appendNameAndTypeAndDescriptor( descriptor, builder, nameConstant.value(), Optional.of( typeConstant.getClassName() ) );
+		Descriptor descriptor = Descriptor.from( descriptorConstant.stringValue() );
+		appendNameAndTypeAndDescriptor( descriptor, builder, nameConstant.stringValue(), Optional.of( typeConstant.getClassName() ) );
 	}
 
-	private static void appendNameAndSignature( StringBuilder builder, Utf8Constant nameConstant, Utf8Constant signatureConstant )
+	private static void appendNameAndSignature( StringBuilder builder, Mutf8Constant nameConstant, Mutf8Constant signatureConstant )
 	{
 		//TODO
-		builder.append( nameConstant.value() );
+		builder.append( nameConstant.stringValue() );
 		builder.append( ' ' );
-		builder.append( signatureConstant.value() );
+		builder.append( signatureConstant.stringValue() );
 	}
 
 	private static void appendNameAndDescriptor( Descriptor descriptor, StringBuilder builder, String name )
@@ -581,20 +581,20 @@ public final class ByteCodePrinter
 
 	private static void enumAnnotationValueToStringBuilder( EnumAnnotationValue enumAnnotationValue, StringBuilder builder )
 	{
-		builder.append( "type = " ).append( enumAnnotationValue.typeNameConstant().value() );
-		builder.append( ", value = " ).append( enumAnnotationValue.valueNameConstant().value() );
+		builder.append( "type = " ).append( enumAnnotationValue.typeNameConstant().stringValue() );
+		builder.append( ", value = " ).append( enumAnnotationValue.valueNameConstant().stringValue() );
 	}
 
 	private static void classAnnotationValueToStringBuilder( ClassAnnotationValue classAnnotationValue, StringBuilder builder )
 	{
-		builder.append( "class = " ).append( classAnnotationValue.utf8Constant().value() );
+		builder.append( "class = " ).append( classAnnotationValue.nameConstant().stringValue() );
 	}
 
 	private static void annotationAnnotationValueToStringBuilder( AnnotationAnnotationValue annotationAnnotationValue, StringBuilder builder )
 	{
 		builder.append( "annotation = { " );
 		ByteCodeAnnotation annotation = annotationAnnotationValue.annotation();
-		builder.append( "type = " ).append( annotation.typeConstant.value() );
+		builder.append( "type = " ).append( annotation.typeConstant.stringValue() );
 		builder.append( ", " ).append( annotation.annotationParameters().size() ).append( " elements" );
 		builder.append( " }" );
 	}
@@ -608,8 +608,8 @@ public final class ByteCodePrinter
 	{
 		switch( constant.tag )
 		{
-			case Utf8Constant.TAG:
-				utf8ConstantToStringBuilder( constant.asUtf8Constant(), builder );
+			case Mutf8Constant.TAG:
+				mutf8ConstantToStringBuilder( constant.asMutf8Constant(), builder );
 				break;
 			case IntegerConstant.TAG:
 				integerConstantToStringBuilder( constant.asIntegerConstant(), builder );
@@ -638,8 +638,8 @@ public final class ByteCodePrinter
 			case InterfaceMethodReferenceConstant.TAG:
 				referenceConstantToStringBuilder( constant.asInterfaceMethodReferenceConstant(), builder );
 				break;
-			case NameAndTypeConstant.TAG:
-				nameAndTypeConstantToStringBuilder( constant.asNameAndTypeConstant(), builder );
+			case NameAndDescriptorConstant.TAG:
+				nameAndDescriptorConstantToStringBuilder( constant.asNameAndDescriptorConstant(), builder );
 				break;
 			case MethodHandleConstant.TAG:
 				methodHandleConstantToStringBuilder( constant.asMethodHandleConstant(), builder );
@@ -655,9 +655,9 @@ public final class ByteCodePrinter
 		}
 	}
 
-	private static void utf8ConstantToStringBuilder( Utf8Constant utf8Constant, StringBuilder builder )
+	private static void mutf8ConstantToStringBuilder( Mutf8Constant mutf8Constant, StringBuilder builder )
 	{
-		Kit.stringBuilder.appendEscapedForJava( builder, utf8Constant.value(), '"' );
+		Kit.stringBuilder.appendEscapedForJava( builder, mutf8Constant.stringValue(), '"' );
 	}
 
 	private static void integerConstantToStringBuilder( IntegerConstant integerConstant, StringBuilder builder )
@@ -687,28 +687,28 @@ public final class ByteCodePrinter
 
 	private static void stringConstantToStringBuilder( StringConstant stringConstant, StringBuilder builder )
 	{
-		utf8ConstantToStringBuilder( stringConstant.valueUtf8Constant(), builder );
+		mutf8ConstantToStringBuilder( stringConstant.valueConstant(), builder );
 	}
 
 	private static void referenceConstantToStringBuilder( ReferenceConstant referenceConstant, StringBuilder builder )
 	{
 		builder.append( "type = " );
 		builder.append( referenceConstant.typeConstant().getClassName() );
-		builder.append( ", nameAndType = " );
-		NameAndTypeConstant nameAndTypeConstant = referenceConstant.nameAndTypeConstant();
+		builder.append( ", nameAndDescriptor = " );
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant();
 		builder.append( "name = " );
-		builder.append( nameAndTypeConstant.nameConstant() );
+		builder.append( nameAndDescriptorConstant.nameConstant() );
 		builder.append( ", descriptor = " );
-		builder.append( nameAndTypeConstant.descriptorConstant() );
+		builder.append( nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( ' ' );
 	}
 
-	private static void nameAndTypeConstantToStringBuilder( NameAndTypeConstant nameAndTypeConstant, StringBuilder builder )
+	private static void nameAndDescriptorConstantToStringBuilder( NameAndDescriptorConstant nameAndDescriptorConstant, StringBuilder builder )
 	{
 		builder.append( "name = " );
-		builder.append( nameAndTypeConstant.nameConstant() );
+		builder.append( nameAndDescriptorConstant.nameConstant() );
 		builder.append( ", descriptor = " );
-		builder.append( nameAndTypeConstant.descriptorConstant() );
+		builder.append( nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( ' ' );
 	}
 
@@ -718,28 +718,28 @@ public final class ByteCodePrinter
 		ReferenceConstant referenceConstant = methodHandleConstant.referenceConstant();
 		builder.append( " type = " );
 		builder.append( referenceConstant.typeConstant().getClassName() );
-		builder.append( ", nameAndType = " );
-		NameAndTypeConstant nameAndTypeConstant = referenceConstant.nameAndTypeConstant();
+		builder.append( ", nameAndDescriptor = " );
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant();
 		builder.append( "name = " );
-		builder.append( nameAndTypeConstant.nameConstant() );
+		builder.append( nameAndDescriptorConstant.nameConstant() );
 		builder.append( ", descriptor = " );
-		builder.append( nameAndTypeConstant.descriptorConstant() );
+		builder.append( nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( ' ' );
 	}
 
 	private static void methodTypeConstantToStringBuilder( MethodTypeConstant methodTypeConstant, StringBuilder builder )
 	{
 		builder.append( "descriptor = " );
-		Kit.stringBuilder.appendEscapedForJava( builder, methodTypeConstant.descriptorConstant.value(), '"' );
+		Kit.stringBuilder.appendEscapedForJava( builder, methodTypeConstant.descriptorConstant.stringValue(), '"' );
 	}
 
 	private static void invokeDynamicConstantToStringBuilder( InvokeDynamicConstant invokeDynamicConstant, StringBuilder builder )
 	{
 		builder.append( "bootstrapMethod " ).append( invokeDynamicConstant.bootstrapMethodIndex() );
 		builder.append( " name = " );
-		builder.append( invokeDynamicConstant.nameAndTypeConstant().nameConstant() );
+		builder.append( invokeDynamicConstant.nameAndDescriptorConstant().nameConstant() );
 		builder.append( ", descriptor = " );
-		builder.append( invokeDynamicConstant.nameAndTypeConstant().descriptorConstant() );
+		builder.append( invokeDynamicConstant.nameAndDescriptorConstant().descriptorConstant() );
 		builder.append( ' ' );
 	}
 
@@ -862,7 +862,7 @@ public final class ByteCodePrinter
 	private static void summarizeByteCodeAnnotation( ByteCodeAnnotation byteCodeAnnotation, StringBuilder builder )
 	{
 		builder.append( "type = " );
-		builder.append( ByteCodeHelpers.getJavaTypeNameFromDescriptorTypeName( byteCodeAnnotation.typeConstant.value() ) );
+		builder.append( ByteCodeHelpers.getJavaTypeNameFromDescriptorTypeName( byteCodeAnnotation.typeConstant.stringValue() ) );
 		builder.append( ", " ).append( byteCodeAnnotation.annotationParameters().size() ).append( " parameters" );
 	}
 
@@ -872,13 +872,35 @@ public final class ByteCodePrinter
 		builder.append( " accessFlags = " );
 		flagsToStringBuilder( byteCodeMember.modifierSet(), builder );
 		builder.append( ", name = " ).append( byteCodeMember.nameConstant );
-		builder.append( ", descriptor = " ).append( byteCodeMember.descriptorConstant );
+		builder.append( ", descriptor = " ).append( byteCodeMember.descriptorConstant() );
 		builder.append( " (" );
-		appendNameAndDescriptor( builder, byteCodeMember.nameConstant, byteCodeMember.descriptorConstant );
+		appendNameAndDescriptor( builder, byteCodeMember.nameConstant, byteCodeMember.descriptorConstant() );
 		builder.append( ")" );
 		String header = builder.toString();
 		AttributeSet attributeSet = byteCodeMember.attributeSet;
 		return Twig.of( header, attributeSet.size() == 0 ? List.of() : List.of( twigFromAttributeSet( attributeSet ) ) );
+	}
+
+	private static String getConstantNameByTag( int tag )
+	{
+		return switch( tag )
+			{
+				case Mutf8Constant.TAG -> "Mutf8";
+				case IntegerConstant.TAG -> "Integer";
+				case FloatConstant.TAG -> "Float";
+				case LongConstant.TAG -> "Long";
+				case DoubleConstant.TAG -> "Double";
+				case ClassConstant.TAG -> "Class";
+				case StringConstant.TAG -> "String";
+				case FieldReferenceConstant.TAG -> "FieldReference";
+				case PlainMethodReferenceConstant.TAG -> "PlainMethodReference";
+				case InterfaceMethodReferenceConstant.TAG -> "InterfaceMethodReference";
+				case NameAndDescriptorConstant.TAG -> "NameAndDescriptor";
+				case MethodHandleConstant.TAG -> "MethodHandle";
+				case MethodTypeConstant.TAG -> "MethodType";
+				case InvokeDynamicConstant.TAG -> "InvokeDynamic";
+				default -> throw new UnknownConstantException( tag );
+			};
 	}
 
 	private Twig twigFromByteCodeType( ByteCodeType byteCodeType, Optional<Path> sourcePath )
@@ -889,11 +911,11 @@ public final class ByteCodePrinter
 		Collection<ClassConstant> interfaces = byteCodeType.interfaceClassConstants();
 		children.add( Twig.of( "interfaces (" + interfaces.size() + " entries)", //
 			interfaces.stream().sorted( Comparator.comparingInt( Constant::hashCode ) ) //
-				.map( constant -> twigFromConstant( renderingContext, Constant.getTagNameByTag( constant.tag ), constant ) ).toList() ) );
+				.map( constant -> twigFromConstant( renderingContext, getConstantNameByTag( constant.tag ), constant ) ).toList() ) );
 		Collection<Constant> extraConstants = byteCodeType.extraConstants();
 		children.add( Twig.of( "extra constants (" + extraConstants.size() + " entries)", //
 			extraConstants.stream().sorted( Comparator.comparingInt( Constant::hashCode ) ) //
-				.map( constant -> twigFromConstant( renderingContext, Constant.getTagNameByTag( constant.tag ), constant ) ).toList() ) );
+				.map( constant -> twigFromConstant( renderingContext, getConstantNameByTag( constant.tag ), constant ) ).toList() ) );
 		Collection<ByteCodeField> fields = byteCodeType.fields();
 		children.add( Twig.of( "fields (" + fields.size() + " entries)", //
 			fields.stream().map( field -> twigFromByteCodeMember( field ) ).toList() ) );
@@ -957,7 +979,7 @@ public final class ByteCodePrinter
 		flagsToStringBuilder( innerClass.modifierSet(), builder );
 		builder.append( ", innerClass=" );
 		summarizeClassConstant( innerClass.innerClassConstant(), builder );
-		Optional<Utf8Constant> innerNameConstant = innerClass.innerNameConstant();
+		Optional<Mutf8Constant> innerNameConstant = innerClass.innerNameConstant();
 		if( innerNameConstant.isPresent() )
 		{
 			builder.append( ", innerName = " );
@@ -1017,7 +1039,7 @@ public final class ByteCodePrinter
 		builder.append( " accessFlags = " );
 		flagsToStringBuilder( methodParameter.modifierSet, builder );
 		builder.append( ", name = " );
-		builder.append( methodParameter.nameConstant.value() );
+		builder.append( methodParameter.nameConstant.stringValue() );
 		String header = builder.toString();
 		return Twig.of( header );
 	}
@@ -1045,7 +1067,7 @@ public final class ByteCodePrinter
 		builder.append( ", elementValue = " );
 		AnnotationParameter annotationParameter = elementValuePair.elementValue();
 		builder.append( "name = " );
-		Kit.stringBuilder.appendEscapedForJava( builder, annotationParameter.nameConstant().value(), '"' );
+		Kit.stringBuilder.appendEscapedForJava( builder, annotationParameter.nameConstant().stringValue(), '"' );
 		builder.append( ", value = " );
 		annotationValueToStringBuilder( annotationParameter.annotationValue(), builder );
 		String header = builder.toString();
@@ -1113,11 +1135,11 @@ public final class ByteCodePrinter
 		builder.append( " bootstrapMethod = " );
 		summarizeBootstrapMethod( invokeDynamicConstant.getBootstrapMethod( renderingContext.byteCodeType ), builder );
 
-		NameAndTypeConstant nameAndTypeConstant = invokeDynamicConstant.nameAndTypeConstant();
-		builder.append( ", name = " ).append( nameAndTypeConstant.nameConstant() );
-		builder.append( ", descriptor = " ).append( nameAndTypeConstant.descriptorConstant() );
+		NameAndDescriptorConstant nameAndDescriptorConstant = invokeDynamicConstant.nameAndDescriptorConstant();
+		builder.append( ", name = " ).append( nameAndDescriptorConstant.nameConstant() );
+		builder.append( ", descriptor = " ).append( nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( " (" );
-		appendNameAndDescriptor( builder, nameAndTypeConstant.nameConstant(), nameAndTypeConstant.descriptorConstant() );
+		appendNameAndDescriptor( builder, nameAndDescriptorConstant.nameConstant(), nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( ")" );
 		String header = builder.toString();
 		return Twig.of( header );
@@ -1127,12 +1149,12 @@ public final class ByteCodePrinter
 	{
 		builder.append( "bootstrapMethod = {" );
 		summarizeBootstrapMethod( invokeDynamicConstant.getBootstrapMethod( byteCodeType ), builder );
-		NameAndTypeConstant nameAndTypeConstant = invokeDynamicConstant.nameAndTypeConstant();
+		NameAndDescriptorConstant nameAndDescriptorConstant = invokeDynamicConstant.nameAndDescriptorConstant();
 		builder.append( "}" );
-		builder.append( ", name = " ).append( nameAndTypeConstant.nameConstant() );
-		builder.append( ", descriptor = " ).append( nameAndTypeConstant.descriptorConstant() );
+		builder.append( ", name = " ).append( nameAndDescriptorConstant.nameConstant() );
+		builder.append( ", descriptor = " ).append( nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( " (" );
-		appendNameAndDescriptor( builder, nameAndTypeConstant.nameConstant(), nameAndTypeConstant.descriptorConstant() );
+		appendNameAndDescriptor( builder, nameAndDescriptorConstant.nameConstant(), nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( ")" );
 	}
 
@@ -1165,9 +1187,9 @@ public final class ByteCodePrinter
 
 	private static void summarizeReferenceConstant( ReferenceConstant referenceConstant, StringBuilder builder )
 	{
-		NameAndTypeConstant nameAndTypeConstant = referenceConstant.nameAndTypeConstant();
-		Descriptor descriptor = Descriptor.from( nameAndTypeConstant.descriptorConstant().value() );
-		appendNameAndTypeAndDescriptor( descriptor, builder, nameAndTypeConstant.nameConstant().value(), Optional.of( referenceConstant.typeConstant().getClassName() ) );
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant();
+		Descriptor descriptor = Descriptor.from( nameAndDescriptorConstant.descriptorConstant().stringValue() );
+		appendNameAndTypeAndDescriptor( descriptor, builder, nameAndDescriptorConstant.nameConstant().stringValue(), Optional.of( referenceConstant.typeConstant().getClassName() ) );
 	}
 
 	private static Twig twigFromMethodTypeConstant( MethodTypeConstant methodTypeConstant, String prefix )
@@ -1186,22 +1208,22 @@ public final class ByteCodePrinter
 		summarizeValueConstant( methodTypeConstant.descriptorConstant, builder );
 	}
 
-	private static Twig twigFromNameAndTypeConstant( NameAndTypeConstant nameAndTypeConstant, String prefix )
+	private static Twig twigFromNameAndDescriptorConstant( NameAndDescriptorConstant nameAndDescriptorConstant, String prefix )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
 		builder.append( " " );
-		summarizeNameAndTypeConstant( nameAndTypeConstant, builder );
+		summarizeNameAndDescriptorConstant( nameAndDescriptorConstant, builder );
 		String header = builder.toString();
 		return Twig.of( header );
 	}
 
-	private static void summarizeNameAndTypeConstant( NameAndTypeConstant nameAndTypeConstant, StringBuilder builder )
+	private static void summarizeNameAndDescriptorConstant( NameAndDescriptorConstant nameAndDescriptorConstant, StringBuilder builder )
 	{
-		builder.append( "name = " ).append( nameAndTypeConstant.nameConstant() );
-		builder.append( "descriptor = " ).append( nameAndTypeConstant.descriptorConstant() );
+		builder.append( "name = " ).append( nameAndDescriptorConstant.nameConstant() );
+		builder.append( "descriptor = " ).append( nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( " (" );
-		appendNameAndDescriptor( builder, nameAndTypeConstant.nameConstant(), nameAndTypeConstant.descriptorConstant() );
+		appendNameAndDescriptor( builder, nameAndDescriptorConstant.nameConstant(), nameAndDescriptorConstant.descriptorConstant() );
 		builder.append( ")" );
 	}
 
@@ -1217,10 +1239,10 @@ public final class ByteCodePrinter
 					twigFromReferenceConstant( constant.asReferenceConstant(), prefix );
 				case InvokeDynamicConstant.TAG -> //
 					twigFromInvokeDynamicConstant( constant.asInvokeDynamicConstant(), renderingContext, prefix );
-				case DoubleConstant.TAG, FloatConstant.TAG, IntegerConstant.TAG, LongConstant.TAG, StringConstant.TAG, Utf8Constant.TAG -> //
+				case DoubleConstant.TAG, FloatConstant.TAG, IntegerConstant.TAG, LongConstant.TAG, StringConstant.TAG, Mutf8Constant.TAG -> //
 					twigFromValueConstant( constant.asValueConstant(), prefix );
-				case NameAndTypeConstant.TAG -> //
-					twigFromNameAndTypeConstant( constant.asNameAndTypeConstant(), prefix );
+				case NameAndDescriptorConstant.TAG -> //
+					twigFromNameAndDescriptorConstant( constant.asNameAndDescriptorConstant(), prefix );
 				case MethodHandleConstant.TAG -> //
 					twigFromMethodHandleConstant( constant.asMethodHandleConstant(), prefix );
 				default -> throw new AssertionError();
@@ -1239,10 +1261,10 @@ public final class ByteCodePrinter
 				summarizeReferenceConstant( constant.asReferenceConstant(), builder );
 			case InvokeDynamicConstant.TAG -> //
 				summarizeInvokeDynamicConstant( constant.asInvokeDynamicConstant(), builder );
-			case DoubleConstant.TAG, FloatConstant.TAG, IntegerConstant.TAG, LongConstant.TAG, StringConstant.TAG, Utf8Constant.TAG -> //
+			case DoubleConstant.TAG, FloatConstant.TAG, IntegerConstant.TAG, LongConstant.TAG, StringConstant.TAG, Mutf8Constant.TAG -> //
 				summarizeValueConstant( constant.asValueConstant(), builder );
-			case NameAndTypeConstant.TAG -> //
-				summarizeNameAndTypeConstant( constant.asNameAndTypeConstant(), builder );
+			case NameAndDescriptorConstant.TAG -> //
+				summarizeNameAndDescriptorConstant( constant.asNameAndDescriptorConstant(), builder );
 			case MethodHandleConstant.TAG -> //
 				summarizeMethodHandleConstant( constant.asMethodHandleConstant(), builder );
 			default -> throw new AssertionError();
@@ -1284,14 +1306,14 @@ public final class ByteCodePrinter
 		var builder = new StringBuilder();
 		builder.append( prefix );
 		builder.append( " " );
-		summarizeValueConstant( classAnnotationValue.utf8Constant(), builder );
+		summarizeValueConstant( classAnnotationValue.nameConstant(), builder );
 		String header = builder.toString();
 		return Twig.of( header );
 	}
 
 	private static void summarizeClassAnnotationValue( ClassAnnotationValue classAnnotationValue, StringBuilder builder )
 	{
-		builder.append( "class = " ).append( classAnnotationValue.utf8Constant().value() );
+		builder.append( "class = " ).append( classAnnotationValue.nameConstant().stringValue() );
 	}
 
 	private static void summarizeConstAnnotationValue( ConstAnnotationValue constAnnotationValue, StringBuilder builder )
@@ -1325,7 +1347,7 @@ public final class ByteCodePrinter
 	{
 		builder.append( "annotation = { " );
 		ByteCodeAnnotation annotation = annotationAnnotationValue.annotation();
-		builder.append( "type = " ).append( annotation.typeConstant.value() );
+		builder.append( "type = " ).append( annotation.typeConstant.stringValue() );
 		builder.append( ", " ).append( annotation.annotationParameters().size() ).append( " elements" );
 		builder.append( " }" );
 	}
@@ -1353,17 +1375,17 @@ public final class ByteCodePrinter
 		builder.append( prefix );
 		builder.append( " " );
 		builder.append( "type = " );
-		builder.append( ByteCodeHelpers.getJavaTypeNameFromDescriptorTypeName( enumAnnotationValue.typeNameConstant().value() ) );
+		builder.append( ByteCodeHelpers.getJavaTypeNameFromDescriptorTypeName( enumAnnotationValue.typeNameConstant().stringValue() ) );
 		builder.append( ", value = " );
-		builder.append( enumAnnotationValue.valueNameConstant().value() );
+		builder.append( enumAnnotationValue.valueNameConstant().stringValue() );
 		String header = builder.toString();
 		return Twig.of( header );
 	}
 
 	private static void summarizeEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue, StringBuilder builder )
 	{
-		builder.append( "type = " ).append( enumAnnotationValue.typeNameConstant().value() );
-		builder.append( ", value = " ).append( enumAnnotationValue.valueNameConstant().value() );
+		builder.append( "type = " ).append( enumAnnotationValue.typeNameConstant().stringValue() );
+		builder.append( ", value = " ).append( enumAnnotationValue.valueNameConstant().stringValue() );
 	}
 
 	private static Twig twigFromAnnotationDefaultAttribute( AnnotationDefaultAttribute annotationDefaultAttribute, String prefix )
@@ -1428,12 +1450,12 @@ public final class ByteCodePrinter
 		var builder = new StringBuilder();
 		builder.append( prefix );
 		builder.append( " " );
-		Optional<NameAndTypeConstant> methodNameAndTypeConstant = enclosingMethodAttribute.methodNameAndTypeConstant();
-		if( methodNameAndTypeConstant.isPresent() )
+		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = enclosingMethodAttribute.methodNameAndDescriptorConstant();
+		if( methodNameAndDescriptorConstant.isPresent() )
 		{
 			builder.append( "name+type+descriptor = " );
-			appendNameAndTypeAndDescriptor( builder, methodNameAndTypeConstant.get().nameConstant(), //
-				methodNameAndTypeConstant.get().descriptorConstant(), enclosingMethodAttribute.classConstant() );
+			appendNameAndTypeAndDescriptor( builder, methodNameAndDescriptorConstant.get().nameConstant(), //
+				methodNameAndDescriptorConstant.get().descriptorConstant(), enclosingMethodAttribute.classConstant() );
 		}
 		else
 		{
@@ -1564,7 +1586,7 @@ public final class ByteCodePrinter
 		var builder = new StringBuilder();
 		builder.append( prefix );
 		builder.append( " " );
-		builder.append( signatureAttribute.signatureConstant().value() );
+		builder.append( signatureAttribute.signatureConstant().stringValue() );
 		String header = builder.toString();
 		return Twig.of( header );
 	}

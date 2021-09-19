@@ -69,10 +69,10 @@ import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.Kit;
 
 import java.util.ArrayList;
@@ -122,7 +122,7 @@ final class ConstantPool
 	{
 		switch( constant.tag )
 		{
-			case Utf8Constant.TAG:
+			case Mutf8Constant.TAG:
 			case IntegerConstant.TAG:
 			case FloatConstant.TAG:
 			case LongConstant.TAG:
@@ -137,35 +137,35 @@ final class ConstantPool
 			case StringConstant.TAG:
 			{
 				StringConstant stringConstant = constant.asStringConstant();
-				internConstant( stringConstant.valueUtf8Constant() );
+				internConstant( stringConstant.valueConstant() );
 				break;
 			}
 			case FieldReferenceConstant.TAG:
 			{
 				FieldReferenceConstant fieldReferenceConstant = constant.asFieldReferenceConstant();
 				internConstant( fieldReferenceConstant.typeConstant() );
-				internConstant( fieldReferenceConstant.nameAndTypeConstant() );
+				internConstant( fieldReferenceConstant.nameAndDescriptorConstant() );
 				break;
 			}
 			case PlainMethodReferenceConstant.TAG:
 			{
 				MethodReferenceConstant methodReferenceConstant = constant.asMethodReferenceConstant();
 				internConstant( methodReferenceConstant.typeConstant() );
-				internConstant( methodReferenceConstant.nameAndTypeConstant() );
+				internConstant( methodReferenceConstant.nameAndDescriptorConstant() );
 				break;
 			}
 			case InterfaceMethodReferenceConstant.TAG:
 			{
 				InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = constant.asInterfaceMethodReferenceConstant();
 				internConstant( interfaceMethodReferenceConstant.typeConstant() );
-				internConstant( interfaceMethodReferenceConstant.nameAndTypeConstant() );
+				internConstant( interfaceMethodReferenceConstant.nameAndDescriptorConstant() );
 				break;
 			}
-			case NameAndTypeConstant.TAG:
+			case NameAndDescriptorConstant.TAG:
 			{
-				NameAndTypeConstant nameAndTypeConstant = constant.asNameAndTypeConstant();
-				internConstant( nameAndTypeConstant.nameConstant() );
-				internConstant( nameAndTypeConstant.descriptorConstant() );
+				NameAndDescriptorConstant nameAndDescriptorConstant = constant.asNameAndDescriptorConstant();
+				internConstant( nameAndDescriptorConstant.nameConstant() );
+				internConstant( nameAndDescriptorConstant.descriptorConstant() );
 				break;
 			}
 			case MethodHandleConstant.TAG:
@@ -183,7 +183,7 @@ final class ConstantPool
 			case InvokeDynamicConstant.TAG:
 			{
 				InvokeDynamicConstant invokeDynamicConstant = constant.asInvokeDynamicConstant();
-				internConstant( invokeDynamicConstant.nameAndTypeConstant() );
+				internConstant( invokeDynamicConstant.nameAndDescriptorConstant() );
 				break;
 			}
 			default:
@@ -203,7 +203,7 @@ final class ConstantPool
 	void internMember( ByteCodeMember byteCodeMember )
 	{
 		internConstant( byteCodeMember.nameConstant );
-		internConstant( byteCodeMember.descriptorConstant );
+		internConstant( byteCodeMember.descriptorConstant() );
 		internAttributeSet( byteCodeMember.attributeSet );
 	}
 
@@ -211,7 +211,7 @@ final class ConstantPool
 	{
 		for( Attribute attribute : attributeSet )
 		{
-			Utf8Constant nameConstant = attribute.kind.utf8Name;
+			Mutf8Constant nameConstant = attribute.kind.mutf8Name;
 			internConstant( nameConstant );
 			internAttribute( attribute );
 		}
@@ -291,7 +291,7 @@ final class ConstantPool
 	private void internEnclosingMethodAttribute( EnclosingMethodAttribute enclosingMethodAttribute )
 	{
 		internConstant( enclosingMethodAttribute.classConstant() );
-		enclosingMethodAttribute.methodNameAndTypeConstant().ifPresent( c -> internConstant( c ) );
+		enclosingMethodAttribute.methodNameAndDescriptorConstant().ifPresent( c -> internConstant( c ) );
 	}
 
 	private void internExceptionsAttribute( ExceptionsAttribute exceptionsAttribute )
@@ -438,7 +438,7 @@ final class ConstantPool
 
 	private void internClassAnnotationValue( ClassAnnotationValue classAnnotationValue )
 	{
-		internConstant( classAnnotationValue.utf8Constant() );
+		internConstant( classAnnotationValue.nameConstant() );
 	}
 
 	private void internAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue )

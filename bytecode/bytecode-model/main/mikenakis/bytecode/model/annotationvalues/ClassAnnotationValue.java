@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -15,26 +15,26 @@ public final class ClassAnnotationValue extends AnnotationValue
 
 	public static ClassAnnotationValue of( String name )
 	{
-		Utf8Constant classConstant = Utf8Constant.of( name );
+		Mutf8Constant classConstant = Mutf8Constant.of( name );
 		return of( classConstant );
 	}
 
-	public static ClassAnnotationValue of( Utf8Constant classConstant )
+	public static ClassAnnotationValue of( Mutf8Constant nameConstant )
 	{
-		return new ClassAnnotationValue( classConstant );
+		return new ClassAnnotationValue( nameConstant );
 	}
 
-	private final Utf8Constant classConstant;
+	private final Mutf8Constant nameConstant;
 
-	private ClassAnnotationValue( Utf8Constant classConstant )
+	private ClassAnnotationValue( Mutf8Constant nameConstant )
 	{
 		super( ClassTag );
-		this.classConstant = classConstant;
+		this.nameConstant = nameConstant;
 	}
 
-	public Utf8Constant utf8Constant()
+	public Mutf8Constant nameConstant()
 	{
-		return classConstant;
+		return nameConstant;
 	}
 
 	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue()
@@ -44,6 +44,6 @@ public final class ClassAnnotationValue extends AnnotationValue
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "class = " + classConstant;
+		return "class = " + nameConstant;
 	}
 }

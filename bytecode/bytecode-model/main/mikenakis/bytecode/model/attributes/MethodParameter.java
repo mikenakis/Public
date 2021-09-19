@@ -2,7 +2,7 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.FlagSet;
 import mikenakis.bytecode.model.FlagEnum;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Map;
@@ -19,7 +19,7 @@ public final class MethodParameter
 		Final, Synthetic, Mandated
 	}
 
-	public static MethodParameter of( Utf8Constant nameConstant, FlagSet<Modifier> modifierSet )
+	public static MethodParameter of( Mutf8Constant nameConstant, FlagSet<Modifier> modifierSet )
 	{
 		return new MethodParameter( nameConstant, modifierSet );
 	}
@@ -29,10 +29,10 @@ public final class MethodParameter
 		Map.entry( Modifier.Synthetic /**/, 0x1000 ),   // ACC_SYNTHETIC  = 0x1000
 		Map.entry( Modifier.Mandated  /**/, 0x8000 ) ); // ACC_MANDATED   = 0x8000
 
-	public final Utf8Constant nameConstant;
+	public final Mutf8Constant nameConstant;
 	public final FlagSet<Modifier> modifierSet;
 
-	private MethodParameter( Utf8Constant nameConstant, FlagSet<Modifier> modifierSet )
+	private MethodParameter( Mutf8Constant nameConstant, FlagSet<Modifier> modifierSet )
 	{
 		this.nameConstant = nameConstant;
 		this.modifierSet = modifierSet;

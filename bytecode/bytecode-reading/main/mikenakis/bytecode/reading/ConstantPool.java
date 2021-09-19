@@ -13,10 +13,10 @@ import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 
@@ -167,7 +167,7 @@ final class ConstantPool
 		{
 			if( constant != null )
 				return constant;
-			BufferReader bufferReader = new BufferReader( buffer );
+			BufferReader bufferReader = BufferReader.of( buffer );
 			constant = ByteCodeReader.readConstant( tag, constantPool, bufferReader );
 			assert bufferReader.isAtEnd();
 			return constant;
@@ -185,15 +185,15 @@ final class ConstantPool
 			{
 				case ClassConstant.TAG, MethodTypeConstant.TAG, StringConstant.TAG -> bufferReader.readBuffer( 2 );
 				case MethodHandleConstant.TAG -> bufferReader.readBuffer( 3 );
-				case FieldReferenceConstant.TAG, NameAndTypeConstant.TAG, IntegerConstant.TAG, FloatConstant.TAG, InvokeDynamicConstant.TAG, //
+				case FieldReferenceConstant.TAG, NameAndDescriptorConstant.TAG, IntegerConstant.TAG, FloatConstant.TAG, InvokeDynamicConstant.TAG, //
 					PlainMethodReferenceConstant.TAG, InterfaceMethodReferenceConstant.TAG -> bufferReader.readBuffer( 4 );
 				case DoubleConstant.TAG, LongConstant.TAG -> bufferReader.readBuffer( 8 );
-				case Utf8Constant.TAG -> readUtf8ConstantBuffer( bufferReader );
+				case Mutf8Constant.TAG -> readMutf8ConstantBuffer( bufferReader );
 				default -> throw new AssertionError();
 			};
 	}
 
-	private static Buffer readUtf8ConstantBuffer( BufferReader bufferReader )
+	private static Buffer readMutf8ConstantBuffer( BufferReader bufferReader )
 	{
 		int length = bufferReader.readUnsignedShort();
 		return bufferReader.readBuffer( length );

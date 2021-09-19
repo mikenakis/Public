@@ -13,22 +13,22 @@ import java.util.Objects;
 public abstract class ReferenceConstant extends Constant
 {
 	private final ClassConstant typeConstant;
-	private final NameAndTypeConstant nameAndTypeConstant;
+	private final NameAndDescriptorConstant nameAndDescriptorConstant;
 
-	protected ReferenceConstant( int tag, ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	protected ReferenceConstant( int tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
 		super( tag );
 		assert tag == FieldReferenceConstant.TAG || tag == PlainMethodReferenceConstant.TAG || tag == InterfaceMethodReferenceConstant.TAG;
 		this.typeConstant = typeConstant;
-		this.nameAndTypeConstant = nameAndTypeConstant;
+		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
 	public ClassConstant typeConstant() { return typeConstant; }
-	public NameAndTypeConstant nameAndTypeConstant() { return nameAndTypeConstant; }
+	public NameAndDescriptorConstant nameAndDescriptorConstant() { return nameAndDescriptorConstant; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public final String toString()
 	{
-		return "type = " + typeConstant + ", nameAndType = " + nameAndTypeConstant;
+		return "type = " + typeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant;
 	}
 
 	@Deprecated @Override public final ReferenceConstant asReferenceConstant()
@@ -47,13 +47,13 @@ public abstract class ReferenceConstant extends Constant
 	{
 		if( !typeConstant.equalsClassConstant( other.typeConstant ) )
 			return false;
-		if( !nameAndTypeConstant.equalsNameAndTypeConstant( other.nameAndTypeConstant ) )
+		if( !nameAndDescriptorConstant.equalsNameAndDescriptorConstant( other.nameAndDescriptorConstant ) )
 			return false;
 		return true;
 	}
 
 	@Override public final int hashCode()
 	{
-		return Objects.hash( tag, typeConstant, nameAndTypeConstant );
+		return Objects.hash( tag, typeConstant, nameAndDescriptorConstant );
 	}
 }

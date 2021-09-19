@@ -105,11 +105,11 @@ import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.Kit;
 
@@ -126,7 +126,7 @@ public class ByteCodeReader
 	public static ByteCodeType read( byte[] bytes )
 	{
 		Buffer buffer = Buffer.of( bytes );
-		BufferReader bufferReader = new BufferReader( buffer );
+		BufferReader bufferReader = BufferReader.of( buffer );
 		int magic = bufferReader.readInt();
 		assert magic == ByteCodeType.MAGIC;
 		int minorVersion = bufferReader.readUnsignedShort();
@@ -147,8 +147,8 @@ public class ByteCodeReader
 		for( int i = 0; i < fieldCount; i++ )
 		{
 			FlagSet<ByteCodeField.Modifier> fieldModifierSet = ByteCodeField.modifierFlagsEnum.fromInt( bufferReader.readUnsignedShort() );
-			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-			Utf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+			Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			AttributeSet attributes = readAttributes( constantPool, ByteCodeReader::readFieldAttribute, bufferReader );
 			ByteCodeField byteCodeField = ByteCodeField.of( fieldModifierSet, nameConstant, descriptorConstant, attributes );
 			Kit.collection.add( fields, byteCodeField );
@@ -158,8 +158,8 @@ public class ByteCodeReader
 		for( int i = 0; i < methodCount; i++ )
 		{
 			FlagSet<ByteCodeMethod.Modifier> methodModifierSet = ByteCodeMethod.modifierFlagsEnum.fromInt( bufferReader.readUnsignedShort() );
-			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-			Utf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+			Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			AttributeSet attributes = readAttributes( constantPool, ByteCodeReader::readMethodAttribute, bufferReader );
 			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( methodModifierSet, nameConstant, descriptorConstant, attributes );
 			Kit.collection.add( methods, byteCodeMethod );
@@ -173,19 +173,19 @@ public class ByteCodeReader
 
 	private interface AttributeReader
 	{
-		Attribute readAttribute( Utf8Constant nameConstant, ConstantPool constantPool, BufferReader bufferReader );
+		Attribute readAttribute( Mutf8Constant nameConstant, ConstantPool constantPool, BufferReader bufferReader );
 	}
 
 	private static AttributeSet readAttributes( ConstantPool constantPool, AttributeReader attributeReader, BufferReader bufferReader )
 	{
 		int count = bufferReader.readUnsignedShort();
-		Map<Utf8Constant,Attribute> attributesFromNames = new LinkedHashMap<>( count );
+		Map<Mutf8Constant,Attribute> attributesFromNames = new LinkedHashMap<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			int attributeLength = bufferReader.readInt();
 			Buffer attributeBuffer = bufferReader.readBuffer( attributeLength );
-			BufferReader attributeBufferReader = new BufferReader( attributeBuffer );
+			BufferReader attributeBufferReader = BufferReader.of( attributeBuffer );
 			Attribute attribute = attributeReader.readAttribute( nameConstant, constantPool, attributeBufferReader );
 			assert attributeBufferReader.isAtEnd();
 			Kit.map.add( attributesFromNames, nameConstant, attribute );
@@ -193,32 +193,32 @@ public class ByteCodeReader
 		return AttributeSet.of( attributesFromNames );
 	}
 
-	private static final OmniSwitch3<Attribute,Utf8Constant,ConstantPool,BufferReader> classAttributeSwitch = //
-		OmniSwitch3.<Attribute,Utf8Constant,ConstantPool,BufferReader>newBuilder() //
-			.with( BootstrapMethodsAttribute.kind.utf8Name, ByteCodeReader::readBootstrapMethodsAttribute )                               //
-			.with( DeprecatedAttribute.kind.utf8Name, ByteCodeReader::readDeprecatedAttribute )                                           //
-			.with( EnclosingMethodAttribute.kind.utf8Name, ByteCodeReader::readEnclosingMethodAttribute )                                 //
-			.with( InnerClassesAttribute.kind.utf8Name, ByteCodeReader::readInnerClassesAttribute )                                       //
-			.with( NestHostAttribute.kind.utf8Name, ByteCodeReader::readNestHostAttribute )                                               //
-			.with( NestMembersAttribute.kind.utf8Name, ByteCodeReader::readNestMembersAttribute )                                         //
-			.with( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleAnnotationsAttribute )         //
-			.with( RuntimeVisibleAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleAnnotationsAttribute )             //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute ) //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )     //
-			.with( SignatureAttribute.kind.utf8Name, ByteCodeReader::readSignatureAttribute )                                             //
-			.with( SourceFileAttribute.kind.utf8Name, ByteCodeReader::readSourceFileAttribute )                                           //
-			.with( SyntheticAttribute.kind.utf8Name, ByteCodeReader::readSyntheticAttribute )                                             //
+	private static final OmniSwitch3<Attribute,Mutf8Constant,ConstantPool,BufferReader> classAttributeSwitch = //
+		OmniSwitch3.<Attribute,Mutf8Constant,ConstantPool,BufferReader>newBuilder() //
+			.with( BootstrapMethodsAttribute.kind.mutf8Name, ByteCodeReader::readBootstrapMethodsAttribute )                               //
+			.with( DeprecatedAttribute.kind.mutf8Name, ByteCodeReader::readDeprecatedAttribute )                                           //
+			.with( EnclosingMethodAttribute.kind.mutf8Name, ByteCodeReader::readEnclosingMethodAttribute )                                 //
+			.with( InnerClassesAttribute.kind.mutf8Name, ByteCodeReader::readInnerClassesAttribute )                                       //
+			.with( NestHostAttribute.kind.mutf8Name, ByteCodeReader::readNestHostAttribute )                                               //
+			.with( NestMembersAttribute.kind.mutf8Name, ByteCodeReader::readNestMembersAttribute )                                         //
+			.with( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleAnnotationsAttribute )         //
+			.with( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleAnnotationsAttribute )             //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute ) //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )     //
+			.with( SignatureAttribute.kind.mutf8Name, ByteCodeReader::readSignatureAttribute )                                             //
+			.with( SourceFileAttribute.kind.mutf8Name, ByteCodeReader::readSourceFileAttribute )                                           //
+			.with( SyntheticAttribute.kind.mutf8Name, ByteCodeReader::readSyntheticAttribute )                                             //
 			.withDefault( ByteCodeReader::readUnknownAttribute )                                                                     //
 			.build();
 
-	private static Attribute readClassAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static Attribute readClassAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		return classAttributeSwitch.on( attributeName, constantPool, bufferReader );
 	}
 
-	private static BootstrapMethodsAttribute readBootstrapMethodsAttribute( Utf8Constant nameConstant, ConstantPool constantPool, BufferReader bufferReader )
+	private static BootstrapMethodsAttribute readBootstrapMethodsAttribute( Mutf8Constant nameConstant, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert nameConstant.equals( BootstrapMethodsAttribute.kind.utf8Name );
+		assert nameConstant.equalsMutf8Constant( BootstrapMethodsAttribute.kind.mutf8Name );
 		int bootstrapMethodCount = bufferReader.readUnsignedShort();
 		assert bootstrapMethodCount > 0;
 		List<BootstrapMethod> entries = new ArrayList<>( bootstrapMethodCount );
@@ -239,17 +239,17 @@ public class ByteCodeReader
 		return BootstrapMethodsAttribute.of( entries );
 	}
 
-	private static EnclosingMethodAttribute readEnclosingMethodAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static EnclosingMethodAttribute readEnclosingMethodAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( EnclosingMethodAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( EnclosingMethodAttribute.kind.mutf8Name );
 		ClassConstant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
-		Optional<NameAndTypeConstant> methodNameAndTypeConstant = Kit.upCast( constantPool.tryReadIndexAndGetConstant( bufferReader ) );
-		return EnclosingMethodAttribute.of( classConstant, methodNameAndTypeConstant );
+		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = Kit.upCast( constantPool.tryReadIndexAndGetConstant( bufferReader ) );
+		return EnclosingMethodAttribute.of( classConstant, methodNameAndDescriptorConstant );
 	}
 
-	private static InnerClassesAttribute readInnerClassesAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static InnerClassesAttribute readInnerClassesAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( InnerClassesAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( InnerClassesAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<InnerClass> innerClasses = new ArrayList<>( count );
@@ -257,7 +257,7 @@ public class ByteCodeReader
 		{
 			ClassConstant innerClassConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
 			Optional<ClassConstant> outerClassConstant = Kit.upCast( constantPool.tryReadIndexAndGetConstant( bufferReader ) );
-			Optional<Utf8Constant> innerNameConstant = Kit.upCast( constantPool.tryReadIndexAndGetConstant( bufferReader ) );
+			Optional<Mutf8Constant> innerNameConstant = Kit.upCast( constantPool.tryReadIndexAndGetConstant( bufferReader ) );
 			FlagSet<InnerClass.InnerClassModifier> modifierSet = InnerClass.innerClassModifierFlagsEnum.fromInt( bufferReader.readUnsignedShort() );
 			InnerClass innerClass = InnerClass.of( innerClassConstant, outerClassConstant, innerNameConstant, modifierSet );
 			innerClasses.add( innerClass );
@@ -265,16 +265,16 @@ public class ByteCodeReader
 		return InnerClassesAttribute.of( innerClasses );
 	}
 
-	private static NestHostAttribute readNestHostAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static NestHostAttribute readNestHostAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( NestHostAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( NestHostAttribute.kind.mutf8Name );
 		ClassConstant hostClassConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
 		return NestHostAttribute.of( hostClassConstant );
 	}
 
-	private static NestMembersAttribute readNestMembersAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static NestMembersAttribute readNestMembersAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( NestMembersAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( NestMembersAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<ClassConstant> memberClassConstants = new ArrayList<>( count );
@@ -286,111 +286,111 @@ public class ByteCodeReader
 		return NestMembersAttribute.of( memberClassConstants );
 	}
 
-	private static RuntimeInvisibleAnnotationsAttribute readRuntimeInvisibleAnnotationsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static RuntimeInvisibleAnnotationsAttribute readRuntimeInvisibleAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name );
 		List<ByteCodeAnnotation> annotations = readAnnotations( constantPool, bufferReader );
 		return RuntimeInvisibleAnnotationsAttribute.of( annotations );
 	}
 
-	private static RuntimeVisibleAnnotationsAttribute readRuntimeVisibleAnnotationsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static RuntimeVisibleAnnotationsAttribute readRuntimeVisibleAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( RuntimeVisibleAnnotationsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name );
 		List<ByteCodeAnnotation> annotations = readAnnotations( constantPool, bufferReader );
 		return RuntimeVisibleAnnotationsAttribute.of( annotations );
 	}
 
-	private static RuntimeInvisibleTypeAnnotationsAttribute readRuntimeInvisibleTypeAnnotationsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static RuntimeInvisibleTypeAnnotationsAttribute readRuntimeInvisibleTypeAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name );
 		List<TypeAnnotation> entries = readTypeAnnotations( constantPool, bufferReader );
 		return RuntimeInvisibleTypeAnnotationsAttribute.of( entries );
 	}
 
-	private static RuntimeVisibleTypeAnnotationsAttribute readRuntimeVisibleTypeAnnotationsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static RuntimeVisibleTypeAnnotationsAttribute readRuntimeVisibleTypeAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name );
 		List<TypeAnnotation> entries = readTypeAnnotations( constantPool, bufferReader );
 		return RuntimeVisibleTypeAnnotationsAttribute.of( entries );
 	}
 
-	private static RuntimeInvisibleParameterAnnotationsAttribute readRuntimeInvisibleParameterAnnotationsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static RuntimeInvisibleParameterAnnotationsAttribute readRuntimeInvisibleParameterAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( RuntimeInvisibleParameterAnnotationsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( RuntimeInvisibleParameterAnnotationsAttribute.kind.mutf8Name );
 		List<ParameterAnnotationSet> entries = readParameterAnnotationsAttributeEntries( constantPool, bufferReader );
 		return RuntimeInvisibleParameterAnnotationsAttribute.of( entries );
 	}
 
-	private static RuntimeVisibleParameterAnnotationsAttribute readRuntimeVisibleParameterAnnotationsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static RuntimeVisibleParameterAnnotationsAttribute readRuntimeVisibleParameterAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( RuntimeVisibleParameterAnnotationsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( RuntimeVisibleParameterAnnotationsAttribute.kind.mutf8Name );
 		List<ParameterAnnotationSet> entries = readParameterAnnotationsAttributeEntries( constantPool, bufferReader );
 		return RuntimeVisibleParameterAnnotationsAttribute.of( entries );
 	}
 
-	private static SignatureAttribute readSignatureAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static SignatureAttribute readSignatureAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( SignatureAttribute.kind.utf8Name );
-		Utf8Constant signatureConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		assert attributeName.equalsMutf8Constant( SignatureAttribute.kind.mutf8Name );
+		Mutf8Constant signatureConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 		return SignatureAttribute.of( signatureConstant );
 	}
 
-	private static SyntheticAttribute readSyntheticAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static SyntheticAttribute readSyntheticAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( SyntheticAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( SyntheticAttribute.kind.mutf8Name );
 		return SyntheticAttribute.of();
 	}
 
-	private static SourceFileAttribute readSourceFileAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static SourceFileAttribute readSourceFileAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( SourceFileAttribute.kind.utf8Name );
-		Utf8Constant valueConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		assert attributeName.equalsMutf8Constant( SourceFileAttribute.kind.mutf8Name );
+		Mutf8Constant valueConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 		return SourceFileAttribute.of( valueConstant );
 	}
 
-	private static DeprecatedAttribute readDeprecatedAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static DeprecatedAttribute readDeprecatedAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( DeprecatedAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( DeprecatedAttribute.kind.mutf8Name );
 		return DeprecatedAttribute.of();
 	}
 
-	private static UnknownAttribute readUnknownAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static UnknownAttribute readUnknownAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		Buffer buffer = bufferReader.readBuffer();
 		return UnknownAttribute.of( attributeName, buffer );
 	}
 
-	private static UnknownAttribute readUnknownAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, LocationMap locationMap )
+	private static UnknownAttribute readUnknownAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, LocationMap locationMap )
 	{
 		Buffer buffer = bufferReader.readBuffer();
 		return UnknownAttribute.of( attributeName, buffer );
 	}
 
-	private static ConstantValueAttribute readConstantValueAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static ConstantValueAttribute readConstantValueAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( ConstantValueAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( ConstantValueAttribute.kind.mutf8Name );
 		Constant constant = constantPool.readIndexAndGetConstant( bufferReader );
 		ValueConstant<?> valueConstant = constant.asValueConstant();
 		return ConstantValueAttribute.of( valueConstant );
 	}
 
-	private static AnnotationDefaultAttribute readAnnotationDefaultAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static AnnotationDefaultAttribute readAnnotationDefaultAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( AnnotationDefaultAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( AnnotationDefaultAttribute.kind.mutf8Name );
 		AnnotationValue annotationValue = readAnnotationValue( constantPool, bufferReader );
 		return AnnotationDefaultAttribute.of( annotationValue );
 	}
 
-	private static CodeAttribute readCodeAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static CodeAttribute readCodeAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( CodeAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( CodeAttribute.kind.mutf8Name );
 		int maxStack = bufferReader.readUnsignedShort();
 		int maxLocals = bufferReader.readUnsignedShort();
 		int codeLength = bufferReader.readInt();
 		Buffer codeBuffer = bufferReader.readBuffer( codeLength );
 
 		List<Instruction> instructions = new ArrayList<>();
-		BufferReader codeBufferReader = new BufferReader( codeBuffer );
+		BufferReader codeBufferReader = BufferReader.of( codeBuffer );
 		ReadingLocationMap locationMap = new ReadingLocationMap( codeBuffer.length() );
 		ConcreteInstructionReader.run( codeBufferReader, locationMap, constantPool, instructionReader -> //
 		{
@@ -597,23 +597,23 @@ public class ByteCodeReader
 		}
 	}
 
-	private static final OmniSwitch4<Attribute,Utf8Constant,ConstantPool,BufferReader,ReadingLocationMap> codeAttributeSwitch = //
-		OmniSwitch4.<Attribute,Utf8Constant,ConstantPool,BufferReader,ReadingLocationMap>newBuilder() //
-			.with( LineNumberTableAttribute.kind.utf8Name, ByteCodeReader::readLineNumberTableAttribute )               //
-			.with( LocalVariableTableAttribute.kind.utf8Name, ByteCodeReader::readLocalVariableTableAttribute )         //
-			.with( LocalVariableTypeTableAttribute.kind.utf8Name, ByteCodeReader::readLocalVariableTypeTableAttribute ) //
-			.with( StackMapTableAttribute.kind.utf8Name, ByteCodeReader::readStackMapTableAttribute )                   //
+	private static final OmniSwitch4<Attribute,Mutf8Constant,ConstantPool,BufferReader,ReadingLocationMap> codeAttributeSwitch = //
+		OmniSwitch4.<Attribute,Mutf8Constant,ConstantPool,BufferReader,ReadingLocationMap>newBuilder() //
+			.with( LineNumberTableAttribute.kind.mutf8Name, ByteCodeReader::readLineNumberTableAttribute )               //
+			.with( LocalVariableTableAttribute.kind.mutf8Name, ByteCodeReader::readLocalVariableTableAttribute )         //
+			.with( LocalVariableTypeTableAttribute.kind.mutf8Name, ByteCodeReader::readLocalVariableTypeTableAttribute ) //
+			.with( StackMapTableAttribute.kind.mutf8Name, ByteCodeReader::readStackMapTableAttribute )                   //
 			.withDefault( ByteCodeReader::readUnknownAttribute ) //
 			.build();
 
-	private static Attribute readCodeAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
+	private static Attribute readCodeAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
 		return codeAttributeSwitch.on( attributeName, constantPool, bufferReader, locationMap );
 	}
 
-	private static ExceptionsAttribute readExceptionsAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static ExceptionsAttribute readExceptionsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( ExceptionsAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( ExceptionsAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<ClassConstant> exceptionClassConstants = new ArrayList<>( count );
@@ -625,15 +625,15 @@ public class ByteCodeReader
 		return ExceptionsAttribute.of( exceptionClassConstants );
 	}
 
-	private static MethodParametersAttribute readMethodParametersAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static MethodParametersAttribute readMethodParametersAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
-		assert attributeName.equals( MethodParametersAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( MethodParametersAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedByte();
 		assert count > 0;
 		List<MethodParameter> entries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			FlagSet<MethodParameter.Modifier> modifierSet = MethodParameter.modifierFlagEnum.fromInt( bufferReader.readUnsignedShort() );
 			MethodParameter entry = MethodParameter.of( nameConstant, modifierSet );
 			entries.add( entry );
@@ -641,9 +641,9 @@ public class ByteCodeReader
 		return MethodParametersAttribute.of( entries );
 	}
 
-	private static LineNumberTableAttribute readLineNumberTableAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
+	private static LineNumberTableAttribute readLineNumberTableAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
-		assert attributeName.equals( LineNumberTableAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( LineNumberTableAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<LineNumber> entries = new ArrayList<>( count );
@@ -657,10 +657,10 @@ public class ByteCodeReader
 		return LineNumberTableAttribute.of( entries );
 	}
 
-	private static LocalVariableTableAttribute readLocalVariableTableAttribute( Utf8Constant attributeName, ConstantPool constantPool, //
+	private static LocalVariableTableAttribute readLocalVariableTableAttribute( Mutf8Constant attributeName, ConstantPool constantPool, //
 		BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
-		assert attributeName.equals( LocalVariableTableAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( LocalVariableTableAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		List<LocalVariable> localVariables = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
@@ -670,8 +670,8 @@ public class ByteCodeReader
 			int endLocation = locationMap.getLocation( startInstructionReference.targetInstruction() ) + length;
 			Optional<Instruction> endInstruction = locationMap.getInstruction( endLocation );
 			AbsoluteInstructionReference endInstructionReference = AbsoluteInstructionReference.of( endInstruction );
-			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-			Utf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+			Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			int index = bufferReader.readUnsignedShort();
 			LocalVariable localVariable = LocalVariable.of( startInstructionReference, endInstructionReference, nameConstant, descriptorConstant, index );
 			localVariables.add( localVariable );
@@ -679,10 +679,10 @@ public class ByteCodeReader
 		return LocalVariableTableAttribute.of( localVariables );
 	}
 
-	private static LocalVariableTypeTableAttribute readLocalVariableTypeTableAttribute( Utf8Constant attributeName, ConstantPool constantPool, //
+	private static LocalVariableTypeTableAttribute readLocalVariableTypeTableAttribute( Mutf8Constant attributeName, ConstantPool constantPool, //
 		BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
-		assert attributeName.equals( LocalVariableTypeTableAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( LocalVariableTypeTableAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<LocalVariableType> entries = new ArrayList<>( count );
@@ -693,8 +693,8 @@ public class ByteCodeReader
 			int endLocation = locationMap.getLocation( startInstructionReference.targetInstruction() ) + length;
 			Optional<Instruction> endInstruction = locationMap.getInstruction( endLocation );
 			AbsoluteInstructionReference endInstructionReference = AbsoluteInstructionReference.of( endInstruction );
-			Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-			Utf8Constant signatureConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+			Mutf8Constant signatureConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			int index = bufferReader.readUnsignedShort();
 			LocalVariableType entry = LocalVariableType.of( startInstructionReference, endInstructionReference, nameConstant, signatureConstant, index );
 			entries.add( entry );
@@ -702,10 +702,10 @@ public class ByteCodeReader
 		return LocalVariableTypeTableAttribute.of( entries );
 	}
 
-	private static StackMapTableAttribute readStackMapTableAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, //
+	private static StackMapTableAttribute readStackMapTableAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, //
 		ReadingLocationMap locationMap )
 	{
-		assert attributeName.equals( StackMapTableAttribute.kind.utf8Name );
+		assert attributeName.equalsMutf8Constant( StackMapTableAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<StackMapFrame> frames = new ArrayList<>( count );
@@ -893,43 +893,43 @@ public class ByteCodeReader
 		return typeAnnotations;
 	}
 
-	private static final OmniSwitch3<Attribute,Utf8Constant,ConstantPool,BufferReader> fieldAttributeSwitch = //
-		OmniSwitch3.<Attribute,Utf8Constant,ConstantPool,BufferReader>newBuilder() //
-			.with( ConstantValueAttribute.kind.utf8Name, ByteCodeReader::readConstantValueAttribute )                                          //
-			.with( DeprecatedAttribute.kind.utf8Name, ByteCodeReader::readDeprecatedAttribute )                                           //
-			.with( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleAnnotationsAttribute )         //
-			.with( RuntimeVisibleAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleAnnotationsAttribute )             //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute ) //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )     //
-			.with( SignatureAttribute.kind.utf8Name, ByteCodeReader::readSignatureAttribute )                                             //
-			.with( SyntheticAttribute.kind.utf8Name, ByteCodeReader::readSyntheticAttribute )                                             //
+	private static final OmniSwitch3<Attribute,Mutf8Constant,ConstantPool,BufferReader> fieldAttributeSwitch = //
+		OmniSwitch3.<Attribute,Mutf8Constant,ConstantPool,BufferReader>newBuilder() //
+			.with( ConstantValueAttribute.kind.mutf8Name, ByteCodeReader::readConstantValueAttribute )                                          //
+			.with( DeprecatedAttribute.kind.mutf8Name, ByteCodeReader::readDeprecatedAttribute )                                           //
+			.with( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleAnnotationsAttribute )         //
+			.with( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleAnnotationsAttribute )             //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute ) //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )     //
+			.with( SignatureAttribute.kind.mutf8Name, ByteCodeReader::readSignatureAttribute )                                             //
+			.with( SyntheticAttribute.kind.mutf8Name, ByteCodeReader::readSyntheticAttribute )                                             //
 			.withDefault( ByteCodeReader::readUnknownAttribute )                                                                          //
 			.build();
 
-	private static Attribute readFieldAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static Attribute readFieldAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		return fieldAttributeSwitch.on( attributeName, constantPool, bufferReader );
 	}
 
-	private static final OmniSwitch3<Attribute,Utf8Constant,ConstantPool,BufferReader> methodAttributeSwitch = //
-		OmniSwitch3.<Attribute,Utf8Constant,ConstantPool,BufferReader>newBuilder() //
-			.with( AnnotationDefaultAttribute.kind.utf8Name, ByteCodeReader::readAnnotationDefaultAttribute )                                        //
-			.with( CodeAttribute.kind.utf8Name, ByteCodeReader::readCodeAttribute )                                                                  //
-			.with( DeprecatedAttribute.kind.utf8Name, ByteCodeReader::readDeprecatedAttribute )                                                      //
-			.with( ExceptionsAttribute.kind.utf8Name, ByteCodeReader::readExceptionsAttribute )                                                      //
-			.with( MethodParametersAttribute.kind.utf8Name, ByteCodeReader::readMethodParametersAttribute )                                          //
-			.with( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleAnnotationsAttribute )                    //
-			.with( RuntimeVisibleAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleAnnotationsAttribute )                        //
-			.with( RuntimeInvisibleParameterAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleParameterAnnotationsAttribute )  //
-			.with( RuntimeVisibleParameterAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleParameterAnnotationsAttribute )      //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute )            //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )                //
-			.with( SignatureAttribute.kind.utf8Name, ByteCodeReader::readSignatureAttribute )                                                        //
-			.with( SyntheticAttribute.kind.utf8Name, ByteCodeReader::readSyntheticAttribute )                                                        //
+	private static final OmniSwitch3<Attribute,Mutf8Constant,ConstantPool,BufferReader> methodAttributeSwitch = //
+		OmniSwitch3.<Attribute,Mutf8Constant,ConstantPool,BufferReader>newBuilder() //
+			.with( AnnotationDefaultAttribute.kind.mutf8Name, ByteCodeReader::readAnnotationDefaultAttribute )                                        //
+			.with( CodeAttribute.kind.mutf8Name, ByteCodeReader::readCodeAttribute )                                                                  //
+			.with( DeprecatedAttribute.kind.mutf8Name, ByteCodeReader::readDeprecatedAttribute )                                                      //
+			.with( ExceptionsAttribute.kind.mutf8Name, ByteCodeReader::readExceptionsAttribute )                                                      //
+			.with( MethodParametersAttribute.kind.mutf8Name, ByteCodeReader::readMethodParametersAttribute )                                          //
+			.with( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleAnnotationsAttribute )                    //
+			.with( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleAnnotationsAttribute )                        //
+			.with( RuntimeInvisibleParameterAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleParameterAnnotationsAttribute )  //
+			.with( RuntimeVisibleParameterAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleParameterAnnotationsAttribute )      //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute )            //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )                //
+			.with( SignatureAttribute.kind.mutf8Name, ByteCodeReader::readSignatureAttribute )                                                        //
+			.with( SyntheticAttribute.kind.mutf8Name, ByteCodeReader::readSyntheticAttribute )                                                        //
 			.withDefault( ByteCodeReader::readUnknownAttribute )                                                                                     //
 			.build();
 
-	private static Attribute readMethodAttribute( Utf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
+	private static Attribute readMethodAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		return methodAttributeSwitch.on( attributeName, constantPool, bufferReader );
 	}
@@ -948,13 +948,13 @@ public class ByteCodeReader
 					}
 				case AnnotationValue.EnumTag -> //
 					{
-						Utf8Constant typeNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-						Utf8Constant valueNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+						Mutf8Constant typeNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+						Mutf8Constant valueNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield EnumAnnotationValue.of( typeNameConstant, valueNameConstant );
 					}
 				case AnnotationValue.ClassTag -> //
 					{
-						Utf8Constant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+						Mutf8Constant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield ClassAnnotationValue.of( classConstant );
 					}
 				case AnnotationValue.AnnotationTag -> //
@@ -977,7 +977,7 @@ public class ByteCodeReader
 
 	private static ByteCodeAnnotation readByteCodeAnnotation( ConstantPool constantPool, BufferReader bufferReader )
 	{
-		Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 		int count = bufferReader.readUnsignedShort();
 		List<AnnotationParameter> annotationParameters = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
@@ -990,7 +990,7 @@ public class ByteCodeReader
 
 	private static AnnotationParameter readAnnotationParameter( ConstantPool constantPool, BufferReader bufferReader )
 	{
-		Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+		Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 		AnnotationValue annotationValue = readAnnotationValue( constantPool, bufferReader );
 		return AnnotationParameter.of( nameConstant, annotationValue );
 	}
@@ -1025,43 +1025,43 @@ public class ByteCodeReader
 						ConstantPool constantPool1 = constantPool;
 						BufferReader bufferReader1 = bufferReader;
 						int index = bufferReader1.readUnsignedShort();
-						Utf8Constant nameConstant = constantPool1.getConstant( index ).asUtf8Constant();
+						Mutf8Constant nameConstant = constantPool1.getConstant( index ).asMutf8Constant();
 						yield ClassConstant.of( nameConstant );
 					}
 				case StringConstant.TAG -> //
 					{
 						int valueIndex = bufferReader.readUnsignedShort();
-						Utf8Constant valueUtf8Constant = constantPool.getConstant( valueIndex ).asUtf8Constant();
-						yield StringConstant.of( valueUtf8Constant );
+						Mutf8Constant valueConstant = constantPool.getConstant( valueIndex ).asMutf8Constant();
+						yield StringConstant.of( valueConstant );
 					}
 				case MethodTypeConstant.TAG -> //
 					{
-						Utf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
+						Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield MethodTypeConstant.of( descriptorConstant );
 					}
 				case FieldReferenceConstant.TAG -> //
 					{
 						ClassConstant typeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
-						NameAndTypeConstant nameAndTypeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndTypeConstant();
-						yield FieldReferenceConstant.of( typeConstant, nameAndTypeConstant );
+						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
+						yield FieldReferenceConstant.of( typeConstant, nameAndDescriptorConstant );
 					}
 				case InterfaceMethodReferenceConstant.TAG -> //
 					{
 						ClassConstant typeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
-						NameAndTypeConstant nameAndTypeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndTypeConstant();
-						yield InterfaceMethodReferenceConstant.of( typeConstant, nameAndTypeConstant );
+						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
+						yield InterfaceMethodReferenceConstant.of( typeConstant, nameAndDescriptorConstant );
 					}
 				case PlainMethodReferenceConstant.TAG -> //
 					{
 						ClassConstant typeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
-						NameAndTypeConstant nameAndTypeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndTypeConstant();
-						yield PlainMethodReferenceConstant.of( typeConstant, nameAndTypeConstant );
+						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
+						yield PlainMethodReferenceConstant.of( typeConstant, nameAndDescriptorConstant );
 					}
 				case InvokeDynamicConstant.TAG -> //
 					{
 						int bootstrapMethodIndex = bufferReader.readUnsignedShort();
-						NameAndTypeConstant nameAndTypeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndTypeConstant();
-						yield InvokeDynamicConstant.of( bootstrapMethodIndex, nameAndTypeConstant );
+						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
+						yield InvokeDynamicConstant.of( bootstrapMethodIndex, nameAndDescriptorConstant );
 					}
 				case DoubleConstant.TAG -> //
 					{
@@ -1083,16 +1083,16 @@ public class ByteCodeReader
 						long value = bufferReader.readLong();
 						yield LongConstant.of( value );
 					}
-				case Utf8Constant.TAG -> //
+				case Mutf8Constant.TAG -> //
 					{
 						Buffer buffer = bufferReader.readBuffer();
-						yield Utf8Constant.of( buffer );
+						yield Mutf8Constant.of( buffer );
 					}
-				case NameAndTypeConstant.TAG -> //
+				case NameAndDescriptorConstant.TAG -> //
 					{
-						Utf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-						Utf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asUtf8Constant();
-						yield NameAndTypeConstant.of( nameConstant, descriptorConstant );
+						Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+						Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+						yield NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
 					}
 				case MethodHandleConstant.TAG -> //
 					{

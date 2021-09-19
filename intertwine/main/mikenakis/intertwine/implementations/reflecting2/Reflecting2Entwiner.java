@@ -5,7 +5,7 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
 
@@ -49,7 +49,7 @@ final class Reflecting2Entwiner<T>
 
 	private static Object newProxyInstance( ClassLoader loader, Class<?> theInterface, InvocationHandler handler )
 	{
-		Utf8Constant thisClassName = Utf8Constant.of( "test" );
+		Mutf8Constant thisClassName = Mutf8Constant.of( "test" );
 		ClassConstant thisClassConstant = ClassConstant.of( thisClassName );
 		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), thisClassConstant, Optional.empty() );
 		ByteCodeField byteCodeField = ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "handler", "" );
@@ -68,8 +68,8 @@ final class Reflecting2Entwiner<T>
 			assert !method.isSynthetic(); // ?
 			assert !method.isDefault(); // ?
 			assert !method.isBridge(); // ?
-			Utf8Constant methodNameConstant = Utf8Constant.of( method.getName() );
-			Utf8Constant methodDescriptorConstant = Utf8Constant.of( "" ); //TODO
+			Mutf8Constant methodNameConstant = Mutf8Constant.of( method.getName() );
+			Mutf8Constant methodDescriptorConstant = Mutf8Constant.of( "" ); //TODO
 			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierFlagsEnum.of(), methodNameConstant, methodDescriptorConstant, AttributeSet.of() );
 		}
 		return byteCodeType;

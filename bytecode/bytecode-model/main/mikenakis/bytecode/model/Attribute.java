@@ -28,7 +28,7 @@ import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -67,12 +67,12 @@ public abstract class Attribute
 	public static class Kind
 	{
 		public final String name;
-		public final Utf8Constant utf8Name;
+		public final Mutf8Constant mutf8Name;
 
 		public Kind( String name )
 		{
 			this.name = name;
-			utf8Name = Utf8Constant.of( name );
+			mutf8Name = Mutf8Constant.of( name );
 		}
 
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()

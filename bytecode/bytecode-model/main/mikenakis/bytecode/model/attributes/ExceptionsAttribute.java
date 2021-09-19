@@ -3,7 +3,6 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;

@@ -52,7 +52,6 @@ public final class MethodHandleConstant extends Constant
 	}
 
 	public static final int TAG = 15; // JVMS::CONSTANT_MethodHandle_info
-	public static final String tagName = "MethodHandle";
 
 	private final ReferenceKind referenceKind;
 	private final ReferenceConstant referenceConstant;

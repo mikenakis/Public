@@ -106,10 +106,10 @@ import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndTypeConstant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.Kit;
 
 import java.util.Collection;
@@ -172,10 +172,10 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedByte( constant.tag );
 		switch( constant.tag )
 		{
-			case Utf8Constant.TAG:
+			case Mutf8Constant.TAG:
 			{
-				Utf8Constant utf8Constant = constant.asUtf8Constant();
-				Buffer buffer = utf8Constant.buffer();
+				Mutf8Constant mutf8Constant = constant.asMutf8Constant();
+				Buffer buffer = mutf8Constant.buffer();
 				bufferWriter.writeUnsignedShort( buffer.length() );
 				bufferWriter.writeBuffer( buffer );
 				break;
@@ -213,35 +213,35 @@ public class ByteCodeWriter
 			case StringConstant.TAG:
 			{
 				StringConstant stringConstant = constant.asStringConstant();
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( stringConstant.valueUtf8Constant() ) );
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( stringConstant.valueConstant() ) );
 				break;
 			}
 			case FieldReferenceConstant.TAG:
 			{
 				FieldReferenceConstant fieldReferenceConstant = constant.asFieldReferenceConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.typeConstant() ) );
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.nameAndTypeConstant() ) );
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
 			case PlainMethodReferenceConstant.TAG:
 			{
 				MethodReferenceConstant methodReferenceConstant = constant.asMethodReferenceConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.typeConstant() ) );
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.nameAndTypeConstant() ) );
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
 			case InterfaceMethodReferenceConstant.TAG:
 			{
 				InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = constant.asInterfaceMethodReferenceConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.typeConstant() ) );
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.nameAndTypeConstant() ) );
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
-			case NameAndTypeConstant.TAG:
+			case NameAndDescriptorConstant.TAG:
 			{
-				NameAndTypeConstant nameAndTypeConstant = constant.asNameAndTypeConstant();
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndTypeConstant.nameConstant() ) );
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndTypeConstant.descriptorConstant() ) );
+				NameAndDescriptorConstant nameAndDescriptorConstant = constant.asNameAndDescriptorConstant();
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.nameConstant() ) );
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.descriptorConstant() ) );
 				break;
 			}
 			case MethodHandleConstant.TAG:
@@ -261,7 +261,7 @@ public class ByteCodeWriter
 			{
 				InvokeDynamicConstant invokeDynamicConstant = constant.asInvokeDynamicConstant();
 				bufferWriter.writeUnsignedShort( invokeDynamicConstant.bootstrapMethodIndex() );
-				bufferWriter.writeUnsignedShort( constantPool.getIndex( invokeDynamicConstant.nameAndTypeConstant() ) );
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( invokeDynamicConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
 			default:
@@ -279,7 +279,7 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( attributeSet.size() );
 		for( Attribute attribute : attributeSet )
 		{
-			Utf8Constant nameConstant = attribute.kind.utf8Name;
+			Mutf8Constant nameConstant = attribute.kind.mutf8Name;
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( nameConstant ) );
 			BufferWriter attributeBufferWriter = new BufferWriter();
 			attributeWriter.writeAttribute( constantPool, attribute, attributeBufferWriter );
@@ -289,80 +289,80 @@ public class ByteCodeWriter
 		}
 	}
 
-	private static final OmniSwitch4<Void,Utf8Constant,ConstantPool,BufferWriter,Attribute> fieldAttributeSwitch = //
-		OmniSwitch4.<Void,Utf8Constant,ConstantPool,BufferWriter,Attribute>newBuilder() //
-			.with( ConstantValueAttribute.kind.utf8Name, ByteCodeWriter::writeConstantValueAttribute )                                     //
-			.with( DeprecatedAttribute.kind.utf8Name, ByteCodeWriter::writeDeprecatedAttribute )                                           //
-			.with( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleAnnotationsAttribute )         //
-			.with( RuntimeVisibleAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleAnnotationsAttribute )             //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute ) //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )     //
-			.with( SignatureAttribute.kind.utf8Name, ByteCodeWriter::writeSignatureAttribute )                                             //
-			.with( SyntheticAttribute.kind.utf8Name, ByteCodeWriter::writeSyntheticAttribute )                                             //
+	private static final OmniSwitch4<Void,Mutf8Constant,ConstantPool,BufferWriter,Attribute> fieldAttributeSwitch = //
+		OmniSwitch4.<Void,Mutf8Constant,ConstantPool,BufferWriter,Attribute>newBuilder() //
+			.with( ConstantValueAttribute.kind.mutf8Name, ByteCodeWriter::writeConstantValueAttribute )                                     //
+			.with( DeprecatedAttribute.kind.mutf8Name, ByteCodeWriter::writeDeprecatedAttribute )                                           //
+			.with( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleAnnotationsAttribute )         //
+			.with( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleAnnotationsAttribute )             //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute ) //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )     //
+			.with( SignatureAttribute.kind.mutf8Name, ByteCodeWriter::writeSignatureAttribute )                                             //
+			.with( SyntheticAttribute.kind.mutf8Name, ByteCodeWriter::writeSyntheticAttribute )                                             //
 			.withDefault( ByteCodeWriter::writeUnknownAttribute )                                                                     //
 			.build();
 
 	private static void writeFieldAttribute( ConstantPool constantPool, Attribute attribute, BufferWriter bufferWriter )
 	{
-		fieldAttributeSwitch.on( attribute.kind.utf8Name, constantPool, bufferWriter, attribute );
+		fieldAttributeSwitch.on( attribute.kind.mutf8Name, constantPool, bufferWriter, attribute );
 	}
 
-	private static final OmniSwitch4<Void,Utf8Constant,ConstantPool,BufferWriter,Attribute> methodAttributeSwitch = //
-		OmniSwitch4.<Void,Utf8Constant,ConstantPool,BufferWriter,Attribute>newBuilder() //
-			.with( AnnotationDefaultAttribute.kind.utf8Name, ByteCodeWriter::writeAnnotationDefaultAttribute )                                        //
-			.with( CodeAttribute.kind.utf8Name, ByteCodeWriter::writeCodeAttribute )                                                             //
-			.with( DeprecatedAttribute.kind.utf8Name, ByteCodeWriter::writeDeprecatedAttribute )                                                      //
-			.with( ExceptionsAttribute.kind.utf8Name, ByteCodeWriter::writeExceptionsAttribute )                                                      //
-			.with( MethodParametersAttribute.kind.utf8Name, ByteCodeWriter::writeMethodParametersAttribute )                                     //
-			.with( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleAnnotationsAttribute )               //
-			.with( RuntimeVisibleAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleAnnotationsAttribute )                   //
-			.with( RuntimeInvisibleParameterAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleParameterAnnotationsAttribute )  //
-			.with( RuntimeVisibleParameterAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleParameterAnnotationsAttribute )      //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute )       //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )           //
-			.with( SignatureAttribute.kind.utf8Name, ByteCodeWriter::writeSignatureAttribute )                                                        //
-			.with( SyntheticAttribute.kind.utf8Name, ByteCodeWriter::writeSyntheticAttribute )                                                        //
+	private static final OmniSwitch4<Void,Mutf8Constant,ConstantPool,BufferWriter,Attribute> methodAttributeSwitch = //
+		OmniSwitch4.<Void,Mutf8Constant,ConstantPool,BufferWriter,Attribute>newBuilder() //
+			.with( AnnotationDefaultAttribute.kind.mutf8Name, ByteCodeWriter::writeAnnotationDefaultAttribute )                                        //
+			.with( CodeAttribute.kind.mutf8Name, ByteCodeWriter::writeCodeAttribute )                                                             //
+			.with( DeprecatedAttribute.kind.mutf8Name, ByteCodeWriter::writeDeprecatedAttribute )                                                      //
+			.with( ExceptionsAttribute.kind.mutf8Name, ByteCodeWriter::writeExceptionsAttribute )                                                      //
+			.with( MethodParametersAttribute.kind.mutf8Name, ByteCodeWriter::writeMethodParametersAttribute )                                     //
+			.with( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleAnnotationsAttribute )               //
+			.with( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleAnnotationsAttribute )                   //
+			.with( RuntimeInvisibleParameterAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleParameterAnnotationsAttribute )  //
+			.with( RuntimeVisibleParameterAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleParameterAnnotationsAttribute )      //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute )       //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )           //
+			.with( SignatureAttribute.kind.mutf8Name, ByteCodeWriter::writeSignatureAttribute )                                                        //
+			.with( SyntheticAttribute.kind.mutf8Name, ByteCodeWriter::writeSyntheticAttribute )                                                        //
 			.withDefault( ByteCodeWriter::writeUnknownAttribute )                                                                                //
 			.build();
 
 	private static void writeMethodAttribute( ConstantPool constantPool, Attribute attribute, BufferWriter bufferWriter )
 	{
-		methodAttributeSwitch.on( attribute.kind.utf8Name, constantPool, bufferWriter, attribute );
+		methodAttributeSwitch.on( attribute.kind.mutf8Name, constantPool, bufferWriter, attribute );
 	}
 
-	private static final OmniSwitch4<Void,Utf8Constant,ConstantPool,BufferWriter,Attribute> classAttributeSwitch = //
-		OmniSwitch4.<Void,Utf8Constant,ConstantPool,BufferWriter,Attribute>newBuilder() //
-			.with( BootstrapMethodsAttribute.kind.utf8Name, ByteCodeWriter::writeBootstrapMethodsAttribute )                               //
-			.with( DeprecatedAttribute.kind.utf8Name, ByteCodeWriter::writeDeprecatedAttribute )                                                //
-			.with( EnclosingMethodAttribute.kind.utf8Name, ByteCodeWriter::writeEnclosingMethodAttribute )                                      //
-			.with( InnerClassesAttribute.kind.utf8Name, ByteCodeWriter::writeInnerClassesAttribute )                                            //
-			.with( NestHostAttribute.kind.utf8Name, ByteCodeWriter::writeNestHostAttribute )                                                    //
-			.with( NestMembersAttribute.kind.utf8Name, ByteCodeWriter::writeNestMembersAttribute )                                              //
-			.with( RuntimeInvisibleAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleAnnotationsAttribute )         //
-			.with( RuntimeVisibleAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleAnnotationsAttribute )             //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute ) //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )     //
-			.with( SignatureAttribute.kind.utf8Name, ByteCodeWriter::writeSignatureAttribute )                                                  //
-			.with( SourceFileAttribute.kind.utf8Name, ByteCodeWriter::writeSourceFileAttribute )                                           //
-			.with( SyntheticAttribute.kind.utf8Name, ByteCodeWriter::writeSyntheticAttribute )                                                  //
+	private static final OmniSwitch4<Void,Mutf8Constant,ConstantPool,BufferWriter,Attribute> classAttributeSwitch = //
+		OmniSwitch4.<Void,Mutf8Constant,ConstantPool,BufferWriter,Attribute>newBuilder() //
+			.with( BootstrapMethodsAttribute.kind.mutf8Name, ByteCodeWriter::writeBootstrapMethodsAttribute )                               //
+			.with( DeprecatedAttribute.kind.mutf8Name, ByteCodeWriter::writeDeprecatedAttribute )                                                //
+			.with( EnclosingMethodAttribute.kind.mutf8Name, ByteCodeWriter::writeEnclosingMethodAttribute )                                      //
+			.with( InnerClassesAttribute.kind.mutf8Name, ByteCodeWriter::writeInnerClassesAttribute )                                            //
+			.with( NestHostAttribute.kind.mutf8Name, ByteCodeWriter::writeNestHostAttribute )                                                    //
+			.with( NestMembersAttribute.kind.mutf8Name, ByteCodeWriter::writeNestMembersAttribute )                                              //
+			.with( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleAnnotationsAttribute )         //
+			.with( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleAnnotationsAttribute )             //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute ) //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )     //
+			.with( SignatureAttribute.kind.mutf8Name, ByteCodeWriter::writeSignatureAttribute )                                                  //
+			.with( SourceFileAttribute.kind.mutf8Name, ByteCodeWriter::writeSourceFileAttribute )                                           //
+			.with( SyntheticAttribute.kind.mutf8Name, ByteCodeWriter::writeSyntheticAttribute )                                                  //
 			.withDefault( ByteCodeWriter::writeUnknownAttribute )                                                                          //
 			.build();
 
 	private static void writeClassAttribute( ConstantPool constantPool, Attribute attribute, BufferWriter bufferWriter )
 	{
-		classAttributeSwitch.on( attribute.kind.utf8Name, constantPool, bufferWriter, attribute );
+		classAttributeSwitch.on( attribute.kind.mutf8Name, constantPool, bufferWriter, attribute );
 	}
 
-	private static Void writeDeprecatedAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeDeprecatedAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == DeprecatedAttribute.kind.utf8Name;
+		assert attributeNameConstant == DeprecatedAttribute.kind.mutf8Name;
 		Kit.get( attribute ); // nothing to do
 		return null;
 	}
 
-	private static Void writeConstantValueAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeConstantValueAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == ConstantValueAttribute.kind.utf8Name;
+		assert attributeNameConstant == ConstantValueAttribute.kind.mutf8Name;
 		ConstantValueAttribute constantValueAttribute = attribute.asConstantValueAttribute();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( constantValueAttribute.valueConstant() ) );
 		return null;
@@ -382,9 +382,9 @@ public class ByteCodeWriter
 		return locationMap;
 	}
 
-	private static Void writeCodeAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeCodeAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == CodeAttribute.kind.utf8Name;
+		assert attributeNameConstant == CodeAttribute.kind.mutf8Name;
 		CodeAttribute codeAttribute = attribute.asCodeAttribute();
 		bufferWriter.writeUnsignedShort( codeAttribute.getMaxStack() );
 		bufferWriter.writeUnsignedShort( codeAttribute.getMaxLocals() );
@@ -652,25 +652,25 @@ public class ByteCodeWriter
 			};
 	}
 
-	private static final OmniSwitch5<Void,Utf8Constant,ConstantPool,BufferWriter,LocationMap,Attribute> codeAttributeSwitch = //
-		OmniSwitch5.<Void,Utf8Constant,ConstantPool,BufferWriter,LocationMap,Attribute>newBuilder() //
-			.with( LineNumberTableAttribute.kind.utf8Name, ByteCodeWriter::writeLineNumberTableAttribute )    //
-			.with( LocalVariableTableAttribute.kind.utf8Name, ByteCodeWriter::writeLocalVariableTableAttribute )    //
-			.with( LocalVariableTypeTableAttribute.kind.utf8Name, ByteCodeWriter::writeLocalVariableTypeTableAttribute )    //
-			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute )    //
-			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )    //
-			.with( StackMapTableAttribute.kind.utf8Name, ByteCodeWriter::writeStackMapTableAttribute )    //
+	private static final OmniSwitch5<Void,Mutf8Constant,ConstantPool,BufferWriter,LocationMap,Attribute> codeAttributeSwitch = //
+		OmniSwitch5.<Void,Mutf8Constant,ConstantPool,BufferWriter,LocationMap,Attribute>newBuilder() //
+			.with( LineNumberTableAttribute.kind.mutf8Name, ByteCodeWriter::writeLineNumberTableAttribute )    //
+			.with( LocalVariableTableAttribute.kind.mutf8Name, ByteCodeWriter::writeLocalVariableTableAttribute )    //
+			.with( LocalVariableTypeTableAttribute.kind.mutf8Name, ByteCodeWriter::writeLocalVariableTypeTableAttribute )    //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeInvisibleTypeAnnotationsAttribute )    //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeWriter::writeRuntimeVisibleTypeAnnotationsAttribute )    //
+			.with( StackMapTableAttribute.kind.mutf8Name, ByteCodeWriter::writeStackMapTableAttribute )    //
 			.withDefault( ByteCodeWriter::writeUnknownAttribute )                                             //
 			.build();
 
 	private static void writeCodeAttributeAttribute( ConstantPool constantPool, Attribute attribute, BufferWriter bufferWriter, LocationMap locationMap )
 	{
-		codeAttributeSwitch.on( attribute.kind.utf8Name, constantPool, bufferWriter, locationMap, attribute );
+		codeAttributeSwitch.on( attribute.kind.mutf8Name, constantPool, bufferWriter, locationMap, attribute );
 	}
 
-	private static Void writeBootstrapMethodsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeBootstrapMethodsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == BootstrapMethodsAttribute.kind.utf8Name;
+		assert attributeNameConstant == BootstrapMethodsAttribute.kind.mutf8Name;
 		BootstrapMethodsAttribute bootstrapMethodsAttribute = attribute.asBootstrapMethodsAttribute();
 		List<BootstrapMethod> bootstrapMethods = bootstrapMethodsAttribute.bootstrapMethods();
 		bufferWriter.writeUnsignedShort( bootstrapMethods.size() );
@@ -685,9 +685,9 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeAnnotationDefaultAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeAnnotationDefaultAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == AnnotationDefaultAttribute.kind.utf8Name;
+		assert attributeNameConstant == AnnotationDefaultAttribute.kind.mutf8Name;
 		AnnotationDefaultAttribute annotationDefaultAttribute = attribute.asAnnotationDefaultAttribute();
 		writeAnnotationValue( constantPool, bufferWriter, annotationDefaultAttribute.annotationValue() );
 		return null;
@@ -726,7 +726,7 @@ public class ByteCodeWriter
 
 	private static void writeClassAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ClassAnnotationValue classAnnotationValue )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.utf8Constant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.nameConstant() ) );
 	}
 
 	private static void writeAnnotationAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationAnnotationValue annotationAnnotationValue )
@@ -746,10 +746,10 @@ public class ByteCodeWriter
 			writeAnnotationValue( constantPool, bufferWriter, annotationValue );
 	}
 
-	private static Void writeStackMapTableAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
+	private static Void writeStackMapTableAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
 		Attribute attribute )
 	{
-		assert attributeNameConstant == StackMapTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == StackMapTableAttribute.kind.mutf8Name;
 		StackMapTableAttribute stackMapTableAttribute = attribute.asStackMapTableAttribute();
 		List<StackMapFrame> frames = stackMapTableAttribute.frames();
 		bufferWriter.writeUnsignedShort( frames.size() );
@@ -850,36 +850,36 @@ public class ByteCodeWriter
 			assert false;
 	}
 
-	private static Void writeSyntheticAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeSyntheticAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == SyntheticAttribute.kind.utf8Name;
+		assert attributeNameConstant == SyntheticAttribute.kind.mutf8Name;
 		Kit.get( attribute ); // nothing to do
 		return null;
 	}
 
-	private static Void writeSourceFileAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeSourceFileAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == SourceFileAttribute.kind.utf8Name;
+		assert attributeNameConstant == SourceFileAttribute.kind.mutf8Name;
 		SourceFileAttribute sourceFileAttribute = attribute.asSourceFileAttribute();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( sourceFileAttribute.valueConstant() ) );
 		return null;
 	}
 
-	private static Void writeSignatureAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeSignatureAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
 		SignatureAttribute signatureAttribute = attribute.asSignatureAttribute();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( signatureAttribute.signatureConstant() ) );
 		return null;
 	}
 
-	private static Void writeRuntimeVisibleTypeAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, Attribute attribute )
+	private static Void writeRuntimeVisibleTypeAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, Attribute attribute )
 	{
 		return writeRuntimeVisibleTypeAnnotationsAttribute( attributeNameConstant, constantPool, bufferWriter, attribute );
 	}
 
-	private static Void writeRuntimeVisibleTypeAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeRuntimeVisibleTypeAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == RuntimeVisibleTypeAnnotationsAttribute.kind.utf8Name;
+		assert attributeNameConstant == RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name;
 		RuntimeVisibleTypeAnnotationsAttribute runtimeVisibleTypeAnnotationsAttribute = attribute.asRuntimeVisibleTypeAnnotationsAttribute();
 		List<TypeAnnotation> typeAnnotations = runtimeVisibleTypeAnnotationsAttribute.typeAnnotations();
 		bufferWriter.writeUnsignedShort( typeAnnotations.size() );
@@ -888,14 +888,14 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeRuntimeInvisibleTypeAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, Attribute attribute )
+	private static Void writeRuntimeInvisibleTypeAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, Attribute attribute )
 	{
 		return writeRuntimeInvisibleTypeAnnotationsAttribute( attributeNameConstant, constantPool, bufferWriter, attribute );
 	}
 
-	private static Void writeRuntimeInvisibleTypeAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeRuntimeInvisibleTypeAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == RuntimeInvisibleTypeAnnotationsAttribute.kind.utf8Name;
+		assert attributeNameConstant == RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name;
 		RuntimeInvisibleTypeAnnotationsAttribute runtimeInvisibleTypeAnnotationsAttribute = attribute.asRuntimeInvisibleTypeAnnotationsAttribute();
 		List<TypeAnnotation> typeAnnotations = runtimeInvisibleTypeAnnotationsAttribute.typeAnnotations();
 		bufferWriter.writeUnsignedShort( typeAnnotations.size() );
@@ -1001,9 +1001,9 @@ public class ByteCodeWriter
 		writeAnnotationValue( constantPool, bufferWriter, annotationParameter.annotationValue() );
 	}
 
-	private static Void writeRuntimeVisibleParameterAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeRuntimeVisibleParameterAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == RuntimeVisibleParameterAnnotationsAttribute.kind.utf8Name;
+		assert attributeNameConstant == RuntimeVisibleParameterAnnotationsAttribute.kind.mutf8Name;
 		RuntimeVisibleParameterAnnotationsAttribute runtimeVisibleParameterAnnotationsAttribute = attribute.asRuntimeVisibleParameterAnnotationsAttribute();
 		List<ParameterAnnotationSet> parameterAnnotationSets = runtimeVisibleParameterAnnotationsAttribute.parameterAnnotationSets();
 		bufferWriter.writeUnsignedByte( parameterAnnotationSets.size() );
@@ -1012,9 +1012,9 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeRuntimeInvisibleParameterAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeRuntimeInvisibleParameterAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == RuntimeInvisibleParameterAnnotationsAttribute.kind.utf8Name;
+		assert attributeNameConstant == RuntimeInvisibleParameterAnnotationsAttribute.kind.mutf8Name;
 		RuntimeInvisibleParameterAnnotationsAttribute runtimeInvisibleParameterAnnotationsAttribute = attribute.asRuntimeInvisibleParameterAnnotationsAttribute();
 		List<ParameterAnnotationSet> parameterAnnotationSets = runtimeInvisibleParameterAnnotationsAttribute.parameterAnnotationSets();
 		bufferWriter.writeUnsignedByte( parameterAnnotationSets.size() );
@@ -1029,16 +1029,16 @@ public class ByteCodeWriter
 		writeAnnotations( constantPool, bufferWriter, annotations );
 	}
 
-	private static Void writeRuntimeInvisibleAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeRuntimeInvisibleAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == RuntimeInvisibleAnnotationsAttribute.kind.utf8Name;
+		assert attributeNameConstant == RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name;
 		RuntimeInvisibleAnnotationsAttribute runtimeInvisibleAnnotationsAttribute = attribute.asRuntimeInvisibleAnnotationsAttribute();
 		Collection<ByteCodeAnnotation> annotations = runtimeInvisibleAnnotationsAttribute.annotations();
 		writeAnnotations( constantPool, bufferWriter, annotations );
 		return null;
 	}
 
-	private static Void writeRuntimeVisibleAnnotationsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeRuntimeVisibleAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
 		RuntimeVisibleAnnotationsAttribute runtimeVisibleAnnotationsAttribute = attribute.asRuntimeVisibleAnnotationsAttribute();
 		Collection<ByteCodeAnnotation> annotations = runtimeVisibleAnnotationsAttribute.annotations();
@@ -1062,9 +1062,9 @@ public class ByteCodeWriter
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
 	}
 
-	private static Void writeMethodParametersAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeMethodParametersAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == MethodParametersAttribute.kind.utf8Name;
+		assert attributeNameConstant == MethodParametersAttribute.kind.mutf8Name;
 		MethodParametersAttribute methodParametersAttribute = attribute.asMethodParametersAttribute();
 		bufferWriter.writeUnsignedByte( methodParametersAttribute.methodParameters().size() );
 		for( MethodParameter methodParameter : methodParametersAttribute.methodParameters() )
@@ -1075,24 +1075,24 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeUnknownAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeUnknownAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
 		UnknownAttribute unknownAttribute = attribute.asUnknownAttribute();
 		bufferWriter.writeBuffer( unknownAttribute.buffer() );
 		return null;
 	}
 
-	private static Void writeUnknownAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, Attribute attribute )
+	private static Void writeUnknownAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, Attribute attribute )
 	{
 		UnknownAttribute unknownAttribute = attribute.asUnknownAttribute();
 		bufferWriter.writeBuffer( unknownAttribute.buffer() );
 		return null;
 	}
 
-	private static Void writeLocalVariableTypeTableAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
+	private static Void writeLocalVariableTypeTableAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
 		Attribute attribute )
 	{
-		assert attributeNameConstant == LocalVariableTypeTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == LocalVariableTypeTableAttribute.kind.mutf8Name;
 		LocalVariableTypeTableAttribute localVariableTypeTableAttribute = attribute.asLocalVariableTypeTableAttribute();
 		List<LocalVariableType> localVariableTypes = localVariableTypeTableAttribute.localVariableTypes();
 		bufferWriter.writeUnsignedShort( localVariableTypes.size() );
@@ -1110,10 +1110,10 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeLocalVariableTableAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
+	private static Void writeLocalVariableTableAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
 		Attribute attribute )
 	{
-		assert attributeNameConstant == LocalVariableTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == LocalVariableTableAttribute.kind.mutf8Name;
 		LocalVariableTableAttribute localVariableTableAttribute = attribute.asLocalVariableTableAttribute();
 		List<LocalVariable> localVariables = localVariableTableAttribute.localVariables();
 		bufferWriter.writeUnsignedShort( localVariables.size() );
@@ -1131,10 +1131,10 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeLineNumberTableAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
+	private static Void writeLineNumberTableAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, LocationMap locationMap, //
 		Attribute attribute )
 	{
-		assert attributeNameConstant == LineNumberTableAttribute.kind.utf8Name;
+		assert attributeNameConstant == LineNumberTableAttribute.kind.mutf8Name;
 		LineNumberTableAttribute lineNumberTableAttribute = attribute.asLineNumberTableAttribute();
 		bufferWriter.writeUnsignedShort( lineNumberTableAttribute.lineNumbers().size() );
 		for( LineNumber lineNumber : lineNumberTableAttribute.lineNumbers() )
@@ -1146,9 +1146,9 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeInnerClassesAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeInnerClassesAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == InnerClassesAttribute.kind.utf8Name;
+		assert attributeNameConstant == InnerClassesAttribute.kind.mutf8Name;
 		InnerClassesAttribute innerClassesAttribute = attribute.asInnerClassesAttribute();
 		List<InnerClass> innerClasses = innerClassesAttribute.innerClasses();
 		bufferWriter.writeUnsignedShort( innerClasses.size() );
@@ -1162,17 +1162,17 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeNestHostAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeNestHostAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == NestHostAttribute.kind.utf8Name;
+		assert attributeNameConstant == NestHostAttribute.kind.mutf8Name;
 		NestHostAttribute nestHostAttribute = attribute.asNestHostAttribute();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( nestHostAttribute.hostClassConstant ) );
 		return null;
 	}
 
-	private static Void writeNestMembersAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeNestMembersAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == NestMembersAttribute.kind.utf8Name;
+		assert attributeNameConstant == NestMembersAttribute.kind.mutf8Name;
 		NestMembersAttribute nestMembersAttribute = attribute.asNestMembersAttribute();
 		List<ClassConstant> memberClassConstants = nestMembersAttribute.memberClassConstants();
 		bufferWriter.writeUnsignedShort( memberClassConstants.size() );
@@ -1181,9 +1181,9 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeExceptionsAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeExceptionsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == ExceptionsAttribute.kind.utf8Name;
+		assert attributeNameConstant == ExceptionsAttribute.kind.mutf8Name;
 		ExceptionsAttribute exceptionsAttribute = attribute.asExceptionsAttribute();
 		List<ClassConstant> exceptionClassConstants = exceptionsAttribute.exceptionClassConstants();
 		bufferWriter.writeUnsignedShort( exceptionClassConstants.size() );
@@ -1192,13 +1192,13 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static Void writeEnclosingMethodAttribute( Utf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
+	private static Void writeEnclosingMethodAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
-		assert attributeNameConstant == EnclosingMethodAttribute.kind.utf8Name;
+		assert attributeNameConstant == EnclosingMethodAttribute.kind.mutf8Name;
 		EnclosingMethodAttribute enclosingMethodAttribute = attribute.asEnclosingMethodAttribute();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( enclosingMethodAttribute.classConstant() ) );
-		Optional<NameAndTypeConstant> methodNameAndTypeConstant = enclosingMethodAttribute.methodNameAndTypeConstant();
-		bufferWriter.writeUnsignedShort( methodNameAndTypeConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
+		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = enclosingMethodAttribute.methodNameAndDescriptorConstant();
+		bufferWriter.writeUnsignedShort( methodNameAndDescriptorConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
 		return null;
 	}
 

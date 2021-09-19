@@ -2,7 +2,7 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.attributes.code.AbsoluteInstructionReference;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -18,25 +18,25 @@ public final class LocalVariable
 	{
 		AbsoluteInstructionReference startInstructionReference = AbsoluteInstructionReference.of( Optional.of( startInstruction ) );
 		AbsoluteInstructionReference endInstructionReference = AbsoluteInstructionReference.of( endInstruction );
-		Utf8Constant nameConstant = Utf8Constant.of( name );
-		Utf8Constant descriptorConstant = Utf8Constant.of( descriptor );
+		Mutf8Constant nameConstant = Mutf8Constant.of( name );
+		Mutf8Constant descriptorConstant = Mutf8Constant.of( descriptor );
 		return of( startInstructionReference, endInstructionReference, nameConstant, descriptorConstant, index );
 	}
 
 	public static LocalVariable of( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		Utf8Constant nameConstant, Utf8Constant descriptorConstant, int index )
+		Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, int index )
 	{
 		return new LocalVariable( startInstructionReference, endInstructionReference, nameConstant, descriptorConstant, index );
 	}
 
 	public final AbsoluteInstructionReference startInstructionReference;
 	public final AbsoluteInstructionReference endInstructionReference;
-	public final Utf8Constant nameConstant;
-	public final Utf8Constant descriptorConstant;
+	public final Mutf8Constant nameConstant;
+	public final Mutf8Constant descriptorConstant;
 	public final int index;
 
 	private LocalVariable( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		Utf8Constant nameConstant, Utf8Constant descriptorConstant, int index )
+		Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, int index )
 	{
 		this.startInstructionReference = startInstructionReference;
 		this.endInstructionReference = endInstructionReference;

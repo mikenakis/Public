@@ -7,17 +7,16 @@ package mikenakis.bytecode.model.constants;
  */
 public final class PlainMethodReferenceConstant extends MethodReferenceConstant
 {
-	public static PlainMethodReferenceConstant of( ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	public static PlainMethodReferenceConstant of( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		return new PlainMethodReferenceConstant( typeConstant, nameAndTypeConstant );
+		return new PlainMethodReferenceConstant( typeConstant, nameAndDescriptorConstant );
 	}
 
 	public static final int TAG = 10; // JVMS::CONSTANT_MethodRef_info
-	public static final String tagName = "PlainMethodReference";
 
-	private PlainMethodReferenceConstant( ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	private PlainMethodReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( TAG, typeConstant, nameAndTypeConstant );
+		super( TAG, typeConstant, nameAndDescriptorConstant );
 	}
 
 	@Deprecated @Override public PlainMethodReferenceConstant asPlainMethodReferenceConstant()

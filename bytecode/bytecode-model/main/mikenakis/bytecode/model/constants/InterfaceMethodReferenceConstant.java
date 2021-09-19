@@ -7,17 +7,16 @@ package mikenakis.bytecode.model.constants;
  */
 public final class InterfaceMethodReferenceConstant extends MethodReferenceConstant
 {
-	public static InterfaceMethodReferenceConstant of( ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	public static InterfaceMethodReferenceConstant of( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		return new InterfaceMethodReferenceConstant( typeConstant, nameAndTypeConstant );
+		return new InterfaceMethodReferenceConstant( typeConstant, nameAndDescriptorConstant );
 	}
 
 	public static final int TAG = 11; // JVMS::CONSTANT_InterfaceMethodRef_info
-	public static final String tagName = "InterfaceMethodReference";
 
-	private InterfaceMethodReferenceConstant( ClassConstant typeConstant, NameAndTypeConstant nameAndTypeConstant )
+	private InterfaceMethodReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( TAG, typeConstant, nameAndTypeConstant );
+		super( TAG, typeConstant, nameAndDescriptorConstant );
 	}
 
 	@Deprecated @Override public InterfaceMethodReferenceConstant asInterfaceMethodReferenceConstant()

@@ -14,30 +14,29 @@ import java.util.Objects;
  */
 public final class InvokeDynamicConstant extends Constant
 {
-	public static InvokeDynamicConstant of( int bootstrapMethodIndex, NameAndTypeConstant nameAndTypeConstant )
+	public static InvokeDynamicConstant of( int bootstrapMethodIndex, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		return new InvokeDynamicConstant( bootstrapMethodIndex, nameAndTypeConstant );
+		return new InvokeDynamicConstant( bootstrapMethodIndex, nameAndDescriptorConstant );
 	}
 
 	public static final int TAG = 18; // JVMS::CONSTANT_InvokeDynamic_info
-	public static final String tagName = "InvokeDynamic";
 
 	private final int bootstrapMethodIndex; //TODO: get rid of the bootstrap method index, reference the actual bootstrap method here.
-	private final NameAndTypeConstant nameAndTypeConstant;
+	private final NameAndDescriptorConstant nameAndDescriptorConstant;
 
-	private InvokeDynamicConstant( int bootstrapMethodIndex, NameAndTypeConstant nameAndTypeConstant )
+	private InvokeDynamicConstant( int bootstrapMethodIndex, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
 		super( TAG );
 		this.bootstrapMethodIndex = bootstrapMethodIndex; //byteCodeType.getIndexOfBootstrapMethod( bootstrapMethod );
-		this.nameAndTypeConstant = nameAndTypeConstant;
+		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
 	public int bootstrapMethodIndex() { return bootstrapMethodIndex; }
-	public NameAndTypeConstant nameAndTypeConstant() { return nameAndTypeConstant; }
+	public NameAndDescriptorConstant nameAndDescriptorConstant() { return nameAndDescriptorConstant; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "bootstrapMethod " + bootstrapMethodIndex + ", nameAndType = " + nameAndTypeConstant;
+		return "bootstrapMethod " + bootstrapMethodIndex + ", nameAndDescriptor = " + nameAndDescriptorConstant;
 	}
 
 	@Deprecated @Override public InvokeDynamicConstant asInvokeDynamicConstant()
@@ -51,7 +50,7 @@ public final class InvokeDynamicConstant extends Constant
 		{
 			if( bootstrapMethodIndex != otherInvokeDynamicConstant.bootstrapMethodIndex )
 				return false;
-			if( !nameAndTypeConstant.equalsNameAndTypeConstant( otherInvokeDynamicConstant.nameAndTypeConstant ) )
+			if( !nameAndDescriptorConstant.equalsNameAndDescriptorConstant( otherInvokeDynamicConstant.nameAndDescriptorConstant ) )
 				return false;
 			return true;
 		}
@@ -60,7 +59,7 @@ public final class InvokeDynamicConstant extends Constant
 
 	@Override public int hashCode()
 	{
-		return Objects.hash( tag, bootstrapMethodIndex, nameAndTypeConstant );
+		return Objects.hash( tag, bootstrapMethodIndex, nameAndDescriptorConstant );
 	}
 
 	public BootstrapMethod getBootstrapMethod( ByteCodeType byteCodeType )

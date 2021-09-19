@@ -17,7 +17,6 @@ public final class LongConstant extends ValueConstant<Long>
 	}
 
 	public static final int TAG = 5; // JVMS::CONSTANT_Long_info
-	public static final String tagName = "Long";
 
 	public final long value;
 
@@ -49,7 +48,7 @@ public final class LongConstant extends ValueConstant<Long>
 		return Objects.hash( tag, value );
 	}
 
-	@Override public Long value()
+	@Deprecated @Override public Long value()
 	{
 		return value;
 	}

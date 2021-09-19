@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.attributes.code.AbsoluteInstructionReference;
-import mikenakis.bytecode.model.constants.Utf8Constant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -12,19 +12,19 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 public final class LocalVariableType
 {
 	public static LocalVariableType of( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		Utf8Constant nameConstant, Utf8Constant signatureConstant, int index )
+		Mutf8Constant nameConstant, Mutf8Constant signatureConstant, int index )
 	{
 		return new LocalVariableType( startInstructionReference, endInstructionReference, nameConstant, signatureConstant, index );
 	}
 
 	public final AbsoluteInstructionReference startInstructionReference;
 	public final AbsoluteInstructionReference endInstructionReference;
-	public final Utf8Constant nameConstant;
-	public final Utf8Constant signatureConstant; //this is a field type signature
+	public final Mutf8Constant nameConstant;
+	public final Mutf8Constant signatureConstant; //this is a field type signature
 	public final int index;
 
 	private LocalVariableType( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		Utf8Constant nameConstant, Utf8Constant signatureConstant, int index )
+		Mutf8Constant nameConstant, Mutf8Constant signatureConstant, int index )
 	{
 		this.startInstructionReference = startInstructionReference;
 		this.endInstructionReference = endInstructionReference;
