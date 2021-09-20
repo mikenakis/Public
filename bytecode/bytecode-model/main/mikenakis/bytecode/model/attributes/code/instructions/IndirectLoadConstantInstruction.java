@@ -2,12 +2,6 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.DoubleConstant;
-import mikenakis.bytecode.model.constants.FloatConstant;
-import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.LongConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
 
 public final class IndirectLoadConstantInstruction extends LoadConstantInstruction
 {
@@ -15,12 +9,12 @@ public final class IndirectLoadConstantInstruction extends LoadConstantInstructi
 	{
 		switch( constant.tag )
 		{
-			case IntegerConstant.TAG:
-			case LongConstant.TAG:
-			case FloatConstant.TAG:
-			case DoubleConstant.TAG:
-			case StringConstant.TAG:
-			case ClassConstant.TAG:
+			case Integer:
+			case Long:
+			case Float:
+			case Double:
+			case String:
+			case Class:
 				break;
 			default:
 				assert false;

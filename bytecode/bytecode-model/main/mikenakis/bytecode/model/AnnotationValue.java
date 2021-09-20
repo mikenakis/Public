@@ -16,44 +16,54 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public abstract class AnnotationValue
 {
-	public static final char ByteTag       /**/ = 'B';
-	public static final char CharacterTag  /**/ = 'C';
-	public static final char DoubleTag     /**/ = 'D';
-	public static final char FloatTag      /**/ = 'F';
-	public static final char IntTag        /**/ = 'I';
-	public static final char LongTag       /**/ = 'J';
-	public static final char ShortTag      /**/ = 'S';
-	public static final char BooleanTag    /**/ = 'Z';
-	public static final char StringTag     /**/ = 's';
-	public static final char AnnotationTag /**/ = '@';
-	public static final char ArrayTag      /**/ = '[';
-	public static final char ClassTag      /**/ = 'c';
-	public static final char EnumTag       /**/ = 'e';
-
-	public static String getNameFromTag( int tag )
+	public enum Tag
 	{
-		return switch( tag )
-			{
-				case ByteTag -> ConstAnnotationValue.BYTE_NAME;
-				case CharacterTag -> ConstAnnotationValue.CHARACTER_NAME;
-				case DoubleTag -> ConstAnnotationValue.DOUBLE_NAME;
-				case FloatTag -> ConstAnnotationValue.FLOAT_NAME;
-				case IntTag -> ConstAnnotationValue.INT_NAME;
-				case LongTag -> ConstAnnotationValue.LONG_NAME;
-				case ShortTag -> ConstAnnotationValue.SHORT_NAME;
-				case BooleanTag -> ConstAnnotationValue.BOOLEAN_NAME;
-				case StringTag -> ConstAnnotationValue.STRING_NAME;
-				case EnumTag -> EnumAnnotationValue.NAME;
-				case ClassTag -> ClassAnnotationValue.NAME;
-				case AnnotationTag -> AnnotationAnnotationValue.NAME;
-				case ArrayTag -> ArrayAnnotationValue.NAME;
-				default -> throw new UnknownValueException( tag );
-			};
+		Byte       /**/( 'B' ), //
+		Character  /**/( 'C' ), //
+		Double     /**/( 'D' ), //
+		Float      /**/( 'F' ), //
+		Integer    /**/( 'I' ), //
+		Long       /**/( 'J' ), //
+		Short      /**/( 'S' ), //
+		Boolean    /**/( 'Z' ), //
+		String     /**/( 's' ), //
+		Annotation /**/( '@' ), //
+		Array      /**/( '[' ), //
+		Class      /**/( 'c' ), //
+		Enum       /**/( 'e' );
+
+		public final char character;
+
+		Tag( char character )
+		{
+			this.character = character;
+		}
+
+		public static Tag fromCharacter( int character )
+		{
+			return switch( character )
+				{
+					case 'B' -> Byte;
+					case 'C' -> Character;
+					case 'I' -> Integer;
+					case 'S' -> Short;
+					case 'Z' -> Boolean;
+					case 'J' -> Long;
+					case 'D' -> Double;
+					case 'F' -> Float;
+					case 's' -> String;
+					case '@' -> Annotation;
+					case '[' -> Array;
+					case 'c' -> Class;
+					case 'e' -> Enum;
+					default -> throw new AssertionError();
+				};
+		}
 	}
 
-	public final int tag;
+	public final Tag tag;
 
-	protected AnnotationValue( int tag )
+	protected AnnotationValue( Tag tag )
 	{
 		this.tag = tag;
 	}

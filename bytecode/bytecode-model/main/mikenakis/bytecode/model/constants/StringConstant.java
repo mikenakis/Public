@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ConstantDesc;
 import java.util.Objects;
 
 /**
@@ -21,20 +22,16 @@ public final class StringConstant extends ValueConstant<String>
 		return new StringConstant( value );
 	}
 
-	public static final int TAG = 8; // JVMS::CONSTANT_String_info
-
 	private final Mutf8Constant valueConstant;
 
 	private StringConstant( Mutf8Constant value )
 	{
-		super( TAG );
+		super( Tag.String );
 		valueConstant = value;
 	}
 
-	public Mutf8Constant valueConstant()
-	{
-		return valueConstant;
-	}
+	public Mutf8Constant valueConstant() { return valueConstant; }
+	@Override public ConstantDesc constantDescriptor() { return valueConstant.stringValue(); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

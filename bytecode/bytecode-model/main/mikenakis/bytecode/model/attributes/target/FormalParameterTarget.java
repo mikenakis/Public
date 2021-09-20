@@ -8,8 +8,10 @@ public final class FormalParameterTarget extends Target // "formal_parameter_tar
 {
 	public final int formalParameterIndex;
 
-	public FormalParameterTarget( int formalParameterIndex )
+	public FormalParameterTarget( Type type, int formalParameterIndex )
 	{
+		super( type );
+		assert type == Type.TypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression;
 		this.formalParameterIndex = formalParameterIndex;
 	}
 

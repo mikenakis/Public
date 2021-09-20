@@ -3,37 +3,37 @@
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (2 entries)
- │   ├─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
+ │   ├─ method accessFlags = [public], name = <init>, descriptor = void()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
  │   │           │   ├─ L9:
  │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │   │           │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │   │           │   └─      RETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 9, startPc = L9
+ │   │               │   └─  lineNumber = 9, start = L9
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L9, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class0HelloWorld;" (mikenakis.bytecode.test.model.Class0HelloWorld this)
- │   └─  accessFlags = [public, static], name = "main", descriptor = "([Ljava/lang/String;)V" (void main( java.lang.String[] ))
+ │   │                   └─  index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class0HelloWorld
+ │   └─ method accessFlags = [public, static], name = main, descriptor = void( java.lang.String[] )
  │       └─ attributes (2 entries)
  │           ├─ Code maxStack = 2, maxLocals = 1
  │           │   ├─ instructions (4 entries)
  │           │   │   ├─ L13:
  │           │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │           │   │   ├─      LDCx "Hello, world!"
- │           │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │           │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │           │   │   ├─ L14:
  │           │   │   └─      RETURN
  │           │   ├─ exceptionInfos (0 entries)
  │           │   └─ attributes (2 entries)
  │           │       ├─ LineNumberTable (2 entries)
- │           │       │   ├─  lineNumber = 13, startPc = L13
- │           │       │   └─  lineNumber = 14, startPc = L14
+ │           │       │   ├─  lineNumber = 13, start = L13
+ │           │       │   └─  lineNumber = 14, start = L14
  │           │       └─ LocalVariableTable (1 entries)
- │           │           └─  index = 0, startPc = L13, endPc = @end, name = "args", descriptor = "[Ljava/lang/String;" (java.lang.String[] args)
+ │           │           └─  index = 0, start = L13, end = @end, name = args, descriptor = java.lang.String[]
  │           └─ MethodParameters (1 entries)
  │               └─  accessFlags = [], name = args
  └─ attributes (1 entries)

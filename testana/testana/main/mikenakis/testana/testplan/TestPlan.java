@@ -17,9 +17,7 @@ public class TestPlan
 {
 	public enum ShowOption
 	{
-		None,
-		Normal,
-		Verbose
+		None, Normal, Verbose
 	}
 
 	private final Collection<TestModule> testModules;
@@ -92,8 +90,12 @@ public class TestPlan
 
 	private static void showChildrenOfTestClass( TextTree textTree, TestClass testClass, ShowOption showOption )
 	{
-		if( showOption == ShowOption.Verbose )
-			textTree.print( testClass.testMethods(), TestMethod::toString );
+		switch( showOption )
+		{
+			case None -> { assert false; } //should not have been here.
+			case Normal -> { }
+			case Verbose -> textTree.print( testClass.testMethods(), TestMethod::toString );
+		}
 	}
 
 	@Override public String toString()

@@ -1,7 +1,5 @@
 package mikenakis.bytecode.writing;
 
-import mikenakis.bytecode.exceptions.UnknownConstantException;
-import mikenakis.bytecode.exceptions.UnknownValueException;
 import mikenakis.bytecode.model.AnnotationParameter;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.Attribute;
@@ -59,20 +57,15 @@ import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificat
 import mikenakis.bytecode.model.attributes.stackmap.verification.UninitializedVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.FloatConstant;
-import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
+import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.kit.Kit;
 
 import java.util.ArrayList;
@@ -122,72 +115,57 @@ final class ConstantPool
 	{
 		switch( constant.tag )
 		{
-			case Mutf8Constant.TAG:
-			case IntegerConstant.TAG:
-			case FloatConstant.TAG:
-			case LongConstant.TAG:
-			case DoubleConstant.TAG:
-				break;
-			case ClassConstant.TAG:
-			{
-				ClassConstant classConstant = constant.asClassConstant();
-				internConstant( classConstant.nameConstant() );
-				break;
-			}
-			case StringConstant.TAG:
-			{
-				StringConstant stringConstant = constant.asStringConstant();
-				internConstant( stringConstant.valueConstant() );
-				break;
-			}
-			case FieldReferenceConstant.TAG:
-			{
-				FieldReferenceConstant fieldReferenceConstant = constant.asFieldReferenceConstant();
-				internConstant( fieldReferenceConstant.typeConstant() );
-				internConstant( fieldReferenceConstant.nameAndDescriptorConstant() );
-				break;
-			}
-			case PlainMethodReferenceConstant.TAG:
-			{
-				MethodReferenceConstant methodReferenceConstant = constant.asMethodReferenceConstant();
-				internConstant( methodReferenceConstant.typeConstant() );
-				internConstant( methodReferenceConstant.nameAndDescriptorConstant() );
-				break;
-			}
-			case InterfaceMethodReferenceConstant.TAG:
-			{
-				InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = constant.asInterfaceMethodReferenceConstant();
-				internConstant( interfaceMethodReferenceConstant.typeConstant() );
-				internConstant( interfaceMethodReferenceConstant.nameAndDescriptorConstant() );
-				break;
-			}
-			case NameAndDescriptorConstant.TAG:
-			{
-				NameAndDescriptorConstant nameAndDescriptorConstant = constant.asNameAndDescriptorConstant();
-				internConstant( nameAndDescriptorConstant.nameConstant() );
-				internConstant( nameAndDescriptorConstant.descriptorConstant() );
-				break;
-			}
-			case MethodHandleConstant.TAG:
-			{
-				MethodHandleConstant methodHandleConstant = constant.asMethodHandleConstant();
-				internConstant( methodHandleConstant.referenceConstant() );
-				break;
-			}
-			case MethodTypeConstant.TAG:
-			{
-				MethodTypeConstant methodTypeConstant = constant.asMethodTypeConstant();
-				internConstant( methodTypeConstant.descriptorConstant );
-				break;
-			}
-			case InvokeDynamicConstant.TAG:
-			{
-				InvokeDynamicConstant invokeDynamicConstant = constant.asInvokeDynamicConstant();
-				internConstant( invokeDynamicConstant.nameAndDescriptorConstant() );
-				break;
-			}
-			default:
-				throw new UnknownConstantException( constant.tag );
+			case Mutf8, Integer, Float, Long, Double -> { }
+			case Class -> //
+				{
+					ClassConstant classConstant = constant.asClassConstant();
+					internConstant( classConstant.nameConstant() );
+				}
+			case String -> //
+				{
+					StringConstant stringConstant = constant.asStringConstant();
+					internConstant( stringConstant.valueConstant() );
+				}
+			case FieldReference -> //
+				{
+					FieldReferenceConstant fieldReferenceConstant = constant.asFieldReferenceConstant();
+					internConstant( fieldReferenceConstant.typeConstant() );
+					internConstant( fieldReferenceConstant.nameAndDescriptorConstant() );
+				}
+			case MethodReference -> //
+				{
+					MethodReferenceConstant methodReferenceConstant = constant.asMethodReferenceConstant();
+					internConstant( methodReferenceConstant.typeConstant() );
+					internConstant( methodReferenceConstant.nameAndDescriptorConstant() );
+				}
+			case InterfaceMethodReference -> //
+				{
+					InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = constant.asInterfaceMethodReferenceConstant();
+					internConstant( interfaceMethodReferenceConstant.typeConstant() );
+					internConstant( interfaceMethodReferenceConstant.nameAndDescriptorConstant() );
+				}
+			case NameAndDescriptor -> //
+				{
+					NameAndDescriptorConstant nameAndDescriptorConstant = constant.asNameAndDescriptorConstant();
+					internConstant( nameAndDescriptorConstant.nameConstant() );
+					internConstant( nameAndDescriptorConstant.descriptorConstant() );
+				}
+			case MethodHandle -> //
+				{
+					MethodHandleConstant methodHandleConstant = constant.asMethodHandleConstant();
+					internConstant( methodHandleConstant.referenceConstant() );
+				}
+			case MethodType -> //
+				{
+					MethodTypeConstant methodTypeConstant = constant.asMethodTypeConstant();
+					internConstant( methodTypeConstant.descriptorConstant );
+				}
+			case InvokeDynamic -> //
+				{
+					InvokeDynamicConstant invokeDynamicConstant = constant.asInvokeDynamicConstant();
+					internConstant( invokeDynamicConstant.nameAndDescriptorConstant() );
+				}
+			default -> throw new AssertionError( constant.tag.value() );
 		}
 		int existingIndex = tryGetIndex( constant );
 		assert existingIndex != 0;
@@ -195,7 +173,7 @@ final class ConstantPool
 		{
 			assert !entries.isEmpty();
 			entries.add( constant );
-			if( constant.tag == LongConstant.TAG || constant.tag == DoubleConstant.TAG )
+			if( constant.tag == Constant.Tag.Long || constant.tag == Constant.Tag.Double )
 				entries.add( null ); //8-byte constants occupy two constant pool entries. (Ancient legacy bollocks.)
 		}
 	}
@@ -203,7 +181,7 @@ final class ConstantPool
 	void internMember( ByteCodeMember byteCodeMember )
 	{
 		internConstant( byteCodeMember.nameConstant );
-		internConstant( byteCodeMember.descriptorConstant() );
+		internConstant( byteCodeMember.descriptorConstant );
 		internAttributeSet( byteCodeMember.attributeSet );
 	}
 
@@ -416,12 +394,13 @@ final class ConstantPool
 	{
 		switch( annotationValue.tag )
 		{
-			case 'B', 's', 'Z', 'S', 'J', 'I', 'F', 'D', 'C' -> internConstAnnotationValue( annotationValue.asConstAnnotationValue() );
-			case 'e' -> internEnumAnnotationValue( annotationValue.asEnumAnnotationValue() );
-			case 'c' -> internClassAnnotationValue( annotationValue.asClassAnnotationValue() );
-			case '@' -> internAnnotationAnnotationValue( annotationValue.asAnnotationAnnotationValue() );
-			case '[' -> internArrayAnnotationValue( annotationValue.asArrayAnnotationValue() );
-			default -> throw new UnknownValueException( annotationValue.tag );
+			case Byte, Character, Double, Float, Integer, Long, Short, Boolean, String -> //
+				internConstAnnotationValue( annotationValue.asConstAnnotationValue() );
+			case Annotation -> internAnnotationAnnotationValue( annotationValue.asAnnotationAnnotationValue() );
+			case Array -> internArrayAnnotationValue( annotationValue.asArrayAnnotationValue() );
+			case Class -> internClassAnnotationValue( annotationValue.asClassAnnotationValue() );
+			case Enum -> internEnumAnnotationValue( annotationValue.asEnumAnnotationValue() );
+			default -> throw new AssertionError( annotationValue );
 		}
 	}
 
@@ -469,7 +448,7 @@ final class ConstantPool
 	private void internAnnotation( ByteCodeAnnotation annotation )
 	{
 		internConstant( annotation.typeConstant );
-		for( AnnotationParameter annotationParameter : annotation.annotationParameters() )
+		for( AnnotationParameter annotationParameter : annotation.parameters() )
 		{
 			internConstant( annotationParameter.nameConstant() );
 			internAnnotationValue( annotationParameter.annotationValue() );

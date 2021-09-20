@@ -15,10 +15,10 @@ public abstract class ReferenceConstant extends Constant
 	private final ClassConstant typeConstant;
 	private final NameAndDescriptorConstant nameAndDescriptorConstant;
 
-	protected ReferenceConstant( int tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	protected ReferenceConstant( Tag tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
 		super( tag );
-		assert tag == FieldReferenceConstant.TAG || tag == PlainMethodReferenceConstant.TAG || tag == InterfaceMethodReferenceConstant.TAG;
+		assert tag == Constant.Tag.FieldReference || tag == Constant.Tag.MethodReference || tag == Constant.Tag.InterfaceMethodReference;
 		this.typeConstant = typeConstant;
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}

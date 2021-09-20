@@ -4,7 +4,7 @@
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (1 entries)
- │   └─  accessFlags = [public, abstract], name = "value", descriptor = "()I" (int value())
+ │   └─ method accessFlags = [public, abstract], name = value, descriptor = int()
  │       └─ attributes (1 entries)
  │           └─ AnnotationDefault 
  │               └─ Integer value =  5
@@ -13,7 +13,7 @@
      └─ RuntimeVisibleAnnotations (2 entries)
          ├─ annotation  type = java.lang.annotation.Target, 1 parameters
          │   └─ parameter name = "value"
-         │       └─ array value =  6 elements
+         │       └─ Array value =  6 elements
          │           ├─ element type = java.lang.annotation.ElementType, value = TYPE
          │           ├─ element type = java.lang.annotation.ElementType, value = FIELD
          │           ├─ element type = java.lang.annotation.ElementType, value = METHOD
@@ -22,4 +22,4 @@
          │           └─ element type = java.lang.annotation.ElementType, value = LOCAL_VARIABLE
          └─ annotation  type = java.lang.annotation.Retention, 1 parameters
              └─ parameter name = "value"
-                 └─ enum value =  type = java.lang.annotation.RetentionPolicy, value = CLASS
+                 └─ Enum value =  type = java.lang.annotation.RetentionPolicy, value = CLASS

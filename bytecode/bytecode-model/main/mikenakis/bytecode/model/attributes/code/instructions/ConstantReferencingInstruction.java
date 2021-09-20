@@ -3,11 +3,6 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
-import mikenakis.bytecode.model.constants.MethodReferenceConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 
 import java.util.Set;
 
@@ -29,10 +24,10 @@ public final class ConstantReferencingInstruction extends Instruction
 		super( Group.ConstantReferencing );
 		switch( constant.tag )
 		{
-			case FieldReferenceConstant.TAG:
-			case InterfaceMethodReferenceConstant.TAG:
-			case PlainMethodReferenceConstant.TAG:
-			case ClassConstant.TAG:
+			case FieldReference:
+			case InterfaceMethodReference:
+			case MethodReference:
+			case Class:
 				break;
 			default:
 				assert false;

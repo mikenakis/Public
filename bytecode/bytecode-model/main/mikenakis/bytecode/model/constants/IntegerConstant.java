@@ -16,13 +16,11 @@ public final class IntegerConstant extends ValueConstant<Integer>
 		return new IntegerConstant( value );
 	}
 
-	public static final int TAG = 3; // JVMS::CONSTANT_Integer_info
-
 	public final int value;
 
 	private IntegerConstant( int value )
 	{
-		super( TAG );
+		super( Tag.Integer );
 		this.value = value;
 	}
 

@@ -1,8 +1,10 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.attributes.code.AbsoluteInstructionReference;
+import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
+import java.util.Optional;
 
 /**
  * Represents an entry of the "local_variable_type_table[]" of a {@link LocalVariableTypeTableAttribute}.
@@ -11,23 +13,23 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class LocalVariableType
 {
-	public static LocalVariableType of( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		Mutf8Constant nameConstant, Mutf8Constant signatureConstant, int index )
+	public static LocalVariableType of( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
+		Mutf8Constant signatureConstant, int index )
 	{
-		return new LocalVariableType( startInstructionReference, endInstructionReference, nameConstant, signatureConstant, index );
+		return new LocalVariableType( startInstruction, endInstruction, nameConstant, signatureConstant, index );
 	}
 
-	public final AbsoluteInstructionReference startInstructionReference;
-	public final AbsoluteInstructionReference endInstructionReference;
+	public final Instruction startInstruction;
+	public final Optional<Instruction> endInstruction;
 	public final Mutf8Constant nameConstant;
 	public final Mutf8Constant signatureConstant; //this is a field type signature
 	public final int index;
 
-	private LocalVariableType( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		Mutf8Constant nameConstant, Mutf8Constant signatureConstant, int index )
+	private LocalVariableType( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
+		Mutf8Constant signatureConstant, int index )
 	{
-		this.startInstructionReference = startInstructionReference;
-		this.endInstructionReference = endInstructionReference;
+		this.startInstruction = startInstruction;
+		this.endInstruction = endInstruction;
 		this.nameConstant = nameConstant;
 		this.signatureConstant = signatureConstant;
 		this.index = index;
@@ -35,7 +37,7 @@ public final class LocalVariableType
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "index = " + index + ", startInstruction = {" + startInstructionReference + "}, endInstruction = {" + endInstructionReference + "}" +
+		return "index = " + index + ", startInstruction = {" + startInstruction + "}, endInstruction = {" + endInstruction + "}" +
 			", name = " + nameConstant + ", signature = " + signatureConstant;
 	}
 }

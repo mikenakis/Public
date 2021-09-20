@@ -3,7 +3,7 @@
  │   └─ Class name = "mikenakis/bytecode/test/model/Interface2"
  ├─ extra constants (0 entries)
  ├─ fields (1 entries)
- │   └─  accessFlags = [private, final], name = "interface1", descriptor = "Lmikenakis/bytecode/test/model/Interface1;" (mikenakis.bytecode.test.model.Interface1 interface1)
+ │   └─ field accessFlags = [private, final], name = interface1, descriptor = mikenakis.bytecode.test.model.Interface1
  │       └─ attributes (1 entries)
  │           └─ RuntimeVisibleAnnotations (1 entries)
  │               └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 2 parameters
@@ -12,13 +12,13 @@
  │                   └─ parameter name = "doubleParameter"
  │                       └─ Double value =  1.1
  ├─ methods (3 entries)
- │   ├─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
+ │   ├─ method accessFlags = [public], name = <init>, descriptor = void()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 2, maxLocals = 1
  │   │           ├─ instructions (6 entries)
  │   │           │   ├─ L14:
  │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
+ │   │           │   ├─      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
  │   │           │   ├─ L10:
  │   │           │   ├─      ALOAD_0
  │   │           │   ├─      ALOAD_0
@@ -28,12 +28,12 @@
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (3 entries)
- │   │               │   ├─  lineNumber = 14, startPc = L14
- │   │               │   ├─  lineNumber = 10, startPc = L10
- │   │               │   └─  lineNumber = 15, startPc = L15
+ │   │               │   ├─  lineNumber = 14, start = L14
+ │   │               │   ├─  lineNumber = 10, start = L10
+ │   │               │   └─  lineNumber = 15, start = L15
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L14, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class5ExtendingClass3AndImplementingInterface2;" (mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this)
- │   ├─  accessFlags = [public], name = "getInterface1", descriptor = "()Lmikenakis/bytecode/test/model/Interface1;" (mikenakis.bytecode.test.model.Interface1 getInterface1())
+ │   │                   └─  index = 0, start = L14, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
+ │   ├─ method accessFlags = [public], name = getInterface1, descriptor = mikenakis.bytecode.test.model.Interface1()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
@@ -44,16 +44,16 @@
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 19, startPc = L19
+ │   │               │   └─  lineNumber = 19, start = L19
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L19, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class5ExtendingClass3AndImplementingInterface2;" (mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this)
- │   └─  accessFlags = [public], name = "getLong", descriptor = "(Lmikenakis/bytecode/test/model/Class3ImplementingInterface;)J" (long getLong( mikenakis.bytecode.test.model.Class3ImplementingInterface ))
+ │   │                   └─  index = 0, start = L19, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
+ │   └─ method accessFlags = [public], name = getLong, descriptor = long( mikenakis.bytecode.test.model.Class3ImplementingInterface )
  │       └─ attributes (2 entries)
  │           ├─ Code maxStack = 2, maxLocals = 4
  │           │   ├─ instructions (5 entries)
  │           │   │   ├─ L25:
- │           │   │   ├─      INVOKESTATIC java.lang.Thread java.lang.Thread.currentThread()
- │           │   │   ├─      INVOKEVIRTUAL long java.lang.Thread.getId()
+ │           │   │   ├─      INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread()
+ │           │   │   ├─      INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
  │           │   │   ├─      LSTORE_2
  │           │   │   ├─ L26:
  │           │   │   ├─      LLOAD_2
@@ -61,12 +61,12 @@
  │           │   ├─ exceptionInfos (0 entries)
  │           │   └─ attributes (2 entries)
  │           │       ├─ LineNumberTable (2 entries)
- │           │       │   ├─  lineNumber = 25, startPc = L25
- │           │       │   └─  lineNumber = 26, startPc = L26
+ │           │       │   ├─  lineNumber = 25, start = L25
+ │           │       │   └─  lineNumber = 26, start = L26
  │           │       └─ LocalVariableTable (3 entries)
- │           │           ├─  index = 0, startPc = L25, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class5ExtendingClass3AndImplementingInterface2;" (mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this)
- │           │           ├─  index = 1, startPc = L25, endPc = @end, name = "class3ImplementingInterface", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface)
- │           │           └─  index = 2, startPc = L26, endPc = @end, name = "id", descriptor = "J" (long id)
+ │           │           ├─  index = 0, start = L25, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
+ │           │           ├─  index = 1, start = L25, end = @end, name = class3ImplementingInterface, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │           │           └─  index = 2, start = L26, end = @end, name = id, descriptor = long
  │           └─ MethodParameters (1 entries)
  │               └─  accessFlags = [], name = class3ImplementingInterface
  └─ attributes (1 entries)

@@ -16,13 +16,11 @@ public final class FloatConstant extends ValueConstant<Float>
 		return new FloatConstant( value );
 	}
 
-	public static final int TAG = 4; // JVMS::CONSTANT_Float_info
-
 	public final float value;
 
 	private FloatConstant( float value )
 	{
-		super( TAG );
+		super( Tag.Float );
 		this.value = value;
 	}
 

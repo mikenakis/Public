@@ -28,14 +28,12 @@ public final class Mutf8Constant extends ValueConstant<String>
 		return new Mutf8Constant( buffer, null );
 	}
 
-	public static final int TAG = 1; // JVMS::CONSTANT_Utf8_info
-
 	@SuppressWarnings( "FieldNamingConvention" ) private Buffer _buffer;
 	@SuppressWarnings( "FieldNamingConvention" ) private String _stringValue;
 
 	private Mutf8Constant( Buffer buffer, String stringValue )
 	{
-		super( TAG );
+		super( Tag.Mutf8 );
 		assert (stringValue == null) != (buffer == null);
 		_buffer = buffer;
 		_stringValue = stringValue;

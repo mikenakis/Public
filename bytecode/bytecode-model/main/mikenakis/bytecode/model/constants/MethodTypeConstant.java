@@ -3,6 +3,8 @@ package mikenakis.bytecode.model.constants;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ConstantDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Objects;
 
 /**
@@ -22,14 +24,17 @@ public final class MethodTypeConstant extends Constant
 		return of( Mutf8Constant.of( descriptor ) );
 	}
 
-	public static final int TAG = 16; // JVMS::CONSTANT_MethodType_info
-
 	public final Mutf8Constant descriptorConstant;
 
 	private MethodTypeConstant( Mutf8Constant descriptorConstant )
 	{
-		super( TAG );
+		super( Tag.MethodType );
 		this.descriptorConstant = descriptorConstant;
+	}
+
+	@Override public ConstantDesc constantDescriptor()
+	{
+		return MethodTypeDesc.ofDescriptor( descriptorConstant.stringValue() );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

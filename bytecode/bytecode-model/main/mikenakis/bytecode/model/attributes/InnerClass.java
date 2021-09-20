@@ -22,20 +22,6 @@ public final class InnerClass
 		return new InnerClass( innerClassConstant, outerClassConstant, innerNameConstant, modifierSet );
 	}
 
-	//FIXME XXX TODO use FlagsEnum for the following!
-	//@formatter:off
-	public static final int ACC_PUBLIC	    = 0x0001; // Marked or implicitly public in source.
-	public static final int ACC_PRIVATE	    = 0x0002; // Marked private in source.
-	public static final int ACC_PROTECTED   = 0x0004; // Marked protected in source.
-	public static final int ACC_STATIC	    = 0x0008; // Marked or implicitly static in source.
-	public static final int ACC_FINAL	    = 0x0010; // Marked final in source.
-	public static final int ACC_INTERFACE   = 0x0200; // Was an interface in source.
-	public static final int ACC_ABSTRACT    = 0x0400; // Marked or implicitly abstract in source.
-	public static final int ACC_SYNTHETIC   = 0x1000; // Declared synthetic; not present in the source code.
-	public static final int ACC_ANNOTATION  = 0x2000; // Declared as an annotation type.
-	public static final int ACC_ENUM	    = 0x4000; // Declared as an enum type.
-	//@formatter:on
-
 	public enum InnerClassModifier
 	{
 		Public,     // Marked or implicitly public in source.
@@ -51,16 +37,16 @@ public final class InnerClass
 	}
 
 	public static final FlagEnum<InnerClassModifier> innerClassModifierFlagsEnum = FlagEnum.of( InnerClassModifier.class, //
-		Map.entry( InnerClassModifier.Public    , 0x0001 ),   // ACC_PUBLIC       = 0x0001
-		Map.entry( InnerClassModifier.Private   , 0x0002 ),   // ACC_PRIVATE      = 0x0002
-		Map.entry( InnerClassModifier.Protected , 0x0004 ),   // ACC_PROTECTED    = 0x0004
-		Map.entry( InnerClassModifier.Static    , 0x0008 ),   // ACC_STATIC       = 0x0008
-		Map.entry( InnerClassModifier.Final     , 0x0010 ),   // ACC_FINAL        = 0x0010
-		Map.entry( InnerClassModifier.Interface , 0x0200 ),   // ACC_INTERFACE    = 0x0200
-		Map.entry( InnerClassModifier.Abstract  , 0x0400 ),   // ACC_ABSTRACT     = 0x0400
-		Map.entry( InnerClassModifier.Synthetic , 0x1000 ),   // ACC_SYNTHETIC    = 0x1000
-		Map.entry( InnerClassModifier.Annotation, 0x2000 ),   // ACC_ANNOTATION   = 0x2000
-		Map.entry( InnerClassModifier.Enum      , 0x4000 ) ); // ACC_ENUM         = 0x4000
+		Map.entry( InnerClassModifier.Public    , 0x0001 ),   // ACC_PUBLIC
+		Map.entry( InnerClassModifier.Private   , 0x0002 ),   // ACC_PRIVATE
+		Map.entry( InnerClassModifier.Protected , 0x0004 ),   // ACC_PROTECTED
+		Map.entry( InnerClassModifier.Static    , 0x0008 ),   // ACC_STATIC
+		Map.entry( InnerClassModifier.Final     , 0x0010 ),   // ACC_FINAL
+		Map.entry( InnerClassModifier.Interface , 0x0200 ),   // ACC_INTERFACE
+		Map.entry( InnerClassModifier.Abstract  , 0x0400 ),   // ACC_ABSTRACT
+		Map.entry( InnerClassModifier.Synthetic , 0x1000 ),   // ACC_SYNTHETIC
+		Map.entry( InnerClassModifier.Annotation, 0x2000 ),   // ACC_
+		Map.entry( InnerClassModifier.Enum      , 0x4000 ) ); // ACC_ENUM
 
 	private final ClassConstant innerClassConstant;
 	private final Optional<ClassConstant> outerClassConstant;

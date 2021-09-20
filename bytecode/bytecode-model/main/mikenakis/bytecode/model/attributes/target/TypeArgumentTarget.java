@@ -9,8 +9,10 @@ public final class TypeArgumentTarget extends Target // "type_argument_target" i
 	public final int offset;
 	public final int typeArgumentIndex;
 
-	public TypeArgumentTarget( int offset, int typeArgumentIndex )
+	public TypeArgumentTarget( Type type, int offset, int typeArgumentIndex )
 	{
+		super( type );
+		assert type == Type.TypeInCastExpression || type == Type.TypeArgumentForGenericConstructorInNewExpressionOrExplicitConstructorInvocationStatement || type == Type.TypeArgumentForGenericMethodInMethodInvocationExpression || type == Type.TypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew || type == Type.TypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier;
 		this.offset = offset;
 		this.typeArgumentIndex = typeArgumentIndex;
 	}

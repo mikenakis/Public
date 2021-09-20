@@ -32,8 +32,10 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 
 	public final List<Entry> entries;
 
-	public LocalVariableTarget( List<Entry> entries )
+	public LocalVariableTarget( Type type, List<Entry> entries )
 	{
+		super( type );
+		assert type == Type.TypeInLocalVariableDeclaration || type == Type.TypeInResourceVariableDeclaration;
 		this.entries = entries;
 	}
 

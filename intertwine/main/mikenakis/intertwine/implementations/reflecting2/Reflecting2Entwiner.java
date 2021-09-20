@@ -8,6 +8,7 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
+import mikenakis.kit.Kit;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -52,7 +53,7 @@ final class Reflecting2Entwiner<T>
 		Mutf8Constant thisClassName = Mutf8Constant.of( "test" );
 		ClassConstant thisClassConstant = ClassConstant.of( thisClassName );
 		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), thisClassConstant, Optional.empty() );
-		ByteCodeField byteCodeField = ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "handler", "" );
+		ByteCodeField byteCodeField = ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "handler", Kit.get( null ) );
 		byteCodeType.addField( byteCodeField );
 		for( Method method : theInterface.getMethods() )
 		{

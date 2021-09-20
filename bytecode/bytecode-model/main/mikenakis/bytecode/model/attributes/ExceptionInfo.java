@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.attributes.code.AbsoluteInstructionReference;
+import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -13,29 +13,29 @@ import java.util.Optional;
  */
 public final class ExceptionInfo
 {
-	public static ExceptionInfo of( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		AbsoluteInstructionReference handlerInstructionReference, Optional<ClassConstant> catchTypeConstant )
+	public static ExceptionInfo of( Instruction startInstruction, Optional<Instruction> endInstruction, //
+		Instruction handlerInstruction, Optional<ClassConstant> catchTypeConstant )
 	{
-		return new ExceptionInfo( startInstructionReference, endInstructionReference, handlerInstructionReference, catchTypeConstant );
+		return new ExceptionInfo( startInstruction, endInstruction, handlerInstruction, catchTypeConstant );
 	}
 
-	public final AbsoluteInstructionReference startInstructionReference;
-	public final AbsoluteInstructionReference endInstructionReference;
-	public final AbsoluteInstructionReference handlerInstructionReference;
+	public final Instruction startInstruction;
+	public final Optional<Instruction> endInstruction;
+	public final Instruction handlerInstruction;
 	public final Optional<ClassConstant> catchTypeConstant;
 
-	private ExceptionInfo( AbsoluteInstructionReference startInstructionReference, AbsoluteInstructionReference endInstructionReference, //
-		AbsoluteInstructionReference handlerInstructionReference, Optional<ClassConstant> catchTypeConstant )
+	private ExceptionInfo( Instruction startInstruction, Optional<Instruction> endInstruction, //
+		Instruction handlerInstruction, Optional<ClassConstant> catchTypeConstant )
 	{
-		this.startInstructionReference = startInstructionReference;
-		this.endInstructionReference = endInstructionReference;
-		this.handlerInstructionReference = handlerInstructionReference;
+		this.startInstruction = startInstruction;
+		this.endInstruction = endInstruction;
+		this.handlerInstruction = handlerInstruction;
 		this.catchTypeConstant = catchTypeConstant;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "start = {" + startInstructionReference + "}, handler = {" + handlerInstructionReference + "}" + //
-			catchTypeConstant.map( classConstant -> ", catchType = " + classConstant.getClassName() ).orElse( "" );
+		return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + //
+			catchTypeConstant.map( classConstant -> ", catchType = " + classConstant ).orElse( "" );
 	}
 }

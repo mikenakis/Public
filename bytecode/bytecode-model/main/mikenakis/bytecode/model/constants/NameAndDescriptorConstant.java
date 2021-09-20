@@ -17,14 +17,12 @@ public final class NameAndDescriptorConstant extends Constant
 		return new NameAndDescriptorConstant( nameConstant, descriptorConstant );
 	}
 
-	public static final int TAG = 12; // JVMS::CONSTANT_NameAndType_info
-
 	private final Mutf8Constant nameConstant;
 	private final Mutf8Constant descriptorConstant;
 
 	private NameAndDescriptorConstant( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant )
 	{
-		super( TAG );
+		super( Tag.NameAndDescriptor );
 		this.nameConstant = nameConstant;
 		this.descriptorConstant = descriptorConstant;
 	}

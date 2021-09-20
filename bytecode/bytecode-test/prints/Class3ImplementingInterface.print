@@ -3,57 +3,57 @@
  │   └─ Class name = "mikenakis/bytecode/test/model/Interface1"
  ├─ extra constants (0 entries)
  ├─ fields (10 entries)
- │   ├─  accessFlags = [private, final], name = "enum1", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 enum1)
- │   ├─  accessFlags = [private, final], name = "booleanMember", descriptor = "Z" (boolean booleanMember)
+ │   ├─ field accessFlags = [private, final], name = enum1, descriptor = mikenakis.bytecode.test.model.Enum1
+ │   ├─ field accessFlags = [private, final], name = booleanMember, descriptor = boolean
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 1
- │   ├─  accessFlags = [private, final], name = "byteMember", descriptor = "B" (byte byteMember)
+ │   ├─ field accessFlags = [private, final], name = byteMember, descriptor = byte
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 1
- │   ├─  accessFlags = [private, final], name = "charMember", descriptor = "C" (char charMember)
+ │   ├─ field accessFlags = [private, final], name = charMember, descriptor = char
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 99
- │   ├─  accessFlags = [private], name = "doubleMember", descriptor = "D" (double doubleMember)
- │   ├─  accessFlags = [private, final], name = "floatMember", descriptor = "F" (float floatMember)
+ │   ├─ field accessFlags = [private], name = doubleMember, descriptor = double
+ │   ├─ field accessFlags = [private, final], name = floatMember, descriptor = float
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 0.25f
- │   ├─  accessFlags = [private, final], name = "intMember", descriptor = "I" (int intMember)
+ │   ├─ field accessFlags = [private, final], name = intMember, descriptor = int
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 2
- │   ├─  accessFlags = [private, final], name = "longMember", descriptor = "J" (long longMember)
+ │   ├─ field accessFlags = [private, final], name = longMember, descriptor = long
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 3L
- │   ├─  accessFlags = [private, final], name = "shortVar", descriptor = "S" (short shortVar)
+ │   ├─ field accessFlags = [private, final], name = shortVar, descriptor = short
  │   │   └─ attributes (1 entries)
  │   │       └─ ConstantValue 4
- │   └─  accessFlags = [private, final], name = "stringMember", descriptor = "Ljava/lang/String;" (java.lang.String stringMember)
+ │   └─ field accessFlags = [private, final], name = stringMember, descriptor = java.lang.String
  │       └─ attributes (1 entries)
  │           └─ ConstantValue "aΦ됔b"
  ├─ methods (11 entries)
- │   ├─  accessFlags = [protected], name = "<init>", descriptor = "()V" (void <init>())
+ │   ├─ method accessFlags = [protected], name = <init>, descriptor = void()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 2, maxLocals = 1
  │   │           ├─ instructions (4 entries)
  │   │           │   ├─ L29:
  │   │           │   ├─      ALOAD_0
  │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
- │   │           │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>( mikenakis.bytecode.test.model.Enum1 )
+ │   │           │   ├─      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Enum1 )
  │   │           │   ├─ L30:
  │   │           │   └─      RETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (2 entries)
- │   │               │   ├─  lineNumber = 29, startPc = L29
- │   │               │   └─  lineNumber = 30, startPc = L30
+ │   │               │   ├─  lineNumber = 29, start = L29
+ │   │               │   └─  lineNumber = 30, start = L30
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L29, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   ├─  accessFlags = [protected], name = "<init>", descriptor = "(Lmikenakis/bytecode/test/model/Enum1;)V" (void <init>( mikenakis.bytecode.test.model.Enum1 ))
+ │   │                   └─  index = 0, start = L29, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   ├─ method accessFlags = [protected], name = <init>, descriptor = void( mikenakis.bytecode.test.model.Enum1 )
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 3, maxLocals = 2
  │   │       │   ├─ instructions (33 entries)
  │   │       │   │   ├─ L33:
  │   │       │   │   ├─      ALOAD_0
- │   │       │   │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │   │       │   │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │   │       │   │   ├─ L17:
  │   │       │   │   ├─      ALOAD_0
  │   │       │   │   ├─      ICONST_1
@@ -99,24 +99,24 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (12 entries)
- │   │       │       │   ├─  lineNumber = 33, startPc = L33
- │   │       │       │   ├─  lineNumber = 17, startPc = L17
- │   │       │       │   ├─  lineNumber = 18, startPc = L18
- │   │       │       │   ├─  lineNumber = 19, startPc = L19
- │   │       │       │   ├─  lineNumber = 20, startPc = L20
- │   │       │       │   ├─  lineNumber = 21, startPc = L21
- │   │       │       │   ├─  lineNumber = 22, startPc = L22
- │   │       │       │   ├─  lineNumber = 23, startPc = L23
- │   │       │       │   ├─  lineNumber = 24, startPc = L24
- │   │       │       │   ├─  lineNumber = 25, startPc = L25
- │   │       │       │   ├─  lineNumber = 34, startPc = L34
- │   │       │       │   └─  lineNumber = 35, startPc = L35
+ │   │       │       │   ├─  lineNumber = 33, start = L33
+ │   │       │       │   ├─  lineNumber = 17, start = L17
+ │   │       │       │   ├─  lineNumber = 18, start = L18
+ │   │       │       │   ├─  lineNumber = 19, start = L19
+ │   │       │       │   ├─  lineNumber = 20, start = L20
+ │   │       │       │   ├─  lineNumber = 21, start = L21
+ │   │       │       │   ├─  lineNumber = 22, start = L22
+ │   │       │       │   ├─  lineNumber = 23, start = L23
+ │   │       │       │   ├─  lineNumber = 24, start = L24
+ │   │       │       │   ├─  lineNumber = 25, start = L25
+ │   │       │       │   ├─  lineNumber = 34, start = L34
+ │   │       │       │   └─  lineNumber = 35, start = L35
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L33, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   │       │           └─  index = 1, startPc = L33, endPc = @end, name = "enum1", descriptor = "Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 enum1)
+ │   │       │           ├─  index = 0, start = L33, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   │       │           └─  index = 1, start = L33, end = @end, name = enum1, descriptor = mikenakis.bytecode.test.model.Enum1
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = enum1
- │   ├─  accessFlags = [public], name = "getEnum1", descriptor = "()Lmikenakis/bytecode/test/model/Enum1;" (mikenakis.bytecode.test.model.Enum1 getEnum1())
+ │   ├─ method accessFlags = [public], name = getEnum1, descriptor = mikenakis.bytecode.test.model.Enum1()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
@@ -127,27 +127,27 @@
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 39, startPc = L39
+ │   │               │   └─  lineNumber = 39, start = L39
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L39, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   ├─  accessFlags = [public], name = "getInteger", descriptor = "(Lmikenakis/bytecode/test/model/Class3ImplementingInterface;)I" (int getInteger( mikenakis.bytecode.test.model.Class3ImplementingInterface ))
+ │   │                   └─  index = 0, start = L39, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   ├─ method accessFlags = [public], name = getInteger, descriptor = int( mikenakis.bytecode.test.model.Class3ImplementingInterface )
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 1, maxLocals = 2
  │   │       │   ├─ instructions (3 entries)
  │   │       │   │   ├─ L45:
- │   │       │   │   ├─      INVOKESTATIC java.util.List java.util.Collections.emptyList()
- │   │       │   │   ├─      INVOKEINTERFACE int java.util.List.size() 1 arguments
+ │   │       │   │   ├─      INVOKESTATIC type = java.util.Collections, name = emptyList, descriptor = java.util.List()
+ │   │       │   │   ├─      INVOKEINTERFACE type = java.util.List, name = size, descriptor = int() 1 arguments
  │   │       │   │   └─      IRETURN
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 45, startPc = L45
+ │   │       │       │   └─  lineNumber = 45, start = L45
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L45, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   │       │           └─  index = 1, startPc = L45, endPc = @end, name = "class3ImplementingInterface", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface)
+ │   │       │           ├─  index = 0, start = L45, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   │       │           └─  index = 1, start = L45, end = @end, name = class3ImplementingInterface, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = class3ImplementingInterface
- │   ├─  accessFlags = [public, final], name = "setDouble", descriptor = "(D)V" (void setDouble( double ))
+ │   ├─ method accessFlags = [public, final], name = setDouble, descriptor = void( double )
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 5, maxLocals = 3
  │   │       │   ├─ instructions (6 entries)
@@ -162,37 +162,37 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (2 entries)
- │   │       │       │   ├─  lineNumber = 50, startPc = L50
- │   │       │       │   └─  lineNumber = 51, startPc = L51
+ │   │       │       │   ├─  lineNumber = 50, start = L50
+ │   │       │       │   └─  lineNumber = 51, start = L51
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L50, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   │       │           └─  index = 1, startPc = L50, endPc = @end, name = "d", descriptor = "D" (double d)
+ │   │       │           ├─  index = 0, start = L50, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   │       │           └─  index = 1, start = L50, end = @end, name = d, descriptor = double
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = d
- │   ├─  accessFlags = [public, final], name = "methodThatThrowsCheckedException", descriptor = "()Z" (boolean methodThatThrowsCheckedException())
+ │   ├─ method accessFlags = [public, final], name = methodThatThrowsCheckedException, descriptor = boolean()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (7 entries)
  │   │       │   │   ├─ L55:
  │   │       │   │   ├─      LDCx ""
  │   │       │   │   ├─      LDCx ""
- │   │       │   │   ├─      INVOKESTATIC java.io.File java.io.File.createTempFile( java.lang.String, java.lang.String )
+ │   │       │   │   ├─      INVOKESTATIC type = java.io.File, name = createTempFile, descriptor = java.io.File( java.lang.String, java.lang.String )
  │   │       │   │   ├─      ASTORE_1
  │   │       │   │   ├─ L56:
  │   │       │   │   ├─      ALOAD_1
- │   │       │   │   ├─      INVOKEVIRTUAL boolean java.io.File.exists()
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.File, name = exists, descriptor = boolean()
  │   │       │   │   └─      IRETURN
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (2 entries)
- │   │       │       │   ├─  lineNumber = 55, startPc = L55
- │   │       │       │   └─  lineNumber = 56, startPc = L56
+ │   │       │       │   ├─  lineNumber = 55, start = L55
+ │   │       │       │   └─  lineNumber = 56, start = L56
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L55, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   │       │           └─  index = 1, startPc = L56, endPc = @end, name = "tempFile", descriptor = "Ljava/io/File;" (java.io.File tempFile)
+ │   │       │           ├─  index = 0, start = L55, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   │       │           └─  index = 1, start = L56, end = @end, name = tempFile, descriptor = java.io.File
  │   │       └─ Exceptions (1 entries)
  │   │           └─ exception  name = "java/io/IOException"
- │   ├─  accessFlags = [public, final], name = "methodThatCatchesCheckedException", descriptor = "()Ljava/io/File;" (java.io.File methodThatCatchesCheckedException())
+ │   ├─ method accessFlags = [public, final], name = methodThatCatchesCheckedException, descriptor = java.io.File()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 2, maxLocals = 4
  │   │           ├─ instructions (34 entries)
@@ -202,14 +202,14 @@
  │   │           │   ├─ L64:
  │   │           │   ├─      LDCx ""
  │   │           │   ├─      LDCx ""
- │   │           │   ├─      INVOKESTATIC java.io.File java.io.File.createTempFile( java.lang.String, java.lang.String )
+ │   │           │   ├─      INVOKESTATIC type = java.io.File, name = createTempFile, descriptor = java.io.File( java.lang.String, java.lang.String )
  │   │           │   ├─      ASTORE_1
  │   │           │   ├─ L72:
  │   │           │   ├─      ALOAD_1
  │   │           │   ├─      IFNULL L76
  │   │           │   ├─ L74:
  │   │           │   ├─      ALOAD_1
- │   │           │   ├─      INVOKEVIRTUAL boolean java.io.File.delete()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.io.File, name = delete, descriptor = boolean()
  │   │           │   ├─      POP
  │   │           │   ├─      GOTO L76
  │   │           │   ├─ L66:
@@ -217,15 +217,15 @@
  │   │           │   ├─ L68:
  │   │           │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKEVIRTUAL java.lang.Class java.lang.Object.getClass()
- │   │           │   ├─      INVOKEVIRTUAL java.lang.String java.lang.Class.getName()
- │   │           │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │           │   ├─      INVOKEVIRTUAL type = java.lang.Object, name = getClass, descriptor = java.lang.Class()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.lang.Class, name = getName, descriptor = java.lang.String()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │           │   ├─ L72:
  │   │           │   ├─      ALOAD_1
  │   │           │   ├─      IFNULL L76
  │   │           │   ├─ L74:
  │   │           │   ├─      ALOAD_1
- │   │           │   ├─      INVOKEVIRTUAL boolean java.io.File.delete()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.io.File, name = delete, descriptor = boolean()
  │   │           │   ├─      POP
  │   │           │   ├─      GOTO L76
  │   │           │   ├─ L72:
@@ -234,7 +234,7 @@
  │   │           │   ├─      IFNULL L75
  │   │           │   ├─ L74:
  │   │           │   ├─      ALOAD_1
- │   │           │   ├─      INVOKEVIRTUAL boolean java.io.File.delete()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.io.File, name = delete, descriptor = boolean()
  │   │           │   ├─      POP
  │   │           │   ├─ L75:
  │   │           │   ├─      ALOAD_3
@@ -243,27 +243,27 @@
  │   │           │   ├─      ALOAD_1
  │   │           │   └─      ARETURN
  │   │           ├─ exceptionInfos (3 entries)
- │   │           │   ├─  startPc = L64 endPc = L72 handlerPc = L66 catchType = java.io.IOException
- │   │           │   ├─  startPc = L64 endPc = L72 handlerPc = L72
- │   │           │   └─  startPc = L66 endPc = L72 handlerPc = L72
+ │   │           │   ├─  start = L64 end = L72 handler = L66 catchType = java.io.IOException
+ │   │           │   ├─  start = L64 end = L72 handler = L72
+ │   │           │   └─  start = L66 end = L72 handler = L72
  │   │           └─ attributes (3 entries)
  │   │               ├─ LineNumberTable (12 entries)
- │   │               │   ├─  lineNumber = 61, startPc = L61
- │   │               │   ├─  lineNumber = 64, startPc = L64
- │   │               │   ├─  lineNumber = 72, startPc = L72
- │   │               │   ├─  lineNumber = 74, startPc = L74
- │   │               │   ├─  lineNumber = 66, startPc = L66
- │   │               │   ├─  lineNumber = 68, startPc = L68
- │   │               │   ├─  lineNumber = 72, startPc = L72
- │   │               │   ├─  lineNumber = 74, startPc = L74
- │   │               │   ├─  lineNumber = 72, startPc = L72
- │   │               │   ├─  lineNumber = 74, startPc = L74
- │   │               │   ├─  lineNumber = 75, startPc = L75
- │   │               │   └─  lineNumber = 76, startPc = L76
+ │   │               │   ├─  lineNumber = 61, start = L61
+ │   │               │   ├─  lineNumber = 64, start = L64
+ │   │               │   ├─  lineNumber = 72, start = L72
+ │   │               │   ├─  lineNumber = 74, start = L74
+ │   │               │   ├─  lineNumber = 66, start = L66
+ │   │               │   ├─  lineNumber = 68, start = L68
+ │   │               │   ├─  lineNumber = 72, start = L72
+ │   │               │   ├─  lineNumber = 74, start = L74
+ │   │               │   ├─  lineNumber = 72, start = L72
+ │   │               │   ├─  lineNumber = 74, start = L74
+ │   │               │   ├─  lineNumber = 75, start = L75
+ │   │               │   └─  lineNumber = 76, start = L76
  │   │               ├─ LocalVariableTable (3 entries)
- │   │               │   ├─  index = 2, startPc = L68, endPc = L72, name = "ignore", descriptor = "Ljava/io/IOException;" (java.io.IOException ignore)
- │   │               │   ├─  index = 0, startPc = L61, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   │               │   └─  index = 1, startPc = L64, endPc = @end, name = "tempFile", descriptor = "Ljava/io/File;" (java.io.File tempFile)
+ │   │               │   ├─  index = 2, start = L68, end = L72, name = ignore, descriptor = java.io.IOException
+ │   │               │   ├─  index = 0, start = L61, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   │               │   └─  index = 1, start = L64, end = @end, name = tempFile, descriptor = java.io.File
  │   │               └─ StackMapTable (4 entries)
  │   │                   ├─  FullFrame target = L66
  │   │                   │   ├─ localVerificationTypes (2 entries)
@@ -279,25 +279,25 @@
  │   │                   │       ├─  Top
  │   │                   │       └─  Object java.lang.Throwable
  │   │                   └─  ChopFrame target = L76 count = 2
- │   ├─  accessFlags = [public], name = "toString", descriptor = "()Ljava/lang/String;" (java.lang.String toString())
+ │   ├─ method accessFlags = [public], name = toString, descriptor = java.lang.String()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 2, maxLocals = 1
  │   │           ├─ instructions (7 entries)
  │   │           │   ├─ L81:
  │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKEVIRTUAL java.lang.Class java.lang.Object.getClass()
- │   │           │   ├─      INVOKEVIRTUAL java.lang.String java.lang.Class.getName()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.lang.Object, name = getClass, descriptor = java.lang.Class()
+ │   │           │   ├─      INVOKEVIRTUAL type = java.lang.Class, name = getName, descriptor = java.lang.String()
  │   │           │   ├─      ALOAD_0
  │   │           │   ├─      GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
- │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01 \x01"}, name = "makeConcatWithConstants", descriptor = "(Ljava/lang/String;Lmikenakis/bytecode/test/model/Enum1;)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 ))
+ │   │           │   ├─      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
  │   │           │   └─      ARETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 81, startPc = L81
+ │   │               │   └─  lineNumber = 81, start = L81
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L81, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   ├─  accessFlags = [public, final], name = "methodWithInnerClass", descriptor = "(I)Ljava/util/function/Supplier;" (java.util.function.Supplier methodWithInnerClass( int ))
+ │   │                   └─  index = 0, start = L81, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   ├─ method accessFlags = [public, final], name = methodWithInnerClass, descriptor = java.util.function.Supplier( int )
  │   │   └─ attributes (3 entries)
  │   │       ├─ Code maxStack = 4, maxLocals = 2
  │   │       │   ├─ instructions (6 entries)
@@ -306,39 +306,39 @@
  │   │       │   │   ├─      DUP
  │   │       │   │   ├─      ALOAD_0
  │   │       │   │   ├─      ILOAD_1
- │   │       │   │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.<init>( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
+ │   │       │   │   ├─      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
  │   │       │   │   └─      ARETURN
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 100, startPc = L100
+ │   │       │       │   └─  lineNumber = 100, start = L100
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L100, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
- │   │       │           └─  index = 1, startPc = L100, endPc = @end, name = "i", descriptor = "I" (int i)
+ │   │       │           ├─  index = 0, start = L100, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │   │       │           └─  index = 1, start = L100, end = @end, name = i, descriptor = int
  │   │       ├─ MethodParameters (1 entries)
  │   │       │   └─  accessFlags = [], name = i
  │   │       └─ Signature (I)Ljava/util/function/Supplier<Ljava/lang/Integer;>;
- │   ├─  accessFlags = [public, final], name = "deprecatedMethod", descriptor = "()V" (void deprecatedMethod())
+ │   ├─ method accessFlags = [public, final], name = deprecatedMethod, descriptor = void()
  │   │   └─ attributes (3 entries)
  │   │       ├─ Code maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions (4 entries)
  │   │       │   │   ├─ L105:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "deprecated"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L106:
  │   │       │   │   └─      RETURN
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (2 entries)
- │   │       │       │   ├─  lineNumber = 105, startPc = L105
- │   │       │       │   └─  lineNumber = 106, startPc = L106
+ │   │       │       │   ├─  lineNumber = 105, start = L105
+ │   │       │       │   └─  lineNumber = 106, start = L106
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L105, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
+ │   │       │           └─  index = 0, start = L105, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
  │   │       ├─ Deprecated 
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = java.lang.Deprecated, 0 parameters
- │   └─  accessFlags = [public, final], name = "methodWithInvokeDynamic", descriptor = "()V" (void methodWithInvokeDynamic())
+ │   └─ method accessFlags = [public, final], name = methodWithInvokeDynamic, descriptor = void()
  │       └─ attributes (1 entries)
  │           └─ Code maxStack = 0, maxLocals = 1
  │               ├─ instructions (1 entries)
@@ -347,15 +347,15 @@
  │               ├─ exceptionInfos (0 entries)
  │               └─ attributes (2 entries)
  │                   ├─ LineNumberTable (1 entries)
- │                   │   └─  lineNumber = 111, startPc = L111
+ │                   │   └─  lineNumber = 111, start = L111
  │                   └─ LocalVariableTable (1 entries)
- │                       └─  index = 0, startPc = L111, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class3ImplementingInterface;" (mikenakis.bytecode.test.model.Class3ImplementingInterface this)
+ │                       └─  index = 0, start = L111, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
  └─ attributes (4 entries)
      ├─ SourceFile value = "Class3ImplementingInterface.java"
      ├─ NestMembers (1 entries)
      │   └─ member = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
      ├─ BootstrapMethods (1 entries)
-     │   └─ methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01 \x01"
+     │   └─ methodHandle = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01 \x01"
      └─ InnerClasses (2 entries)
          ├─  , accessFlags = [], innerClass=mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = "Inner"
          └─  outerClass = java.lang.invoke.MethodHandles, , accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = "Lookup"

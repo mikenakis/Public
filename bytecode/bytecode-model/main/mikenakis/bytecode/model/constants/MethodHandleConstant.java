@@ -4,6 +4,9 @@ import mikenakis.bytecode.model.Constant;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ConstantDesc;
+import java.lang.constant.DirectMethodHandleDesc;
+import java.lang.constant.MethodHandleDesc;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -51,21 +54,31 @@ public final class MethodHandleConstant extends Constant
 		return new MethodHandleConstant( referenceKind, referenceConstant );
 	}
 
-	public static final int TAG = 15; // JVMS::CONSTANT_MethodHandle_info
-
 	private final ReferenceKind referenceKind;
 	private final ReferenceConstant referenceConstant;
 
 	private MethodHandleConstant( ReferenceKind referenceKind, ReferenceConstant referenceConstant )
 	{
-		super( TAG );
-		//FIXME XXX TODO how come this used to work but now fails? assert referenceConstant.kind == PlainMethodReferenceConstant.KIND || referenceConstant.kind == InterfaceMethodReferenceConstant.KIND;
+		super( Tag.MethodHandle );
+		assert referenceConstant.tag == Tag.FieldReference || referenceConstant.tag == Tag.MethodReference || referenceConstant.tag == Tag.InterfaceMethodReference;
 		this.referenceKind = referenceKind;
 		this.referenceConstant = referenceConstant;
 	}
 
 	public ReferenceKind referenceKind() { return referenceKind; }
 	public ReferenceConstant referenceConstant() { return referenceConstant; }
+
+	@Deprecated @Override public ConstantDesc constantDescriptor() { return descriptor(); }
+
+	public DirectMethodHandleDesc descriptor()
+	{
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant();
+		//I do not know why the isInterface parameter is needed, but it does not work otherwise.
+		return MethodHandleDesc.of( DirectMethodHandleDesc.Kind.valueOf( referenceKind.number, referenceKind == ReferenceKind.InvokeInterface ), //
+			referenceConstant.typeConstant().classDescriptor(), //
+			nameAndDescriptorConstant.nameConstant().stringValue(), //
+			nameAndDescriptorConstant.descriptorConstant().stringValue() );
+	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

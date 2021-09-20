@@ -11,14 +11,14 @@ public abstract class ByteCodeMember
 {
 	public final Mutf8Constant nameConstant;
 	public final AttributeSet attributeSet;
+	public final Mutf8Constant descriptorConstant;
 
-	protected ByteCodeMember( Mutf8Constant nameConstant, AttributeSet attributeSet )
+	protected ByteCodeMember( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		this.nameConstant = nameConstant;
 		this.attributeSet = attributeSet;
+		this.descriptorConstant = descriptorConstant;
 	}
 
-	public abstract FlagSet<?> modifierSet();
-
-	public abstract Mutf8Constant descriptorConstant();
+	public final String name() { return nameConstant.stringValue(); }
 }

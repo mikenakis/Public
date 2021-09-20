@@ -30,7 +30,7 @@ public final class ArrayAnnotationValue extends AnnotationValue
 
 	private ArrayAnnotationValue( List<AnnotationValue> annotationValues )
 	{
-		super( ArrayTag );
+		super( Tag.Array );
 		this.annotationValues = annotationValues;
 	}
 

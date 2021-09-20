@@ -4,59 +4,59 @@
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (13 entries)
- │   ├─  accessFlags = [public, abstract], name = "annotationParameter", descriptor = "()Ljava/lang/SuppressWarnings;" (java.lang.SuppressWarnings annotationParameter())
+ │   ├─ method accessFlags = [public, abstract], name = annotationParameter, descriptor = java.lang.SuppressWarnings()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
- │   │           └─ annotation value =  type = java.lang.SuppressWarnings, 1 parameters
- │   ├─  accessFlags = [public, abstract], name = "arrayParameter", descriptor = "()[Ljava/lang/String;" (java.lang.String[] arrayParameter())
+ │   │           └─ Annotation value =  type = java.lang.SuppressWarnings, 1 parameters
+ │   ├─ method accessFlags = [public, abstract], name = arrayParameter, descriptor = java.lang.String[]()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
- │   │           └─ array value =  3 elements
+ │   │           └─ Array value =  3 elements
  │   │               ├─ element "a"
  │   │               ├─ element "b"
  │   │               └─ element "c"
- │   ├─  accessFlags = [public, abstract], name = "booleanParameter", descriptor = "()Z" (boolean booleanParameter())
+ │   ├─ method accessFlags = [public, abstract], name = booleanParameter, descriptor = boolean()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Boolean value =  1
- │   ├─  accessFlags = [public, abstract], name = "byteParameter", descriptor = "()B" (byte byteParameter())
+ │   ├─ method accessFlags = [public, abstract], name = byteParameter, descriptor = byte()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Byte value =  1
- │   ├─  accessFlags = [public, abstract], name = "charParameter", descriptor = "()C" (char charParameter())
+ │   ├─ method accessFlags = [public, abstract], name = charParameter, descriptor = char()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Character value =  99
- │   ├─  accessFlags = [public, abstract], name = "doubleParameter", descriptor = "()D" (double doubleParameter())
+ │   ├─ method accessFlags = [public, abstract], name = doubleParameter, descriptor = double()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Double value =  0.5
- │   ├─  accessFlags = [public, abstract], name = "floatParameter", descriptor = "()F" (float floatParameter())
+ │   ├─ method accessFlags = [public, abstract], name = floatParameter, descriptor = float()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Float value =  0.25f
- │   ├─  accessFlags = [public, abstract], name = "intParameter", descriptor = "()I" (int intParameter())
+ │   ├─ method accessFlags = [public, abstract], name = intParameter, descriptor = int()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Integer value =  2
- │   ├─  accessFlags = [public, abstract], name = "longParameter", descriptor = "()J" (long longParameter())
+ │   ├─ method accessFlags = [public, abstract], name = longParameter, descriptor = long()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Long value =  3L
- │   ├─  accessFlags = [public, abstract], name = "shortParameter", descriptor = "()S" (short shortParameter())
+ │   ├─ method accessFlags = [public, abstract], name = shortParameter, descriptor = short()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ Short value =  4
- │   ├─  accessFlags = [public, abstract], name = "stringParameter", descriptor = "()Ljava/lang/String;" (java.lang.String stringParameter())
+ │   ├─ method accessFlags = [public, abstract], name = stringParameter, descriptor = java.lang.String()
  │   │   └─ attributes (1 entries)
  │   │       └─ AnnotationDefault 
  │   │           └─ String value =  "x"
- │   ├─  accessFlags = [public, abstract], name = "classParameter", descriptor = "()Ljava/lang/Class;" (java.lang.Class classParameter())
+ │   ├─ method accessFlags = [public, abstract], name = classParameter, descriptor = java.lang.Class()
  │   │   └─ attributes (2 entries)
  │   │       ├─ AnnotationDefault 
- │   │       │   └─ class value =  "Ljava/lang/Object;"
+ │   │       │   └─ Class value =  "Ljava/lang/Object;"
  │   │       └─ Signature ()Ljava/lang/Class<*>;
- │   └─  accessFlags = [public, abstract], name = "value", descriptor = "()I" (int value())
+ │   └─ method accessFlags = [public, abstract], name = value, descriptor = int()
  │       └─ attributes (1 entries)
  │           └─ AnnotationDefault 
  │               └─ Integer value =  5
@@ -65,7 +65,7 @@
      └─ RuntimeVisibleAnnotations (2 entries)
          ├─ annotation  type = java.lang.annotation.Target, 1 parameters
          │   └─ parameter name = "value"
-         │       └─ array value =  7 elements
+         │       └─ Array value =  7 elements
          │           ├─ element type = java.lang.annotation.ElementType, value = TYPE
          │           ├─ element type = java.lang.annotation.ElementType, value = FIELD
          │           ├─ element type = java.lang.annotation.ElementType, value = METHOD
@@ -75,4 +75,4 @@
          │           └─ element type = java.lang.annotation.ElementType, value = TYPE_PARAMETER
          └─ annotation  type = java.lang.annotation.Retention, 1 parameters
              └─ parameter name = "value"
-                 └─ enum value =  type = java.lang.annotation.RetentionPolicy, value = RUNTIME
+                 └─ Enum value =  type = java.lang.annotation.RetentionPolicy, value = RUNTIME

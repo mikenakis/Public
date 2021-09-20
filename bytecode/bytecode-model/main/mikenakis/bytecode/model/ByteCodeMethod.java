@@ -3,6 +3,7 @@ package mikenakis.bytecode.model;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.MethodTypeDesc;
 import java.util.Map;
 
 /**
@@ -38,23 +39,16 @@ public final class ByteCodeMethod extends ByteCodeMember
 	}
 
 	public final FlagSet<Modifier> modifierSet;
-	public final Mutf8Constant descriptorConstant;
 
 	private ByteCodeMethod( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, attributeSet );
+		super( nameConstant, descriptorConstant, attributeSet );
 		this.modifierSet = modifierSet;
-		this.descriptorConstant = descriptorConstant;
 	}
 
-	@Deprecated @Override public FlagSet<?> modifierSet()
+	public MethodTypeDesc descriptor()
 	{
-		return modifierSet;
-	}
-
-	@Deprecated @Override public Mutf8Constant descriptorConstant()
-	{
-		return descriptorConstant;
+		return MethodTypeDesc.ofDescriptor( descriptorConstant.stringValue() );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

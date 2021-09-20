@@ -23,7 +23,7 @@ public final class LineNumberTableAttribute extends Attribute
 		return of( new ArrayList<>() );
 	}
 
-	public static LineNumberTableAttribute of( List<LineNumber> entries )
+	public static LineNumberTableAttribute of( List<LineNumberEntry> entries )
 	{
 		return new LineNumberTableAttribute( entries );
 	}
@@ -31,15 +31,15 @@ public final class LineNumberTableAttribute extends Attribute
 	public static final String name = "LineNumberTable";
 	public static final Kind kind = new Kind( name );
 
-	private final List<LineNumber> lineNumbers;
+	private final List<LineNumberEntry> lineNumbers;
 
-	private LineNumberTableAttribute( List<LineNumber> lineNumbers )
+	private LineNumberTableAttribute( List<LineNumberEntry> lineNumbers )
 	{
 		super( kind );
 		this.lineNumbers = lineNumbers;
 	}
 
-	public List<LineNumber> lineNumbers()
+	public List<LineNumberEntry> lineNumbers()
 	{
 		return Collections.unmodifiableList( lineNumbers );
 	}

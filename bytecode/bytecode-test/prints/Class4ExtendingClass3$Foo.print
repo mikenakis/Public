@@ -3,7 +3,7 @@
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (1 entries)
- │   └─  accessFlags = [public, abstract], name = "x", descriptor = "(Ljava/lang/String;)Ljava/lang/String;" (java.lang.String x( java.lang.String ))
+ │   └─ method accessFlags = [public, abstract], name = x, descriptor = java.lang.String( java.lang.String )
  │       └─ attributes (1 entries)
  │           └─ MethodParameters (1 entries)
  │               └─  accessFlags = [], name = s

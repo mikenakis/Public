@@ -1,7 +1,6 @@
 package mikenakis.bytecode.writing;
 
 import mikenakis.bytecode.exceptions.UnknownConstantException;
-import mikenakis.bytecode.exceptions.UnknownValueException;
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.kit.Helpers;
@@ -13,7 +12,6 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeAnnotation;
 import mikenakis.bytecode.model.ByteCodeField;
-import mikenakis.bytecode.model.ByteCodeMember;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
@@ -33,7 +31,7 @@ import mikenakis.bytecode.model.attributes.ExceptionInfo;
 import mikenakis.bytecode.model.attributes.ExceptionsAttribute;
 import mikenakis.bytecode.model.attributes.InnerClass;
 import mikenakis.bytecode.model.attributes.InnerClassesAttribute;
-import mikenakis.bytecode.model.attributes.LineNumber;
+import mikenakis.bytecode.model.attributes.LineNumberEntry;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariable;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
@@ -106,10 +104,9 @@ import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
+import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.kit.Kit;
 
 import java.util.Collection;
@@ -150,7 +147,7 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( byteCodeType.fields().size() );
 		for( ByteCodeField field : byteCodeType.fields() )
 		{
-			bufferWriter.writeUnsignedShort( ((ByteCodeMember)field).modifierSet().toInt() );
+			bufferWriter.writeUnsignedShort( field.modifierSet.toInt() );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.nameConstant ) );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.descriptorConstant ) );
 			writeAttributeSet( bufferWriter, constantPool, field.attributeSet, ByteCodeWriter::writeFieldAttribute );
@@ -158,7 +155,7 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( byteCodeType.methods().size() );
 		for( ByteCodeMethod method : byteCodeType.methods() )
 		{
-			bufferWriter.writeUnsignedShort( ((ByteCodeMember)method).modifierSet().toInt() );
+			bufferWriter.writeUnsignedShort( method.modifierSet.toInt() );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.nameConstant ) );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.descriptorConstant ) );
 			writeAttributeSet( bufferWriter, constantPool, method.attributeSet, ByteCodeWriter::writeMethodAttribute );
@@ -169,10 +166,10 @@ public class ByteCodeWriter
 
 	private static void writeConstant( ConstantPool constantPool, BufferWriter bufferWriter, Constant constant )
 	{
-		bufferWriter.writeUnsignedByte( constant.tag );
+		bufferWriter.writeUnsignedByte( constant.tag.value() );
 		switch( constant.tag )
 		{
-			case Mutf8Constant.TAG:
+			case Mutf8:
 			{
 				Mutf8Constant mutf8Constant = constant.asMutf8Constant();
 				Buffer buffer = mutf8Constant.buffer();
@@ -180,84 +177,84 @@ public class ByteCodeWriter
 				bufferWriter.writeBuffer( buffer );
 				break;
 			}
-			case IntegerConstant.TAG:
+			case Integer:
 			{
 				IntegerConstant integerConstant = constant.asIntegerConstant();
 				bufferWriter.writeInt( integerConstant.value );
 				break;
 			}
-			case FloatConstant.TAG:
+			case Float:
 			{
 				FloatConstant floatConstant = constant.asFloatConstant();
 				bufferWriter.writeFloat( floatConstant.value );
 				break;
 			}
-			case LongConstant.TAG:
+			case Long:
 			{
 				LongConstant longConstant = constant.asLongConstant();
 				bufferWriter.writeLong( longConstant.value );
 				break;
 			}
-			case DoubleConstant.TAG:
+			case Double:
 			{
 				DoubleConstant doubleConstant = constant.asDoubleConstant();
 				bufferWriter.writeDouble( doubleConstant.value );
 				break;
 			}
-			case ClassConstant.TAG:
+			case Class:
 			{
 				ClassConstant classConstant = constant.asClassConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( classConstant.nameConstant() ) );
 				break;
 			}
-			case StringConstant.TAG:
+			case String:
 			{
 				StringConstant stringConstant = constant.asStringConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( stringConstant.valueConstant() ) );
 				break;
 			}
-			case FieldReferenceConstant.TAG:
+			case FieldReference:
 			{
 				FieldReferenceConstant fieldReferenceConstant = constant.asFieldReferenceConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.typeConstant() ) );
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
-			case PlainMethodReferenceConstant.TAG:
+			case MethodReference:
 			{
 				MethodReferenceConstant methodReferenceConstant = constant.asMethodReferenceConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.typeConstant() ) );
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
-			case InterfaceMethodReferenceConstant.TAG:
+			case InterfaceMethodReference:
 			{
 				InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = constant.asInterfaceMethodReferenceConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.typeConstant() ) );
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.nameAndDescriptorConstant() ) );
 				break;
 			}
-			case NameAndDescriptorConstant.TAG:
+			case NameAndDescriptor:
 			{
 				NameAndDescriptorConstant nameAndDescriptorConstant = constant.asNameAndDescriptorConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.nameConstant() ) );
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.descriptorConstant() ) );
 				break;
 			}
-			case MethodHandleConstant.TAG:
+			case MethodHandle:
 			{
 				MethodHandleConstant methodHandleConstant = constant.asMethodHandleConstant();
 				bufferWriter.writeUnsignedByte( methodHandleConstant.referenceKind().number );
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodHandleConstant.referenceConstant() ) );
 				break;
 			}
-			case MethodTypeConstant.TAG:
+			case MethodType:
 			{
 				MethodTypeConstant methodTypeConstant = constant.asMethodTypeConstant();
 				bufferWriter.writeUnsignedShort( constantPool.getIndex( methodTypeConstant.descriptorConstant ) );
 				break;
 			}
-			case InvokeDynamicConstant.TAG:
+			case InvokeDynamic:
 			{
 				InvokeDynamicConstant invokeDynamicConstant = constant.asInvokeDynamicConstant();
 				bufferWriter.writeUnsignedShort( invokeDynamicConstant.bootstrapMethodIndex() );
@@ -265,7 +262,7 @@ public class ByteCodeWriter
 				break;
 			}
 			default:
-				throw new UnknownConstantException( constant.tag );
+				throw new UnknownConstantException( constant.tag.value() );
 		}
 	}
 
@@ -408,9 +405,9 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( exceptionInfos.size() );
 		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos() )
 		{
-			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.startInstructionReference.targetInstruction() ) );
-			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.endInstructionReference.targetInstruction() ) );
-			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.handlerInstructionReference.targetInstruction() ) );
+			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.startInstruction ) );
+			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.endInstruction ) );
+			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.handlerInstruction ) );
 			bufferWriter.writeUnsignedShort( exceptionInfo.catchTypeConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
 		}
 
@@ -695,21 +692,20 @@ public class ByteCodeWriter
 
 	private static void writeAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationValue annotationValue )
 	{
-		bufferWriter.writeUnsignedByte( annotationValue.tag );
+		bufferWriter.writeUnsignedByte( annotationValue.tag.character );
 		switch( annotationValue.tag )
 		{
-			case AnnotationValue.ByteTag, AnnotationValue.CharacterTag, AnnotationValue.DoubleTag, AnnotationValue.FloatTag, AnnotationValue.IntTag, //
-				AnnotationValue.LongTag, AnnotationValue.ShortTag, AnnotationValue.BooleanTag, AnnotationValue.StringTag ->
+			case Byte, Character, Double, Float, Integer, Long, Short, Boolean, String -> //
 				writeConstAnnotationValue( constantPool, bufferWriter, annotationValue.asConstAnnotationValue() );
-			case AnnotationValue.AnnotationTag -> // '@';
+			case Annotation -> //
 				writeAnnotationAnnotationValue( constantPool, bufferWriter, annotationValue.asAnnotationAnnotationValue() );
-			case AnnotationValue.ArrayTag -> // '[';
+			case Array -> //
 				writeArrayAnnotationValue( constantPool, bufferWriter, annotationValue.asArrayAnnotationValue() );
-			case AnnotationValue.ClassTag -> // 'c';
+			case Class -> //
 				writeClassAnnotationValue( constantPool, bufferWriter, annotationValue.asClassAnnotationValue() );
-			case AnnotationValue.EnumTag -> // 'e';
+			case Enum -> //
 				writeEnumAnnotationValue( constantPool, bufferWriter, annotationValue.asEnumAnnotationValue() );
-			default -> throw new UnknownValueException( annotationValue.tag );
+			default -> throw new AssertionError( annotationValue );
 		}
 	}
 
@@ -733,8 +729,8 @@ public class ByteCodeWriter
 	{
 		ByteCodeAnnotation annotation = annotationAnnotationValue.annotation();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotation.typeConstant ) );
-		bufferWriter.writeUnsignedShort( annotation.annotationParameters().size() );
-		for( AnnotationParameter annotationParameter : annotation.annotationParameters() )
+		bufferWriter.writeUnsignedShort( annotation.parameters().size() );
+		for( AnnotationParameter annotationParameter : annotation.parameters() )
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
 	}
 
@@ -842,8 +838,7 @@ public class ByteCodeWriter
 		else if( verificationType.isUninitializedVerificationType() )
 		{
 			UninitializedVerificationType uninitializedVerificationType = verificationType.asUninitializedVerificationType();
-			Optional<Instruction> targetInstruction = uninitializedVerificationType.instructionReference.targetInstruction();
-			int targetLocation = locationMap.getLocation( targetInstruction );
+			int targetLocation = locationMap.getLocation( uninitializedVerificationType.instruction );
 			bufferWriter.writeUnsignedShort( targetLocation );
 		}
 		else
@@ -1056,7 +1051,7 @@ public class ByteCodeWriter
 	private static void writeAnnotation( ConstantPool constantPool, BufferWriter bufferWriter, ByteCodeAnnotation byteCodeAnnotation )
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeAnnotation.typeConstant ) );
-		List<AnnotationParameter> annotationParameters = byteCodeAnnotation.annotationParameters();
+		List<AnnotationParameter> annotationParameters = byteCodeAnnotation.parameters();
 		bufferWriter.writeUnsignedShort( annotationParameters.size() );
 		for( AnnotationParameter annotationParameter : annotationParameters )
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
@@ -1098,9 +1093,8 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( localVariableTypes.size() );
 		for( LocalVariableType localVariableType : localVariableTypes )
 		{
-			assert localVariableType.startInstructionReference.targetInstruction().isPresent();
-			int startLocation = locationMap.getLocation( localVariableType.startInstructionReference.targetInstruction() );
-			int endLocation = locationMap.getLocation( localVariableType.endInstructionReference.targetInstruction() );
+			int startLocation = locationMap.getLocation( localVariableType.startInstruction );
+			int endLocation = locationMap.getLocation( localVariableType.endInstruction );
 			bufferWriter.writeUnsignedShort( startLocation );
 			bufferWriter.writeUnsignedShort( endLocation - startLocation );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( localVariableType.nameConstant ) );
@@ -1119,9 +1113,8 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( localVariables.size() );
 		for( LocalVariable localVariable : localVariables )
 		{
-			assert localVariable.startInstructionReference.targetInstruction().isPresent();
-			int startLocation = locationMap.getLocation( localVariable.startInstructionReference.targetInstruction() );
-			int endLocation = locationMap.getLocation( localVariable.endInstructionReference.targetInstruction() );
+			int startLocation = locationMap.getLocation( localVariable.startInstruction );
+			int endLocation = locationMap.getLocation( localVariable.endInstruction );
 			bufferWriter.writeUnsignedShort( startLocation );
 			bufferWriter.writeUnsignedShort( endLocation - startLocation );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( localVariable.nameConstant ) );
@@ -1137,9 +1130,9 @@ public class ByteCodeWriter
 		assert attributeNameConstant == LineNumberTableAttribute.kind.mutf8Name;
 		LineNumberTableAttribute lineNumberTableAttribute = attribute.asLineNumberTableAttribute();
 		bufferWriter.writeUnsignedShort( lineNumberTableAttribute.lineNumbers().size() );
-		for( LineNumber lineNumber : lineNumberTableAttribute.lineNumbers() )
+		for( LineNumberEntry lineNumber : lineNumberTableAttribute.lineNumbers() )
 		{
-			int location = locationMap.getLocation( lineNumber.instructionReference().targetInstruction() );
+			int location = locationMap.getLocation( lineNumber.instruction() );
 			bufferWriter.writeUnsignedShort( location );
 			bufferWriter.writeUnsignedShort( lineNumber.lineNumber() );
 		}

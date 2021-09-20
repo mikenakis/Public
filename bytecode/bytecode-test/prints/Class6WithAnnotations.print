@@ -2,7 +2,7 @@
  ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (1 entries)
- │   └─  accessFlags = [public, final], name = "fieldWithAnnotation", descriptor = "I" (int fieldWithAnnotation)
+ │   └─ field accessFlags = [public, final], name = fieldWithAnnotation, descriptor = int
  │       └─ attributes (3 entries)
  │           ├─ ConstantValue 5
  │           ├─ RuntimeVisibleAnnotations (1 entries)
@@ -14,13 +14,13 @@
  │                   └─ parameter name = "value"
  │                       └─ Integer value =  7
  ├─ methods (9 entries)
- │   ├─  accessFlags = [protected], name = "<init>", descriptor = "()V" (void <init>())
+ │   ├─ method accessFlags = [protected], name = <init>, descriptor = void()
  │   │   └─ attributes (3 entries)
  │   │       ├─ Code maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions (6 entries)
  │   │       │   │   ├─ L21:
  │   │       │   │   ├─      ALOAD_0
- │   │       │   │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │   │       │   │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │   │       │   │   ├─ L13:
  │   │       │   │   ├─      ALOAD_0
  │   │       │   │   ├─      ICONST_5
@@ -30,11 +30,11 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (3 entries)
- │   │       │       │   ├─  lineNumber = 21, startPc = L21
- │   │       │       │   ├─  lineNumber = 13, startPc = L13
- │   │       │       │   └─  lineNumber = 22, startPc = L22
+ │   │       │       │   ├─  lineNumber = 21, start = L21
+ │   │       │       │   ├─  lineNumber = 13, start = L13
+ │   │       │       │   └─  lineNumber = 22, start = L22
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L21, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L21, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       ├─ RuntimeVisibleAnnotations (1 entries)
  │   │       │   └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 1 parameters
  │   │       │       └─ parameter name = "stringParameter"
@@ -43,7 +43,7 @@
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1, 1 parameters
  │   │               └─ parameter name = "value"
  │   │                   └─ Integer value =  8
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithAnnotationParameter", descriptor = "()V" (void methodWithAnnotationWithAnnotationParameter())
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithAnnotationParameter, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -52,14 +52,14 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 27, startPc = L27
+ │   │       │       │   └─  lineNumber = 27, start = L27
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L27, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L27, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 1 parameters
  │   │               └─ parameter name = "annotationParameter"
- │   │                   └─ annotation value =  type = java.lang.SuppressWarnings, 1 parameters
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithArrayParameter", descriptor = "()V" (void methodWithAnnotationWithArrayParameter())
+ │   │                   └─ Annotation value =  type = java.lang.SuppressWarnings, 1 parameters
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithArrayParameter, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -68,16 +68,16 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 32, startPc = L32
+ │   │       │       │   └─  lineNumber = 32, start = L32
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L32, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L32, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 1 parameters
  │   │               └─ parameter name = "arrayParameter"
- │   │                   └─ array value =  2 elements
+ │   │                   └─ Array value =  2 elements
  │   │                       ├─ element "d"
  │   │                       └─ element "e"
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithPrimitiveParameters", descriptor = "()V" (void methodWithAnnotationWithPrimitiveParameters())
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithPrimitiveParameters, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -86,9 +86,9 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 38, startPc = L38
+ │   │       │       │   └─  lineNumber = 38, start = L38
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L38, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L38, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 8 parameters
  │   │               ├─ parameter name = "booleanParameter"
@@ -107,7 +107,7 @@
  │   │               │   └─ Long value =  4294967296L
  │   │               └─ parameter name = "shortParameter"
  │   │                   └─ Short value =  1000
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithStringParameter", descriptor = "()V" (void methodWithAnnotationWithStringParameter())
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithStringParameter, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -116,14 +116,14 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 43, startPc = L43
+ │   │       │       │   └─  lineNumber = 43, start = L43
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L43, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L43, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 1 parameters
  │   │               └─ parameter name = "stringParameter"
  │   │                   └─ String value =  "y"
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithClassParameter", descriptor = "()V" (void methodWithAnnotationWithClassParameter())
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithClassParameter, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -132,14 +132,14 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 48, startPc = L48
+ │   │       │       │   └─  lineNumber = 48, start = L48
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L48, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L48, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 1 parameters
  │   │               └─ parameter name = "classParameter"
- │   │                   └─ class value =  "Lmikenakis/bytecode/test/model/Class6WithAnnotations;"
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithNoParameter", descriptor = "()V" (void methodWithAnnotationWithNoParameter())
+ │   │                   └─ Class value =  "Lmikenakis/bytecode/test/model/Class6WithAnnotations;"
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithNoParameter, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -148,12 +148,12 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 53, startPc = L53
+ │   │       │       │   └─  lineNumber = 53, start = L53
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L53, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L53, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 0 parameters
- │   ├─  accessFlags = [public, final], name = "methodWithAnnotationWithDefaultParameter", descriptor = "()V" (void methodWithAnnotationWithDefaultParameter())
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithDefaultParameter, descriptor = void()
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions (1 entries)
@@ -162,14 +162,14 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 58, startPc = L58
+ │   │       │       │   └─  lineNumber = 58, start = L58
  │   │       │       └─ LocalVariableTable (1 entries)
- │   │       │           └─  index = 0, startPc = L58, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
+ │   │       │           └─  index = 0, start = L58, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
  │   │       └─ RuntimeVisibleAnnotations (1 entries)
  │   │           └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 1 parameters
  │   │               └─ parameter name = "value"
  │   │                   └─ Integer value =  6
- │   └─  accessFlags = [public, final], name = "methodWithParameterAnnotations", descriptor = "(III)V" (void methodWithParameterAnnotations( int, int, int ))
+ │   └─ method accessFlags = [public, final], name = methodWithParameterAnnotations, descriptor = void( int, int, int )
  │       └─ attributes (4 entries)
  │           ├─ Code maxStack = 4, maxLocals = 4
  │           │   ├─ instructions (7 entries)
@@ -178,20 +178,20 @@
  │           │   │   ├─      ILOAD_1
  │           │   │   ├─      ILOAD_2
  │           │   │   ├─      ILOAD_3
- │           │   │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "a=\x01, b=\x01, c=\x01"}, name = "makeConcatWithConstants", descriptor = "(III)Ljava/lang/String;" (java.lang.String makeConcatWithConstants( int, int, int ))
- │           │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │           │   │   ├─      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int )
+ │           │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │           │   │   ├─ L65:
  │           │   │   └─      RETURN
  │           │   ├─ exceptionInfos (0 entries)
  │           │   └─ attributes (2 entries)
  │           │       ├─ LineNumberTable (2 entries)
- │           │       │   ├─  lineNumber = 64, startPc = L64
- │           │       │   └─  lineNumber = 65, startPc = L65
+ │           │       │   ├─  lineNumber = 64, start = L64
+ │           │       │   └─  lineNumber = 65, start = L65
  │           │       └─ LocalVariableTable (4 entries)
- │           │           ├─  index = 0, startPc = L64, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class6WithAnnotations;" (mikenakis.bytecode.test.model.Class6WithAnnotations this)
- │           │           ├─  index = 1, startPc = L64, endPc = @end, name = "a", descriptor = "I" (int a)
- │           │           ├─  index = 2, startPc = L64, endPc = @end, name = "b", descriptor = "I" (int b)
- │           │           └─  index = 3, startPc = L64, endPc = @end, name = "c", descriptor = "I" (int c)
+ │           │           ├─  index = 0, start = L64, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithAnnotations
+ │           │           ├─  index = 1, start = L64, end = @end, name = a, descriptor = int
+ │           │           ├─  index = 2, start = L64, end = @end, name = b, descriptor = int
+ │           │           └─  index = 3, start = L64, end = @end, name = c, descriptor = int
  │           ├─ MethodParameters (3 entries)
  │           │   ├─  accessFlags = [], name = a
  │           │   ├─  accessFlags = [], name = b
@@ -224,6 +224,6 @@
      │       └─ parameter name = "value"
      │           └─ Integer value =  6
      ├─ BootstrapMethods (1 entries)
-     │   └─ methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "a=\x01, b=\x01, c=\x01"
+     │   └─ methodHandle = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "a=\x01, b=\x01, c=\x01"
      └─ InnerClasses (1 entries)
          └─  outerClass = java.lang.invoke.MethodHandles, , accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = "Lookup"

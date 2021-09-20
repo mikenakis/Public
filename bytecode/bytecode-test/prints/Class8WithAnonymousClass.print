@@ -2,30 +2,30 @@
  ├─ interfaces (0 entries)
  ├─ extra constants (0 entries)
  ├─ fields (1 entries)
- │   └─  accessFlags = [public, final], name = "field", descriptor = "Lmikenakis/bytecode/test/model/Interface1;" (mikenakis.bytecode.test.model.Interface1 field)
+ │   └─ field accessFlags = [public, final], name = field, descriptor = mikenakis.bytecode.test.model.Interface1
  ├─ methods (1 entries)
- │   └─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
+ │   └─ method accessFlags = [public], name = <init>, descriptor = void()
  │       └─ attributes (1 entries)
  │           └─ Code maxStack = 4, maxLocals = 1
  │               ├─ instructions (9 entries)
  │               │   ├─ L9:
  │               │   ├─      ALOAD_0
- │               │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │               │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │               │   ├─ L11:
  │               │   ├─      ALOAD_0
  │               │   ├─      NEW mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
  │               │   ├─      DUP
  │               │   ├─      ALOAD_0
- │               │   ├─      INVOKESPECIAL void mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.<init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+ │               │   ├─      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
  │               │   ├─      PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
  │               │   └─      RETURN
  │               ├─ exceptionInfos (0 entries)
  │               └─ attributes (2 entries)
  │                   ├─ LineNumberTable (2 entries)
- │                   │   ├─  lineNumber = 9, startPc = L9
- │                   │   └─  lineNumber = 11, startPc = L11
+ │                   │   ├─  lineNumber = 9, start = L9
+ │                   │   └─  lineNumber = 11, start = L11
  │                   └─ LocalVariableTable (1 entries)
- │                       └─  index = 0, startPc = L9, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class8WithAnonymousClass;" (mikenakis.bytecode.test.model.Class8WithAnonymousClass this)
+ │                       └─  index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass
  └─ attributes (3 entries)
      ├─ SourceFile value = "Class8WithAnonymousClass.java"
      ├─ NestMembers (1 entries)

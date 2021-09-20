@@ -1,5 +1,6 @@
 package mikenakis.bytecode.test;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
@@ -53,27 +54,11 @@ public class T002_Descriptors
 	private static void classTest( Class<?> javaClass1 )
 	{
 		Log.debug( javaClass1.getTypeName() );
-		ClassDesc descriptor = getDescriptorForClass( javaClass1 );
-		assert descriptor.descriptorString().equals( javaClass1.descriptorString() );
-		assert descriptor.equals( ClassDesc.ofDescriptor( javaClass1.descriptorString() ) );
-		assert typeNameFromClassDesc( descriptor ).equals( javaClass1.getTypeName() );
-	}
-
-	private static ClassDesc getDescriptorForClass( Class<?> c )
-	{
-		return c.describeConstable().orElseThrow();
-	}
-
-	private static String typeNameFromClassDesc( ClassDesc classDesc )
-	{
-		if( classDesc.isPrimitive() )
-			return classDesc.displayName();
-		if( classDesc.isClassOrInterface() )
-			return classDesc.packageName() + "." + classDesc.displayName();
-		if( classDesc.isArray() )
-			return typeNameFromClassDesc( classDesc.componentType() ) + "[]";
-		assert false;
-		return "";
+		ClassDesc descriptor = javaClass1.describeConstable().orElseThrow();
+		String descriptorString = descriptor.descriptorString();
+		assert descriptorString.equals( javaClass1.descriptorString() );
+		assert descriptor.equals( ClassDesc.ofDescriptor( descriptorString ) );
+		assert ByteCodeHelpers.typeNameFromClassDesc( descriptor ).equals( javaClass1.getTypeName() );
 	}
 
 	@SuppressWarnings( "unused" ) private int intField;
@@ -165,11 +150,11 @@ public class T002_Descriptors
 
 	private static MethodTypeDesc getDescriptorForMethod( Method m )
 	{
-		ClassDesc returnTypeDescriptor = getDescriptorForClass( m.getReturnType() );
+		ClassDesc returnTypeDescriptor = m.getReturnType().describeConstable().orElseThrow();
 		Class<?>[] parameterTypes = m.getParameterTypes();
 		ClassDesc[] parameterTypeDescriptors = new ClassDesc[parameterTypes.length];
 		for( int i = 0; i < parameterTypes.length; i++ )
-			parameterTypeDescriptors[i] = getDescriptorForClass( parameterTypes[i] );
+			parameterTypeDescriptors[i] = parameterTypes[i].describeConstable().orElseThrow();
 		return MethodTypeDesc.of( returnTypeDescriptor, parameterTypeDescriptors );
 	}
 }

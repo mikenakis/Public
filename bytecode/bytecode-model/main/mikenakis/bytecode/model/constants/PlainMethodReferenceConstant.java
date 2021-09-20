@@ -1,5 +1,10 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
+
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
+
 /**
  * Represents the JVMS::CONSTANT_Methodref_info structure.
  *
@@ -12,12 +17,19 @@ public final class PlainMethodReferenceConstant extends MethodReferenceConstant
 		return new PlainMethodReferenceConstant( typeConstant, nameAndDescriptorConstant );
 	}
 
-	public static final int TAG = 10; // JVMS::CONSTANT_MethodRef_info
-
 	private PlainMethodReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( TAG, typeConstant, nameAndDescriptorConstant );
+		super( Tag.MethodReference, typeConstant, nameAndDescriptorConstant );
 	}
+
+	// String Customer.name( arguments );
+	//  (1)     (2)     (3)     (1)
+	// 1: nameAndDescriptorConstant.descriptorConstant
+	// 2: typeConstant
+	// 3: nameAndDescriptorConstant.nameConstant
+	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant().descriptorConstant().stringValue() ); }
+	public ClassDesc owningClassDescriptor() { return typeConstant().classDescriptor(); }
+	public String methodName() { return nameAndDescriptorConstant().nameConstant().stringValue(); }
 
 	@Deprecated @Override public PlainMethodReferenceConstant asPlainMethodReferenceConstant()
 	{

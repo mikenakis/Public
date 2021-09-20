@@ -16,13 +16,11 @@ public final class LongConstant extends ValueConstant<Long>
 		return new LongConstant( value );
 	}
 
-	public static final int TAG = 5; // JVMS::CONSTANT_Long_info
-
 	public final long value;
 
 	private LongConstant( long value )
 	{
-		super( TAG );
+		super( Tag.Long );
 		this.value = value;
 	}
 

@@ -6,6 +6,8 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Optional;
 
 /**
@@ -39,6 +41,28 @@ public final class EnclosingMethodAttribute extends Attribute
 
 	public ClassConstant classConstant() { return classConstant; }
 	public Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant() { return methodNameAndDescriptorConstant; }
+
+	public ClassDesc classDescriptor()
+	{
+		return classConstant.classDescriptor();
+	}
+
+	public boolean hasMethod()
+	{
+		return methodNameAndDescriptorConstant.isPresent();
+	}
+
+	public String methodName()
+	{
+		assert hasMethod();
+		return methodNameAndDescriptorConstant.map( c -> c.nameConstant().stringValue() ).orElseThrow();
+	}
+
+	public MethodTypeDesc methodDescriptor()
+	{
+		assert hasMethod();
+		return methodNameAndDescriptorConstant.map( c -> MethodTypeDesc.ofDescriptor( c.descriptorConstant().stringValue() ) ).orElseThrow();
+	}
 
 	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute()
 	{

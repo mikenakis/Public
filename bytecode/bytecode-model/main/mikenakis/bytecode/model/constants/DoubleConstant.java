@@ -16,13 +16,11 @@ public final class DoubleConstant extends ValueConstant<Double>
 		return new DoubleConstant( value );
 	}
 
-	public static final int TAG = 6; // JVMS::CONSTANT_Double_info
-
 	public final double value;
 
 	private DoubleConstant( double value )
 	{
-		super( TAG );
+		super( Tag.Double );
 		this.value = value;
 	}
 

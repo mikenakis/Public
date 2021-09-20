@@ -2,9 +2,11 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.DynamicCallSiteDesc;
+import java.lang.constant.DynamicConstantDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Objects;
 
 /**
@@ -19,20 +21,25 @@ public final class InvokeDynamicConstant extends Constant
 		return new InvokeDynamicConstant( bootstrapMethodIndex, nameAndDescriptorConstant );
 	}
 
-	public static final int TAG = 18; // JVMS::CONSTANT_InvokeDynamic_info
-
 	private final int bootstrapMethodIndex; //TODO: get rid of the bootstrap method index, reference the actual bootstrap method here.
 	private final NameAndDescriptorConstant nameAndDescriptorConstant;
 
 	private InvokeDynamicConstant( int bootstrapMethodIndex, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( TAG );
-		this.bootstrapMethodIndex = bootstrapMethodIndex; //byteCodeType.getIndexOfBootstrapMethod( bootstrapMethod );
+		super( Tag.InvokeDynamic );
+		this.bootstrapMethodIndex = bootstrapMethodIndex;
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
 	public int bootstrapMethodIndex() { return bootstrapMethodIndex; }
 	public NameAndDescriptorConstant nameAndDescriptorConstant() { return nameAndDescriptorConstant; }
+
+	public DynamicCallSiteDesc descriptor( ByteCodeType byteCodeType ) //TODO: get rid of the ByteCodeType parameter.
+	{
+		DynamicConstantDesc<?> dynamicConstantDescriptor = byteCodeType.getBootstrapMethodByIndex( bootstrapMethodIndex ).constantDescriptor();
+		MethodTypeDesc methodTypeDesc = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant().stringValue() );
+		return DynamicCallSiteDesc.of( dynamicConstantDescriptor.bootstrapMethod(), nameAndDescriptorConstant.nameConstant().stringValue(), methodTypeDesc, dynamicConstantDescriptor.bootstrapArgs() );
+	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
@@ -60,10 +67,5 @@ public final class InvokeDynamicConstant extends Constant
 	@Override public int hashCode()
 	{
 		return Objects.hash( tag, bootstrapMethodIndex, nameAndDescriptorConstant );
-	}
-
-	public BootstrapMethod getBootstrapMethod( ByteCodeType byteCodeType )
-	{
-		return byteCodeType.getBootstrapMethodByIndex( bootstrapMethodIndex );
 	}
 }

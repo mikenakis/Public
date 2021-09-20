@@ -3,20 +3,6 @@ package mikenakis.bytecode.reading;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.bytecode.kit.BufferReader;
-import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.DoubleConstant;
-import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.FloatConstant;
-import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
-import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.LongConstant;
-import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 
@@ -44,11 +30,12 @@ final class ConstantPool
 		entries.add( null ); // first entry is empty. (Ancient legacy bollocks.)
 		for( int index = 1; index < count; index++ )
 		{
-			int tag = bufferReader.readUnsignedByte();
+			int tagNumber = bufferReader.readUnsignedByte();
+			Constant.Tag tag = Constant.Tag.fromNumber( tagNumber );
 			Buffer buffer = readConstantBuffer( tag, bufferReader );
 			Entry entry = new Entry( tag, buffer );
 			entries.add( entry );
-			if( tag == LongConstant.TAG || tag == DoubleConstant.TAG )
+			if( tag == Constant.Tag.Long || tag == Constant.Tag.Double )
 			{
 				entries.add( null );
 				index++; //8-byte constants occupy two entries. (Ancient legacy bollocks.)
@@ -146,12 +133,12 @@ final class ConstantPool
 
 	private static final class Entry
 	{
-		final int tag;
+		final Constant.Tag tag;
 		Buffer buffer;
 		Constant constant;
 		boolean used;
 
-		Entry( int tag, Buffer buffer )
+		Entry( Constant.Tag tag, Buffer buffer )
 		{
 			this.tag = tag;
 			this.buffer = buffer;
@@ -179,16 +166,16 @@ final class ConstantPool
 		}
 	}
 
-	private static Buffer readConstantBuffer( int tag, BufferReader bufferReader )
+	private static Buffer readConstantBuffer( Constant.Tag tag, BufferReader bufferReader )
 	{
 		return switch( tag )
 			{
-				case ClassConstant.TAG, MethodTypeConstant.TAG, StringConstant.TAG -> bufferReader.readBuffer( 2 );
-				case MethodHandleConstant.TAG -> bufferReader.readBuffer( 3 );
-				case FieldReferenceConstant.TAG, NameAndDescriptorConstant.TAG, IntegerConstant.TAG, FloatConstant.TAG, InvokeDynamicConstant.TAG, //
-					PlainMethodReferenceConstant.TAG, InterfaceMethodReferenceConstant.TAG -> bufferReader.readBuffer( 4 );
-				case DoubleConstant.TAG, LongConstant.TAG -> bufferReader.readBuffer( 8 );
-				case Mutf8Constant.TAG -> readMutf8ConstantBuffer( bufferReader );
+				case Class, MethodType, String -> bufferReader.readBuffer( 2 );
+				case MethodHandle -> bufferReader.readBuffer( 3 );
+				case FieldReference, NameAndDescriptor, Integer, Float, InvokeDynamic, //
+					MethodReference, InterfaceMethodReference -> bufferReader.readBuffer( 4 );
+				case Double, Long -> bufferReader.readBuffer( 8 );
+				case Mutf8 -> readMutf8ConstantBuffer( bufferReader );
 				default -> throw new AssertionError();
 			};
 	}

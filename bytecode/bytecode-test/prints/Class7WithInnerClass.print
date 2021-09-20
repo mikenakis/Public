@@ -3,20 +3,20 @@
  ├─ extra constants (0 entries)
  ├─ fields (0 entries)
  ├─ methods (1 entries)
- │   └─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
+ │   └─ method accessFlags = [public], name = <init>, descriptor = void()
  │       └─ attributes (1 entries)
  │           └─ Code maxStack = 1, maxLocals = 1
  │               ├─ instructions (3 entries)
  │               │   ├─ L9:
  │               │   ├─      ALOAD_0
- │               │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │               │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │               │   └─      RETURN
  │               ├─ exceptionInfos (0 entries)
  │               └─ attributes (2 entries)
  │                   ├─ LineNumberTable (1 entries)
- │                   │   └─  lineNumber = 9, startPc = L9
+ │                   │   └─  lineNumber = 9, start = L9
  │                   └─ LocalVariableTable (1 entries)
- │                       └─  index = 0, startPc = L9, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class7WithInnerClass;" (mikenakis.bytecode.test.model.Class7WithInnerClass this)
+ │                       └─  index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
  └─ attributes (3 entries)
      ├─ SourceFile value = "Class7WithInnerClass.java"
      ├─ NestMembers (1 entries)

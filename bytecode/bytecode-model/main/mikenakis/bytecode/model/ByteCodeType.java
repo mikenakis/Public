@@ -6,6 +6,8 @@ import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -181,7 +183,27 @@ public final class ByteCodeType
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return thisClassConstant.getClassName();
+		return thisClassConstant.nameConstant().stringValue();
+	}
+
+	public ClassDesc descriptor()
+	{
+		return thisClassConstant.classDescriptor();
+	}
+
+	public String name()
+	{
+		return ByteCodeHelpers.typeNameFromClassDesc( thisClassConstant.classDescriptor() );
+	}
+
+	public Optional<ClassDesc> superClassDescriptor()
+	{
+		return superClassConstant.map( c -> c.classDescriptor() );
+	}
+
+	public Optional<String> superClassName()
+	{
+		return superClassDescriptor().map( c -> ByteCodeHelpers.typeNameFromClassDesc( c ) );
 	}
 
 	public boolean isAnnotation()
@@ -189,7 +211,7 @@ public final class ByteCodeType
 		return modifierSet.contains( Modifier.Annotation );
 	}
 
-	public int findDeclaredMethodByNameAndDescriptor( String name, String descriptor )
+	public int findDeclaredMethodByNameAndDescriptor( String name, MethodTypeDesc descriptor )
 	{
 		int index = 0;
 		for( ByteCodeMethod method : methods )
@@ -201,26 +223,19 @@ public final class ByteCodeType
 		return -1;
 	}
 
-	public ByteCodeMethod getMethodByNameAndDescriptor( String name, String descriptor, Function<String,ByteCodeType> byteCodeTypeByName )
+	public ByteCodeMethod getMethodByNameAndDescriptor( String name, MethodTypeDesc descriptor, Function<String,ByteCodeType> byteCodeTypeByName )
 	{
-		for( ByteCodeType byteCodeType = this; ; )
-		{
+		for( ByteCodeType byteCodeType = this; ; byteCodeType = byteCodeType.superClassName().map( byteCodeTypeByName ).orElseThrow() )
 			for( ByteCodeMethod method : byteCodeType.methods )
 				if( match( method, name, descriptor ) )
 					return method;
-			if( byteCodeType.superClassConstant.isEmpty() )
-				break;
-			String ancestorName = byteCodeType.superClassConstant.get().getClassName();
-			byteCodeType = byteCodeTypeByName.apply( ancestorName );
-		}
-		throw new AssertionError();
 	}
 
-	private static boolean match( ByteCodeMethod method, String name, String descriptor )
+	private static boolean match( ByteCodeMethod method, String name, MethodTypeDesc descriptor )
 	{
-		if( !method.nameConstant.stringValue().equals( name ) )
+		if( !method.name().equals( name ) )
 			return false;
-		if( !method.descriptorConstant.stringValue().equals( descriptor ) )
+		if( !method.descriptor().equals( descriptor ) )
 			return false;
 		return true;
 	}

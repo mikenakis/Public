@@ -3,6 +3,7 @@ package mikenakis.bytecode.model;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ClassDesc;
 import java.util.Map;
 
 /**
@@ -12,9 +13,10 @@ import java.util.Map;
  */
 public final class ByteCodeField extends ByteCodeMember
 {
-	public static ByteCodeField of( FlagSet<Modifier> modifierSet, String name, String descriptor )
+	public static ByteCodeField of( FlagSet<Modifier> modifierSet, String name, @SuppressWarnings( "TypeMayBeWeakened" ) ClassDesc fieldTypeDescriptor )
 	{
-		return of( modifierSet, Mutf8Constant.of( name ), Mutf8Constant.of( descriptor ), AttributeSet.of() );
+		String descriptorString = fieldTypeDescriptor.descriptorString();
+		return of( modifierSet, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
 	}
 
 	public static ByteCodeField of( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
@@ -38,24 +40,17 @@ public final class ByteCodeField extends ByteCodeMember
 		Map.entry( Modifier.Synthetic /**/, 0x1000 ),   // ACC_SYNTHETIC = 0x1000;
 		Map.entry( Modifier.Enum      /**/, 0x4000 ) ); // ACC_ENUM      = 0x4000;
 
-	private final FlagSet<Modifier> modifierSet;
-	public final Mutf8Constant descriptorConstant;
+	public final FlagSet<Modifier> modifierSet;
 
 	private ByteCodeField( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, attributeSet );
+		super( nameConstant, descriptorConstant, attributeSet );
 		this.modifierSet = modifierSet;
-		this.descriptorConstant = descriptorConstant;
 	}
 
-	@Deprecated @Override public FlagSet<?> modifierSet()
+	public ClassDesc descriptor()
 	{
-		return modifierSet;
-	}
-
-	@Deprecated @Override public Mutf8Constant descriptorConstant()
-	{
-		return descriptorConstant;
+		return ClassDesc.ofDescriptor( descriptorConstant.stringValue() );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

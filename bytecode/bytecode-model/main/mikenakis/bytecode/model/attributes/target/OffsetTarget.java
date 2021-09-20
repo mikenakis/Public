@@ -8,8 +8,10 @@ public final class OffsetTarget extends Target
 {
 	public final int offset;
 
-	public OffsetTarget( int offset )
+	public OffsetTarget( Type type, int offset )
 	{
+		super( type );
+		assert type == Type.TypeInInstanceofExpression || type == Type.TypeInNewExpression || type == Type.TypeInMethodReferenceExpressionUsingNew || type == Type.TypeInMethodReferenceExpressionUsingIdentifier;
 		this.offset = offset;
 	}
 

@@ -22,7 +22,7 @@ public final class AnnotationAnnotationValue extends AnnotationValue
 
 	private AnnotationAnnotationValue( ByteCodeAnnotation annotation )
 	{
-		super( AnnotationTag );
+		super( Tag.Annotation );
 		this.annotation = annotation;
 	}
 

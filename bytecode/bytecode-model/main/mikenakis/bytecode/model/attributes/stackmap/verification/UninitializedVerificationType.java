@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
-import mikenakis.bytecode.model.attributes.code.AbsoluteInstructionReference;
+import mikenakis.bytecode.model.attributes.code.Instruction;
 
 import java.util.Optional;
 
@@ -11,20 +11,20 @@ import java.util.Optional;
  */
 public final class UninitializedVerificationType extends VerificationType
 {
-	public static UninitializedVerificationType of( AbsoluteInstructionReference instructionReference )
+	public static UninitializedVerificationType of( Instruction instruction )
 	{
-		return new UninitializedVerificationType( instructionReference );
+		return new UninitializedVerificationType( instruction );
 	}
 
 	public static final int tag = 8;
 	public static final String tagName = "Uninitialized";
 
-	public final AbsoluteInstructionReference instructionReference;
+	public final Instruction instruction;
 
-	private UninitializedVerificationType( AbsoluteInstructionReference instructionReference )
+	private UninitializedVerificationType( Instruction instruction )
 	{
 		super( tag );
-		this.instructionReference = instructionReference;
+		this.instruction = instruction;
 	}
 
 	@Deprecated @Override public Optional<UninitializedVerificationType> tryAsUninitializedVerificationType() { return Optional.of( this ); }

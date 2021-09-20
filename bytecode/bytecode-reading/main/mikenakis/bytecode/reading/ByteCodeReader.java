@@ -1,6 +1,5 @@
 package mikenakis.bytecode.reading;
 
-import mikenakis.bytecode.exceptions.UnknownValueException;
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.kit.OmniSwitch3;
@@ -31,7 +30,7 @@ import mikenakis.bytecode.model.attributes.ExceptionInfo;
 import mikenakis.bytecode.model.attributes.ExceptionsAttribute;
 import mikenakis.bytecode.model.attributes.InnerClass;
 import mikenakis.bytecode.model.attributes.InnerClassesAttribute;
-import mikenakis.bytecode.model.attributes.LineNumber;
+import mikenakis.bytecode.model.attributes.LineNumberEntry;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariable;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
@@ -54,7 +53,6 @@ import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import mikenakis.bytecode.model.attributes.TypeAnnotation;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
-import mikenakis.bytecode.model.attributes.code.AbsoluteInstructionReference;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.attributes.code.instructions.BranchInstruction;
@@ -105,11 +103,11 @@ import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.Kit;
 
@@ -408,11 +406,12 @@ public class ByteCodeReader
 		List<ExceptionInfo> exceptionInfos = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			AbsoluteInstructionReference startPc = readAbsoluteInstructionReference( bufferReader, locationMap );
-			AbsoluteInstructionReference endPc = readAbsoluteInstructionReference( bufferReader, locationMap );
-			AbsoluteInstructionReference handlerPc = readAbsoluteInstructionReference( bufferReader, locationMap );
+			Instruction startInstruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
+			Optional<Instruction> endInstruction = readAbsoluteInstruction( bufferReader, locationMap );
+			assert endInstruction.isPresent();
+			Instruction handlerInstruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
 			Optional<ClassConstant> catchTypeConstant = Kit.upCast( constantPool.tryReadIndexAndGetConstant( bufferReader ) );
-			ExceptionInfo exceptionInfo = ExceptionInfo.of( startPc, endPc, handlerPc, catchTypeConstant );
+			ExceptionInfo exceptionInfo = ExceptionInfo.of( startInstruction, endInstruction, handlerInstruction, catchTypeConstant );
 			exceptionInfos.add( exceptionInfo );
 		}
 		AttributeSet attributes = readAttributes( constantPool, ( a, c, b ) -> readCodeAttribute( a, c, b, locationMap ), bufferReader );
@@ -646,13 +645,13 @@ public class ByteCodeReader
 		assert attributeName.equalsMutf8Constant( LineNumberTableAttribute.kind.mutf8Name );
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
-		List<LineNumber> entries = new ArrayList<>( count );
+		List<LineNumberEntry> entries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			AbsoluteInstructionReference startPc = readAbsoluteInstructionReference( bufferReader, locationMap );
-			int lineNumber1 = bufferReader.readUnsignedShort();
-			var lineNumber = LineNumber.of( startPc, lineNumber1 );
-			entries.add( lineNumber );
+			Instruction startInstruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
+			int lineNumber = bufferReader.readUnsignedShort();
+			var lineNumberEntry = LineNumberEntry.of( startInstruction, lineNumber );
+			entries.add( lineNumberEntry );
 		}
 		return LineNumberTableAttribute.of( entries );
 	}
@@ -665,15 +664,14 @@ public class ByteCodeReader
 		List<LocalVariable> localVariables = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			AbsoluteInstructionReference startInstructionReference = readAbsoluteInstructionReference( bufferReader, locationMap );
+			Instruction startInstruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
 			int length = bufferReader.readUnsignedShort();
-			int endLocation = locationMap.getLocation( startInstructionReference.targetInstruction() ) + length;
+			int endLocation = locationMap.getLocation( startInstruction ) + length;
 			Optional<Instruction> endInstruction = locationMap.getInstruction( endLocation );
-			AbsoluteInstructionReference endInstructionReference = AbsoluteInstructionReference.of( endInstruction );
 			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			int index = bufferReader.readUnsignedShort();
-			LocalVariable localVariable = LocalVariable.of( startInstructionReference, endInstructionReference, nameConstant, descriptorConstant, index );
+			LocalVariable localVariable = LocalVariable.of( startInstruction, endInstruction, nameConstant, descriptorConstant, index );
 			localVariables.add( localVariable );
 		}
 		return LocalVariableTableAttribute.of( localVariables );
@@ -688,15 +686,14 @@ public class ByteCodeReader
 		List<LocalVariableType> entries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			AbsoluteInstructionReference startInstructionReference = readAbsoluteInstructionReference( bufferReader, locationMap );
+			Instruction startInstruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
 			int length = bufferReader.readUnsignedShort();
-			int endLocation = locationMap.getLocation( startInstructionReference.targetInstruction() ) + length;
+			int endLocation = locationMap.getLocation( startInstruction ) + length;
 			Optional<Instruction> endInstruction = locationMap.getInstruction( endLocation );
-			AbsoluteInstructionReference endInstructionReference = AbsoluteInstructionReference.of( endInstruction );
 			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			Mutf8Constant signatureConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 			int index = bufferReader.readUnsignedShort();
-			LocalVariableType entry = LocalVariableType.of( startInstructionReference, endInstructionReference, nameConstant, signatureConstant, index );
+			LocalVariableType entry = LocalVariableType.of( startInstruction, endInstruction, nameConstant, signatureConstant, index );
 			entries.add( entry );
 		}
 		return LocalVariableTypeTableAttribute.of( entries );
@@ -804,37 +801,44 @@ public class ByteCodeReader
 		List<TypeAnnotation> typeAnnotations = new ArrayList<>( typeAnnotationCount );
 		for( int i = 0; i < typeAnnotationCount; i++ )
 		{
-			int targetType = bufferReader.readUnsignedByte();
+			int tag = bufferReader.readUnsignedByte();
+			Target.Type targetType = Target.Type.fromTag( tag );
 			Target target = switch( targetType )
 				{
-					case 0x00, 0x01 -> //
+					case TypeParameterDeclarationOfGenericClassOrInterface, //
+						TypeParameterDeclarationOfGenericMethodOrConstructor -> //
 						{
 							int typeParameterIndex = bufferReader.readUnsignedByte();
-							yield new TypeParameterTarget( typeParameterIndex );
+							yield new TypeParameterTarget( targetType, typeParameterIndex );
 						}
-					case 0x10 -> //
+					case TypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration -> //
 						{
 							int supertypeIndex = bufferReader.readUnsignedShort();
-							yield new SupertypeTarget( supertypeIndex );
+							yield new SupertypeTarget( targetType, supertypeIndex );
 						}
-					case 0x11, 0x12 -> //
+					case TypeInBoundOfTypeParameterDeclarationOfGenericClassOrInterface, //
+						TypeInBoundOfTypeParameterDeclarationOfGenericMethodOrConstructor -> //
 						{
 							int typeParameterIndex = bufferReader.readUnsignedByte();
 							int boundIndex = bufferReader.readUnsignedByte();
-							yield new TypeParameterBoundTarget( typeParameterIndex, boundIndex );
+							yield new TypeParameterBoundTarget( targetType, typeParameterIndex, boundIndex );
 						}
-					case 0x13, 0x14, 0x15 -> new EmptyTarget();
-					case 0x16 -> //
+					case TypeInFieldDeclaration, //
+						ReturnTypeOfMethodOrTypeOfNewlyConstructedObject, //
+						ReceiverTypeOfMethodOrConstructor -> //
+						new EmptyTarget( targetType );
+					case TypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression -> //
 						{
 							int formalParameterIndex = bufferReader.readUnsignedByte();
-							yield new FormalParameterTarget( formalParameterIndex );
+							yield new FormalParameterTarget( targetType, formalParameterIndex );
 						}
-					case 0x17 -> //
+					case TypeInThrowsClauseOfMethodOrConstructor -> //
 						{
 							int throwsTypeIndex = bufferReader.readUnsignedShort();
-							yield new ThrowsTarget( throwsTypeIndex );
+							yield new ThrowsTarget( targetType, throwsTypeIndex );
 						}
-					case 0x40, 0x41 -> //
+					case TypeInLocalVariableDeclaration, //
+						TypeInResourceVariableDeclaration -> //
 						{
 							int entryCount = bufferReader.readUnsignedShort();
 							assert entryCount > 0;
@@ -847,25 +851,31 @@ public class ByteCodeReader
 								LocalVariableTarget.Entry entry = new LocalVariableTarget.Entry( startPc, length, index );
 								entries.add( entry );
 							}
-							yield new LocalVariableTarget( entries );
+							yield new LocalVariableTarget( targetType, entries );
 						}
-					case 0x42 -> //
+					case TypeInExceptionParameterDeclaration -> //
 						{
 							int exceptionTableIndex = bufferReader.readUnsignedShort();
-							yield new CatchTarget( exceptionTableIndex );
+							yield new CatchTarget( targetType, exceptionTableIndex );
 						}
-					case 0x43, 0x44, 0x45, 0x46 -> //
+					case TypeInInstanceofExpression,
+						TypeInNewExpression,
+						TypeInMethodReferenceExpressionUsingNew,
+						TypeInMethodReferenceExpressionUsingIdentifier -> //
 						{
 							int offset = bufferReader.readUnsignedShort();
-							yield new OffsetTarget( offset );
+							yield new OffsetTarget( targetType, offset );
 						}
-					case 0x47, 0x48, 0x49, 0x4a, 0x4b -> //
+					case TypeInCastExpression, //
+						TypeArgumentForGenericConstructorInNewExpressionOrExplicitConstructorInvocationStatement, //
+						TypeArgumentForGenericMethodInMethodInvocationExpression, //
+						TypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew, //
+						TypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier -> //
 						{
 							int offset = bufferReader.readUnsignedShort();
 							int typeArgumentIndex = bufferReader.readUnsignedByte();
-							yield new TypeArgumentTarget( offset, typeArgumentIndex );
+							yield new TypeArgumentTarget( targetType, offset, typeArgumentIndex );
 						}
-					default -> throw new AssertionError();
 				};
 			int entryCount = bufferReader.readUnsignedByte();
 			List<TypePath.Entry> entries = new ArrayList<>( entryCount );
@@ -887,7 +897,7 @@ public class ByteCodeReader
 				TypeAnnotation.ElementValuePair elementValuePair = TypeAnnotation.ElementValuePair.of( elementNameIndex, elementValue );
 				pairs.add( elementValuePair );
 			}
-			TypeAnnotation entry = TypeAnnotation.of( targetType, target, targetPath, typeIndex, pairs );
+			TypeAnnotation entry = TypeAnnotation.of( tag, target, targetPath, typeIndex, pairs );
 			typeAnnotations.add( entry );
 		}
 		return typeAnnotations;
@@ -936,33 +946,33 @@ public class ByteCodeReader
 
 	private static AnnotationValue readAnnotationValue( ConstantPool constantPool, BufferReader bufferReader )
 	{
-		int tag = bufferReader.readUnsignedByte();
+		int character = bufferReader.readUnsignedByte();
+		AnnotationValue.Tag tag = AnnotationValue.Tag.fromCharacter( character );
 		return switch( tag )
 			{
-				case AnnotationValue.ByteTag, AnnotationValue.CharacterTag, AnnotationValue.DoubleTag, AnnotationValue.FloatTag, //
-					AnnotationValue.IntTag, AnnotationValue.LongTag, AnnotationValue.ShortTag, AnnotationValue.BooleanTag, AnnotationValue.StringTag -> //
+				case Byte, Character, Double, Float, Integer, Long, Short, Boolean, String -> //
 					{
 						Constant constant = constantPool.readIndexAndGetConstant( bufferReader );
 						ValueConstant<?> valueConstant = constant.asValueConstant();
 						yield ConstAnnotationValue.of( tag, valueConstant );
 					}
-				case AnnotationValue.EnumTag -> //
+				case Enum -> //
 					{
 						Mutf8Constant typeNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						Mutf8Constant valueNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield EnumAnnotationValue.of( typeNameConstant, valueNameConstant );
 					}
-				case AnnotationValue.ClassTag -> //
+				case Class -> //
 					{
 						Mutf8Constant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield ClassAnnotationValue.of( classConstant );
 					}
-				case AnnotationValue.AnnotationTag -> //
+				case Annotation -> //
 					{
 						ByteCodeAnnotation annotation = readByteCodeAnnotation( constantPool, bufferReader );
 						yield AnnotationAnnotationValue.of( annotation );
 					}
-				case AnnotationValue.ArrayTag -> //
+				case Array -> //
 					{
 						int count = bufferReader.readUnsignedShort();
 						assert count > 0;
@@ -971,7 +981,6 @@ public class ByteCodeReader
 							annotationValues.add( readAnnotationValue( constantPool, bufferReader ) );
 						yield ArrayAnnotationValue.of( annotationValues );
 					}
-				default -> throw new UnknownValueException( tag );
 			};
 	}
 
@@ -1016,11 +1025,11 @@ public class ByteCodeReader
 		return entries;
 	}
 
-	static Constant readConstant( int tag, ConstantPool constantPool, BufferReader bufferReader )
+	static Constant readConstant( Constant.Tag tag, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		return switch( tag )
 			{
-				case ClassConstant.TAG -> //
+				case Class -> //
 					{
 						ConstantPool constantPool1 = constantPool;
 						BufferReader bufferReader1 = bufferReader;
@@ -1028,78 +1037,77 @@ public class ByteCodeReader
 						Mutf8Constant nameConstant = constantPool1.getConstant( index ).asMutf8Constant();
 						yield ClassConstant.of( nameConstant );
 					}
-				case StringConstant.TAG -> //
+				case String -> //
 					{
 						int valueIndex = bufferReader.readUnsignedShort();
 						Mutf8Constant valueConstant = constantPool.getConstant( valueIndex ).asMutf8Constant();
 						yield StringConstant.of( valueConstant );
 					}
-				case MethodTypeConstant.TAG -> //
+				case MethodType -> //
 					{
 						Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield MethodTypeConstant.of( descriptorConstant );
 					}
-				case FieldReferenceConstant.TAG -> //
+				case FieldReference -> //
 					{
 						ClassConstant typeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
 						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
 						yield FieldReferenceConstant.of( typeConstant, nameAndDescriptorConstant );
 					}
-				case InterfaceMethodReferenceConstant.TAG -> //
+				case InterfaceMethodReference -> //
 					{
 						ClassConstant typeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
 						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
 						yield InterfaceMethodReferenceConstant.of( typeConstant, nameAndDescriptorConstant );
 					}
-				case PlainMethodReferenceConstant.TAG -> //
+				case MethodReference -> //
 					{
 						ClassConstant typeConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
 						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
 						yield PlainMethodReferenceConstant.of( typeConstant, nameAndDescriptorConstant );
 					}
-				case InvokeDynamicConstant.TAG -> //
+				case InvokeDynamic -> //
 					{
 						int bootstrapMethodIndex = bufferReader.readUnsignedShort();
 						NameAndDescriptorConstant nameAndDescriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asNameAndDescriptorConstant();
 						yield InvokeDynamicConstant.of( bootstrapMethodIndex, nameAndDescriptorConstant );
 					}
-				case DoubleConstant.TAG -> //
+				case Double -> //
 					{
 						double value = bufferReader.readDouble();
 						yield DoubleConstant.of( value );
 					}
-				case FloatConstant.TAG -> //
+				case Float -> //
 					{
 						float value = bufferReader.readFloat();
 						yield FloatConstant.of( value );
 					}
-				case IntegerConstant.TAG -> //
+				case Integer -> //
 					{
 						int value = bufferReader.readInt();
 						yield IntegerConstant.of( value );
 					}
-				case LongConstant.TAG -> //
+				case Long -> //
 					{
 						long value = bufferReader.readLong();
 						yield LongConstant.of( value );
 					}
-				case Mutf8Constant.TAG -> //
+				case Mutf8 -> //
 					{
 						Buffer buffer = bufferReader.readBuffer();
 						yield Mutf8Constant.of( buffer );
 					}
-				case NameAndDescriptorConstant.TAG -> //
+				case NameAndDescriptor -> //
 					{
 						Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						Mutf8Constant descriptorConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						yield NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
 					}
-				case MethodHandleConstant.TAG -> //
+				case MethodHandle -> //
 					{
 						int referenceKindNumber = bufferReader.readUnsignedByte();
 						MethodHandleConstant.ReferenceKind referenceKind = MethodHandleConstant.ReferenceKind.tryFromNumber( referenceKindNumber ).orElseThrow();
 						ReferenceConstant referenceConstant = constantPool.readIndexAndGetConstant( bufferReader ).asReferenceConstant();
-						assert referenceConstant.tag == PlainMethodReferenceConstant.TAG || referenceConstant.tag == InterfaceMethodReferenceConstant.TAG || referenceConstant.tag == FieldReferenceConstant.TAG;
 						yield MethodHandleConstant.of( referenceKind, referenceConstant );
 					}
 				default -> throw new AssertionError();
@@ -1121,21 +1129,19 @@ public class ByteCodeReader
 					}
 				case UninitializedVerificationType.tag -> //
 					{
-						AbsoluteInstructionReference instructionReference = readAbsoluteInstructionReference( bufferReader, locationMap );
-						yield UninitializedVerificationType.of( instructionReference );
+						Instruction instruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
+						yield UninitializedVerificationType.of( instruction );
 					}
 				default -> throw new AssertionError( tag );
 			};
 	}
 
-	private static AbsoluteInstructionReference readAbsoluteInstructionReference( BufferReader bufferReader, ReadingLocationMap locationMap )
+	private static Optional<Instruction> readAbsoluteInstruction( BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
 		// Absolute instruction references are never used in code; they are only used in attributes.
 		// Thus, by the time an absolute instruction reference is parsed, all instructions have already been parsed,
 		// which means that we can directly reference the target instruction without the need for fix-ups.
 		int targetLocation = bufferReader.readUnsignedShort(); //an unsigned short works here because java methods are limited to 64k.
-		Optional<Instruction> targetInstruction = locationMap.getInstruction( targetLocation );
-		AbsoluteInstructionReference absoluteInstructionReference = AbsoluteInstructionReference.of( targetInstruction );
-		return absoluteInstructionReference;
+		return locationMap.getInstruction( targetLocation );
 	}
 }

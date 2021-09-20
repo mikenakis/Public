@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//TODO: introduce an abstraction of a local variable, get rid of the index, replace it with a local variable reference.
 public final class LocalVariableInstruction extends Instruction
 {
 	public static LocalVariableInstruction of( int opCode, int index )

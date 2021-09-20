@@ -8,8 +8,10 @@ public final class ThrowsTarget extends Target // "throws_target" in jvms-4.7.20
 {
 	public final int throwsTypeIndex;
 
-	public ThrowsTarget( int throwsTypeIndex )
+	public ThrowsTarget( Type type, int throwsTypeIndex )
 	{
+		super( type );
+		assert type == Type.TypeInThrowsClauseOfMethodOrConstructor;
 		this.throwsTypeIndex = throwsTypeIndex;
 	}
 

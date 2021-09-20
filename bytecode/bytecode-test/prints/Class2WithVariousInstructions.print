@@ -5,21 +5,21 @@
  │   └─ Class name = "mikenakis/bytecode/test/model/Class1"
  ├─ fields (0 entries)
  ├─ methods (8 entries)
- │   ├─  accessFlags = [public], name = "<init>", descriptor = "()V" (void <init>())
+ │   ├─ method accessFlags = [public], name = <init>, descriptor = void()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
  │   │           │   ├─ L12:
  │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKESPECIAL void java.lang.Object.<init>()
+ │   │           │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │   │           │   └─      RETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 12, startPc = L12
+ │   │               │   └─  lineNumber = 12, start = L12
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L12, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   ├─  accessFlags = [public, final], name = "methodWithIincInstruction", descriptor = "(I)I" (int methodWithIincInstruction( int ))
+ │   │                   └─  index = 0, start = L12, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   ├─ method accessFlags = [public, final], name = methodWithIincInstruction, descriptor = int( int )
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 1, maxLocals = 2
  │   │       │   ├─ instructions (3 entries)
@@ -31,14 +31,14 @@
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (2 entries)
  │   │       │       ├─ LineNumberTable (2 entries)
- │   │       │       │   ├─  lineNumber = 16, startPc = L16
- │   │       │       │   └─  lineNumber = 17, startPc = L17
+ │   │       │       │   ├─  lineNumber = 16, start = L16
+ │   │       │       │   └─  lineNumber = 17, start = L17
  │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, startPc = L16, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   │       │           └─  index = 1, startPc = L16, endPc = @end, name = "a", descriptor = "I" (int a)
+ │   │       │           ├─  index = 0, start = L16, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   │       │           └─  index = 1, start = L16, end = @end, name = a, descriptor = int
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = a
- │   ├─  accessFlags = [public, final], name = "methodWithMultiANewArrayInstruction", descriptor = "()Ljava/lang/Object;" (java.lang.Object methodWithMultiANewArrayInstruction())
+ │   ├─ method accessFlags = [public, final], name = methodWithMultiANewArrayInstruction, descriptor = java.lang.Object()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 2, maxLocals = 1
  │   │           ├─ instructions (4 entries)
@@ -50,10 +50,10 @@
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 22, startPc = L22
+ │   │               │   └─  lineNumber = 22, start = L22
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L22, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   ├─  accessFlags = [public, final], name = "methodWithTableSwitchInstruction", descriptor = "(I)V" (void methodWithTableSwitchInstruction( int ))
+ │   │                   └─  index = 0, start = L22, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   ├─ method accessFlags = [public, final], name = methodWithTableSwitchInstruction, descriptor = void( int )
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (30 entries)
@@ -63,66 +63,66 @@
  │   │       │   │   ├─ L30:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "100"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L31:
  │   │       │   │   ├─      GOTO L51
  │   │       │   │   ├─ L33:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "101"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L34:
  │   │       │   │   ├─      GOTO L51
  │   │       │   │   ├─ L36:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "102"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L37:
  │   │       │   │   ├─      GOTO L51
  │   │       │   │   ├─ L39:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "103"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L40:
  │   │       │   │   ├─      GOTO L51
  │   │       │   │   ├─ L42:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "104"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L43:
  │   │       │   │   ├─      GOTO L51
  │   │       │   │   ├─ L45:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "105"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L46:
  │   │       │   │   ├─      GOTO L51
  │   │       │   │   ├─ L48:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "publicConstantValue"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L51:
  │   │       │   │   └─      RETURN
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (3 entries)
  │   │       │       ├─ LineNumberTable (15 entries)
- │   │       │       │   ├─  lineNumber = 27, startPc = L27
- │   │       │       │   ├─  lineNumber = 30, startPc = L30
- │   │       │       │   ├─  lineNumber = 31, startPc = L31
- │   │       │       │   ├─  lineNumber = 33, startPc = L33
- │   │       │       │   ├─  lineNumber = 34, startPc = L34
- │   │       │       │   ├─  lineNumber = 36, startPc = L36
- │   │       │       │   ├─  lineNumber = 37, startPc = L37
- │   │       │       │   ├─  lineNumber = 39, startPc = L39
- │   │       │       │   ├─  lineNumber = 40, startPc = L40
- │   │       │       │   ├─  lineNumber = 42, startPc = L42
- │   │       │       │   ├─  lineNumber = 43, startPc = L43
- │   │       │       │   ├─  lineNumber = 45, startPc = L45
- │   │       │       │   ├─  lineNumber = 46, startPc = L46
- │   │       │       │   ├─  lineNumber = 48, startPc = L48
- │   │       │       │   └─  lineNumber = 51, startPc = L51
+ │   │       │       │   ├─  lineNumber = 27, start = L27
+ │   │       │       │   ├─  lineNumber = 30, start = L30
+ │   │       │       │   ├─  lineNumber = 31, start = L31
+ │   │       │       │   ├─  lineNumber = 33, start = L33
+ │   │       │       │   ├─  lineNumber = 34, start = L34
+ │   │       │       │   ├─  lineNumber = 36, start = L36
+ │   │       │       │   ├─  lineNumber = 37, start = L37
+ │   │       │       │   ├─  lineNumber = 39, start = L39
+ │   │       │       │   ├─  lineNumber = 40, start = L40
+ │   │       │       │   ├─  lineNumber = 42, start = L42
+ │   │       │       │   ├─  lineNumber = 43, start = L43
+ │   │       │       │   ├─  lineNumber = 45, start = L45
+ │   │       │       │   ├─  lineNumber = 46, start = L46
+ │   │       │       │   ├─  lineNumber = 48, start = L48
+ │   │       │       │   └─  lineNumber = 51, start = L51
  │   │       │       ├─ LocalVariableTable (2 entries)
- │   │       │       │   ├─  index = 0, startPc = L27, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   │       │       │   └─  index = 1, startPc = L27, endPc = @end, name = "i", descriptor = "I" (int i)
+ │   │       │       │   ├─  index = 0, start = L27, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   │       │       │   └─  index = 1, start = L27, end = @end, name = i, descriptor = int
  │   │       │       └─ StackMapTable (8 entries)
  │   │       │           ├─  SameFrame target = L30
  │   │       │           ├─  SameFrame target = L33
@@ -134,7 +134,7 @@
  │   │       │           └─  SameFrame target = L51
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = i
- │   ├─  accessFlags = [public, final], name = "methodWithLookupSwitchInstruction", descriptor = "(I)V" (void methodWithLookupSwitchInstruction( int ))
+ │   ├─ method accessFlags = [public, final], name = methodWithLookupSwitchInstruction, descriptor = void( int )
  │   │   └─ attributes (2 entries)
  │   │       ├─ Code maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions (30 entries)
@@ -144,66 +144,66 @@
  │   │       │   │   ├─ L58:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "100"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L59:
  │   │       │   │   ├─      GOTO L79
  │   │       │   │   ├─ L61:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "110"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L62:
  │   │       │   │   ├─      GOTO L79
  │   │       │   │   ├─ L64:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "120"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L65:
  │   │       │   │   ├─      GOTO L79
  │   │       │   │   ├─ L67:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "130"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L68:
  │   │       │   │   ├─      GOTO L79
  │   │       │   │   ├─ L70:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "140"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L71:
  │   │       │   │   ├─      GOTO L79
  │   │       │   │   ├─ L73:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "150"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L74:
  │   │       │   │   ├─      GOTO L79
  │   │       │   │   ├─ L76:
  │   │       │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
  │   │       │   │   ├─      LDCx "default"
- │   │       │   │   ├─      INVOKEVIRTUAL void java.io.PrintStream.println( java.lang.String )
+ │   │       │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
  │   │       │   │   ├─ L79:
  │   │       │   │   └─      RETURN
  │   │       │   ├─ exceptionInfos (0 entries)
  │   │       │   └─ attributes (3 entries)
  │   │       │       ├─ LineNumberTable (15 entries)
- │   │       │       │   ├─  lineNumber = 55, startPc = L55
- │   │       │       │   ├─  lineNumber = 58, startPc = L58
- │   │       │       │   ├─  lineNumber = 59, startPc = L59
- │   │       │       │   ├─  lineNumber = 61, startPc = L61
- │   │       │       │   ├─  lineNumber = 62, startPc = L62
- │   │       │       │   ├─  lineNumber = 64, startPc = L64
- │   │       │       │   ├─  lineNumber = 65, startPc = L65
- │   │       │       │   ├─  lineNumber = 67, startPc = L67
- │   │       │       │   ├─  lineNumber = 68, startPc = L68
- │   │       │       │   ├─  lineNumber = 70, startPc = L70
- │   │       │       │   ├─  lineNumber = 71, startPc = L71
- │   │       │       │   ├─  lineNumber = 73, startPc = L73
- │   │       │       │   ├─  lineNumber = 74, startPc = L74
- │   │       │       │   ├─  lineNumber = 76, startPc = L76
- │   │       │       │   └─  lineNumber = 79, startPc = L79
+ │   │       │       │   ├─  lineNumber = 55, start = L55
+ │   │       │       │   ├─  lineNumber = 58, start = L58
+ │   │       │       │   ├─  lineNumber = 59, start = L59
+ │   │       │       │   ├─  lineNumber = 61, start = L61
+ │   │       │       │   ├─  lineNumber = 62, start = L62
+ │   │       │       │   ├─  lineNumber = 64, start = L64
+ │   │       │       │   ├─  lineNumber = 65, start = L65
+ │   │       │       │   ├─  lineNumber = 67, start = L67
+ │   │       │       │   ├─  lineNumber = 68, start = L68
+ │   │       │       │   ├─  lineNumber = 70, start = L70
+ │   │       │       │   ├─  lineNumber = 71, start = L71
+ │   │       │       │   ├─  lineNumber = 73, start = L73
+ │   │       │       │   ├─  lineNumber = 74, start = L74
+ │   │       │       │   ├─  lineNumber = 76, start = L76
+ │   │       │       │   └─  lineNumber = 79, start = L79
  │   │       │       ├─ LocalVariableTable (2 entries)
- │   │       │       │   ├─  index = 0, startPc = L55, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   │       │       │   └─  index = 1, startPc = L55, endPc = @end, name = "i", descriptor = "I" (int i)
+ │   │       │       │   ├─  index = 0, start = L55, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   │       │       │   └─  index = 1, start = L55, end = @end, name = i, descriptor = int
  │   │       │       └─ StackMapTable (8 entries)
  │   │       │           ├─  SameFrame target = L58
  │   │       │           ├─  SameFrame target = L61
@@ -215,76 +215,76 @@
  │   │       │           └─  SameFrame target = L79
  │   │       └─ MethodParameters (1 entries)
  │   │           └─  accessFlags = [], name = i
- │   ├─  accessFlags = [public, final], name = "methodWithSiPush", descriptor = "()Ljava/lang/String;" (java.lang.String methodWithSiPush())
+ │   ├─ method accessFlags = [public, final], name = methodWithSiPush, descriptor = java.lang.String()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 1, maxLocals = 1
  │   │           ├─ instructions (3 entries)
  │   │           │   ├─ L83:
  │   │           │   ├─      SIPUSH 129
- │   │           │   ├─      INVOKESTATIC java.lang.String java.lang.Integer.toString( int )
+ │   │           │   ├─      INVOKESTATIC type = java.lang.Integer, name = toString, descriptor = java.lang.String( int )
  │   │           │   └─      ARETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (2 entries)
  │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 83, startPc = L83
+ │   │               │   └─  lineNumber = 83, start = L83
  │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, startPc = L83, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   ├─  accessFlags = [public, final], name = "methodWithLambda", descriptor = "()Ljava/lang/String;" (java.lang.String methodWithLambda())
+ │   │                   └─  index = 0, start = L83, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   ├─ method accessFlags = [public, final], name = methodWithLambda, descriptor = java.lang.String()
  │   │   └─ attributes (1 entries)
  │   │       └─ Code maxStack = 2, maxLocals = 2
  │   │           ├─ instructions (16 entries)
  │   │           │   ├─ L88:
  │   │           │   ├─      NEW java.util.ArrayList
  │   │           │   ├─      DUP
- │   │           │   ├─      INVOKESPECIAL void java.util.ArrayList.<init>()
+ │   │           │   ├─      INVOKESPECIAL type = java.util.ArrayList, name = <init>, descriptor = void()
  │   │           │   ├─      ASTORE_1
  │   │           │   ├─ L89:
  │   │           │   ├─      ALOAD_1
  │   │           │   ├─      LDCx "x"
- │   │           │   ├─      INVOKEINTERFACE boolean java.util.List.add( java.lang.Object ) 2 arguments
+ │   │           │   ├─      INVOKEINTERFACE type = java.util.List, name = add, descriptor = boolean( java.lang.Object ) 2 arguments
  │   │           │   ├─      POP
  │   │           │   ├─ L90:
  │   │           │   ├─      ALOAD_1
- │   │           │   ├─      INVOKEDYNAMIC bootstrapMethod = {methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "(Ljava/lang/Object;Ljava/lang/Object;)I", InvokeStatic, referenceConstant = int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), "(Ljava/lang/String;Ljava/lang/String;)I"}, name = "compare", descriptor = "()Ljava/util/Comparator;" (java.util.Comparator compare())
- │   │           │   ├─      INVOKEINTERFACE void java.util.List.sort( java.util.Comparator ) 2 arguments
+ │   │           │   ├─      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = compare, descriptor = java.util.Comparator()
+ │   │           │   ├─      INVOKEINTERFACE type = java.util.List, name = sort, descriptor = void( java.util.Comparator ) 2 arguments
  │   │           │   ├─ L91:
  │   │           │   ├─      ALOAD_1
  │   │           │   ├─      ICONST_0
- │   │           │   ├─      INVOKEINTERFACE java.lang.Object java.util.List.get( int ) 2 arguments
+ │   │           │   ├─      INVOKEINTERFACE type = java.util.List, name = get, descriptor = java.lang.Object( int ) 2 arguments
  │   │           │   ├─      CHECKCAST java.lang.String
  │   │           │   └─      ARETURN
  │   │           ├─ exceptionInfos (0 entries)
  │   │           └─ attributes (3 entries)
  │   │               ├─ LineNumberTable (4 entries)
- │   │               │   ├─  lineNumber = 88, startPc = L88
- │   │               │   ├─  lineNumber = 89, startPc = L89
- │   │               │   ├─  lineNumber = 90, startPc = L90
- │   │               │   └─  lineNumber = 91, startPc = L91
+ │   │               │   ├─  lineNumber = 88, start = L88
+ │   │               │   ├─  lineNumber = 89, start = L89
+ │   │               │   ├─  lineNumber = 90, start = L90
+ │   │               │   └─  lineNumber = 91, start = L91
  │   │               ├─ LocalVariableTable (2 entries)
- │   │               │   ├─  index = 0, startPc = L88, endPc = @end, name = "this", descriptor = "Lmikenakis/bytecode/test/model/Class2WithVariousInstructions;" (mikenakis.bytecode.test.model.Class2WithVariousInstructions this)
- │   │               │   └─  index = 1, startPc = L89, endPc = @end, name = "list", descriptor = "Ljava/util/List;" (java.util.List list)
+ │   │               │   ├─  index = 0, start = L88, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   │               │   └─  index = 1, start = L89, end = @end, name = list, descriptor = java.util.List
  │   │               └─ LocalVariableTypeTable (1 entries)
- │   │                   └─  index = 1, startPc = L89, endPc = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)
- │   └─  accessFlags = [private, static, synthetic], name = "lambda$methodWithLambda$0", descriptor = "(Ljava/lang/String;Ljava/lang/String;)I" (int lambda$methodWithLambda$0( java.lang.String, java.lang.String ))
+ │   │                   └─  index = 1, start = L89, end = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)!
+ │   └─ method accessFlags = [private, static, synthetic], name = lambda$methodWithLambda$0, descriptor = int( java.lang.String, java.lang.String )
  │       └─ attributes (1 entries)
  │           └─ Code maxStack = 2, maxLocals = 2
  │               ├─ instructions (5 entries)
  │               │   ├─ L90:
  │               │   ├─      ALOAD_0
  │               │   ├─      ALOAD_1
- │               │   ├─      INVOKEVIRTUAL int java.lang.String.compareTo( java.lang.String )
+ │               │   ├─      INVOKEVIRTUAL type = java.lang.String, name = compareTo, descriptor = int( java.lang.String )
  │               │   ├─      INEG
  │               │   └─      IRETURN
  │               ├─ exceptionInfos (0 entries)
  │               └─ attributes (2 entries)
  │                   ├─ LineNumberTable (1 entries)
- │                   │   └─  lineNumber = 90, startPc = L90
+ │                   │   └─  lineNumber = 90, start = L90
  │                   └─ LocalVariableTable (2 entries)
- │                       ├─  index = 0, startPc = L90, endPc = @end, name = "a", descriptor = "Ljava/lang/String;" (java.lang.String a)
- │                       └─  index = 1, startPc = L90, endPc = @end, name = "b", descriptor = "Ljava/lang/String;" (java.lang.String b)
+ │                       ├─  index = 0, start = L90, end = @end, name = a, descriptor = java.lang.String
+ │                       └─  index = 1, start = L90, end = @end, name = b, descriptor = java.lang.String
  └─ attributes (3 entries)
      ├─ SourceFile value = "Class2WithVariousInstructions.java"
      ├─ BootstrapMethods (1 entries)
-     │   └─ methodHandle = InvokeStatic, referenceConstant = java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "(Ljava/lang/Object;Ljava/lang/Object;)I", InvokeStatic, referenceConstant = int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), "(Ljava/lang/String;Ljava/lang/String;)I"
+     │   └─ methodHandle = InvokeStatic, referenceConstant = type = java.lang.invoke.LambdaMetafactory, name = metafactory, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: "(Ljava/lang/Object;Ljava/lang/Object;)I", InvokeStatic, referenceConstant = type = mikenakis.bytecode.test.model.Class2WithVariousInstructions, name = lambda$methodWithLambda$0, descriptor = int( java.lang.String, java.lang.String ), "(Ljava/lang/String;Ljava/lang/String;)I"
      └─ InnerClasses (1 entries)
          └─  outerClass = java.lang.invoke.MethodHandles, , accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = "Lookup"

@@ -7,7 +7,7 @@ package mikenakis.bytecode.model.constants;
  */
 public abstract class MethodReferenceConstant extends ReferenceConstant
 {
-	protected MethodReferenceConstant( int tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	protected MethodReferenceConstant( Tag tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
 		super( tag, typeConstant, nameAndDescriptorConstant );
 	}

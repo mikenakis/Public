@@ -4,6 +4,8 @@ import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.ConstantDesc;
+import java.lang.constant.DynamicConstantDesc;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +32,14 @@ public final class BootstrapMethod
 
 	public MethodHandleConstant methodHandleConstant() { return methodHandleConstant; }
 	public List<Constant> argumentConstants() { return Collections.unmodifiableList( argumentConstants ); }
+
+	public DynamicConstantDesc<?> constantDescriptor()
+	{
+		ConstantDesc[] argumentConstantDescriptors = new ConstantDesc[argumentConstants.size()];
+		for( int i = 0; i < argumentConstantDescriptors.length; i++ )
+			argumentConstantDescriptors[i] = argumentConstants.get( i ).constantDescriptor();
+		return DynamicConstantDesc.of( methodHandleConstant.descriptor(), argumentConstantDescriptors );
+	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
