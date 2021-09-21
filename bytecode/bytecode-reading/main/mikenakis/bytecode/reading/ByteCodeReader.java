@@ -4,21 +4,21 @@ import mikenakis.bytecode.kit.Buffer;
 import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.kit.OmniSwitch3;
 import mikenakis.bytecode.kit.OmniSwitch4;
-import mikenakis.bytecode.model.AnnotationParameter;
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ElementValuePair;
+import mikenakis.bytecode.model.ElementValue;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.FlagSet;
-import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
+import mikenakis.bytecode.model.annotationvalues.AnnotationElementValue;
+import mikenakis.bytecode.model.annotationvalues.ArrayElementValue;
+import mikenakis.bytecode.model.annotationvalues.ClassElementValue;
+import mikenakis.bytecode.model.annotationvalues.ConstElementValue;
+import mikenakis.bytecode.model.annotationvalues.EnumElementValue;
 import mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
@@ -51,7 +51,7 @@ import mikenakis.bytecode.model.attributes.SignatureAttribute;
 import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
-import mikenakis.bytecode.model.attributes.TypeAnnotation;
+import mikenakis.bytecode.model.TypeAnnotation;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
@@ -287,14 +287,14 @@ public class ByteCodeReader
 	private static RuntimeInvisibleAnnotationsAttribute readRuntimeInvisibleAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		assert attributeName.equalsMutf8Constant( RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name );
-		List<ByteCodeAnnotation> annotations = readAnnotations( constantPool, bufferReader );
+		List<Annotation> annotations = readAnnotations( constantPool, bufferReader );
 		return RuntimeInvisibleAnnotationsAttribute.of( annotations );
 	}
 
 	private static RuntimeVisibleAnnotationsAttribute readRuntimeVisibleAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		assert attributeName.equalsMutf8Constant( RuntimeVisibleAnnotationsAttribute.kind.mutf8Name );
-		List<ByteCodeAnnotation> annotations = readAnnotations( constantPool, bufferReader );
+		List<Annotation> annotations = readAnnotations( constantPool, bufferReader );
 		return RuntimeVisibleAnnotationsAttribute.of( annotations );
 	}
 
@@ -375,7 +375,7 @@ public class ByteCodeReader
 	private static AnnotationDefaultAttribute readAnnotationDefaultAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader )
 	{
 		assert attributeName.equalsMutf8Constant( AnnotationDefaultAttribute.kind.mutf8Name );
-		AnnotationValue annotationValue = readAnnotationValue( constantPool, bufferReader );
+		ElementValue annotationValue = readAnnotationValue( constantPool, bufferReader );
 		return AnnotationDefaultAttribute.of( annotationValue );
 	}
 
@@ -602,6 +602,8 @@ public class ByteCodeReader
 			.with( LocalVariableTableAttribute.kind.mutf8Name, ByteCodeReader::readLocalVariableTableAttribute )         //
 			.with( LocalVariableTypeTableAttribute.kind.mutf8Name, ByteCodeReader::readLocalVariableTypeTableAttribute ) //
 			.with( StackMapTableAttribute.kind.mutf8Name, ByteCodeReader::readStackMapTableAttribute )                   //
+			.with( RuntimeInvisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeInvisibleTypeAnnotationsAttribute ) //
+			.with( RuntimeVisibleTypeAnnotationsAttribute.kind.mutf8Name, ByteCodeReader::readRuntimeVisibleTypeAnnotationsAttribute )     //
 			.withDefault( ByteCodeReader::readUnknownAttribute ) //
 			.build();
 
@@ -762,6 +764,16 @@ public class ByteCodeReader
 		return StackMapTableAttribute.of( frames );
 	}
 
+	private static RuntimeInvisibleTypeAnnotationsAttribute readRuntimeInvisibleTypeAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
+	{
+		return readRuntimeInvisibleTypeAnnotationsAttribute( attributeName, constantPool, bufferReader );
+	}
+
+	private static RuntimeVisibleTypeAnnotationsAttribute readRuntimeVisibleTypeAnnotationsAttribute( Mutf8Constant attributeName, ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
+	{
+		return readRuntimeVisibleTypeAnnotationsAttribute( attributeName, constantPool, bufferReader );
+	}
+
 	private static Optional<Instruction> findTargetInstruction( Optional<StackMapFrame> previousFrame, int offsetDelta, ReadingLocationMap locationMap )
 	{
 		int previousLocation = previousFrame.isEmpty() ? 0 : (locationMap.getLocation( previousFrame.get().getTargetInstruction() ) + 1);
@@ -781,14 +793,14 @@ public class ByteCodeReader
 		return verificationTypes;
 	}
 
-	private static List<ByteCodeAnnotation> readAnnotations( ConstantPool constantPool, BufferReader bufferReader )
+	private static List<Annotation> readAnnotations( ConstantPool constantPool, BufferReader bufferReader )
 	{
 		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
-		List<ByteCodeAnnotation> annotations = new ArrayList<>( count );
+		List<Annotation> annotations = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			ByteCodeAnnotation byteCodeAnnotation = readByteCodeAnnotation( constantPool, bufferReader );
+			Annotation byteCodeAnnotation = readByteCodeAnnotation( constantPool, bufferReader );
 			annotations.add( byteCodeAnnotation );
 		}
 		return annotations;
@@ -801,82 +813,72 @@ public class ByteCodeReader
 		List<TypeAnnotation> typeAnnotations = new ArrayList<>( typeAnnotationCount );
 		for( int i = 0; i < typeAnnotationCount; i++ )
 		{
-			int tag = bufferReader.readUnsignedByte();
-			Target.Type targetType = Target.Type.fromTag( tag );
-			Target target = switch( targetType )
+			int targetTypeNumber = bufferReader.readUnsignedByte();
+			Target.Type targetType = Target.Type.fromNumber( targetTypeNumber );
+			Target target = Target.doSwitch( targetType, new Target.Switcher<>()
+			{
+				@Override public Target caseCatchTarget()
 				{
-					case TypeParameterDeclarationOfGenericClassOrInterface, //
-						TypeParameterDeclarationOfGenericMethodOrConstructor -> //
-						{
-							int typeParameterIndex = bufferReader.readUnsignedByte();
-							yield new TypeParameterTarget( targetType, typeParameterIndex );
-						}
-					case TypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration -> //
-						{
-							int supertypeIndex = bufferReader.readUnsignedShort();
-							yield new SupertypeTarget( targetType, supertypeIndex );
-						}
-					case TypeInBoundOfTypeParameterDeclarationOfGenericClassOrInterface, //
-						TypeInBoundOfTypeParameterDeclarationOfGenericMethodOrConstructor -> //
-						{
-							int typeParameterIndex = bufferReader.readUnsignedByte();
-							int boundIndex = bufferReader.readUnsignedByte();
-							yield new TypeParameterBoundTarget( targetType, typeParameterIndex, boundIndex );
-						}
-					case TypeInFieldDeclaration, //
-						ReturnTypeOfMethodOrTypeOfNewlyConstructedObject, //
-						ReceiverTypeOfMethodOrConstructor -> //
-						new EmptyTarget( targetType );
-					case TypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression -> //
-						{
-							int formalParameterIndex = bufferReader.readUnsignedByte();
-							yield new FormalParameterTarget( targetType, formalParameterIndex );
-						}
-					case TypeInThrowsClauseOfMethodOrConstructor -> //
-						{
-							int throwsTypeIndex = bufferReader.readUnsignedShort();
-							yield new ThrowsTarget( targetType, throwsTypeIndex );
-						}
-					case TypeInLocalVariableDeclaration, //
-						TypeInResourceVariableDeclaration -> //
-						{
-							int entryCount = bufferReader.readUnsignedShort();
-							assert entryCount > 0;
-							List<LocalVariableTarget.Entry> entries = new ArrayList<>( entryCount );
-							for( int j = 0; j < entryCount; j++ )
-							{
-								int startPc = bufferReader.readUnsignedShort();
-								int length = bufferReader.readUnsignedShort();
-								int index = bufferReader.readUnsignedShort();
-								LocalVariableTarget.Entry entry = new LocalVariableTarget.Entry( startPc, length, index );
-								entries.add( entry );
-							}
-							yield new LocalVariableTarget( targetType, entries );
-						}
-					case TypeInExceptionParameterDeclaration -> //
-						{
-							int exceptionTableIndex = bufferReader.readUnsignedShort();
-							yield new CatchTarget( targetType, exceptionTableIndex );
-						}
-					case TypeInInstanceofExpression,
-						TypeInNewExpression,
-						TypeInMethodReferenceExpressionUsingNew,
-						TypeInMethodReferenceExpressionUsingIdentifier -> //
-						{
-							int offset = bufferReader.readUnsignedShort();
-							yield new OffsetTarget( targetType, offset );
-						}
-					case TypeInCastExpression, //
-						TypeArgumentForGenericConstructorInNewExpressionOrExplicitConstructorInvocationStatement, //
-						TypeArgumentForGenericMethodInMethodInvocationExpression, //
-						TypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew, //
-						TypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier -> //
-						{
-							int offset = bufferReader.readUnsignedShort();
-							int typeArgumentIndex = bufferReader.readUnsignedByte();
-							yield new TypeArgumentTarget( targetType, offset, typeArgumentIndex );
-						}
-				};
+					int exceptionTableIndex = bufferReader.readUnsignedShort();
+					return new CatchTarget( targetType, exceptionTableIndex );
+				}
+				@Override public Target caseEmptyTarget()
+				{
+					return new EmptyTarget( targetType );
+				}
+				@Override public Target caseFormalParameterTarget()
+				{
+					int formalParameterIndex = bufferReader.readUnsignedByte();
+					return new FormalParameterTarget( targetType, formalParameterIndex );
+				}
+				@Override public Target caseLocalVariableTarget()
+				{
+					int entryCount = bufferReader.readUnsignedShort();
+					assert entryCount > 0;
+					List<LocalVariableTarget.Entry> entries = new ArrayList<>( entryCount );
+					for( int j = 0; j < entryCount; j++ )
+					{
+						int startPc = bufferReader.readUnsignedShort();
+						int length = bufferReader.readUnsignedShort();
+						int index = bufferReader.readUnsignedShort();
+						LocalVariableTarget.Entry entry = new LocalVariableTarget.Entry( startPc, length, index );
+						entries.add( entry );
+					}
+					return new LocalVariableTarget( targetType, entries );
+				}
+				@Override public Target caseOffsetTarget()
+				{
+					int offset = bufferReader.readUnsignedShort();
+					return new OffsetTarget( targetType, offset );
+				}
+				@Override public Target caseSupertypeTarget()
+				{
+					int supertypeIndex = bufferReader.readUnsignedShort();
+					return new SupertypeTarget( targetType, supertypeIndex );
+				}
+				@Override public Target caseThrowsTarget()
+				{
+					int throwsTypeIndex = bufferReader.readUnsignedShort();
+					return new ThrowsTarget( targetType, throwsTypeIndex );
+				}
+				@Override public Target caseTypeArgumentTarget()
+				{
+					int offset = bufferReader.readUnsignedShort();
+					int typeArgumentIndex = bufferReader.readUnsignedByte();
+					return new TypeArgumentTarget( targetType, offset, typeArgumentIndex );
+				}
+				@Override public Target caseTypeParameterBoundTarget()
+				{
+					int typeParameterIndex = bufferReader.readUnsignedByte();
+					int boundIndex = bufferReader.readUnsignedByte();
+					return new TypeParameterBoundTarget( targetType, typeParameterIndex, boundIndex );
+				}
+				@Override public Target caseTypeParameterTarget()
+				{
+					int typeParameterIndex = bufferReader.readUnsignedByte();
+					return new TypeParameterTarget( targetType, typeParameterIndex );
+				}
+			} );
 			int entryCount = bufferReader.readUnsignedByte();
 			List<TypePath.Entry> entries = new ArrayList<>( entryCount );
 			for( int j = 0; j < entryCount; j++ )
@@ -888,19 +890,25 @@ public class ByteCodeReader
 			}
 			TypePath targetPath = new TypePath( entries );
 			int typeIndex = bufferReader.readUnsignedShort();
-			int pairCount = bufferReader.readUnsignedShort();
-			List<TypeAnnotation.ElementValuePair> pairs = new ArrayList<>( pairCount );
-			for( int j = 0; j < pairCount; j++ )
-			{
-				int elementNameIndex = bufferReader.readUnsignedShort();
-				AnnotationParameter elementValue = readAnnotationParameter( constantPool, bufferReader );
-				TypeAnnotation.ElementValuePair elementValuePair = TypeAnnotation.ElementValuePair.of( elementNameIndex, elementValue );
-				pairs.add( elementValuePair );
-			}
-			TypeAnnotation entry = TypeAnnotation.of( tag, target, targetPath, typeIndex, pairs );
+			List<ElementValuePair> pairs = readElementValuePairs( constantPool, bufferReader );
+			TypeAnnotation entry = TypeAnnotation.of( target, targetPath, typeIndex, pairs );
 			typeAnnotations.add( entry );
 		}
 		return typeAnnotations;
+	}
+
+	private static List<ElementValuePair> readElementValuePairs( ConstantPool constantPool, BufferReader bufferReader )
+	{
+		int pairCount = bufferReader.readUnsignedShort();
+		List<ElementValuePair> elementValuePairs = new ArrayList<>( pairCount );
+		for( int i = 0; i < pairCount; i++ )
+		{
+			Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
+			ElementValue annotationValue = readAnnotationValue( constantPool, bufferReader );
+			ElementValuePair elementValuePair = ElementValuePair.of( nameConstant, annotationValue );
+			elementValuePairs.add( elementValuePair );
+		}
+		return elementValuePairs;
 	}
 
 	private static final OmniSwitch3<Attribute,Mutf8Constant,ConstantPool,BufferReader> fieldAttributeSwitch = //
@@ -944,64 +952,51 @@ public class ByteCodeReader
 		return methodAttributeSwitch.on( attributeName, constantPool, bufferReader );
 	}
 
-	private static AnnotationValue readAnnotationValue( ConstantPool constantPool, BufferReader bufferReader )
+	private static ElementValue readAnnotationValue( ConstantPool constantPool, BufferReader bufferReader )
 	{
 		int character = bufferReader.readUnsignedByte();
-		AnnotationValue.Tag tag = AnnotationValue.Tag.fromCharacter( character );
+		ElementValue.Tag tag = ElementValue.Tag.fromCharacter( character );
 		return switch( tag )
 			{
 				case Byte, Character, Double, Float, Integer, Long, Short, Boolean, String -> //
 					{
 						Constant constant = constantPool.readIndexAndGetConstant( bufferReader );
 						ValueConstant<?> valueConstant = constant.asValueConstant();
-						yield ConstAnnotationValue.of( tag, valueConstant );
+						yield ConstElementValue.of( tag, valueConstant );
 					}
 				case Enum -> //
 					{
 						Mutf8Constant typeNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
 						Mutf8Constant valueNameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
-						yield EnumAnnotationValue.of( typeNameConstant, valueNameConstant );
+						yield EnumElementValue.of( typeNameConstant, valueNameConstant );
 					}
 				case Class -> //
 					{
 						Mutf8Constant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
-						yield ClassAnnotationValue.of( classConstant );
+						yield ClassElementValue.of( classConstant );
 					}
 				case Annotation -> //
 					{
-						ByteCodeAnnotation annotation = readByteCodeAnnotation( constantPool, bufferReader );
-						yield AnnotationAnnotationValue.of( annotation );
+						Annotation annotation = readByteCodeAnnotation( constantPool, bufferReader );
+						yield AnnotationElementValue.of( annotation );
 					}
 				case Array -> //
 					{
 						int count = bufferReader.readUnsignedShort();
 						assert count > 0;
-						List<AnnotationValue> annotationValues = new ArrayList<>( count );
+						List<ElementValue> annotationValues = new ArrayList<>( count );
 						for( int i = 0; i < count; i++ )
 							annotationValues.add( readAnnotationValue( constantPool, bufferReader ) );
-						yield ArrayAnnotationValue.of( annotationValues );
+						yield ArrayElementValue.of( annotationValues );
 					}
 			};
 	}
 
-	private static ByteCodeAnnotation readByteCodeAnnotation( ConstantPool constantPool, BufferReader bufferReader )
+	private static Annotation readByteCodeAnnotation( ConstantPool constantPool, BufferReader bufferReader )
 	{
 		Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
-		int count = bufferReader.readUnsignedShort();
-		List<AnnotationParameter> annotationParameters = new ArrayList<>( count );
-		for( int i = 0; i < count; i++ )
-		{
-			AnnotationParameter annotationParameter = readAnnotationParameter( constantPool, bufferReader );
-			annotationParameters.add( annotationParameter );
-		}
-		return ByteCodeAnnotation.of( nameConstant, annotationParameters );
-	}
-
-	private static AnnotationParameter readAnnotationParameter( ConstantPool constantPool, BufferReader bufferReader )
-	{
-		Mutf8Constant nameConstant = constantPool.readIndexAndGetConstant( bufferReader ).asMutf8Constant();
-		AnnotationValue annotationValue = readAnnotationValue( constantPool, bufferReader );
-		return AnnotationParameter.of( nameConstant, annotationValue );
+		List<ElementValuePair> elementValuePairs = readElementValuePairs( constantPool, bufferReader );
+		return Annotation.of( nameConstant, elementValuePairs );
 	}
 
 	private static List<ParameterAnnotationSet> readParameterAnnotationsAttributeEntries( ConstantPool constantPool, BufferReader bufferReader )
@@ -1013,10 +1008,10 @@ public class ByteCodeReader
 		{
 			int annotationCount = bufferReader.readUnsignedShort();
 			assert annotationCount >= 0;
-			List<ByteCodeAnnotation> annotations = new ArrayList<>( annotationCount );
+			List<Annotation> annotations = new ArrayList<>( annotationCount );
 			for( int i1 = 0; i1 < annotationCount; i1++ )
 			{
-				ByteCodeAnnotation byteCodeAnnotation = readByteCodeAnnotation( constantPool, bufferReader );
+				Annotation byteCodeAnnotation = readByteCodeAnnotation( constantPool, bufferReader );
 				annotations.add( byteCodeAnnotation );
 			}
 			ParameterAnnotationSet entry = ParameterAnnotationSet.of( annotations );
@@ -1114,29 +1109,30 @@ public class ByteCodeReader
 			};
 	}
 
-	private static VerificationType readVerificationType( ConstantPool constantPool, BufferReader bufferReader, ReadingLocationMap locationMap )
+	private static VerificationType readVerificationType( ConstantPool constantPool, BufferReader bufferReader, LocationMap locationMap )
 	{
-		int tag = bufferReader.readUnsignedByte();
-		return switch( tag )
+		int tagNumber = bufferReader.readUnsignedByte();
+		VerificationType.Tag tag = VerificationType.Tag.fromNumber( tagNumber );
+		return VerificationType.doSwitch( tag, new VerificationType.Switcher<>()
+		{
+			@Override public VerificationType caseSimpleVerificationType()
 			{
-				case SimpleVerificationType.topTag, SimpleVerificationType.uninitializedThisTag, SimpleVerificationType.nullTag, //
-					SimpleVerificationType.longTag, SimpleVerificationType.doubleTag, SimpleVerificationType.floatTag, SimpleVerificationType.integerTag //
-					-> new SimpleVerificationType( tag );
-				case ObjectVerificationType.tag -> //
-					{
-						ClassConstant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
-						yield ObjectVerificationType.of( classConstant );
-					}
-				case UninitializedVerificationType.tag -> //
-					{
-						Instruction instruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
-						yield UninitializedVerificationType.of( instruction );
-					}
-				default -> throw new AssertionError( tag );
-			};
+				return new SimpleVerificationType( tag );
+			}
+			@Override public VerificationType caseObjectVerificationType()
+			{
+				ClassConstant classConstant = constantPool.readIndexAndGetConstant( bufferReader ).asClassConstant();
+				return ObjectVerificationType.of( classConstant );
+			}
+			@Override public VerificationType caseUninitializedVerificationType()
+			{
+				Instruction instruction = readAbsoluteInstruction( bufferReader, locationMap ).orElseThrow();
+				return UninitializedVerificationType.of( instruction );
+			}
+		} );
 	}
 
-	private static Optional<Instruction> readAbsoluteInstruction( BufferReader bufferReader, ReadingLocationMap locationMap )
+	private static Optional<Instruction> readAbsoluteInstruction( BufferReader bufferReader, LocationMap locationMap )
 	{
 		// Absolute instruction references are never used in code; they are only used in attributes.
 		// Thus, by the time an absolute instruction reference is parsed, all instructions have already been parsed,

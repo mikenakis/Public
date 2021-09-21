@@ -1,11 +1,13 @@
 package mikenakis.bytecode.exceptions;
 
+import mikenakis.bytecode.kit.UncheckedException;
+
 /**
- * "String too long" {@link ByteCodeException}.
+ * "String too long" exception.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class StringTooLongException extends ByteCodeException
+public final class StringTooLongException extends UncheckedException
 {
 	public final int length;
 

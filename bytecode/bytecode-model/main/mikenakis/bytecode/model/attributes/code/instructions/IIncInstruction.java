@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class IIncInstruction extends Instruction
 {
@@ -32,11 +33,6 @@ public final class IIncInstruction extends Instruction
 		return wide;
 	}
 
-	@Override public int getOpCode()
-	{
-		return OpCode.IINC;
-	}
-
 	// TODO:
 	//	void intern( ConstantPool constantPool )
 	//	{
@@ -46,5 +42,10 @@ public final class IIncInstruction extends Instruction
 	@Deprecated @Override public IIncInstruction asIIncInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( OpCode.IINC );
 	}
 }

@@ -4,10 +4,59 @@ import mikenakis.kit.Kit;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public abstract class Target // "target_info" in jvms-4.7.20.1
 {
+	public interface Switcher<T>
+	{
+		T caseCatchTarget();
+		T caseEmptyTarget();
+		T caseFormalParameterTarget();
+		T caseLocalVariableTarget();
+		T caseOffsetTarget();
+		T caseSupertypeTarget();
+		T caseThrowsTarget();
+		T caseTypeArgumentTarget();
+		T caseTypeParameterBoundTarget();
+		T caseTypeParameterTarget();
+	}
+
+	public static <T> T doSwitch( Type type, Switcher<T> switcher )
+	{
+		return switch( type )
+			{
+				case TypeParameterDeclarationOfGenericClassOrInterface, //
+					TypeParameterDeclarationOfGenericMethodOrConstructor -> //
+					switcher.caseTypeParameterTarget();
+				case TypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration -> //
+					switcher.caseSupertypeTarget();
+				case TypeInBoundOfTypeParameterDeclarationOfGenericClassOrInterface, //
+					TypeInBoundOfTypeParameterDeclarationOfGenericMethodOrConstructor -> //
+					switcher.caseTypeParameterBoundTarget();
+				case TypeInFieldDeclaration, //
+					ReturnTypeOfMethodOrTypeOfNewlyConstructedObject, //
+					ReceiverTypeOfMethodOrConstructor -> //
+					switcher.caseEmptyTarget();
+				case TypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression -> //
+					switcher.caseFormalParameterTarget();
+				case TypeInThrowsClauseOfMethodOrConstructor -> //
+					switcher.caseThrowsTarget();
+				case TypeInLocalVariableDeclaration, //
+					TypeInResourceVariableDeclaration -> //
+					switcher.caseLocalVariableTarget();
+				case TypeInExceptionParameterDeclaration -> //
+					switcher.caseCatchTarget();
+				case TypeInInstanceofExpression, TypeInNewExpression, TypeInMethodReferenceExpressionUsingNew, TypeInMethodReferenceExpressionUsingIdentifier -> //
+					switcher.caseOffsetTarget();
+				case TypeInCastExpression, //
+					TypeArgumentForGenericConstructorInNewExpressionOrExplicitConstructorInvocationStatement, //
+					TypeArgumentForGenericMethodInMethodInvocationExpression, //
+					TypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew, //
+					TypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier -> //
+					switcher.caseTypeArgumentTarget();
+			};
+	}
+
 	@SuppressWarnings( "FieldNamingConvention" )
 	public enum Type
 	{
@@ -34,108 +83,63 @@ public abstract class Target // "target_info" in jvms-4.7.20.1
 		TypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew                     /**/( 0X4A ), // TypeArgumentTarget        // type argument for generic constructor in method reference expression using ::new
 		TypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier                   /**/( 0X4B ); // TypeArgumentTarget        // type argument for generic method in method reference expression using ::Identifier
 
-		private static final Map<Integer,Type> map = Kit.iterable.valuesToMap( List.of( values() ), v -> v.tag );
+		private static final List<Type> values = List.of( values() );
+		private static final Map<Integer,Type> map = Kit.iterable.valuesToMap( values, v -> v.number );
 
-		public final int tag;
+		public final int number;
 
-		Type( int tag )
+		Type( int number )
 		{
-			this.tag = tag;
+			this.number = number;
 		}
 
-		public static Type fromTag( int value )
+		public static Type fromNumber( int value )
 		{
 			return Kit.map.get( map, value );
 		}
 	}
 
+	public interface Visitor<T>
+	{
+		T visit( CatchTarget              /**/ catchTarget );
+		T visit( EmptyTarget              /**/ emptyTarget );
+		T visit( FormalParameterTarget    /**/ formalParameterTarget );
+		T visit( LocalVariableTarget      /**/ localVariableTarget );
+		T visit( OffsetTarget             /**/ offsetTarget );
+		T visit( SupertypeTarget          /**/ supertypeTarget );
+		T visit( ThrowsTarget             /**/ throwsTarget );
+		T visit( TypeArgumentTarget       /**/ typeArgumentTarget );
+		T visit( TypeParameterBoundTarget /**/ typeParameterBoundTarget );
+		T visit( TypeParameterTarget      /**/ typeParameterTarget );
+	}
 
+	public <T> T visit( Visitor<T> visitor )
+	{
+		return doSwitch( type, new Switcher<>()
+		{
+			@Override public T caseCatchTarget()              /**/ { return visitor.visit( asCatchTarget() ); }
+			@Override public T caseEmptyTarget()              /**/ { return visitor.visit( asEmptyTarget() ); }
+			@Override public T caseFormalParameterTarget()    /**/ { return visitor.visit( asFormalParameterTarget() ); }
+			@Override public T caseLocalVariableTarget()      /**/ { return visitor.visit( asLocalVariableTarget() ); }
+			@Override public T caseOffsetTarget()             /**/ { return visitor.visit( asOffsetTarget() ); }
+			@Override public T caseSupertypeTarget()          /**/ { return visitor.visit( asSupertypeTarget() ); }
+			@Override public T caseThrowsTarget()             /**/ { return visitor.visit( asThrowsTarget() ); }
+			@Override public T caseTypeArgumentTarget()       /**/ { return visitor.visit( asTypeArgumentTarget() ); }
+			@Override public T caseTypeParameterBoundTarget() /**/ { return visitor.visit( asTypeParameterBoundTarget() ); }
+			@Override public T caseTypeParameterTarget()      /**/ { return visitor.visit( asTypeParameterTarget() ); }
+		} );
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//@formatter:off
-	public Optional<CatchTarget>              tryAsCatchTarget()              { return Optional.empty(); }
-	public Optional<EmptyTarget>              tryAsEmptyTarget()              { return Optional.empty(); }
-	public Optional<FormalParameterTarget>    tryAsFormalParameterTarget()    { return Optional.empty(); }
-	public Optional<LocalVariableTarget>      tryAsLocalVariableTarget()      { return Optional.empty(); }
-	public Optional<OffsetTarget>             tryAsOffsetTarget()             { return Optional.empty(); }
-	public Optional<SupertypeTarget>          tryAsSupertypeTarget()          { return Optional.empty(); }
-	public Optional<ThrowsTarget>             tryAsThrowsTarget()             { return Optional.empty(); }
-	public Optional<TypeArgumentTarget>       tryAsTypeArgumentTarget()       { return Optional.empty(); }
-	public Optional<TypeParameterBoundTarget> tryAsTypeParameterBoundTarget() { return Optional.empty(); }
-	public Optional<TypeParameterTarget>      tryAsTypeParameterTarget()      { return Optional.empty(); }
-
-	public final CatchTarget              asCatchTarget()              { return tryAsCatchTarget()              .orElseThrow(); }
-	public final EmptyTarget              asEmptyTarget()              { return tryAsEmptyTarget()              .orElseThrow(); }
-	public final FormalParameterTarget    asFormalParameterTarget()    { return tryAsFormalParameterTarget()    .orElseThrow(); }
-	public final LocalVariableTarget      asLocalVariableTarget()      { return tryAsLocalVariableTarget()      .orElseThrow(); }
-	public final OffsetTarget             asOffsetTarget()             { return tryAsOffsetTarget()             .orElseThrow(); }
-	public final SupertypeTarget          asSupertypeTarget()          { return tryAsSupertypeTarget()          .orElseThrow(); }
-	public final ThrowsTarget             asThrowsTarget()             { return tryAsThrowsTarget()             .orElseThrow(); }
-	public final TypeArgumentTarget       asTypeArgumentTarget()       { return tryAsTypeArgumentTarget()       .orElseThrow(); }
-	public final TypeParameterBoundTarget asTypeParameterBoundTarget() { return tryAsTypeParameterBoundTarget() .orElseThrow(); }
-	public final TypeParameterTarget      asTypeParameterTarget()      { return tryAsTypeParameterTarget()      .orElseThrow(); }
-
-	public final boolean isCatchTarget()              { return tryAsCatchTarget()              .isPresent(); }
-	public final boolean isEmptyTarget()              { return tryAsEmptyTarget()              .isPresent(); }
-	public final boolean isFormalParameterTarget()    { return tryAsFormalParameterTarget()    .isPresent(); }
-	public final boolean isLocalVariableTarget()      { return tryAsLocalVariableTarget()      .isPresent(); }
-	public final boolean isOffsetTarget()             { return tryAsOffsetTarget()             .isPresent(); }
-	public final boolean isSupertypeTarget()          { return tryAsSupertypeTarget()          .isPresent(); }
-	public final boolean isThrowsTarget()             { return tryAsThrowsTarget()             .isPresent(); }
-	public final boolean isTypeArgumentTarget()       { return tryAsTypeArgumentTarget()       .isPresent(); }
-	public final boolean isTypeParameterBoundTarget() { return tryAsTypeParameterBoundTarget() .isPresent(); }
-	public final boolean isTypeParameterTarget()      { return tryAsTypeParameterTarget()      .isPresent(); }
-	//@formatter:on
+	public CatchTarget              /**/ asCatchTarget()              /**/ { return Kit.fail(); }
+	public EmptyTarget              /**/ asEmptyTarget()              /**/ { return Kit.fail(); }
+	public FormalParameterTarget    /**/ asFormalParameterTarget()    /**/ { return Kit.fail(); }
+	public LocalVariableTarget      /**/ asLocalVariableTarget()      /**/ { return Kit.fail(); }
+	public OffsetTarget             /**/ asOffsetTarget()             /**/ { return Kit.fail(); }
+	public SupertypeTarget          /**/ asSupertypeTarget()          /**/ { return Kit.fail(); }
+	public ThrowsTarget             /**/ asThrowsTarget()             /**/ { return Kit.fail(); }
+	public TypeArgumentTarget       /**/ asTypeArgumentTarget()       /**/ { return Kit.fail(); }
+	public TypeParameterBoundTarget /**/ asTypeParameterBoundTarget() /**/ { return Kit.fail(); }
+	public TypeParameterTarget      /**/ asTypeParameterTarget()      /**/ { return Kit.fail(); }
 
 	public final Type type;
 

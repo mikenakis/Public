@@ -3,6 +3,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class InvokeDynamicInstruction extends Instruction
 {
@@ -19,13 +20,13 @@ public final class InvokeDynamicInstruction extends Instruction
 		this.invokeDynamicConstant = invokeDynamicConstant;
 	}
 
-	@Override public int getOpCode()
-	{
-		return OpCode.INVOKEDYNAMIC;
-	}
-
 	@Deprecated @Override public InvokeDynamicInstruction asInvokeDynamicInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( OpCode.INVOKEDYNAMIC );
 	}
 }

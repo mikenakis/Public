@@ -2,22 +2,22 @@ package mikenakis.bytecode.printing;
 
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.kit.OmniSwitch3;
-import mikenakis.bytecode.model.AnnotationParameter;
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ElementValuePair;
+import mikenakis.bytecode.model.ElementValue;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.FlagSet;
-import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
+import mikenakis.bytecode.model.annotationvalues.AnnotationElementValue;
+import mikenakis.bytecode.model.annotationvalues.ArrayElementValue;
+import mikenakis.bytecode.model.annotationvalues.ClassElementValue;
+import mikenakis.bytecode.model.annotationvalues.ConstElementValue;
+import mikenakis.bytecode.model.annotationvalues.EnumElementValue;
 import mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import mikenakis.bytecode.model.attributes.AnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
@@ -52,7 +52,7 @@ import mikenakis.bytecode.model.attributes.SignatureAttribute;
 import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
-import mikenakis.bytecode.model.attributes.TypeAnnotation;
+import mikenakis.bytecode.model.TypeAnnotation;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
@@ -456,11 +456,22 @@ public final class ByteCodePrinter
 
 	private static void collectTargetInstructionsFromVerificationType( Consumer<Optional<Instruction>> targetInstructionConsumer, VerificationType verificationType )
 	{
-		if( verificationType.isUninitializedVerificationType() )
+		verificationType.visit( new VerificationType.Visitor<Void>()
 		{
-			UninitializedVerificationType uninitializedVerificationType = verificationType.asUninitializedVerificationType();
-			targetInstructionConsumer.accept( Optional.of( uninitializedVerificationType.instruction ) );
-		}
+			@Override public Void visit( SimpleVerificationType simpleVerificationType )
+			{
+				return null; //nothing to do
+			}
+			@Override public Void visit( ObjectVerificationType objectVerificationType )
+			{
+				return null; //nothing to do
+			}
+			@Override public Void visit( UninitializedVerificationType uninitializedVerificationType )
+			{
+				targetInstructionConsumer.accept( Optional.of( uninitializedVerificationType.instruction ) );
+				return null;
+			}
+		} );
 	}
 
 	private static Map<Instruction,Integer> getLineNumberFromInstructionMap( CodeAttribute codeAttribute )
@@ -566,14 +577,14 @@ public final class ByteCodePrinter
 		summarizeAbsoluteInstruction( Optional.of( instruction ), builder );
 	}
 
-	private static Twig twigFromAnnotationParameter( AnnotationParameter annotationParameter )
+	private static Twig twigFromElementValuePair( ElementValuePair elementValuePair )
 	{
 		var builder = new StringBuilder();
 		builder.append( "parameter name = " );
-		valueConstantToStringBuilder( annotationParameter.nameConstant(), builder );
-		AnnotationValue annotationValue = annotationParameter.annotationValue();
+		valueConstantToStringBuilder( elementValuePair.nameConstant(), builder );
+		ElementValue elementValue = elementValuePair.elementValue();
 		return Twig.of( builder.toString(), //
-			twigFromAnnotationValue( annotationValue.tag.name() + " value = ", annotationValue ) );
+			twigFromElementValue( elementValue.tag.name() + " value = ", elementValue ) );
 	}
 
 	private Twig twigFromAttributeSet( AttributeSet attributeSet )
@@ -642,7 +653,7 @@ public final class ByteCodePrinter
 		}
 	}
 
-	private static Twig twigFromByteCodeAnnotation( String prefix, ByteCodeAnnotation byteCodeAnnotation )
+	private static Twig twigFromByteCodeAnnotation( String prefix, Annotation byteCodeAnnotation )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
@@ -650,14 +661,14 @@ public final class ByteCodePrinter
 		summarizeByteCodeAnnotation( byteCodeAnnotation, builder );
 		String header = builder.toString();
 		return Twig.of( header, //
-			byteCodeAnnotation.parameters().stream().map( p -> twigFromAnnotationParameter( p ) ).toList() );
+			byteCodeAnnotation.elementValuePairs().stream().map( p -> twigFromElementValuePair( p ) ).toList() );
 	}
 
-	private static void summarizeByteCodeAnnotation( ByteCodeAnnotation byteCodeAnnotation, StringBuilder builder )
+	private static void summarizeByteCodeAnnotation( Annotation byteCodeAnnotation, StringBuilder builder )
 	{
 		builder.append( "type = " );
 		builder.append( ByteCodeHelpers.typeNameFromClassDesc( byteCodeAnnotation.typeDescriptor() ) );
-		builder.append( ", " ).append( byteCodeAnnotation.parameters().size() ).append( " parameters" );
+		builder.append( ", " ).append( byteCodeAnnotation.elementValuePairs().size() ).append( " parameters" );
 	}
 
 	private Twig twigFromByteCodeField( ByteCodeField byteCodeField )
@@ -731,7 +742,7 @@ public final class ByteCodePrinter
 		builder.append( " version = " ).append( byteCodeType.majorVersion ).append( '.' ).append( byteCodeType.minorVersion );
 		builder.append( ", accessFlags = " );
 		flagsToStringBuilder( byteCodeType.modifierSet(), builder );
-		builder.append( ", thisClass = " ).append( byteCodeType.name() );
+		builder.append( ", thisClass = " ).append( ByteCodeHelpers.typeNameFromClassDesc( byteCodeType.descriptor() ) );
 		byteCodeType.superClassConstant.ifPresent( s1 -> builder.append( ", superClass = " ).append( ByteCodeHelpers.typeNameFromClassDesc( s1.classDescriptor() ) ) );
 		return builder.toString();
 	}
@@ -850,55 +861,52 @@ public final class ByteCodePrinter
 		builder.append( label );
 	}
 
-	private static Twig twigFromTypeAnnotationElementValuePair( TypeAnnotation.ElementValuePair elementValuePair )
-	{
-		var builder = new StringBuilder();
-		builder.append( " elementNameIndex = " ).append( elementValuePair.elementNameIndex() );
-		builder.append( ", elementValue = " );
-		AnnotationParameter annotationParameter = elementValuePair.elementValue();
-		builder.append( "name = " );
-		Kit.stringBuilder.appendEscapedForJava( builder, annotationParameter.nameConstant().stringValue(), '"' );
-		builder.append( ", value = " );
-		AnnotationValue annotationValue = annotationParameter.annotationValue();
-		switch( annotationValue.tag )
-		{
-			case Byte, Boolean, Short, Long, Integer, Float, Double, Character -> //
-				{
-					ConstAnnotationValue constAnnotationValue = annotationValue.asConstAnnotationValue();
-					builder.append( constAnnotationValue.tag.name() );
-					builder.append( " value = " );
-					valueConstantToStringBuilder( constAnnotationValue.valueConstant(), builder );
-				}
-			case Enum -> //
-				{
-					EnumAnnotationValue enumAnnotationValue = annotationValue.asEnumAnnotationValue();
-					builder.append( "type = " ).append( ByteCodeHelpers.typeNameFromClassDesc( enumAnnotationValue.typeDescriptor() ) );
-					builder.append( ", value = " ).append( enumAnnotationValue.valueName() );
-				}
-			case Class -> //
-				{
-					ClassAnnotationValue classAnnotationValue = annotationValue.asClassAnnotationValue();
-					builder.append( "class = " ).append( classAnnotationValue.name() );
-				}
-			case Annotation -> //
-				{
-					AnnotationAnnotationValue annotationAnnotationValue = annotationValue.asAnnotationAnnotationValue();
-					builder.append( "annotation = { " );
-					ByteCodeAnnotation annotation = annotationAnnotationValue.annotation();
-					builder.append( "type = " ).append( ByteCodeHelpers.typeNameFromClassDesc( annotation.typeDescriptor() ) );
-					builder.append( ", " ).append( annotation.parameters().size() ).append( " elements" );
-					builder.append( " }" );
-				}
-			case Array -> //
-				{
-					ArrayAnnotationValue arrayAnnotationValue = annotationValue.asArrayAnnotationValue();
-					builder.append( arrayAnnotationValue.annotationValues().size() ).append( " elements" );
-				}
-			default -> throw new AssertionError( annotationValue );
-		}
-		String header = builder.toString();
-		return Twig.of( header );
-	}
+//	private static Twig twigFromTypeAnnotationElementValuePair( ElementValuePair elementValuePair )
+//	{
+//		var builder = new StringBuilder();
+//		builder.append( " elementName = " ).append( elementValuePair.nameConstant() );
+//		builder.append( ", elementValue = " );
+//		ElementValue elementValue = elementValuePair.elementValue();
+//		builder.append( "name = " );
+//		switch( elementValue.tag )
+//		{
+//			case Byte, Boolean, Short, Long, Integer, Float, Double, Character -> //
+//				{
+//					ConstElementValue constAnnotationValue = elementValue.asConstAnnotationValue();
+//					builder.append( constAnnotationValue.tag.name() );
+//					builder.append( " value = " );
+//					valueConstantToStringBuilder( constAnnotationValue.valueConstant(), builder );
+//				}
+//			case Enum -> //
+//				{
+//					EnumElementValue enumAnnotationValue = elementValue.asEnumAnnotationValue();
+//					builder.append( "type = " ).append( ByteCodeHelpers.typeNameFromClassDesc( enumAnnotationValue.typeDescriptor() ) );
+//					builder.append( ", value = " ).append( enumAnnotationValue.valueName() );
+//				}
+//			case Class -> //
+//				{
+//					ClassElementValue classAnnotationValue = elementValue.asClassAnnotationValue();
+//					builder.append( "class = " ).append( classAnnotationValue.nameConstant().stringValue() );
+//				}
+//			case Annotation -> //
+//				{
+//					AnnotationElementValue annotationAnnotationValue = elementValue.asAnnotationAnnotationValue();
+//					builder.append( "annotation = { " );
+//					Annotation annotation = annotationAnnotationValue.annotation();
+//					builder.append( "type = " ).append( ByteCodeHelpers.typeNameFromClassDesc( annotation.typeDescriptor() ) );
+//					builder.append( ", " ).append( annotation.parameters().size() ).append( " elements" );
+//					builder.append( " }" );
+//				}
+//			case Array -> //
+//				{
+//					ArrayElementValue arrayAnnotationValue = elementValue.asArrayAnnotationValue();
+//					builder.append( arrayAnnotationValue.annotationValues().size() ).append( " elements" );
+//				}
+//			default -> throw new AssertionError( elementValue );
+//		}
+//		String header = builder.toString();
+//		return Twig.of( header );
+//	}
 
 	private static Twig twigFromLocalVariableTargetEntry( String prefix, LocalVariableTarget.Entry localVariableTargetEntry )
 	{
@@ -1032,7 +1040,7 @@ public final class ByteCodePrinter
 			};
 	}
 
-	private static Twig twigFromAnnotationValue( String prefix, AnnotationValue annotationValue )
+	private static Twig twigFromElementValue( String prefix, ElementValue annotationValue )
 	{
 		return switch( annotationValue.tag )
 			{
@@ -1045,7 +1053,7 @@ public final class ByteCodePrinter
 			};
 	}
 
-	private static Twig twigFromClassAnnotationValue( String prefix, ClassAnnotationValue classAnnotationValue )
+	private static Twig twigFromClassAnnotationValue( String prefix, ClassElementValue classAnnotationValue )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
@@ -1055,7 +1063,7 @@ public final class ByteCodePrinter
 		return Twig.of( header );
 	}
 
-	private static Twig twigFromConstAnnotationValue( String prefix, ConstAnnotationValue constAnnotationValue )
+	private static Twig twigFromConstAnnotationValue( String prefix, ConstElementValue constAnnotationValue )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
@@ -1065,7 +1073,7 @@ public final class ByteCodePrinter
 		return Twig.of( header );
 	}
 
-	private static Twig twigFromAnnotationAnnotationValue( String prefix, AnnotationAnnotationValue annotationAnnotationValue )
+	private static Twig twigFromAnnotationAnnotationValue( String prefix, AnnotationElementValue annotationAnnotationValue )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
@@ -1075,7 +1083,7 @@ public final class ByteCodePrinter
 		return Twig.of( header );
 	}
 
-	private static Twig twigFromArrayAnnotationValue( String prefix, ArrayAnnotationValue arrayAnnotationValue )
+	private static Twig twigFromArrayAnnotationValue( String prefix, ArrayElementValue arrayAnnotationValue )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
@@ -1084,10 +1092,10 @@ public final class ByteCodePrinter
 		builder.append( " elements" );
 		String header = builder.toString();
 		return Twig.of( header, //
-			arrayAnnotationValue.annotationValues().stream().map( a -> twigFromAnnotationValue( "element", a ) ).toList() );
+			arrayAnnotationValue.annotationValues().stream().map( a -> twigFromElementValue( "element", a ) ).toList() );
 	}
 
-	private static Twig twigFromEnumAnnotationValue( String prefix, EnumAnnotationValue enumAnnotationValue )
+	private static Twig twigFromEnumAnnotationValue( String prefix, EnumElementValue enumAnnotationValue )
 	{
 		var builder = new StringBuilder();
 		builder.append( prefix );
@@ -1106,9 +1114,9 @@ public final class ByteCodePrinter
 		builder.append( prefix );
 		builder.append( " " );
 		String header = builder.toString();
-		AnnotationValue annotationValue = annotationDefaultAttribute.annotationValue();
+		ElementValue annotationValue = annotationDefaultAttribute.annotationValue();
 		return Twig.of( header, //
-			twigFromAnnotationValue( annotationValue.tag.name() + " value = ", annotationValue ) );
+			twigFromElementValue( annotationValue.tag.name() + " value = ", annotationValue ) );
 	}
 
 	private static Twig twigFromAnnotationsAttribute( String prefix, AnnotationsAttribute annotationsAttribute )
@@ -1362,7 +1370,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromTypeAnnotation( TypeAnnotation typeAnnotation )
 	{
 		var builder = new StringBuilder();
-		builder.append( " targetType = " ).append( String.format( "0x%02x ", typeAnnotation.targetType() ) );
+		builder.append( " targetType = " ).append( String.format( "0x%02x ", typeAnnotation.target().type.number ) );
 		builder.append( "targetPath = " );
 		TypePath targetPath = typeAnnotation.typePath();
 		builder.append( targetPath.entries().size() ).append( " entries" );
@@ -1396,7 +1404,7 @@ public final class ByteCodePrinter
 		return Twig.of( header, //
 			Twig.of( "target", twig ), //
 			Twig.of( "elementValuePairs", //
-				typeAnnotation.elementValuePairs().stream().map( a -> twigFromTypeAnnotationElementValuePair( a ) ).toList() ) );
+				typeAnnotation.elementValuePairs().stream().map( a -> twigFromElementValuePair( a ) ).toList() ) );
 	}
 
 	private static Twig twigFromTypeAnnotationsAttribute( String prefix, TypeAnnotationsAttribute typeAnnotationsAttribute )
@@ -1753,21 +1761,28 @@ public final class ByteCodePrinter
 
 	private Twig twigFromVerificationType( VerificationType verificationType )
 	{
-		if( verificationType.isSimpleVerificationType() )
-			return twigFromSimpleVerificationType( verificationType.asSimpleVerificationType() );
-		else if( verificationType.isObjectVerificationType() )
-			return twigFromObjectVerificationType( verificationType.asObjectVerificationType() );
-		else if( verificationType.isUninitializedVerificationType() )
-			return twigFromUninitializedVerificationType( verificationType.asUninitializedVerificationType() );
-		else
-			throw new AssertionError();
+		return verificationType.visit( new VerificationType.Visitor<>()
+		{
+			@Override public Twig visit( SimpleVerificationType simpleVerificationType )
+			{
+				return twigFromSimpleVerificationType( simpleVerificationType );
+			}
+			@Override public Twig visit( ObjectVerificationType objectVerificationType )
+			{
+				return twigFromObjectVerificationType( objectVerificationType );
+			}
+			@Override public Twig visit( UninitializedVerificationType uninitializedVerificationType )
+			{
+				return twigFromUninitializedVerificationType( uninitializedVerificationType );
+			}
+		} );
 	}
 
 	private static Twig twigFromObjectVerificationType( ObjectVerificationType objectVerificationType )
 	{
 		var builder = new StringBuilder();
 		builder.append( " " );
-		String name = VerificationType.getTagNameFromTag( ObjectVerificationType.tag );
+		String name = objectVerificationType.tag.name();
 		builder.append( name );
 		builder.append( ' ' );
 		summarizeClassConstant( objectVerificationType.classConstant(), builder );
@@ -1779,7 +1794,7 @@ public final class ByteCodePrinter
 	{
 		var builder = new StringBuilder();
 		builder.append( " " );
-		String name = VerificationType.getTagNameFromTag( simpleVerificationType.tag );
+		String name = simpleVerificationType.tag.name();
 		builder.append( name );
 		String header = builder.toString();
 		return Twig.of( header );
@@ -1789,7 +1804,7 @@ public final class ByteCodePrinter
 	{
 		var builder = new StringBuilder();
 		builder.append( " " );
-		String name = VerificationType.getTagNameFromTag( UninitializedVerificationType.tag );
+		String name = uninitializedVerificationType.tag.name();
 		builder.append( name );
 		builder.append( ' ' );
 		summarizeAbsoluteInstruction( uninitializedVerificationType.instruction, builder );
@@ -1801,39 +1816,61 @@ public final class ByteCodePrinter
 	{
 		var builder = new StringBuilder();
 		builder.append( " " );
-		if( target.isCatchTarget() )
-			builder.append( "exceptionTableIndex = " ).append( target.asCatchTarget().exceptionTableIndex );
-		else if( target.isEmptyTarget() )
+		target.visit( new Target.Visitor<Void>()
 		{
-			target.asEmptyTarget();
-			builder.append( "(empty)" );
-		}
-		else if( target.isFormalParameterTarget() )
-			builder.append( "formalParameterIndex = " ).append( target.asFormalParameterTarget().formalParameterIndex );
-		else if( target.isLocalVariableTarget() )
-			builder.append( target.asLocalVariableTarget().entries.size() ).append( " entries" );
-		else if( target.isOffsetTarget() )
-			builder.append( "offset = " ).append( target.asOffsetTarget().offset );
-		else if( target.isSupertypeTarget() )
-			builder.append( "superTypeIndex = " ).append( target.asSupertypeTarget().supertypeIndex );
-		else if( target.isThrowsTarget() )
-			builder.append( "throwsTypeIndex = " ).append( target.asThrowsTarget().throwsTypeIndex );
-		else if( target.isTypeArgumentTarget() )
-		{
-			TypeArgumentTarget typeArgumentTarget = target.asTypeArgumentTarget();
-			builder.append( "offset = " ).append( typeArgumentTarget.offset );
-			builder.append( ", typeArgumentIndex = " ).append( typeArgumentTarget.typeArgumentIndex );
-		}
-		else if( target.isTypeParameterBoundTarget() )
-		{
-			TypeParameterBoundTarget typeParameterBoundTarget = target.asTypeParameterBoundTarget();
-			builder.append( "typeParameterIndex = " ).append( typeParameterBoundTarget.typeParameterIndex );
-			builder.append( ", boundIndex = " ).append( typeParameterBoundTarget.boundIndex );
-		}
-		else if( target.isTypeParameterTarget() )
-			builder.append( "typeParameterIndex = " ).append( target.asTypeParameterTarget().typeParameterIndex );
-		else
-			throw new AssertionError();
+			@Override public Void visit( CatchTarget catchTarget )
+			{
+				builder.append( "exceptionTableIndex = " ).append( catchTarget.exceptionTableIndex );
+				return null;
+			}
+			@Override public Void visit( EmptyTarget emptyTarget )
+			{
+				builder.append( "(empty)" );
+				return null;
+			}
+			@Override public Void visit( FormalParameterTarget formalParameterTarget )
+			{
+				builder.append( "formalParameterIndex = " ).append( formalParameterTarget.formalParameterIndex );
+				return null;
+			}
+			@Override public Void visit( LocalVariableTarget localVariableTarget )
+			{
+				builder.append( localVariableTarget.entries.size() ).append( " entries" );
+				return null;
+			}
+			@Override public Void visit( OffsetTarget offsetTarget )
+			{
+				builder.append( "offset = " ).append( offsetTarget.offset );
+				return null;
+			}
+			@Override public Void visit( SupertypeTarget supertypeTarget )
+			{
+				builder.append( "superTypeIndex = " ).append( supertypeTarget.supertypeIndex );
+				return null;
+			}
+			@Override public Void visit( ThrowsTarget throwsTarget )
+			{
+				builder.append( "throwsTypeIndex = " ).append( throwsTarget.throwsTypeIndex );
+				return null;
+			}
+			@Override public Void visit( TypeArgumentTarget typeArgumentTarget )
+			{
+				builder.append( "offset = " ).append( typeArgumentTarget.offset );
+				builder.append( ", typeArgumentIndex = " ).append( typeArgumentTarget.typeArgumentIndex );
+				return null;
+			}
+			@Override public Void visit( TypeParameterBoundTarget typeParameterBoundTarget )
+			{
+				builder.append( "typeParameterIndex = " ).append( typeParameterBoundTarget.typeParameterIndex );
+				builder.append( ", boundIndex = " ).append( typeParameterBoundTarget.boundIndex );
+				return null;
+			}
+			@Override public Void visit( TypeParameterTarget typeParameterTarget )
+			{
+				builder.append( "typeParameterIndex = " ).append( typeParameterTarget.typeParameterIndex );
+				return null;
+			}
+		} );
 		String header = builder.toString();
 		return Twig.of( header );
 	}

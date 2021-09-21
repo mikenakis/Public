@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ElementValue;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -16,7 +16,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationDefaultAttribute extends Attribute
 {
-	public static AnnotationDefaultAttribute of( AnnotationValue annotationValue )
+	public static AnnotationDefaultAttribute of( ElementValue annotationValue )
 	{
 		return new AnnotationDefaultAttribute( annotationValue );
 	}
@@ -24,15 +24,15 @@ public final class AnnotationDefaultAttribute extends Attribute
 	public static final String name = "AnnotationDefault";
 	public static final Kind kind = new Kind( name );
 
-	private final AnnotationValue annotationValue;
+	private final ElementValue annotationValue;
 
-	private AnnotationDefaultAttribute( AnnotationValue annotationValue )
+	private AnnotationDefaultAttribute( ElementValue annotationValue )
 	{
 		super( kind );
 		this.annotationValue = annotationValue;
 	}
 
-	public AnnotationValue annotationValue()
+	public ElementValue annotationValue()
 	{
 		return annotationValue;
 	}

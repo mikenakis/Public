@@ -3,6 +3,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class MultiANewArrayInstruction extends Instruction
 {
@@ -21,13 +22,13 @@ public final class MultiANewArrayInstruction extends Instruction
 		this.dimensionCount = dimensionCount;
 	}
 
-	@Override public int getOpCode()
-	{
-		return OpCode.MULTIANEWARRAY;
-	}
-
 	@Deprecated @Override public MultiANewArrayInstruction asMultiANewArrayInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( OpCode.MULTIANEWARRAY );
 	}
 }

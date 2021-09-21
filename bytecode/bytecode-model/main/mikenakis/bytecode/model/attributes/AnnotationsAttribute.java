@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
@@ -23,9 +23,9 @@ import java.util.List;
  */
 public abstract class AnnotationsAttribute extends Attribute
 {
-	private final List<ByteCodeAnnotation> annotations;
+	private final List<Annotation> annotations;
 
-	AnnotationsAttribute( Kind kind, List<ByteCodeAnnotation> annotations )
+	AnnotationsAttribute( Kind kind, List<Annotation> annotations )
 	{
 		super( kind );
 		this.annotations = annotations;
@@ -36,7 +36,7 @@ public abstract class AnnotationsAttribute extends Attribute
 		return this;
 	}
 
-	public Collection<ByteCodeAnnotation> annotations()
+	public Collection<Annotation> annotations()
 	{
 		return annotations;
 	}

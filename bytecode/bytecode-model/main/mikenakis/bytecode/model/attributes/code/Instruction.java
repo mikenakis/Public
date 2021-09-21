@@ -108,8 +108,6 @@ public abstract class Instruction
 		this.group = group;
 	}
 
-	public abstract int getOpCode();
-
 	@ExcludeFromJacocoGeneratedReport public BranchInstruction                  /**/ asBranchInstruction                  /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public ConditionalBranchInstruction       /**/ asConditionalBranchInstruction       /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public ConstantReferencingInstruction     /**/ asConstantReferencingInstruction     /**/ () { return Kit.fail(); }
@@ -136,8 +134,8 @@ public abstract class Instruction
 		return super.equals( other );
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( getOpCode() );
-	}
+	/*@ExcludeFromJacocoGeneratedReport*/ @Override public abstract String toString();
+//	{
+//		return OpCode.getOpCodeName( getOpCode() );
+//	}
 }

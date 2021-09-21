@@ -164,12 +164,6 @@ public final class ByteCodeType
 			} );
 	}
 
-	public int getIndexOfBootstrapMethod( BootstrapMethod bootstrapMethod )
-	{
-		var bootstrapMethodsAttribute = createOrGetBootstrapMethodsAttribute();
-		return bootstrapMethodsAttribute.getIndexOfBootstrapMethod( bootstrapMethod );
-	}
-
 	public BootstrapMethod getBootstrapMethodByIndex( int index )
 	{
 		var bootstrapMethodsAttribute = createOrGetBootstrapMethodsAttribute();
@@ -191,19 +185,9 @@ public final class ByteCodeType
 		return thisClassConstant.classDescriptor();
 	}
 
-	public String name()
-	{
-		return ByteCodeHelpers.typeNameFromClassDesc( thisClassConstant.classDescriptor() );
-	}
-
 	public Optional<ClassDesc> superClassDescriptor()
 	{
 		return superClassConstant.map( c -> c.classDescriptor() );
-	}
-
-	public Optional<String> superClassName()
-	{
-		return superClassDescriptor().map( c -> ByteCodeHelpers.typeNameFromClassDesc( c ) );
 	}
 
 	public boolean isAnnotation()
@@ -225,7 +209,7 @@ public final class ByteCodeType
 
 	public ByteCodeMethod getMethodByNameAndDescriptor( String name, MethodTypeDesc descriptor, Function<String,ByteCodeType> byteCodeTypeByName )
 	{
-		for( ByteCodeType byteCodeType = this; ; byteCodeType = byteCodeType.superClassName().map( byteCodeTypeByName ).orElseThrow() )
+		for( ByteCodeType byteCodeType = this; ; byteCodeType = byteCodeType.superClassDescriptor().map( c -> ByteCodeHelpers.typeNameFromClassDesc( c ) ).map( byteCodeTypeByName ).orElseThrow() )
 			for( ByteCodeMethod method : byteCodeType.methods )
 				if( match( method, name, descriptor ) )
 					return method;

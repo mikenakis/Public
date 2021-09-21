@@ -1,7 +1,10 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
+import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * Verification Type.
@@ -10,46 +13,95 @@ import java.util.Optional;
  */
 public abstract class VerificationType
 {
-	public static String getTagNameFromTag( int tag )
+	public enum Tag
+	{
+		Top               /**/( 0 ), //
+		Integer           /**/( 1 ), //
+		Float             /**/( 2 ), //
+		Double            /**/( 3 ), //
+		Long              /**/( 4 ), //
+		Null              /**/( 5 ), //
+		UninitializedThis /**/( 6 ), //
+		Object            /**/( 7 ), //
+		Uninitialized     /**/( 8 );
+
+		private static final List<Tag> values = List.of( values() );
+
+		public static Tag fromNumber( int number )
+		{
+			return values.get( number );
+		}
+
+		Tag( int tagNumber )
+		{
+			assert tagNumber == ordinal();
+		}
+
+		public int number()
+		{
+			return ordinal();
+		}
+	}
+
+	public interface Switcher<T>
+	{
+		T caseSimpleVerificationType();
+		T caseObjectVerificationType();
+		T caseUninitializedVerificationType();
+	}
+
+	public static <T> T doSwitch( Tag tag, Switcher<T> switcher )
 	{
 		return switch( tag )
 			{
-				case SimpleVerificationType.topTag -> SimpleVerificationType.topTagName;
-				case SimpleVerificationType.integerTag -> SimpleVerificationType.integerTagName;
-				case SimpleVerificationType.floatTag -> SimpleVerificationType.floatTagName;
-				case SimpleVerificationType.doubleTag -> SimpleVerificationType.doubleTagName;
-				case SimpleVerificationType.longTag -> SimpleVerificationType.longTagName;
-				case SimpleVerificationType.nullTag -> SimpleVerificationType.nullTagName;
-				case SimpleVerificationType.uninitializedThisTag -> SimpleVerificationType.uninitializedThisTagName;
-				case ObjectVerificationType.tag -> ObjectVerificationType.tagName;
-				case UninitializedVerificationType.tag -> UninitializedVerificationType.tagName;
-				default -> throw new AssertionError( tag );
+				case Top, Integer, Float, Double, Long, Null, UninitializedThis -> //
+					switcher.caseSimpleVerificationType();        //
+				case Object ->                                    //
+					switcher.caseObjectVerificationType();        //
+				case Uninitialized ->                             //
+					switcher.caseUninitializedVerificationType(); //
 			};
 	}
 
-	public final int tag;
+	public final Tag tag;
 
-	protected VerificationType( int tag )
+	protected VerificationType( Tag tag )
 	{
 		this.tag = tag;
 	}
 
-	//@formatter:off
-	public Optional<ObjectVerificationType>        tryAsObjectVerificationType()        { return Optional.empty(); }
-	public Optional<SimpleVerificationType>        tryAsSimpleVerificationType()        { return Optional.empty(); }
-	public Optional<UninitializedVerificationType> tryAsUninitializedVerificationType() { return Optional.empty(); }
-
-	public final ObjectVerificationType        asObjectVerificationType()        { return tryAsObjectVerificationType().orElseThrow(); }
-	public final SimpleVerificationType        asSimpleVerificationType()        { return tryAsSimpleVerificationType().orElseThrow(); }
-	public final UninitializedVerificationType asUninitializedVerificationType() { return tryAsUninitializedVerificationType().orElseThrow(); }
-
-	public final boolean isObjectVerificationType()        { return tryAsObjectVerificationType().isPresent(); }
-	public final boolean isSimpleVerificationType()        { return tryAsSimpleVerificationType().isPresent(); }
-	public final boolean isUninitializedVerificationType() { return tryAsUninitializedVerificationType().isPresent(); }
-	//@formatter:on
-
-	@Override @OverridingMethodsMustInvokeSuper public String toString()
+	public interface Visitor<T>
 	{
-		return "tag = " + getTagNameFromTag( tag );
+		T visit( SimpleVerificationType simpleVerificationType );
+		T visit( ObjectVerificationType objectVerificationType );
+		T visit( UninitializedVerificationType uninitializedVerificationType );
+	}
+
+	public <T> T visit( Visitor<T> visitor )
+	{
+		return doSwitch( tag, new Switcher<>()
+		{
+			@Override public T caseSimpleVerificationType()
+			{
+				return visitor.visit( asSimpleVerificationType() );
+			}
+			@Override public T caseObjectVerificationType()
+			{
+				return visitor.visit( asObjectVerificationType() );
+			}
+			@Override public T caseUninitializedVerificationType()
+			{
+				return visitor.visit( asUninitializedVerificationType() );
+			}
+		} );
+	}
+
+	@ExcludeFromJacocoGeneratedReport protected ObjectVerificationType asObjectVerificationType() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport protected SimpleVerificationType asSimpleVerificationType() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport protected UninitializedVerificationType asUninitializedVerificationType() { return Kit.fail(); }
+
+	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString()
+	{
+		return "tag = " + tag.name();
 	}
 }

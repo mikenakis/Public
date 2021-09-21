@@ -3,8 +3,6 @@ package mikenakis.bytecode.model.attributes.stackmap.verification;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.util.Optional;
-
 /**
  * 'Object' {@link VerificationType}.
  *
@@ -17,18 +15,15 @@ public final class ObjectVerificationType extends VerificationType
 		return new ObjectVerificationType( classConstant );
 	}
 
-	public static final int tag = 7;
-	public static final String tagName = "Object";
-
 	private final ClassConstant classConstant;
 
 	private ObjectVerificationType( ClassConstant classConstant )
 	{
-		super( tag );
+		super( Tag.Object );
 		this.classConstant = classConstant;
 	}
 
-	@Deprecated @Override public Optional<ObjectVerificationType> tryAsObjectVerificationType() { return Optional.of( this ); }
+	@Deprecated @Override protected ObjectVerificationType asObjectVerificationType() { return this; }
 
 	public ClassConstant classConstant() { return classConstant; }
 

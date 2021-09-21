@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class ConditionalBranchInstruction extends Instruction
 {
@@ -50,7 +51,7 @@ public final class ConditionalBranchInstruction extends Instruction
 		this.targetInstruction = targetInstruction;
 	}
 
-	@Override public int getOpCode()
+	public int getOpCode()
 	{
 		return opCode;
 	}
@@ -58,5 +59,10 @@ public final class ConditionalBranchInstruction extends Instruction
 	@Deprecated @Override public ConditionalBranchInstruction asConditionalBranchInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
 	}
 }

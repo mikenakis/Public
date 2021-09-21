@@ -1,7 +1,5 @@
 package mikenakis.bytecode.model.attributes.code;
 
-import mikenakis.kit.Kit;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;

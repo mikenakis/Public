@@ -1,11 +1,13 @@
 package mikenakis.bytecode.exceptions;
 
+import mikenakis.bytecode.kit.UncheckedException;
+
 /**
- * "Incomplete MUTF8" {@link ByteCodeException}.
+ * "Incomplete MUTF8" exception.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class IncompleteMutf8Exception extends ByteCodeException
+public final class IncompleteMutf8Exception extends UncheckedException
 {
 	public final int position;
 

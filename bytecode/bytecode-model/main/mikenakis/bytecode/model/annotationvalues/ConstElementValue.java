@@ -1,24 +1,24 @@
 package mikenakis.bytecode.model.annotationvalues;
 
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ElementValue;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
- * Represents a constant {@link AnnotationValue}.
+ * Represents a constant {@link ElementValue}.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class ConstAnnotationValue extends AnnotationValue
+public final class ConstElementValue extends ElementValue
 {
-	public static ConstAnnotationValue of( Tag tag, ValueConstant<?> valueConstant )
+	public static ConstElementValue of( Tag tag, ValueConstant<?> valueConstant )
 	{
-		return new ConstAnnotationValue( tag, valueConstant );
+		return new ConstElementValue( tag, valueConstant );
 	}
 
-	public static ConstAnnotationValue of( boolean value )
+	public static ConstElementValue of( boolean value )
 	{
 		IntegerConstant valueConstant = IntegerConstant.of( value ? 1 : 0 );
 		return of( Tag.Boolean, valueConstant );
@@ -26,7 +26,7 @@ public final class ConstAnnotationValue extends AnnotationValue
 
 	private final ValueConstant<?> valueConstant;
 
-	private ConstAnnotationValue( Tag tag, ValueConstant<?> valueConstant )
+	private ConstElementValue( Tag tag, ValueConstant<?> valueConstant )
 	{
 		super( tag );
 		assert valueConstant.tag == getConstantTagFromValueTag( tag );
@@ -48,7 +48,7 @@ public final class ConstAnnotationValue extends AnnotationValue
 
 	public ValueConstant<?> valueConstant() { return valueConstant; }
 
-	@Deprecated @Override public ConstAnnotationValue asConstAnnotationValue()
+	@Deprecated @Override public ConstElementValue asConstAnnotationValue()
 	{
 		return this;
 	}

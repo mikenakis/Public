@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class ImmediateLoadConstantInstruction extends LoadConstantInstruction
 {
@@ -22,7 +23,7 @@ public final class ImmediateLoadConstantInstruction extends LoadConstantInstruct
 		this.immediateValue = immediateValue;
 	}
 
-	@Override public int getOpCode()
+	public int getOpCode()
 	{
 		return opCode;
 	}
@@ -30,5 +31,10 @@ public final class ImmediateLoadConstantInstruction extends LoadConstantInstruct
 	@Deprecated @Override public ImmediateLoadConstantInstruction asImmediateLoadConstantInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
 	}
 }

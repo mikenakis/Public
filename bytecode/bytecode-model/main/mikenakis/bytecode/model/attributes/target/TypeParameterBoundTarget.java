@@ -2,8 +2,6 @@ package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.util.Optional;
-
 public final class TypeParameterBoundTarget extends Target // "type_parameter_bound_target" in jvms-4.7.20.1
 {
 	public final int typeParameterIndex;
@@ -17,7 +15,7 @@ public final class TypeParameterBoundTarget extends Target // "type_parameter_bo
 		this.boundIndex = boundIndex;
 	}
 
-	@Deprecated @Override public Optional<TypeParameterBoundTarget> tryAsTypeParameterBoundTarget() { return Optional.of( this ); }
+	@Deprecated @Override public TypeParameterBoundTarget asTypeParameterBoundTarget() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

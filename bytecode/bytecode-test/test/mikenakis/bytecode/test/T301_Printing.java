@@ -5,12 +5,12 @@ import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.kit.Kit;
+import mikenakis.kit.logging.Log;
 import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -32,15 +32,15 @@ public class T301_Printing
 		return ByteCodeReader.read( bytes );
 	}
 
-	@Test public void Printing_Is_Ok()
+	@Test public void Printing_Checks_Out()
 	{
 		Path workingDirectory = Kit.path.getWorkingDirectory();
-		System.out.printf( Locale.ROOT, "Current directory: %s\n", workingDirectory );
+		Log.debug( "Current directory: " + workingDirectory );
 		Path outputPath = Helpers.getOutputPath( getClass() );
 		Path modelPath = outputPath.resolve( "model" );
 		Path printPath = workingDirectory.resolve( "prints" );
 		List<Path> classFilePathNames = TestKit.collectResourcePaths( modelPath, false, ".class" );
-		assert classFilePathNames.size() == 20;
+		assert classFilePathNames.size() == 23;
 		int mismatchCount = 0;
 		for( Path classFilePathName : classFilePathNames )
 		{
@@ -53,7 +53,7 @@ public class T301_Printing
 
 	private static boolean printAndCompareAgainstExpected( Path classFilePathName, Path printFilePathName )
 	{
-		System.out.printf( Locale.ROOT, "Comparing class: %s <=> print: %s\n", classFilePathName, printFilePathName );
+		Log.debug( "Comparing class: + " + classFilePathName + "  <=>  print: " + printFilePathName );
 		ByteCodeType byteCodeType = load( classFilePathName );
 		String actualPrint = ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() );
 		Kit.unchecked( () -> Files.createDirectories( printFilePathName.getParent() ) );

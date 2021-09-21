@@ -1,0 +1,23 @@
+ version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1, superClass = java.lang.Object
+ ├─ interfaces (1 entries)
+ │   └─ Class name = "java/lang/annotation/Annotation"
+ ├─ extra constants (0 entries)
+ ├─ fields (0 entries)
+ ├─ methods (1 entries)
+ │   └─ method accessFlags = [public, abstract], name = value, descriptor = int()
+ │       └─ attributes (1 entries)
+ │           └─ AnnotationDefault 
+ │               └─ Integer value =  5
+ └─ attributes (2 entries)
+     ├─ SourceFile value = "RuntimeInvisibleTypeAnnotation1.java"
+     └─ RuntimeVisibleAnnotations (2 entries)
+         ├─ annotation  type = java.lang.annotation.Target, 1 parameters
+         │   └─ parameter name = "value"
+         │       └─ Array value =  4 elements
+         │           ├─ element type = java.lang.annotation.ElementType, value = PACKAGE
+         │           ├─ element type = java.lang.annotation.ElementType, value = TYPE_PARAMETER
+         │           ├─ element type = java.lang.annotation.ElementType, value = TYPE_USE
+         │           └─ element type = java.lang.annotation.ElementType, value = MODULE
+         └─ annotation  type = java.lang.annotation.Retention, 1 parameters
+             └─ parameter name = "value"
+                 └─ Enum value =  type = java.lang.annotation.RetentionPolicy, value = CLASS

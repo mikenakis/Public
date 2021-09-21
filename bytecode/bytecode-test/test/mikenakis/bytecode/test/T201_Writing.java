@@ -1,18 +1,20 @@
 package mikenakis.bytecode.test;
 
-import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.test.kit.TestKit;
-import mikenakis.bytecode.test.model.Class1;
-import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.reading.ByteCodeReader;
+import mikenakis.bytecode.test.kit.TestKit;
+import mikenakis.bytecode.test.model.Class1WithFields;
+import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +33,7 @@ public class T201_Writing
 
 	@Test public void Class_Checks_Out()
 	{
-		Path path = Helpers.getPathToClassFile( Class1.class );
+		Path path = Helpers.getPathToClassFile( Class1WithFields.class );
 		test( path );
 	}
 
@@ -51,24 +53,43 @@ public class T201_Writing
 
 	private static void test( Path classFilePathName )
 	{
-		//		Log.debug( "Testing " + classFilePathName );
-		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
-		ByteCodeType type = ByteCodeReader.read( bytes );
-		String string1 = ByteCodePrinter.printByteCodeType( type, Optional.empty() );
+		Log.debug( "Testing " + classFilePathName );
+		byte[] bytes1 = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
+		ByteCodeType type1 = ByteCodeReader.read( bytes1 );
+		String string1 = ByteCodePrinter.printByteCodeType( type1, Optional.empty() );
+		savePrint( replaceExtension( classFilePathName.getParent().resolve( "p1" ).resolve( classFilePathName.getFileName() ), ".print" ), string1 );
 
-		byte[] bytes2 = ByteCodeWriter.write( type );
-		Path classFilePathName2 = getGeneratedClassFilePath( classFilePathName );
-		Kit.unchecked( () -> Files.createDirectories( classFilePathName2.getParent() ) );
-		Kit.unchecked( () -> Files.write( classFilePathName2, bytes2 ) );
-		Log.debug( "saved " + classFilePathName2 );
+		byte[] bytes2 = ByteCodeWriter.write( type1 );
+		saveBytes( classFilePathName.getParent().resolve( "b" ).resolve( classFilePathName.getFileName().toString() ), bytes2 );
 		ByteCodeType type2 = ByteCodeReader.read( bytes2 );
 		String string2 = ByteCodePrinter.printByteCodeType( type2, Optional.empty() );
+		savePrint( replaceExtension( classFilePathName.getParent().resolve( "p2" ).resolve( classFilePathName.getFileName() ), ".print" ), string2 );
 		assert string1.equals( string2 );
 	}
 
-	private static Path getGeneratedClassFilePath( Path path )
+	private static void saveBytes( Path path, byte[] bytes )
 	{
-		String child = path.getFileName().toString();
-		return path.getParent().resolve( "r" ).resolve( child );
+		Kit.unchecked( () -> Files.createDirectories( path.getParent() ) );
+		Kit.unchecked( () -> Files.write( path, bytes ) );
+		Log.debug( "saved bytes: " + path );
+	}
+
+	private static void savePrint( Path path, String print )
+	{
+		Kit.unchecked( () -> Files.createDirectories( path.getParent() ) );
+		Kit.unchecked( () -> Files.writeString( path, print, StandardCharsets.UTF_8, StandardOpenOption.CREATE ) );
+		Log.debug( "saved print: " + path );
+	}
+
+	private static String getBaseName( Path path )
+	{
+		String pathName = path.toString();
+		int index = pathName.lastIndexOf( '.' );
+		return index == -1 ? pathName : pathName.substring( 0, index );
+	}
+
+	private static Path replaceExtension( Path path, String extension )
+	{
+		return path.getParent().resolve( getBaseName( path ) + extension );
 	}
 }

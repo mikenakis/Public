@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class BranchInstruction extends Instruction
 {
@@ -102,7 +103,7 @@ public final class BranchInstruction extends Instruction
 		return flavor == Flavor.LONG;
 	}
 
-	@Override public int getOpCode()
+	public int getOpCode()
 	{
 		return opCode;
 	}
@@ -124,5 +125,10 @@ public final class BranchInstruction extends Instruction
 	@Deprecated @Override public BranchInstruction asBranchInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
 	}
 }

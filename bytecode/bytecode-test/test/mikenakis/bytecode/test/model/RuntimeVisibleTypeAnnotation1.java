@@ -7,20 +7,20 @@ import java.lang.annotation.Target;
 
 @Target( //
 	{ //
-		ElementType.TYPE, //
-		ElementType.FIELD, //
-		ElementType.METHOD, //
-		ElementType.PARAMETER, //
-		ElementType.CONSTRUCTOR, //
-		ElementType.LOCAL_VARIABLE, //
-		ElementType.ANNOTATION_TYPE, //
-		// ElementType.PACKAGE,
-		// ElementType.TYPE_PARAMETER,
-		// ElementType.TYPE_USE,
-		// ElementType.MODULE
+		//ElementType.TYPE,
+		//ElementType.FIELD,
+		//ElementType.METHOD,
+		//ElementType.PARAMETER,
+		//ElementType.CONSTRUCTOR,
+		//ElementType.LOCAL_VARIABLE,
+		//ElementType.ANNOTATION_TYPE,
+		ElementType.PACKAGE, //
+		ElementType.TYPE_PARAMETER, //
+		ElementType.TYPE_USE, //
+		ElementType.MODULE //
 	} )
 @Retention( RetentionPolicy.RUNTIME )
-public @interface RuntimeVisibleAnnotation1
+public @interface RuntimeVisibleTypeAnnotation1
 {
 	SuppressWarnings annotationParameter() default @SuppressWarnings( "" );
 

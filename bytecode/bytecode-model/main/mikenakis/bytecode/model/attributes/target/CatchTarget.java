@@ -2,8 +2,6 @@ package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.util.Optional;
-
 public final class CatchTarget extends Target // "catch_target" in jvms-4.7.20.1
 {
 	public final int exceptionTableIndex;
@@ -15,7 +13,7 @@ public final class CatchTarget extends Target // "catch_target" in jvms-4.7.20.1
 		this.exceptionTableIndex = exceptionTableIndex;
 	}
 
-	@Deprecated @Override public Optional<CatchTarget> tryAsCatchTarget() { return Optional.of( this ); }
+	@Deprecated @Override public CatchTarget asCatchTarget() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

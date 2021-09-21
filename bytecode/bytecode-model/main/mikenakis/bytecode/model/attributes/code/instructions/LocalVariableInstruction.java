@@ -4,6 +4,7 @@ import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Collection;
 import java.util.List;
@@ -219,7 +220,7 @@ public final class LocalVariableInstruction extends Instruction
 		this.index = index;
 	}
 
-	@Override public int getOpCode()
+	public int getOpCode()
 	{
 		return opCode;
 	}
@@ -246,5 +247,10 @@ public final class LocalVariableInstruction extends Instruction
 	@Deprecated @Override public LocalVariableInstruction asLocalVariableInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
 	}
 }

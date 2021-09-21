@@ -1,18 +1,18 @@
 package mikenakis.testana.structure;
 
-import mikenakis.bytecode.model.AnnotationParameter;
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ElementValuePair;
+import mikenakis.bytecode.model.ElementValue;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
+import mikenakis.bytecode.model.annotationvalues.AnnotationElementValue;
+import mikenakis.bytecode.model.annotationvalues.ArrayElementValue;
+import mikenakis.bytecode.model.annotationvalues.ClassElementValue;
+import mikenakis.bytecode.model.annotationvalues.EnumElementValue;
 import mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import mikenakis.bytecode.model.attributes.AnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
@@ -45,7 +45,7 @@ import mikenakis.bytecode.model.attributes.SignatureAttribute;
 import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
-import mikenakis.bytecode.model.attributes.TypeAnnotation;
+import mikenakis.bytecode.model.TypeAnnotation;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
@@ -126,13 +126,13 @@ final class ByteCodeInfo
 	Collection<String> getDependencyNames()
 	{
 		ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ); //TODO get rid of!
-		if( byteCodeType.name().equals( "bytecode_tests.model.Class6WithAnnotations" ) )
+		if( ByteCodeHelpers.typeNameFromClassDesc( byteCodeType.descriptor() ).equals( "bytecode_tests.model.Class6WithAnnotations" ) )
 			Kit.get( true ); //FIXME XXX TODO when we modify the parameters of the @Target annotation of RuntimeVisibleAnnotation1, testana does not detect that Class6WithAnnotations is out of date!
 		Collection<String> mutableDependencyNames = new HashSet<>();
 		addDependencyTypeNames( byteCodeType, mutableDependencyNames );
 		for( Constant constant : byteCodeType.extraConstants() )
 			addDependencyTypeNamesFromConstant( constant, mutableDependencyNames );
-		mutableDependencyNames.remove( byteCodeType.name() );
+		mutableDependencyNames.remove( ByteCodeHelpers.typeNameFromClassDesc( byteCodeType.descriptor() ) );
 		//trim( mutableDependencyNames );
 		return mutableDependencyNames;
 	}
@@ -179,8 +179,8 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNames( ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeName( byteCodeType.name(), mutableDependencyNames );
-		byteCodeType.superClassName().ifPresent( c -> addDependencyTypeName( c, mutableDependencyNames ) );
+		addDependencyTypeName( ByteCodeHelpers.typeNameFromClassDesc( byteCodeType.descriptor() ), mutableDependencyNames );
+		byteCodeType.superClassDescriptor().map( c1 -> ByteCodeHelpers.typeNameFromClassDesc( c1 ) ).ifPresent( c -> addDependencyTypeName( c, mutableDependencyNames ) );
 		for( ClassConstant classConstant : byteCodeType.interfaceClassConstants() )
 			addDependencyTypeNameFromClassConstant( classConstant, mutableDependencyNames );
 		for( ByteCodeField byteCodeField : byteCodeType.fields() )
@@ -336,7 +336,7 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromAnnotationDefaultAttribute( ByteCodeType byteCodeType, AnnotationDefaultAttribute attribute, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromAnnotationValue( byteCodeType, attribute.annotationValue(), mutableDependencyNames );
+		addDependencyTypeNamesFromElementValue( byteCodeType, attribute.annotationValue(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromBootstrapMethodsAttribute( BootstrapMethodsAttribute attribute, Collection<String> mutableDependencyNames )
@@ -531,25 +531,25 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromAnnotationsAttribute( ByteCodeType byteCodeType, AnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
-		for( ByteCodeAnnotation byteCodeAnnotation : attribute.annotations() )
+		for( Annotation byteCodeAnnotation : attribute.annotations() )
 			addDependencyTypeNamesFromAnnotation( byteCodeType, byteCodeAnnotation, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromParameterAnnotationsAttribute( ByteCodeType byteCodeType, ParameterAnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( ParameterAnnotationSet parameterAnnotationSet : attribute.parameterAnnotationSets() )
-			for( ByteCodeAnnotation byteCodeAnnotation : parameterAnnotationSet.annotations() )
+			for( Annotation byteCodeAnnotation : parameterAnnotationSet.annotations() )
 				addDependencyTypeNamesFromAnnotation( byteCodeType, byteCodeAnnotation, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromTypeAnnotationsAttribute( ByteCodeType byteCodeType, TypeAnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( TypeAnnotation typeAnnotation : attribute.typeAnnotations() )
-			for( TypeAnnotation.ElementValuePair elementValuePair : typeAnnotation.elementValuePairs() )
-				addDependencyTypeNamesFromAnnotationValue( byteCodeType, elementValuePair.elementValue().annotationValue(), mutableDependencyNames );
+			for( ElementValuePair elementValuePair : typeAnnotation.elementValuePairs() )
+				addDependencyTypeNamesFromElementValue( byteCodeType, elementValuePair.elementValue(), mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromAnnotationValue( ByteCodeType byteCodeType /* TODO: remove this parameter */, AnnotationValue annotationValue, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromElementValue( ByteCodeType byteCodeType /* TODO: remove this parameter */, ElementValue annotationValue, Collection<String> mutableDependencyNames )
 	{
 		switch( annotationValue.tag )
 		{
@@ -565,27 +565,27 @@ final class ByteCodeInfo
 				break;
 			case Enum:
 			{
-				EnumAnnotationValue enumAnnotationValue = annotationValue.asEnumAnnotationValue();
+				EnumElementValue enumAnnotationValue = annotationValue.asEnumAnnotationValue();
 				addDependencyTypeNameFromClassDescriptor( enumAnnotationValue.typeDescriptor(), mutableDependencyNames );
 				break;
 			}
 			case Class:
 			{
-				ClassAnnotationValue classAnnotationValue = annotationValue.asClassAnnotationValue();
+				ClassElementValue classAnnotationValue = annotationValue.asClassAnnotationValue();
 				addDependencyTypeNameFromClassDescriptor( classAnnotationValue.classDescriptor(), mutableDependencyNames );
 				break;
 			}
 			case Annotation:
 			{
-				AnnotationAnnotationValue annotationAnnotationValue = annotationValue.asAnnotationAnnotationValue();
+				AnnotationElementValue annotationAnnotationValue = annotationValue.asAnnotationAnnotationValue();
 				addDependencyTypeNamesFromAnnotation( byteCodeType, annotationAnnotationValue.annotation(), mutableDependencyNames );
 				break;
 			}
 			case Array:
 			{
-				ArrayAnnotationValue arrayAnnotationValue = annotationValue.asArrayAnnotationValue();
-				for( AnnotationValue value : arrayAnnotationValue.annotationValues() )
-					addDependencyTypeNamesFromAnnotationValue( byteCodeType, value, mutableDependencyNames );
+				ArrayElementValue arrayAnnotationValue = annotationValue.asArrayAnnotationValue();
+				for( ElementValue value : arrayAnnotationValue.annotationValues() )
+					addDependencyTypeNamesFromElementValue( byteCodeType, value, mutableDependencyNames );
 				break;
 			}
 			default:
@@ -593,11 +593,11 @@ final class ByteCodeInfo
 		}
 	}
 
-	private static void addDependencyTypeNamesFromAnnotation( ByteCodeType byteCodeType, ByteCodeAnnotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromAnnotation( ByteCodeType byteCodeType, Annotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
 	{
 		addDependencyTypeNameFromClassDescriptor( byteCodeAnnotation.typeDescriptor(), mutableDependencyNames );
-		for( AnnotationParameter annotationParameter : byteCodeAnnotation.parameters() )
-			addDependencyTypeNamesFromAnnotationValue( byteCodeType, annotationParameter.annotationValue(), mutableDependencyNames );
+		for( ElementValuePair annotationParameter : byteCodeAnnotation.elementValuePairs() )
+			addDependencyTypeNamesFromElementValue( byteCodeType, annotationParameter.elementValue(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromFieldTypeSignature( String signature, Collection<String> mutableDependencyNames )

@@ -1,20 +1,19 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.exceptions.UnknownValueException;
-import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
+import mikenakis.bytecode.model.annotationvalues.AnnotationElementValue;
+import mikenakis.bytecode.model.annotationvalues.ArrayElementValue;
+import mikenakis.bytecode.model.annotationvalues.ClassElementValue;
+import mikenakis.bytecode.model.annotationvalues.ConstElementValue;
+import mikenakis.bytecode.model.annotationvalues.EnumElementValue;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
- * Represents a value of an annotation.
+ * Represents the element_value structure of JVMS 4.7.16.1.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class AnnotationValue
+public abstract class ElementValue
 {
 	public enum Tag
 	{
@@ -63,14 +62,14 @@ public abstract class AnnotationValue
 
 	public final Tag tag;
 
-	protected AnnotationValue( Tag tag )
+	protected ElementValue( Tag tag )
 	{
 		this.tag = tag;
 	}
 
-	@ExcludeFromJacocoGeneratedReport public ConstAnnotationValue      /**/ asConstAnnotationValue()      /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public EnumAnnotationValue       /**/ asEnumAnnotationValue()       /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ClassAnnotationValue      /**/ asClassAnnotationValue()      /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public AnnotationAnnotationValue /**/ asAnnotationAnnotationValue() /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ArrayAnnotationValue      /**/ asArrayAnnotationValue()      /**/ { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ConstElementValue      /**/ asConstAnnotationValue()      /**/ { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public EnumElementValue       /**/ asEnumAnnotationValue()       /**/ { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ClassElementValue      /**/ asClassAnnotationValue()      /**/ { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public AnnotationElementValue /**/ asAnnotationAnnotationValue() /**/ { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ArrayElementValue      /**/ asArrayAnnotationValue()      /**/ { return Kit.fail(); }
 }

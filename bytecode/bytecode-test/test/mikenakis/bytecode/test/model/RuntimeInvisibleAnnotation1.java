@@ -13,11 +13,11 @@ import java.lang.annotation.Target;
 		ElementType.PARAMETER, //
 		ElementType.CONSTRUCTOR, //
 		ElementType.LOCAL_VARIABLE, //
-		//ElementType.ANNOTATION_TYPE, //
-		//ElementType.PACKAGE, //
-		//ElementType.TYPE_PARAMETER, //
-		//ElementType.TYPE_USE, //
-		//ElementType.MODULE //
+		ElementType.ANNOTATION_TYPE
+		//ElementType.PACKAGE,
+		//ElementType.TYPE_PARAMETER,
+		//ElementType.TYPE_USE,
+		//ElementType.MODULE
 	} )
 @Retention( RetentionPolicy.CLASS )
 public @interface RuntimeInvisibleAnnotation1

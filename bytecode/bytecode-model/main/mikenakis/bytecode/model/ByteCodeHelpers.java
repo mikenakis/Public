@@ -19,7 +19,7 @@ public final class ByteCodeHelpers
 
 	public static String getClassSourceLocation( ByteCodeType byteCodeType )
 	{
-		String typeName = byteCodeType.name();
+		String typeName = typeNameFromClassDesc( byteCodeType.descriptor() );
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
 		return typeName + "(" + (sourceFileName.orElse( "?" )) + ":" + 1 + ")";
 	}
@@ -32,7 +32,7 @@ public final class ByteCodeHelpers
 			.flatMap( a -> a.attributeSet().tryGetAttributeByName( LineNumberTableAttribute.kind.mutf8Name ) ) //
 			.map( a -> a.asLineNumberTableAttribute() );
 		int lineNumber = lineNumberTableAttribute.map( a -> a.lineNumbers().get( 0 ).lineNumber() ).orElse( 0 );
-		String typeName = byteCodeType.name();
+		String typeName = typeNameFromClassDesc( byteCodeType.descriptor() );
 		String methodName = byteCodeMethod.name();
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
 		return typeName + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";

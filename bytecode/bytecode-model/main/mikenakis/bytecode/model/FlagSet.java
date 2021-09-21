@@ -63,6 +63,8 @@ public class FlagSet<E extends Enum<E>>
 	{
 		int bit = flagEnum.getFlag( value );
 		int newFlags = flags & ~bit;
+		if( newFlags == flags )
+			return this;
 		return new FlagSet<>( flagEnum, newFlags );
 	}
 
@@ -70,6 +72,8 @@ public class FlagSet<E extends Enum<E>>
 	{
 		int bit = flagEnum.getFlag( value );
 		int newFlags = flags | bit;
+		if( newFlags == flags )
+			return this;
 		return new FlagSet<>( flagEnum, newFlags );
 	}
 
@@ -77,6 +81,8 @@ public class FlagSet<E extends Enum<E>>
 	{
 		assert other.flagEnum == flagEnum;
 		int newFlags = flags & ~other.flags;
+		if( newFlags == flags )
+			return this;
 		return new FlagSet<>( flagEnum, newFlags );
 	}
 
@@ -84,6 +90,8 @@ public class FlagSet<E extends Enum<E>>
 	{
 		assert other.flagEnum == flagEnum;
 		int newFlags = flags | other.flags;
+		if( newFlags == flags )
+			return this;
 		return new FlagSet<>( flagEnum, newFlags );
 	}
 

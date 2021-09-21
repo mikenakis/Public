@@ -1,17 +1,17 @@
 package mikenakis.bytecode.writing;
 
-import mikenakis.bytecode.model.AnnotationParameter;
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.AttributeSet;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
 import mikenakis.bytecode.model.ByteCodeMember;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
+import mikenakis.bytecode.model.ElementValue;
+import mikenakis.bytecode.model.ElementValuePair;
+import mikenakis.bytecode.model.TypeAnnotation;
+import mikenakis.bytecode.model.annotationvalues.AnnotationElementValue;
+import mikenakis.bytecode.model.annotationvalues.ArrayElementValue;
+import mikenakis.bytecode.model.annotationvalues.ClassElementValue;
+import mikenakis.bytecode.model.annotationvalues.ConstElementValue;
+import mikenakis.bytecode.model.annotationvalues.EnumElementValue;
 import mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
@@ -43,7 +43,6 @@ import mikenakis.bytecode.model.attributes.SignatureAttribute;
 import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
-import mikenakis.bytecode.model.attributes.TypeAnnotation;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
@@ -67,6 +66,7 @@ import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +104,7 @@ final class ConstantPool
 		return -1;
 	}
 
-	public int getIndex( Constant constant )
+	int getIndex( Constant constant )
 	{
 		int index = tryGetIndex( constant );
 		assert index != -1;
@@ -165,7 +165,7 @@ final class ConstantPool
 					InvokeDynamicConstant invokeDynamicConstant = constant.asInvokeDynamicConstant();
 					internConstant( invokeDynamicConstant.nameAndDescriptorConstant() );
 				}
-			default -> throw new AssertionError( constant.tag.value() );
+			default -> throw new AssertionError( constant.tag.tagNumber() );
 		}
 		int existingIndex = tryGetIndex( constant );
 		assert existingIndex != 0;
@@ -185,7 +185,7 @@ final class ConstantPool
 		internAttributeSet( byteCodeMember.attributeSet );
 	}
 
-	void internAttributeSet( AttributeSet attributeSet )
+	void internAttributeSet( Iterable<Attribute> attributeSet )
 	{
 		for( Attribute attribute : attributeSet )
 		{
@@ -203,7 +203,7 @@ final class ConstantPool
 			case BootstrapMethodsAttribute.name -> internBootstrapMethodsAttribute( attribute.asBootstrapMethodsAttribute() );
 			case CodeAttribute.name -> internCodeAttribute( attribute.asCodeAttribute() );
 			case ConstantValueAttribute.name -> internConstantValueAttribute( attribute.asConstantValueAttribute() );
-			case DeprecatedAttribute.name -> internDeprecatedAttribute( attribute.asDeprecatedAttribute() );
+			case DeprecatedAttribute.name -> Kit.get( 1 ); //nothing to do
 			case EnclosingMethodAttribute.name -> internEnclosingMethodAttribute( attribute.asEnclosingMethodAttribute() );
 			case ExceptionsAttribute.name -> internExceptionsAttribute( attribute.asExceptionsAttribute() );
 			case InnerClassesAttribute.name -> internInnerClassesAttribute( attribute.asInnerClassesAttribute() );
@@ -222,8 +222,8 @@ final class ConstantPool
 			case SignatureAttribute.name -> internSignatureAttribute( attribute.asSignatureAttribute() );
 			case SourceFileAttribute.name -> internSourceFileAttribute( attribute.asSourceFileAttribute() );
 			case StackMapTableAttribute.name -> internStackMapTableAttribute( attribute.asStackMapTableAttribute() );
-			case SyntheticAttribute.name -> internSyntheticAttribute( attribute.asSyntheticAttribute() );
-			default -> internUnknownAttribute( attribute.asUnknownAttribute() );
+			case SyntheticAttribute.name -> Kit.get( 2 ); //nothing to do
+			default -> { assert attribute instanceof UnknownAttribute; } //nothing to do
 		}
 	}
 
@@ -261,11 +261,6 @@ final class ConstantPool
 		internConstant( constantValueAttribute.valueConstant() );
 	}
 
-	private void internDeprecatedAttribute( DeprecatedAttribute deprecatedAttribute )
-	{
-		Kit.get( deprecatedAttribute ); /* nothing to do */
-	}
-
 	private void internEnclosingMethodAttribute( EnclosingMethodAttribute enclosingMethodAttribute )
 	{
 		internConstant( enclosingMethodAttribute.classConstant() );
@@ -301,7 +296,9 @@ final class ConstantPool
 
 	private void internLineNumberTableAttribute( LineNumberTableAttribute lineNumberTableAttribute )
 	{
-		Kit.get( lineNumberTableAttribute ); /* nothing to do */
+		// FIXME this is probably unnecessary!
+		for( var lineNumber : lineNumberTableAttribute.lineNumbers() )
+			internInstruction( lineNumber.instruction() );
 	}
 
 	private void internLocalVariableTableAttribute( LocalVariableTableAttribute localVariableTableAttribute )
@@ -330,27 +327,27 @@ final class ConstantPool
 
 	private void internRuntimeVisibleAnnotationsAttribute( RuntimeVisibleAnnotationsAttribute runtimeVisibleAnnotationsAttribute )
 	{
-		for( ByteCodeAnnotation annotation : runtimeVisibleAnnotationsAttribute.annotations() )
+		for( Annotation annotation : runtimeVisibleAnnotationsAttribute.annotations() )
 			internAnnotation( annotation );
 	}
 
 	private void internRuntimeInvisibleAnnotationsAttribute( RuntimeInvisibleAnnotationsAttribute runtimeInvisibleAnnotationsAttribute )
 	{
-		for( ByteCodeAnnotation annotation : runtimeInvisibleAnnotationsAttribute.annotations() )
+		for( Annotation annotation : runtimeInvisibleAnnotationsAttribute.annotations() )
 			internAnnotation( annotation );
 	}
 
 	private void internRuntimeInvisibleParameterAnnotationsAttribute( RuntimeInvisibleParameterAnnotationsAttribute runtimeInvisibleParameterAnnotationsAttribute )
 	{
 		for( ParameterAnnotationSet entry : runtimeInvisibleParameterAnnotationsAttribute.parameterAnnotationSets() )
-			for( ByteCodeAnnotation annotation : entry.annotations() )
+			for( Annotation annotation : entry.annotations() )
 				internAnnotation( annotation );
 	}
 
 	private void internRuntimeVisibleParameterAnnotationsAttribute( RuntimeVisibleParameterAnnotationsAttribute runtimeVisibleParameterAnnotationsAttribute )
 	{
 		for( ParameterAnnotationSet entry : runtimeVisibleParameterAnnotationsAttribute.parameterAnnotationSets() )
-			for( ByteCodeAnnotation annotation : entry.annotations() )
+			for( Annotation annotation : entry.annotations() )
 				internAnnotation( annotation );
 	}
 
@@ -380,17 +377,7 @@ final class ConstantPool
 			internStackMapFrame( frame );
 	}
 
-	private void internSyntheticAttribute( SyntheticAttribute syntheticAttribute )
-	{
-		Kit.get( syntheticAttribute ); /* nothing to do */
-	}
-
-	private void internUnknownAttribute( UnknownAttribute unknownAttribute )
-	{
-		Kit.get( unknownAttribute ); /* nothing to do */
-	}
-
-	private void internAnnotationValue( AnnotationValue annotationValue )
+	private void internAnnotationValue( ElementValue annotationValue )
 	{
 		switch( annotationValue.tag )
 		{
@@ -404,30 +391,30 @@ final class ConstantPool
 		}
 	}
 
-	private void internConstAnnotationValue( ConstAnnotationValue constAnnotationValue )
+	private void internConstAnnotationValue( ConstElementValue constAnnotationValue )
 	{
 		internConstant( constAnnotationValue.valueConstant() );
 	}
 
-	private void internEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue )
+	private void internEnumAnnotationValue( EnumElementValue enumAnnotationValue )
 	{
 		internConstant( enumAnnotationValue.typeNameConstant() );
 		internConstant( enumAnnotationValue.valueNameConstant() );
 	}
 
-	private void internClassAnnotationValue( ClassAnnotationValue classAnnotationValue )
+	private void internClassAnnotationValue( ClassElementValue classAnnotationValue )
 	{
 		internConstant( classAnnotationValue.nameConstant() );
 	}
 
-	private void internAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue )
+	private void internAnnotationAnnotationValue( AnnotationElementValue annotationAnnotationValue )
 	{
 		internAnnotation( annotationAnnotationValue.annotation() );
 	}
 
-	private void internArrayAnnotationValue( ArrayAnnotationValue arrayAnnotationValue )
+	private void internArrayAnnotationValue( ArrayElementValue arrayAnnotationValue )
 	{
-		for( AnnotationValue annotationValue : arrayAnnotationValue.annotationValues() )
+		for( ElementValue annotationValue : arrayAnnotationValue.annotationValues() )
 			internAnnotationValue( annotationValue );
 	}
 
@@ -445,25 +432,30 @@ final class ConstantPool
 		constant.ifPresent( c -> internConstant( c ) );
 	}
 
-	private void internAnnotation( ByteCodeAnnotation annotation )
+	private void internAnnotation( Annotation annotation )
 	{
 		internConstant( annotation.typeConstant );
-		for( AnnotationParameter annotationParameter : annotation.parameters() )
+		internElementValuePairs( annotation.elementValuePairs() );
+	}
+
+	private void internElementValuePairs( Iterable<ElementValuePair> elementValuePairs )
+	{
+		for( ElementValuePair annotationParameter : elementValuePairs )
 		{
 			internConstant( annotationParameter.nameConstant() );
-			internAnnotationValue( annotationParameter.annotationValue() );
+			internAnnotationValue( annotationParameter.elementValue() );
 		}
 	}
 
 	private void internTypeAnnotations( Iterable<TypeAnnotation> typeAnnotations )
 	{
-		for( TypeAnnotation entry : typeAnnotations )
-			for( TypeAnnotation.ElementValuePair elementValuePair : entry.elementValuePairs() )
-			{
-				AnnotationParameter annotationParameter = elementValuePair.elementValue();
-				internConstant( annotationParameter.nameConstant() );
-				internAnnotationValue( annotationParameter.annotationValue() );
-			}
+		for( TypeAnnotation typeAnnotation : typeAnnotations )
+		{
+			//internTarget( typeAnnotation.target() ); //TODO
+			//typeAnnotation.typeIndex(); //TODO
+			//internTypePath( typeAnnotation.typePath() ); //TODO
+			internElementValuePairs( typeAnnotation.elementValuePairs() );
+		}
 	}
 
 	private void internStackMapFrame( StackMapFrame stackMapFrame )
@@ -503,36 +495,37 @@ final class ConstantPool
 
 	private void internVerificationType( VerificationType verificationType )
 	{
-		if( verificationType.isObjectVerificationType() )
+		verificationType.visit( new VerificationType.Visitor<>()
 		{
-			ObjectVerificationType objectVerificationType = verificationType.asObjectVerificationType();
-			internConstant( objectVerificationType.classConstant() );
-		}
-		else if( verificationType.isSimpleVerificationType() )
-		{
-			SimpleVerificationType simpleVerificationType = verificationType.asSimpleVerificationType();
-			Kit.get( simpleVerificationType ); //nothing to do
-		}
-		else if( verificationType.isUninitializedVerificationType() )
-		{
-			UninitializedVerificationType uninitializedVerificationType = verificationType.asUninitializedVerificationType();
-			Kit.get( uninitializedVerificationType ); //nothing to do
-		}
-		else
-			assert false;
+			@Override public Void visit( SimpleVerificationType simpleVerificationType )
+			{
+				Kit.get( simpleVerificationType ); //nothing to do
+				return null;
+			}
+			@Override public Void visit( ObjectVerificationType objectVerificationType )
+			{
+				internConstant( objectVerificationType.classConstant() );
+				return null;
+			}
+			@Override public Void visit( UninitializedVerificationType uninitializedVerificationType )
+			{
+				Kit.get( uninitializedVerificationType ); //nothing to do
+				return null;
+			}
+		} );
 	}
 
-	public int size()
+	int size()
 	{
 		return entries.size();
 	}
 
-	public Iterable<Constant> constants()
+	Iterable<Constant> constants()
 	{
 		return Kit.iterable.filtered( entries, c -> c != null );
 	}
 
-	@Override public String toString()
+	@ExcludeFromJacocoGeneratedReport  @Override public String toString()
 	{
 		return size() + " entries";
 	}

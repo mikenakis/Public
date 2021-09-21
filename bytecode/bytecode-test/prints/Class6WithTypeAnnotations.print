@@ -1,0 +1,272 @@
+ version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class6WithTypeAnnotations, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
+ ├─ extra constants (0 entries)
+ ├─ fields (1 entries)
+ │   └─ field accessFlags = [public, final], name = fieldWithAnnotation, descriptor = int
+ │       └─ attributes (3 entries)
+ │           ├─ ConstantValue 5
+ │           ├─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │           │   └─  targetType = 0x13 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │           │       ├─ target
+ │           │       │   └─  (empty)
+ │           │       └─ elementValuePairs
+ │           │           └─ parameter name = "stringParameter"
+ │           │               └─ String value =  "b"
+ │           └─ RuntimeInvisibleTypeAnnotations (RuntimeInvisibleTypeAnnotations 1 entries)
+ │               └─  targetType = 0x13 targetPath = 0 entriestypeIndex = 41, 1 elementValuePairs
+ │                   ├─ target
+ │                   │   └─  (empty)
+ │                   └─ elementValuePairs
+ │                       └─ parameter name = "value"
+ │                           └─ Integer value =  7
+ ├─ methods (9 entries)
+ │   ├─ method accessFlags = [protected], name = <init>, descriptor = void()
+ │   │   └─ attributes (3 entries)
+ │   │       ├─ Code maxStack = 2, maxLocals = 1
+ │   │       │   ├─ instructions (6 entries)
+ │   │       │   │   ├─ L21:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   ├─ L13:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_5
+ │   │       │   │   ├─      PUTFIELD int mikenakis.bytecode.test.model.Class6WithTypeAnnotations.fieldWithAnnotation
+ │   │       │   │   ├─ L22:
+ │   │       │   │   └─      RETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (3 entries)
+ │   │       │       │   ├─  lineNumber = 21, start = L21
+ │   │       │       │   ├─  lineNumber = 13, start = L13
+ │   │       │       │   └─  lineNumber = 22, start = L22
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L21, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       ├─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │       │   └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │   │       │       ├─ target
+ │   │       │       │   └─  (empty)
+ │   │       │       └─ elementValuePairs
+ │   │       │           └─ parameter name = "stringParameter"
+ │   │       │               └─ String value =  "c"
+ │   │       └─ RuntimeInvisibleTypeAnnotations (RuntimeInvisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 41, 1 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   └─ parameter name = "value"
+ │   │                       └─ Integer value =  8
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithAnnotationParameter, descriptor = char()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 1, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L27:
+ │   │       │   │   ├─      BIPUSH 99
+ │   │       │   │   └─      IRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 27, start = L27
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L27, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   └─ parameter name = "annotationParameter"
+ │   │                       └─ Annotation value =  type = java.lang.SuppressWarnings, 1 parameters
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithArrayParameter, descriptor = short()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 1, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L33:
+ │   │       │   │   ├─      BIPUSH 10
+ │   │       │   │   └─      IRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 33, start = L33
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L33, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   └─ parameter name = "arrayParameter"
+ │   │                       └─ Array value =  2 elements
+ │   │                           ├─ element "d"
+ │   │                           └─ element "e"
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithPrimitiveParameters, descriptor = long()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 2, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L40:
+ │   │       │   │   ├─      LDCx 11L
+ │   │       │   │   └─      LRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 40, start = L40
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L40, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 8 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   ├─ parameter name = "booleanParameter"
+ │   │                   │   └─ Boolean value =  0
+ │   │                   ├─ parameter name = "byteParameter"
+ │   │                   │   └─ Byte value =  2
+ │   │                   ├─ parameter name = "charParameter"
+ │   │                   │   └─ Character value =  100
+ │   │                   ├─ parameter name = "doubleParameter"
+ │   │                   │   └─ Double value =  0.1
+ │   │                   ├─ parameter name = "floatParameter"
+ │   │                   │   └─ Float value =  0.2f
+ │   │                   ├─ parameter name = "intParameter"
+ │   │                   │   └─ Integer value =  3
+ │   │                   ├─ parameter name = "longParameter"
+ │   │                   │   └─ Long value =  4294967296L
+ │   │                   └─ parameter name = "shortParameter"
+ │   │                       └─ Short value =  1000
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithStringParameter, descriptor = float()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 1, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L46:
+ │   │       │   │   ├─      LDCx 5.0f
+ │   │       │   │   └─      FRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 46, start = L46
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L46, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   └─ parameter name = "stringParameter"
+ │   │                       └─ String value =  "y"
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithClassParameter, descriptor = double()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 2, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L52:
+ │   │       │   │   ├─      LDCx 6.0
+ │   │       │   │   └─      DRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 52, start = L52
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L52, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   └─ parameter name = "classParameter"
+ │   │                       └─ Class value =  "Lmikenakis/bytecode/test/model/Class6WithTypeAnnotations;"
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithNoParameter, descriptor = int()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 1, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L58:
+ │   │       │   │   ├─      BIPUSH 7
+ │   │       │   │   └─      IRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 58, start = L58
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L58, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 0 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   ├─ method accessFlags = [public, final], name = methodWithAnnotationWithDefaultParameter, descriptor = byte()
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 1, maxLocals = 1
+ │   │       │   ├─ instructions (2 entries)
+ │   │       │   │   ├─ L64:
+ │   │       │   │   ├─      ICONST_1
+ │   │       │   │   └─      IRETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (1 entries)
+ │   │       │       │   └─  lineNumber = 64, start = L64
+ │   │       │       └─ LocalVariableTable (1 entries)
+ │   │       │           └─  index = 0, start = L64, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │   │       └─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 1 entries)
+ │   │           └─  targetType = 0x14 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │   │               ├─ target
+ │   │               │   └─  (empty)
+ │   │               └─ elementValuePairs
+ │   │                   └─ parameter name = "value"
+ │   │                       └─ Integer value =  6
+ │   └─ method accessFlags = [public, final], name = methodWithParameterAnnotations, descriptor = void( int, int, int )
+ │       └─ attributes (4 entries)
+ │           ├─ Code maxStack = 4, maxLocals = 4
+ │           │   ├─ instructions (7 entries)
+ │           │   │   ├─ L71:
+ │           │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
+ │           │   │   ├─      ILOAD_1
+ │           │   │   ├─      ILOAD_2
+ │           │   │   ├─      ILOAD_3
+ │           │   │   ├─      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int )
+ │           │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │           │   │   ├─ L72:
+ │           │   │   └─      RETURN
+ │           │   ├─ exceptionInfos (0 entries)
+ │           │   └─ attributes (2 entries)
+ │           │       ├─ LineNumberTable (2 entries)
+ │           │       │   ├─  lineNumber = 71, start = L71
+ │           │       │   └─  lineNumber = 72, start = L72
+ │           │       └─ LocalVariableTable (4 entries)
+ │           │           ├─  index = 0, start = L71, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+ │           │           ├─  index = 1, start = L71, end = @end, name = a, descriptor = int
+ │           │           ├─  index = 2, start = L71, end = @end, name = b, descriptor = int
+ │           │           └─  index = 3, start = L71, end = @end, name = c, descriptor = int
+ │           ├─ MethodParameters (3 entries)
+ │           │   ├─  accessFlags = [], name = a
+ │           │   ├─  accessFlags = [], name = b
+ │           │   └─  accessFlags = [], name = c
+ │           ├─ RuntimeVisibleTypeAnnotations (RuntimeVisibleTypeAnnotations 2 entries)
+ │           │   ├─  targetType = 0x16 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │           │   │   ├─ target
+ │           │   │   │   └─  formalParameterIndex = 1
+ │           │   │   └─ elementValuePairs
+ │           │   │       └─ parameter name = "stringParameter"
+ │           │   │           └─ String value =  "g"
+ │           │   └─  targetType = 0x16 targetPath = 0 entriestypeIndex = 37, 1 elementValuePairs
+ │           │       ├─ target
+ │           │       │   └─  formalParameterIndex = 2
+ │           │       └─ elementValuePairs
+ │           │           └─ parameter name = "stringParameter"
+ │           │               └─ String value =  "h"
+ │           └─ RuntimeInvisibleTypeAnnotations (RuntimeInvisibleTypeAnnotations 1 entries)
+ │               └─  targetType = 0x16 targetPath = 0 entriestypeIndex = 41, 1 elementValuePairs
+ │                   ├─ target
+ │                   │   └─  formalParameterIndex = 2
+ │                   └─ elementValuePairs
+ │                       └─ parameter name = "value"
+ │                           └─ Integer value =  1
+ └─ attributes (5 entries)
+     ├─ SourceFile value = "Class6WithTypeAnnotations.java"
+     ├─ RuntimeVisibleAnnotations (1 entries)
+     │   └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1, 1 parameters
+     │       └─ parameter name = "stringParameter"
+     │           └─ String value =  "a"
+     ├─ RuntimeInvisibleAnnotations (1 entries)
+     │   └─ annotation  type = mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1, 1 parameters
+     │       └─ parameter name = "value"
+     │           └─ Integer value =  6
+     ├─ BootstrapMethods (1 entries)
+     │   └─ methodHandle = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "a=\x01, b=\x01, c=\x01"
+     └─ InnerClasses (1 entries)
+         └─  outerClass = java.lang.invoke.MethodHandles, , accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = "Lookup"

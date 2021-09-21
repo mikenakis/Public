@@ -1,10 +1,10 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class OperandlessLoadConstantInstruction extends LoadConstantInstruction
 {
-
 	public static OperandlessLoadConstantInstruction of( int opCode )
 	{
 		return new OperandlessLoadConstantInstruction( opCode );
@@ -19,7 +19,7 @@ public final class OperandlessLoadConstantInstruction extends LoadConstantInstru
 		this.opCode = opCode;
 	}
 
-	@Override public int getOpCode()
+	public int getOpCode()
 	{
 		return opCode;
 	}
@@ -27,5 +27,10 @@ public final class OperandlessLoadConstantInstruction extends LoadConstantInstru
 	@Deprecated @Override public OperandlessLoadConstantInstruction asOperandlessLoadConstantInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
 	}
 }

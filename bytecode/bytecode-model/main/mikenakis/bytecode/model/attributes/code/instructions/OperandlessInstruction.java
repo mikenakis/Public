@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Collection;
 import java.util.Set;
@@ -33,7 +34,7 @@ public final class OperandlessInstruction extends Instruction
 		this.opCode = opCode;
 	}
 
-	@Override public int getOpCode()
+	public int getOpCode()
 	{
 		return opCode;
 	}
@@ -41,5 +42,10 @@ public final class OperandlessInstruction extends Instruction
 	@Deprecated @Override public OperandlessInstruction asOperandlessInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
 	}
 }

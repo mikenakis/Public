@@ -1,5 +1,6 @@
 package mikenakis.bytecode.model;
 
+import mikenakis.bytecode.exceptions.UnknownConstantException;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
@@ -22,6 +23,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.ConstantDesc;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Represents a java class file constant.
@@ -32,9 +34,9 @@ public abstract class Constant implements Comparable<Constant>
 {
 	public enum Tag
 	{
-		UndefinedOrdinal0        /**/( 0 ), //
+		UndefinedOrdinal0        /**/( 0, true), //
 		Mutf8                    /**/( 1 ), // JVMS::CONSTANT_Utf8 addresses JVMS::CONSTANT_Utf8_info
-		UndefinedOrdinal2        /**/( 2 ), //
+		UndefinedOrdinal2        /**/( 2, true ), //
 		Integer                  /**/( 3 ), // JVMS::CONSTANT_Integer addresses JVMS::CONSTANT_Integer_info
 		Float                    /**/( 4 ), // JVMS::CONSTANT_Float addresses JVMS::CONSTANT_Float_info
 		Long                     /**/( 5 ), // JVMS::CONSTANT_Long addresses JVMS::CONSTANT_Long_info
@@ -45,24 +47,39 @@ public abstract class Constant implements Comparable<Constant>
 		MethodReference          /**/( 10 ), // JVMS::CONSTANT_MethodRef addresses JVMS::CONSTANT_MethodRef_info
 		InterfaceMethodReference /**/( 11 ), // JVMS::CONSTANT_InterfaceMethodRef addresses JVMS::CONSTANT_InterfaceMethodRef_info
 		NameAndDescriptor        /**/( 12 ), // JVMS::CONSTANT_NameAndType addresses JVMS::CONSTANT_NameAndType_info
-		UndefinedOrdinal13       /**/( 13 ), //
-		UndefinedOrdinal14       /**/( 14 ), //
+		UndefinedOrdinal13       /**/( 13, true ), //
+		UndefinedOrdinal14       /**/( 14, true ), //
 		MethodHandle             /**/( 15 ), // JVMS::CONSTANT_MethodHandle addresses JVMS::CONSTANT_MethodHandle_info
 		MethodType               /**/( 16 ), // JVMS::CONSTANT_MethodType addresses JVMS::CONSTANT_MethodType_info
-		UndefinedOrdinal17       /**/( 17 ), //
+		UndefinedOrdinal17       /**/( 17, true ), //
 		InvokeDynamic            /**/( 18 ); // JVMS::CONSTANT_InvokeDynamic addresses JVMS::CONSTANT_InvokeDynamic_info
 
-		Tag( int value )
+		private static final List<Tag> values = List.of( values() );
+
+		private final boolean undefined;
+
+		Tag( int tagNumber )
 		{
-			assert value == ordinal();
+			this( tagNumber, false );
+		}
+
+		Tag( int tagNumber, boolean undefined )
+		{
+			assert tagNumber == ordinal();
+			this.undefined = undefined;
 		}
 
 		public static Tag fromNumber( int tagNumber )
 		{
-			return values()[tagNumber];
+			if( tagNumber < 0 || tagNumber >= values.size() )
+				throw new UnknownConstantException( tagNumber );
+			Tag tag = values.get( tagNumber );
+			if( tag.undefined )
+				throw new UnknownConstantException( tagNumber );
+			return tag;
 		}
 
-		public int value()
+		public int tagNumber()
 		{
 			return ordinal();
 		}

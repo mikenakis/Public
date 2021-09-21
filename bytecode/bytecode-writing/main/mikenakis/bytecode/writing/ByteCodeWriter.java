@@ -6,20 +6,20 @@ import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.kit.OmniSwitch4;
 import mikenakis.bytecode.kit.OmniSwitch5;
-import mikenakis.bytecode.model.AnnotationParameter;
-import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ElementValuePair;
+import mikenakis.bytecode.model.ElementValue;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
+import mikenakis.bytecode.model.annotationvalues.AnnotationElementValue;
+import mikenakis.bytecode.model.annotationvalues.ArrayElementValue;
+import mikenakis.bytecode.model.annotationvalues.ClassElementValue;
+import mikenakis.bytecode.model.annotationvalues.ConstElementValue;
+import mikenakis.bytecode.model.annotationvalues.EnumElementValue;
 import mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
@@ -52,7 +52,7 @@ import mikenakis.bytecode.model.attributes.SignatureAttribute;
 import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
-import mikenakis.bytecode.model.attributes.TypeAnnotation;
+import mikenakis.bytecode.model.TypeAnnotation;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
@@ -79,6 +79,7 @@ import mikenakis.bytecode.model.attributes.stackmap.SameLocals1StackItemStackMap
 import mikenakis.bytecode.model.attributes.stackmap.SameStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.StackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.verification.ObjectVerificationType;
+import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.UninitializedVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.attributes.target.CatchTarget;
@@ -166,7 +167,7 @@ public class ByteCodeWriter
 
 	private static void writeConstant( ConstantPool constantPool, BufferWriter bufferWriter, Constant constant )
 	{
-		bufferWriter.writeUnsignedByte( constant.tag.value() );
+		bufferWriter.writeUnsignedByte( constant.tag.tagNumber() );
 		switch( constant.tag )
 		{
 			case Mutf8:
@@ -262,7 +263,7 @@ public class ByteCodeWriter
 				break;
 			}
 			default:
-				throw new UnknownConstantException( constant.tag.value() );
+				throw new UnknownConstantException( constant.tag.tagNumber() );
 		}
 	}
 
@@ -690,7 +691,7 @@ public class ByteCodeWriter
 		return null;
 	}
 
-	private static void writeAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationValue annotationValue )
+	private static void writeAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ElementValue annotationValue )
 	{
 		bufferWriter.writeUnsignedByte( annotationValue.tag.character );
 		switch( annotationValue.tag )
@@ -709,36 +710,36 @@ public class ByteCodeWriter
 		}
 	}
 
-	private static void writeConstAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ConstAnnotationValue constAnnotationValue )
+	private static void writeConstAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ConstElementValue constAnnotationValue )
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( constAnnotationValue.valueConstant() ) );
 	}
 
-	private static void writeEnumAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, EnumAnnotationValue enumAnnotationValue )
+	private static void writeEnumAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, EnumElementValue enumAnnotationValue )
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.typeNameConstant() ) );
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.valueNameConstant() ) );
 	}
 
-	private static void writeClassAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ClassAnnotationValue classAnnotationValue )
+	private static void writeClassAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ClassElementValue classAnnotationValue )
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.nameConstant() ) );
 	}
 
-	private static void writeAnnotationAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationAnnotationValue annotationAnnotationValue )
+	private static void writeAnnotationAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationElementValue annotationAnnotationValue )
 	{
-		ByteCodeAnnotation annotation = annotationAnnotationValue.annotation();
+		Annotation annotation = annotationAnnotationValue.annotation();
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotation.typeConstant ) );
-		bufferWriter.writeUnsignedShort( annotation.parameters().size() );
-		for( AnnotationParameter annotationParameter : annotation.parameters() )
+		bufferWriter.writeUnsignedShort( annotation.elementValuePairs().size() );
+		for( ElementValuePair annotationParameter : annotation.elementValuePairs() )
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
 	}
 
-	private static void writeArrayAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ArrayAnnotationValue arrayAnnotationValue )
+	private static void writeArrayAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ArrayElementValue arrayAnnotationValue )
 	{
-		List<AnnotationValue> annotationValues = arrayAnnotationValue.annotationValues();
+		List<ElementValue> annotationValues = arrayAnnotationValue.annotationValues();
 		bufferWriter.writeUnsignedShort( annotationValues.size() );
-		for( AnnotationValue annotationValue : annotationValues )
+		for( ElementValue annotationValue : annotationValues )
 			writeAnnotationValue( constantPool, bufferWriter, annotationValue );
 	}
 
@@ -825,24 +826,26 @@ public class ByteCodeWriter
 
 	private static void writeVerificationType( ConstantPool constantPool, BufferWriter bufferWriter, VerificationType verificationType, LocationMap locationMap )
 	{
-		bufferWriter.writeUnsignedByte( verificationType.tag );
-		if( verificationType.isObjectVerificationType() )
+		bufferWriter.writeUnsignedByte( verificationType.tag.number() );
+		verificationType.visit( new VerificationType.Visitor<Void>()
 		{
-			ObjectVerificationType objectVerificationType = verificationType.asObjectVerificationType();
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( objectVerificationType.classConstant() ) );
-		}
-		else if( verificationType.isSimpleVerificationType() )
-		{
-			Kit.get( true ); //nothing to do
-		}
-		else if( verificationType.isUninitializedVerificationType() )
-		{
-			UninitializedVerificationType uninitializedVerificationType = verificationType.asUninitializedVerificationType();
-			int targetLocation = locationMap.getLocation( uninitializedVerificationType.instruction );
-			bufferWriter.writeUnsignedShort( targetLocation );
-		}
-		else
-			assert false;
+			@Override public Void visit( SimpleVerificationType simpleVerificationType )
+			{
+				Kit.get( true ); //nothing to do
+				return null;
+			}
+			@Override public Void visit( ObjectVerificationType objectVerificationType )
+			{
+				bufferWriter.writeUnsignedShort( constantPool.getIndex( objectVerificationType.classConstant() ) );
+				return null;
+			}
+			@Override public Void visit( UninitializedVerificationType uninitializedVerificationType )
+			{
+				int targetLocation = locationMap.getLocation( uninitializedVerificationType.instruction );
+				bufferWriter.writeUnsignedShort( targetLocation );
+				return null;
+			}
+		} );
 	}
 
 	private static Void writeSyntheticAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
@@ -901,99 +904,84 @@ public class ByteCodeWriter
 
 	private static void writeTypeAnnotation( ConstantPool constantPool, BufferWriter bufferWriter, TypeAnnotation typeAnnotation )
 	{
-		bufferWriter.writeUnsignedByte( typeAnnotation.targetType() );
-		writeTarget( constantPool, bufferWriter, typeAnnotation.target() );
-		writeTypePath( constantPool, bufferWriter, typeAnnotation.typePath() );
-		bufferWriter.writeUnsignedShort( typeAnnotation.typeIndex() );
-		List<TypeAnnotation.ElementValuePair> elementValuePairs = typeAnnotation.elementValuePairs();
-		bufferWriter.writeUnsignedShort( elementValuePairs.size() );
-		for( TypeAnnotation.ElementValuePair elementValuePair : elementValuePairs )
+		Target target = typeAnnotation.target();
+		bufferWriter.writeUnsignedByte( target.type.number );
+		target.visit( new Target.Visitor<Void>()
 		{
-			bufferWriter.writeUnsignedShort( elementValuePair.elementNameIndex() );
-			writeAnnotationParameter( constantPool, bufferWriter, elementValuePair.elementValue() );
-		}
-	}
-
-	private static void writeTarget( ConstantPool constantPool, BufferWriter bufferWriter, Target target )
-	{
-		assert false; //this has not been tested. We probably need to save the target tag, but we do not have it because we did not store it!
-		if( target.isCatchTarget() )
-		{
-			CatchTarget catchTarget = target.asCatchTarget();
-			bufferWriter.writeUnsignedShort( catchTarget.exceptionTableIndex );
-		}
-		else if( target.isEmptyTarget() )
-		{
-			EmptyTarget emptyTarget = target.asEmptyTarget();
-			Kit.get( emptyTarget ); //nothing to do
-		}
-		else if( target.isFormalParameterTarget() )
-		{
-			FormalParameterTarget formalParameterTarget = target.asFormalParameterTarget();
-			bufferWriter.writeUnsignedByte( formalParameterTarget.formalParameterIndex );
-		}
-		else if( target.isLocalVariableTarget() )
-		{
-			LocalVariableTarget localVariableTarget = target.asLocalVariableTarget();
-			bufferWriter.writeUnsignedShort( localVariableTarget.entries.size() );
-			for( LocalVariableTarget.Entry entry : localVariableTarget.entries )
+			@Override public Void visit( CatchTarget catchTarget )
 			{
-				bufferWriter.writeUnsignedShort( entry.startPc() );
-				bufferWriter.writeUnsignedShort( entry.length() );
-				bufferWriter.writeUnsignedShort( entry.index() );
+				bufferWriter.writeUnsignedShort( catchTarget.exceptionTableIndex );
+				return null;
 			}
-		}
-		else if( target.isOffsetTarget() )
-		{
-			OffsetTarget offsetTarget = target.asOffsetTarget();
-			bufferWriter.writeUnsignedShort( offsetTarget.offset );
-		}
-		else if( target.isSupertypeTarget() )
-		{
-			SupertypeTarget supertypeTarget = target.asSupertypeTarget();
-			bufferWriter.writeUnsignedByte( supertypeTarget.supertypeIndex );
-		}
-		else if( target.isThrowsTarget() )
-		{
-			ThrowsTarget throwsTarget = target.asThrowsTarget();
-			bufferWriter.writeUnsignedShort( throwsTarget.throwsTypeIndex );
-		}
-		else if( target.isTypeArgumentTarget() )
-		{
-			TypeArgumentTarget typeArgumentTarget = target.asTypeArgumentTarget();
-			bufferWriter.writeUnsignedShort( typeArgumentTarget.offset );
-			bufferWriter.writeUnsignedByte( typeArgumentTarget.typeArgumentIndex );
-		}
-		else if( target.isTypeParameterBoundTarget() )
-		{
-			TypeParameterBoundTarget typeParameterBoundTarget = target.asTypeParameterBoundTarget();
-			bufferWriter.writeUnsignedByte( typeParameterBoundTarget.typeParameterIndex );
-			bufferWriter.writeUnsignedByte( typeParameterBoundTarget.boundIndex );
-		}
-		else if( target.isTypeParameterTarget() )
-		{
-			TypeParameterTarget typeParameterTarget = target.asTypeParameterTarget();
-			bufferWriter.writeUnsignedByte( typeParameterTarget.typeParameterIndex );
-		}
-		else
-			assert false;
-	}
-
-	private static void writeTypePath( ConstantPool constantPool, BufferWriter bufferWriter, TypePath typePath )
-	{
-		List<TypePath.Entry> entries = typePath.entries();
+			@Override public Void visit( EmptyTarget emptyTarget )
+			{
+				Kit.get( emptyTarget ); //nothing to do
+				return null;
+			}
+			@Override public Void visit( FormalParameterTarget formalParameterTarget )
+			{
+				bufferWriter.writeUnsignedByte( formalParameterTarget.formalParameterIndex );
+				return null;
+			}
+			@Override public Void visit( LocalVariableTarget localVariableTarget )
+			{
+				bufferWriter.writeUnsignedShort( localVariableTarget.entries.size() );
+				for( LocalVariableTarget.Entry entry : localVariableTarget.entries )
+				{
+					bufferWriter.writeUnsignedShort( entry.startPc() );
+					bufferWriter.writeUnsignedShort( entry.length() );
+					bufferWriter.writeUnsignedShort( entry.index() );
+				}
+				return null;
+			}
+			@Override public Void visit( OffsetTarget offsetTarget )
+			{
+				bufferWriter.writeUnsignedShort( offsetTarget.offset );
+				return null;
+			}
+			@Override public Void visit( SupertypeTarget supertypeTarget )
+			{
+				bufferWriter.writeUnsignedByte( supertypeTarget.supertypeIndex );
+				return null;
+			}
+			@Override public Void visit( ThrowsTarget throwsTarget )
+			{
+				bufferWriter.writeUnsignedShort( throwsTarget.throwsTypeIndex );
+				return null;
+			}
+			@Override public Void visit( TypeArgumentTarget typeArgumentTarget )
+			{
+				bufferWriter.writeUnsignedShort( typeArgumentTarget.offset );
+				bufferWriter.writeUnsignedByte( typeArgumentTarget.typeArgumentIndex );
+				return null;
+			}
+			@Override public Void visit( TypeParameterBoundTarget typeParameterBoundTarget )
+			{
+				bufferWriter.writeUnsignedByte( typeParameterBoundTarget.typeParameterIndex );
+				bufferWriter.writeUnsignedByte( typeParameterBoundTarget.boundIndex );
+				return null;
+			}
+			@Override public Void visit( TypeParameterTarget typeParameterTarget )
+			{
+				bufferWriter.writeUnsignedByte( typeParameterTarget.typeParameterIndex );
+				return null;
+			}
+		} );
+		List<TypePath.Entry> entries = typeAnnotation.typePath().entries();
 		bufferWriter.writeUnsignedByte( entries.size() );
 		for( TypePath.Entry entry : entries )
 		{
 			bufferWriter.writeUnsignedByte( entry.pathKind() );
 			bufferWriter.writeUnsignedByte( entry.argumentIndex() );
 		}
+		bufferWriter.writeUnsignedShort( typeAnnotation.typeIndex() );
+		writeElementValuePairs( constantPool, bufferWriter, typeAnnotation.elementValuePairs() );
 	}
 
-	private static void writeAnnotationParameter( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationParameter annotationParameter )
+	private static void writeAnnotationParameter( ConstantPool constantPool, BufferWriter bufferWriter, ElementValuePair annotationParameter )
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotationParameter.nameConstant() ) );
-		writeAnnotationValue( constantPool, bufferWriter, annotationParameter.annotationValue() );
+		writeAnnotationValue( constantPool, bufferWriter, annotationParameter.elementValue() );
 	}
 
 	private static Void writeRuntimeVisibleParameterAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
@@ -1020,7 +1008,7 @@ public class ByteCodeWriter
 
 	private static void writeParameterAnnotationSet( ConstantPool constantPool, BufferWriter bufferWriter, ParameterAnnotationSet parameterAnnotationSet )
 	{
-		List<ByteCodeAnnotation> annotations = parameterAnnotationSet.annotations();
+		List<Annotation> annotations = parameterAnnotationSet.annotations();
 		writeAnnotations( constantPool, bufferWriter, annotations );
 	}
 
@@ -1028,7 +1016,7 @@ public class ByteCodeWriter
 	{
 		assert attributeNameConstant == RuntimeInvisibleAnnotationsAttribute.kind.mutf8Name;
 		RuntimeInvisibleAnnotationsAttribute runtimeInvisibleAnnotationsAttribute = attribute.asRuntimeInvisibleAnnotationsAttribute();
-		Collection<ByteCodeAnnotation> annotations = runtimeInvisibleAnnotationsAttribute.annotations();
+		Collection<Annotation> annotations = runtimeInvisibleAnnotationsAttribute.annotations();
 		writeAnnotations( constantPool, bufferWriter, annotations );
 		return null;
 	}
@@ -1036,24 +1024,28 @@ public class ByteCodeWriter
 	private static Void writeRuntimeVisibleAnnotationsAttribute( Mutf8Constant attributeNameConstant, ConstantPool constantPool, BufferWriter bufferWriter, Attribute attribute )
 	{
 		RuntimeVisibleAnnotationsAttribute runtimeVisibleAnnotationsAttribute = attribute.asRuntimeVisibleAnnotationsAttribute();
-		Collection<ByteCodeAnnotation> annotations = runtimeVisibleAnnotationsAttribute.annotations();
+		Collection<Annotation> annotations = runtimeVisibleAnnotationsAttribute.annotations();
 		writeAnnotations( constantPool, bufferWriter, annotations );
 		return null;
 	}
 
-	private static void writeAnnotations( ConstantPool constantPool, BufferWriter bufferWriter, Collection<ByteCodeAnnotation> annotations )
+	private static void writeAnnotations( ConstantPool constantPool, BufferWriter bufferWriter, Collection<Annotation> annotations )
 	{
 		bufferWriter.writeUnsignedShort( annotations.size() );
-		for( ByteCodeAnnotation annotation : annotations )
+		for( Annotation annotation : annotations )
 			writeAnnotation( constantPool, bufferWriter, annotation );
 	}
 
-	private static void writeAnnotation( ConstantPool constantPool, BufferWriter bufferWriter, ByteCodeAnnotation byteCodeAnnotation )
+	private static void writeAnnotation( ConstantPool constantPool, BufferWriter bufferWriter, Annotation byteCodeAnnotation )
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeAnnotation.typeConstant ) );
-		List<AnnotationParameter> annotationParameters = byteCodeAnnotation.parameters();
-		bufferWriter.writeUnsignedShort( annotationParameters.size() );
-		for( AnnotationParameter annotationParameter : annotationParameters )
+		writeElementValuePairs( constantPool, bufferWriter, byteCodeAnnotation.elementValuePairs() );
+	}
+
+	private static void writeElementValuePairs( ConstantPool constantPool, BufferWriter bufferWriter, Collection<ElementValuePair> elementValuePairs )
+	{
+		bufferWriter.writeUnsignedShort( elementValuePairs.size() );
+		for( ElementValuePair annotationParameter : elementValuePairs )
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
 	}
 

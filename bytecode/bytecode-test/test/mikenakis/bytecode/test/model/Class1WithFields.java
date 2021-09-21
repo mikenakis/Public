@@ -6,11 +6,11 @@ package mikenakis.bytecode.test.model;
  * @author Michael Belivanakis (michael.gr)
  */
 @SuppressWarnings( { "FieldMayBeStatic", "unused" } )
-public abstract class Class1
+public abstract class Class1WithFields
 {
 	public static final String PublicConstant = "publicConstantValue";
 
-	private final Enum1 enum1;
+	private final Enum1 enumMember;
 	private final boolean booleanMember = true;
 	private final byte byteMember = 1;
 	private final char charMember = 'c';
@@ -23,18 +23,18 @@ public abstract class Class1
 	private final int[] arrayOfPrimitiveMember = { 0 };
 	private final String[] arrayOfObjectMember = { "" };
 
-	protected Class1()
+	protected Class1WithFields()
 	{
 		this( Enum1.ENUM_CONSTANT_A );
 	}
 
-	protected Class1( Enum1 enum1 )
+	protected Class1WithFields( Enum1 enumMember )
 	{
-		this.enum1 = enum1;
+		this.enumMember = enumMember;
 	}
 
 	@Override public String toString()
 	{
-		return getClass().getName() + " " + enum1;
+		return getClass().getName() + " " + enumMember;
 	}
 }

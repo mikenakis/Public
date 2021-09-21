@@ -11,24 +11,24 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class ByteCodeAnnotation
+public final class Annotation
 {
-	public static ByteCodeAnnotation of( Mutf8Constant typeConstant, List<AnnotationParameter> parameters )
+	public static Annotation of( Mutf8Constant typeConstant, List<ElementValuePair> parameters )
 	{
-		return new ByteCodeAnnotation( typeConstant, parameters );
+		return new Annotation( typeConstant, parameters );
 	}
 
 	public final Mutf8Constant typeConstant;
-	private final List<AnnotationParameter> parameters;
+	private final List<ElementValuePair> parameters;
 
-	private ByteCodeAnnotation( Mutf8Constant typeConstant, List<AnnotationParameter> parameters )
+	private Annotation( Mutf8Constant typeConstant, List<ElementValuePair> parameters )
 	{
 		this.typeConstant = typeConstant;
 		this.parameters = parameters;
 	}
 
 	public ClassDesc typeDescriptor() {	return ClassDesc.ofDescriptor( typeConstant.stringValue() ); }
-	public List<AnnotationParameter> parameters() { return parameters; }
+	public List<ElementValuePair> elementValuePairs() { return parameters; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

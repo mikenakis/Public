@@ -45,7 +45,7 @@ public abstract class Class2WithVariousInstructions
 				System.out.println( "105" );
 				break;
 			default:
-				System.out.println( Class1.PublicConstant );
+				System.out.println( Class1WithFields.PublicConstant );
 				break;
 		}
 	}

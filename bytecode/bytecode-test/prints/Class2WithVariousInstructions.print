@@ -1,8 +1,8 @@
  version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, superClass = java.lang.Object
  ├─ interfaces (0 entries)
  ├─ extra constants (2 entries)
- │   ├─ Mutf8 "mikenakis/bytecode/test/model/Class1"
- │   └─ Class name = "mikenakis/bytecode/test/model/Class1"
+ │   ├─ Mutf8 "mikenakis/bytecode/test/model/Class1WithFields"
+ │   └─ Class name = "mikenakis/bytecode/test/model/Class1WithFields"
  ├─ fields (0 entries)
  ├─ methods (8 entries)
  │   ├─ method accessFlags = [public], name = <init>, descriptor = void()
@@ -264,7 +264,7 @@
  │   │               │   ├─  index = 0, start = L88, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
  │   │               │   └─  index = 1, start = L89, end = @end, name = list, descriptor = java.util.List
  │   │               └─ LocalVariableTypeTable (1 entries)
- │   │                   └─  index = 1, start = L89, end = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)!
+ │   │                   └─  index = 1, start = L89, end = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)
  │   └─ method accessFlags = [private, static, synthetic], name = lambda$methodWithLambda$0, descriptor = int( java.lang.String, java.lang.String )
  │       └─ attributes (1 entries)
  │           └─ Code maxStack = 2, maxLocals = 2

@@ -1,0 +1,168 @@
+ version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class1WithFields, superClass = java.lang.Object
+ ├─ interfaces (0 entries)
+ ├─ extra constants (0 entries)
+ ├─ fields (13 entries)
+ │   ├─ field accessFlags = [public, static, final], name = PublicConstant, descriptor = java.lang.String
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue "publicConstantValue"
+ │   ├─ field accessFlags = [private, final], name = enumMember, descriptor = mikenakis.bytecode.test.model.Enum1
+ │   ├─ field accessFlags = [private, final], name = booleanMember, descriptor = boolean
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 1
+ │   ├─ field accessFlags = [private, final], name = byteMember, descriptor = byte
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 1
+ │   ├─ field accessFlags = [private, final], name = charMember, descriptor = char
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 99
+ │   ├─ field accessFlags = [private, final], name = doubleMember, descriptor = double
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 0.5
+ │   ├─ field accessFlags = [private, final], name = floatMember, descriptor = float
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 0.25f
+ │   ├─ field accessFlags = [private, final], name = intMember, descriptor = int
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 2
+ │   ├─ field accessFlags = [private, final], name = longMember, descriptor = long
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 3L
+ │   ├─ field accessFlags = [private, final], name = shortVar, descriptor = short
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue 4
+ │   ├─ field accessFlags = [private, final], name = stringMember, descriptor = java.lang.String
+ │   │   └─ attributes (1 entries)
+ │   │       └─ ConstantValue "x"
+ │   ├─ field accessFlags = [private, final], name = arrayOfPrimitiveMember, descriptor = int[]
+ │   └─ field accessFlags = [private, final], name = arrayOfObjectMember, descriptor = java.lang.String[]
+ ├─ methods (3 entries)
+ │   ├─ method accessFlags = [protected], name = <init>, descriptor = void()
+ │   │   └─ attributes (1 entries)
+ │   │       └─ Code maxStack = 2, maxLocals = 1
+ │   │           ├─ instructions (4 entries)
+ │   │           │   ├─ L28:
+ │   │           │   ├─      ALOAD_0
+ │   │           │   ├─      GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
+ │   │           │   ├─      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class1WithFields, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Enum1 )
+ │   │           │   ├─ L29:
+ │   │           │   └─      RETURN
+ │   │           ├─ exceptionInfos (0 entries)
+ │   │           └─ attributes (2 entries)
+ │   │               ├─ LineNumberTable (2 entries)
+ │   │               │   ├─  lineNumber = 28, start = L28
+ │   │               │   └─  lineNumber = 29, start = L29
+ │   │               └─ LocalVariableTable (1 entries)
+ │   │                   └─  index = 0, start = L28, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class1WithFields
+ │   ├─ method accessFlags = [protected], name = <init>, descriptor = void( mikenakis.bytecode.test.model.Enum1 )
+ │   │   └─ attributes (2 entries)
+ │   │       ├─ Code maxStack = 5, maxLocals = 2
+ │   │       │   ├─ instructions (49 entries)
+ │   │       │   │   ├─ L32:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   ├─ L14:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_1
+ │   │       │   │   ├─      PUTFIELD boolean mikenakis.bytecode.test.model.Class1WithFields.booleanMember
+ │   │       │   │   ├─ L15:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_1
+ │   │       │   │   ├─      PUTFIELD byte mikenakis.bytecode.test.model.Class1WithFields.byteMember
+ │   │       │   │   ├─ L16:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      BIPUSH 99
+ │   │       │   │   ├─      PUTFIELD char mikenakis.bytecode.test.model.Class1WithFields.charMember
+ │   │       │   │   ├─ L17:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      LDCx 0.5
+ │   │       │   │   ├─      PUTFIELD double mikenakis.bytecode.test.model.Class1WithFields.doubleMember
+ │   │       │   │   ├─ L18:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      LDCx 0.25f
+ │   │       │   │   ├─      PUTFIELD float mikenakis.bytecode.test.model.Class1WithFields.floatMember
+ │   │       │   │   ├─ L19:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_2
+ │   │       │   │   ├─      PUTFIELD int mikenakis.bytecode.test.model.Class1WithFields.intMember
+ │   │       │   │   ├─ L20:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      LDCx 3L
+ │   │       │   │   ├─      PUTFIELD long mikenakis.bytecode.test.model.Class1WithFields.longMember
+ │   │       │   │   ├─ L21:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_4
+ │   │       │   │   ├─      PUTFIELD short mikenakis.bytecode.test.model.Class1WithFields.shortVar
+ │   │       │   │   ├─ L22:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      LDCx "x"
+ │   │       │   │   ├─      PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class1WithFields.stringMember
+ │   │       │   │   ├─ L23:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_1
+ │   │       │   │   ├─      NEWARRAY INT
+ │   │       │   │   ├─      DUP
+ │   │       │   │   ├─      ICONST_0
+ │   │       │   │   ├─      ICONST_0
+ │   │       │   │   ├─      IASTORE
+ │   │       │   │   ├─      PUTFIELD int[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfPrimitiveMember
+ │   │       │   │   ├─ L24:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ICONST_1
+ │   │       │   │   ├─      ANEWARRAY java.lang.String
+ │   │       │   │   ├─      DUP
+ │   │       │   │   ├─      ICONST_0
+ │   │       │   │   ├─      LDCx ""
+ │   │       │   │   ├─      AASTORE
+ │   │       │   │   ├─      PUTFIELD java.lang.String[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfObjectMember
+ │   │       │   │   ├─ L33:
+ │   │       │   │   ├─      ALOAD_0
+ │   │       │   │   ├─      ALOAD_1
+ │   │       │   │   ├─      PUTFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
+ │   │       │   │   ├─ L34:
+ │   │       │   │   └─      RETURN
+ │   │       │   ├─ exceptionInfos (0 entries)
+ │   │       │   └─ attributes (2 entries)
+ │   │       │       ├─ LineNumberTable (14 entries)
+ │   │       │       │   ├─  lineNumber = 32, start = L32
+ │   │       │       │   ├─  lineNumber = 14, start = L14
+ │   │       │       │   ├─  lineNumber = 15, start = L15
+ │   │       │       │   ├─  lineNumber = 16, start = L16
+ │   │       │       │   ├─  lineNumber = 17, start = L17
+ │   │       │       │   ├─  lineNumber = 18, start = L18
+ │   │       │       │   ├─  lineNumber = 19, start = L19
+ │   │       │       │   ├─  lineNumber = 20, start = L20
+ │   │       │       │   ├─  lineNumber = 21, start = L21
+ │   │       │       │   ├─  lineNumber = 22, start = L22
+ │   │       │       │   ├─  lineNumber = 23, start = L23
+ │   │       │       │   ├─  lineNumber = 24, start = L24
+ │   │       │       │   ├─  lineNumber = 33, start = L33
+ │   │       │       │   └─  lineNumber = 34, start = L34
+ │   │       │       └─ LocalVariableTable (2 entries)
+ │   │       │           ├─  index = 0, start = L32, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class1WithFields
+ │   │       │           └─  index = 1, start = L32, end = @end, name = enumMember, descriptor = mikenakis.bytecode.test.model.Enum1
+ │   │       └─ MethodParameters (1 entries)
+ │   │           └─  accessFlags = [], name = enumMember
+ │   └─ method accessFlags = [public], name = toString, descriptor = java.lang.String()
+ │       └─ attributes (1 entries)
+ │           └─ Code maxStack = 2, maxLocals = 1
+ │               ├─ instructions (7 entries)
+ │               │   ├─ L38:
+ │               │   ├─      ALOAD_0
+ │               │   ├─      INVOKEVIRTUAL type = java.lang.Object, name = getClass, descriptor = java.lang.Class()
+ │               │   ├─      INVOKEVIRTUAL type = java.lang.Class, name = getName, descriptor = java.lang.String()
+ │               │   ├─      ALOAD_0
+ │               │   ├─      GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
+ │               │   ├─      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
+ │               │   └─      ARETURN
+ │               ├─ exceptionInfos (0 entries)
+ │               └─ attributes (2 entries)
+ │                   ├─ LineNumberTable (1 entries)
+ │                   │   └─  lineNumber = 38, start = L38
+ │                   └─ LocalVariableTable (1 entries)
+ │                       └─  index = 0, start = L38, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class1WithFields
+ └─ attributes (3 entries)
+     ├─ SourceFile value = "Class1WithFields.java"
+     ├─ BootstrapMethods (1 entries)
+     │   └─ methodHandle = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "\x01 \x01"
+     └─ InnerClasses (1 entries)
+         └─  outerClass = java.lang.invoke.MethodHandles, , accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = "Lookup"

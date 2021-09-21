@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +40,13 @@ public final class LookupSwitchInstruction extends Instruction
 		this.defaultInstruction = Optional.of( defaultInstruction );
 	}
 
-	@Override public int getOpCode()
-	{
-		return OpCode.LOOKUPSWITCH;
-	}
-
 	@Deprecated @Override public LookupSwitchInstruction asLookupSwitchInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( OpCode.LOOKUPSWITCH );
 	}
 }

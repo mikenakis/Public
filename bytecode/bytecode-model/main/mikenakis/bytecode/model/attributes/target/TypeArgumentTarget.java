@@ -2,8 +2,6 @@ package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.util.Optional;
-
 public final class TypeArgumentTarget extends Target // "type_argument_target" in jvms-4.7.20.1
 {
 	public final int offset;
@@ -17,7 +15,7 @@ public final class TypeArgumentTarget extends Target // "type_argument_target" i
 		this.typeArgumentIndex = typeArgumentIndex;
 	}
 
-	@Deprecated @Override public Optional<TypeArgumentTarget> tryAsTypeArgumentTarget() { return Optional.of( this ); }
+	@Deprecated @Override public TypeArgumentTarget asTypeArgumentTarget() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

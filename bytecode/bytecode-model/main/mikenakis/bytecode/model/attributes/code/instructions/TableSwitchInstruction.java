@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,13 +56,13 @@ public final class TableSwitchInstruction extends Instruction
 		return targetInstructions;
 	}
 
-	@Override public int getOpCode()
-	{
-		return OpCode.TABLESWITCH;
-	}
-
 	@Deprecated @Override public TableSwitchInstruction asTableSwitchInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( OpCode.TABLESWITCH );
 	}
 }

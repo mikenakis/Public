@@ -2,8 +2,6 @@ package mikenakis.bytecode.model.attributes.stackmap.verification;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 
-import java.util.Optional;
-
 /**
  * 'Uninitialized' {@link VerificationType}.
  *
@@ -16,16 +14,13 @@ public final class UninitializedVerificationType extends VerificationType
 		return new UninitializedVerificationType( instruction );
 	}
 
-	public static final int tag = 8;
-	public static final String tagName = "Uninitialized";
-
 	public final Instruction instruction;
 
 	private UninitializedVerificationType( Instruction instruction )
 	{
-		super( tag );
+		super( Tag.Uninitialized );
 		this.instruction = instruction;
 	}
 
-	@Deprecated @Override public Optional<UninitializedVerificationType> tryAsUninitializedVerificationType() { return Optional.of( this ); }
+	@Deprecated @Override protected UninitializedVerificationType asUninitializedVerificationType() { return this; }
 }

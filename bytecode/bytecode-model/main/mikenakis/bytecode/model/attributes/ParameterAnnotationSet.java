@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -14,19 +14,19 @@ public final class ParameterAnnotationSet
 		return of( new ArrayList<>() );
 	}
 
-	public static ParameterAnnotationSet of( List<ByteCodeAnnotation> annotations )
+	public static ParameterAnnotationSet of( List<Annotation> annotations )
 	{
 		return new ParameterAnnotationSet( annotations );
 	}
 
-	private final List<ByteCodeAnnotation> annotations;
+	private final List<Annotation> annotations;
 
-	private ParameterAnnotationSet( List<ByteCodeAnnotation> annotations )
+	private ParameterAnnotationSet( List<Annotation> annotations )
 	{
 		this.annotations = annotations;
 	}
 
-	public List<ByteCodeAnnotation> annotations()
+	public List<Annotation> annotations()
 	{
 		return Collections.unmodifiableList( annotations );
 	}

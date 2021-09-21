@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.ByteCodeAnnotation;
+import mikenakis.bytecode.model.Annotation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public final class RuntimeInvisibleAnnotationsAttribute extends AnnotationsAttri
 		return of( new ArrayList<>() );
 	}
 
-	public static RuntimeInvisibleAnnotationsAttribute of( List<ByteCodeAnnotation> annotations )
+	public static RuntimeInvisibleAnnotationsAttribute of( List<Annotation> annotations )
 	{
 		return new RuntimeInvisibleAnnotationsAttribute( annotations );
 	}
@@ -28,7 +28,7 @@ public final class RuntimeInvisibleAnnotationsAttribute extends AnnotationsAttri
 	public static final String name = "RuntimeInvisibleAnnotations";
 	public static final Kind kind = new Kind( name );
 
-	private RuntimeInvisibleAnnotationsAttribute( List<ByteCodeAnnotation> annotations )
+	private RuntimeInvisibleAnnotationsAttribute( List<Annotation> annotations )
 	{
 		super( kind, annotations );
 	}

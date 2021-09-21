@@ -3,7 +3,6 @@ package mikenakis.bytecode.model.attributes.target;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.List;
-import java.util.Optional;
 
 public final class LocalVariableTarget extends Target // "localvar_target" in jvms-4.7.20.1
 {
@@ -39,7 +38,7 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 		this.entries = entries;
 	}
 
-	@Deprecated @Override public Optional<LocalVariableTarget> tryAsLocalVariableTarget() { return Optional.of( this ); }
+	@Deprecated @Override public LocalVariableTarget asLocalVariableTarget() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

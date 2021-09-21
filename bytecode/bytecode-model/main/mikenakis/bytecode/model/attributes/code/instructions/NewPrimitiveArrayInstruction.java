@@ -3,6 +3,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.List;
 import java.util.Map;
@@ -57,13 +58,13 @@ public final class NewPrimitiveArrayInstruction extends Instruction
 		this.type = type.number;
 	}
 
-	@Override public int getOpCode()
-	{
-		return OpCode.NEWARRAY;
-	}
-
 	@Deprecated @Override public NewPrimitiveArrayInstruction asNewPrimitiveArrayInstruction()
 	{
 		return this;
+	}
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( OpCode.NEWARRAY );
 	}
 }
