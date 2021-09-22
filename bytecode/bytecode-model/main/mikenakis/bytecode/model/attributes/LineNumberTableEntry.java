@@ -8,17 +8,17 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class LineNumberEntry
+public final class LineNumberTableEntry
 {
-	public static LineNumberEntry of( Instruction instruction, int lineNumber )
+	public static LineNumberTableEntry of( Instruction instruction, int lineNumber )
 	{
-		return new LineNumberEntry( instruction, lineNumber );
+		return new LineNumberTableEntry( instruction, lineNumber );
 	}
 
 	private final Instruction instruction;
 	private final int lineNumber;
 
-	private LineNumberEntry( Instruction instruction, int lineNumber )
+	private LineNumberTableEntry( Instruction instruction, int lineNumber )
 	{
 		this.instruction = instruction;
 		this.lineNumber = lineNumber;

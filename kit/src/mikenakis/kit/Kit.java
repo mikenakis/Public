@@ -129,7 +129,8 @@ public final class Kit
 	 */
 	@ExcludeFromJacocoGeneratedReport public static <T> T fail()
 	{
-		throw new AssertionError();
+		assert false;
+		return null;
 	}
 
 	/**

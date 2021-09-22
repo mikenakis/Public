@@ -1,10 +1,10 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
+import mikenakis.bytecode.exceptions.InvalidVerificationTypeTagException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.List;
 
 /**
  * Verification Type.
@@ -13,95 +13,46 @@ import java.util.List;
  */
 public abstract class VerificationType
 {
-	public enum Tag
+	public static final int tagTop               /**/ = 0;
+	public static final int tagInteger           /**/ = 1;
+	public static final int tagFloat             /**/ = 2;
+	public static final int tagDouble            /**/ = 3;
+	public static final int tagLong              /**/ = 4;
+	public static final int tagNull              /**/ = 5;
+	public static final int tagUninitializedThis /**/ = 6;
+	public static final int tagObject            /**/ = 7;
+	public static final int tagUninitialized     /**/ = 8;
+
+	public static String tagName( int verificationTypeTag )
 	{
-		Top               /**/( 0 ), //
-		Integer           /**/( 1 ), //
-		Float             /**/( 2 ), //
-		Double            /**/( 3 ), //
-		Long              /**/( 4 ), //
-		Null              /**/( 5 ), //
-		UninitializedThis /**/( 6 ), //
-		Object            /**/( 7 ), //
-		Uninitialized     /**/( 8 );
-
-		private static final List<Tag> values = List.of( values() );
-
-		public static Tag fromNumber( int number )
+		return switch( verificationTypeTag )
 		{
-			return values.get( number );
-		}
-
-		Tag( int tagNumber )
-		{
-			assert tagNumber == ordinal();
-		}
-
-		public int number()
-		{
-			return ordinal();
-		}
+			case tagTop               /**/ -> "Top";
+			case tagInteger           /**/ -> "Integer";
+			case tagFloat             /**/ -> "Float";
+			case tagDouble            /**/ -> "Double";
+			case tagLong              /**/ -> "Long";
+			case tagNull              /**/ -> "Null";
+			case tagUninitializedThis /**/ -> "UninitializedThis";
+			case tagObject            /**/ -> "Object";
+			case tagUninitialized     /**/ -> "Uninitialized";
+			default -> throw new InvalidVerificationTypeTagException( verificationTypeTag );
+		};
 	}
 
-	public interface Switcher<T>
-	{
-		T caseSimpleVerificationType();
-		T caseObjectVerificationType();
-		T caseUninitializedVerificationType();
-	}
+	public final int tag;
 
-	public static <T> T doSwitch( Tag tag, Switcher<T> switcher )
-	{
-		return switch( tag )
-			{
-				case Top, Integer, Float, Double, Long, Null, UninitializedThis -> //
-					switcher.caseSimpleVerificationType();        //
-				case Object ->                                    //
-					switcher.caseObjectVerificationType();        //
-				case Uninitialized ->                             //
-					switcher.caseUninitializedVerificationType(); //
-			};
-	}
-
-	public final Tag tag;
-
-	protected VerificationType( Tag tag )
+	protected VerificationType( int tag )
 	{
 		this.tag = tag;
 	}
 
-	public interface Visitor<T>
-	{
-		T visit( SimpleVerificationType simpleVerificationType );
-		T visit( ObjectVerificationType objectVerificationType );
-		T visit( UninitializedVerificationType uninitializedVerificationType );
-	}
-
-	public <T> T visit( Visitor<T> visitor )
-	{
-		return doSwitch( tag, new Switcher<>()
-		{
-			@Override public T caseSimpleVerificationType()
-			{
-				return visitor.visit( asSimpleVerificationType() );
-			}
-			@Override public T caseObjectVerificationType()
-			{
-				return visitor.visit( asObjectVerificationType() );
-			}
-			@Override public T caseUninitializedVerificationType()
-			{
-				return visitor.visit( asUninitializedVerificationType() );
-			}
-		} );
-	}
-
-	@ExcludeFromJacocoGeneratedReport protected ObjectVerificationType asObjectVerificationType() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport protected SimpleVerificationType asSimpleVerificationType() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport protected UninitializedVerificationType asUninitializedVerificationType() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ObjectVerificationType asObjectVerificationType() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public SimpleVerificationType asSimpleVerificationType() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public UninitializedVerificationType asUninitializedVerificationType() { return Kit.fail(); }
 
 	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString()
 	{
-		return "tag = " + tag.name();
+		return "tag = " + tagName( tag );
 	}
 }

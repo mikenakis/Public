@@ -39,10 +39,9 @@ public class ClassDumpMain
 			System.exit( -1 );
 		}
 
-		ClassDumpMain classDumpMain = new ClassDumpMain();
 		Kit.tryCatch( () ->
 		{
-			classDumpMain.run( loop.get(), output.get(), sources.get(), binaries.get(), className.get() );
+			run( loop.get(), output.get(), sources.get(), binaries.get(), className.get() );
 			System.exit( 0 );
 		}, throwable ->	handleThrowable( throwable, clio.programName ) );
 	}
@@ -62,7 +61,7 @@ public class ClassDumpMain
 	{
 	}
 
-	private void run( boolean loop, Optional<String> output, Optional<String> sources, Path binaries, Optional<String> className )
+	private static void run( boolean loop, Optional<String> output, Optional<String> sources, Path binaries, Optional<String> className )
 	{
 		for( ; ; )
 		{
@@ -75,7 +74,7 @@ public class ClassDumpMain
 		}
 	}
 
-	private void run1( PrintStream printStream, Optional<String> sources, Path binaries, Optional<String> className )
+	private static void run1( PrintStream printStream, Optional<String> sources, Path binaries, Optional<String> className )
 	{
 		Optional<Path> sourcesRootPath = sources.isEmpty() ? Optional.empty() : Optional.of( Paths.get( sources.get() ).toAbsolutePath().normalize() );
 		Optional<Path> sourcesRootPath2 = sources.map( s -> Paths.get( s ).toAbsolutePath().normalize() );
@@ -147,7 +146,7 @@ public class ClassDumpMain
 		return path.resolve( parent );
 	}
 
-	private void classDump( Path classFilePathName, Optional<Path> sourcePath, PrintStream printStream )
+	private static void classDump( Path classFilePathName, Optional<Path> sourcePath, PrintStream printStream )
 	{
 		Log.debug( "Dumping " + classFilePathName + (sourcePath.isEmpty() ? "" : " (" + sourcePath + ")") );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );

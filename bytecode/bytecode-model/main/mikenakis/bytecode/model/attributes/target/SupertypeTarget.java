@@ -6,10 +6,10 @@ public final class SupertypeTarget extends Target // "supertype_target" in jvms-
 {
 	public final int supertypeIndex;
 
-	public SupertypeTarget( Type type, int supertypeIndex )
+	public SupertypeTarget( int tag, int supertypeIndex )
 	{
-		super( type );
-		assert type == Type.TypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration;
+		super( tag );
+		assert tag == tagTypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration;
 		this.supertypeIndex = supertypeIndex;
 	}
 

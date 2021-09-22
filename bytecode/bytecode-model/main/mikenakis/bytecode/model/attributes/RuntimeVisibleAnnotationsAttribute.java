@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.Annotation;
+import mikenakis.bytecode.model.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +25,9 @@ public final class RuntimeVisibleAnnotationsAttribute extends AnnotationsAttribu
 		return new RuntimeVisibleAnnotationsAttribute( annotations );
 	}
 
-	public static final String name = "RuntimeVisibleAnnotations";
-	public static final Kind kind = new Kind( name );
-
 	private RuntimeVisibleAnnotationsAttribute( List<Annotation> annotations )
 	{
-		super( kind, annotations );
+		super( tagRuntimeVisibleAnnotations, annotations );
 	}
 
 	@Deprecated @Override public RuntimeVisibleAnnotationsAttribute asRuntimeVisibleAnnotationsAttribute()

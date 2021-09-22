@@ -8,19 +8,6 @@ public final class IndirectLoadConstantInstruction extends LoadConstantInstructi
 {
 	public static IndirectLoadConstantInstruction of( int opCode, Constant constant )
 	{
-		switch( constant.tag )
-		{
-			case Integer:
-			case Long:
-			case Float:
-			case Double:
-			case String:
-			case Class:
-				break;
-			default:
-				assert false;
-				break;
-		}
 		return new IndirectLoadConstantInstruction( opCode, constant );
 	}
 
@@ -41,8 +28,18 @@ public final class IndirectLoadConstantInstruction extends LoadConstantInstructi
 	{
 		super( Group.IndirectLoadConstant );
 		assert OpCode.isIndirectLoadConstant( opCode );
+		assert isValidConstant( constant );
 		this.opCode = opCode;
 		this.constant = constant;
+	}
+
+	private static boolean isValidConstant( Constant constant )
+	{
+		return switch( constant.tag )
+			{
+				case Constant.tagInteger, Constant.tagLong, Constant.tagFloat, Constant.tagDouble, Constant.tagString, Constant.tagClass -> true;
+				default -> false;
+			};
 	}
 
 	public int getOpCode()

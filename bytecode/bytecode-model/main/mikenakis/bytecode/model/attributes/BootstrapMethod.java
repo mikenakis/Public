@@ -6,7 +6,6 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.ConstantDesc;
 import java.lang.constant.DynamicConstantDesc;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,23 +20,40 @@ public final class BootstrapMethod
 		return new BootstrapMethod( methodHandleConstant, argumentConstants );
 	}
 
-	private final MethodHandleConstant methodHandleConstant;
-	private final List<Constant> argumentConstants;
+	public final MethodHandleConstant methodHandleConstant;
+	public final List<Constant> argumentConstants;
 
 	private BootstrapMethod( MethodHandleConstant methodHandleConstant, List<Constant> argumentConstants )
 	{
+		assert argumentConstants.stream().allMatch( c -> isBootstrapArgumentConstant( c ) );
 		this.methodHandleConstant = methodHandleConstant;
 		this.argumentConstants = argumentConstants;
 	}
 
-	public MethodHandleConstant methodHandleConstant() { return methodHandleConstant; }
-	public List<Constant> argumentConstants() { return Collections.unmodifiableList( argumentConstants ); }
+	private static boolean isBootstrapArgumentConstant( Constant constant )
+	{
+		return switch( constant.tag )
+			{
+				case Constant.tagClass, Constant.tagMethodType, Constant.tagString, Constant.tagMethodHandle -> true;
+				default -> false;
+			};
+	}
 
 	public DynamicConstantDesc<?> constantDescriptor()
 	{
 		ConstantDesc[] argumentConstantDescriptors = new ConstantDesc[argumentConstants.size()];
 		for( int i = 0; i < argumentConstantDescriptors.length; i++ )
-			argumentConstantDescriptors[i] = argumentConstants.get( i ).constantDescriptor();
+		{
+			Constant constant = argumentConstants.get( i );
+			argumentConstantDescriptors[i] = switch( constant.tag )
+				{
+					case Constant.tagClass -> constant.asClassConstant().constantDescriptor();
+					case Constant.tagMethodType -> constant.asMethodTypeConstant().constantDescriptor();
+					case Constant.tagString -> constant.asStringConstant().constantDescriptor();
+					case Constant.tagMethodHandle -> constant.asMethodHandleConstant().constantDescriptor();
+					default -> throw new AssertionError( constant );
+				};
+		}
 		return DynamicConstantDesc.of( methodHandleConstant.descriptor(), argumentConstantDescriptors );
 	}
 

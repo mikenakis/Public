@@ -2,6 +2,7 @@ package mikenakis.bytecode.test.kit;
 
 import mikenakis.kit.Kit;
 
+import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,5 +40,19 @@ public final class TestKit
 			}
 		} ) );
 		return result;
+	}
+
+	private static Path getPathToResource( Class<?> javaClass, String resourceName )
+	{
+		URL url = javaClass.getResource( resourceName );
+		assert url != null : resourceName;
+		return Kit.classLoading.getPathFromUrl( url );
+	}
+
+	public static Path getPathToClassFile( Class<?> javaClass )
+	{
+		int packageNameLength = javaClass.getPackageName().length();
+		String name = javaClass.getName().substring( packageNameLength + 1 ) + ".class";
+		return getPathToResource( javaClass, name );
 	}
 }

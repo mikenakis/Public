@@ -5,6 +5,7 @@ import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Collection;
@@ -21,24 +22,19 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class AnnotationsAttribute extends Attribute
+public abstract class AnnotationsAttribute extends KnownAttribute
 {
-	private final List<Annotation> annotations;
+	public final List<Annotation> annotations;
 
-	AnnotationsAttribute( Kind kind, List<Annotation> annotations )
+	AnnotationsAttribute( int tag, List<Annotation> annotations )
 	{
-		super( kind );
+		super( tag );
 		this.annotations = annotations;
 	}
 
 	@Deprecated @Override public AnnotationsAttribute asAnnotationsAttribute()
 	{
 		return this;
-	}
-
-	public Collection<Annotation> annotations()
-	{
-		return annotations;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

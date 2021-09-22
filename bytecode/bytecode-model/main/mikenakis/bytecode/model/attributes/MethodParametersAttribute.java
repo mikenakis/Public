@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class MethodParametersAttribute extends Attribute
+public final class MethodParametersAttribute extends KnownAttribute
 {
 	public static MethodParametersAttribute of()
 	{
@@ -29,20 +29,12 @@ public final class MethodParametersAttribute extends Attribute
 		return new MethodParametersAttribute( methodParameters );
 	}
 
-	public static final String name = "MethodParameters";
-	public static final Kind kind = new Kind( name );
-
-	private final List<MethodParameter> methodParameters;
+	public final List<MethodParameter> methodParameters;
 
 	private MethodParametersAttribute( List<MethodParameter> methodParameters )
 	{
-		super( kind );
+		super( tagMethodParameters );
 		this.methodParameters = methodParameters;
-	}
-
-	public List<MethodParameter> methodParameters()
-	{
-		return Collections.unmodifiableList( methodParameters );
 	}
 
 	@Deprecated @Override public MethodParametersAttribute asMethodParametersAttribute()

@@ -34,12 +34,9 @@ public final class RuntimeVisibleTypeAnnotationsAttribute extends TypeAnnotation
 		return new RuntimeVisibleTypeAnnotationsAttribute( entries );
 	}
 
-	public static final String name = "RuntimeVisibleTypeAnnotations";
-	public static final Kind kind = new Kind( name );
-
 	private RuntimeVisibleTypeAnnotationsAttribute( List<TypeAnnotation> entries )
 	{
-		super( kind, entries );
+		super( tagRuntimeVisibleTypeAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeVisibleTypeAnnotationsAttribute asRuntimeVisibleTypeAnnotationsAttribute()

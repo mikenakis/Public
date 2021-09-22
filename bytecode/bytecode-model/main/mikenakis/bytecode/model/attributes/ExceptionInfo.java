@@ -35,7 +35,6 @@ public final class ExceptionInfo
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + //
-			catchTypeConstant.map( classConstant -> ", catchType = " + classConstant ).orElse( "" );
+		return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + (catchTypeConstant.isPresent()? ", catchType = " + catchTypeConstant : "");
 	}
 }

@@ -7,11 +7,11 @@ package mikenakis.bytecode.model.attributes.stackmap.verification;
  */
 public final class SimpleVerificationType extends VerificationType
 {
-	public SimpleVerificationType( Tag tag )
+	public SimpleVerificationType( int tag )
 	{
 		super( tag );
-		assert tag == Tag.Top ||tag == Tag.Integer || tag == Tag.Float || tag == Tag.Double || tag == Tag.Long || tag == Tag.Null || tag == Tag.UninitializedThis;
+		assert tag == tagTop ||tag == tagInteger || tag == tagFloat || tag == tagDouble || tag == tagLong || tag == tagNull || tag == tagUninitializedThis;
 	}
 
-	@Deprecated @Override protected SimpleVerificationType asSimpleVerificationType() { return this; }
+	@Deprecated @Override public SimpleVerificationType asSimpleVerificationType() { return this; }
 }

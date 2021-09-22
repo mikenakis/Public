@@ -17,18 +17,15 @@ public final class NameAndDescriptorConstant extends Constant
 		return new NameAndDescriptorConstant( nameConstant, descriptorConstant );
 	}
 
-	private final Mutf8Constant nameConstant;
-	private final Mutf8Constant descriptorConstant;
+	public final Mutf8Constant nameConstant;
+	public final Mutf8Constant descriptorConstant;
 
 	private NameAndDescriptorConstant( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant )
 	{
-		super( Tag.NameAndDescriptor );
+		super( tagNameAndDescriptor );
 		this.nameConstant = nameConstant;
 		this.descriptorConstant = descriptorConstant;
 	}
-
-	public Mutf8Constant nameConstant() { return nameConstant; }
-	public Mutf8Constant descriptorConstant() { return descriptorConstant; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

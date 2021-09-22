@@ -6,10 +6,10 @@ public final class ThrowsTarget extends Target // "throws_target" in jvms-4.7.20
 {
 	public final int throwsTypeIndex;
 
-	public ThrowsTarget( Type type, int throwsTypeIndex )
+	public ThrowsTarget( int tag, int throwsTypeIndex )
 	{
-		super( type );
-		assert type == Type.TypeInThrowsClauseOfMethodOrConstructor;
+		super( tag );
+		assert tag == tagTypeInThrowsClauseOfMethodOrConstructor;
 		this.throwsTypeIndex = throwsTypeIndex;
 	}
 

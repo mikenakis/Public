@@ -59,8 +59,8 @@ public final class MethodHandleConstant extends Constant
 
 	private MethodHandleConstant( ReferenceKind referenceKind, ReferenceConstant referenceConstant )
 	{
-		super( Tag.MethodHandle );
-		assert referenceConstant.tag == Tag.FieldReference || referenceConstant.tag == Tag.MethodReference || referenceConstant.tag == Tag.InterfaceMethodReference;
+		super( tagMethodHandle );
+		assert referenceConstant.tag == tagFieldReference || referenceConstant.tag == tagMethodReference || referenceConstant.tag == tagInterfaceMethodReference;
 		this.referenceKind = referenceKind;
 		this.referenceConstant = referenceConstant;
 	}
@@ -68,16 +68,16 @@ public final class MethodHandleConstant extends Constant
 	public ReferenceKind referenceKind() { return referenceKind; }
 	public ReferenceConstant referenceConstant() { return referenceConstant; }
 
-	@Deprecated @Override public ConstantDesc constantDescriptor() { return descriptor(); }
+	public ConstantDesc constantDescriptor() { return descriptor(); }
 
 	public DirectMethodHandleDesc descriptor()
 	{
-		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant();
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant;
 		//I do not know why the isInterface parameter is needed, but it does not work otherwise.
 		return MethodHandleDesc.of( DirectMethodHandleDesc.Kind.valueOf( referenceKind.number, referenceKind == ReferenceKind.InvokeInterface ), //
-			referenceConstant.typeConstant().classDescriptor(), //
-			nameAndDescriptorConstant.nameConstant().stringValue(), //
-			nameAndDescriptorConstant.descriptorConstant().stringValue() );
+			referenceConstant.typeConstant.classDescriptor(), //
+			nameAndDescriptorConstant.nameConstant.stringValue(), //
+			nameAndDescriptorConstant.descriptorConstant.stringValue() );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

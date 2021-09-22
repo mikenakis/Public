@@ -18,21 +18,18 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class NestHostAttribute extends Attribute
+public final class NestHostAttribute extends KnownAttribute
 {
 	public static NestHostAttribute of( ClassConstant classConstant )
 	{
 		return new NestHostAttribute( classConstant );
 	}
 
-	public static final String name = "NestHost";
-	public static final Kind kind = new Kind( name );
-
 	public final ClassConstant hostClassConstant;
 
 	private NestHostAttribute( ClassConstant hostClassConstant )
 	{
-		super( kind );
+		super( tagNestHost );
 		this.hostClassConstant = hostClassConstant;
 	}
 

@@ -6,10 +6,10 @@ public final class CatchTarget extends Target // "catch_target" in jvms-4.7.20.1
 {
 	public final int exceptionTableIndex;
 
-	public CatchTarget( Type type, int exceptionTableIndex )
+	public CatchTarget( int tag, int exceptionTableIndex )
 	{
-		super( type );
-		assert type == Type.TypeInExceptionParameterDeclaration;
+		super( tag );
+		assert tag == tagTypeInExceptionParameterDeclaration;
 		this.exceptionTableIndex = exceptionTableIndex;
 	}
 

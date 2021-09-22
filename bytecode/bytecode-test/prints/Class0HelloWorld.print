@@ -1,40 +1,46 @@
- version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class0HelloWorld, superClass = java.lang.Object
- ├─ interfaces (0 entries)
- ├─ extra constants (0 entries)
- ├─ fields (0 entries)
- ├─ methods (2 entries)
- │   ├─ method accessFlags = [public], name = <init>, descriptor = void()
- │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 1
- │   │           ├─ instructions (3 entries)
- │   │           │   ├─ L9:
- │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │           │   └─      RETURN
- │   │           ├─ exceptionInfos (0 entries)
- │   │           └─ attributes (2 entries)
- │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 9, start = L9
- │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class0HelloWorld
- │   └─ method accessFlags = [public, static], name = main, descriptor = void( java.lang.String[] )
- │       └─ attributes (2 entries)
- │           ├─ Code maxStack = 2, maxLocals = 1
- │           │   ├─ instructions (4 entries)
- │           │   │   ├─ L13:
- │           │   │   ├─      GETSTATIC java.io.PrintStream java.lang.System.out
- │           │   │   ├─      LDCx "Hello, world!"
- │           │   │   ├─      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │           │   │   ├─ L14:
- │           │   │   └─      RETURN
- │           │   ├─ exceptionInfos (0 entries)
- │           │   └─ attributes (2 entries)
- │           │       ├─ LineNumberTable (2 entries)
- │           │       │   ├─  lineNumber = 13, start = L13
- │           │       │   └─  lineNumber = 14, start = L14
- │           │       └─ LocalVariableTable (1 entries)
- │           │           └─  index = 0, start = L13, end = @end, name = args, descriptor = java.lang.String[]
- │           └─ MethodParameters (1 entries)
- │               └─  accessFlags = [], name = args
- └─ attributes (1 entries)
-     └─ SourceFile value = "Class0HelloWorld.java"
+ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class0HelloWorld, superClass = java.lang.Object
+ ├─ interfaces: 0 entries
+ ├─ extraConstants: 0 entries
+ ├─ fields: 0 entries
+ ├─ methods: 2 entries
+ │   ├─ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()
+ │   │   └─ attributes: 1 entries
+ │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
+ │   │           ├─ instructions: 3 entries
+ │   │           │   ├─ [0] L9: // public abstract class Class0HelloWorld
+ │   │           │   ├─ [1]      ALOAD_0
+ │   │           │   ├─ [2]      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │           │   └─ [3]      RETURN
+ │   │           ├─ exceptionInfos: 0 entries
+ │   │           └─ attributes: 2 entries
+ │   │               ├─ [0] LineNumberTableAttribute
+ │   │               │   └─ entrys: 1 entries
+ │   │               │       └─ [0] LineNumberTableEntry lineNumber = 9, start = L9
+ │   │               └─ [1] LocalVariableTableAttribute
+ │   │                   └─ entrys: 1 entries
+ │   │                       └─ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class0HelloWorld
+ │   └─ [1] ByteCodeMethod accessFlags = [public, static], name = "main", descriptor = void( java.lang.String[] )
+ │       └─ attributes: 2 entries
+ │           ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
+ │           │   ├─ instructions: 4 entries
+ │           │   │   ├─ [0] L13: // System.out.println( "Hello, world!" );
+ │           │   │   ├─ [1]      GETSTATIC java.io.PrintStream java.lang.System.out
+ │           │   │   ├─ [2]      LDCx StringConstant( Mutf8Constant( "Hello, world!" ) )
+ │           │   │   ├─ [3]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │           │   │   ├─ [4] L14: // }
+ │           │   │   └─ [5]      RETURN
+ │           │   ├─ exceptionInfos: 0 entries
+ │           │   └─ attributes: 2 entries
+ │           │       ├─ [0] LineNumberTableAttribute
+ │           │       │   └─ entrys: 2 entries
+ │           │       │       ├─ [0] LineNumberTableEntry lineNumber = 13, start = L13
+ │           │       │       └─ [1] LineNumberTableEntry lineNumber = 14, start = L14
+ │           │       └─ [1] LocalVariableTableAttribute
+ │           │           └─ entrys: 1 entries
+ │           │               └─ [0] LocalVariableTableEntry index = 0, start = L13, end = @end, name = args, descriptor = java.lang.String[]
+ │           └─ [1] MethodParametersAttribute
+ │               └─ parameters: 1 entries
+ │                   └─ [0] MethodParameter accessFlags = [], name = "args"
+ └─ attributes: 1 entries
+     └─ [0] SourceFileAttribute
+         └─ value: Mutf8Constant( "Class0HelloWorld.java" )

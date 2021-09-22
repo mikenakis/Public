@@ -1,8 +1,8 @@
 package mikenakis.bytecode.kit;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -13,28 +13,7 @@ import java.util.Objects;
  */
 public class Buffer
 {
-	public static final Buffer EMPTY = new Buffer( Kit.ARRAY_OF_ZERO_BYTES, 0, 0 );
-
-	public static Buffer of( int... arguments )
-	{
-		int length = arguments.length;
-		if( length == 0 )
-			return EMPTY;
-		byte[] bytes = new byte[length];
-		for( int i = 0; i < arguments.length; i++ )
-		{
-			int argument = arguments[i];
-			assert argument >= 0 && argument < 256;
-			bytes[i] = (byte)argument;
-		}
-		return new Buffer( bytes, 0, length );
-	}
-
-	public static Buffer of( String s )
-	{
-		byte[] bytes = s.getBytes( StandardCharsets.UTF_8 );
-		return of( bytes );
-	}
+	private static final Buffer EMPTY = new Buffer( Kit.ARRAY_OF_ZERO_BYTES, 0, 0 );
 
 	public static Buffer of( byte[] bytes )
 	{
@@ -43,14 +22,12 @@ public class Buffer
 
 	public static Buffer of( byte[] bytes, int start, int length )
 	{
-		if( length == 0 )
-			return EMPTY;
-		return new Buffer( bytes, start, length );
+		return length == 0 ? EMPTY : new Buffer( bytes, start, length );
 	}
 
 	@SuppressWarnings( { "unused", "FieldNamingConvention" } ) public final Object _debugView = new Object()
 	{
-		@Override public String toString()
+		@ExcludeFromJacocoGeneratedReport @Override public String toString()
 		{
 			var builder = new StringBuilder();
 			BufferReader bufferReader = BufferReader.of( Buffer.this );
@@ -64,7 +41,7 @@ public class Buffer
 			return builder.toString();
 		}
 
-		private char digit( int value )
+		@ExcludeFromJacocoGeneratedReport private static char digit( int value )
 		{
 			value &= 0x0f;
 			if( value < 10 )
@@ -118,7 +95,7 @@ public class Buffer
 		System.arraycopy( bytes, offset, targetBytes, targetPosition, length );
 	}
 
-	@Override public String toString()
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return length + " bytes";
 	}
@@ -135,9 +112,8 @@ public class Buffer
 	{
 		if( length != other.length )
 			return false;
-		if( isHashCodeComputed && other.isHashCodeComputed )
-			if( hashCode != other.hashCode )
-				return false;
+		if( hashCode() != other.hashCode() )
+			return false;
 		return Arrays.compare( bytes, offset, offset + length, other.bytes, other.offset, other.offset + other.length ) == 0;
 	}
 
@@ -162,7 +138,7 @@ public class Buffer
 		return result;
 	}
 
-	public BufferReader newReader()
+	BufferReader newReader()
 	{
 		return BufferReader.of( bytes, offset, length );
 	}

@@ -14,27 +14,19 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class ConstantValueAttribute extends Attribute
+public final class ConstantValueAttribute extends KnownAttribute
 {
 	public static ConstantValueAttribute of( ValueConstant<?> valueConstant )
 	{
 		return new ConstantValueAttribute( valueConstant );
 	}
 
-	public static final String name = "ConstantValue";
-	public static final Kind kind = new Kind( name );
-
-	private final ValueConstant<?> valueConstant;
+	public final ValueConstant<?> valueConstant;
 
 	private ConstantValueAttribute( ValueConstant<?> valueConstant )
 	{
-		super( kind );
+		super( tagConstantValue );
 		this.valueConstant = valueConstant;
-	}
-
-	public ValueConstant<?> valueConstant()
-	{
-		return valueConstant;
 	}
 
 	@Deprecated @Override public ConstantValueAttribute asConstantValueAttribute()

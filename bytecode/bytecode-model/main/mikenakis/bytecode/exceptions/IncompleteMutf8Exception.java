@@ -1,6 +1,6 @@
 package mikenakis.bytecode.exceptions;
 
-import mikenakis.bytecode.kit.UncheckedException;
+import mikenakis.kit.UncheckedException;
 
 /**
  * "Incomplete MUTF8" exception.
@@ -14,10 +14,5 @@ public final class IncompleteMutf8Exception extends UncheckedException
 	public IncompleteMutf8Exception( int position )
 	{
 		this.position = position;
-	}
-
-	@Override protected String onGetMessage()
-	{
-		return "position: " + position;
 	}
 }

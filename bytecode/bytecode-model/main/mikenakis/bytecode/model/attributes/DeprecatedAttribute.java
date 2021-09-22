@@ -17,19 +17,16 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class DeprecatedAttribute extends Attribute
+public final class DeprecatedAttribute extends KnownAttribute
 {
 	public static DeprecatedAttribute of()
 	{
 		return new DeprecatedAttribute();
 	}
 
-	public static final String name = "Deprecated";
-	public static final Kind kind = new Kind( name );
-
 	private DeprecatedAttribute()
 	{
-		super( kind );
+		super( tagDeprecated );
 	}
 
 	@Deprecated @Override public DeprecatedAttribute asDeprecatedAttribute()
@@ -39,6 +36,6 @@ public final class DeprecatedAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return kind.name;
+		return mutf8Name.stringValue();
 	}
 }

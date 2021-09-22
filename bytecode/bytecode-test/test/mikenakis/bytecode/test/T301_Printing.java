@@ -1,9 +1,9 @@
 package mikenakis.bytecode.test;
 
-import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.reading.ByteCodeReader;
+import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
@@ -36,26 +36,27 @@ public class T301_Printing
 	{
 		Path workingDirectory = Kit.path.getWorkingDirectory();
 		Log.debug( "Current directory: " + workingDirectory );
-		Path outputPath = Helpers.getOutputPath( getClass() );
-		Path modelPath = outputPath.resolve( "model" );
-		Path printPath = workingDirectory.resolve( "prints" );
-		List<Path> classFilePathNames = TestKit.collectResourcePaths( modelPath, false, ".class" );
-		assert classFilePathNames.size() == 23;
+		Path printsPath = workingDirectory.resolve( "prints" );
+		Path sourcesPath = workingDirectory.resolve( "test" ).resolve( getClass().getPackageName().replace( '.', '/' ) ).resolve( "model" );
+		List<Path> classFilePathNames = Model.getClassFilePathNames();
 		int mismatchCount = 0;
 		for( Path classFilePathName : classFilePathNames )
 		{
-			Path printFilePathName = getPrintFilePathNameFromClassFilePathName( outputPath, classFilePathName, printPath );
-			if( printAndCompareAgainstExpected( classFilePathName, printFilePathName ) )
+			Path printFilePathName = getPrintFilePathNameFromClassFilePathName( classFilePathName, printsPath, ".print" );
+			if( printAndCompareAgainstExpected( classFilePathName, printFilePathName, sourcesPath ) )
+			{
+				Log.debug( "mismatch: " + printFilePathName );
 				mismatchCount++;
+			}
 		}
 		assert mismatchCount == 0;
 	}
 
-	private static boolean printAndCompareAgainstExpected( Path classFilePathName, Path printFilePathName )
+	private static boolean printAndCompareAgainstExpected( Path classFilePathName, Path printFilePathName, Path sourcesPath )
 	{
-		Log.debug( "Comparing class: + " + classFilePathName + "  <=>  print: " + printFilePathName );
+		Log.debug( "Comparing class: " + classFilePathName + "  <=>  print: " + printFilePathName );
 		ByteCodeType byteCodeType = load( classFilePathName );
-		String actualPrint = ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() );
+		String actualPrint = ByteCodePrinter.printByteCodeType( byteCodeType, Optional.of( sourcesPath ) );
 		Kit.unchecked( () -> Files.createDirectories( printFilePathName.getParent() ) );
 		boolean mismatch;
 		boolean needSave;
@@ -75,11 +76,11 @@ public class T301_Printing
 		return mismatch;
 	}
 
-	private static Path getPrintFilePathNameFromClassFilePathName( Path basePath, Path classFilePathName, Path printPath )
+	private static Path getPrintFilePathNameFromClassFilePathName( Path classFilePathName, Path printsPath, String extension )
 	{
 		String s = classFilePathName.toString();
-		s = replacePrefix( s, basePath.resolve( "model" ).toString(), printPath.toString() );
-		s = replaceSuffix( s, ".class", ".print" );
+		s = replacePrefix( s, classFilePathName.getParent().toString(), printsPath.toString() );
+		s = replaceSuffix( s, ".class", extension );
 		return Path.of( s );
 	}
 

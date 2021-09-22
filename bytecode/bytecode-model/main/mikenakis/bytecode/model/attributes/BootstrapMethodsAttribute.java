@@ -5,7 +5,6 @@ import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class BootstrapMethodsAttribute extends Attribute
+public final class BootstrapMethodsAttribute extends KnownAttribute
 {
 	public static BootstrapMethodsAttribute of()
 	{
@@ -30,20 +29,12 @@ public final class BootstrapMethodsAttribute extends Attribute
 		return new BootstrapMethodsAttribute( entries );
 	}
 
-	public static final String name = "BootstrapMethods";
-	public static final Kind kind = new Kind( name );
-
-	private final List<BootstrapMethod> bootstrapMethods;
+	public final List<BootstrapMethod> bootstrapMethods;
 
 	private BootstrapMethodsAttribute( List<BootstrapMethod> bootstrapMethods )
 	{
-		super( kind );
+		super( tagBootstrapMethods );
 		this.bootstrapMethods = bootstrapMethods;
-	}
-
-	public List<BootstrapMethod> bootstrapMethods()
-	{
-		return Collections.unmodifiableList( bootstrapMethods );
 	}
 
 	@Deprecated @Override public BootstrapMethodsAttribute asBootstrapMethodsAttribute()
@@ -66,7 +57,6 @@ public final class BootstrapMethodsAttribute extends Attribute
 		int index = bootstrapMethods.indexOf( entry );
 		if( index == -1 )
 		{
-			assert false; //does this ever happen?
 			index = bootstrapMethods.size();
 			bootstrapMethods.add( entry );
 		}

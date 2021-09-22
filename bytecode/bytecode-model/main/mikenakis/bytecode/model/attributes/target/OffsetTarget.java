@@ -6,10 +6,11 @@ public final class OffsetTarget extends Target
 {
 	public final int offset;
 
-	public OffsetTarget( Type type, int offset )
+	public OffsetTarget( int tag, int offset )
 	{
-		super( type );
-		assert type == Type.TypeInInstanceofExpression || type == Type.TypeInNewExpression || type == Type.TypeInMethodReferenceExpressionUsingNew || type == Type.TypeInMethodReferenceExpressionUsingIdentifier;
+		super( tag );
+		assert tag == tagTypeInInstanceofExpression || tag == tagTypeInNewExpression || tag == tagTypeInMethodReferenceExpressionUsingNew ||
+			tag == tagTypeInMethodReferenceExpressionUsingIdentifier;
 		this.offset = offset;
 	}
 

@@ -16,13 +16,13 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class ParameterAnnotationsAttribute extends Attribute
+public abstract class ParameterAnnotationsAttribute extends KnownAttribute
 {
 	private final List<ParameterAnnotationSet> parameterAnnotationSets;
 
-	ParameterAnnotationsAttribute( Kind kind, List<ParameterAnnotationSet> parameterAnnotationSets )
+	ParameterAnnotationsAttribute( int tag, List<ParameterAnnotationSet> parameterAnnotationSets )
 	{
-		super( kind );
+		super( tag );
 		this.parameterAnnotationSets = parameterAnnotationSets;
 	}
 
@@ -38,6 +38,6 @@ public abstract class ParameterAnnotationsAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return kind.name + " " + parameterAnnotationSets.size() + " entries";
+		return mutf8Name.stringValue() + " " + parameterAnnotationSets.size() + " entries";
 	}
 }

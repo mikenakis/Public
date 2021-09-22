@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.attributes.CodeAttribute;
+import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 
 import java.lang.constant.ClassDesc;
@@ -26,12 +27,12 @@ public final class ByteCodeHelpers
 
 	public static String getMethodSourceLocation( ByteCodeType byteCodeType, ByteCodeMethod byteCodeMethod )
 	{
-		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetAttributeByName( CodeAttribute.kind.mutf8Name ) //
+		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tagCode ) //
 			.map( a -> a.asCodeAttribute() );
 		Optional<LineNumberTableAttribute> lineNumberTableAttribute = codeAttribute //
-			.flatMap( a -> a.attributeSet().tryGetAttributeByName( LineNumberTableAttribute.kind.mutf8Name ) ) //
+			.flatMap( a -> a.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tagLineNumberTable ) ) //
 			.map( a -> a.asLineNumberTableAttribute() );
-		int lineNumber = lineNumberTableAttribute.map( a -> a.lineNumbers().get( 0 ).lineNumber() ).orElse( 0 );
+		int lineNumber = lineNumberTableAttribute.map( a -> a.entrys.get( 0 ).lineNumber() ).orElse( 0 );
 		String typeName = typeNameFromClassDesc( byteCodeType.descriptor() );
 		String methodName = byteCodeMethod.name();
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
@@ -44,9 +45,24 @@ public final class ByteCodeHelpers
 			return classDesc.displayName();
 		if( classDesc.isClassOrInterface() )
 			return classDesc.packageName() + "." + classDesc.displayName();
-		if( classDesc.isArray() )
-			return typeNameFromClassDesc( classDesc.componentType() ) + "[]";
-		assert false;
-		return "";
+		assert classDesc.isArray();
+		return typeNameFromClassDesc( classDesc.componentType() ) + "[]";
+	}
+
+	public static boolean isValidTerminalTypeName( String typeName )
+	{
+		if( typeName.length() <= 1 ) //NOTE: this will probably fail for a single-letter class name in the global scope (outside any package.)
+			return false;
+		if( typeName.startsWith( "L" ) )
+			return false;
+		if( typeName.startsWith( "[" ) )
+			return false;
+		if( typeName.endsWith( ";" ) )
+			return false;
+		if( typeName.contains( "/" ) )
+			return false;
+		if( typeName.endsWith( "[]" ) )
+			return false;
+		return true;
 	}
 }

@@ -1,6 +1,6 @@
 package mikenakis.bytecode.exceptions;
 
-import mikenakis.bytecode.kit.UncheckedException;
+import mikenakis.kit.UncheckedException;
 
 /**
  * "Malformed MUTF8" exception.
@@ -14,10 +14,5 @@ public final class MalformedMutf8Exception extends UncheckedException
 	public MalformedMutf8Exception( int position )
 	{
 		this.position = position;
-	}
-
-	@Override protected String onGetMessage()
-	{
-		return "position: " + position;
 	}
 }

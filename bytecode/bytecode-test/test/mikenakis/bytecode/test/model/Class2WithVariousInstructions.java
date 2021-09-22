@@ -90,4 +90,20 @@ public abstract class Class2WithVariousInstructions
 		list.sort( ( a, b ) -> -a.compareTo( b ) );
 		return list.get( 0 );
 	}
+
+	public final boolean methodWithUninitializedVerificationType( int i ) //TODO
+	{
+		String s;
+		int j = 5;
+		do
+		{
+			System.out.println( "100" );
+			s = new String( new StringBuilder().append( "test1" ) );
+			System.out.println( s );
+			System.out.println( "200" );
+			j++;
+		}
+		while( j < i );
+		return s.isEmpty();
+	}
 }

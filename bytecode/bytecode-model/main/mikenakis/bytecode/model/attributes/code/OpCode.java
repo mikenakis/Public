@@ -1,5 +1,7 @@
 package mikenakis.bytecode.model.attributes.code;
 
+import mikenakis.kit.Kit;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -228,28 +230,20 @@ public final class OpCode
 	private static String[] collectOpCodeNames()
 	{
 		String[] opCodeNames = new String[256];
-		try
+		int mask = Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL;
+		for( Field field : OpCode.class.getFields() )
 		{
-			int mask = Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL;
-			for( Field field : OpCode.class.getFields() )
+			if( (field.getModifiers() & mask) == mask && field.getType() == int.class )
 			{
-				if( (field.getModifiers() & mask) != mask )
-					continue;
-				if( field.getType() != int.class )
-					continue;
-				int value = field.getInt( null );
+				int value = Kit.unchecked( () -> field.getInt( null ) );
 				String name = field.getName();
 				assert opCodeNames[value] == null;
 				opCodeNames[value] = name;
 			}
-			for( int i = 0; i < opCodeNames.length; i++ )
-				if( opCodeNames[i] == null )
-					opCodeNames[i] = "OPCODE_" + i;
 		}
-		catch( IllegalAccessException e )
-		{
-			throw new RuntimeException( e );
-		}
+		for( int i = 0; i < opCodeNames.length; i++ )
+			if( opCodeNames[i] == null )
+				opCodeNames[i] = "OPCODE_" + i;
 		return opCodeNames;
 	}
 

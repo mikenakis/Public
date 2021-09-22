@@ -2,6 +2,8 @@ package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.collections.FlagEnum;
+import mikenakis.kit.collections.FlagEnumSet;
 
 import java.lang.constant.MethodTypeDesc;
 import java.util.Map;
@@ -33,17 +35,19 @@ public final class ByteCodeMethod extends ByteCodeMember
 		Map.entry( Modifier.Synthetic    /**/, 0x1000 )  // ACC_SYNTHETIC    = 0x1000
 	);
 
-	public static ByteCodeMethod of( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeMethod of( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		return new ByteCodeMethod( modifierSet, nameConstant, descriptorConstant, attributeSet );
 	}
 
-	public final FlagSet<Modifier> modifierSet;
+	public final FlagEnumSet<Modifier> modifierSet;
+	public final Mutf8Constant descriptorConstant;
 
-	private ByteCodeMethod( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeMethod( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, descriptorConstant, attributeSet );
+		super( nameConstant, attributeSet );
 		this.modifierSet = modifierSet;
+		this.descriptorConstant = descriptorConstant;
 	}
 
 	public MethodTypeDesc descriptor()

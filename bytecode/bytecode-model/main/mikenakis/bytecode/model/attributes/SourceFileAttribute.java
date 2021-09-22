@@ -14,7 +14,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class SourceFileAttribute extends Attribute
+public final class SourceFileAttribute extends KnownAttribute
 {
 	public static SourceFileAttribute of( String sourceFile )
 	{
@@ -27,14 +27,11 @@ public final class SourceFileAttribute extends Attribute
 		return new SourceFileAttribute( sourceFileConstant );
 	}
 
-	public static final String name = "SourceFile";
-	public static final Kind kind = new Kind( name );
-
 	private final Mutf8Constant valueConstant;
 
 	private SourceFileAttribute( Mutf8Constant valueConstant )
 	{
-		super( kind );
+		super( tagSourceFile );
 		this.valueConstant = valueConstant;
 	}
 

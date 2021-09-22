@@ -1,9 +1,11 @@
 package mikenakis.bytecode.reading;
 
+import mikenakis.bytecode.exceptions.InvalidConstantTagException;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 
 import java.util.ArrayList;
@@ -30,12 +32,11 @@ final class ConstantPool
 		entries.add( null ); // first entry is empty. (Ancient legacy bollocks.)
 		for( int index = 1; index < count; index++ )
 		{
-			int tagNumber = bufferReader.readUnsignedByte();
-			Constant.Tag tag = Constant.Tag.fromNumber( tagNumber );
-			Buffer buffer = readConstantBuffer( tag, bufferReader );
-			Entry entry = new Entry( tag, buffer );
+			int constantTag = bufferReader.readUnsignedByte();
+			Buffer buffer = readConstantBuffer( constantTag, bufferReader );
+			Entry entry = new Entry( constantTag, buffer );
 			entries.add( entry );
-			if( tag == Constant.Tag.Long || tag == Constant.Tag.Double )
+			if( constantTag == Constant.tagLong || constantTag == Constant.tagDouble )
 			{
 				entries.add( null );
 				index++; //8-byte constants occupy two entries. (Ancient legacy bollocks.)
@@ -133,20 +134,20 @@ final class ConstantPool
 
 	private static final class Entry
 	{
-		final Constant.Tag tag;
+		final int constantTag;
 		Buffer buffer;
 		Constant constant;
 		boolean used;
 
-		Entry( Constant.Tag tag, Buffer buffer )
+		Entry( int constantTag, Buffer buffer )
 		{
-			this.tag = tag;
+			this.constantTag = constantTag;
 			this.buffer = buffer;
 		}
 
 		Entry( Constant constant )
 		{
-			tag = constant.tag;
+			constantTag = constant.tag;
 			this.constant = constant;
 		}
 
@@ -155,28 +156,28 @@ final class ConstantPool
 			if( constant != null )
 				return constant;
 			BufferReader bufferReader = BufferReader.of( buffer );
-			constant = ByteCodeReader.readConstant( tag, constantPool, bufferReader );
+			constant = ByteCodeReader.readConstant( constantTag, constantPool, bufferReader );
 			assert bufferReader.isAtEnd();
 			return constant;
 		}
 
-		@Override public String toString()
+		@ExcludeFromJacocoGeneratedReport @Override public String toString()
 		{
 			return buffer.length() + " bytes";
 		}
 	}
 
-	private static Buffer readConstantBuffer( Constant.Tag tag, BufferReader bufferReader )
+	private static Buffer readConstantBuffer( int constantTag, BufferReader bufferReader )
 	{
-		return switch( tag )
+		return switch( constantTag )
 			{
-				case Class, MethodType, String -> bufferReader.readBuffer( 2 );
-				case MethodHandle -> bufferReader.readBuffer( 3 );
-				case FieldReference, NameAndDescriptor, Integer, Float, InvokeDynamic, //
-					MethodReference, InterfaceMethodReference -> bufferReader.readBuffer( 4 );
-				case Double, Long -> bufferReader.readBuffer( 8 );
-				case Mutf8 -> readMutf8ConstantBuffer( bufferReader );
-				default -> throw new AssertionError();
+				case Constant.tagClass, Constant.tagMethodType, Constant.tagString -> bufferReader.readBuffer( 2 );
+				case Constant.tagMethodHandle -> bufferReader.readBuffer( 3 );
+				case Constant.tagFieldReference, Constant.tagNameAndDescriptor, Constant.tagInteger, Constant.tagFloat, Constant.tagInvokeDynamic, //
+					Constant.tagMethodReference, Constant.tagInterfaceMethodReference -> bufferReader.readBuffer( 4 );
+				case Constant.tagDouble, Constant.tagLong -> bufferReader.readBuffer( 8 );
+				case Constant.tagMutf8 -> readMutf8ConstantBuffer( bufferReader );
+				default -> throw new InvalidConstantTagException( constantTag );
 			};
 	}
 

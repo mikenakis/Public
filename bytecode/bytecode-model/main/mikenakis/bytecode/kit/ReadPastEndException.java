@@ -1,5 +1,7 @@
 package mikenakis.bytecode.kit;
 
+import mikenakis.kit.UncheckedException;
+
 /**
  * "Read Past End" exception.
  *
@@ -7,7 +9,7 @@ package mikenakis.bytecode.kit;
  */
 public final class ReadPastEndException extends UncheckedException
 {
-	public ReadPastEndException()
+	ReadPastEndException()
 	{
 	}
 }

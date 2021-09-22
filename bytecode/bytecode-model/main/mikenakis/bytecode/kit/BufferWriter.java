@@ -1,5 +1,7 @@
 package mikenakis.bytecode.kit;
 
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
 import java.util.Arrays;
 
 /**
@@ -14,13 +16,20 @@ public class BufferWriter
 
 	public BufferWriter()
 	{
-		bytes = new byte[1024];
+		bytes = new byte[16];
 		position = 0;
 	}
 
-	private void reallocate()
+	private void ensureAdditionalCapacity( int additionalByteCount )
 	{
-		bytes = Arrays.copyOf( bytes, bytes.length * 2 );
+		int minimumCapacity = position + additionalByteCount;
+		if( minimumCapacity > bytes.length )
+		{
+			int growth = minimumCapacity - bytes.length;
+			//note: this "+ 2" exists in the StringBuilder code, but I am not sure why.
+			int newLength = bytes.length + Math.max( growth, bytes.length + 2 );
+			bytes = Arrays.copyOf( bytes, newLength );
+		}
 	}
 
 	public byte[] toBytes()
@@ -33,17 +42,16 @@ public class BufferWriter
 		return position;
 	}
 
-	public void writeUnsignedBytes( int count, int value )
+	public void writeZeroBytes( int count )
 	{
-		for( int end = position + count;  position < end;  )
-			writeUnsignedByte( value );
+		for( int end = position + count; position < end; )
+			writeUnsignedByte( 0 );
 	}
 
 	public void writeUnsignedByte( int value )
 	{
 		assert Helpers.isUnsignedByte( value );
-		if( position > bytes.length - 1 )
-			reallocate();
+		ensureAdditionalCapacity( 1 );
 		bytes[position++] = (byte)value;
 	}
 
@@ -56,8 +64,7 @@ public class BufferWriter
 	public void writeUnsignedShort( int value )
 	{
 		assert Helpers.isUnsignedShort( value );
-		if( position > bytes.length - 2 )
-			reallocate();
+		ensureAdditionalCapacity( 2 );
 		bytes[position] = (byte)(value >>> 8);
 		bytes[position + 1] = (byte)value;
 		position += 2;
@@ -71,8 +78,7 @@ public class BufferWriter
 
 	public void writeInt( int value )
 	{
-		if( position > bytes.length - 4 )
-			reallocate();
+		ensureAdditionalCapacity( 4 );
 		bytes[position] = (byte)(value >>> 24);
 		bytes[position + 1] = (byte)(value >>> 16);
 		bytes[position + 2] = (byte)(value >>> 8);
@@ -87,8 +93,7 @@ public class BufferWriter
 
 	public void writeLong( long value )
 	{
-		if( position > bytes.length - 8 )
-			reallocate();
+		ensureAdditionalCapacity( 8 );
 		bytes[position] = (byte)(value >>> 56);
 		bytes[position + 1] = (byte)(value >>> 48);
 		bytes[position + 2] = (byte)(value >>> 40);
@@ -107,8 +112,7 @@ public class BufferWriter
 
 	public void writeBuffer( Buffer value )
 	{
-		while( position > bytes.length - value.length() )
-			reallocate();
+		ensureAdditionalCapacity( value.length() );
 		value.copyTo( bytes, position );
 		position += value.length();
 	}
@@ -120,13 +124,12 @@ public class BufferWriter
 
 	public void writeBytes( byte[] value, int start, int length )
 	{
-		while( position > bytes.length - length )
-			reallocate();
+		ensureAdditionalCapacity( length );
 		System.arraycopy( value, start, bytes, position, length );
 		position += length;
 	}
 
-	@Override public String toString()
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return "Position: " + position;
 	}

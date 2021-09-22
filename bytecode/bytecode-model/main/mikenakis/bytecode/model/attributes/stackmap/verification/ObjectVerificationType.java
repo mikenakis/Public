@@ -19,11 +19,11 @@ public final class ObjectVerificationType extends VerificationType
 
 	private ObjectVerificationType( ClassConstant classConstant )
 	{
-		super( Tag.Object );
+		super( tagObject );
 		this.classConstant = classConstant;
 	}
 
-	@Deprecated @Override protected ObjectVerificationType asObjectVerificationType() { return this; }
+	@Deprecated @Override public ObjectVerificationType asObjectVerificationType() { return this; }
 
 	public ClassConstant classConstant() { return classConstant; }
 

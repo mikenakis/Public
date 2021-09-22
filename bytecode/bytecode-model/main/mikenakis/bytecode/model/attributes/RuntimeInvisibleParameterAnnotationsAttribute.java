@@ -22,12 +22,9 @@ public final class RuntimeInvisibleParameterAnnotationsAttribute extends Paramet
 		return new RuntimeInvisibleParameterAnnotationsAttribute( entries );
 	}
 
-	public static final String name = "RuntimeInvisibleParameterAnnotations";
-	public static final Kind kind = new Kind( name );
-
 	private RuntimeInvisibleParameterAnnotationsAttribute( List<ParameterAnnotationSet> entries )
 	{
-		super( kind, entries );
+		super( tagRuntimeInvisibleParameterAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeInvisibleParameterAnnotationsAttribute asRuntimeInvisibleParameterAnnotationsAttribute()

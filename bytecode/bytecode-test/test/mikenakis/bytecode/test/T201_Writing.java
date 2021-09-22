@@ -6,6 +6,7 @@ import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Enum1;
+import mikenakis.bytecode.test.model.Model;
 import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
@@ -15,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -33,21 +33,19 @@ public class T201_Writing
 
 	@Test public void Class_Checks_Out()
 	{
-		Path path = Helpers.getPathToClassFile( Class1WithFields.class );
+		Path path = TestKit.getPathToClassFile( Class1WithFields.class );
 		test( path );
 	}
 
 	@Test public void Enum_Checks_Out()
 	{
-		Path path = Helpers.getPathToClassFile( Enum1.class );
+		Path path = TestKit.getPathToClassFile( Enum1.class );
 		test( path );
 	}
 
 	@Test public void Multiple_Classes_Checks_Out()
 	{
-		Path rootPath = Helpers.getPathToResource( getClass(), getClass().getSimpleName() + ".class" ).getParent().resolve( "model" );
-		List<Path> classFilePathNames = TestKit.collectResourcePaths( rootPath, false, ".class" );
-		for( Path classFilePathName : classFilePathNames )
+		for( Path classFilePathName : Model.getClassFilePathNames() )
 			test( classFilePathName );
 	}
 

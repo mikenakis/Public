@@ -18,7 +18,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class SignatureAttribute extends Attribute
+public final class SignatureAttribute extends KnownAttribute
 {
 	public static SignatureAttribute of( String signature )
 	{
@@ -30,14 +30,11 @@ public final class SignatureAttribute extends Attribute
 		return new SignatureAttribute( signatureConstant );
 	}
 
-	public static final String name = "Signature";
-	public static final Kind kind = new Kind( name );
-
 	private final Mutf8Constant signatureConstant;
 
 	private SignatureAttribute( Mutf8Constant signatureConstant )
 	{
-		super( kind );
+		super( tagSignature );
 		this.signatureConstant = signatureConstant;
 	}
 

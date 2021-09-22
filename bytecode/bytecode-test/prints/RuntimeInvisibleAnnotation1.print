@@ -1,26 +1,72 @@
- version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1, superClass = java.lang.Object
- ├─ interfaces (1 entries)
- │   └─ Class name = "java/lang/annotation/Annotation"
- ├─ extra constants (0 entries)
- ├─ fields (0 entries)
- ├─ methods (1 entries)
- │   └─ method accessFlags = [public, abstract], name = value, descriptor = int()
- │       └─ attributes (1 entries)
- │           └─ AnnotationDefault 
- │               └─ Integer value =  5
- └─ attributes (2 entries)
-     ├─ SourceFile value = "RuntimeInvisibleAnnotation1.java"
-     └─ RuntimeVisibleAnnotations (2 entries)
-         ├─ annotation  type = java.lang.annotation.Target, 1 parameters
-         │   └─ parameter name = "value"
-         │       └─ Array value =  7 elements
-         │           ├─ element type = java.lang.annotation.ElementType, value = TYPE
-         │           ├─ element type = java.lang.annotation.ElementType, value = FIELD
-         │           ├─ element type = java.lang.annotation.ElementType, value = METHOD
-         │           ├─ element type = java.lang.annotation.ElementType, value = PARAMETER
-         │           ├─ element type = java.lang.annotation.ElementType, value = CONSTRUCTOR
-         │           ├─ element type = java.lang.annotation.ElementType, value = LOCAL_VARIABLE
-         │           └─ element type = java.lang.annotation.ElementType, value = ANNOTATION_TYPE
-         └─ annotation  type = java.lang.annotation.Retention, 1 parameters
-             └─ parameter name = "value"
-                 └─ Enum value =  type = java.lang.annotation.RetentionPolicy, value = CLASS
+ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1, superClass = java.lang.Object
+ ├─ interfaces: 1 entries
+ │   └─ [0] java.lang.annotation.Annotation
+ ├─ extraConstants: 0 entries
+ ├─ fields: 0 entries
+ ├─ methods: 1 entries
+ │   └─ [0] ByteCodeMethod accessFlags = [public, abstract], name = "value", descriptor = int()
+ │       └─ attributes: 1 entries
+ │           └─ [0] AnnotationDefaultAttribute
+ │               └─ value: AnnotationValue
+ │                   ├─ tag: Integer
+ │                   └─ value: ConstAnnotationValue
+ │                       └─ value: IntegerConstant( 5 )
+ └─ attributes: 2 entries
+     ├─ [0] SourceFileAttribute
+     │   └─ value: Mutf8Constant( "RuntimeInvisibleAnnotation1.java" )
+     └─ [1] RuntimeVisibleAnnotationsAttribute
+         └─ annotations: 2 entries
+             ├─ [0] Annotation
+             │   ├─ type: java.lang.annotation.Target
+             │   └─ parameters: 1 entries
+             │       └─ [0] AnnotationParameter
+             │           ├─ name: "value"
+             │           └─ value: AnnotationValue
+             │               ├─ tag: Array
+             │               └─ value: ArrayAnnotationValue
+             │                   └─ values: 7 entries
+             │                       ├─ [0] AnnotationValue
+             │                       │   ├─ tag: Enum
+             │                       │   └─ value: EnumAnnotationValue
+             │                       │       ├─ type: java.lang.annotation.ElementType
+             │                       │       └─ value: TYPE
+             │                       ├─ [1] AnnotationValue
+             │                       │   ├─ tag: Enum
+             │                       │   └─ value: EnumAnnotationValue
+             │                       │       ├─ type: java.lang.annotation.ElementType
+             │                       │       └─ value: FIELD
+             │                       ├─ [2] AnnotationValue
+             │                       │   ├─ tag: Enum
+             │                       │   └─ value: EnumAnnotationValue
+             │                       │       ├─ type: java.lang.annotation.ElementType
+             │                       │       └─ value: METHOD
+             │                       ├─ [3] AnnotationValue
+             │                       │   ├─ tag: Enum
+             │                       │   └─ value: EnumAnnotationValue
+             │                       │       ├─ type: java.lang.annotation.ElementType
+             │                       │       └─ value: PARAMETER
+             │                       ├─ [4] AnnotationValue
+             │                       │   ├─ tag: Enum
+             │                       │   └─ value: EnumAnnotationValue
+             │                       │       ├─ type: java.lang.annotation.ElementType
+             │                       │       └─ value: CONSTRUCTOR
+             │                       ├─ [5] AnnotationValue
+             │                       │   ├─ tag: Enum
+             │                       │   └─ value: EnumAnnotationValue
+             │                       │       ├─ type: java.lang.annotation.ElementType
+             │                       │       └─ value: LOCAL_VARIABLE
+             │                       └─ [6] AnnotationValue
+             │                           ├─ tag: Enum
+             │                           └─ value: EnumAnnotationValue
+             │                               ├─ type: java.lang.annotation.ElementType
+             │                               └─ value: ANNOTATION_TYPE
+             └─ [1] Annotation
+                 ├─ type: java.lang.annotation.Retention
+                 └─ parameters: 1 entries
+                     └─ [0] AnnotationParameter
+                         ├─ name: "value"
+                         └─ value: AnnotationValue
+                             ├─ tag: Enum
+                             └─ value: EnumAnnotationValue
+                                 ├─ type: java.lang.annotation.RetentionPolicy
+                                 └─ value: CLASS

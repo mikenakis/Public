@@ -26,12 +26,12 @@ public final class StringConstant extends ValueConstant<String>
 
 	private StringConstant( Mutf8Constant value )
 	{
-		super( Tag.String );
+		super( tagString );
 		valueConstant = value;
 	}
 
 	public Mutf8Constant valueConstant() { return valueConstant; }
-	@Override public ConstantDesc constantDescriptor() { return valueConstant.stringValue(); }
+	public ConstantDesc constantDescriptor() { return valueConstant.stringValue(); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

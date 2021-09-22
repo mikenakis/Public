@@ -4,10 +4,12 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class EmptyTarget extends Target // "empty_target" in jvms-4.7.20.1
 {
-	public EmptyTarget( Type type )
+	public EmptyTarget( int tag )
 	{
-		super( type );
-		assert type == Type.TypeInFieldDeclaration || type == Type.ReturnTypeOfMethodOrTypeOfNewlyConstructedObject || type == Type.ReceiverTypeOfMethodOrConstructor;
+		super( tag );
+		assert tag == tagTypeInFieldDeclaration || //
+			tag == tagReturnTypeOfMethodOrTypeOfNewlyConstructedObject || //
+			tag == tagReceiverTypeOfMethodOrConstructor;
 	}
 
 	@Deprecated @Override public EmptyTarget asEmptyTarget() { return this; }

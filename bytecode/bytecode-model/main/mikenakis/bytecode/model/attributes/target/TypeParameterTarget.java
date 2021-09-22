@@ -6,10 +6,10 @@ public final class TypeParameterTarget extends Target // "type_parameter_target"
 {
 	public final int typeParameterIndex;
 
-	public TypeParameterTarget( Type type, int typeParameterIndex )
+	public TypeParameterTarget( int tag, int typeParameterIndex )
 	{
-		super( type );
-		assert type == Type.TypeParameterDeclarationOfGenericClassOrInterface || type == Type.TypeParameterDeclarationOfGenericMethodOrConstructor;
+		super( tag );
+		assert tag == tagTypeParameterDeclarationOfGenericClassOrInterface || tag == tagTypeParameterDeclarationOfGenericMethodOrConstructor;
 		this.typeParameterIndex = typeParameterIndex;
 	}
 

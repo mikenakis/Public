@@ -10,10 +10,12 @@ import java.nio.ByteBuffer;
 /**
  * Test.
  */
-public class T02_Bytes
+public class T03_Bytes
 {
-	public T02_Bytes()
+	public T03_Bytes()
 	{
+		if( !Kit.areAssertionsEnabled() )
+			throw new AssertionError();
 	}
 
 	@Test

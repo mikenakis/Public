@@ -12,19 +12,19 @@ import java.util.Optional;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class LocalVariable
+public final class LocalVariableTableEntry
 {
-	public static LocalVariable of( Instruction startInstruction, Optional<Instruction> endInstruction, String name, String descriptor, int index )
+	public static LocalVariableTableEntry of( Instruction startInstruction, Optional<Instruction> endInstruction, String name, String descriptor, int index )
 	{
 		Mutf8Constant nameConstant = Mutf8Constant.of( name );
 		Mutf8Constant descriptorConstant = Mutf8Constant.of( descriptor );
 		return of( startInstruction, endInstruction, nameConstant, descriptorConstant, index );
 	}
 
-	public static LocalVariable of( Instruction startInstruction, Optional<Instruction> endInstruction, //
+	public static LocalVariableTableEntry of( Instruction startInstruction, Optional<Instruction> endInstruction, //
 		Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, int index )
 	{
-		return new LocalVariable( startInstruction, endInstruction, nameConstant, descriptorConstant, index );
+		return new LocalVariableTableEntry( startInstruction, endInstruction, nameConstant, descriptorConstant, index );
 	}
 
 	public final Instruction startInstruction;
@@ -33,7 +33,7 @@ public final class LocalVariable
 	public final Mutf8Constant descriptorConstant;
 	public final int index;
 
-	private LocalVariable( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
+	private LocalVariableTableEntry( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
 		Mutf8Constant descriptorConstant, int index )
 	{
 		this.startInstruction = startInstruction;

@@ -1,73 +1,92 @@
- version = 60.0, accessFlags = [public, final, super], thisClass = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2, superClass = mikenakis.bytecode.test.model.Class3ImplementingInterface
- ├─ interfaces (1 entries)
- │   └─ Class name = "mikenakis/bytecode/test/model/Interface2"
- ├─ extra constants (0 entries)
- ├─ fields (1 entries)
- │   └─ field accessFlags = [private, final], name = interface1, descriptor = mikenakis.bytecode.test.model.Interface1
- │       └─ attributes (1 entries)
- │           └─ RuntimeVisibleAnnotations (1 entries)
- │               └─ annotation  type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, 2 parameters
- │                   ├─ parameter name = "charParameter"
- │                   │   └─ Character value =  120
- │                   └─ parameter name = "doubleParameter"
- │                       └─ Double value =  1.1
- ├─ methods (3 entries)
- │   ├─ method accessFlags = [public], name = <init>, descriptor = void()
- │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 2, maxLocals = 1
- │   │           ├─ instructions (6 entries)
- │   │           │   ├─ L14:
- │   │           │   ├─      ALOAD_0
- │   │           │   ├─      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
- │   │           │   ├─ L10:
- │   │           │   ├─      ALOAD_0
- │   │           │   ├─      ALOAD_0
- │   │           │   ├─      PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
- │   │           │   ├─ L15:
- │   │           │   └─      RETURN
- │   │           ├─ exceptionInfos (0 entries)
- │   │           └─ attributes (2 entries)
- │   │               ├─ LineNumberTable (3 entries)
- │   │               │   ├─  lineNumber = 14, start = L14
- │   │               │   ├─  lineNumber = 10, start = L10
- │   │               │   └─  lineNumber = 15, start = L15
- │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, start = L14, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
- │   ├─ method accessFlags = [public], name = getInterface1, descriptor = mikenakis.bytecode.test.model.Interface1()
- │   │   └─ attributes (1 entries)
- │   │       └─ Code maxStack = 1, maxLocals = 1
- │   │           ├─ instructions (3 entries)
- │   │           │   ├─ L19:
- │   │           │   ├─      ALOAD_0
- │   │           │   ├─      GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
- │   │           │   └─      ARETURN
- │   │           ├─ exceptionInfos (0 entries)
- │   │           └─ attributes (2 entries)
- │   │               ├─ LineNumberTable (1 entries)
- │   │               │   └─  lineNumber = 19, start = L19
- │   │               └─ LocalVariableTable (1 entries)
- │   │                   └─  index = 0, start = L19, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
- │   └─ method accessFlags = [public], name = getLong, descriptor = long( mikenakis.bytecode.test.model.Class3ImplementingInterface )
- │       └─ attributes (2 entries)
- │           ├─ Code maxStack = 2, maxLocals = 4
- │           │   ├─ instructions (5 entries)
- │           │   │   ├─ L25:
- │           │   │   ├─      INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread()
- │           │   │   ├─      INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
- │           │   │   ├─      LSTORE_2
- │           │   │   ├─ L26:
- │           │   │   ├─      LLOAD_2
- │           │   │   └─      LRETURN
- │           │   ├─ exceptionInfos (0 entries)
- │           │   └─ attributes (2 entries)
- │           │       ├─ LineNumberTable (2 entries)
- │           │       │   ├─  lineNumber = 25, start = L25
- │           │       │   └─  lineNumber = 26, start = L26
- │           │       └─ LocalVariableTable (3 entries)
- │           │           ├─  index = 0, start = L25, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
- │           │           ├─  index = 1, start = L25, end = @end, name = class3ImplementingInterface, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
- │           │           └─  index = 2, start = L26, end = @end, name = id, descriptor = long
- │           └─ MethodParameters (1 entries)
- │               └─  accessFlags = [], name = class3ImplementingInterface
- └─ attributes (1 entries)
-     └─ SourceFile value = "Class5ExtendingClass3AndImplementingInterface2.java"
+ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2, superClass = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ ├─ interfaces: 1 entries
+ │   └─ [0] mikenakis.bytecode.test.model.Interface2
+ ├─ extraConstants: 0 entries
+ ├─ fields: 1 entries
+ │   └─ [0] ByteCodeField accessFlags = [private, final], name = "interface1", descriptor = mikenakis.bytecode.test.model.Interface1
+ │       └─ attributes: 1 entries
+ │           └─ [0] RuntimeVisibleAnnotationsAttribute
+ │               └─ annotations: 1 entries
+ │                   └─ [0] Annotation
+ │                       ├─ type: mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1
+ │                       └─ parameters: 2 entries
+ │                           ├─ [0] AnnotationParameter
+ │                           │   ├─ name: "charParameter"
+ │                           │   └─ value: AnnotationValue
+ │                           │       ├─ tag: Character
+ │                           │       └─ value: ConstAnnotationValue
+ │                           │           └─ value: IntegerConstant( 120 (char 'x') )
+ │                           └─ [1] AnnotationParameter
+ │                               ├─ name: "doubleParameter"
+ │                               └─ value: AnnotationValue
+ │                                   ├─ tag: Double
+ │                                   └─ value: ConstAnnotationValue
+ │                                       └─ value: DoubleConstant( 1.1 )
+ ├─ methods: 3 entries
+ │   ├─ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()
+ │   │   └─ attributes: 1 entries
+ │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
+ │   │           ├─ instructions: 6 entries
+ │   │           │   ├─ [0] L14: // {
+ │   │           │   ├─ [1]      ALOAD_0
+ │   │           │   ├─ [2]      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
+ │   │           │   ├─ [3] L10: // @RuntimeVisibleAnnotation1( charParameter = 'x', doubleParameter = 1.1 ) //
+ │   │           │   ├─ [4]      ALOAD_0
+ │   │           │   ├─ [5]      ALOAD_0
+ │   │           │   ├─ [6]      PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
+ │   │           │   ├─ [7] L15: // }
+ │   │           │   └─ [8]      RETURN
+ │   │           ├─ exceptionInfos: 0 entries
+ │   │           └─ attributes: 2 entries
+ │   │               ├─ [0] LineNumberTableAttribute
+ │   │               │   └─ entrys: 3 entries
+ │   │               │       ├─ [0] LineNumberTableEntry lineNumber = 14, start = L14
+ │   │               │       ├─ [1] LineNumberTableEntry lineNumber = 10, start = L10
+ │   │               │       └─ [2] LineNumberTableEntry lineNumber = 15, start = L15
+ │   │               └─ [1] LocalVariableTableAttribute
+ │   │                   └─ entrys: 1 entries
+ │   │                       └─ [0] LocalVariableTableEntry index = 0, start = L14, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
+ │   ├─ [1] ByteCodeMethod accessFlags = [public], name = "getInterface1", descriptor = mikenakis.bytecode.test.model.Interface1()
+ │   │   └─ attributes: 1 entries
+ │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
+ │   │           ├─ instructions: 3 entries
+ │   │           │   ├─ [0] L19: // return interface1;
+ │   │           │   ├─ [1]      ALOAD_0
+ │   │           │   ├─ [2]      GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
+ │   │           │   └─ [3]      ARETURN
+ │   │           ├─ exceptionInfos: 0 entries
+ │   │           └─ attributes: 2 entries
+ │   │               ├─ [0] LineNumberTableAttribute
+ │   │               │   └─ entrys: 1 entries
+ │   │               │       └─ [0] LineNumberTableEntry lineNumber = 19, start = L19
+ │   │               └─ [1] LocalVariableTableAttribute
+ │   │                   └─ entrys: 1 entries
+ │   │                       └─ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
+ │   └─ [2] ByteCodeMethod accessFlags = [public], name = "getLong", descriptor = long( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+ │       └─ attributes: 2 entries
+ │           ├─ [0] CodeAttribute maxStack = 2, maxLocals = 4
+ │           │   ├─ instructions: 5 entries
+ │           │   │   ├─ [0] L25: // long id = Thread.currentThread().getId();
+ │           │   │   ├─ [1]      INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread()
+ │           │   │   ├─ [2]      INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
+ │           │   │   ├─ [3]      LSTORE_2
+ │           │   │   ├─ [4] L26: // return id;
+ │           │   │   ├─ [5]      LLOAD_2
+ │           │   │   └─ [6]      LRETURN
+ │           │   ├─ exceptionInfos: 0 entries
+ │           │   └─ attributes: 2 entries
+ │           │       ├─ [0] LineNumberTableAttribute
+ │           │       │   └─ entrys: 2 entries
+ │           │       │       ├─ [0] LineNumberTableEntry lineNumber = 25, start = L25
+ │           │       │       └─ [1] LineNumberTableEntry lineNumber = 26, start = L26
+ │           │       └─ [1] LocalVariableTableAttribute
+ │           │           └─ entrys: 3 entries
+ │           │               ├─ [0] LocalVariableTableEntry index = 0, start = L25, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2
+ │           │               ├─ [1] LocalVariableTableEntry index = 1, start = L25, end = @end, name = class3ImplementingInterface, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+ │           │               └─ [2] LocalVariableTableEntry index = 2, start = L26, end = @end, name = id, descriptor = long
+ │           └─ [1] MethodParametersAttribute
+ │               └─ parameters: 1 entries
+ │                   └─ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
+ └─ attributes: 1 entries
+     └─ [0] SourceFileAttribute
+         └─ value: Mutf8Constant( "Class5ExtendingClass3AndImplementingInterface2.java" )

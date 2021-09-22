@@ -2,8 +2,6 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.Constant;
 
-import java.util.Comparator;
-
 /**
  * Represents the JVMS::CONSTANT_Double_info structure.
  *
@@ -11,7 +9,7 @@ import java.util.Comparator;
  */
 public abstract class ValueConstant<T extends Comparable<T>> extends Constant
 {
-	protected ValueConstant( Tag tag )
+	protected ValueConstant( int tag )
 	{
 		super( tag );
 	}
@@ -24,16 +22,12 @@ public abstract class ValueConstant<T extends Comparable<T>> extends Constant
 		return result;
 	}
 
-	@Override protected Comparator<? extends Constant> comparator()
+	@Override public int compareTo( Constant other )
 	{
-		return comparator;
-	}
-
-	private static final Comparator<ValueConstant<?>> comparator = Comparator.comparing( ValueConstant::valueExtractor );
-
-	private static <T extends Comparable<T>> T valueExtractor( ValueConstant<T> valueConstant )
-	{
-		return valueConstant.value();
+		int d = super.compareTo( other );
+		if( d != 0 )
+			return d;
+		return value().compareTo( other.<T>asValueConstant().value() );
 	}
 
 	@Override public abstract int hashCode();

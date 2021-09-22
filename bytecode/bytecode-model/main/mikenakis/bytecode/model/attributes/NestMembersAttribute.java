@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class NestMembersAttribute extends Attribute
+public final class NestMembersAttribute extends KnownAttribute
 {
 	public static NestMembersAttribute of()
 	{
@@ -31,20 +31,12 @@ public final class NestMembersAttribute extends Attribute
 		return new NestMembersAttribute( memberClassConstants );
 	}
 
-	public static final String name = "NestMembers";
-	public static final Kind kind = new Kind( name );
-
-	private final List<ClassConstant> memberClassConstants;
+	public final List<ClassConstant> memberClassConstants;
 
 	private NestMembersAttribute( List<ClassConstant> memberClassConstants )
 	{
-		super( kind );
+		super( tagNestMembers );
 		this.memberClassConstants = memberClassConstants;
-	}
-
-	public List<ClassConstant> memberClassConstants()
-	{
-		return memberClassConstants;
 	}
 
 	@Deprecated @Override public NestMembersAttribute asNestMembersAttribute()

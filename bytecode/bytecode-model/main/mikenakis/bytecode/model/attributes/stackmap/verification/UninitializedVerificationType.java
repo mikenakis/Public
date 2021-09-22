@@ -18,9 +18,9 @@ public final class UninitializedVerificationType extends VerificationType
 
 	private UninitializedVerificationType( Instruction instruction )
 	{
-		super( Tag.Uninitialized );
+		super( tagUninitialized );
 		this.instruction = instruction;
 	}
 
-	@Deprecated @Override protected UninitializedVerificationType asUninitializedVerificationType() { return this; }
+	@Deprecated @Override public UninitializedVerificationType asUninitializedVerificationType() { return this; }
 }

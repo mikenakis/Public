@@ -26,7 +26,7 @@ public final class InvokeDynamicConstant extends Constant
 
 	private InvokeDynamicConstant( int bootstrapMethodIndex, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( Tag.InvokeDynamic );
+		super( tagInvokeDynamic );
 		this.bootstrapMethodIndex = bootstrapMethodIndex;
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
@@ -37,8 +37,8 @@ public final class InvokeDynamicConstant extends Constant
 	public DynamicCallSiteDesc descriptor( ByteCodeType byteCodeType ) //TODO: get rid of the ByteCodeType parameter.
 	{
 		DynamicConstantDesc<?> dynamicConstantDescriptor = byteCodeType.getBootstrapMethodByIndex( bootstrapMethodIndex ).constantDescriptor();
-		MethodTypeDesc methodTypeDesc = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant().stringValue() );
-		return DynamicCallSiteDesc.of( dynamicConstantDescriptor.bootstrapMethod(), nameAndDescriptorConstant.nameConstant().stringValue(), methodTypeDesc, dynamicConstantDescriptor.bootstrapArgs() );
+		MethodTypeDesc methodTypeDesc = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() );
+		return DynamicCallSiteDesc.of( dynamicConstantDescriptor.bootstrapMethod(), nameAndDescriptorConstant.nameConstant.stringValue(), methodTypeDesc, dynamicConstantDescriptor.bootstrapArgs() );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

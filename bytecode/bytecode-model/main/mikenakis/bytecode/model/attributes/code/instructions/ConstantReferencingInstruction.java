@@ -1,5 +1,6 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.exceptions.InvalidConstantTagException;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
@@ -25,13 +26,13 @@ public final class ConstantReferencingInstruction extends Instruction
 		super( Group.ConstantReferencing );
 		switch( constant.tag )
 		{
-			case FieldReference:
-			case InterfaceMethodReference:
-			case MethodReference:
-			case Class:
+			case Constant.tagFieldReference:
+			case Constant.tagInterfaceMethodReference:
+			case Constant.tagMethodReference:
+			case Constant.tagClass:
 				break;
 			default:
-				assert false;
+				throw new AssertionError( constant );
 		}
 		assert opCodes.contains( opCode );
 		this.opCode = opCode;

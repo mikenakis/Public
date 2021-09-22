@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,32 +15,24 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class LocalVariableTableAttribute extends Attribute
+public final class LocalVariableTableAttribute extends KnownAttribute
 {
 	public static LocalVariableTableAttribute of()
 	{
 		return of( new ArrayList<>() );
 	}
 
-	public static LocalVariableTableAttribute of( List<LocalVariable> localVariables )
+	public static LocalVariableTableAttribute of( List<LocalVariableTableEntry> entrys )
 	{
-		return new LocalVariableTableAttribute( localVariables );
+		return new LocalVariableTableAttribute( entrys );
 	}
 
-	public static final String name = "LocalVariableTable";
-	public static final Kind kind = new Kind( name );
+	public final List<LocalVariableTableEntry> entrys;
 
-	private final List<LocalVariable> localVariables;
-
-	private LocalVariableTableAttribute( List<LocalVariable> localVariables )
+	private LocalVariableTableAttribute( List<LocalVariableTableEntry> entrys )
 	{
-		super( kind );
-		this.localVariables = localVariables;
-	}
-
-	public List<LocalVariable> localVariables()
-	{
-		return Collections.unmodifiableList( localVariables );
+		super( tagLocalVariableTable );
+		this.entrys = entrys;
 	}
 
 	@Deprecated @Override public LocalVariableTableAttribute asLocalVariableTableAttribute()
@@ -51,6 +42,6 @@ public final class LocalVariableTableAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return localVariables.size() + " entries";
+		return entrys.size() + " entries";
 	}
 }

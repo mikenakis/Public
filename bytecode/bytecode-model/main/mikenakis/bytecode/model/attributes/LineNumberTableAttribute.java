@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,32 +15,24 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class LineNumberTableAttribute extends Attribute
+public final class LineNumberTableAttribute extends KnownAttribute
 {
 	public static LineNumberTableAttribute of()
 	{
 		return of( new ArrayList<>() );
 	}
 
-	public static LineNumberTableAttribute of( List<LineNumberEntry> entries )
+	public static LineNumberTableAttribute of( List<LineNumberTableEntry> entrys )
 	{
-		return new LineNumberTableAttribute( entries );
+		return new LineNumberTableAttribute( entrys );
 	}
 
-	public static final String name = "LineNumberTable";
-	public static final Kind kind = new Kind( name );
+	public final List<LineNumberTableEntry> entrys;
 
-	private final List<LineNumberEntry> lineNumbers;
-
-	private LineNumberTableAttribute( List<LineNumberEntry> lineNumbers )
+	private LineNumberTableAttribute( List<LineNumberTableEntry> entrys )
 	{
-		super( kind );
-		this.lineNumbers = lineNumbers;
-	}
-
-	public List<LineNumberEntry> lineNumbers()
-	{
-		return Collections.unmodifiableList( lineNumbers );
+		super( tagLineNumberTable );
+		this.entrys = entrys;
 	}
 
 	@Deprecated @Override public LineNumberTableAttribute asLineNumberTableAttribute()
@@ -51,6 +42,6 @@ public final class LineNumberTableAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return lineNumbers.size() + " entries";
+		return entrys.size() + " entries";
 	}
 }

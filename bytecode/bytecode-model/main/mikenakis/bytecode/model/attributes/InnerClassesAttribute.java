@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class InnerClassesAttribute extends Attribute
+public final class InnerClassesAttribute extends KnownAttribute
 {
 	public static InnerClassesAttribute of()
 	{
@@ -29,20 +29,12 @@ public final class InnerClassesAttribute extends Attribute
 		return new InnerClassesAttribute( innerClasses );
 	}
 
-	public static final String name = "InnerClasses";
-	public static final Kind kind = new Kind( name );
-
-	private final List<InnerClass> innerClasses;
+	public final List<InnerClass> innerClasses;
 
 	private InnerClassesAttribute( List<InnerClass> innerClasses )
 	{
-		super( kind );
+		super( tagInnerClasses );
 		this.innerClasses = innerClasses;
-	}
-
-	public List<InnerClass> innerClasses()
-	{
-		return Collections.unmodifiableList( innerClasses );
 	}
 
 	@Deprecated @Override public InnerClassesAttribute asInnerClassesAttribute()

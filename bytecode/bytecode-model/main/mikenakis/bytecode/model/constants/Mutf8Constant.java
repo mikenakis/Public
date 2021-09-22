@@ -33,7 +33,7 @@ public final class Mutf8Constant extends ValueConstant<String>
 
 	private Mutf8Constant( Buffer buffer, String stringValue )
 	{
-		super( Tag.Mutf8 );
+		super( tagMutf8 );
 		assert (stringValue == null) != (buffer == null);
 		_buffer = buffer;
 		_stringValue = stringValue;

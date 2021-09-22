@@ -6,10 +6,10 @@ public final class FormalParameterTarget extends Target // "formal_parameter_tar
 {
 	public final int formalParameterIndex;
 
-	public FormalParameterTarget( Type type, int formalParameterIndex )
+	public FormalParameterTarget( int tag, int formalParameterIndex )
 	{
-		super( type );
-		assert type == Type.TypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression;
+		super( tag );
+		assert tag == tagTypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression;
 		this.formalParameterIndex = formalParameterIndex;
 	}
 

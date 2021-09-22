@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class StackMapTableAttribute extends Attribute
+public final class StackMapTableAttribute extends KnownAttribute
 {
 	public static StackMapTableAttribute of()
 	{
@@ -42,14 +42,11 @@ public final class StackMapTableAttribute extends Attribute
 		return new StackMapTableAttribute( frames );
 	}
 
-	public static final String name = "StackMapTable";
-	public static final Kind kind = new Kind( name );
-
 	private final List<StackMapFrame> frames;
 
 	private StackMapTableAttribute( List<StackMapFrame> frames )
 	{
-		super( kind );
+		super( tagStackMapTable );
 		this.frames = frames;
 	}
 

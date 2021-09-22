@@ -20,7 +20,7 @@ public final class FloatConstant extends ValueConstant<Float>
 
 	private FloatConstant( float value )
 	{
-		super( Tag.Float );
+		super( tagFloat );
 		this.value = value;
 	}
 

@@ -19,22 +19,19 @@ import java.util.Optional;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class EnclosingMethodAttribute extends Attribute
+public final class EnclosingMethodAttribute extends KnownAttribute
 {
 	public static EnclosingMethodAttribute of( ClassConstant classConstant, Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant )
 	{
 		return new EnclosingMethodAttribute( classConstant, methodNameAndDescriptorConstant );
 	}
 
-	public static final String name = "EnclosingMethod";
-	public static final Kind kind = new Kind( name );
-
 	private final ClassConstant classConstant;
 	private final Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant;
 
 	private EnclosingMethodAttribute( ClassConstant classConstant, Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant )
 	{
-		super( kind );
+		super( tagEnclosingMethod );
 		this.classConstant = classConstant;
 		this.methodNameAndDescriptorConstant = methodNameAndDescriptorConstant;
 	}
@@ -55,13 +52,13 @@ public final class EnclosingMethodAttribute extends Attribute
 	public String methodName()
 	{
 		assert hasMethod();
-		return methodNameAndDescriptorConstant.map( c -> c.nameConstant().stringValue() ).orElseThrow();
+		return methodNameAndDescriptorConstant.map( c -> c.nameConstant.stringValue() ).orElseThrow();
 	}
 
 	public MethodTypeDesc methodDescriptor()
 	{
 		assert hasMethod();
-		return methodNameAndDescriptorConstant.map( c -> MethodTypeDesc.ofDescriptor( c.descriptorConstant().stringValue() ) ).orElseThrow();
+		return methodNameAndDescriptorConstant.map( c -> MethodTypeDesc.ofDescriptor( c.descriptorConstant.stringValue() ) ).orElseThrow();
 	}
 
 	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute()

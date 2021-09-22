@@ -17,19 +17,16 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class SyntheticAttribute extends Attribute
+public final class SyntheticAttribute extends KnownAttribute
 {
 	public static SyntheticAttribute of()
 	{
 		return new SyntheticAttribute();
 	}
 
-	public static final String name = "Synthetic";
-	public static final Kind kind = new Kind( name );
-
 	private SyntheticAttribute()
 	{
-		super( kind );
+		super( tagSynthetic );
 	}
 
 	@Deprecated @Override public SyntheticAttribute asSyntheticAttribute()

@@ -28,11 +28,11 @@ public final class MethodTypeConstant extends Constant
 
 	private MethodTypeConstant( Mutf8Constant descriptorConstant )
 	{
-		super( Tag.MethodType );
+		super( tagMethodType );
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	@Override public ConstantDesc constantDescriptor()
+	public ConstantDesc constantDescriptor()
 	{
 		return MethodTypeDesc.ofDescriptor( descriptorConstant.stringValue() );
 	}

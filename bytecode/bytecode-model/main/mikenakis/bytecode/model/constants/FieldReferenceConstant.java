@@ -16,7 +16,7 @@ public final class FieldReferenceConstant extends ReferenceConstant
 
 	private FieldReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( Tag.FieldReference, typeConstant, nameAndDescriptorConstant );
+		super( tagFieldReference, typeConstant, nameAndDescriptorConstant );
 	}
 
 	// String Customer.name;
@@ -24,9 +24,9 @@ public final class FieldReferenceConstant extends ReferenceConstant
 	// 1: nameAndDescriptorConstant.descriptorConstant
 	// 2: typeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public ClassDesc fieldTypeDescriptor() { return ClassDesc.ofDescriptor( nameAndDescriptorConstant().descriptorConstant().stringValue() ); }
-	public ClassDesc owningClassDescriptor() { return typeConstant().classDescriptor();	}
-	public String fieldName() {	return nameAndDescriptorConstant().nameConstant().stringValue(); }
+	public ClassDesc fieldTypeDescriptor() { return ClassDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() ); }
+	public ClassDesc owningClassDescriptor() { return typeConstant.classDescriptor(); }
+	public String fieldName() { return nameAndDescriptorConstant.nameConstant.stringValue(); }
 
 	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant()
 	{

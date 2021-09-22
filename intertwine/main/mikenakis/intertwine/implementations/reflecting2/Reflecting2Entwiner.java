@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
@@ -50,11 +49,9 @@ final class Reflecting2Entwiner<T>
 
 	private static Object newProxyInstance( ClassLoader loader, Class<?> theInterface, InvocationHandler handler )
 	{
-		Mutf8Constant thisClassName = Mutf8Constant.of( "test" );
-		ClassConstant thisClassConstant = ClassConstant.of( thisClassName );
-		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), thisClassConstant, Optional.empty() );
+		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), "TestClass", Optional.empty() );
 		ByteCodeField byteCodeField = ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "handler", Kit.get( null ) );
-		byteCodeType.addField( byteCodeField );
+		Kit.collection.add( byteCodeType.fields, byteCodeField );
 		for( Method method : theInterface.getMethods() )
 		{
 			int modifiers = method.getModifiers();

@@ -12,19 +12,16 @@ import java.util.Objects;
  */
 public abstract class ReferenceConstant extends Constant
 {
-	private final ClassConstant typeConstant;
-	private final NameAndDescriptorConstant nameAndDescriptorConstant;
+	public final ClassConstant typeConstant;
+	public final NameAndDescriptorConstant nameAndDescriptorConstant;
 
-	protected ReferenceConstant( Tag tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	protected ReferenceConstant( int tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
 		super( tag );
-		assert tag == Constant.Tag.FieldReference || tag == Constant.Tag.MethodReference || tag == Constant.Tag.InterfaceMethodReference;
+		assert tag == Constant.tagFieldReference || tag == Constant.tagMethodReference || tag == Constant.tagInterfaceMethodReference;
 		this.typeConstant = typeConstant;
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
-
-	public ClassConstant typeConstant() { return typeConstant; }
-	public NameAndDescriptorConstant nameAndDescriptorConstant() { return nameAndDescriptorConstant; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public final String toString()
 	{

@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class ExceptionsAttribute extends Attribute
+public final class ExceptionsAttribute extends KnownAttribute
 {
 	public static ExceptionsAttribute of()
 	{
@@ -30,14 +30,11 @@ public final class ExceptionsAttribute extends Attribute
 		return new ExceptionsAttribute( exceptionClassConstants );
 	}
 
-	public static final String name = "Exceptions";
-	public static final Kind kind = new Kind( name );
-
 	private final List<ClassConstant> exceptionClassConstants;
 
 	private ExceptionsAttribute( List<ClassConstant> exceptionClassConstants )
 	{
-		super( kind );
+		super( tagExceptions );
 		this.exceptionClassConstants = exceptionClassConstants;
 	}
 

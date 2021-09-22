@@ -1,6 +1,6 @@
 package mikenakis.bytecode.exceptions;
 
-import mikenakis.bytecode.kit.UncheckedException;
+import mikenakis.kit.UncheckedException;
 
 /**
  * "String too long" exception.
@@ -14,10 +14,5 @@ public final class StringTooLongException extends UncheckedException
 	public StringTooLongException( int length )
 	{
 		this.length = length;
-	}
-
-	@Override protected String onGetMessage()
-	{
-		return "length: " + length;
 	}
 }

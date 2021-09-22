@@ -19,9 +19,9 @@ public final class UnknownAttribute extends Attribute
 
 	private final Buffer buffer;
 
-	private UnknownAttribute( Mutf8Constant name, Buffer buffer )
+	private UnknownAttribute( Mutf8Constant mutf8name, Buffer buffer )
 	{
-		super( new Kind( name.stringValue() ) );
+		super( mutf8name );
 		this.buffer = buffer;
 	}
 
@@ -30,10 +30,8 @@ public final class UnknownAttribute extends Attribute
 		return buffer;
 	}
 
-	@Deprecated @Override public UnknownAttribute asUnknownAttribute()
-	{
-		return this;
-	}
+	@Deprecated @Override public boolean isKnown() { return false; }
+	@Deprecated @Override public UnknownAttribute asUnknownAttribute() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

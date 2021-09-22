@@ -23,7 +23,7 @@ class ConcreteInstructionWriter implements InstructionWriter
 	@Override public void writeUnsignedShort( int value ) { bufferWriter.writeUnsignedShort( value ); }
 	@Override public void writeSignedShort( int value ) { bufferWriter.writeSignedShort( value ); }
 	@Override public void writeInt( int value ) { bufferWriter.writeInt( value ); }
-	@Override public void skipToAlign() { bufferWriter.writeUnsignedBytes( Helpers.padding( bufferWriter.getPosition() ), 0 ); }
+	@Override public void skipToAlign() { bufferWriter.writeZeroBytes( Helpers.padding( bufferWriter.getPosition() ) ); }
 
 	@Override public int getIndex( Constant constant )
 	{

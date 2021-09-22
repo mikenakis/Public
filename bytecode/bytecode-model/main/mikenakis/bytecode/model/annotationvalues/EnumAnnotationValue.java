@@ -1,31 +1,31 @@
 package mikenakis.bytecode.model.annotationvalues;
 
-import mikenakis.bytecode.model.ElementValue;
+import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.ClassDesc;
 
 /**
- * Represents an enum {@link ElementValue}.
+ * Represents an enum {@link AnnotationValue}.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class EnumElementValue extends ElementValue
+public final class EnumAnnotationValue extends AnnotationValue
 {
 	public static final String NAME = "enum";
 
-	public static EnumElementValue of( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
+	public static EnumAnnotationValue of( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
 	{
-		return new EnumElementValue( typeNameConstant, valueNameConstant );
+		return new EnumAnnotationValue( typeNameConstant, valueNameConstant );
 	}
 
 	private final Mutf8Constant typeNameConstant;
 	private final Mutf8Constant valueNameConstant;
 
-	private EnumElementValue( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
+	private EnumAnnotationValue( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
 	{
-		super( Tag.Enum );
+		super( tagEnum );
 		this.typeNameConstant = typeNameConstant;
 		this.valueNameConstant = valueNameConstant;
 	}
@@ -35,7 +35,7 @@ public final class EnumElementValue extends ElementValue
 	public Mutf8Constant valueNameConstant() { return valueNameConstant; }
 	public String valueName() { return valueNameConstant.stringValue(); }
 
-	@Deprecated @Override public EnumElementValue asEnumAnnotationValue()
+	@Deprecated @Override public EnumAnnotationValue asEnumAnnotationValue()
 	{
 		return this;
 	}

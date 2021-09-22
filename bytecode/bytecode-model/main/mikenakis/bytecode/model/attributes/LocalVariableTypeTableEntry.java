@@ -11,12 +11,12 @@ import java.util.Optional;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class LocalVariableType
+public final class LocalVariableTypeTableEntry
 {
-	public static LocalVariableType of( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
+	public static LocalVariableTypeTableEntry of( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
 		Mutf8Constant signatureConstant, int index )
 	{
-		return new LocalVariableType( startInstruction, endInstruction, nameConstant, signatureConstant, index );
+		return new LocalVariableTypeTableEntry( startInstruction, endInstruction, nameConstant, signatureConstant, index );
 	}
 
 	public final Instruction startInstruction;
@@ -25,7 +25,7 @@ public final class LocalVariableType
 	public final Mutf8Constant signatureConstant; //this is a field type signature
 	public final int index;
 
-	private LocalVariableType( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
+	private LocalVariableTypeTableEntry( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant nameConstant, //
 		Mutf8Constant signatureConstant, int index )
 	{
 		this.startInstruction = startInstruction;

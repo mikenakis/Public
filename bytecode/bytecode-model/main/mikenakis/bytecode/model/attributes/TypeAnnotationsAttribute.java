@@ -5,6 +5,7 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.TypeAnnotation;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Collections;
@@ -19,19 +20,14 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class TypeAnnotationsAttribute extends Attribute
+public abstract class TypeAnnotationsAttribute extends KnownAttribute
 {
-	private final List<TypeAnnotation> typeAnnotations;
+	public final List<TypeAnnotation> typeAnnotations;
 
-	TypeAnnotationsAttribute( Kind kind, List<TypeAnnotation> typeAnnotations )
+	TypeAnnotationsAttribute( int tag, List<TypeAnnotation> typeAnnotations )
 	{
-		super( kind );
+		super( tag );
 		this.typeAnnotations = typeAnnotations;
-	}
-
-	public List<TypeAnnotation> typeAnnotations()
-	{
-		return Collections.unmodifiableList( typeAnnotations );
 	}
 
 	@Deprecated @Override public TypeAnnotationsAttribute asTypeAnnotationsAttribute()
@@ -41,6 +37,6 @@ public abstract class TypeAnnotationsAttribute extends Attribute
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return kind.name + ' ' + typeAnnotations.size() + " entries";
+		return mutf8Name.stringValue() + ' ' + typeAnnotations.size() + " entries";
 	}
 }

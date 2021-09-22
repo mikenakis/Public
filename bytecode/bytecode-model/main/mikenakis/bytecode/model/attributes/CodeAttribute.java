@@ -38,13 +38,13 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class CodeAttribute extends Attribute
+public final class CodeAttribute extends KnownAttribute
 {
 	public static final String END_LABEL = "@end";
 
-	public static CodeAttribute of()
+	public static CodeAttribute of( int maxStack, int maxLocals )
 	{
-		return of( 0, 0, new ArrayList<>(), new ArrayList<>(), AttributeSet.of() );
+		return of( maxStack, maxLocals, new ArrayList<>(), new ArrayList<>(), AttributeSet.of() );
 	}
 
 	public static CodeAttribute of( int maxStack, int maxLocals, List<Instruction> instructions, List<ExceptionInfo> exceptionInfos, AttributeSet attributeSet )
@@ -52,28 +52,20 @@ public final class CodeAttribute extends Attribute
 		return new CodeAttribute( maxStack, maxLocals, instructions, exceptionInfos, attributeSet );
 	}
 
-	public static final String name = "Code";
-	public static final Kind kind = new Kind( name );
-
 	private int maxStack;
 	private int maxLocals;
 	private final List<ExceptionInfo> exceptionInfos;
-	private final AttributeSet attributeSet;
+	public final AttributeSet attributeSet;
 	private final InstructionList instructions;
 
 	private CodeAttribute( int maxStack, int maxLocals, List<Instruction> instructions, List<ExceptionInfo> exceptionInfos, AttributeSet attributeSet )
 	{
-		super( kind );
+		super( tagCode );
 		this.maxStack = maxStack;
 		this.maxLocals = maxLocals;
 		this.instructions = InstructionList.of( instructions );
 		this.exceptionInfos = exceptionInfos;
 		this.attributeSet = attributeSet;
-	}
-
-	public AttributeSet attributeSet()
-	{
-		return attributeSet;
 	}
 
 	public int getMaxStack()
@@ -177,7 +169,7 @@ public final class CodeAttribute extends Attribute
 	public TableSwitchInstruction         addTableSwitch     ( int lowValue )                                                 { return add( TableSwitchInstruction.of( 0, lowValue ) ); }
 	public LookupSwitchInstruction        addLookupSwitch    ()                                                               { return add( LookupSwitchInstruction.of() ); }
 	public NewPrimitiveArrayInstruction   addNewArray        ( NewPrimitiveArrayInstruction.Type type )                       { return add( NewPrimitiveArrayInstruction.of( type ) ); }
-	public LocalVariableInstruction       addRet             ( byte localVariableIndex )                                      { return add( LocalVariableInstruction.of( OpCode.RET, localVariableIndex ) ); }
+	public LocalVariableInstruction       addRet             ( int localVariableIndex )                                      { return add( LocalVariableInstruction.of( OpCode.RET, localVariableIndex ) ); }
 	public ConstantReferencingInstruction addGetStatic       ( FieldReferenceConstant constant )                              { return add( ConstantReferencingInstruction.of ( OpCode.GETSTATIC, constant ) ); }
 	public ConstantReferencingInstruction addPutStatic       ( FieldReferenceConstant constant )                              { return add( ConstantReferencingInstruction.of ( OpCode.PUTSTATIC, constant ) ); }
 	public ConstantReferencingInstruction addGetField        ( FieldReferenceConstant constant )                              { return add( ConstantReferencingInstruction.of ( OpCode.GETFIELD, constant ) ); }

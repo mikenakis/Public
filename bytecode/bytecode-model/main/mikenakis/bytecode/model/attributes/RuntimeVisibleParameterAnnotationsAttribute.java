@@ -27,12 +27,9 @@ public final class RuntimeVisibleParameterAnnotationsAttribute extends Parameter
 		return new RuntimeVisibleParameterAnnotationsAttribute( entries );
 	}
 
-	public static final String name = "RuntimeVisibleParameterAnnotations";
-	public static final Kind kind = new Kind( name );
-
 	private RuntimeVisibleParameterAnnotationsAttribute( List<ParameterAnnotationSet> entries )
 	{
-		super( kind, entries );
+		super( tagRuntimeVisibleParameterAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeVisibleParameterAnnotationsAttribute asRuntimeVisibleParameterAnnotationsAttribute()

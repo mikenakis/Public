@@ -66,7 +66,7 @@ class ReadingLocationMap implements LocationMap
 		return instructionsByLocation[location] != null;
 	}
 
-	public int getPosition()
+	int getPosition()
 	{
 		return topLocation;
 	}

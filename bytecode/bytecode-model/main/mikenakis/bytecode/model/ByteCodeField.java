@@ -2,6 +2,8 @@ package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.collections.FlagEnum;
+import mikenakis.kit.collections.FlagEnumSet;
 
 import java.lang.constant.ClassDesc;
 import java.util.Map;
@@ -13,13 +15,13 @@ import java.util.Map;
  */
 public final class ByteCodeField extends ByteCodeMember
 {
-	public static ByteCodeField of( FlagSet<Modifier> modifierSet, String name, @SuppressWarnings( "TypeMayBeWeakened" ) ClassDesc fieldTypeDescriptor )
+	public static ByteCodeField of( FlagEnumSet<Modifier> modifierSet, String name, @SuppressWarnings( "TypeMayBeWeakened" ) ClassDesc fieldTypeDescriptor )
 	{
 		String descriptorString = fieldTypeDescriptor.descriptorString();
 		return of( modifierSet, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
 	}
 
-	public static ByteCodeField of( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeField of( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		return new ByteCodeField( modifierSet, nameConstant, descriptorConstant, attributeSet );
 	}
@@ -40,12 +42,14 @@ public final class ByteCodeField extends ByteCodeMember
 		Map.entry( Modifier.Synthetic /**/, 0x1000 ),   // ACC_SYNTHETIC = 0x1000;
 		Map.entry( Modifier.Enum      /**/, 0x4000 ) ); // ACC_ENUM      = 0x4000;
 
-	public final FlagSet<Modifier> modifierSet;
+	public final FlagEnumSet<Modifier> modifierSet;
+	public final Mutf8Constant descriptorConstant;
 
-	private ByteCodeField( FlagSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeField( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, descriptorConstant, attributeSet );
+		super( nameConstant, attributeSet );
 		this.modifierSet = modifierSet;
+		this.descriptorConstant = descriptorConstant;
 	}
 
 	public ClassDesc descriptor()

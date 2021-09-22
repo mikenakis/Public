@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,32 +15,24 @@ import java.util.List;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class LocalVariableTypeTableAttribute extends Attribute
+public final class LocalVariableTypeTableAttribute extends KnownAttribute
 {
 	public static LocalVariableTypeTableAttribute of()
 	{
 		return of( new ArrayList<>() );
 	}
 
-	public static LocalVariableTypeTableAttribute of( List<LocalVariableType> localVariableTypes )
+	public static LocalVariableTypeTableAttribute of( List<LocalVariableTypeTableEntry> localVariableTypes )
 	{
 		return new LocalVariableTypeTableAttribute( localVariableTypes );
 	}
 
-	public static final String name = "LocalVariableTypeTable";
-	public static final Kind kind = new Kind( name );
+	public final List<LocalVariableTypeTableEntry> localVariableTypes;
 
-	private final List<LocalVariableType> localVariableTypes;
-
-	private LocalVariableTypeTableAttribute( List<LocalVariableType> localVariableTypes )
+	private LocalVariableTypeTableAttribute( List<LocalVariableTypeTableEntry> localVariableTypes )
 	{
-		super( kind );
+		super( tagLocalVariableTypeTable );
 		this.localVariableTypes = localVariableTypes;
-	}
-
-	public List<LocalVariableType> localVariableTypes()
-	{
-		return Collections.unmodifiableList( localVariableTypes );
 	}
 
 	@Deprecated @Override public LocalVariableTypeTableAttribute asLocalVariableTypeTableAttribute()

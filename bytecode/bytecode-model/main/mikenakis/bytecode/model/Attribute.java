@@ -9,6 +9,7 @@ import mikenakis.bytecode.model.attributes.DeprecatedAttribute;
 import mikenakis.bytecode.model.attributes.EnclosingMethodAttribute;
 import mikenakis.bytecode.model.attributes.ExceptionsAttribute;
 import mikenakis.bytecode.model.attributes.InnerClassesAttribute;
+import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTypeTableAttribute;
@@ -64,30 +65,17 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public abstract class Attribute
 {
-	public static class Kind
+	public final Mutf8Constant mutf8Name;
+
+	protected Attribute( Mutf8Constant mutf8Name )
 	{
-		public final String name;
-		public final Mutf8Constant mutf8Name;
-
-		public Kind( String name )
-		{
-			this.name = name;
-			mutf8Name = Mutf8Constant.of( name );
-		}
-
-		@ExcludeFromJacocoGeneratedReport @Override public String toString()
-		{
-			return name;
-		}
+		this.mutf8Name = mutf8Name;
 	}
 
-	public final Kind kind;
+	public abstract boolean isKnown();
 
-	protected Attribute( Kind kind )
-	{
-		this.kind = kind;
-	}
-
+	@ExcludeFromJacocoGeneratedReport public UnknownAttribute                              /**/ asUnknownAttribute                              /**/() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public KnownAttribute                                /**/ asKnownAttribute                                /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public AnnotationDefaultAttribute                    /**/ asAnnotationDefaultAttribute                    /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public BootstrapMethodsAttribute                     /**/ asBootstrapMethodsAttribute                     /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public CodeAttribute                                 /**/ asCodeAttribute                                 /**/() { return Kit.fail(); }
@@ -115,5 +103,4 @@ public abstract class Attribute
 	@ExcludeFromJacocoGeneratedReport public SourceFileAttribute                           /**/ asSourceFileAttribute                           /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public StackMapTableAttribute                        /**/ asStackMapTableAttribute                        /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public SyntheticAttribute                            /**/ asSyntheticAttribute                            /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public UnknownAttribute                              /**/ asUnknownAttribute                              /**/() { return Kit.fail(); }
 }

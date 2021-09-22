@@ -7,9 +7,9 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Optional;
 
-public class T03_Converting_And_Filtering_Iterable
+public class T0401_Converting_And_Filtering_Iterable
 {
-	public T03_Converting_And_Filtering_Iterable()
+	public T0401_Converting_And_Filtering_Iterable()
 	{
 		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();

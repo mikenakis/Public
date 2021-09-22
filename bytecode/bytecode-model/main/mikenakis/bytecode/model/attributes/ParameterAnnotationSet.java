@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.Annotation;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public final class ParameterAnnotationSet
@@ -19,16 +18,11 @@ public final class ParameterAnnotationSet
 		return new ParameterAnnotationSet( annotations );
 	}
 
-	private final List<Annotation> annotations;
+	public final List<Annotation> annotations;
 
 	private ParameterAnnotationSet( List<Annotation> annotations )
 	{
 		this.annotations = annotations;
-	}
-
-	public List<Annotation> annotations()
-	{
-		return Collections.unmodifiableList( annotations );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

@@ -1,7 +1,5 @@
 package mikenakis.bytecode.model.constants;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
-
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 
@@ -19,7 +17,7 @@ public final class InterfaceMethodReferenceConstant extends MethodReferenceConst
 
 	private InterfaceMethodReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		super( Tag.InterfaceMethodReference, typeConstant, nameAndDescriptorConstant );
+		super( tagInterfaceMethodReference, typeConstant, nameAndDescriptorConstant );
 	}
 
 	// String Customer.name( arguments );
@@ -27,9 +25,9 @@ public final class InterfaceMethodReferenceConstant extends MethodReferenceConst
 	// 1: nameAndDescriptorConstant.descriptorConstant
 	// 2: typeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant().descriptorConstant().stringValue() ); }
-	public ClassDesc owningClassDescriptor() { return typeConstant().classDescriptor(); }
-	public String methodName() { return nameAndDescriptorConstant().nameConstant().stringValue(); }
+	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() ); }
+	public ClassDesc owningClassDescriptor() { return typeConstant.classDescriptor(); }
+	public String methodName() { return nameAndDescriptorConstant.nameConstant.stringValue(); }
 
 	@Deprecated @Override public InterfaceMethodReferenceConstant asInterfaceMethodReferenceConstant()
 	{

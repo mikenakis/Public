@@ -35,12 +35,9 @@ public final class RuntimeInvisibleTypeAnnotationsAttribute extends TypeAnnotati
 		return new RuntimeInvisibleTypeAnnotationsAttribute( entries );
 	}
 
-	public static final String name = "RuntimeInvisibleTypeAnnotations";
-	public static final Kind kind = new Kind( name );
-
 	private RuntimeInvisibleTypeAnnotationsAttribute( List<TypeAnnotation> entries )
 	{
-		super( kind, entries );
+		super( tagRuntimeInvisibleTypeAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeInvisibleTypeAnnotationsAttribute asRuntimeInvisibleTypeAnnotationsAttribute()

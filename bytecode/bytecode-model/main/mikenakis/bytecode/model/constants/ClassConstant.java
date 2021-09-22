@@ -5,7 +5,6 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDesc;
-import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -20,6 +19,11 @@ public final class ClassConstant extends Constant
 		return of( Mutf8Constant.of( name ) );
 	}
 
+	public static ClassConstant of( ClassDesc classDesc )
+	{
+		return of( Mutf8Constant.of( classDesc.descriptorString() ) );
+	}
+
 	public static ClassConstant of( Mutf8Constant nameConstant )
 	{
 		return new ClassConstant( nameConstant );
@@ -29,20 +33,21 @@ public final class ClassConstant extends Constant
 
 	private ClassConstant( Mutf8Constant nameConstant )
 	{
-		super( Tag.Class );
+		super( tagClass );
 		this.nameConstant = nameConstant;
 	}
 
 	public Mutf8Constant nameConstant() { return nameConstant; }
-	@Override public ConstantDesc constantDescriptor() { return classDescriptor(); }
+	public ConstantDesc constantDescriptor() { return classDescriptor(); }
 	public ClassDesc classDescriptor() { return ClassDesc.ofDescriptor( getDescriptorString( nameConstant.stringValue() ) ); }
 
-	@Override protected Comparator<? extends Constant> comparator()
+	@Override public int compareTo( Constant other )
 	{
-		return comparator;
+		int d = super.compareTo( other );
+		if( d != 0 )
+			return d;
+		return nameConstant.compareTo( other.asClassConstant().nameConstant );
 	}
-
-	public static final Comparator<ClassConstant> comparator = Comparator.comparing( ( ClassConstant o ) -> o.nameConstant );
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

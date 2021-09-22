@@ -1,50 +1,60 @@
- version = 60.0, accessFlags = [public, super], thisClass = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, superClass = java.lang.Object
- ├─ interfaces (0 entries)
- ├─ extra constants (0 entries)
- ├─ fields (1 entries)
- │   └─ field accessFlags = [final, synthetic], name = this$0, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
- ├─ methods (2 entries)
- │   ├─ method accessFlags = [public], name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class7WithInnerClass )
- │   │   └─ attributes (2 entries)
- │   │       ├─ Code maxStack = 2, maxLocals = 2
- │   │       │   ├─ instructions (6 entries)
- │   │       │   │   ├─ L11:
- │   │       │   │   ├─      ALOAD_0
- │   │       │   │   ├─      ALOAD_1
- │   │       │   │   ├─      PUTFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
- │   │       │   │   ├─      ALOAD_0
- │   │       │   │   ├─      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   └─      RETURN
- │   │       │   ├─ exceptionInfos (0 entries)
- │   │       │   └─ attributes (2 entries)
- │   │       │       ├─ LineNumberTable (1 entries)
- │   │       │       │   └─  lineNumber = 11, start = L11
- │   │       │       └─ LocalVariableTable (2 entries)
- │   │       │           ├─  index = 0, start = L11, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
- │   │       │           └─  index = 1, start = L11, end = @end, name = this$0, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
- │   │       └─ MethodParameters (1 entries)
- │   │           └─  accessFlags = [final, mandated], name = this$0
- │   └─ method accessFlags = [public], name = toString, descriptor = java.lang.String()
- │       └─ attributes (1 entries)
- │           └─ Code maxStack = 1, maxLocals = 1
- │               ├─ instructions (5 entries)
- │               │   ├─ L15:
- │               │   ├─      ALOAD_0
- │               │   ├─      GETFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
- │               │   ├─      INVOKEVIRTUAL type = java.lang.Object, name = toString, descriptor = java.lang.String()
- │               │   ├─      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String )
- │               │   └─      ARETURN
- │               ├─ exceptionInfos (0 entries)
- │               └─ attributes (2 entries)
- │                   ├─ LineNumberTable (1 entries)
- │                   │   └─  lineNumber = 15, start = L15
- │                   └─ LocalVariableTable (1 entries)
- │                       └─  index = 0, start = L15, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
- └─ attributes (4 entries)
-     ├─ SourceFile value = "Class7WithInnerClass.java"
-     ├─ NestHost class = mikenakis.bytecode.test.model.Class7WithInnerClass
-     ├─ BootstrapMethods (1 entries)
-     │   └─ methodHandle = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: "inner class of \x01"
-     └─ InnerClasses (2 entries)
-         ├─  outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, , accessFlags = [public], innerClass=mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, innerName = "InnerClass"
-         └─  outerClass = java.lang.invoke.MethodHandles, , accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = "Lookup"
+ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, superClass = java.lang.Object
+ ├─ interfaces: 0 entries
+ ├─ extraConstants: 0 entries
+ ├─ fields: 1 entries
+ │   └─ [0] ByteCodeField accessFlags = [final, synthetic], name = "this$0", descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
+ │       └─ attributes: 0 entries
+ ├─ methods: 2 entries
+ │   ├─ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class7WithInnerClass )
+ │   │   └─ attributes: 2 entries
+ │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
+ │   │       │   ├─ instructions: 6 entries
+ │   │       │   │   ├─ [0] L11: // public class InnerClass
+ │   │       │   │   ├─ [1]      ALOAD_0
+ │   │       │   │   ├─ [2]      ALOAD_1
+ │   │       │   │   ├─ [3]      PUTFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
+ │   │       │   │   ├─ [4]      ALOAD_0
+ │   │       │   │   ├─ [5]      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   └─ [6]      RETURN
+ │   │       │   ├─ exceptionInfos: 0 entries
+ │   │       │   └─ attributes: 2 entries
+ │   │       │       ├─ [0] LineNumberTableAttribute
+ │   │       │       │   └─ entrys: 1 entries
+ │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 11, start = L11
+ │   │       │       └─ [1] LocalVariableTableAttribute
+ │   │       │           └─ entrys: 2 entries
+ │   │       │               ├─ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
+ │   │       │               └─ [1] LocalVariableTableEntry index = 1, start = L11, end = @end, name = this$0, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
+ │   │       └─ [1] MethodParametersAttribute
+ │   │           └─ parameters: 1 entries
+ │   │               └─ [0] MethodParameter accessFlags = [final, mandated], name = "this$0"
+ │   └─ [1] ByteCodeMethod accessFlags = [public], name = "toString", descriptor = java.lang.String()
+ │       └─ attributes: 1 entries
+ │           └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
+ │               ├─ instructions: 5 entries
+ │               │   ├─ [0] L15: // return "inner class of " + Class7WithInnerClass.this.toString();
+ │               │   ├─ [1]      ALOAD_0
+ │               │   ├─ [2]      GETFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
+ │               │   ├─ [3]      INVOKEVIRTUAL type = java.lang.Object, name = toString, descriptor = java.lang.String()
+ │               │   ├─ [4]      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String )
+ │               │   └─ [5]      ARETURN
+ │               ├─ exceptionInfos: 0 entries
+ │               └─ attributes: 2 entries
+ │                   ├─ [0] LineNumberTableAttribute
+ │                   │   └─ entrys: 1 entries
+ │                   │       └─ [0] LineNumberTableEntry lineNumber = 15, start = L15
+ │                   └─ [1] LocalVariableTableAttribute
+ │                       └─ entrys: 1 entries
+ │                           └─ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
+ └─ attributes: 4 entries
+     ├─ [0] SourceFileAttribute
+     │   └─ value: Mutf8Constant( "Class7WithInnerClass.java" )
+     ├─ [1] NestHostAttribute
+     │   └─ class: name = Mutf8Constant( "mikenakis/bytecode/test/model/Class7WithInnerClass" )
+     ├─ [2] BootstrapMethodsAttribute
+     │   └─ bootstrapMethods: 1 entries
+     │       └─ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )
+     └─ [3] InnerClassesAttribute
+         └─ innerClasses: 2 entries
+             ├─ [0] InnerClass outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, accessFlags = [public], innerClass=mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, innerName = Mutf8Constant( "InnerClass" )
+             └─ [1] InnerClass outerClass = java.lang.invoke.MethodHandles, accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = Mutf8Constant( "Lookup" )
