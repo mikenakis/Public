@@ -49,7 +49,13 @@ public class T301_Printing
 				mismatchCount++;
 			}
 		}
-		assert mismatchCount == 0;
+
+		// a "mismatch" means that some difference between the output of the printer and one or more existing .print files was detected.
+		// the .print file has already been overwritten with the new output of the printer.
+		// The file comparison feature of the source control system can be used to see what has changed.
+		// We use an assertion to signal that a mismatch has been detected because we have no other means of alerting the programmer
+		// from within a test. (Nobody looks at the log. Testana even hides the log.)
+		assert mismatchCount == 0; //a failure of this assertion is not necessarily an error! It just means that the output of the printer has changed.
 	}
 
 	private static boolean printAndCompareAgainstExpected( Path classFilePathName, Path printFilePathName, Path sourcesPath )

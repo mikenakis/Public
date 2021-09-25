@@ -10,6 +10,7 @@ public class Model
 	private static final List<Class<?>> allClasses = List.of(
 		Class0HelloWorld.class,
 		Class1WithFields.class,
+		Class2WithTableswitch.class,
 		Class2WithVariousInstructions.class,
 		Class3ImplementingInterface.class,
 		Class4ExtendingClass3.class,

@@ -5,13 +5,13 @@ import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 
-class ConcreteInstructionWriter implements InstructionWriter
+class RealInstructionWriter implements InstructionWriter
 {
 	private final BufferWriter bufferWriter;
 	private final LocationMap locationMap;
 	private final ConstantPool constantPool;
 
-	ConcreteInstructionWriter( LocationMap locationMap, ConstantPool constantPool )
+	RealInstructionWriter( LocationMap locationMap, ConstantPool constantPool )
 	{
 		bufferWriter = new BufferWriter();
 		this.locationMap = locationMap;

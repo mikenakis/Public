@@ -7,7 +7,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
- * Verification Type.
+ * Base class for verification types.  See JVMS §4.10.1.2. "Verification Type System"
  *
  * @author Michael Belivanakis (michael.gr)
  */

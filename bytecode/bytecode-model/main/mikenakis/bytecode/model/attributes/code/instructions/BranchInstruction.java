@@ -15,69 +15,17 @@ public final class BranchInstruction extends Instruction
 
 	public static BranchInstruction of( int opCode )
 	{
-		return of( opCode, Kind.fromOpCode( opCode ).getFlavorOfOpCode( opCode ) );
+		return new BranchInstruction( generalFromSpecialOpcode( opCode ) );
 	}
 
-	private static BranchInstruction of( int opCode, Flavor flavor )
-	{
-		return new BranchInstruction( opCode, flavor );
-	}
-
-	private enum Flavor
-	{
-		ANY, SHORT, LONG
-	}
-
-	private enum Kind
-	{
-		GOTO( OpCode.GOTO, OpCode.GOTO_W ), //
-		JSR( OpCode.JSR, OpCode.JSR_W );
-
-		public static Kind fromOpCode( int opCode )
-		{
-			for( Kind kind : values() )
-				if( opCode == kind.shortOpCode || opCode == kind.longOpCode )
-					return kind;
-			throw new AssertionError( String.valueOf( opCode ) );
-		}
-
-		public final int shortOpCode;
-		public final int longOpCode;
-
-		Kind( int shortOpCode, int longOpCode )
-		{
-			this.shortOpCode = shortOpCode;
-			this.longOpCode = longOpCode;
-		}
-
-		public Flavor getFlavorOfOpCode( int opCode )
-		{
-			if( opCode == shortOpCode )
-				return Flavor.SHORT;
-			if( opCode == longOpCode )
-				return Flavor.LONG;
-			throw new AssertionError( opCode );
-		}
-
-		public int getOpCode( Flavor flavor )
-		{
-			return switch( flavor )
-				{
-					case ANY, SHORT -> shortOpCode;
-					case LONG -> longOpCode;
-				};
-		}
-	}
-
-	private final int opCode;
-	private final Flavor flavor;
+	public final int opCode;
 	private Instruction targetInstruction; //null means that it has not been set yet.
 
-	private BranchInstruction( int opCode, Flavor flavor )
+	private BranchInstruction( int opCode )
 	{
 		super( Group.Branch );
+		assert opCode == OpCode.GOTO || opCode == OpCode.JSR;
 		this.opCode = opCode;
-		this.flavor = flavor;
 	}
 
 	public Instruction getTargetInstruction()
@@ -93,34 +41,27 @@ public final class BranchInstruction extends Instruction
 		this.targetInstruction = targetInstruction;
 	}
 
-	public boolean isAny()
+	public int getOpCode( boolean isLong )
 	{
-		return flavor == Flavor.ANY;
-	}
-
-	public boolean isLong()
-	{
-		return flavor == Flavor.LONG;
-	}
-
-	public int getOpCode()
-	{
+		if( isLong )
+			return switch( opCode )
+				{
+					case OpCode.GOTO -> OpCode.GOTO_W;
+					case OpCode.JSR -> OpCode.JSR_W;
+					default -> throw new AssertionError( opCode );
+				};
 		return opCode;
 	}
 
-// TODO:
-//	void intern( ConstantPool constantPool )
-//	{
-//		flavor = instructionReference.isShort() ? Flavor.SHORT : Flavor.LONG;
-//		opCode = Kind.fromOpCode( opCode ).getOpCode( flavor );
-//	}
-//
-//	void write( ConstantPool constantPool, BufferWriter bufferWriter )
-//	{
-//		assert flavor != Flavor.ANY;
-//		bufferWriter.writeUnsignedByte( opCode );
-//		instructionReference.write( flavor == Flavor.LONG, bufferWriter );
-//	}
+	public static boolean isLong( int opCode )
+	{
+		return switch( opCode )
+			{
+				case OpCode.GOTO, OpCode.JSR -> false;
+				case OpCode.GOTO_W, OpCode.JSR_W -> true;
+				default -> throw new AssertionError( opCode );
+			};
+	}
 
 	@Deprecated @Override public BranchInstruction asBranchInstruction()
 	{
@@ -130,5 +71,16 @@ public final class BranchInstruction extends Instruction
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return OpCode.getOpCodeName( opCode );
+	}
+
+	private static int generalFromSpecialOpcode( int opcode )
+	{
+		return switch( opcode )
+			{
+				case OpCode.GOTO, OpCode.JSR -> opcode;
+				case OpCode.GOTO_W -> OpCode.GOTO;
+				case OpCode.JSR_W -> OpCode.JSR;
+				default -> throw new AssertionError( opcode );
+			};
 	}
 }

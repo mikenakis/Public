@@ -123,7 +123,7 @@ public abstract class Instruction
 
 	@Override public final boolean equals( Object other )
 	{
-		return super.equals( other );
+		return this == other;
 	}
 
 	@Override public abstract String toString();

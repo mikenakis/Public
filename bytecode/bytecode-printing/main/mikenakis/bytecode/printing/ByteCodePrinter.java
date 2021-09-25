@@ -1450,7 +1450,7 @@ public final class ByteCodePrinter
 	{
 		var builder = new StringBuilder();
 		appendRelativeInstructionReference( branchInstruction.getTargetInstruction(), builder, labeler );
-		return Twig.leaf( buildInstructionHeader( prefix, suffix, branchInstruction.getOpCode(), builder.toString() ) );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, branchInstruction.opCode, builder.toString() ) );
 	}
 
 	private static Twig twigFromConditionalBranchInstruction( String prefix, Optional<String> suffix, ConditionalBranchInstruction conditionalBranchInstruction, Labeler labeler )

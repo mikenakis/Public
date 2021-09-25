@@ -5,6 +5,7 @@ import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
+import mikenakis.bytecode.test.model.Class2WithTableswitch;
 import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.bytecode.writing.ByteCodeWriter;
@@ -49,19 +50,24 @@ public class T201_Writing
 			test( classFilePathName );
 	}
 
+	private static final boolean save = Kit.get( false ); //saving is only useful when troubleshooting.
+
 	private static void test( Path classFilePathName )
 	{
 		Log.debug( "Testing " + classFilePathName );
 		byte[] bytes1 = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
 		ByteCodeType type1 = ByteCodeReader.read( bytes1 );
 		String string1 = ByteCodePrinter.printByteCodeType( type1, Optional.empty() );
-		savePrint( replaceExtension( classFilePathName.getParent().resolve( "p1" ).resolve( classFilePathName.getFileName() ), ".print" ), string1 );
+		if( save )
+			savePrint( replaceExtension( classFilePathName.getParent().resolve( "p1" ).resolve( classFilePathName.getFileName() ), ".print" ), string1 );
 
 		byte[] bytes2 = ByteCodeWriter.write( type1 );
-		saveBytes( classFilePathName.getParent().resolve( "b" ).resolve( classFilePathName.getFileName().toString() ), bytes2 );
+		if( save )
+			saveBytes( classFilePathName.getParent().resolve( "b" ).resolve( classFilePathName.getFileName().toString() ), bytes2 );
 		ByteCodeType type2 = ByteCodeReader.read( bytes2 );
 		String string2 = ByteCodePrinter.printByteCodeType( type2, Optional.empty() );
-		savePrint( replaceExtension( classFilePathName.getParent().resolve( "p2" ).resolve( classFilePathName.getFileName() ), ".print" ), string2 );
+		if( save )
+			savePrint( replaceExtension( classFilePathName.getParent().resolve( "p2" ).resolve( classFilePathName.getFileName() ), ".print" ), string2 );
 		assert string1.equals( string2 );
 	}
 

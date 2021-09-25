@@ -36,8 +36,8 @@ import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.attributes.LineNumberTableEntry;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableEntry;
-import mikenakis.bytecode.model.attributes.LocalVariableTypeTableEntry;
 import mikenakis.bytecode.model.attributes.LocalVariableTypeTableAttribute;
+import mikenakis.bytecode.model.attributes.LocalVariableTypeTableEntry;
 import mikenakis.bytecode.model.attributes.MethodParameter;
 import mikenakis.bytecode.model.attributes.MethodParametersAttribute;
 import mikenakis.bytecode.model.attributes.NestHostAttribute;
@@ -535,15 +535,8 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( codeAttribute.getMaxStack() );
 		bufferWriter.writeUnsignedShort( codeAttribute.getMaxLocals() );
 
-		//TODO: improve this algorithm.
-		//      Currently, we do one pass over all instructions obtaining the pessimistic length of each instruction,
-		//      and then one more pass obtaining the actual length of each instruction, which may be slightly shorter.
-		//      However, as a result of some of the instructions shortening in the second pass, it could be that more instructions
-		//      can now also be shortened, but we are not handling this.
-		//      A naive solution would be to keep repeating the second pass until there is no change, but it would be wasteful, since
-		//      the size of most instructions is fixed.
 		LocationMap locationMap = getLocationMap( codeAttribute.instructions().all(), constantPool );
-		ConcreteInstructionWriter instructionWriter = new ConcreteInstructionWriter( locationMap, constantPool );
+		RealInstructionWriter instructionWriter = new RealInstructionWriter( locationMap, constantPool );
 		for( Instruction instruction : codeAttribute.instructions().all() )
 			writeInstruction( instruction, instructionWriter );
 		byte[] bytes = instructionWriter.toBytes();
@@ -700,16 +693,38 @@ public class ByteCodeWriter
 
 	private static LocationMap getLocationMap( Iterable<Instruction> instructions, ConstantPool constantPool )
 	{
-		WritingLocationMap locationMap = new WritingLocationMap();
-		InterimInstructionWriter instructionWriter = new InterimInstructionWriter( constantPool );
+		WritingLocationMap writingLocationMap = new WritingLocationMap();
+		FakeInstructionWriter instructionWriter = new FakeInstructionWriter( constantPool, writingLocationMap );
 		for( Instruction instruction : instructions )
 		{
-			int startLocation = instructionWriter.getLocation();
+			int startLocation = instructionWriter.location;
+			writingLocationMap.add( instruction );
 			writeInstruction( instruction, instructionWriter );
-			int length = instructionWriter.getLocation() - startLocation;
-			locationMap.add( instruction, length );
+			int length = instructionWriter.location - startLocation;
+			writingLocationMap.setLength( instruction, length );
 		}
-		return locationMap;
+
+		for( ; ; )
+		{
+			boolean anyWorkDone = false;
+			for( Instruction instruction : instructionWriter.sourceInstructions )
+			{
+				int location = writingLocationMap.getLocation( instruction );
+				instructionWriter.location = location;
+				int oldLength = writingLocationMap.getLength( instruction );
+				writeInstruction( instruction, instructionWriter );
+				int newLength = instructionWriter.location - location;
+				assert newLength <= oldLength;
+				if( newLength == oldLength )
+					continue;
+				writingLocationMap.removeBytes( location + newLength, oldLength - newLength );
+				anyWorkDone = true;
+			}
+			if( !anyWorkDone )
+				break;
+		}
+
+		return writingLocationMap;
 	}
 
 	private static void writeInstruction( Instruction instruction, InstructionWriter instructionWriter )
@@ -739,7 +754,8 @@ public class ByteCodeWriter
 	{
 		instructionWriter.writeUnsignedByte( OpCode.TABLESWITCH );
 		instructionWriter.skipToAlign();
-		instructionWriter.writeInt( instructionWriter.getOffset( tableSwitchInstruction, tableSwitchInstruction.getDefaultInstruction() ) );
+		int defaultInstructionOffset = instructionWriter.getOffset( tableSwitchInstruction, tableSwitchInstruction.getDefaultInstruction() );
+		instructionWriter.writeInt( defaultInstructionOffset );
 		instructionWriter.writeInt( tableSwitchInstruction.lowValue );
 		instructionWriter.writeInt( tableSwitchInstruction.lowValue + tableSwitchInstruction.getTargetInstructionCount() - 1 );
 		for( Instruction targetInstruction : tableSwitchInstruction.targetInstructions() )
@@ -911,10 +927,10 @@ public class ByteCodeWriter
 
 	private static void writeBranchInstruction( InstructionWriter instructionWriter, BranchInstruction branchInstruction )
 	{
-		assert !branchInstruction.isAny();
 		int offset = instructionWriter.getOffset( branchInstruction, branchInstruction.getTargetInstruction() );
-		instructionWriter.writeUnsignedByte( branchInstruction.getOpCode() );
-		if( branchInstruction.isLong() )
+		boolean isLong = !Helpers.isSignedShort( offset );
+		instructionWriter.writeUnsignedByte( branchInstruction.getOpCode( isLong ) );
+		if( isLong )
 			instructionWriter.writeInt( offset );
 		else
 			instructionWriter.writeSignedShort( offset );

@@ -39,6 +39,16 @@ class WritingLocationMap implements LocationMap
 		return Kit.map.get( locationsByInstruction, instruction );
 	}
 
+	int getLength( Instruction instruction )
+	{
+		int location = getLocation( instruction );
+		int nextLocation;
+		for( nextLocation = location + 1; nextLocation < instructionsByLocation.size(); nextLocation++ )
+			if( instructionsByLocation.get( nextLocation ) != null )
+				break;
+		return nextLocation - location;
+	}
+
 	@Override public int getOffset( Instruction sourceInstruction, Instruction targetInstruction )
 	{
 		int sourceLocation = getLocation( sourceInstruction );
@@ -46,14 +56,20 @@ class WritingLocationMap implements LocationMap
 		return targetLocation - sourceLocation;
 	}
 
-	void add( Instruction instruction, int length )
+	void add( Instruction instruction )
 	{
-		assert length >= 1;
 		int location = instructionsByLocation.size();
 		instructionsByLocation.add( instruction );
-		for( int i = 1;  i < length;  i++ )
-			instructionsByLocation.add( null );
 		Kit.map.add( locationsByInstruction, instruction, location );
+	}
+
+	void setLength( Instruction instruction, int length )
+	{
+		assert length >= 1;
+		assert instruction == instructionsByLocation.get( instructionsByLocation.size() - 1 );
+		assert Kit.map.get( locationsByInstruction, instruction ) == instructionsByLocation.size() - 1;
+		for( int i = 1; i < length; i++ )
+			instructionsByLocation.add( null );
 	}
 
 	boolean contains( Instruction instruction )
@@ -64,5 +80,22 @@ class WritingLocationMap implements LocationMap
 	@Override public boolean contains( int location )
 	{
 		return instructionsByLocation.get( location ) != null;
+	}
+
+	void removeBytes( int location, int length )
+	{
+		assert length > 0;
+		for( int i = 0;  i < length;  i++ ) //TODO: optimize this by using an array instead of a list, so that we can remove [length] number of bytes in one pass.
+			instructionsByLocation.remove( location );
+		for( Map.Entry<Instruction,Integer> entry : locationsByInstruction.entrySet() )
+		{
+			int location2 = entry.getValue();
+			if( location2 > location )
+			{
+				location2 -= length;
+				assert location2 >= location;
+				entry.setValue( location2 );
+			}
+		}
 	}
 }

@@ -454,7 +454,7 @@ public class ByteCodeReader
 		List<Instruction> instructions = new ArrayList<>();
 		BufferReader codeBufferReader = BufferReader.of( codeBuffer );
 		ReadingLocationMap locationMap = new ReadingLocationMap( codeBuffer.length() );
-		ConcreteInstructionReader.run( codeBufferReader, locationMap, constantPool, instructionReader -> //
+		InstructionReader.run( codeBufferReader, locationMap, constantPool, instructionReader -> //
 		{
 			while( !codeBufferReader.isAtEnd() )
 			{
@@ -600,7 +600,7 @@ public class ByteCodeReader
 	{
 		assert !wide;
 		BranchInstruction branchInstruction = BranchInstruction.of( opCode );
-		int targetInstructionOffset = branchInstruction.isLong() ? instructionReader.readInt() : instructionReader.readSignedShort();
+		int targetInstructionOffset = BranchInstruction.isLong( opCode ) ? instructionReader.readInt() : instructionReader.readSignedShort();
 		instructionReader.setRelativeTargetInstruction( branchInstruction, targetInstructionOffset, branchInstruction::setTargetInstruction );
 		return branchInstruction;
 	}

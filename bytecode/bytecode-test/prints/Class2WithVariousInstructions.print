@@ -1,12 +1,8 @@
 ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, superClass = java.lang.Object
  ├─ interfaces: 0 entries
- ├─ extraConstants: 4 entries
- │   ├─ [0] Mutf8Constant( "mikenakis/bytecode/test/model/Class1WithFields" )
- │   ├─ [1] Mutf8Constant( "mikenakis/bytecode/test/model/Class3ImplementingInterface" )
- │   ├─ [2] ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class1WithFields" )
- │   └─ [3] ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class3ImplementingInterface" )
+ ├─ extraConstants: 0 entries
  ├─ fields: 0 entries
- ├─ methods: 9 entries
+ ├─ methods: 8 entries
  │   ├─ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
@@ -58,52 +54,49 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │               └─ [1] LocalVariableTableAttribute
  │   │                   └─ entrys: 1 entries
  │   │                       └─ [0] LocalVariableTableEntry index = 0, start = L22, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
- │   ├─ [3] ByteCodeMethod accessFlags = [public, final], name = "methodWithTableSwitchInstruction", descriptor = void( int )
+ │   ├─ [3] ByteCodeMethod accessFlags = [public, final], name = "methodWithLookupSwitchInstruction", descriptor = void( int )
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
- │   │       │   ├─ instructions: 30 entries
+ │   │       │   ├─ instructions: 27 entries
  │   │       │   │   ├─ [0] L27:    ILOAD_1 1 // switch( i )
- │   │       │   │   ├─ [1]         TABLESWITCH lowValue = 100
- │   │       │   │   │   ├─ default: L56
- │   │       │   │   │   └─ offsets: 6 entries
- │   │       │   │   │       ├─ [0] L30
- │   │       │   │   │       ├─ [1] L33
- │   │       │   │   │       ├─ [2] L36
- │   │       │   │   │       ├─ [3] L39
- │   │       │   │   │       ├─ [4] L42
- │   │       │   │   │       └─ [5] L45
+ │   │       │   │   ├─ [1]         LOOKUPSWITCH
+ │   │       │   │   │   ├─ default: L50
+ │   │       │   │   │   └─ entries: 6 entries
+ │   │       │   │   │       ├─ [0] LookupSwitchEntry value = 100, target = L30
+ │   │       │   │   │       ├─ [1] LookupSwitchEntry value = 110, target = L33
+ │   │       │   │   │       ├─ [2] LookupSwitchEntry value = 120, target = L36
+ │   │       │   │   │       ├─ [3] LookupSwitchEntry value = 130, target = L39
+ │   │       │   │   │       ├─ [4] LookupSwitchEntry value = 140, target = L42
+ │   │       │   │   │       └─ [5] LookupSwitchEntry value = 150, target = L45
  │   │       │   │   ├─ [2] L30:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "100" );
  │   │       │   │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "100" ) )
  │   │       │   │   ├─ [4]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [5] L31:    GOTO L59 // break;
- │   │       │   │   ├─ [6] L33:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "101" );
- │   │       │   │   ├─ [7]         LDC constant = StringConstant( Mutf8Constant( "101" ) )
+ │   │       │   │   ├─ [5] L31:    GOTO L50 // break;
+ │   │       │   │   ├─ [6] L33:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "110" );
+ │   │       │   │   ├─ [7]         LDC constant = StringConstant( Mutf8Constant( "110" ) )
  │   │       │   │   ├─ [8]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [9] L34:    GOTO L59 // break;
- │   │       │   │   ├─ [10] L36:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "102" );
- │   │       │   │   ├─ [11]         LDC constant = StringConstant( Mutf8Constant( "102" ) )
+ │   │       │   │   ├─ [9] L34:    GOTO L50 // break;
+ │   │       │   │   ├─ [10] L36:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "120" );
+ │   │       │   │   ├─ [11]         LDC constant = StringConstant( Mutf8Constant( "120" ) )
  │   │       │   │   ├─ [12]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [13] L37:    GOTO L59 // break;
- │   │       │   │   ├─ [14] L39:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "103" );
- │   │       │   │   ├─ [15]         LDC constant = StringConstant( Mutf8Constant( "103" ) )
+ │   │       │   │   ├─ [13] L37:    GOTO L50 // break;
+ │   │       │   │   ├─ [14] L39:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "130" );
+ │   │       │   │   ├─ [15]         LDC constant = StringConstant( Mutf8Constant( "130" ) )
  │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [17] L40:    GOTO L59 // break;
- │   │       │   │   ├─ [18] L42:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "104" );
- │   │       │   │   ├─ [19]         LDC constant = StringConstant( Mutf8Constant( "104" ) )
+ │   │       │   │   ├─ [17] L40:    GOTO L50 // break;
+ │   │       │   │   ├─ [18] L42:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "140" );
+ │   │       │   │   ├─ [19]         LDC constant = StringConstant( Mutf8Constant( "140" ) )
  │   │       │   │   ├─ [20]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [21] L43:    GOTO L59 // break;
- │   │       │   │   ├─ [22] L45:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "105" );
- │   │       │   │   ├─ [23]         LDC constant = StringConstant( Mutf8Constant( "105" ) )
+ │   │       │   │   ├─ [21] L43:    GOTO L50 // break;
+ │   │       │   │   ├─ [22] L45:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "150" );
+ │   │       │   │   ├─ [23]         LDC constant = StringConstant( Mutf8Constant( "150" ) )
  │   │       │   │   ├─ [24]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [25] L46:    GOTO L59 // break;
- │   │       │   │   ├─ [26] L56:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( Class1WithFields.PublicStringConstant + Class3ImplementingInterface.stringLiteral );
- │   │       │   │   ├─ [27]         LDC constant = StringConstant( Mutf8Constant( "publicConstantValueaΦ됔b" ) )
- │   │       │   │   ├─ [28]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   └─ [29] L59:    RETURN // }
+ │   │       │   │   ├─ [25] L46:    GOTO L50 // break;
+ │   │       │   │   └─ [26] L50:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 15 entries
+ │   │       │       │   └─ entrys: 14 entries
  │   │       │       │       ├─ [0] LineNumberTableEntry lineNumber = 27, start = L27
  │   │       │       │       ├─ [1] LineNumberTableEntry lineNumber = 30, start = L30
  │   │       │       │       ├─ [2] LineNumberTableEntry lineNumber = 31, start = L31
@@ -117,129 +110,54 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │       │       │       ├─ [10] LineNumberTableEntry lineNumber = 43, start = L43
  │   │       │       │       ├─ [11] LineNumberTableEntry lineNumber = 45, start = L45
  │   │       │       │       ├─ [12] LineNumberTableEntry lineNumber = 46, start = L46
- │   │       │       │       ├─ [13] LineNumberTableEntry lineNumber = 56, start = L56
- │   │       │       │       └─ [14] LineNumberTableEntry lineNumber = 59, start = L59
+ │   │       │       │       └─ [13] LineNumberTableEntry lineNumber = 50, start = L50
  │   │       │       ├─ [1] LocalVariableTableAttribute
  │   │       │       │   └─ entrys: 2 entries
  │   │       │       │       ├─ [0] LocalVariableTableEntry index = 0, start = L27, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
  │   │       │       │       └─ [1] LocalVariableTableEntry index = 1, start = L27, end = @end, name = i, descriptor = int
  │   │       │       └─ [2] StackMapTableAttribute
- │   │       │           └─ frames: 8 entries
+ │   │       │           └─ frames: 7 entries
  │   │       │               ├─ [0] SameFrame target = L30
  │   │       │               ├─ [1] SameFrame target = L33
  │   │       │               ├─ [2] SameFrame target = L36
  │   │       │               ├─ [3] SameFrame target = L39
  │   │       │               ├─ [4] SameFrame target = L42
  │   │       │               ├─ [5] SameFrame target = L45
- │   │       │               ├─ [6] SameFrame target = L56
- │   │       │               └─ [7] SameFrame target = L59
+ │   │       │               └─ [6] SameFrame target = L50
  │   │       └─ [1] MethodParametersAttribute
  │   │           └─ parameters: 1 entries
  │   │               └─ [0] MethodParameter accessFlags = [], name = "i"
- │   ├─ [4] ByteCodeMethod accessFlags = [public, final], name = "methodWithLookupSwitchInstruction", descriptor = void( int )
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
- │   │       │   ├─ instructions: 27 entries
- │   │       │   │   ├─ [0] L63:    ILOAD_1 1 // switch( i )
- │   │       │   │   ├─ [1]         LOOKUPSWITCH
- │   │       │   │   │   ├─ default: L86
- │   │       │   │   │   └─ entries: 6 entries
- │   │       │   │   │       ├─ [0] LookupSwitchEntry value = 100, target = L66
- │   │       │   │   │       ├─ [1] LookupSwitchEntry value = 110, target = L69
- │   │       │   │   │       ├─ [2] LookupSwitchEntry value = 120, target = L72
- │   │       │   │   │       ├─ [3] LookupSwitchEntry value = 130, target = L75
- │   │       │   │   │       ├─ [4] LookupSwitchEntry value = 140, target = L78
- │   │       │   │   │       └─ [5] LookupSwitchEntry value = 150, target = L81
- │   │       │   │   ├─ [2] L66:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "100" );
- │   │       │   │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "100" ) )
- │   │       │   │   ├─ [4]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [5] L67:    GOTO L86 // break;
- │   │       │   │   ├─ [6] L69:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "110" );
- │   │       │   │   ├─ [7]         LDC constant = StringConstant( Mutf8Constant( "110" ) )
- │   │       │   │   ├─ [8]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [9] L70:    GOTO L86 // break;
- │   │       │   │   ├─ [10] L72:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "120" );
- │   │       │   │   ├─ [11]         LDC constant = StringConstant( Mutf8Constant( "120" ) )
- │   │       │   │   ├─ [12]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [13] L73:    GOTO L86 // break;
- │   │       │   │   ├─ [14] L75:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "130" );
- │   │       │   │   ├─ [15]         LDC constant = StringConstant( Mutf8Constant( "130" ) )
- │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [17] L76:    GOTO L86 // break;
- │   │       │   │   ├─ [18] L78:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "140" );
- │   │       │   │   ├─ [19]         LDC constant = StringConstant( Mutf8Constant( "140" ) )
- │   │       │   │   ├─ [20]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [21] L79:    GOTO L86 // break;
- │   │       │   │   ├─ [22] L81:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "150" );
- │   │       │   │   ├─ [23]         LDC constant = StringConstant( Mutf8Constant( "150" ) )
- │   │       │   │   ├─ [24]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [25] L82:    GOTO L86 // break;
- │   │       │   │   └─ [26] L86:    RETURN // }
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 3 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 14 entries
- │   │       │       │       ├─ [0] LineNumberTableEntry lineNumber = 63, start = L63
- │   │       │       │       ├─ [1] LineNumberTableEntry lineNumber = 66, start = L66
- │   │       │       │       ├─ [2] LineNumberTableEntry lineNumber = 67, start = L67
- │   │       │       │       ├─ [3] LineNumberTableEntry lineNumber = 69, start = L69
- │   │       │       │       ├─ [4] LineNumberTableEntry lineNumber = 70, start = L70
- │   │       │       │       ├─ [5] LineNumberTableEntry lineNumber = 72, start = L72
- │   │       │       │       ├─ [6] LineNumberTableEntry lineNumber = 73, start = L73
- │   │       │       │       ├─ [7] LineNumberTableEntry lineNumber = 75, start = L75
- │   │       │       │       ├─ [8] LineNumberTableEntry lineNumber = 76, start = L76
- │   │       │       │       ├─ [9] LineNumberTableEntry lineNumber = 78, start = L78
- │   │       │       │       ├─ [10] LineNumberTableEntry lineNumber = 79, start = L79
- │   │       │       │       ├─ [11] LineNumberTableEntry lineNumber = 81, start = L81
- │   │       │       │       ├─ [12] LineNumberTableEntry lineNumber = 82, start = L82
- │   │       │       │       └─ [13] LineNumberTableEntry lineNumber = 86, start = L86
- │   │       │       ├─ [1] LocalVariableTableAttribute
- │   │       │       │   └─ entrys: 2 entries
- │   │       │       │       ├─ [0] LocalVariableTableEntry index = 0, start = L63, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
- │   │       │       │       └─ [1] LocalVariableTableEntry index = 1, start = L63, end = @end, name = i, descriptor = int
- │   │       │       └─ [2] StackMapTableAttribute
- │   │       │           └─ frames: 7 entries
- │   │       │               ├─ [0] SameFrame target = L66
- │   │       │               ├─ [1] SameFrame target = L69
- │   │       │               ├─ [2] SameFrame target = L72
- │   │       │               ├─ [3] SameFrame target = L75
- │   │       │               ├─ [4] SameFrame target = L78
- │   │       │               ├─ [5] SameFrame target = L81
- │   │       │               └─ [6] SameFrame target = L86
- │   │       └─ [1] MethodParametersAttribute
- │   │           └─ parameters: 1 entries
- │   │               └─ [0] MethodParameter accessFlags = [], name = "i"
- │   ├─ [5] ByteCodeMethod accessFlags = [public, final], name = "methodWithSiPush", descriptor = java.lang.String()
+ │   ├─ [4] ByteCodeMethod accessFlags = [public, final], name = "methodWithSiPush", descriptor = java.lang.String()
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L90:    SIPUSH immediateValue = 129 // return Integer.toString( 129 );
+ │   │           │   ├─ [0] L54:    SIPUSH immediateValue = 129 // return Integer.toString( 129 );
  │   │           │   ├─ [1]         INVOKESTATIC type = java.lang.Integer, name = toString, descriptor = java.lang.String( int )
  │   │           │   └─ [2]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
  │   │               │   └─ entrys: 1 entries
- │   │               │       └─ [0] LineNumberTableEntry lineNumber = 90, start = L90
+ │   │               │       └─ [0] LineNumberTableEntry lineNumber = 54, start = L54
  │   │               └─ [1] LocalVariableTableAttribute
  │   │                   └─ entrys: 1 entries
- │   │                       └─ [0] LocalVariableTableEntry index = 0, start = L90, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
- │   ├─ [6] ByteCodeMethod accessFlags = [public, final], name = "methodWithLambda", descriptor = java.lang.String()
+ │   │                       └─ [0] LocalVariableTableEntry index = 0, start = L54, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   ├─ [5] ByteCodeMethod accessFlags = [public, final], name = "methodWithLambda", descriptor = java.lang.String()
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │           ├─ instructions: 16 entries
- │   │           │   ├─ [0] L95:    NEW java.util.ArrayList // List<String> list = new ArrayList<>();
+ │   │           │   ├─ [0] L59:    NEW java.util.ArrayList // List<String> list = new ArrayList<>();
  │   │           │   ├─ [1]         DUP
  │   │           │   ├─ [2]         INVOKESPECIAL type = java.util.ArrayList, name = <init>, descriptor = void()
  │   │           │   ├─ [3]         ASTORE_1 1
- │   │           │   ├─ [4] L96:    ALOAD_1 1 // list.add( "x" );
+ │   │           │   ├─ [4] L60:    ALOAD_1 1 // list.add( "x" );
  │   │           │   ├─ [5]         LDC constant = StringConstant( Mutf8Constant( "x" ) )
  │   │           │   ├─ [6]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = add, descriptor = boolean( java.lang.Object ), 2 arguments
  │   │           │   ├─ [7]         POP
- │   │           │   ├─ [8] L97:    ALOAD_1 1 // list.sort( ( a, b ) -> -a.compareTo( b ) );
+ │   │           │   ├─ [8] L61:    ALOAD_1 1 // list.sort( ( a, b ) -> -a.compareTo( b ) );
  │   │           │   ├─ [9]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = compare, descriptor = java.util.Comparator()
  │   │           │   ├─ [10]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = sort, descriptor = void( java.util.Comparator ), 2 arguments
- │   │           │   ├─ [11] L98:    ALOAD_1 1 // return list.get( 0 );
+ │   │           │   ├─ [11] L62:    ALOAD_1 1 // return list.get( 0 );
  │   │           │   ├─ [12]         ICONST_0
  │   │           │   ├─ [13]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = get, descriptor = java.lang.Object( int ), 2 arguments
  │   │           │   ├─ [14]         CHECKCAST java.lang.String
@@ -248,22 +166,22 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
  │   │               │   └─ entrys: 4 entries
- │   │               │       ├─ [0] LineNumberTableEntry lineNumber = 95, start = L95
- │   │               │       ├─ [1] LineNumberTableEntry lineNumber = 96, start = L96
- │   │               │       ├─ [2] LineNumberTableEntry lineNumber = 97, start = L97
- │   │               │       └─ [3] LineNumberTableEntry lineNumber = 98, start = L98
+ │   │               │       ├─ [0] LineNumberTableEntry lineNumber = 59, start = L59
+ │   │               │       ├─ [1] LineNumberTableEntry lineNumber = 60, start = L60
+ │   │               │       ├─ [2] LineNumberTableEntry lineNumber = 61, start = L61
+ │   │               │       └─ [3] LineNumberTableEntry lineNumber = 62, start = L62
  │   │               ├─ [1] LocalVariableTableAttribute
  │   │               │   └─ entrys: 2 entries
- │   │               │       ├─ [0] LocalVariableTableEntry index = 0, start = L95, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
- │   │               │       └─ [1] LocalVariableTableEntry index = 1, start = L96, end = @end, name = list, descriptor = java.util.List
+ │   │               │       ├─ [0] LocalVariableTableEntry index = 0, start = L59, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   │               │       └─ [1] LocalVariableTableEntry index = 1, start = L60, end = @end, name = list, descriptor = java.util.List
  │   │               └─ [2] LocalVariableTypeTableAttribute
  │   │                   └─ entrys: 1 entries
- │   │                       └─ [0] LocalVariableTypeTableEntry index = 1, start = L96, end = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)
- │   ├─ [7] ByteCodeMethod accessFlags = [public, final], name = "methodWithUninitializedVerificationType", descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo( boolean )
+ │   │                       └─ [0] LocalVariableTypeTableEntry index = 1, start = L60, end = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)
+ │   ├─ [6] ByteCodeMethod accessFlags = [public, final], name = "methodWithUninitializedVerificationType", descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo( boolean )
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 13, maxLocals = 2
  │   │       │   ├─ instructions: 26 entries
- │   │       │   │   ├─ [0] L113:   NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo // return new Foo( new Foo( b ? new Foo() : null ) );
+ │   │       │   │   ├─ [0] L77:    NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo // return new Foo( new Foo( b ? new Foo() : null ) );
  │   │       │   │   ├─ [1]         DUP
  │   │       │   │   ├─ [2]         ICONST_1
  │   │       │   │   ├─ [3]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
@@ -293,11 +211,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
  │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 113, start = L113
+ │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 77, start = L77
  │   │       │       ├─ [1] LocalVariableTableAttribute
  │   │       │       │   └─ entrys: 2 entries
- │   │       │       │       ├─ [0] LocalVariableTableEntry index = 0, start = L113, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
- │   │       │       │       └─ [1] LocalVariableTableEntry index = 1, start = L113, end = @end, name = b, descriptor = boolean
+ │   │       │       │       ├─ [0] LocalVariableTableEntry index = 0, start = L77, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+ │   │       │       │       └─ [1] LocalVariableTableEntry index = 1, start = L77, end = @end, name = b, descriptor = boolean
  │   │       │       └─ [2] StackMapTableAttribute
  │   │       │           └─ frames: 2 entries
  │   │       │               ├─ [0] FullFrame target = T2
@@ -305,8 +223,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │       │               │   │   ├─ [0] name = Object, type = mikenakis.bytecode.test.model.Class2WithVariousInstructions
  │   │       │               │   │   └─ [1] Integer
  │   │       │               │   └─ stackVerificationTypes: 10 entries
- │   │       │               │       ├─ [0] Uninitialized L113
- │   │       │               │       ├─ [1] Uninitialized L113
+ │   │       │               │       ├─ [0] Uninitialized L77
+ │   │       │               │       ├─ [1] Uninitialized L77
  │   │       │               │       ├─ [2] name = Object, type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
  │   │       │               │       ├─ [3] name = Object, type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
  │   │       │               │       ├─ [4] Integer
@@ -320,8 +238,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │       │                   │   ├─ [0] name = Object, type = mikenakis.bytecode.test.model.Class2WithVariousInstructions
  │   │       │                   │   └─ [1] Integer
  │   │       │                   └─ stackVerificationTypes: 11 entries
- │   │       │                       ├─ [0] Uninitialized L113
- │   │       │                       ├─ [1] Uninitialized L113
+ │   │       │                       ├─ [0] Uninitialized L77
+ │   │       │                       ├─ [1] Uninitialized L77
  │   │       │                       ├─ [2] name = Object, type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
  │   │       │                       ├─ [3] name = Object, type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
  │   │       │                       ├─ [4] Integer
@@ -334,11 +252,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │       └─ [1] MethodParametersAttribute
  │   │           └─ parameters: 1 entries
  │   │               └─ [0] MethodParameter accessFlags = [], name = "b"
- │   └─ [8] ByteCodeMethod accessFlags = [private, static, synthetic], name = "lambda$methodWithLambda$0", descriptor = int( java.lang.String, java.lang.String )
+ │   └─ [7] ByteCodeMethod accessFlags = [private, static, synthetic], name = "lambda$methodWithLambda$0", descriptor = int( java.lang.String, java.lang.String )
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │               ├─ instructions: 5 entries
- │               │   ├─ [0] L97:    ALOAD_0 0 // list.sort( ( a, b ) -> -a.compareTo( b ) );
+ │               │   ├─ [0] L61:    ALOAD_0 0 // list.sort( ( a, b ) -> -a.compareTo( b ) );
  │               │   ├─ [1]         ALOAD_1 1
  │               │   ├─ [2]         INVOKEVIRTUAL type = java.lang.String, name = compareTo, descriptor = int( java.lang.String )
  │               │   ├─ [3]         INEG
@@ -347,11 +265,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute
  │                   │   └─ entrys: 1 entries
- │                   │       └─ [0] LineNumberTableEntry lineNumber = 97, start = L97
+ │                   │       └─ [0] LineNumberTableEntry lineNumber = 61, start = L61
  │                   └─ [1] LocalVariableTableAttribute
  │                       └─ entrys: 2 entries
- │                           ├─ [0] LocalVariableTableEntry index = 0, start = L97, end = @end, name = a, descriptor = java.lang.String
- │                           └─ [1] LocalVariableTableEntry index = 1, start = L97, end = @end, name = b, descriptor = java.lang.String
+ │                           ├─ [0] LocalVariableTableEntry index = 0, start = L61, end = @end, name = a, descriptor = java.lang.String
+ │                           └─ [1] LocalVariableTableEntry index = 1, start = L61, end = @end, name = b, descriptor = java.lang.String
  └─ attributes: 4 entries
      ├─ [0] SourceFileAttribute
      │   └─ value: Mutf8Constant( "Class2WithVariousInstructions.java" )
