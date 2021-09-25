@@ -9,7 +9,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L11:    ALOAD_0 0 //public class InnerClass
+ │   │       │   │   ├─ [0] L11:    ALOAD_0 0 // public class InnerClass
  │   │       │   │   ├─ [1]         ALOAD_1 1
  │   │       │   │   ├─ [2]         PUTFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
  │   │       │   │   ├─ [3]         ALOAD_0 0
@@ -31,7 +31,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │               ├─ instructions: 5 entries
- │               │   ├─ [0] L15:    ALOAD_0 0 //return "inner class of " + Class7WithInnerClass.this.toString();
+ │               │   ├─ [0] L15:    ALOAD_0 0 // return "inner class of " + Class7WithInnerClass.this.toString();
  │               │   ├─ [1]         GETFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
  │               │   ├─ [2]         INVOKEVIRTUAL type = java.lang.Object, name = toString, descriptor = java.lang.String()
  │               │   ├─ [3]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String )
@@ -48,7 +48,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
      ├─ [0] SourceFileAttribute
      │   └─ value: Mutf8Constant( "Class7WithInnerClass.java" )
      ├─ [1] NestHostAttribute
-     │   └─ class: name = Mutf8Constant( "mikenakis/bytecode/test/model/Class7WithInnerClass" )
+     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class7WithInnerClass" )
      ├─ [2] BootstrapMethodsAttribute
      │   └─ bootstrapMethods: 1 entries
      │       └─ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )

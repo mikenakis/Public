@@ -9,9 +9,9 @@ ByteCodeType version = 60.0, accessFlags = [final, super], thisClass = mikenakis
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │               ├─ instructions: 6 entries
- │               │   ├─ [0] L11:    ALOAD_0 0 //private static final class NestedClass
+ │               │   ├─ [0] L11:    ALOAD_0 0 // private static final class NestedClass
  │               │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │               │   ├─ [2] L13:    ALOAD_0 0 //private boolean foo = false;
+ │               │   ├─ [2] L13:    ALOAD_0 0 // private boolean foo = false;
  │               │   ├─ [3]         ICONST_0
  │               │   ├─ [4]         PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
  │               │   └─ [5]         RETURN
@@ -28,7 +28,7 @@ ByteCodeType version = 60.0, accessFlags = [final, super], thisClass = mikenakis
      ├─ [0] SourceFileAttribute
      │   └─ value: Mutf8Constant( "Class4ExtendingClass3.java" )
      ├─ [1] NestHostAttribute
-     │   └─ class: name = Mutf8Constant( "mikenakis/bytecode/test/model/Class4ExtendingClass3" )
+     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class4ExtendingClass3" )
      └─ [2] InnerClassesAttribute
          └─ innerClasses: 1 entries
              └─ [0] InnerClass outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, accessFlags = [private, static, final], innerClass=mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, innerName = Mutf8Constant( "NestedClass" )

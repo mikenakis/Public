@@ -118,6 +118,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -986,8 +987,23 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromExtraConstants( Collection<Constant> extraConstants )
 	{
-		List<Constant> list = extraConstants.stream().sorted().toList();
+		if( extraConstants.isEmpty() )
+			return Twig.array( List.of() );
+		List<Constant> list = extraConstants.stream().sorted( ByteCodePrinter::extraConstantComparator ).toList();
 		return Twig.array( list.stream().map( ByteCodePrinter::twigFromExtraConstant ).toList() );
+	}
+
+	private static int extraConstantComparator( Constant a, Constant b )
+	{
+		int d = Integer.compare( a.tag, b.tag );
+		if( d != 0 )
+			return d;
+		return switch( a.tag )
+			{
+				case Constant.tagClass -> extraConstantComparator( a.asClassConstant().nameConstant(), b.asClassConstant().nameConstant() );
+				case Constant.tagMutf8 -> a.asMutf8Constant().stringValue().compareTo( b.asMutf8Constant().stringValue() );
+				default -> throw new AssertionError( a.tag ); //I have not witnessed any other kind of extra constants.
+			};
 	}
 
 	private static Twig twigFromFields( Collection<ByteCodeField> fields, ByteCodeType byteCodeType, Labeler labeler )
@@ -1089,7 +1105,8 @@ public final class ByteCodePrinter
 	private static Twig twigFromClassConstant( ClassConstant classConstant )
 	{
 		var builder = new StringBuilder();
-		builder.append( "name = " );
+		builder.append( classConstant.getClass().getSimpleName() );
+		builder.append( " name = " );
 		mutf8ConstantToStringBuilder( classConstant.nameConstant(), builder );
 		String header = builder.toString();
 		return Twig.leaf( header );
@@ -1186,9 +1203,15 @@ public final class ByteCodePrinter
 		return switch( constant.tag )
 			{
 				case Constant.tagClass -> //
-					twigFromClassConstant( constant.asClassConstant() );
+					{
+						ClassConstant classConstant = constant.asClassConstant();
+						yield twigFromClassConstant( classConstant );
+					}
 				case Constant.tagDouble, Constant.tagFloat, Constant.tagInteger, Constant.tagLong, Constant.tagString, Constant.tagMutf8 -> //
-					twigFromValueConstant( constant.asValueConstant() );
+					{
+						ValueConstant<?> valueConstant = constant.asValueConstant();
+						yield twigFromValueConstant( valueConstant );
+					}
 				default -> throw new AssertionError( constant );
 			};
 	}
@@ -1489,15 +1512,13 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromLocalVariableInstruction( String prefix, Optional<String> suffix, LocalVariableInstruction localVariableInstruction )
 	{
-		String[] arguments = localVariableInstruction.index <= 3 && localVariableInstruction.getOpCode() != OpCode.RET ? new String[]{ "" + localVariableInstruction.index } : Kit.ARRAY_OF_ZERO_STRINGS;
+		String[] arguments = localVariableInstruction.index <= 3 && localVariableInstruction.getOpCode() != OpCode.RET ? new String[] { "" + localVariableInstruction.index } : Kit.ARRAY_OF_ZERO_STRINGS;
 		return Twig.leaf( buildInstructionHeader( prefix, suffix, localVariableInstruction.getOpCode(), arguments ) );
 	}
 
 	private static Twig twigFromLookupSwitchInstruction( String prefix, Optional<String> suffix, LookupSwitchInstruction lookupSwitchInstruction, Labeler labeler )
 	{
-		return Twig.group( buildInstructionHeader( prefix, suffix, OpCode.LOOKUPSWITCH ),
-			Map.entry( "default", Twig.leaf( labeler.getLabel( lookupSwitchInstruction.getDefaultInstruction() ) ) ),
-			Map.entry( "entries", Twig.array( lookupSwitchInstruction.entries.stream().map( e -> twigFromLookupSwitchEntry( e, labeler  ) ).toList() ) ) );
+		return Twig.group( buildInstructionHeader( prefix, suffix, OpCode.LOOKUPSWITCH ), Map.entry( "default", Twig.leaf( labeler.getLabel( lookupSwitchInstruction.getDefaultInstruction() ) ) ), Map.entry( "entries", Twig.array( lookupSwitchInstruction.entries.stream().map( e -> twigFromLookupSwitchEntry( e, labeler ) ).toList() ) ) );
 	}
 
 	private static Twig twigFromLookupSwitchEntry( LookupSwitchEntry lookupSwitchEntry, Labeler labeler )

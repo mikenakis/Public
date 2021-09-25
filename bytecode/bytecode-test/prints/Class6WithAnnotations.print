@@ -32,12 +32,12 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 3 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L21:    ALOAD_0 0 //{
+ │   │       │   │   ├─ [0] L21:    ALOAD_0 0 // {
  │   │       │   │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [2] L13:    ALOAD_0 0 //@SuppressWarnings( "FieldMayBeStatic" ) //
+ │   │       │   │   ├─ [2] L13:    ALOAD_0 0 // @SuppressWarnings( "FieldMayBeStatic" ) //
  │   │       │   │   ├─ [3]         ICONST_5
  │   │       │   │   ├─ [4]         PUTFIELD int mikenakis.bytecode.test.model.Class6WithAnnotations.fieldWithAnnotation
- │   │       │   │   └─ [5] L22:    RETURN //}
+ │   │       │   │   └─ [5] L22:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -74,7 +74,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L27:    RETURN //}
+ │   │       │   │   └─ [0] L27:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -109,7 +109,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L32:    RETURN //}
+ │   │       │   │   └─ [0] L32:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -141,7 +141,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L38:    RETURN //}
+ │   │       │   │   └─ [0] L38:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -207,7 +207,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L43:    RETURN //}
+ │   │       │   │   └─ [0] L43:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -231,7 +231,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L48:    RETURN //}
+ │   │       │   │   └─ [0] L48:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -255,7 +255,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L53:    RETURN //}
+ │   │       │   │   └─ [0] L53:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -273,7 +273,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L58:    RETURN //}
+ │   │       │   │   └─ [0] L58:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -297,13 +297,13 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 4 entries
  │           ├─ [0] CodeAttribute maxStack = 4, maxLocals = 4
  │           │   ├─ instructions: 7 entries
- │           │   │   ├─ [0] L64:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
+ │           │   │   ├─ [0] L64:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
  │           │   │   ├─ [1]         ILOAD_1 1
  │           │   │   ├─ [2]         ILOAD_2 2
  │           │   │   ├─ [3]         ILOAD_3 3
  │           │   │   ├─ [4]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int )
  │           │   │   ├─ [5]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │           │   │   └─ [6] L65:    RETURN //}
+ │           │   │   └─ [6] L65:    RETURN // }
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
  │           │       ├─ [0] LineNumberTableAttribute

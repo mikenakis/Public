@@ -41,14 +41,6 @@ public final class ClassConstant extends Constant
 	public ConstantDesc constantDescriptor() { return classDescriptor(); }
 	public ClassDesc classDescriptor() { return ClassDesc.ofDescriptor( getDescriptorString( nameConstant.stringValue() ) ); }
 
-	@Override public int compareTo( Constant other )
-	{
-		int d = super.compareTo( other );
-		if( d != 0 )
-			return d;
-		return nameConstant.compareTo( other.asClassConstant().nameConstant );
-	}
-
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return nameConstant.stringValue();

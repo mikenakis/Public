@@ -13,16 +13,26 @@ import java.util.function.Supplier;
 @SuppressWarnings( { "FieldCanBeLocal", "FieldMayBeStatic", "unused" } )
 public abstract class Class3ImplementingInterface implements Interface1
 {
+	public static final String stringLiteral = "a\u03A6\uB414b"; //these characters are chosen so as to cover all unicode groups.
+	public static final boolean booleanLiteral = true;
+	public static final byte byteLiteral = 1;
+	public static final char charLiteral = 'c';
+	public static final double doubleLiteral = 0.5;
+	public static final float floatLiteral = 0.25f;
+	public static final int intLiteral = 2;
+	public static final long longLiteral = 3;
+	public static final short shortLiteral = 4;
+
 	private final Enum1 enum1;
-	private final boolean booleanMember = true;
-	private final byte byteMember = 1;
-	private final char charMember = 'c';
-	private double doubleMember = 0.5;
-	private final float floatMember = 0.25f;
-	private final int intMember = 2;
-	private final long longMember = 3;
-	private final short shortVar = 4;
-	private final String stringMember = "a\u03A6\uB414b"; //these characters are chosen so as to cover all unicode groups.
+	private final boolean booleanMember = booleanLiteral;
+	private final byte byteMember = byteLiteral;
+	private final char charMember = charLiteral;
+	private double doubleMember = doubleLiteral;
+	private final float floatMember = floatLiteral;
+	private final int intMember = intLiteral;
+	private final long longMember = longLiteral;
+	private final short shortMember = shortLiteral;
+	private final String stringMember = stringLiteral;
 
 	protected Class3ImplementingInterface()
 	{

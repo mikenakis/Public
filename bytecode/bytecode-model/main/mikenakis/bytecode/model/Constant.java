@@ -21,15 +21,12 @@ import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Comparator;
-
 /**
  * Represents a java class file constant.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class Constant implements Comparable<Constant>
+public abstract class Constant
 {
 	public static final int tagMutf8                    /**/ = 1; // JVMS::CONSTANT_Utf8 addresses JVMS::CONSTANT_Utf8_info
 	public static final int tagInteger                  /**/ = 3; // JVMS::CONSTANT_Integer addresses JVMS::CONSTANT_Integer_info
@@ -49,23 +46,23 @@ public abstract class Constant implements Comparable<Constant>
 	public static String tagName( int constantTag )
 	{
 		return switch( constantTag )
-		{
-			case tagMutf8                    /**/ -> "Mutf8";
-			case tagInteger                  /**/ -> "Integer";
-			case tagFloat                    /**/ -> "Float";
-			case tagLong                     /**/ -> "Long";
-			case tagDouble                   /**/ -> "Double";
-			case tagClass                    /**/ -> "Class";
-			case tagString                   /**/ -> "String";
-			case tagFieldReference           /**/ -> "FieldReference";
-			case tagMethodReference          /**/ -> "MethodReference";
-			case tagInterfaceMethodReference /**/ -> "InterfaceMethodReference";
-			case tagNameAndDescriptor        /**/ -> "NameAndDescriptor";
-			case tagMethodHandle             /**/ -> "MethodHandle";
-			case tagMethodType               /**/ -> "MethodType";
-			case tagInvokeDynamic            /**/ -> "InvokeDynamic";
-			default -> throw new InvalidConstantTagException( constantTag );
-		};
+			{
+				case tagMutf8                    /**/ -> "Mutf8";
+				case tagInteger                  /**/ -> "Integer";
+				case tagFloat                    /**/ -> "Float";
+				case tagLong                     /**/ -> "Long";
+				case tagDouble                   /**/ -> "Double";
+				case tagClass                    /**/ -> "Class";
+				case tagString                   /**/ -> "String";
+				case tagFieldReference           /**/ -> "FieldReference";
+				case tagMethodReference          /**/ -> "MethodReference";
+				case tagInterfaceMethodReference /**/ -> "InterfaceMethodReference";
+				case tagNameAndDescriptor        /**/ -> "NameAndDescriptor";
+				case tagMethodHandle             /**/ -> "MethodHandle";
+				case tagMethodType               /**/ -> "MethodType";
+				case tagInvokeDynamic            /**/ -> "InvokeDynamic";
+				default -> throw new InvalidConstantTagException( constantTag );
+			};
 	}
 
 	public final int tag;
@@ -74,13 +71,6 @@ public abstract class Constant implements Comparable<Constant>
 	{
 		this.tag = tag;
 	}
-
-	@OverridingMethodsMustInvokeSuper @Override public int compareTo( Constant other )
-	{
-		return Integer.compare( tag, other.tag );
-	}
-
-	public static final Comparator<Constant> comparator = Comparator.naturalOrder();
 
 	@Override public abstract boolean equals( Object other );
 

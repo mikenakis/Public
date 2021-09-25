@@ -38,12 +38,12 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 3 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L21:    ALOAD_0 0 //{
+ │   │       │   │   ├─ [0] L21:    ALOAD_0 0 // {
  │   │       │   │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [2] L13:    ALOAD_0 0 //@SuppressWarnings( "FieldMayBeStatic" ) //
+ │   │       │   │   ├─ [2] L13:    ALOAD_0 0 // @SuppressWarnings( "FieldMayBeStatic" ) //
  │   │       │   │   ├─ [3]         ICONST_5
  │   │       │   │   ├─ [4]         PUTFIELD int mikenakis.bytecode.test.model.Class6WithTypeAnnotations.fieldWithAnnotation
- │   │       │   │   └─ [5] L22:    RETURN //}
+ │   │       │   │   └─ [5] L22:    RETURN // }
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -86,7 +86,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L27:    BIPUSH immediateValue = 99 //return 'c';
+ │   │       │   │   ├─ [0] L27:    BIPUSH immediateValue = 99 // return 'c';
  │   │       │   │   └─ [1]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -125,7 +125,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L33:    BIPUSH immediateValue = 10 //return 10;
+ │   │       │   │   ├─ [0] L33:    BIPUSH immediateValue = 10 // return 10;
  │   │       │   │   └─ [1]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -161,7 +161,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L40:    LDC2_W constant = LongConstant( 11L ) //return 11;
+ │   │       │   │   ├─ [0] L40:    LDC2_W constant = LongConstant( 11L ) // return 11;
  │   │       │   │   └─ [1]         LRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -231,7 +231,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L46:    LDC constant = FloatConstant( 5.0f ) //return 5f;
+ │   │       │   │   ├─ [0] L46:    LDC constant = FloatConstant( 5.0f ) // return 5f;
  │   │       │   │   └─ [1]         FRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -259,7 +259,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L52:    LDC2_W constant = DoubleConstant( 6.0 ) //return 6;
+ │   │       │   │   ├─ [0] L52:    LDC2_W constant = DoubleConstant( 6.0 ) // return 6;
  │   │       │   │   └─ [1]         DRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -287,7 +287,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L58:    BIPUSH immediateValue = 7 //return 7;
+ │   │       │   │   ├─ [0] L58:    BIPUSH immediateValue = 7 // return 7;
  │   │       │   │   └─ [1]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -309,7 +309,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L64:    ICONST_1 //return 1;
+ │   │       │   │   ├─ [0] L64:    ICONST_1 // return 1;
  │   │       │   │   └─ [1]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
@@ -337,13 +337,13 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 4 entries
  │           ├─ [0] CodeAttribute maxStack = 4, maxLocals = 4
  │           │   ├─ instructions: 7 entries
- │           │   │   ├─ [0] L71:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
+ │           │   │   ├─ [0] L71:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
  │           │   │   ├─ [1]         ILOAD_1 1
  │           │   │   ├─ [2]         ILOAD_2 2
  │           │   │   ├─ [3]         ILOAD_3 3
  │           │   │   ├─ [4]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int )
  │           │   │   ├─ [5]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │           │   │   └─ [6] L72:    RETURN //}
+ │           │   │   └─ [6] L72:    RETURN // }
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
  │           │       ├─ [0] LineNumberTableAttribute

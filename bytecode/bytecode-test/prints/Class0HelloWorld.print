@@ -7,7 +7,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L9:     ALOAD_0 0 //public abstract class Class0HelloWorld
+ │   │           │   ├─ [0] L9:     ALOAD_0 0 // public abstract class Class0HelloWorld
  │   │           │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │   │           │   └─ [2]         RETURN
  │   │           ├─ exceptionInfos: 0 entries
@@ -22,10 +22,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 2 entries
  │           ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │           │   ├─ instructions: 4 entries
- │           │   │   ├─ [0] L13:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "Hello, world!" );
+ │           │   │   ├─ [0] L13:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "Hello, world!" );
  │           │   │   ├─ [1]         LDC constant = StringConstant( Mutf8Constant( "Hello, world!" ) )
  │           │   │   ├─ [2]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │           │   │   └─ [3] L14:    RETURN //}
+ │           │   │   └─ [3] L14:    RETURN // }
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
  │           │       ├─ [0] LineNumberTableAttribute

@@ -7,7 +7,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │               ├─ instructions: 3 entries
- │               │   ├─ [0] L9:     ALOAD_0 0 //public abstract class Class7WithInnerClass
+ │               │   ├─ [0] L9:     ALOAD_0 0 // public abstract class Class7WithInnerClass
  │               │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
  │               │   └─ [2]         RETURN
  │               ├─ exceptionInfos: 0 entries

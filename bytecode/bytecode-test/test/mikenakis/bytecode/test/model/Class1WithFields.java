@@ -8,7 +8,11 @@ package mikenakis.bytecode.test.model;
 @SuppressWarnings( { "FieldMayBeStatic", "unused" } )
 public abstract class Class1WithFields
 {
-	public static final String PublicConstant = "publicConstantValue";
+	public static final String PublicStringConstant = "publicConstantValue";
+	public static final double PublicDoubleConstant = 1.0;
+	public static final float PublicFloatConstant = 2.0f;
+	public static final long PublicLongConstant = 3L;
+	public static final int PublicIntConstant = 4;
 
 	private final Enum1 enumMember;
 	private final boolean booleanMember = true;

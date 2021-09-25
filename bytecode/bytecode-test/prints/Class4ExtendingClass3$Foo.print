@@ -12,7 +12,7 @@ ByteCodeType version = 60.0, accessFlags = [interface, abstract], thisClass = mi
      ├─ [0] SourceFileAttribute
      │   └─ value: Mutf8Constant( "Class4ExtendingClass3.java" )
      ├─ [1] NestHostAttribute
-     │   └─ class: name = Mutf8Constant( "mikenakis/bytecode/test/model/Class4ExtendingClass3" )
+     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class4ExtendingClass3" )
      └─ [2] InnerClassesAttribute
          └─ innerClasses: 1 entries
              └─ [0] InnerClass outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, accessFlags = [static, interface, abstract], innerClass=mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, innerName = Mutf8Constant( "Foo" )

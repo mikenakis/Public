@@ -51,20 +51,24 @@ public class T101_Reading
 		assert methods.get( 1 ).name().equals( "<init>" );
 		assert methods.get( 2 ).name().equals( "toString" );
 		List<ByteCodeField> fields = new ArrayList<>( byteCodeType.fields );
-		assert fields.size() == 13;
-		assert fields.get( 0 ).name().equals( "PublicConstant" );
-		assert fields.get( 1 ).name().equals( "enumMember" );
-		assert fields.get( 2 ).name().equals( "booleanMember" );
-		assert fields.get( 3 ).name().equals( "byteMember" );
-		assert fields.get( 4 ).name().equals( "charMember" );
-		assert fields.get( 5 ).name().equals( "doubleMember" );
-		assert fields.get( 6 ).name().equals( "floatMember" );
-		assert fields.get( 7 ).name().equals( "intMember" );
-		assert fields.get( 8 ).name().equals( "longMember" );
-		assert fields.get( 9 ).name().equals( "shortVar" );
-		assert fields.get( 10 ).name().equals( "stringMember" );
-		assert fields.get( 11 ).name().equals( "arrayOfPrimitiveMember" );
-		assert fields.get( 12 ).name().equals( "arrayOfObjectMember" );
+		assert fields.size() == 17;
+		assert fields.get( 0 ).name().equals( "PublicStringConstant" );
+		assert fields.get( 1 ).name().equals( "PublicDoubleConstant" );
+		assert fields.get( 2 ).name().equals( "PublicFloatConstant" );
+		assert fields.get( 3 ).name().equals( "PublicLongConstant" );
+		assert fields.get( 4 ).name().equals( "PublicIntConstant" );
+		assert fields.get( 5 ).name().equals( "enumMember" );
+		assert fields.get( 6 ).name().equals( "booleanMember" );
+		assert fields.get( 7 ).name().equals( "byteMember" );
+		assert fields.get( 8 ).name().equals( "charMember" );
+		assert fields.get( 9 ).name().equals( "doubleMember" );
+		assert fields.get( 10 ).name().equals( "floatMember" );
+		assert fields.get( 11 ).name().equals( "intMember" );
+		assert fields.get( 12 ).name().equals( "longMember" );
+		assert fields.get( 13 ).name().equals( "shortVar" );
+		assert fields.get( 14 ).name().equals( "stringMember" );
+		assert fields.get( 15 ).name().equals( "arrayOfPrimitiveMember" );
+		assert fields.get( 16 ).name().equals( "arrayOfObjectMember" );
 		assert byteCodeType.tryGetSourceFileName().isPresent(); //yes, according to the JVMS it is an optional attribute, but in practice, it better be there.
 		assert byteCodeType.tryGetSourceFileName().orElseThrow().equals( Class1WithFields.class.getSimpleName() + ".java" );
 	}

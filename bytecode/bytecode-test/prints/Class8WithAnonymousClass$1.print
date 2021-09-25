@@ -10,7 +10,7 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L12:    ALOAD_0 0 //{
+ │   │       │   │   ├─ [0] L12:    ALOAD_0 0 // {
  │   │       │   │   ├─ [1]         ALOAD_1 1
  │   │       │   │   ├─ [2]         PUTFIELD mikenakis.bytecode.test.model.Class8WithAnonymousClass mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
  │   │       │   │   ├─ [3]         ALOAD_0 0
@@ -32,7 +32,7 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 2 entries
- │   │           │   ├─ [0] L15:    ACONST_NULL //return null;
+ │   │           │   ├─ [0] L15:    ACONST_NULL // return null;
  │   │           │   └─ [1]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
@@ -46,7 +46,7 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │       └─ attributes: 2 entries
  │           ├─ [0] CodeAttribute maxStack = 1, maxLocals = 2
  │           │   ├─ instructions: 2 entries
- │           │   │   ├─ [0] L19:    ICONST_0 //return 0;
+ │           │   │   ├─ [0] L19:    ICONST_0 // return 0;
  │           │   │   └─ [1]         IRETURN
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
@@ -65,7 +65,7 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
      │   └─ value: Mutf8Constant( "Class8WithAnonymousClass.java" )
      ├─ [1] EnclosingMethodAttribute type = mikenakis.bytecode.test.model.Class8WithAnonymousClass
      ├─ [2] NestHostAttribute
-     │   └─ class: name = Mutf8Constant( "mikenakis/bytecode/test/model/Class8WithAnonymousClass" )
+     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class8WithAnonymousClass" )
      └─ [3] InnerClassesAttribute
          └─ innerClasses: 1 entries
              └─ [0] InnerClass accessFlags = [], innerClass=mikenakis.bytecode.test.model.Class8WithAnonymousClass$1

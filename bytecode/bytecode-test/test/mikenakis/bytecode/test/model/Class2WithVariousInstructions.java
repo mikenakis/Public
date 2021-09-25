@@ -45,7 +45,15 @@ public abstract class Class2WithVariousInstructions
 				System.out.println( "105" );
 				break;
 			default:
-				System.out.println( Class1WithFields.PublicConstant );
+				/* Excercise the "ExtraConstants" feature:
+				   Here we make use of constant (public static final) fields from other classes,
+				   without referencing these other classes in any other way.
+				   The compiler does not emit any code that references the fields of the other classes;
+				   instead, it copies the values of these fields verbatim into the current class.
+				   However, (probably in order to facilitate dependency checking,)
+				   the compiler does emit a class constant referring to each class from which a constant was copied.
+				   This "extra" class constant might not be used in any other way in this class file. */
+				System.out.println( Class1WithFields.PublicStringConstant + Class3ImplementingInterface.stringLiteral );
 				break;
 		}
 	}
@@ -73,7 +81,6 @@ public abstract class Class2WithVariousInstructions
 				System.out.println( "150" );
 				break;
 			default:
-				System.out.println( "default" );
 				break;
 		}
 	}
@@ -91,19 +98,18 @@ public abstract class Class2WithVariousInstructions
 		return list.get( 0 );
 	}
 
-	public final boolean methodWithUninitializedVerificationType( int i ) //TODO
+	static class Foo
 	{
-		String s;
-		int j = 5;
-		do
+		final Foo[] foos;
+
+		Foo( Foo... foos )
 		{
-			System.out.println( "100" );
-			s = new String( new StringBuilder().append( "test1" ) );
-			System.out.println( s );
-			System.out.println( "200" );
-			j++;
+			this.foos = foos;
 		}
-		while( j < i );
-		return s.isEmpty();
+	}
+
+	public final Foo methodWithUninitializedVerificationType( boolean b )
+	{
+		return new Foo( new Foo( b ? new Foo() : null ) );
 	}
 }
