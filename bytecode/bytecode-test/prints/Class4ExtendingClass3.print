@@ -12,21 +12,17 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 3, maxLocals = 1
  │   │           ├─ instructions: 11 entries
- │   │           │   ├─ [0] L20: // {
- │   │           │   ├─ [1]      ALOAD_0
- │   │           │   ├─ [2]      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
- │   │           │   ├─ [3] L16: // private final Interface1 interface1 = this;
- │   │           │   ├─ [4]      ALOAD_0
- │   │           │   ├─ [5]      ALOAD_0
- │   │           │   ├─ [6]      PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
- │   │           │   ├─ [7] L17: // private final NestedClass nestedObject = new NestedClass();
- │   │           │   ├─ [8]      ALOAD_0
- │   │           │   ├─ [9]      NEW mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
- │   │           │   ├─ [10]      DUP
- │   │           │   ├─ [11]      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, name = <init>, descriptor = void()
- │   │           │   ├─ [12]      PUTFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
- │   │           │   ├─ [13] L21: // }
- │   │           │   └─ [14]      RETURN
+ │   │           │   ├─ [0] L20:    ALOAD_0 0 //{
+ │   │           │   ├─ [1]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
+ │   │           │   ├─ [2] L16:    ALOAD_0 0 //private final Interface1 interface1 = this;
+ │   │           │   ├─ [3]         ALOAD_0 0
+ │   │           │   ├─ [4]         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
+ │   │           │   ├─ [5] L17:    ALOAD_0 0 //private final NestedClass nestedObject = new NestedClass();
+ │   │           │   ├─ [6]         NEW mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
+ │   │           │   ├─ [7]         DUP
+ │   │           │   ├─ [8]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, name = <init>, descriptor = void()
+ │   │           │   ├─ [9]         PUTFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
+ │   │           │   └─ [10] L21:    RETURN //}
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -42,10 +38,9 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L25: // return interface1;
- │   │           │   ├─ [1]      ALOAD_0
- │   │           │   ├─ [2]      GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
- │   │           │   └─ [3]      ARETURN
+ │   │           │   ├─ [0] L25:    ALOAD_0 0 //return interface1;
+ │   │           │   ├─ [1]         GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
+ │   │           │   └─ [2]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -58,10 +53,9 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 3 entries
- │   │       │   │   ├─ [0] L30: // return Thread.currentThread().getId();
- │   │       │   │   ├─ [1]      INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread()
- │   │       │   │   ├─ [2]      INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
- │   │       │   │   └─ [3]      LRETURN
+ │   │       │   │   ├─ [0] L30:    INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread() //return Thread.currentThread().getId();
+ │   │       │   │   ├─ [1]         INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
+ │   │       │   │   └─ [2]         LRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -78,14 +72,11 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 2
  │   │           ├─ instructions: 5 entries
- │   │           │   ├─ [0] L35: // Runnable runnable = () -> new Class4ExtendingClass3();
- │   │           │   ├─ [1]      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = run, descriptor = java.lang.Runnable()
- │   │           │   ├─ [2]      ASTORE_1
- │   │           │   ├─ [3] L36: // runnable.run();
- │   │           │   ├─ [4]      ALOAD_1
- │   │           │   ├─ [5]      INVOKEINTERFACE type = java.lang.Runnable, name = run, descriptor = void() 1 arguments
- │   │           │   ├─ [6] L37: // }
- │   │           │   └─ [7]      RETURN
+ │   │           │   ├─ [0] L35:    INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = run, descriptor = java.lang.Runnable() //Runnable runnable = () -> new Class4ExtendingClass3();
+ │   │           │   ├─ [1]         ASTORE_1 1
+ │   │           │   ├─ [2] L36:    ALOAD_1 1 //runnable.run();
+ │   │           │   ├─ [3]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.lang.Runnable, name = run, descriptor = void(), 1 arguments
+ │   │           │   └─ [4] L37:    RETURN //}
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -101,16 +92,13 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │           ├─ instructions: 7 entries
- │   │           │   ├─ [0] L46: // Foo foo = s -> s + "x";
- │   │           │   ├─ [1]      INVOKEDYNAMIC bootstrapMethodIndex = 1, name = x, descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo()
- │   │           │   ├─ [2]      ASTORE_1
- │   │           │   ├─ [3] L47: // foo.x( "aaa" );
- │   │           │   ├─ [4]      ALOAD_1
- │   │           │   ├─ [5]      LDCx StringConstant( Mutf8Constant( "aaa" ) )
- │   │           │   ├─ [6]      INVOKEINTERFACE type = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, name = x, descriptor = java.lang.String( java.lang.String ) 2 arguments
- │   │           │   ├─ [7]      POP
- │   │           │   ├─ [8] L48: // }
- │   │           │   └─ [9]      RETURN
+ │   │           │   ├─ [0] L46:    INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 1, name = x, descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo() //Foo foo = s -> s + "x";
+ │   │           │   ├─ [1]         ASTORE_1 1
+ │   │           │   ├─ [2] L47:    ALOAD_1 1 //foo.x( "aaa" );
+ │   │           │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "aaa" ) )
+ │   │           │   ├─ [4]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, name = x, descriptor = java.lang.String( java.lang.String ), 2 arguments
+ │   │           │   ├─ [5]         POP
+ │   │           │   └─ [6] L48:    RETURN //}
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -126,11 +114,10 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 4 entries
- │   │           │   ├─ [0] L52: // return nestedObject.foo;
- │   │           │   ├─ [1]      ALOAD_0
- │   │           │   ├─ [2]      GETFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
- │   │           │   ├─ [3]      GETFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
- │   │           │   └─ [4]      IRETURN
+ │   │           │   ├─ [0] L52:    ALOAD_0 0 //return nestedObject.foo;
+ │   │           │   ├─ [1]         GETFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
+ │   │           │   ├─ [2]         GETFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
+ │   │           │   └─ [3]         IRETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -143,13 +130,11 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 5 entries
- │   │       │   │   ├─ [0] L57: // nestedObject.foo = foo;
- │   │       │   │   ├─ [1]      ALOAD_0
- │   │       │   │   ├─ [2]      GETFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
- │   │       │   │   ├─ [3]      ILOAD_1
- │   │       │   │   ├─ [4]      PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
- │   │       │   │   ├─ [5] L58: // }
- │   │       │   │   └─ [6]      RETURN
+ │   │       │   │   ├─ [0] L57:    ALOAD_0 0 //nestedObject.foo = foo;
+ │   │       │   │   ├─ [1]         GETFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
+ │   │       │   │   ├─ [2]         ILOAD_1 1
+ │   │       │   │   ├─ [3]         PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
+ │   │       │   │   └─ [4] L58:    RETURN //}
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -167,10 +152,9 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L46: // Foo foo = s -> s + "x";
- │   │           │   ├─ [1]      ALOAD_0
- │   │           │   ├─ [2]      INVOKEDYNAMIC bootstrapMethodIndex = 2, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String )
- │   │           │   └─ [3]      ARETURN
+ │   │           │   ├─ [0] L46:    ALOAD_0 0 //Foo foo = s -> s + "x";
+ │   │           │   ├─ [1]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 2, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String )
+ │   │           │   └─ [2]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -183,12 +167,11 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 0
  │               ├─ instructions: 5 entries
- │               │   ├─ [0] L35: // Runnable runnable = () -> new Class4ExtendingClass3();
- │               │   ├─ [1]      NEW mikenakis.bytecode.test.model.Class4ExtendingClass3
- │               │   ├─ [2]      DUP
- │               │   ├─ [3]      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class4ExtendingClass3, name = <init>, descriptor = void()
- │               │   ├─ [4]      POP
- │               │   └─ [5]      RETURN
+ │               │   ├─ [0] L35:    NEW mikenakis.bytecode.test.model.Class4ExtendingClass3 //Runnable runnable = () -> new Class4ExtendingClass3();
+ │               │   ├─ [1]         DUP
+ │               │   ├─ [2]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class4ExtendingClass3, name = <init>, descriptor = void()
+ │               │   ├─ [3]         POP
+ │               │   └─ [4]         RETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 1 entries
  │                   └─ [0] LineNumberTableAttribute

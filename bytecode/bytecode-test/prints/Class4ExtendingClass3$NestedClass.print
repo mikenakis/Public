@@ -9,14 +9,12 @@ ByteCodeType version = 60.0, accessFlags = [final, super], thisClass = mikenakis
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │               ├─ instructions: 6 entries
- │               │   ├─ [0] L11: // private static final class NestedClass
- │               │   ├─ [1]      ALOAD_0
- │               │   ├─ [2]      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │               │   ├─ [3] L13: // private boolean foo = false;
- │               │   ├─ [4]      ALOAD_0
- │               │   ├─ [5]      ICONST_0
- │               │   ├─ [6]      PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
- │               │   └─ [7]      RETURN
+ │               │   ├─ [0] L11:    ALOAD_0 0 //private static final class NestedClass
+ │               │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │               │   ├─ [2] L13:    ALOAD_0 0 //private boolean foo = false;
+ │               │   ├─ [3]         ICONST_0
+ │               │   ├─ [4]         PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
+ │               │   └─ [5]         RETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute

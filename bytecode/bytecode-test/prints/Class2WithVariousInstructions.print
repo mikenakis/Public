@@ -9,10 +9,9 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L12: // public abstract class Class2WithVariousInstructions
- │   │           │   ├─ [1]      ALOAD_0
- │   │           │   ├─ [2]      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │           │   └─ [3]      RETURN
+ │   │           │   ├─ [0] L12:    ALOAD_0 0 //public abstract class Class2WithVariousInstructions
+ │   │           │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │           │   └─ [2]         RETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -25,11 +24,9 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 2
  │   │       │   ├─ instructions: 3 entries
- │   │       │   │   ├─ [0] L16: // a += 5;
- │   │       │   │   ├─ [1]      IINC 1 5
- │   │       │   │   ├─ [2] L17: // return a;
- │   │       │   │   ├─ [3]      ILOAD_1
- │   │       │   │   └─ [4]      IRETURN
+ │   │       │   │   ├─ [0] L16:    IINC index = 1, delta = 5 //a += 5;
+ │   │       │   │   ├─ [1] L17:    ILOAD_1 1 //return a;
+ │   │       │   │   └─ [2]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -47,11 +44,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │           ├─ instructions: 4 entries
- │   │           │   ├─ [0] L22: // return new Object[4][5][];
- │   │           │   ├─ [1]      ICONST_4
- │   │           │   ├─ [2]      ICONST_5
- │   │           │   ├─ [3]      MULTIANEWARRAY java.lang.Object[][][] 2 dimensions
- │   │           │   └─ [4]      ARETURN
+ │   │           │   ├─ [0] L22:    ICONST_4 //return new Object[4][5][];
+ │   │           │   ├─ [1]         ICONST_5
+ │   │           │   ├─ [2]         MULTIANEWARRAY class = java.lang.Object[][][], 2 dimensions
+ │   │           │   └─ [3]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -64,51 +60,44 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 30 entries
- │   │       │   │   ├─ [0] L27: // switch( i )
- │   │       │   │   ├─ [1]      ILOAD_1
- │   │       │   │   ├─ [2]      TABLESWITCH default: L48 range: 100 - 105 offsets: [L30, L33, L36, L39, L42, L45]
- │   │       │   │   ├─ [3] L30: // System.out.println( "100" );
- │   │       │   │   ├─ [4]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [5]      LDCx StringConstant( Mutf8Constant( "100" ) )
- │   │       │   │   ├─ [6]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [7] L31: // break;
- │   │       │   │   ├─ [8]      GOTO L51
- │   │       │   │   ├─ [9] L33: // System.out.println( "101" );
- │   │       │   │   ├─ [10]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [11]      LDCx StringConstant( Mutf8Constant( "101" ) )
- │   │       │   │   ├─ [12]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [13] L34: // break;
- │   │       │   │   ├─ [14]      GOTO L51
- │   │       │   │   ├─ [15] L36: // System.out.println( "102" );
- │   │       │   │   ├─ [16]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [17]      LDCx StringConstant( Mutf8Constant( "102" ) )
- │   │       │   │   ├─ [18]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [19] L37: // break;
- │   │       │   │   ├─ [20]      GOTO L51
- │   │       │   │   ├─ [21] L39: // System.out.println( "103" );
- │   │       │   │   ├─ [22]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [23]      LDCx StringConstant( Mutf8Constant( "103" ) )
- │   │       │   │   ├─ [24]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [25] L40: // break;
- │   │       │   │   ├─ [26]      GOTO L51
- │   │       │   │   ├─ [27] L42: // System.out.println( "104" );
- │   │       │   │   ├─ [28]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [29]      LDCx StringConstant( Mutf8Constant( "104" ) )
- │   │       │   │   ├─ [30]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [31] L43: // break;
- │   │       │   │   ├─ [32]      GOTO L51
- │   │       │   │   ├─ [33] L45: // System.out.println( "105" );
- │   │       │   │   ├─ [34]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [35]      LDCx StringConstant( Mutf8Constant( "105" ) )
- │   │       │   │   ├─ [36]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [37] L46: // break;
- │   │       │   │   ├─ [38]      GOTO L51
- │   │       │   │   ├─ [39] L48: // System.out.println( Class1WithFields.PublicConstant );
- │   │       │   │   ├─ [40]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [41]      LDCx StringConstant( Mutf8Constant( "publicConstantValue" ) )
- │   │       │   │   ├─ [42]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [43] L51: // }
- │   │       │   │   └─ [44]      RETURN
+ │   │       │   │   ├─ [0] L27:    ILOAD_1 1 //switch( i )
+ │   │       │   │   ├─ [1]         TABLESWITCH lowValue = 100
+ │   │       │   │   │   ├─ default: L48
+ │   │       │   │   │   └─ offsets: 6 entries
+ │   │       │   │   │       ├─ [0] L30
+ │   │       │   │   │       ├─ [1] L33
+ │   │       │   │   │       ├─ [2] L36
+ │   │       │   │   │       ├─ [3] L39
+ │   │       │   │   │       ├─ [4] L42
+ │   │       │   │   │       └─ [5] L45
+ │   │       │   │   ├─ [2] L30:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "100" );
+ │   │       │   │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "100" ) )
+ │   │       │   │   ├─ [4]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [5] L31:    GOTO L51 //break;
+ │   │       │   │   ├─ [6] L33:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "101" );
+ │   │       │   │   ├─ [7]         LDC constant = StringConstant( Mutf8Constant( "101" ) )
+ │   │       │   │   ├─ [8]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [9] L34:    GOTO L51 //break;
+ │   │       │   │   ├─ [10] L36:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "102" );
+ │   │       │   │   ├─ [11]         LDC constant = StringConstant( Mutf8Constant( "102" ) )
+ │   │       │   │   ├─ [12]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [13] L37:    GOTO L51 //break;
+ │   │       │   │   ├─ [14] L39:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "103" );
+ │   │       │   │   ├─ [15]         LDC constant = StringConstant( Mutf8Constant( "103" ) )
+ │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [17] L40:    GOTO L51 //break;
+ │   │       │   │   ├─ [18] L42:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "104" );
+ │   │       │   │   ├─ [19]         LDC constant = StringConstant( Mutf8Constant( "104" ) )
+ │   │       │   │   ├─ [20]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [21] L43:    GOTO L51 //break;
+ │   │       │   │   ├─ [22] L45:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "105" );
+ │   │       │   │   ├─ [23]         LDC constant = StringConstant( Mutf8Constant( "105" ) )
+ │   │       │   │   ├─ [24]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [25] L46:    GOTO L51 //break;
+ │   │       │   │   ├─ [26] L48:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( Class1WithFields.PublicConstant );
+ │   │       │   │   ├─ [27]         LDC constant = StringConstant( Mutf8Constant( "publicConstantValue" ) )
+ │   │       │   │   ├─ [28]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   └─ [29] L51:    RETURN //}
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -149,51 +138,44 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 30 entries
- │   │       │   │   ├─ [0] L55: // switch( i )
- │   │       │   │   ├─ [1]      ILOAD_1
- │   │       │   │   ├─ [2]      LOOKUPSWITCH default: L76 value-offset-pairs: [100:L58, 110:L61, 120:L64, 130:L67, 140:L70, 150:L73]
- │   │       │   │   ├─ [3] L58: // System.out.println( "100" );
- │   │       │   │   ├─ [4]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [5]      LDCx StringConstant( Mutf8Constant( "100" ) )
- │   │       │   │   ├─ [6]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [7] L59: // break;
- │   │       │   │   ├─ [8]      GOTO L79
- │   │       │   │   ├─ [9] L61: // System.out.println( "110" );
- │   │       │   │   ├─ [10]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [11]      LDCx StringConstant( Mutf8Constant( "110" ) )
- │   │       │   │   ├─ [12]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [13] L62: // break;
- │   │       │   │   ├─ [14]      GOTO L79
- │   │       │   │   ├─ [15] L64: // System.out.println( "120" );
- │   │       │   │   ├─ [16]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [17]      LDCx StringConstant( Mutf8Constant( "120" ) )
- │   │       │   │   ├─ [18]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [19] L65: // break;
- │   │       │   │   ├─ [20]      GOTO L79
- │   │       │   │   ├─ [21] L67: // System.out.println( "130" );
- │   │       │   │   ├─ [22]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [23]      LDCx StringConstant( Mutf8Constant( "130" ) )
- │   │       │   │   ├─ [24]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [25] L68: // break;
- │   │       │   │   ├─ [26]      GOTO L79
- │   │       │   │   ├─ [27] L70: // System.out.println( "140" );
- │   │       │   │   ├─ [28]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [29]      LDCx StringConstant( Mutf8Constant( "140" ) )
- │   │       │   │   ├─ [30]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [31] L71: // break;
- │   │       │   │   ├─ [32]      GOTO L79
- │   │       │   │   ├─ [33] L73: // System.out.println( "150" );
- │   │       │   │   ├─ [34]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [35]      LDCx StringConstant( Mutf8Constant( "150" ) )
- │   │       │   │   ├─ [36]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [37] L74: // break;
- │   │       │   │   ├─ [38]      GOTO L79
- │   │       │   │   ├─ [39] L76: // System.out.println( "default" );
- │   │       │   │   ├─ [40]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [41]      LDCx StringConstant( Mutf8Constant( "default" ) )
- │   │       │   │   ├─ [42]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [43] L79: // }
- │   │       │   │   └─ [44]      RETURN
+ │   │       │   │   ├─ [0] L55:    ILOAD_1 1 //switch( i )
+ │   │       │   │   ├─ [1]         LOOKUPSWITCH
+ │   │       │   │   │   ├─ default: L76
+ │   │       │   │   │   └─ entries: 6 entries
+ │   │       │   │   │       ├─ [0] LookupSwitchEntry value = 100, target = L58
+ │   │       │   │   │       ├─ [1] LookupSwitchEntry value = 110, target = L61
+ │   │       │   │   │       ├─ [2] LookupSwitchEntry value = 120, target = L64
+ │   │       │   │   │       ├─ [3] LookupSwitchEntry value = 130, target = L67
+ │   │       │   │   │       ├─ [4] LookupSwitchEntry value = 140, target = L70
+ │   │       │   │   │       └─ [5] LookupSwitchEntry value = 150, target = L73
+ │   │       │   │   ├─ [2] L58:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "100" );
+ │   │       │   │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "100" ) )
+ │   │       │   │   ├─ [4]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [5] L59:    GOTO L79 //break;
+ │   │       │   │   ├─ [6] L61:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "110" );
+ │   │       │   │   ├─ [7]         LDC constant = StringConstant( Mutf8Constant( "110" ) )
+ │   │       │   │   ├─ [8]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [9] L62:    GOTO L79 //break;
+ │   │       │   │   ├─ [10] L64:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "120" );
+ │   │       │   │   ├─ [11]         LDC constant = StringConstant( Mutf8Constant( "120" ) )
+ │   │       │   │   ├─ [12]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [13] L65:    GOTO L79 //break;
+ │   │       │   │   ├─ [14] L67:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "130" );
+ │   │       │   │   ├─ [15]         LDC constant = StringConstant( Mutf8Constant( "130" ) )
+ │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [17] L68:    GOTO L79 //break;
+ │   │       │   │   ├─ [18] L70:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "140" );
+ │   │       │   │   ├─ [19]         LDC constant = StringConstant( Mutf8Constant( "140" ) )
+ │   │       │   │   ├─ [20]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [21] L71:    GOTO L79 //break;
+ │   │       │   │   ├─ [22] L73:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "150" );
+ │   │       │   │   ├─ [23]         LDC constant = StringConstant( Mutf8Constant( "150" ) )
+ │   │       │   │   ├─ [24]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [25] L74:    GOTO L79 //break;
+ │   │       │   │   ├─ [26] L76:    GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "default" );
+ │   │       │   │   ├─ [27]         LDC constant = StringConstant( Mutf8Constant( "default" ) )
+ │   │       │   │   ├─ [28]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   └─ [29] L79:    RETURN //}
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -234,10 +216,9 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L83: // return Integer.toString( 129 );
- │   │           │   ├─ [1]      SIPUSH 129
- │   │           │   ├─ [2]      INVOKESTATIC type = java.lang.Integer, name = toString, descriptor = java.lang.String( int )
- │   │           │   └─ [3]      ARETURN
+ │   │           │   ├─ [0] L83:    SIPUSH immediateValue = 129 //return Integer.toString( 129 );
+ │   │           │   ├─ [1]         INVOKESTATIC type = java.lang.Integer, name = toString, descriptor = java.lang.String( int )
+ │   │           │   └─ [2]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -250,26 +231,22 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │           ├─ instructions: 16 entries
- │   │           │   ├─ [0] L88: // List<String> list = new ArrayList<>();
- │   │           │   ├─ [1]      NEW java.util.ArrayList
- │   │           │   ├─ [2]      DUP
- │   │           │   ├─ [3]      INVOKESPECIAL type = java.util.ArrayList, name = <init>, descriptor = void()
- │   │           │   ├─ [4]      ASTORE_1
- │   │           │   ├─ [5] L89: // list.add( "x" );
- │   │           │   ├─ [6]      ALOAD_1
- │   │           │   ├─ [7]      LDCx StringConstant( Mutf8Constant( "x" ) )
- │   │           │   ├─ [8]      INVOKEINTERFACE type = java.util.List, name = add, descriptor = boolean( java.lang.Object ) 2 arguments
- │   │           │   ├─ [9]      POP
- │   │           │   ├─ [10] L90: // list.sort( ( a, b ) -> -a.compareTo( b ) );
- │   │           │   ├─ [11]      ALOAD_1
- │   │           │   ├─ [12]      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = compare, descriptor = java.util.Comparator()
- │   │           │   ├─ [13]      INVOKEINTERFACE type = java.util.List, name = sort, descriptor = void( java.util.Comparator ) 2 arguments
- │   │           │   ├─ [14] L91: // return list.get( 0 );
- │   │           │   ├─ [15]      ALOAD_1
- │   │           │   ├─ [16]      ICONST_0
- │   │           │   ├─ [17]      INVOKEINTERFACE type = java.util.List, name = get, descriptor = java.lang.Object( int ) 2 arguments
- │   │           │   ├─ [18]      CHECKCAST java.lang.String
- │   │           │   └─ [19]      ARETURN
+ │   │           │   ├─ [0] L88:    NEW java.util.ArrayList //List<String> list = new ArrayList<>();
+ │   │           │   ├─ [1]         DUP
+ │   │           │   ├─ [2]         INVOKESPECIAL type = java.util.ArrayList, name = <init>, descriptor = void()
+ │   │           │   ├─ [3]         ASTORE_1 1
+ │   │           │   ├─ [4] L89:    ALOAD_1 1 //list.add( "x" );
+ │   │           │   ├─ [5]         LDC constant = StringConstant( Mutf8Constant( "x" ) )
+ │   │           │   ├─ [6]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = add, descriptor = boolean( java.lang.Object ), 2 arguments
+ │   │           │   ├─ [7]         POP
+ │   │           │   ├─ [8] L90:    ALOAD_1 1 //list.sort( ( a, b ) -> -a.compareTo( b ) );
+ │   │           │   ├─ [9]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = compare, descriptor = java.util.Comparator()
+ │   │           │   ├─ [10]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = sort, descriptor = void( java.util.Comparator ), 2 arguments
+ │   │           │   ├─ [11] L91:    ALOAD_1 1 //return list.get( 0 );
+ │   │           │   ├─ [12]         ICONST_0
+ │   │           │   ├─ [13]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = get, descriptor = java.lang.Object( int ), 2 arguments
+ │   │           │   ├─ [14]         CHECKCAST java.lang.String
+ │   │           │   └─ [15]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -289,41 +266,33 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 4, maxLocals = 4
  │   │       │   ├─ instructions: 27 entries
- │   │       │   │   ├─ [0] L97: // int j = 5;
- │   │       │   │   ├─ [1]      ICONST_5
- │   │       │   │   ├─ [2]      ISTORE_3
- │   │       │   │   ├─ [3] L100: // System.out.println( "100" );
- │   │       │   │   ├─ [4]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [5]      LDCx StringConstant( Mutf8Constant( "100" ) )
- │   │       │   │   ├─ [6]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [7] L101: // s = new String( new StringBuilder().append( "test1" ) );
- │   │       │   │   ├─ [8]      NEW java.lang.String
- │   │       │   │   ├─ [9]      DUP
- │   │       │   │   ├─ [10]      NEW java.lang.StringBuilder
- │   │       │   │   ├─ [11]      DUP
- │   │       │   │   ├─ [12]      INVOKESPECIAL type = java.lang.StringBuilder, name = <init>, descriptor = void()
- │   │       │   │   ├─ [13]      LDCx StringConstant( Mutf8Constant( "test1" ) )
- │   │       │   │   ├─ [14]      INVOKEVIRTUAL type = java.lang.StringBuilder, name = append, descriptor = java.lang.StringBuilder( java.lang.String )
- │   │       │   │   ├─ [15]      INVOKESPECIAL type = java.lang.String, name = <init>, descriptor = void( java.lang.StringBuilder )
- │   │       │   │   ├─ [16]      ASTORE_2
- │   │       │   │   ├─ [17] L102: // System.out.println( s );
- │   │       │   │   ├─ [18]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [19]      ALOAD_2
- │   │       │   │   ├─ [20]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [21] L103: // System.out.println( "200" );
- │   │       │   │   ├─ [22]      GETSTATIC java.io.PrintStream java.lang.System.out
- │   │       │   │   ├─ [23]      LDCx StringConstant( Mutf8Constant( "200" ) )
- │   │       │   │   ├─ [24]      INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [25] L104: // j++;
- │   │       │   │   ├─ [26]      IINC 3 1
- │   │       │   │   ├─ [27] L106: // while( j < i );
- │   │       │   │   ├─ [28]      ILOAD_3
- │   │       │   │   ├─ [29]      ILOAD_1
- │   │       │   │   ├─ [30]      IF_ICMPLT L100
- │   │       │   │   ├─ [31] L107: // return s.isEmpty();
- │   │       │   │   ├─ [32]      ALOAD_2
- │   │       │   │   ├─ [33]      INVOKEVIRTUAL type = java.lang.String, name = isEmpty, descriptor = boolean()
- │   │       │   │   └─ [34]      IRETURN
+ │   │       │   │   ├─ [0] L97:    ICONST_5 //int j = 5;
+ │   │       │   │   ├─ [1]         ISTORE_3 3
+ │   │       │   │   ├─ [2] L100:   GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "100" );
+ │   │       │   │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "100" ) )
+ │   │       │   │   ├─ [4]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [5] L101:   NEW java.lang.String //s = new String( new StringBuilder().append( "test1" ) );
+ │   │       │   │   ├─ [6]         DUP
+ │   │       │   │   ├─ [7]         NEW java.lang.StringBuilder
+ │   │       │   │   ├─ [8]         DUP
+ │   │       │   │   ├─ [9]         INVOKESPECIAL type = java.lang.StringBuilder, name = <init>, descriptor = void()
+ │   │       │   │   ├─ [10]         LDC constant = StringConstant( Mutf8Constant( "test1" ) )
+ │   │       │   │   ├─ [11]         INVOKEVIRTUAL type = java.lang.StringBuilder, name = append, descriptor = java.lang.StringBuilder( java.lang.String )
+ │   │       │   │   ├─ [12]         INVOKESPECIAL type = java.lang.String, name = <init>, descriptor = void( java.lang.StringBuilder )
+ │   │       │   │   ├─ [13]         ASTORE_2 2
+ │   │       │   │   ├─ [14] L102:   GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( s );
+ │   │       │   │   ├─ [15]         ALOAD_2 2
+ │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [17] L103:   GETSTATIC java.io.PrintStream java.lang.System.out //System.out.println( "200" );
+ │   │       │   │   ├─ [18]         LDC constant = StringConstant( Mutf8Constant( "200" ) )
+ │   │       │   │   ├─ [19]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [20] L104:   IINC index = 3, delta = 1 //j++;
+ │   │       │   │   ├─ [21] L106:   ILOAD_3 3 //while( j < i );
+ │   │       │   │   ├─ [22]         ILOAD_1 1
+ │   │       │   │   ├─ [23]         IF_ICMPLT L100
+ │   │       │   │   ├─ [24] L107:   ALOAD_2 2 //return s.isEmpty();
+ │   │       │   │   ├─ [25]         INVOKEVIRTUAL type = java.lang.String, name = isEmpty, descriptor = boolean()
+ │   │       │   │   └─ [26]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -355,12 +324,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │               ├─ instructions: 5 entries
- │               │   ├─ [0] L90: // list.sort( ( a, b ) -> -a.compareTo( b ) );
- │               │   ├─ [1]      ALOAD_0
- │               │   ├─ [2]      ALOAD_1
- │               │   ├─ [3]      INVOKEVIRTUAL type = java.lang.String, name = compareTo, descriptor = int( java.lang.String )
- │               │   ├─ [4]      INEG
- │               │   └─ [5]      IRETURN
+ │               │   ├─ [0] L90:    ALOAD_0 0 //list.sort( ( a, b ) -> -a.compareTo( b ) );
+ │               │   ├─ [1]         ALOAD_1 1
+ │               │   ├─ [2]         INVOKEVIRTUAL type = java.lang.String, name = compareTo, descriptor = int( java.lang.String )
+ │               │   ├─ [3]         INEG
+ │               │   └─ [4]         IRETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute

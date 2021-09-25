@@ -43,12 +43,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │           ├─ instructions: 4 entries
- │   │           │   ├─ [0] L28: // this( Enum1.ENUM_CONSTANT_A );
- │   │           │   ├─ [1]      ALOAD_0
- │   │           │   ├─ [2]      GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
- │   │           │   ├─ [3]      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class1WithFields, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Enum1 )
- │   │           │   ├─ [4] L29: // }
- │   │           │   └─ [5]      RETURN
+ │   │           │   ├─ [0] L28:    ALOAD_0 0 //this( Enum1.ENUM_CONSTANT_A );
+ │   │           │   ├─ [1]         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
+ │   │           │   ├─ [2]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class1WithFields, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Enum1 )
+ │   │           │   └─ [3] L29:    RETURN //}
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -62,69 +60,55 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 5, maxLocals = 2
  │   │       │   ├─ instructions: 49 entries
- │   │       │   │   ├─ [0] L32: // {
- │   │       │   │   ├─ [1]      ALOAD_0
- │   │       │   │   ├─ [2]      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [3] L14: // private final boolean booleanMember = true;
- │   │       │   │   ├─ [4]      ALOAD_0
- │   │       │   │   ├─ [5]      ICONST_1
- │   │       │   │   ├─ [6]      PUTFIELD boolean mikenakis.bytecode.test.model.Class1WithFields.booleanMember
- │   │       │   │   ├─ [7] L15: // private final byte byteMember = 1;
- │   │       │   │   ├─ [8]      ALOAD_0
- │   │       │   │   ├─ [9]      ICONST_1
- │   │       │   │   ├─ [10]      PUTFIELD byte mikenakis.bytecode.test.model.Class1WithFields.byteMember
- │   │       │   │   ├─ [11] L16: // private final char charMember = 'c';
- │   │       │   │   ├─ [12]      ALOAD_0
- │   │       │   │   ├─ [13]      BIPUSH 99
- │   │       │   │   ├─ [14]      PUTFIELD char mikenakis.bytecode.test.model.Class1WithFields.charMember
- │   │       │   │   ├─ [15] L17: // private final double doubleMember = 0.5;
- │   │       │   │   ├─ [16]      ALOAD_0
- │   │       │   │   ├─ [17]      LDCx DoubleConstant( 0.5 )
- │   │       │   │   ├─ [18]      PUTFIELD double mikenakis.bytecode.test.model.Class1WithFields.doubleMember
- │   │       │   │   ├─ [19] L18: // private final float floatMember = 0.25f;
- │   │       │   │   ├─ [20]      ALOAD_0
- │   │       │   │   ├─ [21]      LDCx FloatConstant( 0.25f )
- │   │       │   │   ├─ [22]      PUTFIELD float mikenakis.bytecode.test.model.Class1WithFields.floatMember
- │   │       │   │   ├─ [23] L19: // private final int intMember = 2;
- │   │       │   │   ├─ [24]      ALOAD_0
- │   │       │   │   ├─ [25]      ICONST_2
- │   │       │   │   ├─ [26]      PUTFIELD int mikenakis.bytecode.test.model.Class1WithFields.intMember
- │   │       │   │   ├─ [27] L20: // private final long longMember = 3;
- │   │       │   │   ├─ [28]      ALOAD_0
- │   │       │   │   ├─ [29]      LDCx LongConstant( 3L )
- │   │       │   │   ├─ [30]      PUTFIELD long mikenakis.bytecode.test.model.Class1WithFields.longMember
- │   │       │   │   ├─ [31] L21: // private final short shortVar = 4;
- │   │       │   │   ├─ [32]      ALOAD_0
- │   │       │   │   ├─ [33]      ICONST_4
- │   │       │   │   ├─ [34]      PUTFIELD short mikenakis.bytecode.test.model.Class1WithFields.shortVar
- │   │       │   │   ├─ [35] L22: // private final String stringMember = "x";
- │   │       │   │   ├─ [36]      ALOAD_0
- │   │       │   │   ├─ [37]      LDCx StringConstant( Mutf8Constant( "x" ) )
- │   │       │   │   ├─ [38]      PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class1WithFields.stringMember
- │   │       │   │   ├─ [39] L23: // private final int[] arrayOfPrimitiveMember = { 0 };
- │   │       │   │   ├─ [40]      ALOAD_0
- │   │       │   │   ├─ [41]      ICONST_1
- │   │       │   │   ├─ [42]      NEWARRAY INT
- │   │       │   │   ├─ [43]      DUP
- │   │       │   │   ├─ [44]      ICONST_0
- │   │       │   │   ├─ [45]      ICONST_0
- │   │       │   │   ├─ [46]      IASTORE
- │   │       │   │   ├─ [47]      PUTFIELD int[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfPrimitiveMember
- │   │       │   │   ├─ [48] L24: // private final String[] arrayOfObjectMember = { "" };
- │   │       │   │   ├─ [49]      ALOAD_0
- │   │       │   │   ├─ [50]      ICONST_1
- │   │       │   │   ├─ [51]      ANEWARRAY java.lang.String
- │   │       │   │   ├─ [52]      DUP
- │   │       │   │   ├─ [53]      ICONST_0
- │   │       │   │   ├─ [54]      LDCx StringConstant( Mutf8Constant( "" ) )
- │   │       │   │   ├─ [55]      AASTORE
- │   │       │   │   ├─ [56]      PUTFIELD java.lang.String[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfObjectMember
- │   │       │   │   ├─ [57] L33: // this.enumMember = enumMember;
- │   │       │   │   ├─ [58]      ALOAD_0
- │   │       │   │   ├─ [59]      ALOAD_1
- │   │       │   │   ├─ [60]      PUTFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
- │   │       │   │   ├─ [61] L34: // }
- │   │       │   │   └─ [62]      RETURN
+ │   │       │   │   ├─ [0] L32:    ALOAD_0 0 //{
+ │   │       │   │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   ├─ [2] L14:    ALOAD_0 0 //private final boolean booleanMember = true;
+ │   │       │   │   ├─ [3]         ICONST_1
+ │   │       │   │   ├─ [4]         PUTFIELD boolean mikenakis.bytecode.test.model.Class1WithFields.booleanMember
+ │   │       │   │   ├─ [5] L15:    ALOAD_0 0 //private final byte byteMember = 1;
+ │   │       │   │   ├─ [6]         ICONST_1
+ │   │       │   │   ├─ [7]         PUTFIELD byte mikenakis.bytecode.test.model.Class1WithFields.byteMember
+ │   │       │   │   ├─ [8] L16:    ALOAD_0 0 //private final char charMember = 'c';
+ │   │       │   │   ├─ [9]         BIPUSH immediateValue = 99
+ │   │       │   │   ├─ [10]         PUTFIELD char mikenakis.bytecode.test.model.Class1WithFields.charMember
+ │   │       │   │   ├─ [11] L17:    ALOAD_0 0 //private final double doubleMember = 0.5;
+ │   │       │   │   ├─ [12]         LDC2_W constant = DoubleConstant( 0.5 )
+ │   │       │   │   ├─ [13]         PUTFIELD double mikenakis.bytecode.test.model.Class1WithFields.doubleMember
+ │   │       │   │   ├─ [14] L18:    ALOAD_0 0 //private final float floatMember = 0.25f;
+ │   │       │   │   ├─ [15]         LDC constant = FloatConstant( 0.25f )
+ │   │       │   │   ├─ [16]         PUTFIELD float mikenakis.bytecode.test.model.Class1WithFields.floatMember
+ │   │       │   │   ├─ [17] L19:    ALOAD_0 0 //private final int intMember = 2;
+ │   │       │   │   ├─ [18]         ICONST_2
+ │   │       │   │   ├─ [19]         PUTFIELD int mikenakis.bytecode.test.model.Class1WithFields.intMember
+ │   │       │   │   ├─ [20] L20:    ALOAD_0 0 //private final long longMember = 3;
+ │   │       │   │   ├─ [21]         LDC2_W constant = LongConstant( 3L )
+ │   │       │   │   ├─ [22]         PUTFIELD long mikenakis.bytecode.test.model.Class1WithFields.longMember
+ │   │       │   │   ├─ [23] L21:    ALOAD_0 0 //private final short shortVar = 4;
+ │   │       │   │   ├─ [24]         ICONST_4
+ │   │       │   │   ├─ [25]         PUTFIELD short mikenakis.bytecode.test.model.Class1WithFields.shortVar
+ │   │       │   │   ├─ [26] L22:    ALOAD_0 0 //private final String stringMember = "x";
+ │   │       │   │   ├─ [27]         LDC constant = StringConstant( Mutf8Constant( "x" ) )
+ │   │       │   │   ├─ [28]         PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class1WithFields.stringMember
+ │   │       │   │   ├─ [29] L23:    ALOAD_0 0 //private final int[] arrayOfPrimitiveMember = { 0 };
+ │   │       │   │   ├─ [30]         ICONST_1
+ │   │       │   │   ├─ [31]         NEWARRAY type = INT
+ │   │       │   │   ├─ [32]         DUP
+ │   │       │   │   ├─ [33]         ICONST_0
+ │   │       │   │   ├─ [34]         ICONST_0
+ │   │       │   │   ├─ [35]         IASTORE
+ │   │       │   │   ├─ [36]         PUTFIELD int[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfPrimitiveMember
+ │   │       │   │   ├─ [37] L24:    ALOAD_0 0 //private final String[] arrayOfObjectMember = { "" };
+ │   │       │   │   ├─ [38]         ICONST_1
+ │   │       │   │   ├─ [39]         ANEWARRAY java.lang.String
+ │   │       │   │   ├─ [40]         DUP
+ │   │       │   │   ├─ [41]         ICONST_0
+ │   │       │   │   ├─ [42]         LDC constant = StringConstant( Mutf8Constant( "" ) )
+ │   │       │   │   ├─ [43]         AASTORE
+ │   │       │   │   ├─ [44]         PUTFIELD java.lang.String[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfObjectMember
+ │   │       │   │   ├─ [45] L33:    ALOAD_0 0 //this.enumMember = enumMember;
+ │   │       │   │   ├─ [46]         ALOAD_1 1
+ │   │       │   │   ├─ [47]         PUTFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
+ │   │       │   │   └─ [48] L34:    RETURN //}
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -154,14 +138,13 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │               ├─ instructions: 7 entries
- │               │   ├─ [0] L38: // return getClass().getName() + " " + enumMember;
- │               │   ├─ [1]      ALOAD_0
- │               │   ├─ [2]      INVOKEVIRTUAL type = java.lang.Object, name = getClass, descriptor = java.lang.Class()
- │               │   ├─ [3]      INVOKEVIRTUAL type = java.lang.Class, name = getName, descriptor = java.lang.String()
- │               │   ├─ [4]      ALOAD_0
- │               │   ├─ [5]      GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
- │               │   ├─ [6]      INVOKEDYNAMIC bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
- │               │   └─ [7]      ARETURN
+ │               │   ├─ [0] L38:    ALOAD_0 0 //return getClass().getName() + " " + enumMember;
+ │               │   ├─ [1]         INVOKEVIRTUAL type = java.lang.Object, name = getClass, descriptor = java.lang.Class()
+ │               │   ├─ [2]         INVOKEVIRTUAL type = java.lang.Class, name = getName, descriptor = java.lang.String()
+ │               │   ├─ [3]         ALOAD_0 0
+ │               │   ├─ [4]         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
+ │               │   ├─ [5]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
+ │               │   └─ [6]         ARETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute

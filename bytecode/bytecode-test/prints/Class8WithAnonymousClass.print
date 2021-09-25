@@ -9,17 +9,15 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 4, maxLocals = 1
  │               ├─ instructions: 9 entries
- │               │   ├─ [0] L9: // public abstract class Class8WithAnonymousClass
- │               │   ├─ [1]      ALOAD_0
- │               │   ├─ [2]      INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │               │   ├─ [3] L11: // public final Interface1 field = new Interface1()
- │               │   ├─ [4]      ALOAD_0
- │               │   ├─ [5]      NEW mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
- │               │   ├─ [6]      DUP
- │               │   ├─ [7]      ALOAD_0
- │               │   ├─ [8]      INVOKESPECIAL type = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
- │               │   ├─ [9]      PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
- │               │   └─ [10]      RETURN
+ │               │   ├─ [0] L9:     ALOAD_0 0 //public abstract class Class8WithAnonymousClass
+ │               │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │               │   ├─ [2] L11:    ALOAD_0 0 //public final Interface1 field = new Interface1()
+ │               │   ├─ [3]         NEW mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
+ │               │   ├─ [4]         DUP
+ │               │   ├─ [5]         ALOAD_0 0
+ │               │   ├─ [6]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+ │               │   ├─ [7]         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
+ │               │   └─ [8]         RETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute

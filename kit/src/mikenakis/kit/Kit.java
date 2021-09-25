@@ -71,6 +71,7 @@ public final class Kit
 {
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
+	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
 
 	private Kit() { }
 
@@ -639,6 +640,7 @@ public final class Kit
 				builder.append( delimiter );
 			return false;
 		}
+
 		/**
 		 * Optionally appends a delimiter to a {@link StringBuilder}.
 		 *
@@ -1289,17 +1291,17 @@ public final class Kit
 			return new UnmodifiableIterable<>( delegee );
 		}
 
-		public static <K,V,T> Map<K,V> toMap( Iterable<T> iterable, Function1<K,T> keyExtractor, Function1<V,T> valueExtractor )
+		public static <K, V, T> Map<K,V> toMap( Iterable<T> iterable, Function1<K,T> keyExtractor, Function1<V,T> valueExtractor )
 		{
 			return collection.stream.fromIterable( iterable ).collect( Collectors.toMap( t -> keyExtractor.invoke( t ), t -> valueExtractor.invoke( t ), Kit::dummyMergeFunction, LinkedHashMap::new ) );
 		}
 
-		public static <K,V> Map<K,V> keysToMap( Iterable<K> iterable, Function1<V,K> valueExtractor )
+		public static <K, V> Map<K,V> keysToMap( Iterable<K> iterable, Function1<V,K> valueExtractor )
 		{
 			return toMap( iterable, k -> k, valueExtractor );
 		}
 
-		public static <K,V> Map<K,V> valuesToMap( Iterable<V> iterable, Function1<K,V> keyExtractor )
+		public static <K, V> Map<K,V> valuesToMap( Iterable<V> iterable, Function1<K,V> keyExtractor )
 		{
 			return toMap( iterable, keyExtractor, v -> v );
 		}

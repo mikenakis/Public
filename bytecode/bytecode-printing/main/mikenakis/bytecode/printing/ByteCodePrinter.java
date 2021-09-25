@@ -1,7 +1,6 @@
 package mikenakis.bytecode.printing;
 
 import mikenakis.bytecode.exceptions.InvalidKnownAttributeTagException;
-import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.AnnotationParameter;
 import mikenakis.bytecode.model.AnnotationValue;
@@ -128,7 +127,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * @author Michael Belivanakis (michael.gr)
@@ -206,6 +204,11 @@ public final class ByteCodePrinter
 	private interface Labeler
 	{
 		Optional<LabelInfo> tryGetLabelInfo( Instruction instruction );
+
+		default String getLabel( Instruction instruction )
+		{
+			return tryGetLabelInfo( instruction ).orElseThrow().label;
+		}
 
 		default String getLabel( Optional<Instruction> instruction )
 		{
@@ -1077,7 +1080,7 @@ public final class ByteCodePrinter
 				Twig.array( parameterAnnotationSet.annotations.stream().map( a -> twigFromAnnotation( a ) ).toList() ) ) );
 	}
 
-	private static void twigFromRelativeInstructionReference( Instruction instruction, StringBuilder builder, Labeler labeler )
+	private static void appendRelativeInstructionReference( Instruction instruction, StringBuilder builder, Labeler labeler )
 	{
 		String label = labeler.getLabel( Optional.of( instruction ) );
 		builder.append( label );
@@ -1420,34 +1423,21 @@ public final class ByteCodePrinter
 		return Twig.leaf( header );
 	}
 
-	private static Twig twigFromBranchInstruction( BranchInstruction branchInstruction, Labeler labeler )
+	private static Twig twigFromBranchInstruction( String prefix, Optional<String> suffix, BranchInstruction branchInstruction, Labeler labeler )
 	{
 		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( branchInstruction.getOpCode() ) );
-		builder.append( ' ' );
-		twigFromRelativeInstructionReference( branchInstruction.getTargetInstruction(), builder, labeler );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		appendRelativeInstructionReference( branchInstruction.getTargetInstruction(), builder, labeler );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, branchInstruction.getOpCode(), builder.toString() ) );
 	}
 
-	private static Twig twigFromConditionalBranchInstruction( ConditionalBranchInstruction conditionalBranchInstruction, Labeler labeler )
+	private static Twig twigFromConditionalBranchInstruction( String prefix, Optional<String> suffix, ConditionalBranchInstruction conditionalBranchInstruction, Labeler labeler )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( conditionalBranchInstruction.getOpCode() ) );
-		builder.append( ' ' );
-		twigFromRelativeInstructionReference( conditionalBranchInstruction.getTargetInstruction(), builder, labeler );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, conditionalBranchInstruction.getOpCode(), labeler.getLabel( conditionalBranchInstruction.getTargetInstruction() ) ) );
 	}
 
-	private static Twig twigFromConstantReferencingInstruction( ConstantReferencingInstruction constantReferencingInstruction )
+	private static Twig twigFromConstantReferencingInstruction( String prefix, Optional<String> suffix, ConstantReferencingInstruction constantReferencingInstruction )
 	{
 		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( constantReferencingInstruction.opCode ) );
-		builder.append( ' ' );
 		Constant constant = constantReferencingInstruction.constant;
 		switch( constant.tag )
 		{
@@ -1457,40 +1447,22 @@ public final class ByteCodePrinter
 			case Constant.tagClass -> summarizeClassConstant( constant.asClassConstant(), builder );
 			default -> throw new AssertionError( constant );
 		}
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, constantReferencingInstruction.opCode, builder.toString() ) );
 	}
 
-	private static Twig twigFromIIncInstruction( IIncInstruction iIncInstruction )
+	private static Twig twigFromIIncInstruction( String prefix, Optional<String> suffix, IIncInstruction iIncInstruction )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		if( iIncInstruction.isWide() )
-			builder.append( "wide " );
-		builder.append( OpCode.getOpCodeName( OpCode.IINC ) );
-		builder.append( ' ' ).append( iIncInstruction.index );
-		builder.append( ' ' ).append( iIncInstruction.delta );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, OpCode.IINC, "index = " + iIncInstruction.index, "delta = " + iIncInstruction.delta ) );
 	}
 
-	private static Twig twigFromImmediateLoadConstantInstruction( ImmediateLoadConstantInstruction immediateLoadConstantInstruction )
+	private static Twig twigFromImmediateLoadConstantInstruction( String prefix, Optional<String> suffix, ImmediateLoadConstantInstruction immediateLoadConstantInstruction )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( immediateLoadConstantInstruction.opCode ) );
-		builder.append( ' ' );
-		builder.append( immediateLoadConstantInstruction.immediateValue );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, immediateLoadConstantInstruction.opCode, "immediateValue = " + immediateLoadConstantInstruction.immediateValue ) );
 	}
 
-	private static Twig twigFromIndirectLoadConstantInstruction( IndirectLoadConstantInstruction indirectLoadConstantInstruction )
+	private static Twig twigFromIndirectLoadConstantInstruction( String prefix, Optional<String> suffix, IndirectLoadConstantInstruction indirectLoadConstantInstruction )
 	{
 		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( Kit.get( true ) ? "LDCx" : OpCode.getOpCodeName( indirectLoadConstantInstruction.opCode ) );
-		builder.append( ' ' );
 		Constant constant = indirectLoadConstantInstruction.constant;
 		switch( constant.tag )
 		{
@@ -1498,169 +1470,124 @@ public final class ByteCodePrinter
 			case Constant.tagClass -> summarizeClassConstant( constant.asClassConstant(), builder );
 			default -> throw new AssertionError( constant );
 		}
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, indirectLoadConstantInstruction.opCode, "constant = " + builder.toString() ) );
 	}
 
-	private static Twig twigFromInvokeDynamicInstruction( InvokeDynamicInstruction invokeDynamicInstruction, ByteCodeType byteCodeType )
+	private static Twig twigFromInvokeDynamicInstruction( String prefix, Optional<String> suffix, InvokeDynamicInstruction invokeDynamicInstruction, ByteCodeType byteCodeType )
 	{
 		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( OpCode.INVOKEDYNAMIC ) );
-		builder.append( ' ' );
 		summarizeInvokeDynamicConstant( invokeDynamicInstruction.invokeDynamicConstant, builder, byteCodeType );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, OpCode.INVOKEDYNAMIC, "invokeDynamicConstant = " + builder.toString() ) );
 	}
 
-	private static Twig twigFromInvokeInterfaceInstruction( InvokeInterfaceInstruction invokeInterfaceInstruction )
+	private static Twig twigFromInvokeInterfaceInstruction( String prefix, Optional<String> suffix, InvokeInterfaceInstruction invokeInterfaceInstruction )
 	{
 		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( OpCode.INVOKEINTERFACE ) );
-		builder.append( ' ' );
 		summarizeInterfaceMethodReferenceConstant( invokeInterfaceInstruction.interfaceMethodReferenceConstant, builder );
-		builder.append( ' ' ).append( invokeInterfaceInstruction.argumentCount ).append( " arguments" );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, OpCode.INVOKEINTERFACE, "interfaceMethodReferenceConstant = " + builder.toString(), invokeInterfaceInstruction.argumentCount + " arguments" ) );
 	}
 
-	private static Twig twigFromLocalVariableInstruction( LocalVariableInstruction localVariableInstruction )
+	private static Twig twigFromLocalVariableInstruction( String prefix, Optional<String> suffix, LocalVariableInstruction localVariableInstruction )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		int flavor = localVariableInstruction.index <= 3 && localVariableInstruction.getOpCode() != OpCode.RET ? localVariableInstruction.index : -1;
-		boolean wide = !Helpers.isUnsignedByte( localVariableInstruction.index );
-		if( wide )
-			builder.append( "wide " );
-		builder.append( OpCode.getOpCodeName( localVariableInstruction.getOpCode() ) );
-		if( flavor == -1 )
-			builder.append( ' ' ).append( localVariableInstruction.index );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		String[] arguments = localVariableInstruction.index <= 3 && localVariableInstruction.getOpCode() != OpCode.RET ? new String[]{ "" + localVariableInstruction.index } : Kit.ARRAY_OF_ZERO_STRINGS;
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, localVariableInstruction.getOpCode(), arguments ) );
 	}
 
-	private static Twig twigFromLookupSwitchInstruction( LookupSwitchInstruction lookupSwitchInstruction, Labeler labeler )
+	private static Twig twigFromLookupSwitchInstruction( String prefix, Optional<String> suffix, LookupSwitchInstruction lookupSwitchInstruction, Labeler labeler )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( OpCode.LOOKUPSWITCH ) );
-		builder.append( " default: " );
-		twigFromRelativeInstructionReference( lookupSwitchInstruction.getDefaultInstruction(), builder, labeler );
-		builder.append( " value-offset-pairs: [" );
-		boolean first = true;
-		for( LookupSwitchEntry entry : lookupSwitchInstruction.entries )
-		{
-			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			builder.append( entry.value() ).append( ":" );
-			twigFromRelativeInstructionReference( entry.getTargetInstruction(), builder, labeler );
-		}
-		builder.append( ']' );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.group( buildInstructionHeader( prefix, suffix, OpCode.LOOKUPSWITCH ),
+			Map.entry( "default", Twig.leaf( labeler.getLabel( lookupSwitchInstruction.getDefaultInstruction() ) ) ),
+			Map.entry( "entries", Twig.array( lookupSwitchInstruction.entries.stream().map( e -> twigFromLookupSwitchEntry( e, labeler  ) ).toList() ) ) );
 	}
 
-	private static Twig twigFromMultiANewArrayInstruction( MultiANewArrayInstruction multiANewArrayInstruction )
+	private static Twig twigFromLookupSwitchEntry( LookupSwitchEntry lookupSwitchEntry, Labeler labeler )
+	{
+		return Twig.leaf( lookupSwitchEntry.getClass().getSimpleName() + " value = " + lookupSwitchEntry.value() + ", target = " + labeler.getLabel( lookupSwitchEntry.getTargetInstruction() ) );
+	}
+
+	private static Twig twigFromMultiANewArrayInstruction( String prefix, Optional<String> suffix, MultiANewArrayInstruction multiANewArrayInstruction )
 	{
 		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( OpCode.MULTIANEWARRAY ) );
-		builder.append( ' ' );
+		builder.append( "class = " );
 		summarizeClassConstant( multiANewArrayInstruction.classConstant, builder );
-		builder.append( ' ' ).append( multiANewArrayInstruction.dimensionCount ).append( " dimensions" );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, OpCode.MULTIANEWARRAY, builder.toString(), multiANewArrayInstruction.dimensionCount + " dimensions" ) );
 	}
 
-	private static Twig twigFromNewPrimitiveArrayInstruction( NewPrimitiveArrayInstruction newPrimitiveArrayInstruction )
+	private static Twig twigFromNewPrimitiveArrayInstruction( String prefix, Optional<String> suffix, NewPrimitiveArrayInstruction newPrimitiveArrayInstruction )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( OpCode.NEWARRAY ) );
-		builder.append( ' ' ).append( NewPrimitiveArrayInstruction.Type.fromNumber( newPrimitiveArrayInstruction.type ).name() );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, OpCode.NEWARRAY, "type = " + NewPrimitiveArrayInstruction.Type.fromNumber( newPrimitiveArrayInstruction.type ).name() ) );
 	}
 
-	private static Twig twigFromOperandlessInstruction( OperandlessInstruction operandlessInstruction )
+	private static Twig twigFromOperandlessInstruction( String prefix, Optional<String> suffix, OperandlessInstruction operandlessInstruction )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( operandlessInstruction.opCode ) );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, operandlessInstruction.opCode ) );
 	}
 
-	private static Twig twigFromOperandlessLoadConstantInstruction( OperandlessLoadConstantInstruction operandlessLoadConstantInstruction )
+	private static Twig twigFromOperandlessLoadConstantInstruction( String prefix, Optional<String> suffix, OperandlessLoadConstantInstruction operandlessLoadConstantInstruction )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( operandlessLoadConstantInstruction.opCode ) );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		return Twig.leaf( buildInstructionHeader( prefix, suffix, operandlessLoadConstantInstruction.opCode ) );
 	}
 
-	private static Twig twigFromTableSwitchInstruction( TableSwitchInstruction tableSwitchInstruction, Labeler labeler )
+	private static Twig twigFromRelativeInstructionReference( Instruction instruction, Labeler labeler )
 	{
-		var builder = new StringBuilder();
-		builder.append( "     " );
-		builder.append( OpCode.getOpCodeName( OpCode.TABLESWITCH ) );
-		builder.append( " default: " );
-		twigFromRelativeInstructionReference( tableSwitchInstruction.getDefaultInstruction(), builder, labeler );
-		int lowValue = tableSwitchInstruction.lowValue;
-		builder.append( " range: " ).append( lowValue );
-		builder.append( " - " ).append( lowValue + tableSwitchInstruction.getTargetInstructionCount() - 1 );
-		builder.append( " offsets: [" );
+		String label = labeler.getLabel( instruction );
+		return Twig.leaf( label );
+	}
+
+	private static String buildInstructionHeader( String prefix, Optional<String> suffix, int opCode, String... parts )
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append( prefix );
+		stringBuilder.append( OpCode.getOpCodeName( opCode ) );
 		boolean first = true;
-		for( Instruction targetInstruction : tableSwitchInstruction.targetInstructions() )
+		for( String part : parts )
 		{
-			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			twigFromRelativeInstructionReference( targetInstruction, builder, labeler );
+			stringBuilder.append( first ? " " : ", " );
+			first = false;
+			stringBuilder.append( part );
 		}
-		builder.append( ']' );
-		String header = builder.toString();
-		return Twig.leaf( header );
+		suffix.ifPresent( s -> stringBuilder.append( " // " ).append( s ) );
+		return stringBuilder.toString();
+	}
+
+	private static Twig twigFromTableSwitchInstruction( String prefix, Optional<String> suffix, TableSwitchInstruction tableSwitchInstruction, Labeler labeler )
+	{
+		return Twig.group( buildInstructionHeader( prefix, suffix, OpCode.TABLESWITCH, "lowValue = " + tableSwitchInstruction.lowValue ), //
+			Map.entry( "default", Twig.leaf( labeler.getLabel( tableSwitchInstruction.getDefaultInstruction() ) ) ), //
+			Map.entry( "offsets", //
+				Twig.array( tableSwitchInstruction.targetInstructions().stream().map( i -> twigFromRelativeInstructionReference( i, labeler ) ).toList() ) ) );
 	}
 
 	private static Twig twigFromInstructionList( InstructionList instructionList, ByteCodeType byteCodeType, Labeler labeler )
 	{
 		Collection<Instruction> instructions = instructionList.all();
-		return Twig.array( instructions.size() + " entries", //
-			instructions.stream().flatMap( i -> //
-				Stream.concat( //
-					labeler.tryGetLabelInfo( i ).map( labelInfo -> twigFromLabelInfo( labelInfo ) ).stream(), //
-					Stream.of( twigFromInstruction( i, byteCodeType, labeler ) ) //
-				) ).toList() );
+		return Twig.array( instructions.stream().map( i -> twigFromInstruction( i, byteCodeType, labeler ) ).toList() );
 	}
 
-	private static Twig twigFromLabelInfo( LabelInfo labelInfo )
-	{
-		var builder = new StringBuilder();
-		builder.append( labelInfo.label );
-		builder.append( ':' );
-		labelInfo.source.ifPresent( s -> builder.append( " // " ).append( s ) );
-		return Twig.leaf( builder.toString() );
-	}
+	private static final String indentation = "        ";
 
 	private static Twig twigFromInstruction( Instruction instruction, ByteCodeType byteCodeType, Labeler labeler )
 	{
+		Optional<LabelInfo> labelInfo = labeler.tryGetLabelInfo( instruction );
+		String prefix = labelInfo.map( l -> l.label + ":" + indentation.substring( l.label.length() + 1 ) ).orElse( indentation );
+		Optional<String> suffix = labelInfo.flatMap( l -> l.source );
 		Twig twig = switch( instruction.group )
 			{
-				case TableSwitch -> twigFromTableSwitchInstruction( instruction.asTableSwitchInstruction(), labeler );
-				case ConditionalBranch -> twigFromConditionalBranchInstruction( instruction.asConditionalBranchInstruction(), labeler );
-				case ConstantReferencing -> twigFromConstantReferencingInstruction( instruction.asConstantReferencingInstruction() );
-				case IInc -> twigFromIIncInstruction( instruction.asIIncInstruction() );
-				case ImmediateLoadConstant -> twigFromImmediateLoadConstantInstruction( instruction.asImmediateLoadConstantInstruction() );
-				case IndirectLoadConstant -> twigFromIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction() );
-				case InvokeDynamic -> twigFromInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction(), byteCodeType );
-				case InvokeInterface -> twigFromInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction() );
-				case LocalVariable -> twigFromLocalVariableInstruction( instruction.asLocalVariableInstruction() );
-				case LookupSwitch -> twigFromLookupSwitchInstruction( instruction.asLookupSwitchInstruction(), labeler );
-				case MultiANewArray -> twigFromMultiANewArrayInstruction( instruction.asMultiANewArrayInstruction() );
-				case NewPrimitiveArray -> twigFromNewPrimitiveArrayInstruction( instruction.asNewPrimitiveArrayInstruction() );
-				case Operandless -> twigFromOperandlessInstruction( instruction.asOperandlessInstruction() );
-				case OperandlessLoadConstant -> twigFromOperandlessLoadConstantInstruction( instruction.asOperandlessLoadConstantInstruction() );
-				case Branch -> twigFromBranchInstruction( instruction.asBranchInstruction(), labeler );
+				case TableSwitch -> twigFromTableSwitchInstruction( prefix, suffix, instruction.asTableSwitchInstruction(), labeler );
+				case ConditionalBranch -> twigFromConditionalBranchInstruction( prefix, suffix, instruction.asConditionalBranchInstruction(), labeler );
+				case ConstantReferencing -> twigFromConstantReferencingInstruction( prefix, suffix, instruction.asConstantReferencingInstruction() );
+				case IInc -> twigFromIIncInstruction( prefix, suffix, instruction.asIIncInstruction() );
+				case ImmediateLoadConstant -> twigFromImmediateLoadConstantInstruction( prefix, suffix, instruction.asImmediateLoadConstantInstruction() );
+				case IndirectLoadConstant -> twigFromIndirectLoadConstantInstruction( prefix, suffix, instruction.asIndirectLoadConstantInstruction() );
+				case InvokeDynamic -> twigFromInvokeDynamicInstruction( prefix, suffix, instruction.asInvokeDynamicInstruction(), byteCodeType );
+				case InvokeInterface -> twigFromInvokeInterfaceInstruction( prefix, suffix, instruction.asInvokeInterfaceInstruction() );
+				case LocalVariable -> twigFromLocalVariableInstruction( prefix, suffix, instruction.asLocalVariableInstruction() );
+				case LookupSwitch -> twigFromLookupSwitchInstruction( prefix, suffix, instruction.asLookupSwitchInstruction(), labeler );
+				case MultiANewArray -> twigFromMultiANewArrayInstruction( prefix, suffix, instruction.asMultiANewArrayInstruction() );
+				case NewPrimitiveArray -> twigFromNewPrimitiveArrayInstruction( prefix, suffix, instruction.asNewPrimitiveArrayInstruction() );
+				case Operandless -> twigFromOperandlessInstruction( prefix, suffix, instruction.asOperandlessInstruction() );
+				case OperandlessLoadConstant -> twigFromOperandlessLoadConstantInstruction( prefix, suffix, instruction.asOperandlessLoadConstantInstruction() );
+				case Branch -> twigFromBranchInstruction( prefix, suffix, instruction.asBranchInstruction(), labeler );
 			};
 		return twig;
 	}
