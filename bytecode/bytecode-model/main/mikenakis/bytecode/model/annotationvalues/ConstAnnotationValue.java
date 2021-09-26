@@ -38,11 +38,11 @@ public final class ConstAnnotationValue extends AnnotationValue
 	{
 		return switch( annotationValueTag )
 			{
-				case tagByte, tagCharacter, tagInteger, tagShort, tagBoolean -> Constant.tagInteger;
-				case tagLong -> Constant.tagLong;
-				case tagDouble -> Constant.tagDouble;
-				case tagFloat -> Constant.tagFloat;
-				case tagString -> Constant.tagMutf8;
+				case tagByte, tagCharacter, tagInteger, tagShort, tagBoolean -> Constant.tag_Integer;
+				case tagLong -> Constant.tag_Long;
+				case tagDouble -> Constant.tag_Double;
+				case tagFloat -> Constant.tag_Float;
+				case tagString -> Constant.tag_Mutf8;
 				default -> throw new InvalidConstAnnotationValueTagException( annotationValueTag );
 			};
 	}

@@ -5,7 +5,6 @@ import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ public final class InnerClassesAttribute extends KnownAttribute
 
 	private InnerClassesAttribute( List<InnerClass> innerClasses )
 	{
-		super( tagInnerClasses );
+		super( tag_InnerClasses );
 		this.innerClasses = innerClasses;
 	}
 

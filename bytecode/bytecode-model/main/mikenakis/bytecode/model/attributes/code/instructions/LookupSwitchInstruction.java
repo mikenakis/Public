@@ -25,7 +25,7 @@ public final class LookupSwitchInstruction extends Instruction
 
 	private LookupSwitchInstruction( List<LookupSwitchEntry> entries )
 	{
-		super( Group.LookupSwitch );
+		super( groupTag_LookupSwitch );
 		this.entries = entries;
 	}
 

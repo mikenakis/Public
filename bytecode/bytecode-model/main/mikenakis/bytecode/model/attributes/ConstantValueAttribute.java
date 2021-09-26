@@ -25,7 +25,7 @@ public final class ConstantValueAttribute extends KnownAttribute
 
 	private ConstantValueAttribute( ValueConstant<?> valueConstant )
 	{
-		super( tagConstantValue );
+		super( tag_ConstantValue );
 		this.valueConstant = valueConstant;
 	}
 

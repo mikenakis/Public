@@ -27,7 +27,7 @@ public final class RuntimeInvisibleAnnotationsAttribute extends AnnotationsAttri
 
 	private RuntimeInvisibleAnnotationsAttribute( List<Annotation> annotations )
 	{
-		super( tagRuntimeInvisibleAnnotations, annotations );
+		super( tag_RuntimeInvisibleAnnotations, annotations );
 	}
 
 	@Deprecated @Override public RuntimeInvisibleAnnotationsAttribute asRuntimeInvisibleAnnotationsAttribute()

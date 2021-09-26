@@ -7,6 +7,7 @@ import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.StringConstant;
 
 //TODO: merge all the load-constant instructions into one pseudo-instruction! Determine which one to use depending on the type and value of the constant.
@@ -68,11 +69,13 @@ public abstract class LoadConstantInstruction extends Instruction
 
 	public static LoadConstantInstruction of( String value )
 	{
-		return IndirectLoadConstantInstruction.of( OpCode.LDC2_W, StringConstant.of( value ) );
+		StringConstant stringConstant = new StringConstant();
+		stringConstant.setValueConstant( Mutf8Constant.of( value ) );
+		return IndirectLoadConstantInstruction.of( OpCode.LDC2_W, stringConstant );
 	}
 
-	protected LoadConstantInstruction( Group group )
+	protected LoadConstantInstruction( int groupTag )
 	{
-		super( group );
+		super( groupTag );
 	}
 }

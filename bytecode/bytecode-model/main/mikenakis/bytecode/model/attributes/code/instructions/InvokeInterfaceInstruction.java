@@ -17,7 +17,7 @@ public final class InvokeInterfaceInstruction extends Instruction
 
 	private InvokeInterfaceInstruction( InterfaceMethodReferenceConstant interfaceMethodReferenceConstant, int argumentCount )
 	{
-		super( Group.InvokeInterface );
+		super( groupTag_InvokeInterface );
 		this.interfaceMethodReferenceConstant = interfaceMethodReferenceConstant;
 		this.argumentCount = argumentCount;
 	}

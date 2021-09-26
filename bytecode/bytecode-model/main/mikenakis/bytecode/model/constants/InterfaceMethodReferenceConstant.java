@@ -10,24 +10,27 @@ import java.lang.constant.MethodTypeDesc;
  */
 public final class InterfaceMethodReferenceConstant extends MethodReferenceConstant
 {
-	public static InterfaceMethodReferenceConstant of( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public static InterfaceMethodReferenceConstant of( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant ) //TODO remove
 	{
-		return new InterfaceMethodReferenceConstant( typeConstant, nameAndDescriptorConstant );
+		InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = new InterfaceMethodReferenceConstant();
+		interfaceMethodReferenceConstant.setDeclaringTypeConstant( declaringTypeConstant );
+		interfaceMethodReferenceConstant.setNameAndDescriptorConstant( nameAndDescriptorConstant );
+		return interfaceMethodReferenceConstant;
 	}
 
-	private InterfaceMethodReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public InterfaceMethodReferenceConstant()
 	{
-		super( tagInterfaceMethodReference, typeConstant, nameAndDescriptorConstant );
+		super( tag_InterfaceMethodReference );
 	}
 
 	// String Customer.name( arguments );
 	//  (1)     (2)     (3)     (1)
 	// 1: nameAndDescriptorConstant.descriptorConstant
-	// 2: typeConstant
+	// 2: declaringTypeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() ); }
-	public ClassDesc owningClassDescriptor() { return typeConstant.classDescriptor(); }
-	public String methodName() { return nameAndDescriptorConstant.nameConstant.stringValue(); }
+	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ); }
+	public ClassDesc owningClassDescriptor() { return getDeclaringTypeConstant().classDesc(); }
+	public String methodName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
 
 	@Deprecated @Override public InterfaceMethodReferenceConstant asInterfaceMethodReferenceConstant()
 	{

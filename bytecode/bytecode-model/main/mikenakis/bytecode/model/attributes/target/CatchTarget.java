@@ -9,7 +9,7 @@ public final class CatchTarget extends Target // "catch_target" in jvms-4.7.20.1
 	public CatchTarget( int tag, int exceptionTableIndex )
 	{
 		super( tag );
-		assert tag == tagTypeInExceptionParameterDeclaration;
+		assert tag == tag_Catch;
 		this.exceptionTableIndex = exceptionTableIndex;
 	}
 

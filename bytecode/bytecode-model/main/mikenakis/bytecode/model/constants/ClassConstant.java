@@ -1,10 +1,10 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDesc;
 import java.util.Objects;
 
 /**
@@ -16,40 +16,39 @@ public final class ClassConstant extends Constant
 {
 	public static ClassConstant of( String name )
 	{
-		return of( Mutf8Constant.of( name ) );
+		ClassConstant classConstant = new ClassConstant();
+		classConstant.setNameConstant( Mutf8Constant.of( name ) );
+		return classConstant;
 	}
 
-	public static ClassConstant of( ClassDesc classDesc )
+	private Mutf8Constant nameConstant;
+
+	public ClassConstant()
 	{
-		return of( Mutf8Constant.of( classDesc.descriptorString() ) );
+		super( tag_Class );
 	}
 
-	public static ClassConstant of( Mutf8Constant nameConstant )
+	public Mutf8Constant getNameConstant()
 	{
-		return new ClassConstant( nameConstant );
+		assert nameConstant != null;
+		return nameConstant;
 	}
 
-	private final Mutf8Constant nameConstant;
-
-	private ClassConstant( Mutf8Constant nameConstant )
+	public void setNameConstant( Mutf8Constant nameConstant )
 	{
-		super( tagClass );
+		assert this.nameConstant == null;
+		assert nameConstant != null;
 		this.nameConstant = nameConstant;
 	}
 
-	public Mutf8Constant nameConstant() { return nameConstant; }
-	public ConstantDesc constantDescriptor() { return classDescriptor(); }
-	public ClassDesc classDescriptor() { return ClassDesc.ofDescriptor( getDescriptorString( nameConstant.stringValue() ) ); }
+	public String internalName() { return nameConstant.stringValue(); }
+	public String descriptorString() { return ByteCodeHelpers.descriptorStringFromInternalName( internalName() ); }
+	public ClassDesc classDesc() { return ClassDesc.ofDescriptor( descriptorString() ); }
+	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( classDesc() );	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return nameConstant.stringValue();
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return nameConstant.stringValue(); }
 
-	@Deprecated @Override public ClassConstant asClassConstant()
-	{
-		return this;
-	}
+	@Deprecated @Override public ClassConstant asClassConstant() { return this; }
 
 	@Override public boolean equals( Object other )
 	{
@@ -66,14 +65,5 @@ public final class ClassConstant extends Constant
 	@Override public int hashCode()
 	{
 		return Objects.hash( tag, nameConstant );
-	}
-
-	private static String getDescriptorString( String internalName )
-	{
-		if( internalName.startsWith( "[" ) )
-			return internalName;
-		if( !internalName.endsWith( ";" ) )
-			return "L" + internalName + ";";
-		return internalName;
 	}
 }

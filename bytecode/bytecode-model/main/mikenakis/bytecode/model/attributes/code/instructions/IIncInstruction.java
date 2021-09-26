@@ -22,7 +22,7 @@ public final class IIncInstruction extends Instruction
 
 	private IIncInstruction( boolean wide, int index, int delta )
 	{
-		super( Group.IInc );
+		super( groupTag_IInc );
 		this.wide = wide;
 		this.index = index;
 		this.delta = delta;

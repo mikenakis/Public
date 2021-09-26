@@ -11,5 +11,4 @@ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract], thisCl
  │               └─ parameters: 1 entries
  │                   └─ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
  └─ attributes: 1 entries
-     └─ [0] SourceFileAttribute
-         └─ value: Mutf8Constant( "Interface1.java" )
+     └─ [0] SourceFileAttribute "Interface1.java"

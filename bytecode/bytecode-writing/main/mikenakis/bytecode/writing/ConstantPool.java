@@ -26,11 +26,10 @@ import mikenakis.bytecode.model.attributes.ExceptionsAttribute;
 import mikenakis.bytecode.model.attributes.InnerClass;
 import mikenakis.bytecode.model.attributes.InnerClassesAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
-import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableEntry;
-import mikenakis.bytecode.model.attributes.LocalVariableTypeTableEntry;
 import mikenakis.bytecode.model.attributes.LocalVariableTypeTableAttribute;
+import mikenakis.bytecode.model.attributes.LocalVariableTypeTableEntry;
 import mikenakis.bytecode.model.attributes.MethodParameter;
 import mikenakis.bytecode.model.attributes.MethodParametersAttribute;
 import mikenakis.bytecode.model.attributes.NestHostAttribute;
@@ -42,10 +41,12 @@ import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.ChopStackMapFrame;
@@ -60,13 +61,13 @@ import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationTyp
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
+import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -82,18 +83,15 @@ import java.util.List;
  */
 final class ConstantPool
 {
-	private final List<Constant> entries;
+	private final List<Constant> entries = new ArrayList<>();
 
 	ConstantPool()
 	{
-		entries = new ArrayList<>( 1 );
 		entries.add( null ); // first entry is empty. (Ancient legacy bollocks.)
 	}
 
 	private int tryGetIndex( Constant constant )
 	{
-		if( constant == null )
-			return 0;
 		for( int i = 0; i < entries.size(); i++ )
 		{
 			Constant existingConstant = entries.get( i );
@@ -112,27 +110,11 @@ final class ConstantPool
 		return index;
 	}
 
-	void internTerminalTypeDescriptor( TerminalTypeDescriptor terminalTypeDescriptor )
-	{
-		ClassConstant classConstant = ClassConstant.of( terminalTypeDescriptor.classDesc );
-		internClassConstant( classConstant );
-	}
-
 	void internExtraConstant( Constant constant )
 	{
-		internConstant0( constant );
 		switch( constant.tag )
 		{
-			case Constant.tagMutf8, Constant.tagInteger, Constant.tagFloat, Constant.tagLong, Constant.tagDouble -> { }
-			case Constant.tagClass -> internClassConstant( constant.asClassConstant() );
-			case Constant.tagString -> internStringConstant( constant.asStringConstant() );
-			case Constant.tagFieldReference -> internReferenceConstant( constant.asFieldReferenceConstant() );
-			case Constant.tagMethodReference -> internReferenceConstant( constant.asMethodReferenceConstant() );
-			case Constant.tagInterfaceMethodReference -> internReferenceConstant( constant.asInterfaceMethodReferenceConstant() );
-			case Constant.tagNameAndDescriptor -> internNameAndDescriptorConstant( constant.asNameAndDescriptorConstant() );
-			case Constant.tagMethodHandle -> internMethodHandleConstant( constant.asMethodHandleConstant() );
-			case Constant.tagMethodType -> internMethodTypeConstant( constant.asMethodTypeConstant() );
-			case Constant.tagInvokeDynamic -> internInvokeDynamicConstant( constant.asInvokeDynamicConstant() );
+			case Constant.tag_Class -> internClassConstant( constant.asClassConstant() );
 			default -> throw new AssertionError( constant );
 		}
 	}
@@ -141,28 +123,19 @@ final class ConstantPool
 	{
 		switch( valueConstant.tag )
 		{
-			case Constant.tagString:
-				internStringConstant( valueConstant.asStringConstant() );
-				break;
-			case Constant.tagMutf8:
-			case Constant.tagInteger:
-			case Constant.tagFloat:
-			case Constant.tagLong:
-			case Constant.tagDouble:
-				internConstant0( valueConstant );
-				break;
-			default:
-				assert false;
-				break;
+			case Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double -> internConstant( valueConstant );
+			case Constant.tag_String -> internStringConstant( valueConstant.asStringConstant() );
+			case Constant.tag_Mutf8 -> internMutf8Constant( valueConstant.asMutf8Constant() );
+			default -> throw new AssertionError( valueConstant );
 		}
 	}
 
 	private void internMutf8Constant( Mutf8Constant mutf8Constant )
 	{
-		internConstant0( mutf8Constant );
+		internConstant( mutf8Constant );
 	}
 
-	private void internConstant0( Constant constant )
+	private void internConstant( Constant constant )
 	{
 		int existingIndex = tryGetIndex( constant );
 		assert existingIndex != 0;
@@ -170,53 +143,53 @@ final class ConstantPool
 		{
 			assert !entries.isEmpty();
 			entries.add( constant );
-			if( constant.tag == Constant.tagLong || constant.tag == Constant.tagDouble )
+			if( constant.tag == Constant.tag_Long || constant.tag == Constant.tag_Double )
 				entries.add( null ); //8-byte constants occupy two constant pool entries. (Ancient legacy bollocks.)
 		}
 	}
 
 	private void internInvokeDynamicConstant( InvokeDynamicConstant invokeDynamicConstant )
 	{
-		internConstant0( invokeDynamicConstant );
-		internNameAndDescriptorConstant( invokeDynamicConstant.nameAndDescriptorConstant() );
+		internConstant( invokeDynamicConstant );
+		internNameAndDescriptorConstant( invokeDynamicConstant.getNameAndDescriptorConstant() );
 	}
 
 	private void internMethodTypeConstant( MethodTypeConstant methodTypeConstant )
 	{
-		internConstant0( methodTypeConstant );
-		internMutf8Constant( methodTypeConstant.descriptorConstant );
+		internConstant( methodTypeConstant );
+		internMutf8Constant( methodTypeConstant.getDescriptorConstant() );
 	}
 
 	private void internMethodHandleConstant( MethodHandleConstant methodHandleConstant )
 	{
-		internConstant0( methodHandleConstant );
-		internReferenceConstant( methodHandleConstant.referenceConstant() );
+		internConstant( methodHandleConstant );
+		internReferenceConstant( methodHandleConstant.getReferenceConstant() );
 	}
 
 	private void internNameAndDescriptorConstant( NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		internConstant0( nameAndDescriptorConstant );
-		internMutf8Constant( nameAndDescriptorConstant.nameConstant );
-		internMutf8Constant( nameAndDescriptorConstant.descriptorConstant );
+		internConstant( nameAndDescriptorConstant );
+		internMutf8Constant( nameAndDescriptorConstant.getNameConstant() );
+		internMutf8Constant( nameAndDescriptorConstant.getDescriptorConstant() );
 	}
 
 	private void internReferenceConstant( ReferenceConstant referenceConstant )
 	{
-		internConstant0( referenceConstant );
-		internClassConstant( referenceConstant.typeConstant );
-		internNameAndDescriptorConstant( referenceConstant.nameAndDescriptorConstant );
+		internConstant( referenceConstant );
+		internClassConstant( referenceConstant.getDeclaringTypeConstant() );
+		internNameAndDescriptorConstant( referenceConstant.getNameAndDescriptorConstant() );
 	}
 
 	private void internStringConstant( StringConstant stringConstant )
 	{
-		internConstant0( stringConstant );
-		internMutf8Constant( stringConstant.valueConstant() );
+		internConstant( stringConstant );
+		internMutf8Constant( stringConstant.getValueConstant() );
 	}
 
 	void internClassConstant( ClassConstant classConstant )
 	{
-		internConstant0( classConstant );
-		internMutf8Constant( classConstant.nameConstant() );
+		internConstant( classConstant );
+		internMutf8Constant( classConstant.getNameConstant() );
 	}
 
 	void internField( ByteCodeField byteCodeField )
@@ -237,42 +210,37 @@ final class ConstantPool
 	{
 		for( Attribute attribute : attributeSet.allAttributes() )
 		{
-			internMutf8Constant( attribute.mutf8Name );
-			internAttribute( attribute );
-		}
-	}
-
-	private void internAttribute( Attribute attribute )
-	{
-		if( !attribute.isKnown() )
-			return;
-		KnownAttribute knownAttribute = attribute.asKnownAttribute();
-		switch( knownAttribute.tag )
-		{
-			case KnownAttribute.tagAnnotationDefault -> internAnnotationDefaultAttribute( attribute.asAnnotationDefaultAttribute() );
-			case KnownAttribute.tagBootstrapMethods -> internBootstrapMethodsAttribute( attribute.asBootstrapMethodsAttribute() );
-			case KnownAttribute.tagCode -> internCodeAttribute( attribute.asCodeAttribute() );
-			case KnownAttribute.tagConstantValue -> internConstantValueAttribute( attribute.asConstantValueAttribute() );
-			case KnownAttribute.tagEnclosingMethod -> internEnclosingMethodAttribute( attribute.asEnclosingMethodAttribute() );
-			case KnownAttribute.tagExceptions -> internExceptionsAttribute( attribute.asExceptionsAttribute() );
-			case KnownAttribute.tagInnerClasses -> internInnerClassesAttribute( attribute.asInnerClassesAttribute() );
-			case KnownAttribute.tagNestHost -> internNestHostAttribute( attribute.asNestHostAttribute() );
-			case KnownAttribute.tagNestMembers -> internNestMembersAttribute( attribute.asNestMembersAttribute() );
-			case KnownAttribute.tagLineNumberTable -> internLineNumberTableAttribute( attribute.asLineNumberTableAttribute() );
-			case KnownAttribute.tagLocalVariableTable -> internLocalVariableTableAttribute( attribute.asLocalVariableTableAttribute() );
-			case KnownAttribute.tagLocalVariableTypeTable -> internLocalVariableTypeTableAttribute( attribute.asLocalVariableTypeTableAttribute() );
-			case KnownAttribute.tagMethodParameters -> internMethodParametersAttribute( attribute.asMethodParametersAttribute() );
-			case KnownAttribute.tagRuntimeVisibleAnnotations -> internAnnotationsAttribute( attribute.asRuntimeVisibleAnnotationsAttribute() );
-			case KnownAttribute.tagRuntimeInvisibleAnnotations -> internAnnotationsAttribute( attribute.asRuntimeInvisibleAnnotationsAttribute() );
-			case KnownAttribute.tagRuntimeInvisibleParameterAnnotations -> internParameterAnnotationsAttribute( attribute.asRuntimeInvisibleParameterAnnotationsAttribute() );
-			case KnownAttribute.tagRuntimeVisibleParameterAnnotations -> internParameterAnnotationsAttribute( attribute.asRuntimeVisibleParameterAnnotationsAttribute() );
-			case KnownAttribute.tagRuntimeInvisibleTypeAnnotations -> internTypeAnnotationsAttribute( attribute.asRuntimeInvisibleTypeAnnotationsAttribute() );
-			case KnownAttribute.tagRuntimeVisibleTypeAnnotations -> internTypeAnnotationsAttribute( attribute.asRuntimeVisibleTypeAnnotationsAttribute() );
-			case KnownAttribute.tagSignature -> internSignatureAttribute( attribute.asSignatureAttribute() );
-			case KnownAttribute.tagSourceFile -> internSourceFileAttribute( attribute.asSourceFileAttribute() );
-			case KnownAttribute.tagStackMapTable -> internStackMapTableAttribute( attribute.asStackMapTableAttribute() );
-			case KnownAttribute.tagDeprecated, KnownAttribute.tagSynthetic -> { /* nothing to do */ }
-			default -> { assert false; }
+			if( attribute.isKnown() )
+			{
+				internMutf8Constant( attribute.mutf8Name );
+				KnownAttribute knownAttribute = attribute.asKnownAttribute();
+				switch( knownAttribute.tag )
+				{
+					case KnownAttribute.tag_AnnotationDefault -> internAnnotationDefaultAttribute( knownAttribute.asAnnotationDefaultAttribute() );
+					case KnownAttribute.tag_BootstrapMethods -> internBootstrapMethodsAttribute( knownAttribute.asBootstrapMethodsAttribute() );
+					case KnownAttribute.tag_Code -> internCodeAttribute( knownAttribute.asCodeAttribute() );
+					case KnownAttribute.tag_ConstantValue -> internConstantValueAttribute( knownAttribute.asConstantValueAttribute() );
+					case KnownAttribute.tag_EnclosingMethod -> internEnclosingMethodAttribute( knownAttribute.asEnclosingMethodAttribute() );
+					case KnownAttribute.tag_Exceptions -> internExceptionsAttribute( knownAttribute.asExceptionsAttribute() );
+					case KnownAttribute.tag_InnerClasses -> internInnerClassesAttribute( knownAttribute.asInnerClassesAttribute() );
+					case KnownAttribute.tag_NestHost -> internNestHostAttribute( knownAttribute.asNestHostAttribute() );
+					case KnownAttribute.tag_NestMembers -> internNestMembersAttribute( knownAttribute.asNestMembersAttribute() );
+					case KnownAttribute.tag_LocalVariableTable -> internLocalVariableTableAttribute( knownAttribute.asLocalVariableTableAttribute() );
+					case KnownAttribute.tag_LocalVariableTypeTable -> internLocalVariableTypeTableAttribute( knownAttribute.asLocalVariableTypeTableAttribute() );
+					case KnownAttribute.tag_MethodParameters -> internMethodParametersAttribute( knownAttribute.asMethodParametersAttribute() );
+					case KnownAttribute.tag_RuntimeVisibleAnnotations -> internAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute() );
+					case KnownAttribute.tag_RuntimeInvisibleAnnotations -> internAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute() );
+					case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> internParameterAnnotationsAttribute( knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute() );
+					case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> internParameterAnnotationsAttribute( knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute() );
+					case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> internTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute() );
+					case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> internTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute() );
+					case KnownAttribute.tag_Signature -> internSignatureAttribute( knownAttribute.asSignatureAttribute() );
+					case KnownAttribute.tag_SourceFile -> internSourceFileAttribute( knownAttribute.asSourceFileAttribute() );
+					case KnownAttribute.tag_StackMapTable -> internStackMapTableAttribute( knownAttribute.asStackMapTableAttribute() );
+					case KnownAttribute.tag_LineNumberTable, KnownAttribute.tag_Deprecated, KnownAttribute.tag_Synthetic -> { /* nothing to do */ }
+					default -> { assert false; }
+				}
+			}
 		}
 	}
 
@@ -289,10 +257,10 @@ final class ConstantPool
 			for( Constant constant : bootstrapMethod.argumentConstants )
 				switch( constant.tag )
 				{
-					case Constant.tagClass -> internClassConstant( constant.asClassConstant() );
-					case Constant.tagMethodType -> internMethodTypeConstant( constant.asMethodTypeConstant() );
-					case Constant.tagString -> internStringConstant( constant.asStringConstant() );
-					case Constant.tagMethodHandle -> internMethodHandleConstant( constant.asMethodHandleConstant() );
+					case Constant.tag_Class -> internClassConstant( constant.asClassConstant() );
+					case Constant.tag_MethodType -> internMethodTypeConstant( constant.asMethodTypeConstant() );
+					case Constant.tag_String -> internStringConstant( constant.asStringConstant() );
+					case Constant.tag_MethodHandle -> internMethodHandleConstant( constant.asMethodHandleConstant() );
 					default -> throw new AssertionError( constant );
 				}
 		}
@@ -300,7 +268,7 @@ final class ConstantPool
 
 	private void internCodeAttribute( CodeAttribute codeAttribute )
 	{
-		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos() )
+		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos )
 			exceptionInfo.catchTypeConstant.ifPresent( c -> internClassConstant( c ) );
 
 		internAttributeSet( codeAttribute.attributeSet );
@@ -319,13 +287,13 @@ final class ConstantPool
 
 	private void internEnclosingMethodAttribute( EnclosingMethodAttribute enclosingMethodAttribute )
 	{
-		internClassConstant( enclosingMethodAttribute.classConstant() );
-		enclosingMethodAttribute.methodNameAndDescriptorConstant().ifPresent( c -> internNameAndDescriptorConstant( c ) );
+		internClassConstant( enclosingMethodAttribute.enclosingClassConstant );
+		enclosingMethodAttribute.enclosingMethodNameAndDescriptorConstant.ifPresent( c -> internNameAndDescriptorConstant( c ) );
 	}
 
 	private void internExceptionsAttribute( ExceptionsAttribute exceptionsAttribute )
 	{
-		for( ClassConstant exceptionClassConstant : exceptionsAttribute.exceptionClassConstants() )
+		for( ClassConstant exceptionClassConstant : exceptionsAttribute.exceptionClassConstants )
 			internClassConstant( exceptionClassConstant );
 	}
 
@@ -333,9 +301,9 @@ final class ConstantPool
 	{
 		for( InnerClass innerClass : innerClassesAttribute.innerClasses )
 		{
-			internClassConstant( innerClass.innerClassConstant() );
-			innerClass.outerClassConstant().ifPresent( c -> internClassConstant( c ) );
-			innerClass.innerNameConstant().ifPresent( c -> internMutf8Constant( c ) );
+			internClassConstant( innerClass.innerClassConstant );
+			innerClass.outerClassConstant.ifPresent( c -> internClassConstant( c ) );
+			innerClass.innerNameConstant.ifPresent( c -> internMutf8Constant( c ) );
 		}
 	}
 
@@ -348,13 +316,6 @@ final class ConstantPool
 	{
 		for( ClassConstant memberClassConstant : nestMembersAttribute.memberClassConstants )
 			internClassConstant( memberClassConstant );
-	}
-
-	private void internLineNumberTableAttribute( LineNumberTableAttribute lineNumberTableAttribute )
-	{
-		// FIXME this is probably unnecessary!
-		for( var lineNumber : lineNumberTableAttribute.entrys )
-			internInstruction( lineNumber.instruction() );
 	}
 
 	private void internLocalVariableTableAttribute( LocalVariableTableAttribute localVariableTableAttribute )
@@ -407,12 +368,12 @@ final class ConstantPool
 
 	private void internSignatureAttribute( SignatureAttribute signatureAttribute )
 	{
-		internMutf8Constant( signatureAttribute.signatureConstant() );
+		internMutf8Constant( signatureAttribute.signatureConstant );
 	}
 
 	private void internSourceFileAttribute( SourceFileAttribute sourceFileAttribute )
 	{
-		internMutf8Constant( sourceFileAttribute.valueConstant() );
+		internMutf8Constant( sourceFileAttribute.valueConstant );
 	}
 
 	private void internStackMapTableAttribute( StackMapTableAttribute stackMapTableAttribute )
@@ -465,20 +426,22 @@ final class ConstantPool
 
 	private void internInstruction( Instruction instruction )
 	{
-		switch( instruction.group )
+		switch( instruction.groupTag )
 		{
-			case ConstantReferencing -> internConstantReferencingInstruction( instruction.asConstantReferencingInstruction() );
-			case IndirectLoadConstant -> internIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction() );
-			case InvokeDynamic -> internInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction() );
-			case InvokeInterface -> internInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction() );
-			case MultiANewArray -> internMultiANewArrayInstruction( instruction.asMultiANewArrayInstruction() );
-			default -> { }
+			case Instruction.groupTag_ClassConstantReferencing -> internClassConstantReferencingInstruction( instruction.asClassConstantReferencingInstruction() );
+			case Instruction.groupTag_FieldConstantReferencing -> internFieldConstantReferencingInstruction( instruction.asFieldConstantReferencingInstruction() );
+			case Instruction.groupTag_MethodConstantReferencing -> internMethodConstantReferencingInstruction( instruction.asMethodConstantReferencingInstruction() );
+			case Instruction.groupTag_IndirectLoadConstant -> internIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction() );
+			case Instruction.groupTag_InvokeDynamic -> internInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction() );
+			case Instruction.groupTag_InvokeInterface -> internInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction() );
+			case Instruction.groupTag_MultiANewArray -> internMultiANewArrayInstruction( instruction.asMultiANewArrayInstruction() );
+			default -> { /* nothing to do */ }
 		}
 	}
 
 	private void internMultiANewArrayInstruction( MultiANewArrayInstruction multiANewArrayInstruction )
 	{
-		internClassConstant( multiANewArrayInstruction.classConstant );
+		internClassConstant( multiANewArrayInstruction.targetClassConstant );
 	}
 
 	private void internInvokeInterfaceInstruction( InvokeInterfaceInstruction invokeInterfaceInstruction )
@@ -496,23 +459,31 @@ final class ConstantPool
 		Constant constant = indirectLoadConstantInstruction.constant;
 		switch( constant.tag )
 		{
-			case Constant.tagInteger, Constant.tagLong, Constant.tagFloat, Constant.tagDouble -> internConstant0( constant );
-			case Constant.tagString -> internStringConstant( constant.asStringConstant() );
-			case Constant.tagClass -> internClassConstant( constant.asClassConstant() );
+			case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double -> internConstant( constant );
+			case Constant.tag_String -> internStringConstant( constant.asStringConstant() );
+			case Constant.tag_Class -> internClassConstant( constant.asClassConstant() );
 			default -> throw new AssertionError( constant );
 		}
 	}
 
-	private void internConstantReferencingInstruction( ConstantReferencingInstruction constantReferencingInstruction )
+	private void internClassConstantReferencingInstruction( ClassConstantReferencingInstruction classConstantReferencingInstruction )
 	{
-		Constant constant = constantReferencingInstruction.constant;
-		switch( constant.tag )
+		internClassConstant( classConstantReferencingInstruction.targetClassConstant );
+	}
+
+	private void internFieldConstantReferencingInstruction( FieldConstantReferencingInstruction fieldConstantReferencingInstruction )
+	{
+		internReferenceConstant( fieldConstantReferencingInstruction.fieldReferenceConstant );
+	}
+
+	private void internMethodConstantReferencingInstruction( MethodConstantReferencingInstruction methodConstantReferencingInstruction )
+	{
+		MethodReferenceConstant methodReferenceConstant = methodConstantReferencingInstruction.methodReferenceConstant;
+		switch( methodReferenceConstant.tag )
 		{
-			case Constant.tagFieldReference -> internReferenceConstant( constant.asFieldReferenceConstant() );
-			case Constant.tagInterfaceMethodReference -> internReferenceConstant( constant.asInterfaceMethodReferenceConstant() );
-			case Constant.tagMethodReference -> internReferenceConstant( constant.asMethodReferenceConstant() );
-			case Constant.tagClass -> internClassConstant( constant.asClassConstant() );
-			default -> throw new AssertionError( constant );
+			case Constant.tag_InterfaceMethodReference -> internReferenceConstant( methodReferenceConstant.asInterfaceMethodReferenceConstant() );
+			case Constant.tag_MethodReference -> internReferenceConstant( methodReferenceConstant.asPlainMethodReferenceConstant() );
+			default -> throw new AssertionError( methodReferenceConstant );
 		}
 	}
 
@@ -553,7 +524,7 @@ final class ConstantPool
 			internVerificationType( verificationType );
 	}
 
-	private void internChopStackMapFrame( ChopStackMapFrame chopStackMapFrame )
+	private static void internChopStackMapFrame( ChopStackMapFrame chopStackMapFrame )
 	{
 		Kit.get( chopStackMapFrame ); //nothing to do.
 	}
@@ -566,7 +537,7 @@ final class ConstantPool
 			internVerificationType( verificationType );
 	}
 
-	private void internSameStackMapFrame( SameStackMapFrame sameStackMapFrame )
+	private static void internSameStackMapFrame( SameStackMapFrame sameStackMapFrame )
 	{
 		Kit.get( sameStackMapFrame ); //nothing to do.
 	}
@@ -580,10 +551,10 @@ final class ConstantPool
 	{
 		switch( verificationType.tag )
 		{
-			case VerificationType.tagTop, VerificationType.tagInteger, VerificationType.tagFloat, VerificationType.tagDouble, VerificationType.tagLong, //
-				VerificationType.tagNull, VerificationType.tagUninitializedThis -> internSimpleVerificationType( verificationType.asSimpleVerificationType() );
-			case VerificationType.tagObject -> internObjectVerificationType( verificationType.asObjectVerificationType() );
-			case VerificationType.tagUninitialized -> internUninitializedVerificationType( verificationType.asUninitializedVerificationType() );
+			case VerificationType.tag_Top, VerificationType.tag_Integer, VerificationType.tag_Float, VerificationType.tag_Double, VerificationType.tag_Long, //
+				VerificationType.tag_Null, VerificationType.tag_UninitializedThis -> internSimpleVerificationType( verificationType.asSimpleVerificationType() );
+			case VerificationType.tag_Object -> internObjectVerificationType( verificationType.asObjectVerificationType() );
+			case VerificationType.tag_Uninitialized -> internUninitializedVerificationType( verificationType.asUninitializedVerificationType() );
 			default -> throw new AssertionError( verificationType );
 		}
 	}

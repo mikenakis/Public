@@ -20,7 +20,7 @@ public final class DoubleConstant extends ValueConstant<Double>
 
 	private DoubleConstant( double value )
 	{
-		super( tagDouble );
+		super( tag_Double );
 		this.value = value;
 	}
 

@@ -19,7 +19,7 @@ public final class ObjectVerificationType extends VerificationType
 
 	private ObjectVerificationType( ClassConstant classConstant )
 	{
-		super( tagObject );
+		super( tag_Object );
 		this.classConstant = classConstant;
 	}
 

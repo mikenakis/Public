@@ -76,31 +76,4 @@ public abstract class Attribute
 
 	@ExcludeFromJacocoGeneratedReport public UnknownAttribute                              /**/ asUnknownAttribute                              /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public KnownAttribute                                /**/ asKnownAttribute                                /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public AnnotationDefaultAttribute                    /**/ asAnnotationDefaultAttribute                    /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public BootstrapMethodsAttribute                     /**/ asBootstrapMethodsAttribute                     /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public CodeAttribute                                 /**/ asCodeAttribute                                 /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ConstantValueAttribute                        /**/ asConstantValueAttribute                        /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public DeprecatedAttribute                           /**/ asDeprecatedAttribute                           /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public EnclosingMethodAttribute                      /**/ asEnclosingMethodAttribute                      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ExceptionsAttribute                           /**/ asExceptionsAttribute                           /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InnerClassesAttribute                         /**/ asInnerClassesAttribute                         /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public NestHostAttribute                             /**/ asNestHostAttribute                             /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public NestMembersAttribute                          /**/ asNestMembersAttribute                          /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LineNumberTableAttribute                      /**/ asLineNumberTableAttribute                      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LocalVariableTableAttribute                   /**/ asLocalVariableTableAttribute                   /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LocalVariableTypeTableAttribute               /**/ asLocalVariableTypeTableAttribute               /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MethodParametersAttribute                     /**/ asMethodParametersAttribute                     /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public AnnotationsAttribute                          /**/ asAnnotationsAttribute                          /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public RuntimeVisibleAnnotationsAttribute            /**/ asRuntimeVisibleAnnotationsAttribute            /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public RuntimeInvisibleAnnotationsAttribute          /**/ asRuntimeInvisibleAnnotationsAttribute          /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ParameterAnnotationsAttribute                 /**/ asParameterAnnotationsAttribute                 /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public RuntimeInvisibleParameterAnnotationsAttribute /**/ asRuntimeInvisibleParameterAnnotationsAttribute /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public RuntimeVisibleParameterAnnotationsAttribute   /**/ asRuntimeVisibleParameterAnnotationsAttribute   /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TypeAnnotationsAttribute                      /**/ asTypeAnnotationsAttribute                      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public RuntimeInvisibleTypeAnnotationsAttribute      /**/ asRuntimeInvisibleTypeAnnotationsAttribute      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public RuntimeVisibleTypeAnnotationsAttribute        /**/ asRuntimeVisibleTypeAnnotationsAttribute        /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public SignatureAttribute                            /**/ asSignatureAttribute                            /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public SourceFileAttribute                           /**/ asSourceFileAttribute                           /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public StackMapTableAttribute                        /**/ asStackMapTableAttribute                        /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public SyntheticAttribute                            /**/ asSyntheticAttribute                            /**/() { return Kit.fail(); }
 }

@@ -18,20 +18,9 @@ class WritingLocationMap implements LocationMap
 	{
 	}
 
-	@Override public Optional<Instruction> getInstruction( int location ) //returns Optional.empty() if the location is @end.
-	{
-		if( location == instructionsByLocation.size() )
-			return Optional.empty();
-		Instruction instruction = instructionsByLocation.get( location );
-		assert instruction != null;
-		return Optional.of( instruction );
-	}
-
 	@Override public int getLocation( Optional<Instruction> instruction )
 	{
-		if( instruction.isEmpty() )
-			return instructionsByLocation.size();
-		return getLocation( instruction.get() );
+		return instruction.isEmpty() ? instructionsByLocation.size() : getLocation( instruction.get() );
 	}
 
 	@Override public int getLocation( Instruction instruction )
@@ -77,16 +66,10 @@ class WritingLocationMap implements LocationMap
 		return locationsByInstruction.containsKey( instruction );
 	}
 
-	@Override public boolean contains( int location )
-	{
-		return instructionsByLocation.get( location ) != null;
-	}
-
 	void removeBytes( int location, int length )
 	{
 		assert length > 0;
-		for( int i = 0;  i < length;  i++ ) //TODO: optimize this by using an array instead of a list, so that we can remove [length] number of bytes in one pass.
-			instructionsByLocation.remove( location );
+		instructionsByLocation.subList( location, location + length ).clear();
 		for( Map.Entry<Instruction,Integer> entry : locationsByInstruction.entrySet() )
 		{
 			int location2 = entry.getValue();

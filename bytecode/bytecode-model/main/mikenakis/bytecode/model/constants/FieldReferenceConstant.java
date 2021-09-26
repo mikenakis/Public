@@ -9,14 +9,17 @@ import java.lang.constant.ClassDesc;
  */
 public final class FieldReferenceConstant extends ReferenceConstant
 {
-	public static FieldReferenceConstant of( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public static FieldReferenceConstant of( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant ) //TODO remove
 	{
-		return new FieldReferenceConstant( typeConstant, nameAndDescriptorConstant );
+		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
+		fieldReferenceConstant.setDeclaringTypeConstant( declaringTypeConstant );
+		fieldReferenceConstant.setNameAndDescriptorConstant( nameAndDescriptorConstant );
+		return fieldReferenceConstant;
 	}
 
-	private FieldReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public FieldReferenceConstant()
 	{
-		super( tagFieldReference, typeConstant, nameAndDescriptorConstant );
+		super( tag_FieldReference );
 	}
 
 	// String Customer.name;
@@ -24,9 +27,9 @@ public final class FieldReferenceConstant extends ReferenceConstant
 	// 1: nameAndDescriptorConstant.descriptorConstant
 	// 2: typeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public ClassDesc fieldTypeDescriptor() { return ClassDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() ); }
-	public ClassDesc owningClassDescriptor() { return typeConstant.classDescriptor(); }
-	public String fieldName() { return nameAndDescriptorConstant.nameConstant.stringValue(); }
+	public ClassDesc fieldTypeDescriptor() { return ClassDesc.ofDescriptor( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ); }
+	public ClassDesc declaringClassDescriptor() { return getDeclaringTypeConstant().classDesc(); }
+	public String fieldName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
 
 	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant()
 	{

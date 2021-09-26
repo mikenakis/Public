@@ -32,12 +32,15 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 3 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L21:    ALOAD_0 0 // {
- │   │       │   │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [2] L13:    ALOAD_0 0 // @SuppressWarnings( "FieldMayBeStatic" ) //
- │   │       │   │   ├─ [3]         ICONST_5
- │   │       │   │   ├─ [4]         PUTFIELD int mikenakis.bytecode.test.model.Class6WithAnnotations.fieldWithAnnotation
- │   │       │   │   └─ [5] L22:    RETURN // }
+ │   │       │   │   ├─ [0] L21: // {
+ │   │       │   │   ├─ [1]         ALOAD_0 0
+ │   │       │   │   ├─ [2]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   ├─ [3] L13: // @SuppressWarnings( "FieldMayBeStatic" ) //
+ │   │       │   │   ├─ [4]         ALOAD_0 0
+ │   │       │   │   ├─ [5]         ICONST_5
+ │   │       │   │   ├─ [6]         PUTFIELD int mikenakis.bytecode.test.model.Class6WithAnnotations.fieldWithAnnotation
+ │   │       │   │   ├─ [7] L22: // }
+ │   │       │   │   └─ [8]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -74,7 +77,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L27:    RETURN // }
+ │   │       │   │   ├─ [0] L27: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -109,7 +113,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L32:    RETURN // }
+ │   │       │   │   ├─ [0] L32: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -141,7 +146,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L38:    RETURN // }
+ │   │       │   │   ├─ [0] L38: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -207,7 +213,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L43:    RETURN // }
+ │   │       │   │   ├─ [0] L43: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -231,7 +238,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L48:    RETURN // }
+ │   │       │   │   ├─ [0] L48: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -255,7 +263,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L53:    RETURN // }
+ │   │       │   │   ├─ [0] L53: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -273,7 +282,8 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 0, maxLocals = 1
  │   │       │   ├─ instructions: 1 entries
- │   │       │   │   └─ [0] L58:    RETURN // }
+ │   │       │   │   ├─ [0] L58: // }
+ │   │       │   │   └─ [1]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -297,13 +307,18 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 4 entries
  │           ├─ [0] CodeAttribute maxStack = 4, maxLocals = 4
  │           │   ├─ instructions: 7 entries
- │           │   │   ├─ [0] L64:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
- │           │   │   ├─ [1]         ILOAD_1 1
- │           │   │   ├─ [2]         ILOAD_2 2
- │           │   │   ├─ [3]         ILOAD_3 3
- │           │   │   ├─ [4]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int )
- │           │   │   ├─ [5]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │           │   │   └─ [6] L65:    RETURN // }
+ │           │   │   ├─ [0] L64: // System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
+ │           │   │   ├─ [1]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │           │   │   ├─ [2]         ILOAD_1 1
+ │           │   │   ├─ [3]         ILOAD_2 2
+ │           │   │   ├─ [4]         ILOAD_3 3
+ │           │   │   ├─ [5]         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int ), arguments = a=, b=, c=
+ │           │   │   │   ├─                 referenceKind: InvokeStatic
+ │           │   │   │   ├─                 referenceType: java.lang.invoke.StringConcatFactory
+ │           │   │   │   └─                 methodName: makeConcatWithConstants
+ │           │   │   ├─ [6]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │           │   │   ├─ [7] L65: // }
+ │           │   │   └─ [8]         RETURN
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
  │           │       ├─ [0] LineNumberTableAttribute
@@ -365,8 +380,7 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │                                           └─ value: ConstAnnotationValue
  │                                               └─ value: IntegerConstant( 1 )
  └─ attributes: 5 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class6WithAnnotations.java" )
+     ├─ [0] SourceFileAttribute "Class6WithAnnotations.java"
      ├─ [1] RuntimeVisibleAnnotationsAttribute
      │   └─ annotations: 1 entries
      │       └─ [0] Annotation
@@ -394,4 +408,4 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
      │       └─ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
      └─ [4] InnerClassesAttribute
          └─ innerClasses: 1 entries
-             └─ [0] InnerClass outerClass = java.lang.invoke.MethodHandles, accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = Mutf8Constant( "Lookup" )
+             └─ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

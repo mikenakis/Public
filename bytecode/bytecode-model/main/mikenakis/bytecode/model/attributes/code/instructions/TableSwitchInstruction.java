@@ -21,7 +21,7 @@ public final class TableSwitchInstruction extends Instruction
 
 	private TableSwitchInstruction( int entryCount, int lowValue )
 	{
-		super( Group.TableSwitch );
+		super( groupTag_TableSwitch );
 		targetInstructions = new ArrayList<>( entryCount );
 		this.lowValue = lowValue;
 		for( int i = 0; i < entryCount; i++ )

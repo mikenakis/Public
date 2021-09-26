@@ -13,29 +13,29 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class VerificationType
 {
-	public static final int tagTop               /**/ = 0;
-	public static final int tagInteger           /**/ = 1;
-	public static final int tagFloat             /**/ = 2;
-	public static final int tagDouble            /**/ = 3;
-	public static final int tagLong              /**/ = 4;
-	public static final int tagNull              /**/ = 5;
-	public static final int tagUninitializedThis /**/ = 6;
-	public static final int tagObject            /**/ = 7;
-	public static final int tagUninitialized     /**/ = 8;
+	public static final int tag_Top               /**/ = 0;
+	public static final int tag_Integer           /**/ = 1;
+	public static final int tag_Float             /**/ = 2;
+	public static final int tag_Double            /**/ = 3;
+	public static final int tag_Long              /**/ = 4;
+	public static final int tag_Null              /**/ = 5;
+	public static final int tag_UninitializedThis /**/ = 6;
+	public static final int tag_Object            /**/ = 7;
+	public static final int tag_Uninitialized     /**/ = 8;
 
 	public static String tagName( int verificationTypeTag )
 	{
 		return switch( verificationTypeTag )
 		{
-			case tagTop               /**/ -> "Top";
-			case tagInteger           /**/ -> "Integer";
-			case tagFloat             /**/ -> "Float";
-			case tagDouble            /**/ -> "Double";
-			case tagLong              /**/ -> "Long";
-			case tagNull              /**/ -> "Null";
-			case tagUninitializedThis /**/ -> "UninitializedThis";
-			case tagObject            /**/ -> "Object";
-			case tagUninitialized     /**/ -> "Uninitialized";
+			case tag_Top               /**/ -> "Top";
+			case tag_Integer           /**/ -> "Integer";
+			case tag_Float             /**/ -> "Float";
+			case tag_Double            /**/ -> "Double";
+			case tag_Long              /**/ -> "Long";
+			case tag_Null              /**/ -> "Null";
+			case tag_UninitializedThis /**/ -> "UninitializedThis";
+			case tag_Object            /**/ -> "Object";
+			case tag_Uninitialized     /**/ -> "Uninitialized";
 			default -> throw new InvalidVerificationTypeTagException( verificationTypeTag );
 		};
 	}

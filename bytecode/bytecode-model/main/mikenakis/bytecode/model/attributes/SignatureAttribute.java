@@ -30,26 +30,15 @@ public final class SignatureAttribute extends KnownAttribute
 		return new SignatureAttribute( signatureConstant );
 	}
 
-	private final Mutf8Constant signatureConstant;
+	public final Mutf8Constant signatureConstant;
 
 	private SignatureAttribute( Mutf8Constant signatureConstant )
 	{
-		super( tagSignature );
+		super( tag_Signature );
 		this.signatureConstant = signatureConstant;
 	}
 
-	public Mutf8Constant signatureConstant()
-	{
-		return signatureConstant;
-	}
-
-	@Deprecated @Override public SignatureAttribute asSignatureAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "signature = " + signatureConstant.stringValue();
-	}
+	public String signatureString() { return signatureConstant.stringValue(); }
+	@Deprecated @Override public SignatureAttribute asSignatureAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "signature = " + signatureConstant.stringValue(); }
 }

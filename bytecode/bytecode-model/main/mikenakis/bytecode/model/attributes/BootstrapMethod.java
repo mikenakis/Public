@@ -7,6 +7,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import java.lang.constant.ConstantDesc;
 import java.lang.constant.DynamicConstantDesc;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * An entry of the {@link BootstrapMethodsAttribute}.
@@ -34,7 +35,7 @@ public final class BootstrapMethod
 	{
 		return switch( constant.tag )
 			{
-				case Constant.tagClass, Constant.tagMethodType, Constant.tagString, Constant.tagMethodHandle -> true;
+				case Constant.tag_Class, Constant.tag_MethodType, Constant.tag_String, Constant.tag_MethodHandle -> true;
 				default -> false;
 			};
 	}
@@ -47,18 +48,32 @@ public final class BootstrapMethod
 			Constant constant = argumentConstants.get( i );
 			argumentConstantDescriptors[i] = switch( constant.tag )
 				{
-					case Constant.tagClass -> constant.asClassConstant().constantDescriptor();
-					case Constant.tagMethodType -> constant.asMethodTypeConstant().constantDescriptor();
-					case Constant.tagString -> constant.asStringConstant().constantDescriptor();
-					case Constant.tagMethodHandle -> constant.asMethodHandleConstant().constantDescriptor();
+					case Constant.tag_Class -> constant.asClassConstant().classDesc();
+					case Constant.tag_MethodType -> constant.asMethodTypeConstant().constantDescriptor();
+					case Constant.tag_String -> constant.asStringConstant().constantDescriptor();
+					case Constant.tag_MethodHandle -> constant.asMethodHandleConstant().constantDescriptor();
 					default -> throw new AssertionError( constant );
 				};
 		}
 		return DynamicConstantDesc.of( methodHandleConstant.descriptor(), argumentConstantDescriptors );
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "methodHandle = " + methodHandleConstant + ", " + argumentConstants.size() + " arguments"; }
+
+	@Deprecated @Override public boolean equals( Object other )
 	{
-		return "methodHandle = " + methodHandleConstant + ", " + argumentConstants.size() + " arguments";
+		if( other instanceof BootstrapMethod otherBootstrapMethod )
+			return equals( otherBootstrapMethod );
+		return false;
+	}
+
+	public boolean equals( BootstrapMethod other )
+	{
+		return methodHandleConstant.equals( other.methodHandleConstant ) && argumentConstants.equals( other.argumentConstants );
+	}
+
+	@Override public int hashCode()
+	{
+		return Objects.hash( methodHandleConstant, argumentConstants );
 	}
 }

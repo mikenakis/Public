@@ -11,13 +11,6 @@ public final class ConditionalBranchInstruction extends Instruction
 		return new ConditionalBranchInstruction( opCode );
 	}
 
-	public static ConditionalBranchInstruction of( int opCode, Instruction targetInstruction )
-	{
-		ConditionalBranchInstruction conditionalBranchInstruction = of( opCode );
-		conditionalBranchInstruction.setTargetInstruction( targetInstruction );
-		return conditionalBranchInstruction;
-	}
-
 	private static boolean isValidOpCode( int opCode )
 	{
 		return switch( opCode )
@@ -33,7 +26,7 @@ public final class ConditionalBranchInstruction extends Instruction
 
 	private ConditionalBranchInstruction( int opCode )
 	{
-		super( Group.ConditionalBranch );
+		super( groupTag_ConditionalBranch );
 		assert isValidOpCode( opCode );
 		this.opCode = opCode;
 	}

@@ -10,11 +10,11 @@ public final class TypeArgumentTarget extends Target // "type_argument_target" i
 	public TypeArgumentTarget( int tag, int offset, int typeArgumentIndex )
 	{
 		super( tag );
-		assert tag == tagTypeInCastExpression || //
-			tag == tagTypeArgumentForGenericConstructorInNewExpressionOrExplicitConstructorInvocationStatement || //
-			tag == tagTypeArgumentForGenericMethodInMethodInvocationExpression || //
-			tag == tagTypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew || //
-			tag == tagTypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier;
+		assert tag == tag_CastArgument || //
+			tag == tag_ConstructorArgument || //
+			tag == tag_MethodArgument || //
+			tag == tag_NewMethodArgument || //
+			tag == tag_IdentifierMethodArgument;
 		this.offset = offset;
 		this.typeArgumentIndex = typeArgumentIndex;
 	}

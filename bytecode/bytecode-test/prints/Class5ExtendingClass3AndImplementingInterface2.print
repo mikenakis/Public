@@ -27,12 +27,15 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │           ├─ instructions: 6 entries
- │   │           │   ├─ [0] L14:    ALOAD_0 0 // {
- │   │           │   ├─ [1]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
- │   │           │   ├─ [2] L10:    ALOAD_0 0 // @RuntimeVisibleAnnotation1( charParameter = 'x', doubleParameter = 1.1 ) //
- │   │           │   ├─ [3]         ALOAD_0 0
- │   │           │   ├─ [4]         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
- │   │           │   └─ [5] L15:    RETURN // }
+ │   │           │   ├─ [0] L14: // {
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = <init>, descriptor = void()
+ │   │           │   ├─ [3] L10: // @RuntimeVisibleAnnotation1( charParameter = 'x', doubleParameter = 1.1 ) //
+ │   │           │   ├─ [4]         ALOAD_0 0
+ │   │           │   ├─ [5]         ALOAD_0 0
+ │   │           │   ├─ [6]         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
+ │   │           │   ├─ [7] L15: // }
+ │   │           │   └─ [8]         RETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -47,9 +50,10 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L19:    ALOAD_0 0 // return interface1;
- │   │           │   ├─ [1]         GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
- │   │           │   └─ [2]         ARETURN
+ │   │           │   ├─ [0] L19: // return interface1;
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
+ │   │           │   └─ [3]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -62,11 +66,13 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │       └─ attributes: 2 entries
  │           ├─ [0] CodeAttribute maxStack = 2, maxLocals = 4
  │           │   ├─ instructions: 5 entries
- │           │   │   ├─ [0] L25:    INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread() // long id = Thread.currentThread().getId();
- │           │   │   ├─ [1]         INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
- │           │   │   ├─ [2]         LSTORE_2 2
- │           │   │   ├─ [3] L26:    LLOAD_2 2 // return id;
- │           │   │   └─ [4]         LRETURN
+ │           │   │   ├─ [0] L25: // long id = Thread.currentThread().getId();
+ │           │   │   ├─ [1]         INVOKESTATIC type = java.lang.Thread, name = currentThread, descriptor = java.lang.Thread()
+ │           │   │   ├─ [2]         INVOKEVIRTUAL type = java.lang.Thread, name = getId, descriptor = long()
+ │           │   │   ├─ [3]         LSTORE_2 2
+ │           │   │   ├─ [4] L26: // return id;
+ │           │   │   ├─ [5]         LLOAD_2 2
+ │           │   │   └─ [6]         LRETURN
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
  │           │       ├─ [0] LineNumberTableAttribute
@@ -82,5 +88,4 @@ ByteCodeType version = 60.0, accessFlags = [public, final, super], thisClass = m
  │               └─ parameters: 1 entries
  │                   └─ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
  └─ attributes: 1 entries
-     └─ [0] SourceFileAttribute
-         └─ value: Mutf8Constant( "Class5ExtendingClass3AndImplementingInterface2.java" )
+     └─ [0] SourceFileAttribute "Class5ExtendingClass3AndImplementingInterface2.java"

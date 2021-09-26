@@ -20,7 +20,7 @@ public final class LongConstant extends ValueConstant<Long>
 
 	private LongConstant( long value )
 	{
-		super( tagLong );
+		super( tag_Long );
 		this.value = value;
 	}
 

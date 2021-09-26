@@ -24,7 +24,7 @@ public final class RuntimeInvisibleParameterAnnotationsAttribute extends Paramet
 
 	private RuntimeInvisibleParameterAnnotationsAttribute( List<ParameterAnnotationSet> entries )
 	{
-		super( tagRuntimeInvisibleParameterAnnotations, entries );
+		super( tag_RuntimeInvisibleParameterAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeInvisibleParameterAnnotationsAttribute asRuntimeInvisibleParameterAnnotationsAttribute()

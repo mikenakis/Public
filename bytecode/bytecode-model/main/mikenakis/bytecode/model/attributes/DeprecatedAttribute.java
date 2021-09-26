@@ -26,7 +26,7 @@ public final class DeprecatedAttribute extends KnownAttribute
 
 	private DeprecatedAttribute()
 	{
-		super( tagDeprecated );
+		super( tag_Deprecated );
 	}
 
 	@Deprecated @Override public DeprecatedAttribute asDeprecatedAttribute()

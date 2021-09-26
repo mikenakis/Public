@@ -3,12 +3,12 @@ package mikenakis.bytecode.model;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
+import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagEnumSet;
 
-import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +40,8 @@ import java.util.function.Function;
  */
 public final class ByteCodeType
 {
+	public static record Version( int major, int minor ) {}
+
 	public static final int MAGIC = 0xCAFEBABE;
 
 	public enum Modifier
@@ -61,66 +63,72 @@ public final class ByteCodeType
 	{
 		TerminalTypeDescriptor thisClassDescriptor = TerminalTypeDescriptor.of( className );
 		Optional<TerminalTypeDescriptor> superClassDescriptor = superClassName.map( TerminalTypeDescriptor::of );
-		int majorVersion = Runtime.version().feature();
-		int minorVersion = Runtime.version().interim();
-		return of( minorVersion, majorVersion, modifierSet, thisClassDescriptor, superClassDescriptor );
+		return of( modifierSet, thisClassDescriptor, superClassDescriptor );
 	}
 
-	public static ByteCodeType of( int minorVersion, int majorVersion, FlagEnumSet<Modifier> modifierSet, TerminalTypeDescriptor thisClassDescriptor, //
+	public static ByteCodeType of( FlagEnumSet<Modifier> modifierSet, TerminalTypeDescriptor thisClassDescriptor, //
 		Optional<TerminalTypeDescriptor> superClassDescriptor )
 	{
-		return of( minorVersion, majorVersion, modifierSet, thisClassDescriptor, superClassDescriptor, new ArrayList<>( 0 ), //
-			new ArrayList<>( 0 ), new ArrayList<>( 0 ), AttributeSet.of(), new ArrayList<>() );
+		Version version = new Version( 60, 0 ); //TODO: add full support for this version!
+		return of( version, modifierSet, thisClassDescriptor.classConstant(), superClassDescriptor.map( c -> c.classConstant() ), //
+			new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), AttributeSet.of(), new ArrayList<>() );
 	}
 
-	public static ByteCodeType of( int minorVersion, int majorVersion, FlagEnumSet<Modifier> modifierSet, TerminalTypeDescriptor thisClassDescriptor, //
-		Optional<TerminalTypeDescriptor> superClassDescriptor, List<TerminalTypeDescriptor> interfaces, List<ByteCodeField> fields, //
+	public static ByteCodeType of( Version version, FlagEnumSet<Modifier> modifierSet, ClassConstant thisClassConstant, //
+		Optional<ClassConstant> superClassConstant, List<ClassConstant> interfaceConstants, List<ByteCodeField> fields, //
 		List<ByteCodeMethod> methods, AttributeSet attributeSet, Collection<Constant> extraConstants )
 	{
-		return new ByteCodeType( minorVersion, majorVersion, modifierSet, thisClassDescriptor, superClassDescriptor, interfaces, fields, methods, //
+		return new ByteCodeType( version, modifierSet, thisClassConstant, superClassConstant, interfaceConstants, fields, methods, //
 			attributeSet, extraConstants );
 	}
 
-	public final int minorVersion;
-	public final int majorVersion;
+	public final Version version;
 	public final FlagEnumSet<Modifier> modifierSet;
-	public final TerminalTypeDescriptor thisClassDescriptor;
-	public final Optional<TerminalTypeDescriptor> superClassDescriptor;
-	public final List<TerminalTypeDescriptor> interfaces;
+	private final ClassConstant thisClassConstant;
+	private final Optional<ClassConstant> superClassConstant;
+	private final List<ClassConstant> interfaceConstants;
 	public final List<ByteCodeField> fields;
 	public final List<ByteCodeMethod> methods;
 	public final AttributeSet attributeSet;
 	public final Collection<Constant> extraConstants;
 
-	private ByteCodeType( int minorVersion, int majorVersion, FlagEnumSet<Modifier> modifierSet, TerminalTypeDescriptor thisClassDescriptor, //
-		Optional<TerminalTypeDescriptor> superClassDescriptor, List<TerminalTypeDescriptor> interfaces, List<ByteCodeField> fields, //
+	private ByteCodeType( Version version, FlagEnumSet<Modifier> modifierSet, ClassConstant thisClassConstant, //
+		Optional<ClassConstant> superClassConstant, List<ClassConstant> interfaceConstants, List<ByteCodeField> fields, //
 		List<ByteCodeMethod> methods, AttributeSet attributeSet, Collection<Constant> extraConstants )
 	{
-		this.minorVersion = minorVersion;
-		this.majorVersion = majorVersion;
+		this.version = version;
 		this.modifierSet = modifierSet;
-		this.thisClassDescriptor = thisClassDescriptor;
-		this.superClassDescriptor = superClassDescriptor;
-		this.interfaces = interfaces;
+		this.thisClassConstant = thisClassConstant;
+		this.superClassConstant = superClassConstant;
+		this.interfaceConstants = interfaceConstants;
 		this.fields = fields;
 		this.methods = methods;
 		this.attributeSet = attributeSet;
 		this.extraConstants = extraConstants;
 	}
 
+	public ClassConstant classConstant() { return thisClassConstant; }
+	public TerminalTypeDescriptor typeDescriptor() { return TerminalTypeDescriptor.of( thisClassConstant ); }
+	public String typeName() { return typeDescriptor().name(); }
+	public Optional<ClassConstant> superClassConstant() { return superClassConstant; }
+	public Optional<TerminalTypeDescriptor> superTypeDescriptor() { return superClassConstant.map( c -> TerminalTypeDescriptor.of( c ) ); }
+	public Optional<String> superTypeName() { return superTypeDescriptor().map( d -> d.name() ); }
+	public List<ClassConstant> interfaceClassConstants() { return interfaceConstants; }
+	public List<TerminalTypeDescriptor> interfaceClassDescriptors() { return interfaceConstants.stream().map( c -> TerminalTypeDescriptor.of( c ) ).toList(); }
+	public List<String> interfaceTypeNames() { return interfaceConstants.stream().map( c -> TerminalTypeDescriptor.of( c ).name() ).toList(); }
+
 	public Optional<String> tryGetSourceFileName()
 	{
-		return attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tagSourceFile ) //
+		return attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_SourceFile ) //
 			.map( a -> a.asSourceFileAttribute() ) //
-			.map( a -> a.valueConstant().stringValue() );
+			.map( a -> a.value() );
 	}
 
 	public BootstrapMethodsAttribute createOrGetBootstrapMethodsAttribute()
 	{
-		return attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tagBootstrapMethods ) //
+		return attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_BootstrapMethods ) //
 			.map( a -> a.asBootstrapMethodsAttribute() ) //
-			.orElseGet( () ->
-			{
+			.orElseGet( () -> {
 				BootstrapMethodsAttribute bootstrapMethodsAttribute = BootstrapMethodsAttribute.of();
 				attributeSet.addAttribute( bootstrapMethodsAttribute );
 				return bootstrapMethodsAttribute;
@@ -135,17 +143,7 @@ public final class ByteCodeType
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return thisClassDescriptor.name();
-	}
-
-	public ClassDesc descriptor()
-	{
-		return thisClassDescriptor.classDesc;
-	}
-
-	public Optional<ClassDesc> superClassDescriptor()
-	{
-		return superClassDescriptor.map( c -> c.classDesc );
+		return thisClassConstant.typeName();
 	}
 
 	public int findDeclaredMethodByNameAndDescriptor( String name, MethodTypeDesc descriptor )
@@ -162,12 +160,12 @@ public final class ByteCodeType
 
 	public Optional<ByteCodeMethod> getMethodByNameAndDescriptor( String name, MethodTypeDesc descriptor, Function<String,ByteCodeType> byteCodeTypeByName )
 	{
-		for( ByteCodeType byteCodeType = this; ;  )
+		for( ByteCodeType byteCodeType = this; ; )
 		{
 			int index = byteCodeType.findDeclaredMethodByNameAndDescriptor( name, descriptor );
 			if( index != -1 )
 				return Optional.of( byteCodeType.methods.get( index ) );
-			Optional<ByteCodeType> superType = byteCodeType.superClassDescriptor.map( c -> c.name() ).map( byteCodeTypeByName );
+			Optional<ByteCodeType> superType = byteCodeType.superTypeName().map( byteCodeTypeByName );
 			if( superType.isEmpty() )
 				break;
 			byteCodeType = superType.get();

@@ -10,12 +10,13 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L12:    ALOAD_0 0 // {
- │   │       │   │   ├─ [1]         ALOAD_1 1
- │   │       │   │   ├─ [2]         PUTFIELD mikenakis.bytecode.test.model.Class8WithAnonymousClass mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
- │   │       │   │   ├─ [3]         ALOAD_0 0
- │   │       │   │   ├─ [4]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   └─ [5]         RETURN
+ │   │       │   │   ├─ [0] L12: // {
+ │   │       │   │   ├─ [1]         ALOAD_0 0
+ │   │       │   │   ├─ [2]         ALOAD_1 1
+ │   │       │   │   ├─ [3]         PUTFIELD mikenakis.bytecode.test.model.Class8WithAnonymousClass mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
+ │   │       │   │   ├─ [4]         ALOAD_0 0
+ │   │       │   │   ├─ [5]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   └─ [6]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -32,8 +33,9 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 2 entries
- │   │           │   ├─ [0] L15:    ACONST_NULL // return null;
- │   │           │   └─ [1]         ARETURN
+ │   │           │   ├─ [0] L15: // return null;
+ │   │           │   ├─ [1]         ACONST_NULL
+ │   │           │   └─ [2]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -46,8 +48,9 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │       └─ attributes: 2 entries
  │           ├─ [0] CodeAttribute maxStack = 1, maxLocals = 2
  │           │   ├─ instructions: 2 entries
- │           │   │   ├─ [0] L19:    ICONST_0 // return 0;
- │           │   │   └─ [1]         IRETURN
+ │           │   │   ├─ [0] L19: // return 0;
+ │           │   │   ├─ [1]         ICONST_0
+ │           │   │   └─ [2]         IRETURN
  │           │   ├─ exceptionInfos: 0 entries
  │           │   └─ attributes: 2 entries
  │           │       ├─ [0] LineNumberTableAttribute
@@ -61,11 +64,9 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │               └─ parameters: 1 entries
  │                   └─ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
  └─ attributes: 4 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class8WithAnonymousClass.java" )
-     ├─ [1] EnclosingMethodAttribute type = mikenakis.bytecode.test.model.Class8WithAnonymousClass
-     ├─ [2] NestHostAttribute
-     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class8WithAnonymousClass" )
+     ├─ [0] SourceFileAttribute "Class8WithAnonymousClass.java"
+     ├─ [1] EnclosingMethodAttribute enclosingClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass
+     ├─ [2] NestHostAttribute mikenakis.bytecode.test.model.Class8WithAnonymousClass
      └─ [3] InnerClassesAttribute
          └─ innerClasses: 1 entries
-             └─ [0] InnerClass accessFlags = [], innerClass=mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
+             └─ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1

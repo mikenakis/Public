@@ -6,8 +6,6 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ClassDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.util.Optional;
 
 /**
@@ -21,53 +19,22 @@ import java.util.Optional;
  */
 public final class EnclosingMethodAttribute extends KnownAttribute
 {
-	public static EnclosingMethodAttribute of( ClassConstant classConstant, Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant )
+	public static EnclosingMethodAttribute of( ClassConstant enclosingClassConstant, Optional<NameAndDescriptorConstant> enclosingMethodNameAndDescriptorConstant )
 	{
-		return new EnclosingMethodAttribute( classConstant, methodNameAndDescriptorConstant );
+		return new EnclosingMethodAttribute( enclosingClassConstant, enclosingMethodNameAndDescriptorConstant );
 	}
 
-	private final ClassConstant classConstant;
-	private final Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant;
+	public final ClassConstant enclosingClassConstant;
+	public final Optional<NameAndDescriptorConstant> enclosingMethodNameAndDescriptorConstant;
 
-	private EnclosingMethodAttribute( ClassConstant classConstant, Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant )
+	private EnclosingMethodAttribute( ClassConstant enclosingClassConstant, Optional<NameAndDescriptorConstant> enclosingMethodNameAndDescriptorConstant )
 	{
-		super( tagEnclosingMethod );
-		this.classConstant = classConstant;
-		this.methodNameAndDescriptorConstant = methodNameAndDescriptorConstant;
+		super( tag_EnclosingMethod );
+		this.enclosingClassConstant = enclosingClassConstant;
+		this.enclosingMethodNameAndDescriptorConstant = enclosingMethodNameAndDescriptorConstant;
 	}
 
-	public ClassConstant classConstant() { return classConstant; }
-	public Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant() { return methodNameAndDescriptorConstant; }
-
-	public ClassDesc classDescriptor()
-	{
-		return classConstant.classDescriptor();
-	}
-
-	public boolean hasMethod()
-	{
-		return methodNameAndDescriptorConstant.isPresent();
-	}
-
-	public String methodName()
-	{
-		assert hasMethod();
-		return methodNameAndDescriptorConstant.map( c -> c.nameConstant.stringValue() ).orElseThrow();
-	}
-
-	public MethodTypeDesc methodDescriptor()
-	{
-		assert hasMethod();
-		return methodNameAndDescriptorConstant.map( c -> MethodTypeDesc.ofDescriptor( c.descriptorConstant.stringValue() ) ).orElseThrow();
-	}
-
-	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "class = " + classConstant + ", methodNameAndDescriptor = { " + methodNameAndDescriptorConstant + " }";
-	}
+	public String enclosingClassTypeName() { return enclosingClassConstant.typeName(); }
+	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "class = " + enclosingClassConstant + ", methodNameAndDescriptor = { " + enclosingMethodNameAndDescriptorConstant + " }"; }
 }

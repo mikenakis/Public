@@ -16,7 +16,7 @@ public final class ImmediateLoadConstantInstruction extends LoadConstantInstruct
 
 	private ImmediateLoadConstantInstruction( int opCode, int immediateValue )
 	{
-		super( Group.ImmediateLoadConstant );
+		super( groupTag_ImmediateLoadConstant );
 		assert (Helpers.isUnsignedByte( immediateValue ) && opCode == OpCode.BIPUSH) || //
 			(Helpers.isUnsignedShort( immediateValue ) && opCode == OpCode.SIPUSH);
 		this.opCode = opCode;

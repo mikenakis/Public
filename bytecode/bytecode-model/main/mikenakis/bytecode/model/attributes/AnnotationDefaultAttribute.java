@@ -25,7 +25,7 @@ public final class AnnotationDefaultAttribute extends KnownAttribute
 
 	private AnnotationDefaultAttribute( AnnotationValue annotationValue )
 	{
-		super( tagAnnotationDefault );
+		super( tag_AnnotationDefault );
 		this.annotationValue = annotationValue;
 	}
 

@@ -6,13 +6,6 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class BranchInstruction extends Instruction
 {
-	public static BranchInstruction of( int opCode, Instruction targetInstruction )
-	{
-		BranchInstruction branchInstruction = of( opCode );
-		branchInstruction.setTargetInstruction( targetInstruction );
-		return branchInstruction;
-	}
-
 	public static BranchInstruction of( int opCode )
 	{
 		return new BranchInstruction( generalFromSpecialOpcode( opCode ) );
@@ -23,7 +16,7 @@ public final class BranchInstruction extends Instruction
 
 	private BranchInstruction( int opCode )
 	{
-		super( Group.Branch );
+		super( groupTag_Branch );
 		assert opCode == OpCode.GOTO || opCode == OpCode.JSR;
 		this.opCode = opCode;
 	}

@@ -7,28 +7,22 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class MultiANewArrayInstruction extends Instruction
 {
-	public static MultiANewArrayInstruction of( ClassConstant classConstant, int dimensionCount )
+	public static MultiANewArrayInstruction of( ClassConstant targetClassConstant, int dimensionCount )
 	{
-		return new MultiANewArrayInstruction( classConstant, dimensionCount );
+		return new MultiANewArrayInstruction( targetClassConstant, dimensionCount );
 	}
 
-	public final ClassConstant classConstant;
+	public final ClassConstant targetClassConstant;
 	public final int dimensionCount;
 
-	private MultiANewArrayInstruction( ClassConstant classConstant, int dimensionCount )
+	private MultiANewArrayInstruction( ClassConstant targetClassConstant, int dimensionCount )
 	{
-		super( Group.MultiANewArray );
-		this.classConstant = classConstant;
+		super( groupTag_MultiANewArray );
+		this.targetClassConstant = targetClassConstant;
 		this.dimensionCount = dimensionCount;
 	}
 
-	@Deprecated @Override public MultiANewArrayInstruction asMultiANewArrayInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( OpCode.MULTIANEWARRAY );
-	}
+	public String targetTypeName() { return targetClassConstant.typeName(); }
+	@Deprecated @Override public MultiANewArrayInstruction asMultiANewArrayInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( OpCode.MULTIANEWARRAY ) + " " + targetTypeName(); }
 }

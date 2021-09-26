@@ -27,7 +27,7 @@ public final class RuntimeVisibleAnnotationsAttribute extends AnnotationsAttribu
 
 	private RuntimeVisibleAnnotationsAttribute( List<Annotation> annotations )
 	{
-		super( tagRuntimeVisibleAnnotations, annotations );
+		super( tag_RuntimeVisibleAnnotations, annotations );
 	}
 
 	@Deprecated @Override public RuntimeVisibleAnnotationsAttribute asRuntimeVisibleAnnotationsAttribute()

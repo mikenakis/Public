@@ -12,25 +12,33 @@ import java.util.Objects;
  */
 public final class StringConstant extends ValueConstant<String>
 {
-	public static StringConstant of( String value )
+	public static StringConstant of( String value ) //TODO remove
 	{
-		return of( Mutf8Constant.of( value ) );
+		StringConstant stringConstant = new StringConstant();
+		stringConstant.setValueConstant( Mutf8Constant.of( value ) );
+		return stringConstant;
 	}
 
-	public static StringConstant of( Mutf8Constant value )
+	private Mutf8Constant valueConstant;
+
+	public StringConstant()
 	{
-		return new StringConstant( value );
+		super( tag_String );
 	}
 
-	private final Mutf8Constant valueConstant;
-
-	private StringConstant( Mutf8Constant value )
+	public Mutf8Constant getValueConstant()
 	{
-		super( tagString );
-		valueConstant = value;
+		assert valueConstant != null;
+		return valueConstant;
 	}
 
-	public Mutf8Constant valueConstant() { return valueConstant; }
+	public void setValueConstant( Mutf8Constant valueConstant )
+	{
+		assert this.valueConstant == null;
+		assert valueConstant != null;
+		this.valueConstant = valueConstant;
+	}
+
 	public ConstantDesc constantDescriptor() { return valueConstant.stringValue(); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

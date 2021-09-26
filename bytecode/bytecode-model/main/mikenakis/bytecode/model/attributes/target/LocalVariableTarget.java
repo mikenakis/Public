@@ -11,7 +11,7 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 	public LocalVariableTarget( int tag, List<LocalVariableTargetEntry> entries )
 	{
 		super( tag );
-		assert tag == tagTypeInLocalVariableDeclaration || tag == tagTypeInResourceVariableDeclaration;
+		assert tag == tag_LocalVariable || tag == tag_ResourceLocalVariable;
 		this.entries = entries;
 	}
 

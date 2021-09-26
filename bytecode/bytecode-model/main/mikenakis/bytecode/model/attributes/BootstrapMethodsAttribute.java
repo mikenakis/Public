@@ -33,7 +33,7 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 
 	private BootstrapMethodsAttribute( List<BootstrapMethod> bootstrapMethods )
 	{
-		super( tagBootstrapMethods );
+		super( tag_BootstrapMethods );
 		this.bootstrapMethods = bootstrapMethods;
 	}
 
@@ -54,6 +54,7 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 
 	public int getIndexOfBootstrapMethod( BootstrapMethod entry )
 	{
+		assert entry != null;
 		int index = bootstrapMethods.indexOf( entry );
 		if( index == -1 )
 		{

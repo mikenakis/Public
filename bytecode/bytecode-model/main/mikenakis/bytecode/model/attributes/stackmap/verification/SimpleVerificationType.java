@@ -10,7 +10,7 @@ public final class SimpleVerificationType extends VerificationType
 	public SimpleVerificationType( int tag )
 	{
 		super( tag );
-		assert tag == tagTop ||tag == tagInteger || tag == tagFloat || tag == tagDouble || tag == tagLong || tag == tagNull || tag == tagUninitializedThis;
+		assert tag == tag_Top ||tag == tag_Integer || tag == tag_Float || tag == tag_Double || tag == tag_Long || tag == tag_Null || tag == tag_UninitializedThis;
 	}
 
 	@Deprecated @Override public SimpleVerificationType asSimpleVerificationType() { return this; }

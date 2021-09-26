@@ -10,24 +10,27 @@ import java.lang.constant.MethodTypeDesc;
  */
 public final class PlainMethodReferenceConstant extends MethodReferenceConstant
 {
-	public static PlainMethodReferenceConstant of( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public static PlainMethodReferenceConstant of( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		return new PlainMethodReferenceConstant( typeConstant, nameAndDescriptorConstant );
+		PlainMethodReferenceConstant plainMethodReferenceConstant = new PlainMethodReferenceConstant();
+		plainMethodReferenceConstant.setDeclaringTypeConstant( declaringTypeConstant );
+		plainMethodReferenceConstant.setNameAndDescriptorConstant( nameAndDescriptorConstant );
+		return plainMethodReferenceConstant;
 	}
 
-	private PlainMethodReferenceConstant( ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public PlainMethodReferenceConstant()
 	{
-		super( tagMethodReference, typeConstant, nameAndDescriptorConstant );
+		super( tag_MethodReference );
 	}
 
 	// String Customer.name( arguments );
 	//  (1)     (2)     (3)     (1)
 	// 1: nameAndDescriptorConstant.descriptorConstant
-	// 2: typeConstant
+	// 2: declaringTypeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() ); }
-	public ClassDesc owningClassDescriptor() { return typeConstant.classDescriptor(); }
-	public String methodName() { return nameAndDescriptorConstant.nameConstant.stringValue(); }
+	public MethodTypeDesc methodDescriptor() { return MethodTypeDesc.ofDescriptor( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ); }
+	public ClassDesc owningClassDescriptor() { return getDeclaringTypeConstant().classDesc(); }
+	public String methodName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
 
 	@Deprecated @Override public PlainMethodReferenceConstant asPlainMethodReferenceConstant()
 	{

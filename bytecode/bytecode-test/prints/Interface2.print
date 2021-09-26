@@ -17,5 +17,4 @@ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract], thisCl
  │               └─ parameters: 1 entries
  │                   └─ [0] MethodParameter accessFlags = [], name = "d"
  └─ attributes: 1 entries
-     └─ [0] SourceFileAttribute
-         └─ value: Mutf8Constant( "Interface2.java" )
+     └─ [0] SourceFileAttribute "Interface2.java"

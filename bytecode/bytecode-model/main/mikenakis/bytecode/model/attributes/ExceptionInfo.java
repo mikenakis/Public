@@ -33,8 +33,6 @@ public final class ExceptionInfo
 		this.catchTypeConstant = catchTypeConstant;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + (catchTypeConstant.isPresent()? ", catchType = " + catchTypeConstant : "");
-	}
+	public Optional<String> catchTypeName() { return catchTypeConstant.map( c -> c.typeName() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + (catchTypeConstant.isPresent()? ", catchType = " + catchTypeConstant : ""); }
 }

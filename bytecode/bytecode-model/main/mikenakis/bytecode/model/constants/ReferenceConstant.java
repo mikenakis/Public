@@ -12,26 +12,44 @@ import java.util.Objects;
  */
 public abstract class ReferenceConstant extends Constant
 {
-	public final ClassConstant typeConstant;
-	public final NameAndDescriptorConstant nameAndDescriptorConstant;
+	private ClassConstant declaringTypeConstant; //null means it has not been set yet.
+	private NameAndDescriptorConstant nameAndDescriptorConstant; //null means it has not been set yet.
 
-	protected ReferenceConstant( int tag, ClassConstant typeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	protected ReferenceConstant( int tag )
 	{
 		super( tag );
-		assert tag == Constant.tagFieldReference || tag == Constant.tagMethodReference || tag == Constant.tagInterfaceMethodReference;
-		this.typeConstant = typeConstant;
+		assert tag == Constant.tag_FieldReference || tag == Constant.tag_MethodReference || tag == Constant.tag_InterfaceMethodReference;
+	}
+
+	public ClassConstant getDeclaringTypeConstant()
+	{
+		assert declaringTypeConstant != null;
+		return declaringTypeConstant;
+	}
+
+	public void setDeclaringTypeConstant( ClassConstant declaringTypeConstant )
+	{
+		assert this.declaringTypeConstant == null;
+		assert declaringTypeConstant != null;
+		this.declaringTypeConstant = declaringTypeConstant;
+	}
+
+	public NameAndDescriptorConstant getNameAndDescriptorConstant()
+	{
+		assert nameAndDescriptorConstant != null;
+		return nameAndDescriptorConstant;
+	}
+
+	public void setNameAndDescriptorConstant( NameAndDescriptorConstant nameAndDescriptorConstant )
+	{
+		assert this.nameAndDescriptorConstant == null;
+		assert nameAndDescriptorConstant != null;
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public final String toString()
-	{
-		return "type = " + typeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant;
-	}
-
-	@Deprecated @Override public final ReferenceConstant asReferenceConstant()
-	{
-		return this;
-	}
+	public final String declaringTypeName() { return declaringTypeConstant.typeName(); }
+	@ExcludeFromJacocoGeneratedReport @Override public final String toString() { return "declaringType = " + declaringTypeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant; }
+	@Deprecated @Override public final ReferenceConstant asReferenceConstant() { return this; }
 
 	@Override public final boolean equals( Object other )
 	{
@@ -42,7 +60,7 @@ public abstract class ReferenceConstant extends Constant
 
 	public boolean equalsReferenceConstant( ReferenceConstant other )
 	{
-		if( !typeConstant.equalsClassConstant( other.typeConstant ) )
+		if( !declaringTypeConstant.equalsClassConstant( other.declaringTypeConstant ) )
 			return false;
 		if( !nameAndDescriptorConstant.equalsNameAndDescriptorConstant( other.nameAndDescriptorConstant ) )
 			return false;
@@ -51,6 +69,6 @@ public abstract class ReferenceConstant extends Constant
 
 	@Override public final int hashCode()
 	{
-		return Objects.hash( tag, typeConstant, nameAndDescriptorConstant );
+		return Objects.hash( tag, declaringTypeConstant, nameAndDescriptorConstant );
 	}
 }

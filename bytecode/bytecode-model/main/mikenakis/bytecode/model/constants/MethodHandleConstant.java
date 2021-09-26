@@ -49,35 +49,41 @@ public final class MethodHandleConstant extends Constant
 		}
 	}
 
-	public static MethodHandleConstant of( ReferenceKind referenceKind, ReferenceConstant referenceConstant )
-	{
-		return new MethodHandleConstant( referenceKind, referenceConstant );
-	}
-
 	private final ReferenceKind referenceKind;
-	private final ReferenceConstant referenceConstant;
+	private ReferenceConstant referenceConstant; //null means it has not been set yet.
 
-	private MethodHandleConstant( ReferenceKind referenceKind, ReferenceConstant referenceConstant )
+	public MethodHandleConstant( ReferenceKind referenceKind )
 	{
-		super( tagMethodHandle );
-		assert referenceConstant.tag == tagFieldReference || referenceConstant.tag == tagMethodReference || referenceConstant.tag == tagInterfaceMethodReference;
+		super( tag_MethodHandle );
 		this.referenceKind = referenceKind;
-		this.referenceConstant = referenceConstant;
 	}
 
 	public ReferenceKind referenceKind() { return referenceKind; }
-	public ReferenceConstant referenceConstant() { return referenceConstant; }
+
+	public ReferenceConstant getReferenceConstant()
+	{
+		assert referenceConstant != null;
+		return referenceConstant;
+	}
+
+	public void setReferenceConstant( ReferenceConstant referenceConstant )
+	{
+		assert this.referenceConstant == null;
+		assert referenceConstant != null;
+		assert referenceConstant.tag == tag_FieldReference || referenceConstant.tag == tag_MethodReference || referenceConstant.tag == tag_InterfaceMethodReference;
+		this.referenceConstant = referenceConstant;
+	}
 
 	public ConstantDesc constantDescriptor() { return descriptor(); }
 
 	public DirectMethodHandleDesc descriptor()
 	{
-		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.nameAndDescriptorConstant;
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.getNameAndDescriptorConstant();
 		//I do not know why the isInterface parameter is needed, but it does not work otherwise.
 		return MethodHandleDesc.of( DirectMethodHandleDesc.Kind.valueOf( referenceKind.number, referenceKind == ReferenceKind.InvokeInterface ), //
-			referenceConstant.typeConstant.classDescriptor(), //
-			nameAndDescriptorConstant.nameConstant.stringValue(), //
-			nameAndDescriptorConstant.descriptorConstant.stringValue() );
+			referenceConstant.getDeclaringTypeConstant().classDesc(), //
+			nameAndDescriptorConstant.getNameConstant().stringValue(), //
+			nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
@@ -90,17 +96,20 @@ public final class MethodHandleConstant extends Constant
 		return this;
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
-		if( other instanceof MethodHandleConstant methodHandleConstant )
-		{
-			if( referenceKind != methodHandleConstant.referenceKind )
-				return false;
-			if( !referenceConstant.equalsReferenceConstant( methodHandleConstant.referenceConstant ) )
-				return false;
-			return true;
-		}
+		if( other instanceof MethodHandleConstant otherMethodHandleConstant )
+			return equals( otherMethodHandleConstant );
 		return false;
+	}
+
+	public boolean equals( MethodHandleConstant other )
+	{
+		if( referenceKind != other.referenceKind )
+			return false;
+		if( !referenceConstant.equalsReferenceConstant( other.referenceConstant ) )
+			return false;
+		return true;
 	}
 
 	@Override public int hashCode()

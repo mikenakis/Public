@@ -31,7 +31,7 @@ public final class LineNumberTableAttribute extends KnownAttribute
 
 	private LineNumberTableAttribute( List<LineNumberTableEntry> entrys )
 	{
-		super( tagLineNumberTable );
+		super( tag_LineNumberTable );
 		this.entrys = entrys;
 	}
 

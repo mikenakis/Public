@@ -20,23 +20,21 @@ public final class ByteCodeHelpers
 
 	public static String getClassSourceLocation( ByteCodeType byteCodeType )
 	{
-		String typeName = typeNameFromClassDesc( byteCodeType.descriptor() );
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
-		return typeName + "(" + (sourceFileName.orElse( "?" )) + ":" + 1 + ")";
+		return byteCodeType.typeName() + "(" + (sourceFileName.orElse( "?" )) + ":" + 1 + ")";
 	}
 
 	public static String getMethodSourceLocation( ByteCodeType byteCodeType, ByteCodeMethod byteCodeMethod )
 	{
-		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tagCode ) //
+		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_Code ) //
 			.map( a -> a.asCodeAttribute() );
 		Optional<LineNumberTableAttribute> lineNumberTableAttribute = codeAttribute //
-			.flatMap( a -> a.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tagLineNumberTable ) ) //
+			.flatMap( a -> a.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_LineNumberTable ) ) //
 			.map( a -> a.asLineNumberTableAttribute() );
 		int lineNumber = lineNumberTableAttribute.map( a -> a.entrys.get( 0 ).lineNumber() ).orElse( 0 );
-		String typeName = typeNameFromClassDesc( byteCodeType.descriptor() );
 		String methodName = byteCodeMethod.name();
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
-		return typeName + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";
+		return byteCodeType.typeName() + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";
 	}
 
 	public static String typeNameFromClassDesc( ClassDesc classDesc )
@@ -64,5 +62,14 @@ public final class ByteCodeHelpers
 		if( typeName.endsWith( "[]" ) )
 			return false;
 		return true;
+	}
+
+	public static String descriptorStringFromInternalName( String internalName )
+	{
+		if( internalName.startsWith( "[" ) )
+			return internalName;
+		if( !internalName.endsWith( ";" ) )
+			return "L" + internalName + ";";
+		return internalName;
 	}
 }

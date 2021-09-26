@@ -14,7 +14,7 @@ public final class OperandlessLoadConstantInstruction extends LoadConstantInstru
 
 	private OperandlessLoadConstantInstruction( int opCode )
 	{
-		super( Group.OperandlessLoadConstant );
+		super( groupTag_OperandlessLoadConstant );
 		assert OpCode.isImmediateLoadConstant( opCode );
 		this.opCode = opCode;
 	}

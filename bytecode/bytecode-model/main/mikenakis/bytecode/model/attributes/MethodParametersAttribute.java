@@ -5,7 +5,6 @@ import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,7 +32,7 @@ public final class MethodParametersAttribute extends KnownAttribute
 
 	private MethodParametersAttribute( List<MethodParameter> methodParameters )
 	{
-		super( tagMethodParameters );
+		super( tag_MethodParameters );
 		this.methodParameters = methodParameters;
 	}
 

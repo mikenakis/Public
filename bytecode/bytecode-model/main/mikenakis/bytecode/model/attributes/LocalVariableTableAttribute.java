@@ -31,7 +31,7 @@ public final class LocalVariableTableAttribute extends KnownAttribute
 
 	private LocalVariableTableAttribute( List<LocalVariableTableEntry> entrys )
 	{
-		super( tagLocalVariableTable );
+		super( tag_LocalVariableTable );
 		this.entrys = entrys;
 	}
 

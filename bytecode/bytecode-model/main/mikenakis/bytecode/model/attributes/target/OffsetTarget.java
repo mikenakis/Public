@@ -9,8 +9,8 @@ public final class OffsetTarget extends Target
 	public OffsetTarget( int tag, int offset )
 	{
 		super( tag );
-		assert tag == tagTypeInInstanceofExpression || tag == tagTypeInNewExpression || tag == tagTypeInMethodReferenceExpressionUsingNew ||
-			tag == tagTypeInMethodReferenceExpressionUsingIdentifier;
+		assert tag == tag_InstanceOfOffset || tag == tag_NewExpressionOffset || tag == tag_NewMethodOffset ||
+			tag == tag_IdentifierMethodOffset;
 		this.offset = offset;
 	}
 

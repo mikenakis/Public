@@ -26,7 +26,7 @@ public final class SyntheticAttribute extends KnownAttribute
 
 	private SyntheticAttribute()
 	{
-		super( tagSynthetic );
+		super( tag_Synthetic );
 	}
 
 	@Deprecated @Override public SyntheticAttribute asSyntheticAttribute()

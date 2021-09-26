@@ -9,10 +9,8 @@ ByteCodeType version = 60.0, accessFlags = [interface, abstract], thisClass = mi
  │               └─ parameters: 1 entries
  │                   └─ [0] MethodParameter accessFlags = [], name = "s"
  └─ attributes: 3 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class4ExtendingClass3.java" )
-     ├─ [1] NestHostAttribute
-     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class4ExtendingClass3" )
+     ├─ [0] SourceFileAttribute "Class4ExtendingClass3.java"
+     ├─ [1] NestHostAttribute mikenakis.bytecode.test.model.Class4ExtendingClass3
      └─ [2] InnerClassesAttribute
          └─ innerClasses: 1 entries
-             └─ [0] InnerClass outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, accessFlags = [static, interface, abstract], innerClass=mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, innerName = Mutf8Constant( "Foo" )
+             └─ [0] InnerClass accessFlags = [static, interface, abstract], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo

@@ -16,7 +16,7 @@ public final class InvokeDynamicInstruction extends Instruction
 
 	private InvokeDynamicInstruction( InvokeDynamicConstant invokeDynamicConstant )
 	{
-		super( Group.InvokeDynamic );
+		super( groupTag_InvokeDynamic );
 		this.invokeDynamicConstant = invokeDynamicConstant;
 	}
 

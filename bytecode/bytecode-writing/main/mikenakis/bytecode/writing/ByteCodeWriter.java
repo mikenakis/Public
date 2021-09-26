@@ -43,14 +43,17 @@ import mikenakis.bytecode.model.attributes.MethodParametersAttribute;
 import mikenakis.bytecode.model.attributes.NestHostAttribute;
 import mikenakis.bytecode.model.attributes.NestMembersAttribute;
 import mikenakis.bytecode.model.attributes.ParameterAnnotationSet;
+import mikenakis.bytecode.model.attributes.SignatureAttribute;
+import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.attributes.code.instructions.BranchInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ImmediateLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
@@ -59,6 +62,7 @@ import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInst
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchEntry;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
@@ -101,7 +105,6 @@ import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 
 import java.util.Collection;
@@ -114,36 +117,54 @@ public class ByteCodeWriter
 	{
 		BufferWriter bufferWriter = new BufferWriter();
 		bufferWriter.writeInt( ByteCodeType.MAGIC );
-		bufferWriter.writeUnsignedShort( byteCodeType.minorVersion );
-		bufferWriter.writeUnsignedShort( byteCodeType.majorVersion );
+		bufferWriter.writeUnsignedShort( byteCodeType.version.minor() );
+		bufferWriter.writeUnsignedShort( byteCodeType.version.major() );
 
 		ConstantPool constantPool = new ConstantPool();
-		ClassConstant thisClassConstant = ClassConstant.of( byteCodeType.thisClassDescriptor.classDesc );
-		constantPool.internClassConstant( thisClassConstant );
-		Optional<ClassConstant> superClassConstant = byteCodeType.superClassDescriptor.map( c -> ClassConstant.of( c.classDesc ) );
-		superClassConstant.ifPresent( c -> constantPool.internClassConstant( c ) );
-		for( Constant extraConstant : byteCodeType.extraConstants )
-			constantPool.internExtraConstant( extraConstant );
-		for( TerminalTypeDescriptor interfaceDescriptor : byteCodeType.interfaces )
-			constantPool.internTerminalTypeDescriptor( interfaceDescriptor );
+		constantPool.internClassConstant( byteCodeType.classConstant() );
+		byteCodeType.superClassConstant().ifPresent( c -> constantPool.internClassConstant( c ) );
+		for( ClassConstant classConstant : byteCodeType.interfaceClassConstants() )
+			constantPool.internClassConstant( classConstant );
 		for( ByteCodeField field : byteCodeType.fields )
 			constantPool.internField( field );
+
+		BootstrapPool bootstrapPool = new BootstrapPool();
 		for( ByteCodeMethod method : byteCodeType.methods )
+		{
 			constantPool.internMethod( method );
+			method.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_Code ) //
+				.map( attribute -> attribute.asCodeAttribute() ) //
+				.ifPresent( codeAttribute -> //
+				{
+					for( Instruction instruction : codeAttribute.instructions().all() )
+						if( instruction.groupTag == Instruction.groupTag_InvokeDynamic )
+							bootstrapPool.intern( instruction.asInvokeDynamicInstruction().invokeDynamicConstant.getBootstrapMethod() );
+				} );
+		}
+		if( !bootstrapPool.bootstrapMethods().isEmpty() )
+		{
+			BootstrapMethodsAttribute bootstrapMethodsAttribute = BootstrapMethodsAttribute.of();
+			bootstrapMethodsAttribute.bootstrapMethods.addAll( bootstrapPool.bootstrapMethods() ); // TODO perhaps replace the bootstrapPool with the bootstrapMethodsAttribute
+			byteCodeType.attributeSet.addOrReplaceAttribute( bootstrapMethodsAttribute );
+		}
+
 		constantPool.internAttributeSet( byteCodeType.attributeSet );
+
+		for( Constant extraConstant : byteCodeType.extraConstants )
+			constantPool.internExtraConstant( extraConstant );
+
+		//TODO: optimize the constant pool by moving the constants most frequently used by the IndirectLoadConstantInstruction to the first 256 entries!
 
 		bufferWriter.writeUnsignedShort( constantPool.size() );
 		for( Constant constant : constantPool.constants() )
-			writeConstant( constantPool, bufferWriter, constant );
+			writeConstant( constantPool, bootstrapPool, bufferWriter, constant );
 		bufferWriter.writeUnsignedShort( byteCodeType.modifierSet.getBits() );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( thisClassConstant ) );
-		bufferWriter.writeUnsignedShort( superClassConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
-		bufferWriter.writeUnsignedShort( byteCodeType.interfaces.size() );
-		for( TerminalTypeDescriptor interfaceDescriptor : byteCodeType.interfaces )
-		{
-			ClassConstant interfaceClassConstant = ClassConstant.of( interfaceDescriptor.classDesc );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeType.classConstant() ) );
+		bufferWriter.writeUnsignedShort( byteCodeType.superClassConstant().map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
+		List<ClassConstant> interfaceClassConstants = byteCodeType.interfaceClassConstants();
+		bufferWriter.writeUnsignedShort( interfaceClassConstants.size() );
+		for( ClassConstant interfaceClassConstant : interfaceClassConstants )
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceClassConstant ) );
-		}
 		bufferWriter.writeUnsignedShort( byteCodeType.fields.size() );
 		for( ByteCodeField field : byteCodeType.fields )
 		{
@@ -164,25 +185,25 @@ public class ByteCodeWriter
 		return bufferWriter.toBytes();
 	}
 
-	private static void writeConstant( ConstantPool constantPool, BufferWriter bufferWriter, Constant constant )
+	private static void writeConstant( ConstantPool constantPool, BootstrapPool bootstrapPool, BufferWriter bufferWriter, Constant constant )
 	{
 		bufferWriter.writeUnsignedByte( constant.tag );
 		switch( constant.tag )
 		{
-			case Constant.tagMutf8 -> writeMutf8Constant( bufferWriter, constant.asMutf8Constant() );
-			case Constant.tagInteger -> writeIntegerConstant( bufferWriter, constant.asIntegerConstant() );
-			case Constant.tagFloat -> writeFloatConstant( bufferWriter, constant.asFloatConstant() );
-			case Constant.tagLong -> writeLongConstant( bufferWriter, constant.asLongConstant() );
-			case Constant.tagDouble -> writeDoubleConstant( bufferWriter, constant.asDoubleConstant() );
-			case Constant.tagClass -> writeClassConstant( constantPool, bufferWriter, constant.asClassConstant() );
-			case Constant.tagString -> writeStringConstant( constantPool, bufferWriter, constant.asStringConstant() );
-			case Constant.tagFieldReference -> writeFieldReferenceConstant( constantPool, bufferWriter, constant.asFieldReferenceConstant() );
-			case Constant.tagMethodReference -> writeMethodReferenceConstant( constantPool, bufferWriter, constant.asMethodReferenceConstant() );
-			case Constant.tagInterfaceMethodReference -> writeInterfaceMethodReferenceConstant( constantPool, bufferWriter, constant.asInterfaceMethodReferenceConstant() );
-			case Constant.tagNameAndDescriptor -> writeNameAndDescriptorConstant( constantPool, bufferWriter, constant.asNameAndDescriptorConstant() );
-			case Constant.tagMethodHandle -> writeMethodHandleConstant( constantPool, bufferWriter, constant.asMethodHandleConstant() );
-			case Constant.tagMethodType -> writeMethodTypeConstant( constantPool, bufferWriter, constant.asMethodTypeConstant() );
-			case Constant.tagInvokeDynamic -> writeInvokeDynamicConstant( constantPool, bufferWriter, constant.asInvokeDynamicConstant() );
+			case Constant.tag_Mutf8 -> writeMutf8Constant( bufferWriter, constant.asMutf8Constant() );
+			case Constant.tag_Integer -> writeIntegerConstant( bufferWriter, constant.asIntegerConstant() );
+			case Constant.tag_Float -> writeFloatConstant( bufferWriter, constant.asFloatConstant() );
+			case Constant.tag_Long -> writeLongConstant( bufferWriter, constant.asLongConstant() );
+			case Constant.tag_Double -> writeDoubleConstant( bufferWriter, constant.asDoubleConstant() );
+			case Constant.tag_Class -> writeClassConstant( constantPool, bufferWriter, constant.asClassConstant() );
+			case Constant.tag_String -> writeStringConstant( constantPool, bufferWriter, constant.asStringConstant() );
+			case Constant.tag_FieldReference -> writeFieldReferenceConstant( constantPool, bufferWriter, constant.asFieldReferenceConstant() );
+			case Constant.tag_MethodReference -> writeMethodReferenceConstant( constantPool, bufferWriter, constant.asMethodReferenceConstant() );
+			case Constant.tag_InterfaceMethodReference -> writeInterfaceMethodReferenceConstant( constantPool, bufferWriter, constant.asInterfaceMethodReferenceConstant() );
+			case Constant.tag_NameAndDescriptor -> writeNameAndDescriptorConstant( constantPool, bufferWriter, constant.asNameAndDescriptorConstant() );
+			case Constant.tag_MethodHandle -> writeMethodHandleConstant( constantPool, bufferWriter, constant.asMethodHandleConstant() );
+			case Constant.tag_MethodType -> writeMethodTypeConstant( constantPool, bufferWriter, constant.asMethodTypeConstant() );
+			case Constant.tag_InvokeDynamic -> writeInvokeDynamicConstant( constantPool, bootstrapPool, bufferWriter, constant.asInvokeDynamicConstant() );
 			default -> throw new AssertionError( constant );
 		}
 	}
@@ -216,53 +237,54 @@ public class ByteCodeWriter
 
 	private static void writeClassConstant( ConstantPool constantPool, BufferWriter bufferWriter, ClassConstant classConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( classConstant.nameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( classConstant.getNameConstant() ) );
 	}
 
 	private static void writeStringConstant( ConstantPool constantPool, BufferWriter bufferWriter, StringConstant stringConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( stringConstant.valueConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( stringConstant.getValueConstant() ) );
 	}
 
 	private static void writeFieldReferenceConstant( ConstantPool constantPool, BufferWriter bufferWriter, FieldReferenceConstant fieldReferenceConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.typeConstant ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.nameAndDescriptorConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.getDeclaringTypeConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( fieldReferenceConstant.getNameAndDescriptorConstant() ) );
 	}
 
 	private static void writeMethodReferenceConstant( ConstantPool constantPool, BufferWriter bufferWriter, MethodReferenceConstant methodReferenceConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.typeConstant ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.nameAndDescriptorConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.getDeclaringTypeConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.getNameAndDescriptorConstant() ) );
 	}
 
 	private static void writeInterfaceMethodReferenceConstant( ConstantPool constantPool, BufferWriter bufferWriter, InterfaceMethodReferenceConstant interfaceMethodReferenceConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.typeConstant ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.nameAndDescriptorConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.getDeclaringTypeConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.getNameAndDescriptorConstant() ) );
 	}
 
 	private static void writeNameAndDescriptorConstant( ConstantPool constantPool, BufferWriter bufferWriter, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.nameConstant ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.descriptorConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.getNameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( nameAndDescriptorConstant.getDescriptorConstant() ) );
 	}
 
 	private static void writeMethodHandleConstant( ConstantPool constantPool, BufferWriter bufferWriter, MethodHandleConstant methodHandleConstant )
 	{
 		bufferWriter.writeUnsignedByte( methodHandleConstant.referenceKind().number );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodHandleConstant.referenceConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodHandleConstant.getReferenceConstant() ) );
 	}
 
 	private static void writeMethodTypeConstant( ConstantPool constantPool, BufferWriter bufferWriter, MethodTypeConstant methodTypeConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodTypeConstant.descriptorConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodTypeConstant.getDescriptorConstant() ) );
 	}
 
-	private static void writeInvokeDynamicConstant( ConstantPool constantPool, BufferWriter bufferWriter, InvokeDynamicConstant invokeDynamicConstant )
+	private static void writeInvokeDynamicConstant( ConstantPool constantPool, BootstrapPool bootstrapPool, BufferWriter bufferWriter, InvokeDynamicConstant invokeDynamicConstant )
 	{
-		bufferWriter.writeUnsignedShort( invokeDynamicConstant.bootstrapMethodIndex() );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( invokeDynamicConstant.nameAndDescriptorConstant() ) );
+		int bootstrapMethodIndex = bootstrapPool.getIndex( invokeDynamicConstant.getBootstrapMethod() );
+		bufferWriter.writeUnsignedShort( bootstrapMethodIndex );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( invokeDynamicConstant.getNameAndDescriptorConstant() ) );
 	}
 
 	private static void writeAttribute( ConstantPool constantPool, Attribute attribute, BufferWriter bufferWriter, Optional<LocationMap> locationMap )
@@ -272,30 +294,30 @@ public class ByteCodeWriter
 			KnownAttribute knownAttribute = attribute.asKnownAttribute();
 			switch( knownAttribute.tag )
 			{
-				case KnownAttribute.tagAnnotationDefault -> writeAnnotationDefaultAttribute( constantPool, bufferWriter, knownAttribute.asAnnotationDefaultAttribute() );
-				case KnownAttribute.tagBootstrapMethods -> writeBootstrapMethodsAttribute( constantPool, bufferWriter, knownAttribute.asBootstrapMethodsAttribute() );
-				case KnownAttribute.tagCode -> writeCodeAttribute( constantPool, bufferWriter, knownAttribute.asCodeAttribute() );
-				case KnownAttribute.tagConstantValue -> writeConstantValueAttribute( constantPool, bufferWriter, knownAttribute.asConstantValueAttribute() );
-				case KnownAttribute.tagDeprecated -> writeDeprecatedAttribute( knownAttribute.asDeprecatedAttribute() );
-				case KnownAttribute.tagEnclosingMethod -> writeEnclosingMethodAttribute( constantPool, bufferWriter, knownAttribute.asEnclosingMethodAttribute() );
-				case KnownAttribute.tagExceptions -> writeExceptionsAttribute( constantPool, bufferWriter, knownAttribute.asExceptionsAttribute() );
-				case KnownAttribute.tagInnerClasses -> writeInnerClassesAttribute( constantPool, bufferWriter, knownAttribute.asInnerClassesAttribute() );
-				case KnownAttribute.tagLineNumberTable -> writeLineNumberTableAttribute( bufferWriter, locationMap, knownAttribute.asLineNumberTableAttribute() );
-				case KnownAttribute.tagLocalVariableTable -> writeLocalVariableTableAttribute( constantPool, bufferWriter, locationMap.orElseThrow(), knownAttribute.asLocalVariableTableAttribute() );
-				case KnownAttribute.tagLocalVariableTypeTable -> writeLocalVariableTypeTableAttribute( constantPool, bufferWriter, locationMap.orElseThrow(), knownAttribute.asLocalVariableTypeTableAttribute() );
-				case KnownAttribute.tagMethodParameters -> writeMethodParametersAttribute( constantPool, bufferWriter, knownAttribute.asMethodParametersAttribute() );
-				case KnownAttribute.tagNestHost -> writeNestHostAttribute( constantPool, bufferWriter, knownAttribute.asNestHostAttribute() );
-				case KnownAttribute.tagNestMembers -> writeNestMembersAttribute( constantPool, bufferWriter, knownAttribute.asNestMembersAttribute() );
-				case KnownAttribute.tagRuntimeInvisibleAnnotations -> writeAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleAnnotationsAttribute() );
-				case KnownAttribute.tagRuntimeInvisibleParameterAnnotations -> writeParameterAnnotationSets( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute().parameterAnnotationSets() );
-				case KnownAttribute.tagRuntimeInvisibleTypeAnnotations -> writeTypeAnnotations( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute().typeAnnotations );
-				case KnownAttribute.tagRuntimeVisibleAnnotations -> writeAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleAnnotationsAttribute() );
-				case KnownAttribute.tagRuntimeVisibleParameterAnnotations -> writeParameterAnnotationSets( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute().parameterAnnotationSets() );
-				case KnownAttribute.tagRuntimeVisibleTypeAnnotations -> writeTypeAnnotations( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute().typeAnnotations );
-				case KnownAttribute.tagSignature -> bufferWriter.writeUnsignedShort( constantPool.getIndex( knownAttribute.asSignatureAttribute().signatureConstant() ) );
-				case KnownAttribute.tagSourceFile -> bufferWriter.writeUnsignedShort( constantPool.getIndex( knownAttribute.asSourceFileAttribute().valueConstant() ) );
-				case KnownAttribute.tagStackMapTable -> writeStackMapTableAttribute( constantPool, bufferWriter, locationMap.orElseThrow(), knownAttribute.asStackMapTableAttribute() );
-				case KnownAttribute.tagSynthetic -> writeSyntheticAttribute( knownAttribute.asSyntheticAttribute() );
+				case KnownAttribute.tag_AnnotationDefault -> writeAnnotationDefaultAttribute( constantPool, bufferWriter, knownAttribute.asAnnotationDefaultAttribute() );
+				case KnownAttribute.tag_BootstrapMethods -> writeBootstrapMethodsAttribute( constantPool, bufferWriter, knownAttribute.asBootstrapMethodsAttribute() );
+				case KnownAttribute.tag_Code -> writeCodeAttribute( constantPool, bufferWriter, knownAttribute.asCodeAttribute() );
+				case KnownAttribute.tag_ConstantValue -> writeConstantValueAttribute( constantPool, bufferWriter, knownAttribute.asConstantValueAttribute() );
+				case KnownAttribute.tag_Deprecated -> writeDeprecatedAttribute( knownAttribute.asDeprecatedAttribute() );
+				case KnownAttribute.tag_EnclosingMethod -> writeEnclosingMethodAttribute( constantPool, bufferWriter, knownAttribute.asEnclosingMethodAttribute() );
+				case KnownAttribute.tag_Exceptions -> writeExceptionsAttribute( constantPool, bufferWriter, knownAttribute.asExceptionsAttribute() );
+				case KnownAttribute.tag_InnerClasses -> writeInnerClassesAttribute( constantPool, bufferWriter, knownAttribute.asInnerClassesAttribute() );
+				case KnownAttribute.tag_LineNumberTable -> writeLineNumberTableAttribute( bufferWriter, locationMap, knownAttribute.asLineNumberTableAttribute() );
+				case KnownAttribute.tag_LocalVariableTable -> writeLocalVariableTableAttribute( constantPool, bufferWriter, locationMap.orElseThrow(), knownAttribute.asLocalVariableTableAttribute() );
+				case KnownAttribute.tag_LocalVariableTypeTable -> writeLocalVariableTypeTableAttribute( constantPool, bufferWriter, locationMap.orElseThrow(), knownAttribute.asLocalVariableTypeTableAttribute() );
+				case KnownAttribute.tag_MethodParameters -> writeMethodParametersAttribute( constantPool, bufferWriter, knownAttribute.asMethodParametersAttribute() );
+				case KnownAttribute.tag_NestHost -> writeNestHostAttribute( constantPool, bufferWriter, knownAttribute.asNestHostAttribute() );
+				case KnownAttribute.tag_NestMembers -> writeNestMembersAttribute( constantPool, bufferWriter, knownAttribute.asNestMembersAttribute() );
+				case KnownAttribute.tag_RuntimeInvisibleAnnotations -> writeAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleAnnotationsAttribute() );
+				case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> writeParameterAnnotationSets( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute().parameterAnnotationSets() );
+				case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> writeTypeAnnotations( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute().typeAnnotations );
+				case KnownAttribute.tag_RuntimeVisibleAnnotations -> writeAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleAnnotationsAttribute() );
+				case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> writeParameterAnnotationSets( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute().parameterAnnotationSets() );
+				case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> writeTypeAnnotations( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute().typeAnnotations );
+				case KnownAttribute.tag_Signature -> writeSignatureAttribute( constantPool, bufferWriter, knownAttribute.asSignatureAttribute() );
+				case KnownAttribute.tag_SourceFile -> writeSourceFileAttribute( constantPool, bufferWriter, knownAttribute.asSourceFileAttribute() );
+				case KnownAttribute.tag_StackMapTable -> writeStackMapTableAttribute( constantPool, bufferWriter, locationMap.orElseThrow(), knownAttribute.asStackMapTableAttribute() );
+				case KnownAttribute.tag_Synthetic -> writeSyntheticAttribute( knownAttribute.asSyntheticAttribute() );
 				default -> throw new InvalidKnownAttributeTagException( knownAttribute.tag );
 			}
 		}
@@ -304,6 +326,16 @@ public class ByteCodeWriter
 			UnknownAttribute unknownAttribute = attribute.asUnknownAttribute();
 			bufferWriter.writeBuffer( unknownAttribute.buffer() );
 		}
+	}
+
+	private static void writeSourceFileAttribute( ConstantPool constantPool, BufferWriter bufferWriter, SourceFileAttribute sourceFileAttribute )
+	{
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( sourceFileAttribute.valueConstant ) );
+	}
+
+	private static void writeSignatureAttribute( ConstantPool constantPool, BufferWriter bufferWriter, SignatureAttribute signatureAttribute )
+	{
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( signatureAttribute.signatureConstant ) );
 	}
 
 	private static void writeAnnotationsAttribute( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationsAttribute annotationsAttribute )
@@ -358,16 +390,15 @@ public class ByteCodeWriter
 
 	private static void writeEnclosingMethodAttribute( ConstantPool constantPool, BufferWriter bufferWriter, EnclosingMethodAttribute enclosingMethodAttribute )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( enclosingMethodAttribute.classConstant() ) );
-		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = enclosingMethodAttribute.methodNameAndDescriptorConstant();
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( enclosingMethodAttribute.enclosingClassConstant ) );
+		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = enclosingMethodAttribute.enclosingMethodNameAndDescriptorConstant;
 		bufferWriter.writeUnsignedShort( methodNameAndDescriptorConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
 	}
 
 	private static void writeExceptionsAttribute( ConstantPool constantPool, BufferWriter bufferWriter, ExceptionsAttribute exceptionsAttribute )
 	{
-		List<ClassConstant> exceptionClassConstants = exceptionsAttribute.exceptionClassConstants();
-		bufferWriter.writeUnsignedShort( exceptionClassConstants.size() );
-		for( ClassConstant exceptionClassConstant : exceptionClassConstants )
+		bufferWriter.writeUnsignedShort( exceptionsAttribute.exceptionClassConstants.size() );
+		for( ClassConstant exceptionClassConstant : exceptionsAttribute.exceptionClassConstants )
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( exceptionClassConstant ) );
 	}
 
@@ -377,10 +408,10 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( innerClasses.size() );
 		for( InnerClass innerClass : innerClasses )
 		{
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( innerClass.innerClassConstant() ) );
-			bufferWriter.writeUnsignedShort( innerClass.outerClassConstant().map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
-			bufferWriter.writeUnsignedShort( innerClass.innerNameConstant().map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
-			bufferWriter.writeUnsignedShort( innerClass.modifierSet().getBits() );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( innerClass.innerClassConstant ) );
+			bufferWriter.writeUnsignedShort( innerClass.outerClassConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
+			bufferWriter.writeUnsignedShort( innerClass.innerNameConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
+			bufferWriter.writeUnsignedShort( innerClass.modifierSet.getBits() );
 		}
 	}
 
@@ -412,9 +443,8 @@ public class ByteCodeWriter
 
 	private static void writeNestMembersAttribute( ConstantPool constantPool, BufferWriter bufferWriter, NestMembersAttribute nestMembersAttribute )
 	{
-		List<ClassConstant> memberClassConstants = nestMembersAttribute.memberClassConstants;
-		bufferWriter.writeUnsignedShort( memberClassConstants.size() );
-		for( ClassConstant memberClassConstant : memberClassConstants )
+		bufferWriter.writeUnsignedShort( nestMembersAttribute.memberClassConstants.size() );
+		for( ClassConstant memberClassConstant : nestMembersAttribute.memberClassConstants )
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( memberClassConstant ) );
 	}
 
@@ -543,9 +573,9 @@ public class ByteCodeWriter
 		bufferWriter.writeInt( bytes.length );
 		bufferWriter.writeBytes( bytes );
 
-		List<ExceptionInfo> exceptionInfos = codeAttribute.exceptionInfos();
+		List<ExceptionInfo> exceptionInfos = codeAttribute.exceptionInfos;
 		bufferWriter.writeUnsignedShort( exceptionInfos.size() );
-		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos() )
+		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos )
 		{
 			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.startInstruction ) );
 			bufferWriter.writeUnsignedShort( locationMap.getLocation( exceptionInfo.endInstruction ) );
@@ -572,38 +602,18 @@ public class ByteCodeWriter
 			bufferWriter.writeUnsignedByte( target.tag );
 			switch( target.tag )
 			{
-				case Target.tagTypeParameterDeclarationOfGenericClassOrInterface, //
-					Target.tagTypeParameterDeclarationOfGenericMethodOrConstructor -> //
-					writeTypeParameterTarget( bufferWriter, target.asTypeParameterTarget() );
-				case Target.tagTypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration -> //
-					writeSupertypeTarget( bufferWriter, target.asSupertypeTarget() );
-				case Target.tagTypeInBoundOfTypeParameterDeclarationOfGenericClassOrInterface, //
-					Target.tagTypeInBoundOfTypeParameterDeclarationOfGenericMethodOrConstructor -> //
-					writeTypeParameterBoundTarget( bufferWriter, target.asTypeParameterBoundTarget() );
-				case Target.tagTypeInFieldDeclaration, //
-					Target.tagReturnTypeOfMethodOrTypeOfNewlyConstructedObject, //
-					Target.tagReceiverTypeOfMethodOrConstructor -> //
-					writeEmptyTarget( target.asEmptyTarget() );
-				case Target.tagTypeInFormalParameterDeclarationOfMethodConstructorOrLambdaExpression -> //
-					writeFormalParameterTarget( bufferWriter, target.asFormalParameterTarget() );
-				case Target.tagTypeInThrowsClauseOfMethodOrConstructor -> //
-					writeThrowsTarget( bufferWriter, target.asThrowsTarget() );
-				case Target.tagTypeInLocalVariableDeclaration, //
-					Target.tagTypeInResourceVariableDeclaration -> //
-					writeLocalVariableTarget( bufferWriter, target.asLocalVariableTarget() );
-				case Target.tagTypeInExceptionParameterDeclaration -> //
-					writeCatchTarget( bufferWriter, target.asCatchTarget() );
-				case Target.tagTypeInInstanceofExpression, //
-					Target.tagTypeInNewExpression, //
-					Target.tagTypeInMethodReferenceExpressionUsingNew, //
-					Target.tagTypeInMethodReferenceExpressionUsingIdentifier -> //
+				case Target.tag_ClassTypeParameter, Target.tag_MethodTypeParameter -> writeTypeParameterTarget( bufferWriter, target.asTypeParameterTarget() );
+				case Target.tag_Supertype -> writeSupertypeTarget( bufferWriter, target.asSupertypeTarget() );
+				case Target.tag_ClassTypeBound, Target.tag_MethodTypeBound -> writeTypeParameterBoundTarget( bufferWriter, target.asTypeParameterBoundTarget() );
+				case Target.tag_FieldType, Target.tag_ReturnType, Target.tag_ReceiverType -> writeEmptyTarget( target.asEmptyTarget() );
+				case Target.tag_FormalParameter -> writeFormalParameterTarget( bufferWriter, target.asFormalParameterTarget() );
+				case Target.tag_Throws -> writeThrowsTarget( bufferWriter, target.asThrowsTarget() );
+				case Target.tag_LocalVariable, Target.tag_ResourceLocalVariable -> writeLocalVariableTarget( bufferWriter, target.asLocalVariableTarget() );
+				case Target.tag_Catch -> writeCatchTarget( bufferWriter, target.asCatchTarget() );
+				case Target.tag_InstanceOfOffset, Target.tag_NewExpressionOffset, Target.tag_NewMethodOffset, Target.tag_IdentifierMethodOffset -> //
 					writeOffsetTarget( bufferWriter, target.asOffsetTarget() );
-				case Target.tagTypeInCastExpression, //
-					Target.tagTypeArgumentForGenericConstructorInNewExpressionOrExplicitConstructorInvocationStatement, //
-					Target.tagTypeArgumentForGenericMethodInMethodInvocationExpression, //
-					Target.tagTypeArgumentForGenericConstructorInMethodReferenceExpressionUsingNew, //
-					Target.tagTypeArgumentForGenericMethodInMethodReferenceExpressionUsingIdentifier -> //
-					writeTypeArgumentTarget( bufferWriter, target.asTypeArgumentTarget() );
+				case Target.tag_CastArgument, Target.tag_ConstructorArgument, Target.tag_MethodArgument, Target.tag_NewMethodArgument, //
+					Target.tag_IdentifierMethodArgument -> writeTypeArgumentTarget( bufferWriter, target.asTypeArgumentTarget() );
 				default -> throw new AssertionError( target );
 			}
 			List<TypePathEntry> entries = typeAnnotation.typePath.entries();
@@ -729,23 +739,25 @@ public class ByteCodeWriter
 
 	private static void writeInstruction( Instruction instruction, InstructionWriter instructionWriter )
 	{
-		switch( instruction.group )
+		switch( instruction.groupTag )
 		{
-			case Branch -> writeBranchInstruction( instructionWriter, instruction.asBranchInstruction() );
-			case ConditionalBranch -> writeConditionalBranchInstruction( instructionWriter, instruction.asConditionalBranchInstruction() );
-			case ConstantReferencing -> writeConstantReferencingInstruction( instructionWriter, instruction.asConstantReferencingInstruction() );
-			case IInc -> writeIIncInstruction( instructionWriter, instruction.asIIncInstruction() );
-			case ImmediateLoadConstant -> writeImmediateLoadConstantInstruction( instructionWriter, instruction.asImmediateLoadConstantInstruction() );
-			case IndirectLoadConstant -> writeIndirectLoadConstantInstruction( instructionWriter, instruction.asIndirectLoadConstantInstruction() );
-			case InvokeDynamic -> writeInvokeDynamicInstruction( instructionWriter, instruction.asInvokeDynamicInstruction() );
-			case InvokeInterface -> writeInvokeInterfaceInstruction( instructionWriter, instruction.asInvokeInterfaceInstruction() );
-			case LocalVariable -> writeLocalVariableInstruction( instructionWriter, instruction.asLocalVariableInstruction() );
-			case LookupSwitch -> writeLookupSwitchInstruction( instructionWriter, instruction.asLookupSwitchInstruction() );
-			case MultiANewArray -> writeMultiANewArrayInstruction( instructionWriter, instruction.asMultiANewArrayInstruction() );
-			case NewPrimitiveArray -> writeNewPrimitiveArrayInstruction( instructionWriter, instruction.asNewPrimitiveArrayInstruction() );
-			case Operandless -> writeOperandlessInstruction( instructionWriter, instruction.asOperandlessInstruction() );
-			case OperandlessLoadConstant -> writeOperandlessLoadConstantInstruction( instructionWriter, instruction.asOperandlessLoadConstantInstruction() );
-			case TableSwitch -> writeTableSwitchInstruction( instructionWriter, instruction.asTableSwitchInstruction() );
+			case Instruction.groupTag_Branch -> writeBranchInstruction( instructionWriter, instruction.asBranchInstruction() );
+			case Instruction.groupTag_ConditionalBranch -> writeConditionalBranchInstruction( instructionWriter, instruction.asConditionalBranchInstruction() );
+			case Instruction.groupTag_ClassConstantReferencing -> writeClassConstantReferencingInstruction( instructionWriter, instruction.asClassConstantReferencingInstruction() );
+			case Instruction.groupTag_FieldConstantReferencing -> writeFieldConstantReferencingInstruction( instructionWriter, instruction.asFieldConstantReferencingInstruction() );
+			case Instruction.groupTag_IInc -> writeIIncInstruction( instructionWriter, instruction.asIIncInstruction() );
+			case Instruction.groupTag_ImmediateLoadConstant -> writeImmediateLoadConstantInstruction( instructionWriter, instruction.asImmediateLoadConstantInstruction() );
+			case Instruction.groupTag_IndirectLoadConstant -> writeIndirectLoadConstantInstruction( instructionWriter, instruction.asIndirectLoadConstantInstruction() );
+			case Instruction.groupTag_InvokeDynamic -> writeInvokeDynamicInstruction( instructionWriter, instruction.asInvokeDynamicInstruction() );
+			case Instruction.groupTag_InvokeInterface -> writeInvokeInterfaceInstruction( instructionWriter, instruction.asInvokeInterfaceInstruction() );
+			case Instruction.groupTag_LocalVariable -> writeLocalVariableInstruction( instructionWriter, instruction.asLocalVariableInstruction() );
+			case Instruction.groupTag_LookupSwitch -> writeLookupSwitchInstruction( instructionWriter, instruction.asLookupSwitchInstruction() );
+			case Instruction.groupTag_MethodConstantReferencing -> writeMethodConstantReferencingInstruction( instructionWriter, instruction.asMethodConstantReferencingInstruction() );
+			case Instruction.groupTag_MultiANewArray -> writeMultiANewArrayInstruction( instructionWriter, instruction.asMultiANewArrayInstruction() );
+			case Instruction.groupTag_NewPrimitiveArray -> writeNewPrimitiveArrayInstruction( instructionWriter, instruction.asNewPrimitiveArrayInstruction() );
+			case Instruction.groupTag_Operandless -> writeOperandlessInstruction( instructionWriter, instruction.asOperandlessInstruction() );
+			case Instruction.groupTag_OperandlessLoadConstant -> writeOperandlessLoadConstantInstruction( instructionWriter, instruction.asOperandlessLoadConstantInstruction() );
+			case Instruction.groupTag_TableSwitch -> writeTableSwitchInstruction( instructionWriter, instruction.asTableSwitchInstruction() );
 			default -> throw new AssertionError( instruction );
 		}
 	}
@@ -783,7 +795,7 @@ public class ByteCodeWriter
 
 	private static void writeMultiANewArrayInstruction( InstructionWriter instructionWriter, MultiANewArrayInstruction multiANewArrayInstruction )
 	{
-		int constantIndex = instructionWriter.getIndex( multiANewArrayInstruction.classConstant );
+		int constantIndex = instructionWriter.getIndex( multiANewArrayInstruction.targetClassConstant );
 		instructionWriter.writeUnsignedByte( OpCode.MULTIANEWARRAY );
 		instructionWriter.writeUnsignedShort( constantIndex );
 		instructionWriter.writeUnsignedByte( multiANewArrayInstruction.dimensionCount );
@@ -897,10 +909,24 @@ public class ByteCodeWriter
 		}
 	}
 
-	private static void writeConstantReferencingInstruction( InstructionWriter instructionWriter, ConstantReferencingInstruction constantReferencingInstruction )
+	private static void writeClassConstantReferencingInstruction( InstructionWriter instructionWriter, ClassConstantReferencingInstruction classConstantReferencingInstruction )
 	{
-		instructionWriter.writeUnsignedByte( constantReferencingInstruction.opCode );
-		int constantIndex = instructionWriter.getIndex( constantReferencingInstruction.constant );
+		instructionWriter.writeUnsignedByte( classConstantReferencingInstruction.opCode );
+		int constantIndex = instructionWriter.getIndex( classConstantReferencingInstruction.targetClassConstant );
+		instructionWriter.writeUnsignedShort( constantIndex );
+	}
+
+	private static void writeFieldConstantReferencingInstruction( InstructionWriter instructionWriter, FieldConstantReferencingInstruction fieldConstantReferencingInstruction )
+	{
+		instructionWriter.writeUnsignedByte( fieldConstantReferencingInstruction.opCode );
+		int constantIndex = instructionWriter.getIndex( fieldConstantReferencingInstruction.fieldReferenceConstant );
+		instructionWriter.writeUnsignedShort( constantIndex );
+	}
+
+	private static void writeMethodConstantReferencingInstruction( InstructionWriter instructionWriter, MethodConstantReferencingInstruction methodConstantReferencingInstruction )
+	{
+		instructionWriter.writeUnsignedByte( methodConstantReferencingInstruction.opCode );
+		int constantIndex = instructionWriter.getIndex( methodConstantReferencingInstruction.methodReferenceConstant );
 		instructionWriter.writeUnsignedShort( constantIndex );
 	}
 
@@ -1009,10 +1035,10 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedByte( verificationType.tag );
 		switch( verificationType.tag )
 		{
-			case VerificationType.tagTop, VerificationType.tagInteger, VerificationType.tagFloat, VerificationType.tagDouble, VerificationType.tagLong, //
-				VerificationType.tagNull, VerificationType.tagUninitializedThis -> writeSimpleVerificationType( verificationType.asSimpleVerificationType() );
-			case VerificationType.tagObject -> writeObjectVerificationType( constantPool, bufferWriter, verificationType.asObjectVerificationType() );
-			case VerificationType.tagUninitialized -> writeUninitializedVerificationType( bufferWriter, locationMap, verificationType.asUninitializedVerificationType() );
+			case VerificationType.tag_Top, VerificationType.tag_Integer, VerificationType.tag_Float, VerificationType.tag_Double, VerificationType.tag_Long, //
+				VerificationType.tag_Null, VerificationType.tag_UninitializedThis -> writeSimpleVerificationType( verificationType.asSimpleVerificationType() );
+			case VerificationType.tag_Object -> writeObjectVerificationType( constantPool, bufferWriter, verificationType.asObjectVerificationType() );
+			case VerificationType.tag_Uninitialized -> writeUninitializedVerificationType( bufferWriter, locationMap, verificationType.asUninitializedVerificationType() );
 			default -> throw new AssertionError( verificationType );
 		}
 	}

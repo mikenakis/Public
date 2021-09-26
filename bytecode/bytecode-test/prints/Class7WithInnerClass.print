@@ -7,9 +7,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │               ├─ instructions: 3 entries
- │               │   ├─ [0] L9:     ALOAD_0 0 // public abstract class Class7WithInnerClass
- │               │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │               │   └─ [2]         RETURN
+ │               │   ├─ [0] L9: // public abstract class Class7WithInnerClass
+ │               │   ├─ [1]         ALOAD_0 0
+ │               │   ├─ [2]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │               │   └─ [3]         RETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute
@@ -19,11 +20,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │                       └─ entrys: 1 entries
  │                           └─ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
  └─ attributes: 3 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class7WithInnerClass.java" )
+     ├─ [0] SourceFileAttribute "Class7WithInnerClass.java"
      ├─ [1] NestMembersAttribute
      │   └─ members: 1 entries
-     │       └─ [0] ClassConstant mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
+     │       └─ [0] mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
      └─ [2] InnerClassesAttribute
          └─ innerClasses: 1 entries
-             └─ [0] InnerClass outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, accessFlags = [public], innerClass=mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, innerName = Mutf8Constant( "InnerClass" )
+             └─ [0] InnerClass accessFlags = [public], innerClass = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, innerName = InnerClass

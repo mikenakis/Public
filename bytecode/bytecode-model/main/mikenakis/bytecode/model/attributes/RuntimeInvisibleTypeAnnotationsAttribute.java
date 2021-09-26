@@ -37,7 +37,7 @@ public final class RuntimeInvisibleTypeAnnotationsAttribute extends TypeAnnotati
 
 	private RuntimeInvisibleTypeAnnotationsAttribute( List<TypeAnnotation> entries )
 	{
-		super( tagRuntimeInvisibleTypeAnnotations, entries );
+		super( tag_RuntimeInvisibleTypeAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeInvisibleTypeAnnotationsAttribute asRuntimeInvisibleTypeAnnotationsAttribute()

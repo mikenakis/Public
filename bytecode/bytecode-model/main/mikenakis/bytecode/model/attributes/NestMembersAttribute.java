@@ -35,17 +35,11 @@ public final class NestMembersAttribute extends KnownAttribute
 
 	private NestMembersAttribute( List<ClassConstant> memberClassConstants )
 	{
-		super( tagNestMembers );
+		super( tag_NestMembers );
 		this.memberClassConstants = memberClassConstants;
 	}
 
-	@Deprecated @Override public NestMembersAttribute asNestMembersAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return memberClassConstants.size() + " entries";
-	}
+	public List<String> memberTypeNames() { return memberClassConstants.stream().map( c -> c.typeName() ).toList(); }
+	@Deprecated @Override public NestMembersAttribute asNestMembersAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return memberClassConstants.size() + " entries"; }
 }

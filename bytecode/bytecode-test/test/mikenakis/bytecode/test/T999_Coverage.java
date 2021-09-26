@@ -4,7 +4,6 @@ import mikenakis.bytecode.exceptions.InvalidAnnotationValueTagException;
 import mikenakis.bytecode.exceptions.InvalidConstAnnotationValueTagException;
 import mikenakis.bytecode.exceptions.InvalidConstantTagException;
 import mikenakis.bytecode.model.AnnotationValue;
-import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
@@ -18,6 +17,7 @@ import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
 import mikenakis.bytecode.model.attributes.ExceptionsAttribute;
 import mikenakis.bytecode.model.attributes.InnerClassesAttribute;
+import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableEntry;
@@ -37,7 +37,6 @@ import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.InstructionList;
-import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.constants.ClassConstant;
@@ -88,7 +87,8 @@ public class T999_Coverage
 		Mutf8Constant descriptorConstant = Mutf8Constant.of( "descriptor" );
 		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
 		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( classConstant, nameAndDescriptorConstant );
-		MethodHandleConstant methodHandleConstant = MethodHandleConstant.of( MethodHandleConstant.ReferenceKind.GetField, fieldReferenceConstant );
+		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( MethodHandleConstant.ReferenceKind.GetField );
+		methodHandleConstant.setReferenceConstant( fieldReferenceConstant );
 		List<Constant> argumentConstants = new ArrayList<>();
 		argumentConstants.add( StringConstant.of( "bootstrapMethodArgument" ) );
 		BootstrapMethod bootstrapMethod = BootstrapMethod.of( methodHandleConstant, argumentConstants );
@@ -116,51 +116,40 @@ public class T999_Coverage
 		codeAttribute.addLdc( 3f );
 		codeAttribute.addLdc( 4.0 );
 		codeAttribute.addLdc( "" );
-		codeAttribute.addIfEQ( instruction1 );
 		codeAttribute.addIfEQ();
-		codeAttribute.addIfNE( instruction1 );
 		codeAttribute.addIfNE();
-		codeAttribute.addIfLT( instruction1 );
 		codeAttribute.addIfLT();
-		codeAttribute.addIfGE( instruction1 );
 		codeAttribute.addIfGE();
-		codeAttribute.addIfGT( instruction1 );
 		codeAttribute.addIfGT();
-		codeAttribute.addIfLE( instruction1 );
 		codeAttribute.addIfLE();
-		codeAttribute.addIfICmpEQ( instruction1 );
 		codeAttribute.addIfICmpEQ();
-		codeAttribute.addIfICmpNE( instruction1 );
 		codeAttribute.addIfICmpNE();
-		codeAttribute.addIfICmpLT( instruction1 );
 		codeAttribute.addIfICmpLT();
-		codeAttribute.addIfICmpGE( instruction1 );
 		codeAttribute.addIfICmpGE();
-		codeAttribute.addIfICmpGT( instruction1 );
 		codeAttribute.addIfICmpGT();
-		codeAttribute.addIfICmpLE( instruction1 );
 		codeAttribute.addIfICmpLE();
-		codeAttribute.addIfNull( instruction1 );
 		codeAttribute.addIfNull();
-		codeAttribute.addIfNonNull( instruction1 );
 		codeAttribute.addIfNonNull();
-		codeAttribute.addIfACmpEQ( instruction1 );
 		codeAttribute.addIfACmpEQ();
-		codeAttribute.addIfACmpNE( instruction1 );
 		codeAttribute.addIfACmpNE();
-		codeAttribute.addGoto( instruction1 );
 		codeAttribute.addGoto();
-		codeAttribute.addJsr( instruction1 );
 		codeAttribute.addJsr();
 		codeAttribute.addIInc( 0, 0 );
 		InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = InterfaceMethodReferenceConstant.of( classConstant, nameAndDescriptorConstant );
 		codeAttribute.addInvokeInterface( interfaceMethodReferenceConstant, 0 );
-		InvokeDynamicConstant invokeDynamicConstant = InvokeDynamicConstant.of( 0, nameAndDescriptorConstant );
+		InvokeDynamicConstant invokeDynamicConstant = InvokeDynamicConstant.of( bootstrapMethod, nameAndDescriptorConstant );
 		codeAttribute.addInvokeDynamic( invokeDynamicConstant );
 		codeAttribute.addMultiANewArray( classConstant, 0 );
 		codeAttribute.addTableSwitch( 0 );
 		codeAttribute.addLookupSwitch();
-		codeAttribute.addNewArray( NewPrimitiveArrayInstruction.Type.INT );
+		codeAttribute.addNewArrayOfBoolean();
+		codeAttribute.addNewArrayOfChar();
+		codeAttribute.addNewArrayOfFloat();
+		codeAttribute.addNewArrayOfDouble();
+		codeAttribute.addNewArrayOfByte();
+		codeAttribute.addNewArrayOfShort();
+		codeAttribute.addNewArrayOfInt();
+		codeAttribute.addNewArrayOfLong();
 		codeAttribute.addRet( 0 );
 		codeAttribute.addGetStatic( fieldReferenceConstant );
 		codeAttribute.addPutStatic( fieldReferenceConstant );
@@ -297,9 +286,9 @@ public class T999_Coverage
 		//		} ) );
 		//		assert invalidAnnotationValueTagException.tag == '_';
 
-		for( int constantTag : List.of( Constant.tagMutf8, Constant.tagInteger, Constant.tagFloat, Constant.tagLong, Constant.tagDouble, //
-			Constant.tagClass, Constant.tagString, Constant.tagFieldReference, Constant.tagMethodReference, Constant.tagInterfaceMethodReference, //
-			Constant.tagNameAndDescriptor, Constant.tagMethodHandle, Constant.tagMethodType, Constant.tagInvokeDynamic ) )
+		for( int constantTag : List.of( Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, //
+			Constant.tag_Class, Constant.tag_String, Constant.tag_FieldReference, Constant.tag_MethodReference, Constant.tag_InterfaceMethodReference, //
+			Constant.tag_NameAndDescriptor, Constant.tag_MethodHandle, Constant.tag_MethodType, Constant.tag_InvokeDynamic ) )
 			Kit.get( Constant.tagName( constantTag ) );
 		InvalidConstantTagException invalidConstantTagException = Kit.testing.expectException( //
 			InvalidConstantTagException.class, () -> Kit.get( Constant.tagName( 999 ) ) );
@@ -336,12 +325,12 @@ public class T999_Coverage
 		SourceFileAttribute.of( "" );
 		StackMapTableAttribute stackMapTableAttribute = StackMapTableAttribute.of();
 		stackMapTableAttribute.addSameFrame( instruction1 );
-		VerificationType stackVerificationType = new SimpleVerificationType( VerificationType.tagDouble );
+		VerificationType stackVerificationType = new SimpleVerificationType( VerificationType.tag_Double );
 		stackMapTableAttribute.addSameLocals1StackItemFrame( instruction1, stackVerificationType );
 		stackMapTableAttribute.addChopFrame( instruction1, 1 );
 		stackMapTableAttribute.addAppendFrame( instruction1, List.of( stackVerificationType ) );
 		stackMapTableAttribute.addFullFrame( instruction1, List.of( stackVerificationType ), List.of( stackVerificationType ) );
-		Attribute syntheticAttribute = SyntheticAttribute.of();
+		KnownAttribute syntheticAttribute = SyntheticAttribute.of();
 		syntheticAttribute.asSyntheticAttribute();
 
 		InstructionList instructionList = InstructionList.of();

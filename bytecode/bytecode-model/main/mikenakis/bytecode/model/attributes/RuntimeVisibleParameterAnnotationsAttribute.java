@@ -29,7 +29,7 @@ public final class RuntimeVisibleParameterAnnotationsAttribute extends Parameter
 
 	private RuntimeVisibleParameterAnnotationsAttribute( List<ParameterAnnotationSet> entries )
 	{
-		super( tagRuntimeVisibleParameterAnnotations, entries );
+		super( tag_RuntimeVisibleParameterAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeVisibleParameterAnnotationsAttribute asRuntimeVisibleParameterAnnotationsAttribute()

@@ -6,7 +6,6 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,26 +29,15 @@ public final class ExceptionsAttribute extends KnownAttribute
 		return new ExceptionsAttribute( exceptionClassConstants );
 	}
 
-	private final List<ClassConstant> exceptionClassConstants;
+	public final List<ClassConstant> exceptionClassConstants;
 
 	private ExceptionsAttribute( List<ClassConstant> exceptionClassConstants )
 	{
-		super( tagExceptions );
+		super( tag_Exceptions );
 		this.exceptionClassConstants = exceptionClassConstants;
 	}
 
-	public List<ClassConstant> exceptionClassConstants()
-	{
-		return Collections.unmodifiableList( exceptionClassConstants );
-	}
-
-	@Deprecated @Override public ExceptionsAttribute asExceptionsAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return exceptionClassConstants.size() + " entries";
-	}
+	public List<String> exceptionTypeNames() { return exceptionClassConstants.stream().map( c -> c.typeName() ).toList(); }
+	@Deprecated @Override public ExceptionsAttribute asExceptionsAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return exceptionClassConstants.size() + " entries"; }
 }

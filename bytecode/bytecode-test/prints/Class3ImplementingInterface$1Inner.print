@@ -12,15 +12,18 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 3
  │   │       │   ├─ instructions: 9 entries
- │   │       │   │   ├─ [0] L101:   ALOAD_0 0 // {
- │   │       │   │   ├─ [1]         ALOAD_1 1
- │   │       │   │   ├─ [2]         PUTFIELD mikenakis.bytecode.test.model.Class3ImplementingInterface mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.this$0
- │   │       │   │   ├─ [3]         ALOAD_0 0
- │   │       │   │   ├─ [4]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [5] L102:   ALOAD_0 0 // this.i = i;
- │   │       │   │   ├─ [6]         ILOAD_2 2
- │   │       │   │   ├─ [7]         PUTFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
- │   │       │   │   └─ [8] L103:   RETURN // }
+ │   │       │   │   ├─ [0] L101: // {
+ │   │       │   │   ├─ [1]         ALOAD_0 0
+ │   │       │   │   ├─ [2]         ALOAD_1 1
+ │   │       │   │   ├─ [3]         PUTFIELD mikenakis.bytecode.test.model.Class3ImplementingInterface mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.this$0
+ │   │       │   │   ├─ [4]         ALOAD_0 0
+ │   │       │   │   ├─ [5]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   ├─ [6] L102: // this.i = i;
+ │   │       │   │   ├─ [7]         ALOAD_0 0
+ │   │       │   │   ├─ [8]         ILOAD_2 2
+ │   │       │   │   ├─ [9]         PUTFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
+ │   │       │   │   ├─ [10] L103: // }
+ │   │       │   │   └─ [11]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -41,10 +44,11 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 4 entries
- │   │           │   ├─ [0] L107:   ALOAD_0 0 // return i;
- │   │           │   ├─ [1]         GETFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
- │   │           │   ├─ [2]         INVOKESTATIC type = java.lang.Integer, name = valueOf, descriptor = java.lang.Integer( int )
- │   │           │   └─ [3]         ARETURN
+ │   │           │   ├─ [0] L107: // return i;
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         GETFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
+ │   │           │   ├─ [3]         INVOKESTATIC type = java.lang.Integer, name = valueOf, descriptor = java.lang.Integer( int )
+ │   │           │   └─ [4]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -57,9 +61,10 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │               ├─ instructions: 3 entries
- │               │   ├─ [0] L96:    ALOAD_0 0 // class Inner implements Supplier<Integer>
- │               │   ├─ [1]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, name = get, descriptor = java.lang.Integer()
- │               │   └─ [2]         ARETURN
+ │               │   ├─ [0] L96: // class Inner implements Supplier<Integer>
+ │               │   ├─ [1]         ALOAD_0 0
+ │               │   ├─ [2]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, name = get, descriptor = java.lang.Integer()
+ │               │   └─ [3]         ARETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute
@@ -70,11 +75,9 @@ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.byteco
  │                           └─ [0] LocalVariableTableEntry index = 0, start = L96, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
  └─ attributes: 5 entries
      ├─ [0] SignatureAttribute Ljava/lang/Object;Ljava/util/function/Supplier<Ljava/lang/Integer;>;
-     ├─ [1] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class3ImplementingInterface.java" )
-     ├─ [2] EnclosingMethodAttribute type = mikenakis.bytecode.test.model.Class3ImplementingInterface, name = "methodWithInnerClass", descriptor = java.util.function.Supplier( int )
-     ├─ [3] NestHostAttribute
-     │   └─ class: ClassConstant name = Mutf8Constant( "mikenakis/bytecode/test/model/Class3ImplementingInterface" )
+     ├─ [1] SourceFileAttribute "Class3ImplementingInterface.java"
+     ├─ [2] EnclosingMethodAttribute enclosingClass = mikenakis.bytecode.test.model.Class3ImplementingInterface, enclosingMethodName = "methodWithInnerClass", enclosingMethodDescriptor = java.util.function.Supplier( int )
+     ├─ [3] NestHostAttribute mikenakis.bytecode.test.model.Class3ImplementingInterface
      └─ [4] InnerClassesAttribute
          └─ innerClasses: 1 entries
-             └─ [0] InnerClass accessFlags = [], innerClass=mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Mutf8Constant( "Inner" )
+             └─ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Inner

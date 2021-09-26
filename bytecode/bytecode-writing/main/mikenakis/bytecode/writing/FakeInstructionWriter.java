@@ -41,9 +41,15 @@ class FakeInstructionWriter implements InstructionWriter
 
 	@Override public int getOffset( Instruction sourceInstruction, Instruction targetInstruction )
 	{
+		// Add the source instruction to the set of instructions.
+		// add-or-replace is necessary because some instructions (e.g. LOOKUPSWITCH) will invoke this method many times.
 		Kit.collection.addOrReplace( sourceInstructions, sourceInstruction );
+
+		// If the target is already known, compute the offset and return it.
 		if( writingLocationMap.contains( targetInstruction ) )
 			return writingLocationMap.getOffset( sourceInstruction, targetInstruction );
+
+		// Assume that the target will be so far away that a long index will be needed.
 		return Short.MAX_VALUE + 1;
 	}
 }

@@ -54,7 +54,7 @@ public final class NewPrimitiveArrayInstruction extends Instruction
 
 	private NewPrimitiveArrayInstruction( Type type )
 	{
-		super( Group.NewPrimitiveArray );
+		super( groupTag_NewPrimitiveArray );
 		this.type = type.number;
 	}
 

@@ -9,7 +9,7 @@ public final class SupertypeTarget extends Target // "supertype_target" in jvms-
 	public SupertypeTarget( int tag, int supertypeIndex )
 	{
 		super( tag );
-		assert tag == tagTypeInExtendsOrImplementsClauseOfClassDeclarationOrInExtendsClauseOfInterfaceDeclaration;
+		assert tag == tag_Supertype;
 		this.supertypeIndex = supertypeIndex;
 	}
 

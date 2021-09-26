@@ -120,9 +120,4 @@ public class BufferReader
 		position += count;
 		return result;
 	}
-
-	public Buffer readBuffer()
-	{
-		return readBuffer( endPosition - position );
-	}
 }

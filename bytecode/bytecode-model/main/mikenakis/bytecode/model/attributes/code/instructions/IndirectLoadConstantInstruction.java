@@ -26,7 +26,7 @@ public final class IndirectLoadConstantInstruction extends LoadConstantInstructi
 
 	private IndirectLoadConstantInstruction( int opCode, Constant constant )
 	{
-		super( Group.IndirectLoadConstant );
+		super( groupTag_IndirectLoadConstant );
 		assert OpCode.isIndirectLoadConstant( opCode );
 		assert isValidConstant( constant );
 		this.opCode = opCode;
@@ -37,7 +37,7 @@ public final class IndirectLoadConstantInstruction extends LoadConstantInstructi
 	{
 		return switch( constant.tag )
 			{
-				case Constant.tagInteger, Constant.tagLong, Constant.tagFloat, Constant.tagDouble, Constant.tagString, Constant.tagClass -> true;
+				case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double, Constant.tag_String, Constant.tag_Class -> true;
 				default -> false;
 			};
 	}

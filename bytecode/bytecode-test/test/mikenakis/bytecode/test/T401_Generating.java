@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
-import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
@@ -52,8 +51,7 @@ public class T401_Generating
 		FlagEnumSet<ByteCodeMethod.Modifier> initMethodModifiers = ByteCodeMethod.modifierFlagsEnum.of( ByteCodeMethod.Modifier.Public );
 		Mutf8Constant evalMethodNameConstant = Mutf8Constant.of( "<init>" );
 		Mutf8Constant evalMethodDescriptorConstant = Mutf8Constant.of( "(Ljava/lang/String;)D" );
-		ByteCodeMethod initMethod = ByteCodeMethod.of( initMethodModifiers, //
-			evalMethodNameConstant, evalMethodDescriptorConstant, AttributeSet.of() );
+		ByteCodeMethod initMethod = ByteCodeMethod.of( initMethodModifiers, evalMethodNameConstant, evalMethodDescriptorConstant, AttributeSet.of() );
 		byteCodeType.methods.add( initMethod );
 
 		CodeAttribute codeAttribute = CodeAttribute.of( 0, 0 );
@@ -61,14 +59,14 @@ public class T401_Generating
 		codeAttribute.setMaxLocals( 2 );
 		//evalMethod.attributeSet.addAttribute( codeAttribute );
 
-		codeAttribute.addNew( ClassConstant.of( byteCodeType.thisClassDescriptor.classDesc ) );
+		codeAttribute.addNew( byteCodeType.classConstant() );
 		codeAttribute.addDup();
 		codeAttribute.addALoad( 0 );
 
 		Mutf8Constant initMethodNameConstant = Mutf8Constant.of( "<init>" );
 		Mutf8Constant initMethodTypeConstant = Mutf8Constant.of( "(Ljava/lang/String;)V" );
 		NameAndDescriptorConstant initMethodNameAndDescriptorConstant = NameAndDescriptorConstant.of( initMethodNameConstant, initMethodTypeConstant );
-		PlainMethodReferenceConstant initMethodReferenceConstant = PlainMethodReferenceConstant.of( ClassConstant.of( byteCodeType.thisClassDescriptor.classDesc ), initMethodNameAndDescriptorConstant );
+		PlainMethodReferenceConstant initMethodReferenceConstant = PlainMethodReferenceConstant.of( byteCodeType.classConstant(), initMethodNameAndDescriptorConstant );
 		codeAttribute.addInvokeSpecial( initMethodReferenceConstant );
 		codeAttribute.addAStore( 1 );
 		codeAttribute.addALoad( 1 );
@@ -76,7 +74,7 @@ public class T401_Generating
 		Mutf8Constant parseMethodNameConstant = Mutf8Constant.of( "parse" );
 		Mutf8Constant parseMethodTypeConstant = Mutf8Constant.of( "()D" );
 		NameAndDescriptorConstant parseMethodNameAndDescriptorConstant = NameAndDescriptorConstant.of( parseMethodNameConstant, parseMethodTypeConstant );
-		PlainMethodReferenceConstant parseMethodReferenceConstant = PlainMethodReferenceConstant.of( ClassConstant.of( byteCodeType.thisClassDescriptor.classDesc ), parseMethodNameAndDescriptorConstant );
+		PlainMethodReferenceConstant parseMethodReferenceConstant = PlainMethodReferenceConstant.of( byteCodeType.classConstant(), parseMethodNameAndDescriptorConstant );
 		codeAttribute.addInvokeVirtual( parseMethodReferenceConstant );
 	}
 }

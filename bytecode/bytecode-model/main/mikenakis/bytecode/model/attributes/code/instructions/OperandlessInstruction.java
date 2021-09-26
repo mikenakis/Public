@@ -29,7 +29,7 @@ public final class OperandlessInstruction extends Instruction
 
 	private OperandlessInstruction( int opCode )
 	{
-		super( Group.Operandless );
+		super( groupTag_Operandless );
 		assert opCodes.contains( opCode );
 		this.opCode = opCode;
 	}

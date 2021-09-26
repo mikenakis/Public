@@ -14,21 +14,28 @@ import java.util.Objects;
  */
 public final class MethodTypeConstant extends Constant
 {
-	public static MethodTypeConstant of( Mutf8Constant descriptorConstant )
+//	public static MethodTypeConstant of( String descriptor )
+//	{
+//		return of( Mutf8Constant.of( descriptor ) );
+//	}
+
+	private Mutf8Constant descriptorConstant; //null means that it has not been set yet.
+
+	public MethodTypeConstant()
 	{
-		return new MethodTypeConstant( descriptorConstant );
+		super( tag_MethodType );
 	}
 
-	public static MethodTypeConstant of( String descriptor )
+	public Mutf8Constant getDescriptorConstant()
 	{
-		return of( Mutf8Constant.of( descriptor ) );
+		assert descriptorConstant != null;
+		return descriptorConstant;
 	}
 
-	public final Mutf8Constant descriptorConstant;
-
-	private MethodTypeConstant( Mutf8Constant descriptorConstant )
+	public void setDescriptorConstant( Mutf8Constant descriptorConstant )
 	{
-		super( tagMethodType );
+		assert this.descriptorConstant == null;
+		assert descriptorConstant != null;
 		this.descriptorConstant = descriptorConstant;
 	}
 

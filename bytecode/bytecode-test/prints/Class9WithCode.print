@@ -13,14 +13,16 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 3, maxLocals = 2
  │   │       │   ├─ instructions: 8 entries
- │   │       │   │   ├─ [0] L9:     NEW mikenakis.bytecode.test.model.Class9WithCode // Class9WithCode parser = new Class9WithCode( str );
- │   │       │   │   ├─ [1]         DUP
- │   │       │   │   ├─ [2]         ALOAD_0 0
- │   │       │   │   ├─ [3]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class9WithCode, name = <init>, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [4]         ASTORE_1 1
- │   │       │   │   ├─ [5] L10:    ALOAD_1 1 // return parser.parse();
- │   │       │   │   ├─ [6]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parse, descriptor = double()
- │   │       │   │   └─ [7]         DRETURN
+ │   │       │   │   ├─ [0] L9: // Class9WithCode parser = new Class9WithCode( str );
+ │   │       │   │   ├─ [1]         NEW mikenakis.bytecode.test.model.Class9WithCode
+ │   │       │   │   ├─ [2]         DUP
+ │   │       │   │   ├─ [3]         ALOAD_0 0
+ │   │       │   │   ├─ [4]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class9WithCode, name = <init>, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [5]         ASTORE_1 1
+ │   │       │   │   ├─ [6] L10: // return parser.parse();
+ │   │       │   │   ├─ [7]         ALOAD_1 1
+ │   │       │   │   ├─ [8]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parse, descriptor = double()
+ │   │       │   │   └─ [9]         DRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -38,15 +40,19 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 9 entries
- │   │       │   │   ├─ [0] L18:    ALOAD_0 0 // {
- │   │       │   │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [2] L14:    ALOAD_0 0 // private int pos = -1;
- │   │       │   │   ├─ [3]         ICONST_M1
- │   │       │   │   ├─ [4]         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │   │       │   │   ├─ [5] L19:    ALOAD_0 0 // this.str = str;
- │   │       │   │   ├─ [6]         ALOAD_1 1
- │   │       │   │   ├─ [7]         PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
- │   │       │   │   └─ [8] L20:    RETURN // }
+ │   │       │   │   ├─ [0] L18: // {
+ │   │       │   │   ├─ [1]         ALOAD_0 0
+ │   │       │   │   ├─ [2]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │       │   │   ├─ [3] L14: // private int pos = -1;
+ │   │       │   │   ├─ [4]         ALOAD_0 0
+ │   │       │   │   ├─ [5]         ICONST_M1
+ │   │       │   │   ├─ [6]         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │   │       │   │   ├─ [7] L19: // this.str = str;
+ │   │       │   │   ├─ [8]         ALOAD_0 0
+ │   │       │   │   ├─ [9]         ALOAD_1 1
+ │   │       │   │   ├─ [10]         PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+ │   │       │   │   ├─ [11] L20: // }
+ │   │       │   │   └─ [12]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -66,27 +72,29 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 4, maxLocals = 1
  │   │           ├─ instructions: 21 entries
- │   │           │   ├─ [0] L24:    ALOAD_0 0 // ch = (++pos < str.length()) ? str.charAt( pos ) : -1;
+ │   │           │   ├─ [0] L24: // ch = (++pos < str.length()) ? str.charAt( pos ) : -1;
  │   │           │   ├─ [1]         ALOAD_0 0
- │   │           │   ├─ [2]         DUP
- │   │           │   ├─ [3]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │   │           │   ├─ [4]         ICONST_1
- │   │           │   ├─ [5]         IADD
- │   │           │   ├─ [6]         DUP_X1
- │   │           │   ├─ [7]         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │   │           │   ├─ [8]         ALOAD_0 0
- │   │           │   ├─ [9]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
- │   │           │   ├─ [10]         INVOKEVIRTUAL type = java.lang.String, name = length, descriptor = int()
- │   │           │   ├─ [11]         IF_ICMPGE T1
- │   │           │   ├─ [12]         ALOAD_0 0
- │   │           │   ├─ [13]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
- │   │           │   ├─ [14]         ALOAD_0 0
- │   │           │   ├─ [15]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │   │           │   ├─ [16]         INVOKEVIRTUAL type = java.lang.String, name = charAt, descriptor = char( int )
- │   │           │   ├─ [17]         GOTO T2
- │   │           │   ├─ [18] T1:     ICONST_M1
- │   │           │   ├─ [19] T2:     PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │   │           │   └─ [20] L25:    RETURN // }
+ │   │           │   ├─ [2]         ALOAD_0 0
+ │   │           │   ├─ [3]         DUP
+ │   │           │   ├─ [4]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │   │           │   ├─ [5]         ICONST_1
+ │   │           │   ├─ [6]         IADD
+ │   │           │   ├─ [7]         DUP_X1
+ │   │           │   ├─ [8]         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │   │           │   ├─ [9]         ALOAD_0 0
+ │   │           │   ├─ [10]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+ │   │           │   ├─ [11]         INVOKEVIRTUAL type = java.lang.String, name = length, descriptor = int()
+ │   │           │   ├─ [12]         IF_ICMPGE T1
+ │   │           │   ├─ [13]         ALOAD_0 0
+ │   │           │   ├─ [14]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+ │   │           │   ├─ [15]         ALOAD_0 0
+ │   │           │   ├─ [16]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │   │           │   ├─ [17]         INVOKEVIRTUAL type = java.lang.String, name = charAt, descriptor = char( int )
+ │   │           │   ├─ [18]         GOTO T2
+ │   │           │   ├─ [19] T1:     ICONST_M1
+ │   │           │   ├─ [20] T2:     PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │   │           │   ├─ [21] L25: // }
+ │   │           │   └─ [22]         RETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -110,23 +118,29 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 17 entries
- │   │       │   │   ├─ [0] L30:    ALOAD_0 0 // while( ch == ' ' )
- │   │       │   │   ├─ [1]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │   │       │   │   ├─ [2]         BIPUSH immediateValue = 32
- │   │       │   │   ├─ [3]         IF_ICMPNE L32
- │   │       │   │   ├─ [4] L31:    ALOAD_0 0 // nextChar();
- │   │       │   │   ├─ [5]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
- │   │       │   │   ├─ [6]         GOTO L30
- │   │       │   │   ├─ [7] L32:    ALOAD_0 0 // if( ch == charToEat )
- │   │       │   │   ├─ [8]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │   │       │   │   ├─ [9]         ILOAD_1 1
- │   │       │   │   ├─ [10]         IF_ICMPNE L37
- │   │       │   │   ├─ [11] L34:    ALOAD_0 0 // nextChar();
- │   │       │   │   ├─ [12]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
- │   │       │   │   ├─ [13] L35:    ICONST_1 // return true;
- │   │       │   │   ├─ [14]         IRETURN
- │   │       │   │   ├─ [15] L37:    ICONST_0 // return false;
- │   │       │   │   └─ [16]         IRETURN
+ │   │       │   │   ├─ [0] L30: // while( ch == ' ' )
+ │   │       │   │   ├─ [1]         ALOAD_0 0
+ │   │       │   │   ├─ [2]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │   │       │   │   ├─ [3]         BIPUSH immediateValue = 32
+ │   │       │   │   ├─ [4]         IF_ICMPNE L32
+ │   │       │   │   ├─ [5] L31: // nextChar();
+ │   │       │   │   ├─ [6]         ALOAD_0 0
+ │   │       │   │   ├─ [7]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
+ │   │       │   │   ├─ [8]         GOTO L30
+ │   │       │   │   ├─ [9] L32: // if( ch == charToEat )
+ │   │       │   │   ├─ [10]         ALOAD_0 0
+ │   │       │   │   ├─ [11]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │   │       │   │   ├─ [12]         ILOAD_1 1
+ │   │       │   │   ├─ [13]         IF_ICMPNE L37
+ │   │       │   │   ├─ [14] L34: // nextChar();
+ │   │       │   │   ├─ [15]         ALOAD_0 0
+ │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
+ │   │       │   │   ├─ [17] L35: // return true;
+ │   │       │   │   ├─ [18]         ICONST_1
+ │   │       │   │   ├─ [19]         IRETURN
+ │   │       │   │   ├─ [20] L37: // return false;
+ │   │       │   │   ├─ [21]         ICONST_0
+ │   │       │   │   └─ [22]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -153,27 +167,35 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 3, maxLocals = 3
  │   │           ├─ instructions: 21 entries
- │   │           │   ├─ [0] L42:    ALOAD_0 0 // nextChar();
- │   │           │   ├─ [1]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
- │   │           │   ├─ [2] L43:    ALOAD_0 0 // double x = parseExpression();
- │   │           │   ├─ [3]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseExpression, descriptor = double()
- │   │           │   ├─ [4]         DSTORE_1 1
- │   │           │   ├─ [5] L44:    ALOAD_0 0 // if( pos < str.length() )
- │   │           │   ├─ [6]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │   │           │   ├─ [7]         ALOAD_0 0
- │   │           │   ├─ [8]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
- │   │           │   ├─ [9]         INVOKEVIRTUAL type = java.lang.String, name = length, descriptor = int()
- │   │           │   ├─ [10]         IF_ICMPGE L46
- │   │           │   ├─ [11] L45:    NEW java.lang.RuntimeException // throw new RuntimeException( "Unexpected: " + (char)ch );
- │   │           │   ├─ [12]         DUP
- │   │           │   ├─ [13]         ALOAD_0 0
- │   │           │   ├─ [14]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │   │           │   ├─ [15]         I2C
- │   │           │   ├─ [16]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( char )
- │   │           │   ├─ [17]         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
- │   │           │   ├─ [18]         ATHROW
- │   │           │   ├─ [19] L46:    DLOAD_1 1 // return x;
- │   │           │   └─ [20]         DRETURN
+ │   │           │   ├─ [0] L42: // nextChar();
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
+ │   │           │   ├─ [3] L43: // double x = parseExpression();
+ │   │           │   ├─ [4]         ALOAD_0 0
+ │   │           │   ├─ [5]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseExpression, descriptor = double()
+ │   │           │   ├─ [6]         DSTORE_1 1
+ │   │           │   ├─ [7] L44: // if( pos < str.length() )
+ │   │           │   ├─ [8]         ALOAD_0 0
+ │   │           │   ├─ [9]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │   │           │   ├─ [10]         ALOAD_0 0
+ │   │           │   ├─ [11]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+ │   │           │   ├─ [12]         INVOKEVIRTUAL type = java.lang.String, name = length, descriptor = int()
+ │   │           │   ├─ [13]         IF_ICMPGE L46
+ │   │           │   ├─ [14] L45: // throw new RuntimeException( "Unexpected: " + (char)ch );
+ │   │           │   ├─ [15]         NEW java.lang.RuntimeException
+ │   │           │   ├─ [16]         DUP
+ │   │           │   ├─ [17]         ALOAD_0 0
+ │   │           │   ├─ [18]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │   │           │   ├─ [19]         I2C
+ │   │           │   ├─ [20]         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( char ), arguments = Unexpected: 
+ │   │           │   │   ├─                 referenceKind: InvokeStatic
+ │   │           │   │   ├─                 referenceType: java.lang.invoke.StringConcatFactory
+ │   │           │   │   └─                 methodName: makeConcatWithConstants
+ │   │           │   ├─ [21]         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
+ │   │           │   ├─ [22]         ATHROW
+ │   │           │   ├─ [23] L46: // return x;
+ │   │           │   ├─ [24]         DLOAD_1 1
+ │   │           │   └─ [25]         DRETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -196,31 +218,37 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 4, maxLocals = 3
  │   │           ├─ instructions: 25 entries
- │   │           │   ├─ [0] L57:    ALOAD_0 0 // double x = parseTerm();
- │   │           │   ├─ [1]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseTerm, descriptor = double()
- │   │           │   ├─ [2]         DSTORE_1 1
- │   │           │   ├─ [3] L60:    ALOAD_0 0 // if( eat( '+' ) )
- │   │           │   ├─ [4]         BIPUSH immediateValue = 43
- │   │           │   ├─ [5]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │   │           │   ├─ [6]         IFEQ L62
- │   │           │   ├─ [7] L61:    DLOAD_1 1 // x += parseTerm(); // addition
- │   │           │   ├─ [8]         ALOAD_0 0
- │   │           │   ├─ [9]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseTerm, descriptor = double()
- │   │           │   ├─ [10]         DADD
- │   │           │   ├─ [11]         DSTORE_1 1
- │   │           │   ├─ [12]         GOTO L60
- │   │           │   ├─ [13] L62:    ALOAD_0 0 // else if( eat( '-' ) )
- │   │           │   ├─ [14]         BIPUSH immediateValue = 45
- │   │           │   ├─ [15]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │   │           │   ├─ [16]         IFEQ L65
- │   │           │   ├─ [17] L63:    DLOAD_1 1 // x -= parseTerm(); // subtraction
- │   │           │   ├─ [18]         ALOAD_0 0
- │   │           │   ├─ [19]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseTerm, descriptor = double()
- │   │           │   ├─ [20]         DSUB
- │   │           │   ├─ [21]         DSTORE_1 1
- │   │           │   ├─ [22]         GOTO L60
- │   │           │   ├─ [23] L65:    DLOAD_1 1 // return x;
- │   │           │   └─ [24]         DRETURN
+ │   │           │   ├─ [0] L57: // double x = parseTerm();
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseTerm, descriptor = double()
+ │   │           │   ├─ [3]         DSTORE_1 1
+ │   │           │   ├─ [4] L60: // if( eat( '+' ) )
+ │   │           │   ├─ [5]         ALOAD_0 0
+ │   │           │   ├─ [6]         BIPUSH immediateValue = 43
+ │   │           │   ├─ [7]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │   │           │   ├─ [8]         IFEQ L62
+ │   │           │   ├─ [9] L61: // x += parseTerm(); // addition
+ │   │           │   ├─ [10]         DLOAD_1 1
+ │   │           │   ├─ [11]         ALOAD_0 0
+ │   │           │   ├─ [12]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseTerm, descriptor = double()
+ │   │           │   ├─ [13]         DADD
+ │   │           │   ├─ [14]         DSTORE_1 1
+ │   │           │   ├─ [15]         GOTO L60
+ │   │           │   ├─ [16] L62: // else if( eat( '-' ) )
+ │   │           │   ├─ [17]         ALOAD_0 0
+ │   │           │   ├─ [18]         BIPUSH immediateValue = 45
+ │   │           │   ├─ [19]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │   │           │   ├─ [20]         IFEQ L65
+ │   │           │   ├─ [21] L63: // x -= parseTerm(); // subtraction
+ │   │           │   ├─ [22]         DLOAD_1 1
+ │   │           │   ├─ [23]         ALOAD_0 0
+ │   │           │   ├─ [24]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseTerm, descriptor = double()
+ │   │           │   ├─ [25]         DSUB
+ │   │           │   ├─ [26]         DSTORE_1 1
+ │   │           │   ├─ [27]         GOTO L60
+ │   │           │   ├─ [28] L65: // return x;
+ │   │           │   ├─ [29]         DLOAD_1 1
+ │   │           │   └─ [30]         DRETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -246,31 +274,37 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 4, maxLocals = 3
  │   │           ├─ instructions: 25 entries
- │   │           │   ├─ [0] L71:    ALOAD_0 0 // double x = parseFactor();
- │   │           │   ├─ [1]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │   │           │   ├─ [2]         DSTORE_1 1
- │   │           │   ├─ [3] L74:    ALOAD_0 0 // if( eat( '*' ) )
- │   │           │   ├─ [4]         BIPUSH immediateValue = 42
- │   │           │   ├─ [5]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │   │           │   ├─ [6]         IFEQ L76
- │   │           │   ├─ [7] L75:    DLOAD_1 1 // x *= parseFactor(); // multiplication
- │   │           │   ├─ [8]         ALOAD_0 0
- │   │           │   ├─ [9]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │   │           │   ├─ [10]         DMUL
- │   │           │   ├─ [11]         DSTORE_1 1
- │   │           │   ├─ [12]         GOTO L74
- │   │           │   ├─ [13] L76:    ALOAD_0 0 // else if( eat( '/' ) )
- │   │           │   ├─ [14]         BIPUSH immediateValue = 47
- │   │           │   ├─ [15]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │   │           │   ├─ [16]         IFEQ L79
- │   │           │   ├─ [17] L77:    DLOAD_1 1 // x /= parseFactor(); // division
- │   │           │   ├─ [18]         ALOAD_0 0
- │   │           │   ├─ [19]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │   │           │   ├─ [20]         DDIV
- │   │           │   ├─ [21]         DSTORE_1 1
- │   │           │   ├─ [22]         GOTO L74
- │   │           │   ├─ [23] L79:    DLOAD_1 1 // return x;
- │   │           │   └─ [24]         DRETURN
+ │   │           │   ├─ [0] L71: // double x = parseFactor();
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │   │           │   ├─ [3]         DSTORE_1 1
+ │   │           │   ├─ [4] L74: // if( eat( '*' ) )
+ │   │           │   ├─ [5]         ALOAD_0 0
+ │   │           │   ├─ [6]         BIPUSH immediateValue = 42
+ │   │           │   ├─ [7]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │   │           │   ├─ [8]         IFEQ L76
+ │   │           │   ├─ [9] L75: // x *= parseFactor(); // multiplication
+ │   │           │   ├─ [10]         DLOAD_1 1
+ │   │           │   ├─ [11]         ALOAD_0 0
+ │   │           │   ├─ [12]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │   │           │   ├─ [13]         DMUL
+ │   │           │   ├─ [14]         DSTORE_1 1
+ │   │           │   ├─ [15]         GOTO L74
+ │   │           │   ├─ [16] L76: // else if( eat( '/' ) )
+ │   │           │   ├─ [17]         ALOAD_0 0
+ │   │           │   ├─ [18]         BIPUSH immediateValue = 47
+ │   │           │   ├─ [19]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │   │           │   ├─ [20]         IFEQ L79
+ │   │           │   ├─ [21] L77: // x /= parseFactor(); // division
+ │   │           │   ├─ [22]         DLOAD_1 1
+ │   │           │   ├─ [23]         ALOAD_0 0
+ │   │           │   ├─ [24]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │   │           │   ├─ [25]         DDIV
+ │   │           │   ├─ [26]         DSTORE_1 1
+ │   │           │   ├─ [27]         GOTO L74
+ │   │           │   ├─ [28] L79: // return x;
+ │   │           │   ├─ [29]         DLOAD_1 1
+ │   │           │   └─ [30]         DRETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -296,108 +330,126 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 4, maxLocals = 7
  │               ├─ instructions: 190 entries
- │               │   ├─ [0] L85:    ALOAD_0 0 // if( eat( '+' ) )
- │               │   ├─ [1]         BIPUSH immediateValue = 43
- │               │   ├─ [2]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │               │   ├─ [3]         IFEQ L87
- │               │   ├─ [4] L86:    ALOAD_0 0 // return parseFactor(); // unary plus
- │               │   ├─ [5]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │               │   ├─ [6]         DRETURN
- │               │   ├─ [7] L87:    ALOAD_0 0 // if( eat( '-' ) )
- │               │   ├─ [8]         BIPUSH immediateValue = 45
- │               │   ├─ [9]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │               │   ├─ [10]         IFEQ L91
- │               │   ├─ [11] L88:    ALOAD_0 0 // return -parseFactor(); // unary minus
- │               │   ├─ [12]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │               │   ├─ [13]         DNEG
- │               │   ├─ [14]         DRETURN
- │               │   ├─ [15] L91:    ALOAD_0 0 // int startPos = pos;
- │               │   ├─ [16]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │               │   ├─ [17]         ISTORE_3 3
- │               │   ├─ [18] L92:    ALOAD_0 0 // if( eat( '(' ) )
- │               │   ├─ [19]         BIPUSH immediateValue = 40
- │               │   ├─ [20]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │               │   ├─ [21]         IFEQ L98
- │               │   ├─ [22] L95:    ALOAD_0 0 // x = parseExpression();
- │               │   ├─ [23]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseExpression, descriptor = double()
- │               │   ├─ [24]         DSTORE_1 1
- │               │   ├─ [25] L96:    ALOAD_0 0 // eat( ')' );
- │               │   ├─ [26]         BIPUSH immediateValue = 41
- │               │   ├─ [27]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │               │   ├─ [28]         POP
- │               │   ├─ [29]         GOTO L128
- │               │   ├─ [30] L98:    ALOAD_0 0 // else if( (ch >= '0' && ch <= '9') || ch == '.' )
- │               │   ├─ [31]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [32]         BIPUSH immediateValue = 48
- │               │   ├─ [33]         IF_ICMPLT T1
- │               │   ├─ [34]         ALOAD_0 0
- │               │   ├─ [35]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [36]         BIPUSH immediateValue = 57
- │               │   ├─ [37]         IF_ICMPLE L101
- │               │   ├─ [38] T1:     ALOAD_0 0
- │               │   ├─ [39]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [40]         BIPUSH immediateValue = 46
- │               │   ├─ [41]         IF_ICMPNE L105
- │               │   ├─ [42] L101:   ALOAD_0 0 // while( (ch >= '0' && ch <= '9') || ch == '.' )
- │               │   ├─ [43]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [44]         BIPUSH immediateValue = 48
- │               │   ├─ [45]         IF_ICMPLT T2
- │               │   ├─ [46]         ALOAD_0 0
- │               │   ├─ [47]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [48]         BIPUSH immediateValue = 57
- │               │   ├─ [49]         IF_ICMPLE L102
- │               │   ├─ [50] T2:     ALOAD_0 0
- │               │   ├─ [51]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [52]         BIPUSH immediateValue = 46
- │               │   ├─ [53]         IF_ICMPNE L103
- │               │   ├─ [54] L102:   ALOAD_0 0 // nextChar();
- │               │   ├─ [55]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
- │               │   ├─ [56]         GOTO L101
- │               │   ├─ [57] L103:   ALOAD_0 0 // x = Double.parseDouble( str.substring( startPos, pos ) );
- │               │   ├─ [58]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
- │               │   ├─ [59]         ILOAD_3 3
- │               │   ├─ [60]         ALOAD_0 0
- │               │   ├─ [61]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │               │   ├─ [62]         INVOKEVIRTUAL type = java.lang.String, name = substring, descriptor = java.lang.String( int, int )
- │               │   ├─ [63]         INVOKESTATIC type = java.lang.Double, name = parseDouble, descriptor = double( java.lang.String )
- │               │   ├─ [64]         DSTORE_1 1
- │               │   ├─ [65] T3:     GOTO L128
- │               │   ├─ [66] L105:   ALOAD_0 0 // else if( ch >= 'a' && ch <= 'z' )
- │               │   ├─ [67]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [68]         BIPUSH immediateValue = 97
- │               │   ├─ [69]         IF_ICMPLT L125
- │               │   ├─ [70]         ALOAD_0 0
- │               │   ├─ [71]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [72]         BIPUSH immediateValue = 122
- │               │   ├─ [73]         IF_ICMPGT L125
- │               │   ├─ [74] L108:   ALOAD_0 0 // while( ch >= 'a' && ch <= 'z' )
- │               │   ├─ [75]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [76]         BIPUSH immediateValue = 97
- │               │   ├─ [77]         IF_ICMPLT L110
- │               │   ├─ [78]         ALOAD_0 0
- │               │   ├─ [79]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [80]         BIPUSH immediateValue = 122
- │               │   ├─ [81]         IF_ICMPGT L110
- │               │   ├─ [82] L109:   ALOAD_0 0 // nextChar();
- │               │   ├─ [83]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
- │               │   ├─ [84]         GOTO L108
- │               │   ├─ [85] L110:   ALOAD_0 0 // String func = str.substring( startPos, pos );
- │               │   ├─ [86]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
- │               │   ├─ [87]         ILOAD_3 3
+ │               │   ├─ [0] L85: // if( eat( '+' ) )
+ │               │   ├─ [1]         ALOAD_0 0
+ │               │   ├─ [2]         BIPUSH immediateValue = 43
+ │               │   ├─ [3]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │               │   ├─ [4]         IFEQ L87
+ │               │   ├─ [5] L86: // return parseFactor(); // unary plus
+ │               │   ├─ [6]         ALOAD_0 0
+ │               │   ├─ [7]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │               │   ├─ [8]         DRETURN
+ │               │   ├─ [9] L87: // if( eat( '-' ) )
+ │               │   ├─ [10]         ALOAD_0 0
+ │               │   ├─ [11]         BIPUSH immediateValue = 45
+ │               │   ├─ [12]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │               │   ├─ [13]         IFEQ L91
+ │               │   ├─ [14] L88: // return -parseFactor(); // unary minus
+ │               │   ├─ [15]         ALOAD_0 0
+ │               │   ├─ [16]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │               │   ├─ [17]         DNEG
+ │               │   ├─ [18]         DRETURN
+ │               │   ├─ [19] L91: // int startPos = pos;
+ │               │   ├─ [20]         ALOAD_0 0
+ │               │   ├─ [21]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │               │   ├─ [22]         ISTORE_3 3
+ │               │   ├─ [23] L92: // if( eat( '(' ) )
+ │               │   ├─ [24]         ALOAD_0 0
+ │               │   ├─ [25]         BIPUSH immediateValue = 40
+ │               │   ├─ [26]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │               │   ├─ [27]         IFEQ L98
+ │               │   ├─ [28] L95: // x = parseExpression();
+ │               │   ├─ [29]         ALOAD_0 0
+ │               │   ├─ [30]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseExpression, descriptor = double()
+ │               │   ├─ [31]         DSTORE_1 1
+ │               │   ├─ [32] L96: // eat( ')' );
+ │               │   ├─ [33]         ALOAD_0 0
+ │               │   ├─ [34]         BIPUSH immediateValue = 41
+ │               │   ├─ [35]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │               │   ├─ [36]         POP
+ │               │   ├─ [37]         GOTO L128
+ │               │   ├─ [38] L98: // else if( (ch >= '0' && ch <= '9') || ch == '.' )
+ │               │   ├─ [39]         ALOAD_0 0
+ │               │   ├─ [40]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [41]         BIPUSH immediateValue = 48
+ │               │   ├─ [42]         IF_ICMPLT T1
+ │               │   ├─ [43]         ALOAD_0 0
+ │               │   ├─ [44]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [45]         BIPUSH immediateValue = 57
+ │               │   ├─ [46]         IF_ICMPLE L101
+ │               │   ├─ [47] T1:     ALOAD_0 0
+ │               │   ├─ [48]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [49]         BIPUSH immediateValue = 46
+ │               │   ├─ [50]         IF_ICMPNE L105
+ │               │   ├─ [51] L101: // while( (ch >= '0' && ch <= '9') || ch == '.' )
+ │               │   ├─ [52]         ALOAD_0 0
+ │               │   ├─ [53]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [54]         BIPUSH immediateValue = 48
+ │               │   ├─ [55]         IF_ICMPLT T2
+ │               │   ├─ [56]         ALOAD_0 0
+ │               │   ├─ [57]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [58]         BIPUSH immediateValue = 57
+ │               │   ├─ [59]         IF_ICMPLE L102
+ │               │   ├─ [60] T2:     ALOAD_0 0
+ │               │   ├─ [61]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [62]         BIPUSH immediateValue = 46
+ │               │   ├─ [63]         IF_ICMPNE L103
+ │               │   ├─ [64] L102: // nextChar();
+ │               │   ├─ [65]         ALOAD_0 0
+ │               │   ├─ [66]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
+ │               │   ├─ [67]         GOTO L101
+ │               │   ├─ [68] L103: // x = Double.parseDouble( str.substring( startPos, pos ) );
+ │               │   ├─ [69]         ALOAD_0 0
+ │               │   ├─ [70]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+ │               │   ├─ [71]         ILOAD_3 3
+ │               │   ├─ [72]         ALOAD_0 0
+ │               │   ├─ [73]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │               │   ├─ [74]         INVOKEVIRTUAL type = java.lang.String, name = substring, descriptor = java.lang.String( int, int )
+ │               │   ├─ [75]         INVOKESTATIC type = java.lang.Double, name = parseDouble, descriptor = double( java.lang.String )
+ │               │   ├─ [76]         DSTORE_1 1
+ │               │   ├─ [77] T3:     GOTO L128
+ │               │   ├─ [78] L105: // else if( ch >= 'a' && ch <= 'z' )
+ │               │   ├─ [79]         ALOAD_0 0
+ │               │   ├─ [80]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [81]         BIPUSH immediateValue = 97
+ │               │   ├─ [82]         IF_ICMPLT L125
+ │               │   ├─ [83]         ALOAD_0 0
+ │               │   ├─ [84]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [85]         BIPUSH immediateValue = 122
+ │               │   ├─ [86]         IF_ICMPGT L125
+ │               │   ├─ [87] L108: // while( ch >= 'a' && ch <= 'z' )
  │               │   ├─ [88]         ALOAD_0 0
- │               │   ├─ [89]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
- │               │   ├─ [90]         INVOKEVIRTUAL type = java.lang.String, name = substring, descriptor = java.lang.String( int, int )
- │               │   ├─ [91]         ASTORE
- │               │   ├─ [92] L111:   ALOAD_0 0 // x = parseFactor();
- │               │   ├─ [93]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │               │   ├─ [94]         DSTORE_1 1
- │               │   ├─ [95] L112:   ALOAD // x = switch( func )
- │               │   ├─ [96]         ASTORE
- │               │   ├─ [97]         ICONST_M1
- │               │   ├─ [98]         ISTORE
- │               │   ├─ [99]         ALOAD
- │               │   ├─ [100]         INVOKEVIRTUAL type = java.lang.String, name = hashCode, descriptor = int()
- │               │   ├─ [101]         LOOKUPSWITCH
+ │               │   ├─ [89]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [90]         BIPUSH immediateValue = 97
+ │               │   ├─ [91]         IF_ICMPLT L110
+ │               │   ├─ [92]         ALOAD_0 0
+ │               │   ├─ [93]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [94]         BIPUSH immediateValue = 122
+ │               │   ├─ [95]         IF_ICMPGT L110
+ │               │   ├─ [96] L109: // nextChar();
+ │               │   ├─ [97]         ALOAD_0 0
+ │               │   ├─ [98]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = nextChar, descriptor = void()
+ │               │   ├─ [99]         GOTO L108
+ │               │   ├─ [100] L110: // String func = str.substring( startPos, pos );
+ │               │   ├─ [101]         ALOAD_0 0
+ │               │   ├─ [102]         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+ │               │   ├─ [103]         ILOAD_3 3
+ │               │   ├─ [104]         ALOAD_0 0
+ │               │   ├─ [105]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+ │               │   ├─ [106]         INVOKEVIRTUAL type = java.lang.String, name = substring, descriptor = java.lang.String( int, int )
+ │               │   ├─ [107]         ASTORE
+ │               │   ├─ [108] L111: // x = parseFactor();
+ │               │   ├─ [109]         ALOAD_0 0
+ │               │   ├─ [110]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │               │   ├─ [111]         DSTORE_1 1
+ │               │   ├─ [112] L112: // x = switch( func )
+ │               │   ├─ [113]         ALOAD
+ │               │   ├─ [114]         ASTORE
+ │               │   ├─ [115]         ICONST_M1
+ │               │   ├─ [116]         ISTORE
+ │               │   ├─ [117]         ALOAD
+ │               │   ├─ [118]         INVOKEVIRTUAL type = java.lang.String, name = hashCode, descriptor = int()
+ │               │   ├─ [119]         LOOKUPSWITCH
  │               │   │   ├─ default: T10
  │               │   │   └─ entries: 6 entries
  │               │   │       ├─ [0] LookupSwitchEntry value = 98695, target = T6
@@ -406,49 +458,49 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │               │   │       ├─ [3] LookupSwitchEntry value = 113880, target = T5
  │               │   │       ├─ [4] LookupSwitchEntry value = 114593, target = T7
  │               │   │       └─ [5] LookupSwitchEntry value = 3538208, target = T4
- │               │   ├─ [102] T4:     ALOAD
- │               │   ├─ [103]         LDC constant = StringConstant( Mutf8Constant( "sqrt" ) )
- │               │   ├─ [104]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
- │               │   ├─ [105]         IFEQ T10
- │               │   ├─ [106]         ICONST_0
- │               │   ├─ [107]         ISTORE
- │               │   ├─ [108]         GOTO T10
- │               │   ├─ [109] T5:     ALOAD
- │               │   ├─ [110]         LDC constant = StringConstant( Mutf8Constant( "sin" ) )
- │               │   ├─ [111]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
- │               │   ├─ [112]         IFEQ T10
- │               │   ├─ [113]         ICONST_1
- │               │   ├─ [114]         ISTORE
- │               │   ├─ [115]         GOTO T10
- │               │   ├─ [116] T6:     ALOAD
- │               │   ├─ [117]         LDC constant = StringConstant( Mutf8Constant( "cos" ) )
- │               │   ├─ [118]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
- │               │   ├─ [119]         IFEQ T10
- │               │   ├─ [120]         ICONST_2
- │               │   ├─ [121]         ISTORE
- │               │   ├─ [122]         GOTO T10
- │               │   ├─ [123] T7:     ALOAD
- │               │   ├─ [124]         LDC constant = StringConstant( Mutf8Constant( "tan" ) )
- │               │   ├─ [125]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
- │               │   ├─ [126]         IFEQ T10
- │               │   ├─ [127]         ICONST_3
- │               │   ├─ [128]         ISTORE
- │               │   ├─ [129]         GOTO T10
- │               │   ├─ [130] T8:     ALOAD
- │               │   ├─ [131]         LDC constant = StringConstant( Mutf8Constant( "rad" ) )
- │               │   ├─ [132]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
- │               │   ├─ [133]         IFEQ T10
- │               │   ├─ [134]         ICONST_4
- │               │   ├─ [135]         ISTORE
- │               │   ├─ [136]         GOTO T10
- │               │   ├─ [137] T9:     ALOAD
- │               │   ├─ [138]         LDC constant = StringConstant( Mutf8Constant( "deg" ) )
- │               │   ├─ [139]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
- │               │   ├─ [140]         IFEQ T10
- │               │   ├─ [141]         ICONST_5
- │               │   ├─ [142]         ISTORE
- │               │   ├─ [143] T10:    ILOAD
- │               │   ├─ [144]         TABLESWITCH lowValue = 0
+ │               │   ├─ [120] T4:     ALOAD
+ │               │   ├─ [121]         LDC StringConstant( Mutf8Constant( "sqrt" ) )
+ │               │   ├─ [122]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
+ │               │   ├─ [123]         IFEQ T10
+ │               │   ├─ [124]         ICONST_0
+ │               │   ├─ [125]         ISTORE
+ │               │   ├─ [126]         GOTO T10
+ │               │   ├─ [127] T5:     ALOAD
+ │               │   ├─ [128]         LDC StringConstant( Mutf8Constant( "sin" ) )
+ │               │   ├─ [129]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
+ │               │   ├─ [130]         IFEQ T10
+ │               │   ├─ [131]         ICONST_1
+ │               │   ├─ [132]         ISTORE
+ │               │   ├─ [133]         GOTO T10
+ │               │   ├─ [134] T6:     ALOAD
+ │               │   ├─ [135]         LDC StringConstant( Mutf8Constant( "cos" ) )
+ │               │   ├─ [136]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
+ │               │   ├─ [137]         IFEQ T10
+ │               │   ├─ [138]         ICONST_2
+ │               │   ├─ [139]         ISTORE
+ │               │   ├─ [140]         GOTO T10
+ │               │   ├─ [141] T7:     ALOAD
+ │               │   ├─ [142]         LDC StringConstant( Mutf8Constant( "tan" ) )
+ │               │   ├─ [143]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
+ │               │   ├─ [144]         IFEQ T10
+ │               │   ├─ [145]         ICONST_3
+ │               │   ├─ [146]         ISTORE
+ │               │   ├─ [147]         GOTO T10
+ │               │   ├─ [148] T8:     ALOAD
+ │               │   ├─ [149]         LDC StringConstant( Mutf8Constant( "rad" ) )
+ │               │   ├─ [150]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
+ │               │   ├─ [151]         IFEQ T10
+ │               │   ├─ [152]         ICONST_4
+ │               │   ├─ [153]         ISTORE
+ │               │   ├─ [154]         GOTO T10
+ │               │   ├─ [155] T9:     ALOAD
+ │               │   ├─ [156]         LDC StringConstant( Mutf8Constant( "deg" ) )
+ │               │   ├─ [157]         INVOKEVIRTUAL type = java.lang.String, name = equals, descriptor = boolean( java.lang.Object )
+ │               │   ├─ [158]         IFEQ T10
+ │               │   ├─ [159]         ICONST_5
+ │               │   ├─ [160]         ISTORE
+ │               │   ├─ [161] T10:    ILOAD
+ │               │   ├─ [162]         TABLESWITCH lowValue = 0
  │               │   │   ├─ default: L120
  │               │   │   └─ offsets: 6 entries
  │               │   │       ├─ [0] L114
@@ -457,51 +509,69 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │               │   │       ├─ [3] L117
  │               │   │       ├─ [4] L118
  │               │   │       └─ [5] L119
- │               │   ├─ [145] L114:   DLOAD_1 1 // case "sqrt" -> Math.sqrt( x );
- │               │   ├─ [146]         INVOKESTATIC type = java.lang.Math, name = sqrt, descriptor = double( double )
- │               │   ├─ [147]         GOTO T11
- │               │   ├─ [148] L115:   DLOAD_1 1 // case "sin" -> Math.sin( x );
- │               │   ├─ [149]         INVOKESTATIC type = java.lang.Math, name = sin, descriptor = double( double )
- │               │   ├─ [150]         GOTO T11
- │               │   ├─ [151] L116:   DLOAD_1 1 // case "cos" -> Math.cos( x );
- │               │   ├─ [152]         INVOKESTATIC type = java.lang.Math, name = cos, descriptor = double( double )
- │               │   ├─ [153]         GOTO T11
- │               │   ├─ [154] L117:   DLOAD_1 1 // case "tan" -> Math.tan( x );
- │               │   ├─ [155]         INVOKESTATIC type = java.lang.Math, name = tan, descriptor = double( double )
- │               │   ├─ [156]         GOTO T11
- │               │   ├─ [157] L118:   DLOAD_1 1 // case "rad" -> Math.toRadians( x );
- │               │   ├─ [158]         INVOKESTATIC type = java.lang.Math, name = toRadians, descriptor = double( double )
- │               │   ├─ [159]         GOTO T11
- │               │   ├─ [160] L119:   DLOAD_1 1 // case "deg" -> Math.toDegrees( x );
- │               │   ├─ [161]         INVOKESTATIC type = java.lang.Math, name = toDegrees, descriptor = double( double )
- │               │   ├─ [162]         GOTO T11
- │               │   ├─ [163] L120:   NEW java.lang.RuntimeException // default -> throw new RuntimeException( "Unknown function: " + func );
- │               │   ├─ [164]         DUP
- │               │   ├─ [165]         ALOAD
- │               │   ├─ [166]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 1, name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String )
- │               │   ├─ [167]         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
- │               │   ├─ [168]         ATHROW
- │               │   ├─ [169] T11:    DSTORE_1 1
- │               │   ├─ [170] L122:   GOTO L128 // }
- │               │   ├─ [171] L125:   NEW java.lang.RuntimeException // throw new RuntimeException( "Unexpected: " + (char)ch );
- │               │   ├─ [172]         DUP
- │               │   ├─ [173]         ALOAD_0 0
- │               │   ├─ [174]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
- │               │   ├─ [175]         I2C
- │               │   ├─ [176]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = makeConcatWithConstants, descriptor = java.lang.String( char )
- │               │   ├─ [177]         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
- │               │   ├─ [178]         ATHROW
- │               │   ├─ [179] L128:   ALOAD_0 0 // if( eat( '^' ) )
- │               │   ├─ [180]         BIPUSH immediateValue = 94
- │               │   ├─ [181]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
- │               │   ├─ [182]         IFEQ L131
- │               │   ├─ [183] L129:   DLOAD_1 1 // x = Math.pow( x, parseFactor() ); // exponentiation
- │               │   ├─ [184]         ALOAD_0 0
- │               │   ├─ [185]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
- │               │   ├─ [186]         INVOKESTATIC type = java.lang.Math, name = pow, descriptor = double( double, double )
- │               │   ├─ [187]         DSTORE_1 1
- │               │   ├─ [188] L131:   DLOAD_1 1 // return x;
- │               │   └─ [189]         DRETURN
+ │               │   ├─ [163] L114: // case "sqrt" -> Math.sqrt( x );
+ │               │   ├─ [164]         DLOAD_1 1
+ │               │   ├─ [165]         INVOKESTATIC type = java.lang.Math, name = sqrt, descriptor = double( double )
+ │               │   ├─ [166]         GOTO T11
+ │               │   ├─ [167] L115: // case "sin" -> Math.sin( x );
+ │               │   ├─ [168]         DLOAD_1 1
+ │               │   ├─ [169]         INVOKESTATIC type = java.lang.Math, name = sin, descriptor = double( double )
+ │               │   ├─ [170]         GOTO T11
+ │               │   ├─ [171] L116: // case "cos" -> Math.cos( x );
+ │               │   ├─ [172]         DLOAD_1 1
+ │               │   ├─ [173]         INVOKESTATIC type = java.lang.Math, name = cos, descriptor = double( double )
+ │               │   ├─ [174]         GOTO T11
+ │               │   ├─ [175] L117: // case "tan" -> Math.tan( x );
+ │               │   ├─ [176]         DLOAD_1 1
+ │               │   ├─ [177]         INVOKESTATIC type = java.lang.Math, name = tan, descriptor = double( double )
+ │               │   ├─ [178]         GOTO T11
+ │               │   ├─ [179] L118: // case "rad" -> Math.toRadians( x );
+ │               │   ├─ [180]         DLOAD_1 1
+ │               │   ├─ [181]         INVOKESTATIC type = java.lang.Math, name = toRadians, descriptor = double( double )
+ │               │   ├─ [182]         GOTO T11
+ │               │   ├─ [183] L119: // case "deg" -> Math.toDegrees( x );
+ │               │   ├─ [184]         DLOAD_1 1
+ │               │   ├─ [185]         INVOKESTATIC type = java.lang.Math, name = toDegrees, descriptor = double( double )
+ │               │   ├─ [186]         GOTO T11
+ │               │   ├─ [187] L120: // default -> throw new RuntimeException( "Unknown function: " + func );
+ │               │   ├─ [188]         NEW java.lang.RuntimeException
+ │               │   ├─ [189]         DUP
+ │               │   ├─ [190]         ALOAD
+ │               │   ├─ [191]         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String ), arguments = Unknown function: 
+ │               │   │   ├─                 referenceKind: InvokeStatic
+ │               │   │   ├─                 referenceType: java.lang.invoke.StringConcatFactory
+ │               │   │   └─                 methodName: makeConcatWithConstants
+ │               │   ├─ [192]         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
+ │               │   ├─ [193]         ATHROW
+ │               │   ├─ [194] T11:    DSTORE_1 1
+ │               │   ├─ [195] L122: // }
+ │               │   ├─ [196]         GOTO L128
+ │               │   ├─ [197] L125: // throw new RuntimeException( "Unexpected: " + (char)ch );
+ │               │   ├─ [198]         NEW java.lang.RuntimeException
+ │               │   ├─ [199]         DUP
+ │               │   ├─ [200]         ALOAD_0 0
+ │               │   ├─ [201]         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+ │               │   ├─ [202]         I2C
+ │               │   ├─ [203]         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( char ), arguments = Unexpected: 
+ │               │   │   ├─                 referenceKind: InvokeStatic
+ │               │   │   ├─                 referenceType: java.lang.invoke.StringConcatFactory
+ │               │   │   └─                 methodName: makeConcatWithConstants
+ │               │   ├─ [204]         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
+ │               │   ├─ [205]         ATHROW
+ │               │   ├─ [206] L128: // if( eat( '^' ) )
+ │               │   ├─ [207]         ALOAD_0 0
+ │               │   ├─ [208]         BIPUSH immediateValue = 94
+ │               │   ├─ [209]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = eat, descriptor = boolean( int )
+ │               │   ├─ [210]         IFEQ L131
+ │               │   ├─ [211] L129: // x = Math.pow( x, parseFactor() ); // exponentiation
+ │               │   ├─ [212]         DLOAD_1 1
+ │               │   ├─ [213]         ALOAD_0 0
+ │               │   ├─ [214]         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class9WithCode, name = parseFactor, descriptor = double()
+ │               │   ├─ [215]         INVOKESTATIC type = java.lang.Math, name = pow, descriptor = double( double, double )
+ │               │   ├─ [216]         DSTORE_1 1
+ │               │   ├─ [217] L131: // return x;
+ │               │   ├─ [218]         DLOAD_1 1
+ │               │   └─ [219]         DRETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 3 entries
  │                   ├─ [0] LineNumberTableAttribute
@@ -607,12 +677,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super], thisClass = mikenaki
  │                           │   └─ stackVerificationTypes: 0 entries
  │                           └─ [28] SameFrame target = L131
  └─ attributes: 3 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class9WithCode.java" )
+     ├─ [0] SourceFileAttribute "Class9WithCode.java"
      ├─ [1] BootstrapMethodsAttribute
      │   └─ bootstrapMethods: 2 entries
      │       ├─ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
      │       └─ [1] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
      └─ [2] InnerClassesAttribute
          └─ innerClasses: 1 entries
-             └─ [0] InnerClass outerClass = java.lang.invoke.MethodHandles, accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = Mutf8Constant( "Lookup" )
+             └─ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -10,8 +10,8 @@ public final class TypeParameterBoundTarget extends Target // "type_parameter_bo
 	public TypeParameterBoundTarget( int tag, int typeParameterIndex, int boundIndex )
 	{
 		super( tag );
-		assert tag == tagTypeInBoundOfTypeParameterDeclarationOfGenericClassOrInterface ||
-			tag == tagTypeInBoundOfTypeParameterDeclarationOfGenericMethodOrConstructor;
+		assert tag == tag_ClassTypeBound ||
+			tag == tag_MethodTypeBound;
 		this.typeParameterIndex = typeParameterIndex;
 		this.boundIndex = boundIndex;
 	}

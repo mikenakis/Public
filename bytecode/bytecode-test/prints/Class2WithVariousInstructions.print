@@ -7,9 +7,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L12:    ALOAD_0 0 // public abstract class Class2WithVariousInstructions
- │   │           │   ├─ [1]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │           │   └─ [2]         RETURN
+ │   │           │   ├─ [0] L12: // public abstract class Class2WithVariousInstructions
+ │   │           │   ├─ [1]         ALOAD_0 0
+ │   │           │   ├─ [2]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+ │   │           │   └─ [3]         RETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -22,9 +23,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 2
  │   │       │   ├─ instructions: 3 entries
- │   │       │   │   ├─ [0] L16:    IINC index = 1, delta = 5 // a += 5;
- │   │       │   │   ├─ [1] L17:    ILOAD_1 1 // return a;
- │   │       │   │   └─ [2]         IRETURN
+ │   │       │   │   ├─ [0] L16: // a += 5;
+ │   │       │   │   ├─ [1]         IINC index = 1, delta = 5
+ │   │       │   │   ├─ [2] L17: // return a;
+ │   │       │   │   ├─ [3]         ILOAD_1 1
+ │   │       │   │   └─ [4]         IRETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 2 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -42,10 +45,11 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 1
  │   │           ├─ instructions: 4 entries
- │   │           │   ├─ [0] L22:    ICONST_4 // return new Object[4][5][];
- │   │           │   ├─ [1]         ICONST_5
- │   │           │   ├─ [2]         MULTIANEWARRAY class = java.lang.Object[][][], 2 dimensions
- │   │           │   └─ [3]         ARETURN
+ │   │           │   ├─ [0] L22: // return new Object[4][5][];
+ │   │           │   ├─ [1]         ICONST_4
+ │   │           │   ├─ [2]         ICONST_5
+ │   │           │   ├─ [3]         MULTIANEWARRAY class = java.lang.Object[][][], 2 dimensions
+ │   │           │   └─ [4]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -58,8 +62,9 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │       │   ├─ instructions: 27 entries
- │   │       │   │   ├─ [0] L27:    ILOAD_1 1 // switch( i )
- │   │       │   │   ├─ [1]         LOOKUPSWITCH
+ │   │       │   │   ├─ [0] L27: // switch( i )
+ │   │       │   │   ├─ [1]         ILOAD_1 1
+ │   │       │   │   ├─ [2]         LOOKUPSWITCH
  │   │       │   │   │   ├─ default: L50
  │   │       │   │   │   └─ entries: 6 entries
  │   │       │   │   │       ├─ [0] LookupSwitchEntry value = 100, target = L30
@@ -68,31 +73,44 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │       │   │   │       ├─ [3] LookupSwitchEntry value = 130, target = L39
  │   │       │   │   │       ├─ [4] LookupSwitchEntry value = 140, target = L42
  │   │       │   │   │       └─ [5] LookupSwitchEntry value = 150, target = L45
- │   │       │   │   ├─ [2] L30:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "100" );
- │   │       │   │   ├─ [3]         LDC constant = StringConstant( Mutf8Constant( "100" ) )
- │   │       │   │   ├─ [4]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [5] L31:    GOTO L50 // break;
- │   │       │   │   ├─ [6] L33:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "110" );
- │   │       │   │   ├─ [7]         LDC constant = StringConstant( Mutf8Constant( "110" ) )
- │   │       │   │   ├─ [8]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [9] L34:    GOTO L50 // break;
- │   │       │   │   ├─ [10] L36:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "120" );
- │   │       │   │   ├─ [11]         LDC constant = StringConstant( Mutf8Constant( "120" ) )
+ │   │       │   │   ├─ [3] L30: // System.out.println( "100" );
+ │   │       │   │   ├─ [4]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │   │       │   │   ├─ [5]         LDC StringConstant( Mutf8Constant( "100" ) )
+ │   │       │   │   ├─ [6]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [7] L31: // break;
+ │   │       │   │   ├─ [8]         GOTO L50
+ │   │       │   │   ├─ [9] L33: // System.out.println( "110" );
+ │   │       │   │   ├─ [10]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │   │       │   │   ├─ [11]         LDC StringConstant( Mutf8Constant( "110" ) )
  │   │       │   │   ├─ [12]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [13] L37:    GOTO L50 // break;
- │   │       │   │   ├─ [14] L39:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "130" );
- │   │       │   │   ├─ [15]         LDC constant = StringConstant( Mutf8Constant( "130" ) )
- │   │       │   │   ├─ [16]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [17] L40:    GOTO L50 // break;
- │   │       │   │   ├─ [18] L42:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "140" );
- │   │       │   │   ├─ [19]         LDC constant = StringConstant( Mutf8Constant( "140" ) )
- │   │       │   │   ├─ [20]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [21] L43:    GOTO L50 // break;
- │   │       │   │   ├─ [22] L45:    GETSTATIC java.io.PrintStream java.lang.System.out // System.out.println( "150" );
- │   │       │   │   ├─ [23]         LDC constant = StringConstant( Mutf8Constant( "150" ) )
+ │   │       │   │   ├─ [13] L34: // break;
+ │   │       │   │   ├─ [14]         GOTO L50
+ │   │       │   │   ├─ [15] L36: // System.out.println( "120" );
+ │   │       │   │   ├─ [16]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │   │       │   │   ├─ [17]         LDC StringConstant( Mutf8Constant( "120" ) )
+ │   │       │   │   ├─ [18]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [19] L37: // break;
+ │   │       │   │   ├─ [20]         GOTO L50
+ │   │       │   │   ├─ [21] L39: // System.out.println( "130" );
+ │   │       │   │   ├─ [22]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │   │       │   │   ├─ [23]         LDC StringConstant( Mutf8Constant( "130" ) )
  │   │       │   │   ├─ [24]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │   │       │   │   ├─ [25] L46:    GOTO L50 // break;
- │   │       │   │   └─ [26] L50:    RETURN // }
+ │   │       │   │   ├─ [25] L40: // break;
+ │   │       │   │   ├─ [26]         GOTO L50
+ │   │       │   │   ├─ [27] L42: // System.out.println( "140" );
+ │   │       │   │   ├─ [28]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │   │       │   │   ├─ [29]         LDC StringConstant( Mutf8Constant( "140" ) )
+ │   │       │   │   ├─ [30]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [31] L43: // break;
+ │   │       │   │   ├─ [32]         GOTO L50
+ │   │       │   │   ├─ [33] L45: // System.out.println( "150" );
+ │   │       │   │   ├─ [34]         GETSTATIC java.io.PrintStream java.lang.System.out
+ │   │       │   │   ├─ [35]         LDC StringConstant( Mutf8Constant( "150" ) )
+ │   │       │   │   ├─ [36]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+ │   │       │   │   ├─ [37] L46: // break;
+ │   │       │   │   ├─ [38]         GOTO L50
+ │   │       │   │   ├─ [39] L50: // }
+ │   │       │   │   └─ [40]         RETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -131,9 +149,10 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 1, maxLocals = 1
  │   │           ├─ instructions: 3 entries
- │   │           │   ├─ [0] L54:    SIPUSH immediateValue = 129 // return Integer.toString( 129 );
- │   │           │   ├─ [1]         INVOKESTATIC type = java.lang.Integer, name = toString, descriptor = java.lang.String( int )
- │   │           │   └─ [2]         ARETURN
+ │   │           │   ├─ [0] L54: // return Integer.toString( 129 );
+ │   │           │   ├─ [1]         SIPUSH immediateValue = 129
+ │   │           │   ├─ [2]         INVOKESTATIC type = java.lang.Integer, name = toString, descriptor = java.lang.String( int )
+ │   │           │   └─ [3]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 2 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -146,22 +165,29 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 1 entries
  │   │       └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │   │           ├─ instructions: 16 entries
- │   │           │   ├─ [0] L59:    NEW java.util.ArrayList // List<String> list = new ArrayList<>();
- │   │           │   ├─ [1]         DUP
- │   │           │   ├─ [2]         INVOKESPECIAL type = java.util.ArrayList, name = <init>, descriptor = void()
- │   │           │   ├─ [3]         ASTORE_1 1
- │   │           │   ├─ [4] L60:    ALOAD_1 1 // list.add( "x" );
- │   │           │   ├─ [5]         LDC constant = StringConstant( Mutf8Constant( "x" ) )
- │   │           │   ├─ [6]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = add, descriptor = boolean( java.lang.Object ), 2 arguments
- │   │           │   ├─ [7]         POP
- │   │           │   ├─ [8] L61:    ALOAD_1 1 // list.sort( ( a, b ) -> -a.compareTo( b ) );
- │   │           │   ├─ [9]         INVOKEDYNAMIC invokeDynamicConstant = bootstrapMethodIndex = 0, name = compare, descriptor = java.util.Comparator()
- │   │           │   ├─ [10]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = sort, descriptor = void( java.util.Comparator ), 2 arguments
- │   │           │   ├─ [11] L62:    ALOAD_1 1 // return list.get( 0 );
- │   │           │   ├─ [12]         ICONST_0
- │   │           │   ├─ [13]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = get, descriptor = java.lang.Object( int ), 2 arguments
- │   │           │   ├─ [14]         CHECKCAST java.lang.String
- │   │           │   └─ [15]         ARETURN
+ │   │           │   ├─ [0] L59: // List<String> list = new ArrayList<>();
+ │   │           │   ├─ [1]         NEW java.util.ArrayList
+ │   │           │   ├─ [2]         DUP
+ │   │           │   ├─ [3]         INVOKESPECIAL type = java.util.ArrayList, name = <init>, descriptor = void()
+ │   │           │   ├─ [4]         ASTORE_1 1
+ │   │           │   ├─ [5] L60: // list.add( "x" );
+ │   │           │   ├─ [6]         ALOAD_1 1
+ │   │           │   ├─ [7]         LDC StringConstant( Mutf8Constant( "x" ) )
+ │   │           │   ├─ [8]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = add, descriptor = boolean( java.lang.Object ), 2 arguments
+ │   │           │   ├─ [9]         POP
+ │   │           │   ├─ [10] L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
+ │   │           │   ├─ [11]         ALOAD_1 1
+ │   │           │   ├─ [12]         INVOKEDYNAMIC name = compare, descriptor = java.util.Comparator(), arguments = MethodTypeDesc[(Object,Object)int], MethodHandleDesc[STATIC/Class2WithVariousInstructions::lambda$methodWithLambda$0(String,String)int], MethodTypeDesc[(String,String)int]
+ │   │           │   │   ├─                 referenceKind: InvokeStatic
+ │   │           │   │   ├─                 referenceType: java.lang.invoke.LambdaMetafactory
+ │   │           │   │   └─                 methodName: metafactory
+ │   │           │   ├─ [13]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = sort, descriptor = void( java.util.Comparator ), 2 arguments
+ │   │           │   ├─ [14] L62: // return list.get( 0 );
+ │   │           │   ├─ [15]         ALOAD_1 1
+ │   │           │   ├─ [16]         ICONST_0
+ │   │           │   ├─ [17]         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = get, descriptor = java.lang.Object( int ), 2 arguments
+ │   │           │   ├─ [18]         CHECKCAST java.lang.String
+ │   │           │   └─ [19]         ARETURN
  │   │           ├─ exceptionInfos: 0 entries
  │   │           └─ attributes: 3 entries
  │   │               ├─ [0] LineNumberTableAttribute
@@ -181,32 +207,33 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │   │   └─ attributes: 2 entries
  │   │       ├─ [0] CodeAttribute maxStack = 13, maxLocals = 2
  │   │       │   ├─ instructions: 26 entries
- │   │       │   │   ├─ [0] L77:    NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo // return new Foo( new Foo( b ? new Foo() : null ) );
- │   │       │   │   ├─ [1]         DUP
- │   │       │   │   ├─ [2]         ICONST_1
- │   │       │   │   ├─ [3]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
- │   │       │   │   ├─ [4]         DUP
- │   │       │   │   ├─ [5]         ICONST_0
- │   │       │   │   ├─ [6] T1:     NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
- │   │       │   │   ├─ [7]         DUP
- │   │       │   │   ├─ [8]         ICONST_1
- │   │       │   │   ├─ [9]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
- │   │       │   │   ├─ [10]         DUP
- │   │       │   │   ├─ [11]         ICONST_0
- │   │       │   │   ├─ [12]         ILOAD_1 1
- │   │       │   │   ├─ [13]         IFEQ T2
- │   │       │   │   ├─ [14]         NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
- │   │       │   │   ├─ [15]         DUP
- │   │       │   │   ├─ [16]         ICONST_0
- │   │       │   │   ├─ [17]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
- │   │       │   │   ├─ [18]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
- │   │       │   │   ├─ [19]         GOTO T3
- │   │       │   │   ├─ [20] T2:     ACONST_NULL
- │   │       │   │   ├─ [21] T3:     AASTORE
- │   │       │   │   ├─ [22]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
- │   │       │   │   ├─ [23]         AASTORE
- │   │       │   │   ├─ [24]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
- │   │       │   │   └─ [25]         ARETURN
+ │   │       │   │   ├─ [0] L77: // return new Foo( new Foo( b ? new Foo() : null ) );
+ │   │       │   │   ├─ [1]         NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+ │   │       │   │   ├─ [2]         DUP
+ │   │       │   │   ├─ [3]         ICONST_1
+ │   │       │   │   ├─ [4]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+ │   │       │   │   ├─ [5]         DUP
+ │   │       │   │   ├─ [6]         ICONST_0
+ │   │       │   │   ├─ [7] T1:     NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+ │   │       │   │   ├─ [8]         DUP
+ │   │       │   │   ├─ [9]         ICONST_1
+ │   │       │   │   ├─ [10]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+ │   │       │   │   ├─ [11]         DUP
+ │   │       │   │   ├─ [12]         ICONST_0
+ │   │       │   │   ├─ [13]         ILOAD_1 1
+ │   │       │   │   ├─ [14]         IFEQ T2
+ │   │       │   │   ├─ [15]         NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+ │   │       │   │   ├─ [16]         DUP
+ │   │       │   │   ├─ [17]         ICONST_0
+ │   │       │   │   ├─ [18]         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+ │   │       │   │   ├─ [19]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+ │   │       │   │   ├─ [20]         GOTO T3
+ │   │       │   │   ├─ [21] T2:     ACONST_NULL
+ │   │       │   │   ├─ [22] T3:     AASTORE
+ │   │       │   │   ├─ [23]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+ │   │       │   │   ├─ [24]         AASTORE
+ │   │       │   │   ├─ [25]         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+ │   │       │   │   └─ [26]         ARETURN
  │   │       │   ├─ exceptionInfos: 0 entries
  │   │       │   └─ attributes: 3 entries
  │   │       │       ├─ [0] LineNumberTableAttribute
@@ -256,11 +283,12 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │       └─ attributes: 1 entries
  │           └─ [0] CodeAttribute maxStack = 2, maxLocals = 2
  │               ├─ instructions: 5 entries
- │               │   ├─ [0] L61:    ALOAD_0 0 // list.sort( ( a, b ) -> -a.compareTo( b ) );
- │               │   ├─ [1]         ALOAD_1 1
- │               │   ├─ [2]         INVOKEVIRTUAL type = java.lang.String, name = compareTo, descriptor = int( java.lang.String )
- │               │   ├─ [3]         INEG
- │               │   └─ [4]         IRETURN
+ │               │   ├─ [0] L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
+ │               │   ├─ [1]         ALOAD_0 0
+ │               │   ├─ [2]         ALOAD_1 1
+ │               │   ├─ [3]         INVOKEVIRTUAL type = java.lang.String, name = compareTo, descriptor = int( java.lang.String )
+ │               │   ├─ [4]         INEG
+ │               │   └─ [5]         IRETURN
  │               ├─ exceptionInfos: 0 entries
  │               └─ attributes: 2 entries
  │                   ├─ [0] LineNumberTableAttribute
@@ -271,15 +299,14 @@ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass 
  │                           ├─ [0] LocalVariableTableEntry index = 0, start = L61, end = @end, name = a, descriptor = java.lang.String
  │                           └─ [1] LocalVariableTableEntry index = 1, start = L61, end = @end, name = b, descriptor = java.lang.String
  └─ attributes: 4 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "Class2WithVariousInstructions.java" )
+     ├─ [0] SourceFileAttribute "Class2WithVariousInstructions.java"
      ├─ [1] NestMembersAttribute
      │   └─ members: 1 entries
-     │       └─ [0] ClassConstant mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+     │       └─ [0] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
      ├─ [2] BootstrapMethodsAttribute
      │   └─ bootstrapMethods: 1 entries
      │       └─ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.LambdaMetafactory, name = metafactory, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = mikenakis.bytecode.test.model.Class2WithVariousInstructions, name = lambda$methodWithLambda$0, descriptor = int( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
      └─ [3] InnerClassesAttribute
          └─ innerClasses: 2 entries
-             ├─ [0] InnerClass outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, accessFlags = [static], innerClass=mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, innerName = Mutf8Constant( "Foo" )
-             └─ [1] InnerClass outerClass = java.lang.invoke.MethodHandles, accessFlags = [public, static, final], innerClass=java.lang.invoke.MethodHandles$Lookup, innerName = Mutf8Constant( "Lookup" )
+             ├─ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
+             └─ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -213,7 +213,7 @@ public final class LocalVariableInstruction extends Instruction
 
 	private LocalVariableInstruction( int opCode, int index )
 	{
-		super( Group.LocalVariable );
+		super( groupTag_LocalVariable );
 		assert opCodes.contains( opCode );
 		assert index >= 0;
 		this.opCode = opCode;

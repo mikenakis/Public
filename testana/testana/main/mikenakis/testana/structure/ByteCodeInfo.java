@@ -27,23 +27,24 @@ import mikenakis.bytecode.model.attributes.InnerClassesAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableAttribute;
 import mikenakis.bytecode.model.attributes.LocalVariableTableEntry;
-import mikenakis.bytecode.model.attributes.LocalVariableTypeTableEntry;
 import mikenakis.bytecode.model.attributes.LocalVariableTypeTableAttribute;
+import mikenakis.bytecode.model.attributes.LocalVariableTypeTableEntry;
 import mikenakis.bytecode.model.attributes.NestHostAttribute;
 import mikenakis.bytecode.model.attributes.NestMembersAttribute;
 import mikenakis.bytecode.model.attributes.ParameterAnnotationSet;
 import mikenakis.bytecode.model.attributes.ParameterAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
-import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
+import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
@@ -85,6 +86,8 @@ import java.util.stream.Collectors;
 
 final class ByteCodeInfo
 {
+	private static final boolean includeDescriptors = Kit.get( false ); //I believe that descriptor-only dependencies are unnecessary.
+
 	private final ByteCodeType byteCodeType;
 
 	ByteCodeInfo( ByteCodeType byteCodeType )
@@ -97,7 +100,7 @@ final class ByteCodeInfo
 		ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ); //TODO this is only here for testing, must be removed!
 		Collection<String> mutableDependencyNames = new HashSet<>();
 		addDependencyTypeNames( byteCodeType, mutableDependencyNames );
-		mutableDependencyNames.remove( ByteCodeHelpers.typeNameFromClassDesc( byteCodeType.descriptor() ) );
+		mutableDependencyNames.remove( byteCodeType.typeName() );
 		return mutableDependencyNames;
 	}
 
@@ -119,9 +122,9 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNames( ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeName( byteCodeType.thisClassDescriptor.name(), mutableDependencyNames );
-		byteCodeType.superClassDescriptor.map( d -> d.name() ).ifPresent( c -> addDependencyTypeName( c, mutableDependencyNames ) );
-		for( TerminalTypeDescriptor interfaceDescriptor : byteCodeType.interfaces )
+		addDependencyTypeName( byteCodeType.typeName(), mutableDependencyNames );
+		byteCodeType.superTypeName().ifPresent( c -> addDependencyTypeName( c, mutableDependencyNames ) );
+		for( TerminalTypeDescriptor interfaceDescriptor : byteCodeType.interfaceClassDescriptors() )
 			addDependencyTypeName( interfaceDescriptor.name(), mutableDependencyNames );
 		for( ByteCodeField byteCodeField : byteCodeType.fields )
 		{
@@ -130,13 +133,13 @@ final class ByteCodeInfo
 			{
 				switch( knownAttribute.tag )
 				{
-					case KnownAttribute.tagConstantValue -> addDependencyTypeNamesFromConstantValueAttribute( knownAttribute.asConstantValueAttribute() );
-					case KnownAttribute.tagRuntimeVisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeInvisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagSignature -> addDependencyTypeNamesFromFieldTypeSignature( knownAttribute.asSignatureAttribute().signatureConstant().stringValue(), mutableDependencyNames );
-					case KnownAttribute.tagDeprecated, KnownAttribute.tagSynthetic -> { /* nothing to do */ }
+					case KnownAttribute.tag_ConstantValue -> addDependencyTypeNamesFromConstantValueAttribute( knownAttribute.asConstantValueAttribute() );
+					case KnownAttribute.tag_RuntimeVisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeInvisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_Signature -> addDependencyTypeNamesFromFieldTypeSignatureString( knownAttribute.asSignatureAttribute().signatureString(), mutableDependencyNames );
+					case KnownAttribute.tag_Deprecated, KnownAttribute.tag_Synthetic -> { /* nothing to do */ }
 					default -> throw new AssertionError( knownAttribute );
 				}
 			}
@@ -148,17 +151,17 @@ final class ByteCodeInfo
 			{
 				switch( knownAttribute.tag )
 				{
-					case KnownAttribute.tagAnnotationDefault -> addDependencyTypeNamesFromAnnotationDefaultAttribute( knownAttribute.asAnnotationDefaultAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagCode -> addDependencyTypeNamesFromCodeAttribute( knownAttribute.asCodeAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagExceptions -> addDependencyTypeNamesFromExceptionsAttribute( knownAttribute.asExceptionsAttribute(), mutableDependencyNames );
-					case KnownAttribute.tagRuntimeVisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeInvisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeInvisibleParameterAnnotations -> addDependencyTypeNamesFromParameterAnnotationsAttribute( knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeVisibleParameterAnnotations -> addDependencyTypeNamesFromParameterAnnotationsAttribute( knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagRuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-					case KnownAttribute.tagSignature -> addDependencyTypeNamesFromMethodTypeSignatureAttribute( knownAttribute.asSignatureAttribute().signatureConstant().stringValue(), mutableDependencyNames );
-					case KnownAttribute.tagDeprecated, KnownAttribute.tagSynthetic, KnownAttribute.tagMethodParameters -> { /* nothing to do */ }
+					case KnownAttribute.tag_AnnotationDefault -> addDependencyTypeNamesFromAnnotationDefaultAttribute( knownAttribute.asAnnotationDefaultAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_Code -> addDependencyTypeNamesFromCodeAttribute( knownAttribute.asCodeAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_Exceptions -> addDependencyTypeNamesFromExceptionsAttribute( knownAttribute.asExceptionsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeVisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeInvisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> addDependencyTypeNamesFromParameterAnnotationsAttribute( knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> addDependencyTypeNamesFromParameterAnnotationsAttribute( knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+					case KnownAttribute.tag_Signature -> addDependencyTypeNamesFromMethodTypeSignatureString( knownAttribute.asSignatureAttribute().signatureString(), mutableDependencyNames );
+					case KnownAttribute.tag_Deprecated, KnownAttribute.tag_Synthetic, KnownAttribute.tag_MethodParameters -> { /* nothing to do */ }
 					default -> throw new AssertionError( knownAttribute );
 				}
 			}
@@ -167,41 +170,43 @@ final class ByteCodeInfo
 		{
 			switch( knownAttribute.tag )
 			{
-				case KnownAttribute.tagBootstrapMethods -> addDependencyTypeNamesFromBootstrapMethodsAttribute( knownAttribute.asBootstrapMethodsAttribute(), mutableDependencyNames );
-				case KnownAttribute.tagEnclosingMethod -> addDependencyTypeNamesFromEnclosingMethodAttribute( knownAttribute.asEnclosingMethodAttribute(), mutableDependencyNames );
-				case KnownAttribute.tagInnerClasses -> addDependencyTypeNamesFromInnerClassesAttribute( knownAttribute.asInnerClassesAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_BootstrapMethods -> addDependencyTypeNamesFromBootstrapMethodsAttribute( knownAttribute.asBootstrapMethodsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_EnclosingMethod -> addDependencyTypeNamesFromEnclosingMethodAttribute( knownAttribute.asEnclosingMethodAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_InnerClasses -> addDependencyTypeNamesFromInnerClassesAttribute( knownAttribute.asInnerClassesAttribute(), mutableDependencyNames );
 				//case ModuleAttribute.name:
 				//case ModulePackageAttribute.name:
 				//case ModuleMainClassAttribute.name:
-				case KnownAttribute.tagNestHost -> addDependencyTypeNamesFromNestHostAttribute( knownAttribute.asNestHostAttribute(), mutableDependencyNames );
-				case KnownAttribute.tagNestMembers -> addDependencyTypeNamesFromNestMembersAttribute( knownAttribute.asNestMembersAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_NestHost -> addDependencyTypeNamesFromNestHostAttribute( knownAttribute.asNestHostAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_NestMembers -> addDependencyTypeNamesFromNestMembersAttribute( knownAttribute.asNestMembersAttribute(), mutableDependencyNames );
 				//case RecordAttribute.name:
-				case KnownAttribute.tagRuntimeInvisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-				case KnownAttribute.tagRuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-				case KnownAttribute.tagRuntimeVisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-				case KnownAttribute.tagRuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-				case KnownAttribute.tagSignature -> addDependencyTypeNamesFromClassTypeSignatureString( knownAttribute.asSignatureAttribute().signatureConstant().stringValue(), mutableDependencyNames );
+				case KnownAttribute.tag_RuntimeInvisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeInvisibleAnnotationsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_RuntimeVisibleAnnotations -> addDependencyTypeNamesFromAnnotationsAttribute( knownAttribute.asRuntimeVisibleAnnotationsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_Signature -> addDependencyTypeNamesFromClassTypeSignatureString( knownAttribute.asSignatureAttribute().signatureString(), mutableDependencyNames );
 				//SourceDebugExtension
-				case KnownAttribute.tagDeprecated, KnownAttribute.tagSourceFile, KnownAttribute.tagSynthetic -> { /* nothing to do */ }
+				case KnownAttribute.tag_Deprecated, KnownAttribute.tag_SourceFile, KnownAttribute.tag_Synthetic -> { /* nothing to do */ }
 				default -> throw new AssertionError( knownAttribute );
 			}
 		}
 		for( Constant constant : byteCodeType.extraConstants )
 			addDependencyTypeNamesFromConstant( constant, mutableDependencyNames );
 	}
+
 	private static void addDependencyTypeNamesFromNestMembersAttribute( NestMembersAttribute nestMembersAttribute, Collection<String> mutableDependencyNames )
 	{
-		for( ClassConstant memberClassConstant : nestMembersAttribute.memberClassConstants )
-			addDependencyTypeNameFromClassConstant( memberClassConstant, mutableDependencyNames );
-	}
-	private static void addDependencyTypeNamesFromNestHostAttribute( NestHostAttribute nestHostAttribute, Collection<String> mutableDependencyNames )
-	{
-		addDependencyTypeNameFromClassConstant( nestHostAttribute.hostClassConstant, mutableDependencyNames );
+		for( String memberTypeName : nestMembersAttribute.memberTypeNames() )
+			addDependencyTypeName( memberTypeName, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromAnnotationDefaultAttribute( AnnotationDefaultAttribute attribute, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromNestHostAttribute( NestHostAttribute nestHostAttribute, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromElementValue( byteCodeType, attribute.annotationValue(), mutableDependencyNames );
+		addDependencyTypeName( nestHostAttribute.hostClassTypeName(), mutableDependencyNames );
+	}
+
+	private static void addDependencyTypeNamesFromAnnotationDefaultAttribute( AnnotationDefaultAttribute attribute, Collection<String> mutableDependencyNames )
+	{
+		addDependencyTypeNamesFromElementValue( attribute.annotationValue(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromBootstrapMethodsAttribute( BootstrapMethodsAttribute attribute, Collection<String> mutableDependencyNames )
@@ -210,20 +215,23 @@ final class ByteCodeInfo
 			addDependencyTypeNamesFromBootstrapMethod( bootstrapMethod, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromCodeAttribute( CodeAttribute codeAttribute, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromCodeAttribute( CodeAttribute codeAttribute, Collection<String> mutableDependencyNames )
 	{
-		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos() )
-			exceptionInfo.catchTypeConstant.ifPresent( classConstant -> addDependencyTypeNameFromClassConstant( classConstant, mutableDependencyNames ) );
+		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos )
+			addDependencyTypeNamesFromExceptionInfo( mutableDependencyNames, exceptionInfo );
 		for( Instruction instruction : codeAttribute.instructions().all() )
 		{
-			switch( instruction.group )
+			switch( instruction.groupTag )
 			{
-				case Branch, ConditionalBranch, IInc, ImmediateLoadConstant, LocalVariable, LookupSwitch, NewPrimitiveArray, Operandless, OperandlessLoadConstant, TableSwitch -> { /* nothing to do */ }
-				case ConstantReferencing -> addDependencyTypeNamesFromConstantReferencingInstruction( instruction.asConstantReferencingInstruction(), mutableDependencyNames );
-				case IndirectLoadConstant -> addDependencyTypeNamesFromIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction(), mutableDependencyNames );
-				case InvokeDynamic -> addDependencyTypeNamesFromInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction(), byteCodeType, mutableDependencyNames );
-				case InvokeInterface -> addDependencyTypeNamesFromInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction(), mutableDependencyNames );
-				case MultiANewArray -> addDependencyTypeNamesFromMultiANewArrayInstruction( instruction.asMultiANewArrayInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_Branch, Instruction.groupTag_ConditionalBranch, Instruction.groupTag_IInc, Instruction.groupTag_ImmediateLoadConstant, Instruction.groupTag_LocalVariable, Instruction.groupTag_LookupSwitch, //
+					Instruction.groupTag_NewPrimitiveArray, Instruction.groupTag_Operandless, Instruction.groupTag_OperandlessLoadConstant, Instruction.groupTag_TableSwitch -> { /* nothing to do */ }
+				case Instruction.groupTag_ClassConstantReferencing -> addDependencyTypeNamesFromClassConstantReferencingInstruction( instruction.asClassConstantReferencingInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_FieldConstantReferencing -> addDependencyTypeNamesFromFieldConstantReferencingInstruction( instruction.asFieldConstantReferencingInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_MethodConstantReferencing -> addDependencyTypeNamesFromMethodConstantReferencingInstruction( instruction.asMethodConstantReferencingInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_IndirectLoadConstant -> addDependencyTypeNamesFromIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_InvokeDynamic -> addDependencyTypeNamesFromInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_InvokeInterface -> addDependencyTypeNamesFromInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction(), mutableDependencyNames );
+				case Instruction.groupTag_MultiANewArray -> addDependencyTypeNamesFromMultiANewArrayInstruction( instruction.asMultiANewArrayInstruction(), mutableDependencyNames );
 				default -> throw new AssertionError( instruction );
 			}
 		}
@@ -231,19 +239,24 @@ final class ByteCodeInfo
 		{
 			switch( knownAttribute.tag )
 			{
-				case KnownAttribute.tagLocalVariableTable -> addDependencyTypeNamesFromLocalVariableTableAttribute( knownAttribute.asLocalVariableTableAttribute(), mutableDependencyNames );
-				case KnownAttribute.tagLocalVariableTypeTable -> addDependencyTypeNamesFromLocalVariableTypeTableAttribute( knownAttribute.asLocalVariableTypeTableAttribute(), mutableDependencyNames );
-				case KnownAttribute.tagRuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-				case KnownAttribute.tagRuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), byteCodeType, mutableDependencyNames );
-				case KnownAttribute.tagLineNumberTable, KnownAttribute.tagStackMapTable -> { /* nothing to do */ }
+				case KnownAttribute.tag_LocalVariableTable -> addDependencyTypeNamesFromLocalVariableTableAttribute( knownAttribute.asLocalVariableTableAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_LocalVariableTypeTable -> addDependencyTypeNamesFromLocalVariableTypeTableAttribute( knownAttribute.asLocalVariableTypeTableAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> addDependencyTypeNamesFromTypeAnnotationsAttribute( knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute(), mutableDependencyNames );
+				case KnownAttribute.tag_LineNumberTable, KnownAttribute.tag_StackMapTable -> { /* nothing to do */ }
 				default -> throw new AssertionError( knownAttribute );
 			}
 		}
 	}
 
+	private static void addDependencyTypeNamesFromExceptionInfo( Collection<String> mutableDependencyNames, ExceptionInfo exceptionInfo )
+	{
+		exceptionInfo.catchTypeName().ifPresent( s -> addDependencyTypeName( s, mutableDependencyNames ) );
+	}
+
 	private static void addDependencyTypeNamesFromMultiANewArrayInstruction( MultiANewArrayInstruction multiANewArrayInstruction, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassConstant( multiANewArrayInstruction.classConstant, mutableDependencyNames );
+		addDependencyTypeName( multiANewArrayInstruction.targetTypeName(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromInvokeInterfaceInstruction( InvokeInterfaceInstruction invokeInterfaceInstruction, Collection<String> mutableDependencyNames )
@@ -251,31 +264,40 @@ final class ByteCodeInfo
 		addDependencyTypeNamesFromInterfaceMethodReferenceConstant( invokeInterfaceInstruction.interfaceMethodReferenceConstant, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromInvokeDynamicInstruction( InvokeDynamicInstruction invokeDynamicInstruction, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromInvokeDynamicInstruction( InvokeDynamicInstruction invokeDynamicInstruction, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromInvokeDynamicConstant( byteCodeType, invokeDynamicInstruction.invokeDynamicConstant, mutableDependencyNames );
+		addDependencyTypeNamesFromInvokeDynamicConstant( invokeDynamicInstruction.invokeDynamicConstant, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromIndirectLoadConstantInstruction( IndirectLoadConstantInstruction indirectLoadConstantInstruction, Collection<String> mutableDependencyNames )
 	{
 		switch( indirectLoadConstantInstruction.constant.tag )
 		{
-			case Constant.tagFloat, Constant.tagLong, Constant.tagInteger, Constant.tagDouble, Constant.tagString -> { /* nothing to do */ }
-			case Constant.tagClass -> addDependencyTypeNameFromClassConstant( indirectLoadConstantInstruction.constant.asClassConstant(), mutableDependencyNames );
+			case Constant.tag_Float, Constant.tag_Long, Constant.tag_Integer, Constant.tag_Double, Constant.tag_String -> { /* nothing to do */ }
+			case Constant.tag_Class -> addDependencyTypeName( indirectLoadConstantInstruction.constant.asClassConstant().typeName(), mutableDependencyNames );
 			default -> throw new AssertionError( indirectLoadConstantInstruction.constant );
 		}
 	}
 
-	private static void addDependencyTypeNamesFromConstantReferencingInstruction( ConstantReferencingInstruction constantReferencingInstruction, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromClassConstantReferencingInstruction( ClassConstantReferencingInstruction classConstantReferencingInstruction, Collection<String> mutableDependencyNames )
 	{
-		Constant constant = constantReferencingInstruction.constant;
-		switch( constant.tag )
+		addDependencyTypeName( classConstantReferencingInstruction.targetTypeName(), mutableDependencyNames );
+	}
+
+	private static void addDependencyTypeNamesFromFieldConstantReferencingInstruction( FieldConstantReferencingInstruction fieldConstantReferencingInstruction, Collection<String> mutableDependencyNames )
+	{
+		addDependencyTypeName( fieldConstantReferencingInstruction.fieldDeclaringTypeName(), mutableDependencyNames );
+		addDependencyTypeNameFromClassDescriptor( fieldConstantReferencingInstruction.fieldReferenceConstant.fieldTypeDescriptor(), mutableDependencyNames );
+	}
+
+	private static void addDependencyTypeNamesFromMethodConstantReferencingInstruction( MethodConstantReferencingInstruction methodConstantReferencingInstruction, Collection<String> mutableDependencyNames )
+	{
+		MethodReferenceConstant methodReferenceConstant = methodConstantReferencingInstruction.methodReferenceConstant;
+		switch( methodReferenceConstant.tag )
 		{
-			case Constant.tagInterfaceMethodReference -> addDependencyTypeNamesFromInterfaceMethodReferenceConstant( constant.asInterfaceMethodReferenceConstant(), mutableDependencyNames );
-			case Constant.tagMethodReference -> addDependencyTypeNamesFromPlainMethodReferenceConstant( constant.asPlainMethodReferenceConstant(), mutableDependencyNames );
-			case Constant.tagFieldReference -> addDependencyTypeNamesFromFieldReferenceConstant( constant.asFieldReferenceConstant(), mutableDependencyNames );
-			case Constant.tagClass -> addDependencyTypeNameFromClassConstant( constant.asClassConstant(), mutableDependencyNames );
-			default -> throw new AssertionError( constant );
+			case Constant.tag_InterfaceMethodReference -> addDependencyTypeNamesFromInterfaceMethodReferenceConstant( methodReferenceConstant.asInterfaceMethodReferenceConstant(), mutableDependencyNames );
+			case Constant.tag_MethodReference -> addDependencyTypeNamesFromPlainMethodReferenceConstant( methodReferenceConstant.asPlainMethodReferenceConstant(), mutableDependencyNames );
+			default -> throw new AssertionError( methodReferenceConstant );
 		}
 	}
 
@@ -283,33 +305,33 @@ final class ByteCodeInfo
 	{
 		switch( constantValueAttribute.valueConstant.tag )
 		{
-			case Constant.tagMutf8, Constant.tagInteger, Constant.tagFloat, Constant.tagLong, Constant.tagDouble, Constant.tagString -> { /* nothing to do */ }
+			case Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, Constant.tag_String -> { /* nothing to do */ }
 			default -> throw new AssertionError( constantValueAttribute.valueConstant );
 		}
 	}
 
 	private static void addDependencyTypeNamesFromEnclosingMethodAttribute( EnclosingMethodAttribute attribute, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassConstant( attribute.classConstant(), mutableDependencyNames );
-		attribute.methodNameAndDescriptorConstant().ifPresent( nameAndDescriptorConstant -> //
+		addDependencyTypeName( attribute.enclosingClassTypeName(), mutableDependencyNames );
+		attribute.enclosingMethodNameAndDescriptorConstant.ifPresent( nameAndDescriptorConstant -> //
 		{
-			MethodTypeDesc methodDescriptor = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.descriptorConstant.stringValue() );
+			MethodTypeDesc methodDescriptor = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 			addDependencyTypeNamesFromMethodDescriptor( methodDescriptor, mutableDependencyNames );
 		} );
 	}
 
 	private static void addDependencyTypeNamesFromExceptionsAttribute( ExceptionsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
-		for( ClassConstant classConstant : attribute.exceptionClassConstants() )
-			addDependencyTypeNameFromClassConstant( classConstant, mutableDependencyNames );
+		for( String exceptionTypeName : attribute.exceptionTypeNames() )
+			addDependencyTypeName( exceptionTypeName, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromInnerClassesAttribute( InnerClassesAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( InnerClass innerClass : attribute.innerClasses )
 		{
-			addDependencyTypeNameFromClassConstant( innerClass.innerClassConstant(), mutableDependencyNames );
-			innerClass.outerClassConstant().ifPresent( classConstant -> addDependencyTypeNameFromClassConstant( classConstant, mutableDependencyNames ) );
+			addDependencyTypeName( innerClass.innerTypeName(), mutableDependencyNames );
+			innerClass.outerTypeName().ifPresent( s -> addDependencyTypeName( s, mutableDependencyNames ) );
 		}
 	}
 
@@ -322,30 +344,30 @@ final class ByteCodeInfo
 	private static void addDependencyTypeNamesFromLocalVariableTypeTableAttribute( LocalVariableTypeTableAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( LocalVariableTypeTableEntry localVariableType : attribute.localVariableTypes )
-			addDependencyTypeNamesFromFieldTypeSignature( localVariableType.signatureConstant.stringValue(), mutableDependencyNames );
+			addDependencyTypeNamesFromFieldTypeSignatureString( localVariableType.signatureConstant.stringValue(), mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromAnnotationsAttribute( AnnotationsAttribute attribute, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromAnnotationsAttribute( AnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( Annotation byteCodeAnnotation : attribute.annotations )
-			addDependencyTypeNamesFromAnnotation( byteCodeType, byteCodeAnnotation, mutableDependencyNames );
+			addDependencyTypeNamesFromAnnotation( byteCodeAnnotation, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromParameterAnnotationsAttribute( ParameterAnnotationsAttribute attribute, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromParameterAnnotationsAttribute( ParameterAnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( ParameterAnnotationSet parameterAnnotationSet : attribute.parameterAnnotationSets() )
 			for( Annotation byteCodeAnnotation : parameterAnnotationSet.annotations )
-				addDependencyTypeNamesFromAnnotation( byteCodeType, byteCodeAnnotation, mutableDependencyNames );
+				addDependencyTypeNamesFromAnnotation( byteCodeAnnotation, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromTypeAnnotationsAttribute( TypeAnnotationsAttribute attribute, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromTypeAnnotationsAttribute( TypeAnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( TypeAnnotation typeAnnotation : attribute.typeAnnotations )
 			for( AnnotationParameter annotationParameter : typeAnnotation.parameters )
-				addDependencyTypeNamesFromElementValue( byteCodeType, annotationParameter.value, mutableDependencyNames );
+				addDependencyTypeNamesFromElementValue( annotationParameter.value, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromElementValue( ByteCodeType byteCodeType /* TODO: remove this parameter */, AnnotationValue annotationValue, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromElementValue( AnnotationValue annotationValue, Collection<String> mutableDependencyNames )
 	{
 		switch( annotationValue.tag )
 		{
@@ -353,21 +375,21 @@ final class ByteCodeInfo
 				AnnotationValue.tagLong, AnnotationValue.tagShort, AnnotationValue.tagString -> { /* nothing to do */ }
 			case AnnotationValue.tagClass -> addDependencyTypeNamesFromClassAnnotationValue( annotationValue.asClassAnnotationValue(), mutableDependencyNames );
 			case AnnotationValue.tagEnum -> addDependencyTypeNamesFromEnumAnnotationValue( annotationValue.asEnumAnnotationValue(), mutableDependencyNames );
-			case AnnotationValue.tagAnnotation -> addDependencyTypeNamesFromAnnotationAnnotationValue( annotationValue.asAnnotationAnnotationValue(), byteCodeType, mutableDependencyNames );
-			case AnnotationValue.tagArray -> addDependencyTypeNamesFromArrayAnnotationValue( annotationValue.asArrayAnnotationValue(), byteCodeType, mutableDependencyNames );
+			case AnnotationValue.tagAnnotation -> addDependencyTypeNamesFromAnnotationAnnotationValue( annotationValue.asAnnotationAnnotationValue(), mutableDependencyNames );
+			case AnnotationValue.tagArray -> addDependencyTypeNamesFromArrayAnnotationValue( annotationValue.asArrayAnnotationValue(), mutableDependencyNames );
 			default -> throw new AssertionError( annotationValue );
 		}
 	}
 
-	private static void addDependencyTypeNamesFromArrayAnnotationValue( ArrayAnnotationValue arrayAnnotationValue, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromArrayAnnotationValue( ArrayAnnotationValue arrayAnnotationValue, Collection<String> mutableDependencyNames )
 	{
 		for( AnnotationValue value : arrayAnnotationValue.annotationValues )
-			addDependencyTypeNamesFromElementValue( byteCodeType, value, mutableDependencyNames );
+			addDependencyTypeNamesFromElementValue( value, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue, ByteCodeType byteCodeType, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromAnnotation( byteCodeType, annotationAnnotationValue.annotation, mutableDependencyNames );
+		addDependencyTypeNamesFromAnnotation( annotationAnnotationValue.annotation, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue, Collection<String> mutableDependencyNames )
@@ -380,14 +402,14 @@ final class ByteCodeInfo
 		addDependencyTypeNameFromClassDescriptor( classAnnotationValue.classDescriptor(), mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromAnnotation( ByteCodeType byteCodeType, Annotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromAnnotation( Annotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
 	{
 		addDependencyTypeNameFromClassDescriptor( byteCodeAnnotation.typeDescriptor(), mutableDependencyNames );
 		for( AnnotationParameter annotationParameter : byteCodeAnnotation.parameters )
-			addDependencyTypeNamesFromElementValue( byteCodeType, annotationParameter.value, mutableDependencyNames );
+			addDependencyTypeNamesFromElementValue( annotationParameter.value, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromFieldTypeSignature( String signature, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromFieldTypeSignatureString( String signature, Collection<String> mutableDependencyNames )
 	{
 		ObjectSignature parsedSignature = SignatureParser.make().parseFieldSig( signature ); // parseFieldTypeSignature() {
 		if( parsedSignature instanceof ClassSignature classSignature )
@@ -438,7 +460,7 @@ final class ByteCodeInfo
 		addDependencyTypeName( fullTypeName, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromMethodTypeSignatureAttribute( String signature, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromMethodTypeSignatureString( String signature, Collection<String> mutableDependencyNames )
 	{
 		if( Kit.get( true ) )
 			return;
@@ -507,8 +529,8 @@ final class ByteCodeInfo
 	{
 		switch( constant.tag )
 		{
-			case Constant.tagMutf8, Constant.tagInteger, Constant.tagFloat, Constant.tagLong, Constant.tagDouble, Constant.tagString -> { /* nothing to do */ }
-			case Constant.tagClass -> addDependencyTypeNameFromClassConstant( constant.asClassConstant(), mutableDependencyNames );
+			case Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, Constant.tag_String -> { /* nothing to do */ }
+			case Constant.tag_Class -> addDependencyTypeName( constant.asClassConstant().typeName(), mutableDependencyNames );
 			default -> throw new AssertionError( constant );
 		}
 	}
@@ -519,28 +541,16 @@ final class ByteCodeInfo
 		addDependencyTypeNameFromClassDescriptor( classDescriptor, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromFieldReferenceConstant( FieldReferenceConstant fieldReferenceConstant, Collection<String> mutableDependencyNames )
-	{
-		addDependencyTypeNameFromClassConstant( fieldReferenceConstant.typeConstant, mutableDependencyNames );
-		addDependencyTypeNameFromClassDescriptor( fieldReferenceConstant.fieldTypeDescriptor(), mutableDependencyNames );
-	}
-
 	private static void addDependencyTypeNamesFromPlainMethodReferenceConstant( PlainMethodReferenceConstant plainMethodReferenceConstant, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassConstant( plainMethodReferenceConstant.typeConstant, mutableDependencyNames );
+		addDependencyTypeName( plainMethodReferenceConstant.declaringTypeName(), mutableDependencyNames );
 		addDependencyTypeNamesFromMethodDescriptor( plainMethodReferenceConstant.methodDescriptor(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromInterfaceMethodReferenceConstant( InterfaceMethodReferenceConstant interfaceMethodReferenceConstant, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassConstant( interfaceMethodReferenceConstant.typeConstant, mutableDependencyNames );
+		addDependencyTypeName( interfaceMethodReferenceConstant.declaringTypeName(), mutableDependencyNames );
 		addDependencyTypeNamesFromMethodDescriptor( interfaceMethodReferenceConstant.methodDescriptor(), mutableDependencyNames );
-	}
-
-	private static void addDependencyTypeNameFromClassConstant( ClassConstant classConstant, Collection<String> mutableDependencyNames )
-	{
-		String className = ByteCodeHelpers.typeNameFromClassDesc( classConstant.classDescriptor() );
-		addDependencyTypeName( className, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromBootstrapMethod( BootstrapMethod bootstrapMethod, Collection<String> mutableDependencyNames )
@@ -552,9 +562,9 @@ final class ByteCodeInfo
 			addDependencyTypeNamesFromConstantDescriptor( bootstrapArgumentDescriptor, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromInvokeDynamicConstant( ByteCodeType byteCodeType, InvokeDynamicConstant invokeDynamicConstant, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromInvokeDynamicConstant( InvokeDynamicConstant invokeDynamicConstant, Collection<String> mutableDependencyNames )
 	{
-		DynamicCallSiteDesc invokeDynamicDescriptor = invokeDynamicConstant.descriptor( byteCodeType );
+		DynamicCallSiteDesc invokeDynamicDescriptor = invokeDynamicConstant.descriptor();
 		addDependencyTypeNamesFromDynamicCallSiteDescriptor( invokeDynamicDescriptor, mutableDependencyNames );
 	}
 
@@ -619,9 +629,10 @@ final class ByteCodeInfo
 			addDependencyTypeNameFromClassDescriptor( argumentDescriptor, mutableDependencyNames );
 	}
 
-	// TODO: check whether it is necessary to include types from descriptor strings.
 	private static void addDependencyTypeNameFromClassDescriptor( ClassDesc classDesc, Collection<String> mutableDependencyNames )
 	{
+		if( !includeDescriptors )
+			return;
 		String typeName = ByteCodeHelpers.typeNameFromClassDesc( classDesc );
 		addDependencyTypeName( typeName, mutableDependencyNames );
 	}

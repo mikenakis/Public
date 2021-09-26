@@ -20,7 +20,7 @@ public final class IntegerConstant extends ValueConstant<Integer>
 
 	private IntegerConstant( int value )
 	{
-		super( tagInteger );
+		super( tag_Integer );
 		this.value = value;
 	}
 

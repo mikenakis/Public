@@ -36,7 +36,7 @@ public final class RuntimeVisibleTypeAnnotationsAttribute extends TypeAnnotation
 
 	private RuntimeVisibleTypeAnnotationsAttribute( List<TypeAnnotation> entries )
 	{
-		super( tagRuntimeVisibleTypeAnnotations, entries );
+		super( tag_RuntimeVisibleTypeAnnotations, entries );
 	}
 
 	@Deprecated @Override public RuntimeVisibleTypeAnnotationsAttribute asRuntimeVisibleTypeAnnotationsAttribute()

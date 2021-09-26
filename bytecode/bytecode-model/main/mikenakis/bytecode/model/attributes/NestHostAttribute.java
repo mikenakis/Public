@@ -29,8 +29,13 @@ public final class NestHostAttribute extends KnownAttribute
 
 	private NestHostAttribute( ClassConstant hostClassConstant )
 	{
-		super( tagNestHost );
+		super( tag_NestHost );
 		this.hostClassConstant = hostClassConstant;
+	}
+
+	public String hostClassTypeName()
+	{
+		return hostClassConstant.typeName();
 	}
 
 	@Deprecated @Override public NestHostAttribute asNestHostAttribute()

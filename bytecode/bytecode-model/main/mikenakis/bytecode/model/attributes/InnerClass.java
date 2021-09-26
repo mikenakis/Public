@@ -48,10 +48,10 @@ public final class InnerClass
 		Map.entry( InnerClassModifier.Annotation, 0x2000 ),   // ACC_
 		Map.entry( InnerClassModifier.Enum      , 0x4000 ) ); // ACC_ENUM
 
-	private final ClassConstant innerClassConstant;
-	private final Optional<ClassConstant> outerClassConstant;
-	private final Optional<Mutf8Constant> innerNameConstant;
-	private final FlagEnumSet<InnerClassModifier> modifierSet;
+	public final ClassConstant innerClassConstant;
+	public final Optional<ClassConstant> outerClassConstant;
+	public final Optional<Mutf8Constant> innerNameConstant;
+	public final FlagEnumSet<InnerClassModifier> modifierSet;
 
 	private InnerClass( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
 		FlagEnumSet<InnerClassModifier> modifierSet )
@@ -62,28 +62,8 @@ public final class InnerClass
 		this.modifierSet = modifierSet;
 	}
 
-	public ClassConstant innerClassConstant()
-	{
-		return innerClassConstant;
-	}
-
-	public Optional<ClassConstant> outerClassConstant()
-	{
-		return outerClassConstant;
-	}
-
-	public Optional<Mutf8Constant> innerNameConstant()
-	{
-		return innerNameConstant;
-	}
-
-	public FlagEnumSet<InnerClassModifier> modifierSet()
-	{
-		return modifierSet;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "outerClass = " + outerClassConstant + " accessFlags = " + modifierSet + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant;
-	}
+	public String innerTypeName() { return innerClassConstant.typeName(); }
+	public Optional<String> outerTypeName() { return outerClassConstant.map( c -> c.typeName() ); }
+	public Optional<String> innerName() { return innerNameConstant.map( c -> c.stringValue() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "outerClass = " + outerClassConstant + " accessFlags = " + modifierSet + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant; }
 }

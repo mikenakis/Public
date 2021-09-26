@@ -27,15 +27,15 @@ public final class SourceFileAttribute extends KnownAttribute
 		return new SourceFileAttribute( sourceFileConstant );
 	}
 
-	private final Mutf8Constant valueConstant;
+	public final Mutf8Constant valueConstant;
 
 	private SourceFileAttribute( Mutf8Constant valueConstant )
 	{
-		super( tagSourceFile );
+		super( tag_SourceFile );
 		this.valueConstant = valueConstant;
 	}
 
-	public Mutf8Constant valueConstant() { return valueConstant; }
+	public String value() { return valueConstant.stringValue(); }
 
 	@Deprecated @Override public SourceFileAttribute asSourceFileAttribute()
 	{

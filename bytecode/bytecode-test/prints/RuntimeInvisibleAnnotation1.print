@@ -12,8 +12,7 @@ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotat
  │                   └─ value: ConstAnnotationValue
  │                       └─ value: IntegerConstant( 5 )
  └─ attributes: 2 entries
-     ├─ [0] SourceFileAttribute
-     │   └─ value: Mutf8Constant( "RuntimeInvisibleAnnotation1.java" )
+     ├─ [0] SourceFileAttribute "RuntimeInvisibleAnnotation1.java"
      └─ [1] RuntimeVisibleAnnotationsAttribute
          └─ annotations: 2 entries
              ├─ [0] Annotation

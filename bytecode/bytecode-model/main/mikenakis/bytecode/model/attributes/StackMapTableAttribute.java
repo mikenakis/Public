@@ -46,7 +46,7 @@ public final class StackMapTableAttribute extends KnownAttribute
 
 	private StackMapTableAttribute( List<StackMapFrame> frames )
 	{
-		super( tagStackMapTable );
+		super( tag_StackMapTable );
 		this.frames = frames;
 	}
 

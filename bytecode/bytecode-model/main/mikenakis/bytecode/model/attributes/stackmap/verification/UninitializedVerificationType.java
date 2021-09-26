@@ -18,7 +18,7 @@ public final class UninitializedVerificationType extends VerificationType
 
 	private UninitializedVerificationType( Instruction instruction )
 	{
-		super( tagUninitialized );
+		super( tag_Uninitialized );
 		this.instruction = instruction;
 	}
 
