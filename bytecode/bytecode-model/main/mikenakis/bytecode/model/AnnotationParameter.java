@@ -24,6 +24,8 @@ public final class AnnotationParameter
 		this.value = value;
 	}
 
+	public String name() { return nameConstant.stringValue(); }
+
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return "name = " + nameConstant + ", value = " + value;

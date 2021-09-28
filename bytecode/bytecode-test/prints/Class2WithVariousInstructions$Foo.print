@@ -1,40 +1,36 @@
-ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, superClass = java.lang.Object
- ├─ interfaces: 0 entries
- ├─ extraConstants: 0 entries
- ├─ fields: 1 entries
- │   └─ [0] ByteCodeField accessFlags = [final], name = "foos", descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
- │       └─ attributes: 0 entries
- ├─ methods: 1 entries
- │   └─ [0] ByteCodeMethod accessFlags = [varargs], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
- │       └─ attributes: 2 entries
- │           ├─ [0] CodeAttribute maxStack = 2, maxLocals = 2
- │           │   ├─ instructions: 6 entries
- │           │   │   ├─ [0] L70: // {
- │           │   │   ├─ [1]         ALOAD_0 0
- │           │   │   ├─ [2]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │           │   │   ├─ [3] L71: // this.foos = foos;
- │           │   │   ├─ [4]         ALOAD_0 0
- │           │   │   ├─ [5]         ALOAD_1 1
- │           │   │   ├─ [6]         PUTFIELD mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.foos
- │           │   │   ├─ [7] L72: // }
- │           │   │   └─ [8]         RETURN
- │           │   ├─ exceptionInfos: 0 entries
- │           │   └─ attributes: 2 entries
- │           │       ├─ [0] LineNumberTableAttribute
- │           │       │   └─ entrys: 3 entries
- │           │       │       ├─ [0] LineNumberTableEntry lineNumber = 70, start = L70
- │           │       │       ├─ [1] LineNumberTableEntry lineNumber = 71, start = L71
- │           │       │       └─ [2] LineNumberTableEntry lineNumber = 72, start = L72
- │           │       └─ [1] LocalVariableTableAttribute
- │           │           └─ entrys: 2 entries
- │           │               ├─ [0] LocalVariableTableEntry index = 0, start = L70, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
- │           │               └─ [1] LocalVariableTableEntry index = 1, start = L70, end = @end, name = foos, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
- │           └─ [1] MethodParametersAttribute
- │               └─ parameters: 1 entries
- │                   └─ [0] MethodParameter accessFlags = [], name = "foos"
- └─ attributes: 3 entries
-     ├─ [0] SourceFileAttribute "Class2WithVariousInstructions.java"
-     ├─ [1] NestHostAttribute mikenakis.bytecode.test.model.Class2WithVariousInstructions
-     └─ [2] InnerClassesAttribute
-         └─ innerClasses: 1 entries
-             └─ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
+■ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, superClass = java.lang.Object
+├─■ interfaces: 0 items
+├─■ extraConstants: 0 items
+├─■ fields: 1 items
+│ └─■ [0] ByteCodeField accessFlags = [final], name = "foos", descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│   └─■ attributeSet: 0 items
+├─■ methods: 1 items
+│ └─■ [0] ByteCodeMethod accessFlags = [varargs], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│   └─■ attributes: 2 items
+│     ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
+│     │ ├─■ instructions: 6 entries
+│     │ │ ├─■ L70: // {
+│     │ │ ├─■         ALOAD_0 0
+│     │ │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│     │ │ ├─■ L71: // this.foos = foos;
+│     │ │ ├─■         ALOAD_0 0
+│     │ │ ├─■         ALOAD_1 1
+│     │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.foos
+│     │ │ ├─■ L72: // }
+│     │ │ └─■         RETURN
+│     │ ├─■ exceptionInfos: 0 items
+│     │ └─■ attributeSet: 2 items
+│     │   ├─■ [0] LineNumberTableAttribute; 3 items
+│     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 70, start = L70
+│     │   │ ├─■ [1] LineNumberTableEntry lineNumber = 71, start = L71
+│     │   │ └─■ [2] LineNumberTableEntry lineNumber = 72, start = L72
+│     │   └─■ [1] LocalVariableTableAttribute; 2 items
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L70, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L70, end = @end, name = foos, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│     └─■ [1] MethodParametersAttribute; 1 items
+│       └─■ [0] MethodParameter accessFlags = [], name = "foos"
+└─■ attributeSet: 3 items
+  ├─■ [0] SourceFileAttribute "Class2WithVariousInstructions.java"
+  ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class2WithVariousInstructions
+  └─■ [2] InnerClassesAttribute; 1 items
+    └─■ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo

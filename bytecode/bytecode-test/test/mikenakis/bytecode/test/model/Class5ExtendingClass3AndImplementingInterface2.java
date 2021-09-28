@@ -21,7 +21,7 @@ public final class Class5ExtendingClass3AndImplementingInterface2 extends Class3
 
 	@Override public long getLong( Class3ImplementingInterface class3ImplementingInterface )
 	{
-		@RuntimeVisibleAnnotation1 //
+		@RuntimeVisibleAnnotation2 //Java blooper: this is silently ignored: it is nowhere to be found in the .class file!
 		long id = Thread.currentThread().getId();
 		return id;
 	}

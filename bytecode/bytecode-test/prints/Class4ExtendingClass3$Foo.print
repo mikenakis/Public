@@ -1,16 +1,14 @@
-ByteCodeType version = 60.0, accessFlags = [interface, abstract], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, superClass = java.lang.Object
- ├─ interfaces: 0 entries
- ├─ extraConstants: 0 entries
- ├─ fields: 0 entries
- ├─ methods: 1 entries
- │   └─ [0] ByteCodeMethod accessFlags = [public, abstract], name = "x", descriptor = java.lang.String( java.lang.String )
- │       └─ attributes: 1 entries
- │           └─ [0] MethodParametersAttribute
- │               └─ parameters: 1 entries
- │                   └─ [0] MethodParameter accessFlags = [], name = "s"
- └─ attributes: 3 entries
-     ├─ [0] SourceFileAttribute "Class4ExtendingClass3.java"
-     ├─ [1] NestHostAttribute mikenakis.bytecode.test.model.Class4ExtendingClass3
-     └─ [2] InnerClassesAttribute
-         └─ innerClasses: 1 entries
-             └─ [0] InnerClass accessFlags = [static, interface, abstract], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo
+■ ByteCodeType version = 60.0, accessFlags = [interface, abstract], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, superClass = java.lang.Object
+├─■ interfaces: 0 items
+├─■ extraConstants: 0 items
+├─■ fields: 0 items
+├─■ methods: 1 items
+│ └─■ [0] ByteCodeMethod accessFlags = [public, abstract], name = "x", descriptor = java.lang.String( java.lang.String )
+│   └─■ attributes: 1 items
+│     └─■ [0] MethodParametersAttribute; 1 items
+│       └─■ [0] MethodParameter accessFlags = [], name = "s"
+└─■ attributeSet: 3 items
+  ├─■ [0] SourceFileAttribute "Class4ExtendingClass3.java"
+  ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class4ExtendingClass3
+  └─■ [2] InnerClassesAttribute; 1 items
+    └─■ [0] InnerClass accessFlags = [static, interface, abstract], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo

@@ -20,7 +20,10 @@ final class StructTwig extends BranchTwig
 		return children.stream().map( e -> //
 		{
 			Twig child = e.getValue();
-			return ConcreteBranchTwig.of( e.getKey() + ": " + child.text(), child.children() );
+			String prefix = e.getKey();
+			if( !prefix.isEmpty() && !prefix.isBlank() )
+				prefix += ": ";
+			return ConcreteBranchTwig.of( prefix + child.text(), child.children() );
 		} ).toList();
 	}
 

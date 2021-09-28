@@ -273,10 +273,10 @@ final class ConstantPool
 
 		internAttributeSet( codeAttribute.attributeSet );
 
-		for( Instruction instruction : codeAttribute.instructions().all() )
+		for( Instruction instruction : codeAttribute.instructions.all() )
 			internInstruction( instruction );
 
-		for( Instruction instruction : codeAttribute.instructions().all() )
+		for( Instruction instruction : codeAttribute.instructions.all() )
 			internInstruction( instruction );
 	}
 
@@ -350,7 +350,7 @@ final class ConstantPool
 
 	private void internParameterAnnotationsAttribute( ParameterAnnotationsAttribute runtimeInvisibleParameterAnnotationsAttribute )
 	{
-		for( ParameterAnnotationSet entry : runtimeInvisibleParameterAnnotationsAttribute.parameterAnnotationSets() )
+		for( ParameterAnnotationSet entry : runtimeInvisibleParameterAnnotationsAttribute.parameterAnnotationSets )
 			for( Annotation annotation : entry.annotations )
 				internAnnotation( annotation );
 	}
@@ -571,7 +571,7 @@ final class ConstantPool
 
 	private void internObjectVerificationType( ObjectVerificationType objectVerificationType )
 	{
-		internClassConstant( objectVerificationType.classConstant() );
+		internClassConstant( objectVerificationType.classConstant );
 	}
 
 	int size()

@@ -219,7 +219,7 @@ final class ByteCodeInfo
 	{
 		for( ExceptionInfo exceptionInfo : codeAttribute.exceptionInfos )
 			addDependencyTypeNamesFromExceptionInfo( mutableDependencyNames, exceptionInfo );
-		for( Instruction instruction : codeAttribute.instructions().all() )
+		for( Instruction instruction : codeAttribute.instructions.all() )
 		{
 			switch( instruction.groupTag )
 			{
@@ -355,7 +355,7 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromParameterAnnotationsAttribute( ParameterAnnotationsAttribute attribute, Collection<String> mutableDependencyNames )
 	{
-		for( ParameterAnnotationSet parameterAnnotationSet : attribute.parameterAnnotationSets() )
+		for( ParameterAnnotationSet parameterAnnotationSet : attribute.parameterAnnotationSets )
 			for( Annotation byteCodeAnnotation : parameterAnnotationSet.annotations )
 				addDependencyTypeNamesFromAnnotation( byteCodeAnnotation, mutableDependencyNames );
 	}

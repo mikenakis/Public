@@ -52,6 +52,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -2899,49 +2900,134 @@ public final class Kit
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Tree
 
-	private static class Step<T>
+	public static final class tree
 	{
-		final Step<T> previous;
-		final T element;
+//		static class Node<T>
+//		{
+//			public static <T> Node<T> of( T payload )
+//			{
+//				return new Node<>( payload, null );
+//			}
+//
+//			public static <T> Node<T> of( T payload, Node<T> previous )
+//			{
+//				return new Node<>( payload, previous );
+//			}
+//
+//			public static <T> Node<T> of( T payload, Optional<Node<T>> previous )
+//			{
+//				return new Node<>( payload, previous.orElse( null ) );
+//			}
+//
+//			public final T payload;
+//			private final Node<T> previous;
+//
+//			private Node( T payload, Node<T> previous )
+//			{
+//				this.payload = payload;
+//				this.previous = previous;
+//			}
+//
+//			public Optional<Node<T>> previous()
+//			{
+//				return Optional.ofNullable( previous );
+//			}
+//
+//			public Node<T> add( Node<T> other )
+//			{
+//				return new Node<>( other.payload, this );
+//			}
+//		}
 
-		private Step( Step<T> previous, T element )
+		public static <T> void print( T rootNode, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
 		{
-			this.previous = previous;
-			this.element = element;
+			StringBuilder stringBuilder = new StringBuilder();
+			printTreeRecursive( stringBuilder, "", rootNode, "", breeder, stringizer, emitter );
 		}
 
-		boolean contains( T element )
+		private static final String midLeaf = "├─";
+		private static final String endLeaf = "└─";
+		private static final String midNode = "│ ";
+		private static final String endNode = "  ";
+		private static final String terminal = "■ ";
+
+		private static <T> void printTreeRecursive( StringBuilder stringBuilder, String parentPrefix, T node, String childPrefix, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
 		{
-			if( element == this.element )
-				return true;
-			if( previous != null )
-				return previous.contains( element );
-			return false;
+			Iterator<T> iterator = breeder.invoke( node ).iterator();
+			int position = stringBuilder.length();
+			stringBuilder.append( parentPrefix ).append( terminal );
+			stringBuilder.append( stringizer.invoke( node ) );
+			emitter.invoke( stringBuilder.toString() );
+			stringBuilder.setLength( position );
+			stringBuilder.append( childPrefix );
+			while( iterator.hasNext() )
+			{
+				T childNode = iterator.next();
+				boolean mid = iterator.hasNext();
+				printTreeRecursive( stringBuilder, mid ? midLeaf : endLeaf, childNode, mid ? midNode : endNode, breeder, stringizer, emitter );
+			}
+			stringBuilder.setLength( position );
 		}
-	}
 
-	public static <T> void treeDump( T node, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
-	{
-		emitter.invoke( stringizer.invoke( node ) );
-		treeDumpRecursive( node, "", breeder, stringizer, emitter, null );
-	}
+		private static final boolean troubleshoot = get( false );
 
-	private static final String[][] PREFIXES = { { " ├─ ", " │  " }, { " └─ ", "    " } };
-
-	private static <T> void treeDumpRecursive( T node, String parentPrefix, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, //
-		Procedure1<String> emitter, Step<T> previous )
-	{
-		Step<T> step = new Step<>( previous, node );
-		Iterable<T> children = breeder.invoke( node );
-		for( Iterator<? extends T> iterator = children.iterator(); iterator.hasNext(); )
+		// This algorithm produces a more elaborate but ultimately less comprehensible tree.
+		public static <T> void print2( T rootNode, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
 		{
-			T childNode = iterator.next();
-			String[] prefixes = PREFIXES[iterator.hasNext() ? 0 : 1];
-			boolean cycle = step.contains( childNode );
-			emitter.invoke( parentPrefix + prefixes[0] + stringizer.invoke( childNode ) + (cycle ? " <-- CYCLE!" : "") );
-			if( cycle )
-				continue;
-			treeDumpRecursive( childNode, parentPrefix + prefixes[1], breeder, stringizer, emitter, step );
+			//Kit.printTree( rootNode, breeder, stringizer, emitter );
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append( "  " ).append( terminal ).append( stringizer.invoke( rootNode ) );
+			emitter.invoke( stringBuilder.toString() );
+			stringBuilder.setLength( 0 );
+			printChildren( stringBuilder, breeder, stringizer, emitter, breeder.invoke( rootNode ).iterator() );
+			if( troubleshoot )
+				for( var entry : map2.entrySet() )
+					Log.debug( "\"" + entry.getKey() + "\", \"" + entry.getValue() + "\"," );
+		}
+
+		private static final Map<String,String> map = Map.of( //
+			"   " /**/, "   ├─", //
+			"F  " /**/, "  └┬─", //
+			"FL " /**/, "  └──", //
+			" L " /**/, "   └─", //
+			"  P" /**/, "   ├──┬─", //
+			" LP" /**/, "   └──┬─", //
+			"F P" /**/, "  └┬──┬─", //
+			"FLP" /**/, "  └───┬─" //
+		);
+
+		private static final Map<String,String> map2 = new HashMap<>();
+
+		private static <T> void printTreeRecursive( StringBuilder stringBuilder, int childIndex, boolean isLastChild, T node, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
+		{
+			//String parentPrefix = isLastChild ? endLeaf : midLeaf;
+			Iterator<T> iterator = breeder.invoke( node ).iterator();
+			boolean isParent = iterator.hasNext();
+			boolean isFirstChild = childIndex == 0;
+			int position = stringBuilder.length();
+			String k = (isFirstChild ? "F" : " ") + (isLastChild ? "L" : " ") + (isParent ? "P" : " ");
+			String s = map.get( k );
+			if( troubleshoot )
+				map2.put( k, s );
+			stringBuilder.append( s ).append( terminal );
+			if( troubleshoot )
+				stringBuilder.append( "\"" ).append( k ).append( "\"" ).append( " " );
+			stringBuilder.append( stringizer.invoke( node ) );
+			emitter.invoke( stringBuilder.toString() );
+			stringBuilder.setLength( position );
+			stringBuilder.append( isLastChild ? "    " : "   │" );
+			printChildren( stringBuilder, breeder, stringizer, emitter, iterator );
+			stringBuilder.setLength( position );
+		}
+
+		private static <T> void printChildren( StringBuilder stringBuilder, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter, Iterator<T> iterator )
+		{
+			for( int i = 0; iterator.hasNext(); i++ )
+			{
+				T childNode = iterator.next();
+				boolean isLastChild = !iterator.hasNext();
+				printTreeRecursive( stringBuilder, i, isLastChild, childNode, breeder, stringizer, emitter );
+			}
 		}
 	}
 

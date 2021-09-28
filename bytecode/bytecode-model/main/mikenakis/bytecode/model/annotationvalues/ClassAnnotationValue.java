@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -36,6 +37,7 @@ public final class ClassAnnotationValue extends AnnotationValue
 
 	public Mutf8Constant nameConstant() { return nameConstant; }
 	public ClassDesc classDescriptor() { return ClassDesc.ofDescriptor( nameConstant.stringValue() ); }
+	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( classDescriptor() ); }
 
 	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue()
 	{

@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,17 +17,12 @@ import java.util.List;
  */
 public abstract class ParameterAnnotationsAttribute extends KnownAttribute
 {
-	private final List<ParameterAnnotationSet> parameterAnnotationSets;
+	public final List<ParameterAnnotationSet> parameterAnnotationSets;
 
 	ParameterAnnotationsAttribute( int tag, List<ParameterAnnotationSet> parameterAnnotationSets )
 	{
 		super( tag );
 		this.parameterAnnotationSets = parameterAnnotationSets;
-	}
-
-	public final List<ParameterAnnotationSet> parameterAnnotationSets()
-	{
-		return Collections.unmodifiableList( parameterAnnotationSets );
 	}
 
 	@Deprecated @Override public ParameterAnnotationsAttribute asParameterAnnotationsAttribute()

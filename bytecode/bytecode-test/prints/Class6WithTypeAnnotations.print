@@ -1,448 +1,292 @@
-ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class6WithTypeAnnotations, superClass = java.lang.Object
- ├─ interfaces: 0 entries
- ├─ extraConstants: 0 entries
- ├─ fields: 1 entries
- │   └─ [0] ByteCodeField accessFlags = [public, final], name = "fieldWithAnnotation", descriptor = int
- │       └─ attributes: 3 entries
- │           ├─ [0] ConstantValueAttribute IntegerConstant( 5 )
- │           ├─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │           │   └─ typeAnnotations: 1 entries
- │           │       └─ [0] TypeAnnotation
- │           │           ├─ typePath: TypePath
- │           │           │   └─ entries: 0 entries
- │           │           ├─ typeIndex: 37
- │           │           ├─ target: Target tag = FieldType
- │           │           └─ parameters: 1 entries
- │           │               └─ [0] AnnotationParameter
- │           │                   ├─ name: "stringParameter"
- │           │                   └─ value: AnnotationValue
- │           │                       ├─ tag: String
- │           │                       └─ value: ConstAnnotationValue
- │           │                           └─ value: Mutf8Constant( "b" )
- │           └─ [2] RuntimeInvisibleTypeAnnotationsAttribute
- │               └─ typeAnnotations: 1 entries
- │                   └─ [0] TypeAnnotation
- │                       ├─ typePath: TypePath
- │                       │   └─ entries: 0 entries
- │                       ├─ typeIndex: 41
- │                       ├─ target: Target tag = FieldType
- │                       └─ parameters: 1 entries
- │                           └─ [0] AnnotationParameter
- │                               ├─ name: "value"
- │                               └─ value: AnnotationValue
- │                                   ├─ tag: Integer
- │                                   └─ value: ConstAnnotationValue
- │                                       └─ value: IntegerConstant( 7 )
- ├─ methods: 9 entries
- │   ├─ [0] ByteCodeMethod accessFlags = [protected], name = "<init>", descriptor = void()
- │   │   └─ attributes: 3 entries
- │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
- │   │       │   ├─ instructions: 6 entries
- │   │       │   │   ├─ [0] L21: // {
- │   │       │   │   ├─ [1]         ALOAD_0 0
- │   │       │   │   ├─ [2]         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
- │   │       │   │   ├─ [3] L13: // @SuppressWarnings( "FieldMayBeStatic" ) //
- │   │       │   │   ├─ [4]         ALOAD_0 0
- │   │       │   │   ├─ [5]         ICONST_5
- │   │       │   │   ├─ [6]         PUTFIELD int mikenakis.bytecode.test.model.Class6WithTypeAnnotations.fieldWithAnnotation
- │   │       │   │   ├─ [7] L22: // }
- │   │       │   │   └─ [8]         RETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 3 entries
- │   │       │       │       ├─ [0] LineNumberTableEntry lineNumber = 21, start = L21
- │   │       │       │       ├─ [1] LineNumberTableEntry lineNumber = 13, start = L13
- │   │       │       │       └─ [2] LineNumberTableEntry lineNumber = 22, start = L22
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L21, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       ├─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │       │   └─ typeAnnotations: 1 entries
- │   │       │       └─ [0] TypeAnnotation
- │   │       │           ├─ typePath: TypePath
- │   │       │           │   └─ entries: 0 entries
- │   │       │           ├─ typeIndex: 37
- │   │       │           ├─ target: Target tag = ReturnType
- │   │       │           └─ parameters: 1 entries
- │   │       │               └─ [0] AnnotationParameter
- │   │       │                   ├─ name: "stringParameter"
- │   │       │                   └─ value: AnnotationValue
- │   │       │                       ├─ tag: String
- │   │       │                       └─ value: ConstAnnotationValue
- │   │       │                           └─ value: Mutf8Constant( "c" )
- │   │       └─ [2] RuntimeInvisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 41
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "value"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Integer
- │   │                               └─ value: ConstAnnotationValue
- │   │                                   └─ value: IntegerConstant( 8 )
- │   ├─ [1] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithAnnotationParameter", descriptor = char()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L27: // return 'c';
- │   │       │   │   ├─ [1]         BIPUSH immediateValue = 99
- │   │       │   │   └─ [2]         IRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 27, start = L27
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L27, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "annotationParameter"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Annotation
- │   │                               └─ value: Annotation
- │   │                                   ├─ type: java.lang.SuppressWarnings
- │   │                                   └─ parameters: 1 entries
- │   │                                       └─ [0] AnnotationParameter
- │   │                                           ├─ name: "value"
- │   │                                           └─ value: AnnotationValue
- │   │                                               ├─ tag: Array
- │   │                                               └─ value: ArrayAnnotationValue
- │   │                                                   └─ values: 1 entries
- │   │                                                       └─ [0] AnnotationValue
- │   │                                                           ├─ tag: String
- │   │                                                           └─ value: ConstAnnotationValue
- │   │                                                               └─ value: Mutf8Constant( "foo" )
- │   ├─ [2] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithArrayParameter", descriptor = short()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L33: // return 10;
- │   │       │   │   ├─ [1]         BIPUSH immediateValue = 10
- │   │       │   │   └─ [2]         IRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 33, start = L33
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L33, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "arrayParameter"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Array
- │   │                               └─ value: ArrayAnnotationValue
- │   │                                   └─ values: 2 entries
- │   │                                       ├─ [0] AnnotationValue
- │   │                                       │   ├─ tag: String
- │   │                                       │   └─ value: ConstAnnotationValue
- │   │                                       │       └─ value: Mutf8Constant( "d" )
- │   │                                       └─ [1] AnnotationValue
- │   │                                           ├─ tag: String
- │   │                                           └─ value: ConstAnnotationValue
- │   │                                               └─ value: Mutf8Constant( "e" )
- │   ├─ [3] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithPrimitiveParameters", descriptor = long()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L40: // return 11;
- │   │       │   │   ├─ [1]         LDC2_W LongConstant( 11L )
- │   │       │   │   └─ [2]         LRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 40, start = L40
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L40, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 8 entries
- │   │                       ├─ [0] AnnotationParameter
- │   │                       │   ├─ name: "booleanParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Boolean
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: IntegerConstant( 0 (boolean false) )
- │   │                       ├─ [1] AnnotationParameter
- │   │                       │   ├─ name: "byteParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Byte
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: IntegerConstant( 2 (byte) )
- │   │                       ├─ [2] AnnotationParameter
- │   │                       │   ├─ name: "charParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Character
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: IntegerConstant( 100 (char 'd') )
- │   │                       ├─ [3] AnnotationParameter
- │   │                       │   ├─ name: "doubleParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Double
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: DoubleConstant( 0.1 )
- │   │                       ├─ [4] AnnotationParameter
- │   │                       │   ├─ name: "floatParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Float
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: FloatConstant( 0.2f )
- │   │                       ├─ [5] AnnotationParameter
- │   │                       │   ├─ name: "intParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Integer
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: IntegerConstant( 3 )
- │   │                       ├─ [6] AnnotationParameter
- │   │                       │   ├─ name: "longParameter"
- │   │                       │   └─ value: AnnotationValue
- │   │                       │       ├─ tag: Long
- │   │                       │       └─ value: ConstAnnotationValue
- │   │                       │           └─ value: LongConstant( 4294967296L )
- │   │                       └─ [7] AnnotationParameter
- │   │                           ├─ name: "shortParameter"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Short
- │   │                               └─ value: ConstAnnotationValue
- │   │                                   └─ value: IntegerConstant( 1000 (short) )
- │   ├─ [4] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithStringParameter", descriptor = float()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L46: // return 5f;
- │   │       │   │   ├─ [1]         LDC FloatConstant( 5.0f )
- │   │       │   │   └─ [2]         FRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 46, start = L46
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L46, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "stringParameter"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: String
- │   │                               └─ value: ConstAnnotationValue
- │   │                                   └─ value: Mutf8Constant( "y" )
- │   ├─ [5] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithClassParameter", descriptor = double()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 2, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L52: // return 6;
- │   │       │   │   ├─ [1]         LDC2_W DoubleConstant( 6.0 )
- │   │       │   │   └─ [2]         DRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 52, start = L52
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L52, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "classParameter"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Class
- │   │                               └─ value: ClassAnnotationValue
- │   │                                   └─ name: mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   ├─ [6] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithNoParameter", descriptor = int()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L58: // return 7;
- │   │       │   │   ├─ [1]         BIPUSH immediateValue = 7
- │   │       │   │   └─ [2]         IRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 58, start = L58
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L58, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 0 entries
- │   ├─ [7] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithDefaultParameter", descriptor = byte()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] CodeAttribute maxStack = 1, maxLocals = 1
- │   │       │   ├─ instructions: 2 entries
- │   │       │   │   ├─ [0] L64: // return 1;
- │   │       │   │   ├─ [1]         ICONST_1
- │   │       │   │   └─ [2]         IRETURN
- │   │       │   ├─ exceptionInfos: 0 entries
- │   │       │   └─ attributes: 2 entries
- │   │       │       ├─ [0] LineNumberTableAttribute
- │   │       │       │   └─ entrys: 1 entries
- │   │       │       │       └─ [0] LineNumberTableEntry lineNumber = 64, start = L64
- │   │       │       └─ [1] LocalVariableTableAttribute
- │   │       │           └─ entrys: 1 entries
- │   │       │               └─ [0] LocalVariableTableEntry index = 0, start = L64, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │   │       └─ [1] RuntimeVisibleTypeAnnotationsAttribute
- │   │           └─ typeAnnotations: 1 entries
- │   │               └─ [0] TypeAnnotation
- │   │                   ├─ typePath: TypePath
- │   │                   │   └─ entries: 0 entries
- │   │                   ├─ typeIndex: 37
- │   │                   ├─ target: Target tag = ReturnType
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "value"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Integer
- │   │                               └─ value: ConstAnnotationValue
- │   │                                   └─ value: IntegerConstant( 6 )
- │   └─ [8] ByteCodeMethod accessFlags = [public, final], name = "methodWithParameterAnnotations", descriptor = void( int, int, int )
- │       └─ attributes: 4 entries
- │           ├─ [0] CodeAttribute maxStack = 4, maxLocals = 4
- │           │   ├─ instructions: 7 entries
- │           │   │   ├─ [0] L71: // System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
- │           │   │   ├─ [1]         GETSTATIC java.io.PrintStream java.lang.System.out
- │           │   │   ├─ [2]         ILOAD_1 1
- │           │   │   ├─ [3]         ILOAD_2 2
- │           │   │   ├─ [4]         ILOAD_3 3
- │           │   │   ├─ [5]         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int ), arguments = a=, b=, c=
- │           │   │   │   ├─                 referenceKind: InvokeStatic
- │           │   │   │   ├─                 referenceType: java.lang.invoke.StringConcatFactory
- │           │   │   │   └─                 methodName: makeConcatWithConstants
- │           │   │   ├─ [6]         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
- │           │   │   ├─ [7] L72: // }
- │           │   │   └─ [8]         RETURN
- │           │   ├─ exceptionInfos: 0 entries
- │           │   └─ attributes: 2 entries
- │           │       ├─ [0] LineNumberTableAttribute
- │           │       │   └─ entrys: 2 entries
- │           │       │       ├─ [0] LineNumberTableEntry lineNumber = 71, start = L71
- │           │       │       └─ [1] LineNumberTableEntry lineNumber = 72, start = L72
- │           │       └─ [1] LocalVariableTableAttribute
- │           │           └─ entrys: 4 entries
- │           │               ├─ [0] LocalVariableTableEntry index = 0, start = L71, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
- │           │               ├─ [1] LocalVariableTableEntry index = 1, start = L71, end = @end, name = a, descriptor = int
- │           │               ├─ [2] LocalVariableTableEntry index = 2, start = L71, end = @end, name = b, descriptor = int
- │           │               └─ [3] LocalVariableTableEntry index = 3, start = L71, end = @end, name = c, descriptor = int
- │           ├─ [1] MethodParametersAttribute
- │           │   └─ parameters: 3 entries
- │           │       ├─ [0] MethodParameter accessFlags = [], name = "a"
- │           │       ├─ [1] MethodParameter accessFlags = [], name = "b"
- │           │       └─ [2] MethodParameter accessFlags = [], name = "c"
- │           ├─ [2] RuntimeVisibleTypeAnnotationsAttribute
- │           │   └─ typeAnnotations: 2 entries
- │           │       ├─ [0] TypeAnnotation
- │           │       │   ├─ typePath: TypePath
- │           │       │   │   └─ entries: 0 entries
- │           │       │   ├─ typeIndex: 37
- │           │       │   ├─ target: Target tag = FormalParameter formalParameterIndex = 1
- │           │       │   └─ parameters: 1 entries
- │           │       │       └─ [0] AnnotationParameter
- │           │       │           ├─ name: "stringParameter"
- │           │       │           └─ value: AnnotationValue
- │           │       │               ├─ tag: String
- │           │       │               └─ value: ConstAnnotationValue
- │           │       │                   └─ value: Mutf8Constant( "g" )
- │           │       └─ [1] TypeAnnotation
- │           │           ├─ typePath: TypePath
- │           │           │   └─ entries: 0 entries
- │           │           ├─ typeIndex: 37
- │           │           ├─ target: Target tag = FormalParameter formalParameterIndex = 2
- │           │           └─ parameters: 1 entries
- │           │               └─ [0] AnnotationParameter
- │           │                   ├─ name: "stringParameter"
- │           │                   └─ value: AnnotationValue
- │           │                       ├─ tag: String
- │           │                       └─ value: ConstAnnotationValue
- │           │                           └─ value: Mutf8Constant( "h" )
- │           └─ [3] RuntimeInvisibleTypeAnnotationsAttribute
- │               └─ typeAnnotations: 1 entries
- │                   └─ [0] TypeAnnotation
- │                       ├─ typePath: TypePath
- │                       │   └─ entries: 0 entries
- │                       ├─ typeIndex: 41
- │                       ├─ target: Target tag = FormalParameter formalParameterIndex = 2
- │                       └─ parameters: 1 entries
- │                           └─ [0] AnnotationParameter
- │                               ├─ name: "value"
- │                               └─ value: AnnotationValue
- │                                   ├─ tag: Integer
- │                                   └─ value: ConstAnnotationValue
- │                                       └─ value: IntegerConstant( 1 )
- └─ attributes: 5 entries
-     ├─ [0] SourceFileAttribute "Class6WithTypeAnnotations.java"
-     ├─ [1] RuntimeVisibleAnnotationsAttribute
-     │   └─ annotations: 1 entries
-     │       └─ [0] Annotation
-     │           ├─ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
-     │           └─ parameters: 1 entries
-     │               └─ [0] AnnotationParameter
-     │                   ├─ name: "stringParameter"
-     │                   └─ value: AnnotationValue
-     │                       ├─ tag: String
-     │                       └─ value: ConstAnnotationValue
-     │                           └─ value: Mutf8Constant( "a" )
-     ├─ [2] RuntimeInvisibleAnnotationsAttribute
-     │   └─ annotations: 1 entries
-     │       └─ [0] Annotation
-     │           ├─ type: mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
-     │           └─ parameters: 1 entries
-     │               └─ [0] AnnotationParameter
-     │                   ├─ name: "value"
-     │                   └─ value: AnnotationValue
-     │                       ├─ tag: Integer
-     │                       └─ value: ConstAnnotationValue
-     │                           └─ value: IntegerConstant( 6 )
-     ├─ [3] BootstrapMethodsAttribute
-     │   └─ bootstrapMethods: 1 entries
-     │       └─ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
-     └─ [4] InnerClassesAttribute
-         └─ innerClasses: 1 entries
-             └─ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup
+■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class6WithTypeAnnotations, superClass = java.lang.Object
+├─■ interfaces: 0 items
+├─■ extraConstants: 0 items
+├─■ fields: 1 items
+│ └─■ [0] ByteCodeField accessFlags = [public, final], name = "fieldWithAnnotation", descriptor = int
+│   └─■ attributeSet: 3 items
+│     ├─■ [0] ConstantValueAttribute IntegerConstant( 5 )
+│     ├─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│     │ └─■ [0] TypeAnnotation
+│     │   ├─■ typePath: TypePath; 0 items
+│     │   ├─■ typeIndex: 37
+│     │   ├─■ target: Target tag = FieldType
+│     │   └─■ parameters: 1 items
+│     │     └─■ [0] AnnotationParameter name = "stringParameter"
+│     │       └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "b" )
+│     └─■ [2] RuntimeInvisibleTypeAnnotationsAttribute; 1 items
+│       └─■ [0] TypeAnnotation
+│         ├─■ typePath: TypePath; 0 items
+│         ├─■ typeIndex: 41
+│         ├─■ target: Target tag = FieldType
+│         └─■ parameters: 1 items
+│           └─■ [0] AnnotationParameter name = "value"
+│             └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 7 )
+├─■ methods: 9 items
+│ ├─■ [0] ByteCodeMethod accessFlags = [protected], name = "<init>", descriptor = void()
+│ │ └─■ attributes: 3 items
+│ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
+│ │   │ ├─■ instructions: 6 entries
+│ │   │ │ ├─■ L21: // {
+│ │   │ │ ├─■         ALOAD_0 0
+│ │   │ │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│ │   │ │ ├─■ L13: // @SuppressWarnings( "FieldMayBeStatic" ) //
+│ │   │ │ ├─■         ALOAD_0 0
+│ │   │ │ ├─■         ICONST_5
+│ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class6WithTypeAnnotations.fieldWithAnnotation
+│ │   │ │ ├─■ L22: // }
+│ │   │ │ └─■         RETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 3 items
+│ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 21, start = L21
+│ │   │   │ ├─■ [1] LineNumberTableEntry lineNumber = 13, start = L13
+│ │   │   │ └─■ [2] LineNumberTableEntry lineNumber = 22, start = L22
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L21, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   ├─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │   │ └─■ [0] TypeAnnotation
+│ │   │   ├─■ typePath: TypePath; 0 items
+│ │   │   ├─■ typeIndex: 37
+│ │   │   ├─■ target: Target tag = ReturnType
+│ │   │   └─■ parameters: 1 items
+│ │   │     └─■ [0] AnnotationParameter name = "stringParameter"
+│ │   │       └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "c" )
+│ │   └─■ [2] RuntimeInvisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 41
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 1 items
+│ │         └─■ [0] AnnotationParameter name = "value"
+│ │           └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 8 )
+│ ├─■ [1] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithAnnotationParameter", descriptor = char()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L27: // return 'c';
+│ │   │ │ ├─■         BIPUSH immediateValue = 99
+│ │   │ │ └─■         IRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 27, start = L27
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L27, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 1 items
+│ │         └─■ [0] AnnotationParameter name = "annotationParameter"
+│ │           └─■ value: AnnotationAnnotationValue type = java.lang.SuppressWarnings; 1 parameters
+│ │             └─■ [0] AnnotationParameter name = "value"
+│ │               └─■ value: ArrayAnnotationValue; 1 values
+│ │                 └─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "foo" )
+│ ├─■ [2] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithArrayParameter", descriptor = short()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L33: // return 10;
+│ │   │ │ ├─■         BIPUSH immediateValue = 10
+│ │   │ │ └─■         IRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 33, start = L33
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L33, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 1 items
+│ │         └─■ [0] AnnotationParameter name = "arrayParameter"
+│ │           └─■ value: ArrayAnnotationValue; 2 values
+│ │             ├─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "d" )
+│ │             └─■ [1] ConstAnnotationValue tag = String value = Mutf8Constant( "e" )
+│ ├─■ [3] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithPrimitiveParameters", descriptor = long()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L40: // return 11;
+│ │   │ │ ├─■         LDC2_W LongConstant( 11L )
+│ │   │ │ └─■         LRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 40, start = L40
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L40, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 8 items
+│ │         ├─■ [0] AnnotationParameter name = "booleanParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Boolean value = IntegerConstant( 0 (boolean false) )
+│ │         ├─■ [1] AnnotationParameter name = "byteParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Byte value = IntegerConstant( 2 (byte) )
+│ │         ├─■ [2] AnnotationParameter name = "charParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Character value = IntegerConstant( 100 (char 'd') )
+│ │         ├─■ [3] AnnotationParameter name = "doubleParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Double value = DoubleConstant( 0.1 )
+│ │         ├─■ [4] AnnotationParameter name = "floatParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Float value = FloatConstant( 0.2f )
+│ │         ├─■ [5] AnnotationParameter name = "intParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 3 )
+│ │         ├─■ [6] AnnotationParameter name = "longParameter"
+│ │         │ └─■ value: ConstAnnotationValue tag = Long value = LongConstant( 4294967296L )
+│ │         └─■ [7] AnnotationParameter name = "shortParameter"
+│ │           └─■ value: ConstAnnotationValue tag = Short value = IntegerConstant( 1000 (short) )
+│ ├─■ [4] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithStringParameter", descriptor = float()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L46: // return 5f;
+│ │   │ │ ├─■         LDC FloatConstant( 5.0f )
+│ │   │ │ └─■         FRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 46, start = L46
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L46, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 1 items
+│ │         └─■ [0] AnnotationParameter name = "stringParameter"
+│ │           └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "y" )
+│ ├─■ [5] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithClassParameter", descriptor = double()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L52: // return 6;
+│ │   │ │ ├─■         LDC2_W DoubleConstant( 6.0 )
+│ │   │ │ └─■         DRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 52, start = L52
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L52, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 1 items
+│ │         └─■ [0] AnnotationParameter name = "classParameter"
+│ │           └─■ value: ClassAnnotationValue name = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ ├─■ [6] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithNoParameter", descriptor = int()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L58: // return 7;
+│ │   │ │ ├─■         BIPUSH immediateValue = 7
+│ │   │ │ └─■         IRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 58, start = L58
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L58, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 0 items
+│ ├─■ [7] ByteCodeMethod accessFlags = [public, final], name = "methodWithAnnotationWithDefaultParameter", descriptor = byte()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
+│ │   │ ├─■ instructions: 2 entries
+│ │   │ │ ├─■ L64: // return 1;
+│ │   │ │ ├─■         ICONST_1
+│ │   │ │ └─■         IRETURN
+│ │   │ ├─■ exceptionInfos: 0 items
+│ │   │ └─■ attributeSet: 2 items
+│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 64, start = L64
+│ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L64, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
+│ │     └─■ [0] TypeAnnotation
+│ │       ├─■ typePath: TypePath; 0 items
+│ │       ├─■ typeIndex: 37
+│ │       ├─■ target: Target tag = ReturnType
+│ │       └─■ parameters: 1 items
+│ │         └─■ [0] AnnotationParameter name = "value"
+│ │           └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 6 )
+│ └─■ [8] ByteCodeMethod accessFlags = [public, final], name = "methodWithParameterAnnotations", descriptor = void( int, int, int )
+│   └─■ attributes: 4 items
+│     ├─■ [0] CodeAttribute maxStack = 4, maxLocals = 4
+│     │ ├─■ instructions: 7 entries
+│     │ │ ├─■ L71: // System.out.println( "a=" + a + ", b=" + b + ", c=" + c );
+│     │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
+│     │ │ ├─■         ILOAD_1 1
+│     │ │ ├─■         ILOAD_2 2
+│     │ │ ├─■         ILOAD_3 3
+│     │ │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int ), arguments = a=, b=, c=
+│     │ │ │ ├─■                 referenceKind: InvokeStatic
+│     │ │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
+│     │ │ │ └─■                 methodName: makeConcatWithConstants
+│     │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│     │ │ ├─■ L72: // }
+│     │ │ └─■         RETURN
+│     │ ├─■ exceptionInfos: 0 items
+│     │ └─■ attributeSet: 2 items
+│     │   ├─■ [0] LineNumberTableAttribute; 2 items
+│     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 71, start = L71
+│     │   │ └─■ [1] LineNumberTableEntry lineNumber = 72, start = L72
+│     │   └─■ [1] LocalVariableTableAttribute; 4 items
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L71, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│     │     ├─■ [1] LocalVariableTableEntry index = 1, start = L71, end = @end, name = a, descriptor = int
+│     │     ├─■ [2] LocalVariableTableEntry index = 2, start = L71, end = @end, name = b, descriptor = int
+│     │     └─■ [3] LocalVariableTableEntry index = 3, start = L71, end = @end, name = c, descriptor = int
+│     ├─■ [1] MethodParametersAttribute; 3 items
+│     │ ├─■ [0] MethodParameter accessFlags = [], name = "a"
+│     │ ├─■ [1] MethodParameter accessFlags = [], name = "b"
+│     │ └─■ [2] MethodParameter accessFlags = [], name = "c"
+│     ├─■ [2] RuntimeVisibleTypeAnnotationsAttribute; 2 items
+│     │ ├─■ [0] TypeAnnotation
+│     │ │ ├─■ typePath: TypePath; 0 items
+│     │ │ ├─■ typeIndex: 37
+│     │ │ ├─■ target: Target tag = FormalParameter formalParameterIndex = 1
+│     │ │ └─■ parameters: 1 items
+│     │ │   └─■ [0] AnnotationParameter name = "stringParameter"
+│     │ │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "g" )
+│     │ └─■ [1] TypeAnnotation
+│     │   ├─■ typePath: TypePath; 0 items
+│     │   ├─■ typeIndex: 37
+│     │   ├─■ target: Target tag = FormalParameter formalParameterIndex = 2
+│     │   └─■ parameters: 1 items
+│     │     └─■ [0] AnnotationParameter name = "stringParameter"
+│     │       └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "h" )
+│     └─■ [3] RuntimeInvisibleTypeAnnotationsAttribute; 1 items
+│       └─■ [0] TypeAnnotation
+│         ├─■ typePath: TypePath; 0 items
+│         ├─■ typeIndex: 41
+│         ├─■ target: Target tag = FormalParameter formalParameterIndex = 2
+│         └─■ parameters: 1 items
+│           └─■ [0] AnnotationParameter name = "value"
+│             └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 1 )
+└─■ attributeSet: 5 items
+  ├─■ [0] SourceFileAttribute "Class6WithTypeAnnotations.java"
+  ├─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
+  │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1; 1 parameters
+  │   └─■ [0] AnnotationParameter name = "stringParameter"
+  │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "a" )
+  ├─■ [2] RuntimeInvisibleAnnotationsAttribute; 1 items
+  │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1; 1 parameters
+  │   └─■ [0] AnnotationParameter name = "value"
+  │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 6 )
+  ├─■ [3] BootstrapMethodsAttribute; 1 items
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
+  └─■ [4] InnerClassesAttribute; 1 items
+    └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -58,7 +58,7 @@ public final class CodeAttribute extends KnownAttribute
 	private int maxLocals;
 	public final List<ExceptionInfo> exceptionInfos;
 	public final AttributeSet attributeSet;
-	private final InstructionList instructions;
+	public final InstructionList instructions;
 
 	private CodeAttribute( int maxStack, int maxLocals, List<Instruction> instructions, List<ExceptionInfo> exceptionInfos, AttributeSet attributeSet )
 	{
@@ -88,11 +88,6 @@ public final class CodeAttribute extends KnownAttribute
 	public void setMaxLocals( int value )
 	{
 		maxLocals = value;
-	}
-
-	public InstructionList instructions()
-	{
-		return instructions;
 	}
 
 	@Deprecated @Override public CodeAttribute asCodeAttribute()

@@ -15,7 +15,7 @@ public final class ObjectVerificationType extends VerificationType
 		return new ObjectVerificationType( classConstant );
 	}
 
-	private final ClassConstant classConstant;
+	public final ClassConstant classConstant;
 
 	private ObjectVerificationType( ClassConstant classConstant )
 	{
@@ -23,9 +23,9 @@ public final class ObjectVerificationType extends VerificationType
 		this.classConstant = classConstant;
 	}
 
-	@Deprecated @Override public ObjectVerificationType asObjectVerificationType() { return this; }
+	public String typeName() { return classConstant.typeName(); }
 
-	public ClassConstant classConstant() { return classConstant; }
+	@Deprecated @Override public ObjectVerificationType asObjectVerificationType() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

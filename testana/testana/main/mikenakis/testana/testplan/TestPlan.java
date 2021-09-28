@@ -1,11 +1,12 @@
 package mikenakis.testana.testplan;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.functional.Function1;
 import mikenakis.testana.kit.TestanaLog;
-import mikenakis.testana.kit.textTree.TextTree;
 import mikenakis.testana.testplan.intent.Intent;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,33 +69,39 @@ public class TestPlan
 	{
 		if( showOption != ShowOption.None )
 		{
-			TextTree textTree = new TextTree( "TestPlan", TestanaLog::report );
-			textTree.print( testModules, TestPlan::showModule, ( parent, testModule ) -> showChildrenOfModule( parent, testModule, showOption ) );
-		}
-	}
-
-	private static String showModule( TestModule testModule )
-	{
-		return "Module: " + testModule.name();
-	}
-
-	private void showChildrenOfModule( TextTree textTree, TestModule testModule, ShowOption showOption )
-	{
-		textTree.print( testModule.testClasses(), this::showTestClass, ( parent, classTestNode ) -> showChildrenOfTestClass( parent, classTestNode, showOption ) );
-	}
-
-	private String showTestClass( TestClass testClass )
-	{
-		return testClass.toString() + " " + getIntent( testClass );
-	}
-
-	private static void showChildrenOfTestClass( TextTree textTree, TestClass testClass, ShowOption showOption )
-	{
-		switch( showOption )
-		{
-			case None -> { assert false; } //should not have been here.
-			case Normal -> { }
-			case Verbose -> textTree.print( testClass.testMethods(), TestMethod::toString );
+			Function1<Iterable<Object>,Object> breeder = object -> //
+			{
+				if( object instanceof TestPlan testPlan )
+					return Kit.iterable.downCast( testPlan.testModules );
+				if( object instanceof TestModule testModule )
+					return Kit.iterable.downCast( testModule.testClasses() );
+				if( object instanceof TestClass testClass )
+					return switch( showOption )
+					{
+						//noinspection ConstantConditions
+						case None -> { assert false; yield null; } //should not have been here.
+						case Normal -> List.of();
+						case Verbose -> Kit.iterable.downCast( testClass.testMethods() );
+					};
+				if( object instanceof TestMethod )
+					return List.of();
+				assert false;
+				return null;
+			};
+			Function1<String,Object> stringizer = object -> //
+			{
+				if( object instanceof TestPlan )
+					return "TestPlan";
+				if( object instanceof TestModule testModule )
+					return "Module: " + testModule.name();
+				if( object instanceof TestClass testClass )
+					return testClass.toString() + " " + getIntent( testClass );
+				if( object instanceof TestMethod testMethod )
+					return testMethod.toString();
+				assert false;
+				return null;
+			};
+			Kit.tree.print( this, breeder, stringizer, TestanaLog::report );
 		}
 	}
 

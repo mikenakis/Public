@@ -43,6 +43,7 @@ import mikenakis.bytecode.model.attributes.MethodParametersAttribute;
 import mikenakis.bytecode.model.attributes.NestHostAttribute;
 import mikenakis.bytecode.model.attributes.NestMembersAttribute;
 import mikenakis.bytecode.model.attributes.ParameterAnnotationSet;
+import mikenakis.bytecode.model.attributes.ParameterAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.SignatureAttribute;
 import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
@@ -136,7 +137,7 @@ public class ByteCodeWriter
 				.map( attribute -> attribute.asCodeAttribute() ) //
 				.ifPresent( codeAttribute -> //
 				{
-					for( Instruction instruction : codeAttribute.instructions().all() )
+					for( Instruction instruction : codeAttribute.instructions.all() )
 						if( instruction.groupTag == Instruction.groupTag_InvokeDynamic )
 							bootstrapPool.intern( instruction.asInvokeDynamicInstruction().invokeDynamicConstant.getBootstrapMethod() );
 				} );
@@ -309,10 +310,10 @@ public class ByteCodeWriter
 				case KnownAttribute.tag_NestHost -> writeNestHostAttribute( constantPool, bufferWriter, knownAttribute.asNestHostAttribute() );
 				case KnownAttribute.tag_NestMembers -> writeNestMembersAttribute( constantPool, bufferWriter, knownAttribute.asNestMembersAttribute() );
 				case KnownAttribute.tag_RuntimeInvisibleAnnotations -> writeAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleAnnotationsAttribute() );
-				case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> writeParameterAnnotationSets( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute().parameterAnnotationSets() );
+				case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> writeParameterAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleParameterAnnotationsAttribute() );
 				case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> writeTypeAnnotations( constantPool, bufferWriter, knownAttribute.asRuntimeInvisibleTypeAnnotationsAttribute().typeAnnotations );
 				case KnownAttribute.tag_RuntimeVisibleAnnotations -> writeAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleAnnotationsAttribute() );
-				case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> writeParameterAnnotationSets( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute().parameterAnnotationSets() );
+				case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> writeParameterAnnotationsAttribute( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleParameterAnnotationsAttribute() );
 				case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> writeTypeAnnotations( constantPool, bufferWriter, knownAttribute.asRuntimeVisibleTypeAnnotationsAttribute().typeAnnotations );
 				case KnownAttribute.tag_Signature -> writeSignatureAttribute( constantPool, bufferWriter, knownAttribute.asSignatureAttribute() );
 				case KnownAttribute.tag_SourceFile -> writeSourceFileAttribute( constantPool, bufferWriter, knownAttribute.asSourceFileAttribute() );
@@ -326,6 +327,11 @@ public class ByteCodeWriter
 			UnknownAttribute unknownAttribute = attribute.asUnknownAttribute();
 			bufferWriter.writeBuffer( unknownAttribute.buffer() );
 		}
+	}
+
+	private static void writeParameterAnnotationsAttribute( ConstantPool constantPool, BufferWriter bufferWriter, ParameterAnnotationsAttribute parameterAnnotationsAttribute )
+	{
+		writeParameterAnnotationSets( constantPool, bufferWriter, parameterAnnotationsAttribute.parameterAnnotationSets );
 	}
 
 	private static void writeSourceFileAttribute( ConstantPool constantPool, BufferWriter bufferWriter, SourceFileAttribute sourceFileAttribute )
@@ -565,9 +571,9 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( codeAttribute.getMaxStack() );
 		bufferWriter.writeUnsignedShort( codeAttribute.getMaxLocals() );
 
-		LocationMap locationMap = getLocationMap( codeAttribute.instructions().all(), constantPool );
+		LocationMap locationMap = getLocationMap( codeAttribute.instructions.all(), constantPool );
 		RealInstructionWriter instructionWriter = new RealInstructionWriter( locationMap, constantPool );
-		for( Instruction instruction : codeAttribute.instructions().all() )
+		for( Instruction instruction : codeAttribute.instructions.all() )
 			writeInstruction( instruction, instructionWriter );
 		byte[] bytes = instructionWriter.toBytes();
 		bufferWriter.writeInt( bytes.length );
@@ -1051,7 +1057,7 @@ public class ByteCodeWriter
 
 	private static void writeObjectVerificationType( ConstantPool constantPool, BufferWriter bufferWriter, ObjectVerificationType objectVerificationType )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( objectVerificationType.classConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( objectVerificationType.classConstant ) );
 	}
 
 	private static void writeSimpleVerificationType( SimpleVerificationType simpleVerificationType )

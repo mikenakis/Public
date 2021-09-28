@@ -1,164 +1,78 @@
-ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1, superClass = java.lang.Object
- ├─ interfaces: 1 entries
- │   └─ [0] java.lang.annotation.Annotation
- ├─ extraConstants: 0 entries
- ├─ fields: 0 entries
- ├─ methods: 13 entries
- │   ├─ [0] ByteCodeMethod accessFlags = [public, abstract], name = "annotationParameter", descriptor = java.lang.SuppressWarnings()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Annotation
- │   │               └─ value: Annotation
- │   │                   ├─ type: java.lang.SuppressWarnings
- │   │                   └─ parameters: 1 entries
- │   │                       └─ [0] AnnotationParameter
- │   │                           ├─ name: "value"
- │   │                           └─ value: AnnotationValue
- │   │                               ├─ tag: Array
- │   │                               └─ value: ArrayAnnotationValue
- │   │                                   └─ values: 1 entries
- │   │                                       └─ [0] AnnotationValue
- │   │                                           ├─ tag: String
- │   │                                           └─ value: ConstAnnotationValue
- │   │                                               └─ value: Mutf8Constant( "" )
- │   ├─ [1] ByteCodeMethod accessFlags = [public, abstract], name = "arrayParameter", descriptor = java.lang.String[]()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Array
- │   │               └─ value: ArrayAnnotationValue
- │   │                   └─ values: 3 entries
- │   │                       ├─ [0] AnnotationValue
- │   │                       │   ├─ tag: String
- │   │                       │   └─ value: ConstAnnotationValue
- │   │                       │       └─ value: Mutf8Constant( "a" )
- │   │                       ├─ [1] AnnotationValue
- │   │                       │   ├─ tag: String
- │   │                       │   └─ value: ConstAnnotationValue
- │   │                       │       └─ value: Mutf8Constant( "b" )
- │   │                       └─ [2] AnnotationValue
- │   │                           ├─ tag: String
- │   │                           └─ value: ConstAnnotationValue
- │   │                               └─ value: Mutf8Constant( "c" )
- │   ├─ [2] ByteCodeMethod accessFlags = [public, abstract], name = "booleanParameter", descriptor = boolean()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Boolean
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: IntegerConstant( 1 (boolean true) )
- │   ├─ [3] ByteCodeMethod accessFlags = [public, abstract], name = "byteParameter", descriptor = byte()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Byte
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: IntegerConstant( 1 (byte) )
- │   ├─ [4] ByteCodeMethod accessFlags = [public, abstract], name = "charParameter", descriptor = char()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Character
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: IntegerConstant( 99 (char 'c') )
- │   ├─ [5] ByteCodeMethod accessFlags = [public, abstract], name = "doubleParameter", descriptor = double()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Double
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: DoubleConstant( 0.5 )
- │   ├─ [6] ByteCodeMethod accessFlags = [public, abstract], name = "floatParameter", descriptor = float()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Float
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: FloatConstant( 0.25f )
- │   ├─ [7] ByteCodeMethod accessFlags = [public, abstract], name = "intParameter", descriptor = int()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Integer
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: IntegerConstant( 2 )
- │   ├─ [8] ByteCodeMethod accessFlags = [public, abstract], name = "longParameter", descriptor = long()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Long
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: LongConstant( 3L )
- │   ├─ [9] ByteCodeMethod accessFlags = [public, abstract], name = "shortParameter", descriptor = short()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: Short
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: IntegerConstant( 4 (short) )
- │   ├─ [10] ByteCodeMethod accessFlags = [public, abstract], name = "stringParameter", descriptor = java.lang.String()
- │   │   └─ attributes: 1 entries
- │   │       └─ [0] AnnotationDefaultAttribute
- │   │           └─ value: AnnotationValue
- │   │               ├─ tag: String
- │   │               └─ value: ConstAnnotationValue
- │   │                   └─ value: Mutf8Constant( "x" )
- │   ├─ [11] ByteCodeMethod accessFlags = [public, abstract], name = "classParameter", descriptor = java.lang.Class()
- │   │   └─ attributes: 2 entries
- │   │       ├─ [0] AnnotationDefaultAttribute
- │   │       │   └─ value: AnnotationValue
- │   │       │       ├─ tag: Class
- │   │       │       └─ value: ClassAnnotationValue
- │   │       │           └─ name: java.lang.Object
- │   │       └─ [1] SignatureAttribute ()Ljava/lang/Class<*>;
- │   └─ [12] ByteCodeMethod accessFlags = [public, abstract], name = "value", descriptor = int()
- │       └─ attributes: 1 entries
- │           └─ [0] AnnotationDefaultAttribute
- │               └─ value: AnnotationValue
- │                   ├─ tag: Integer
- │                   └─ value: ConstAnnotationValue
- │                       └─ value: IntegerConstant( 5 )
- └─ attributes: 2 entries
-     ├─ [0] SourceFileAttribute "RuntimeVisibleTypeAnnotation1.java"
-     └─ [1] RuntimeVisibleAnnotationsAttribute
-         └─ annotations: 2 entries
-             ├─ [0] Annotation
-             │   ├─ type: java.lang.annotation.Target
-             │   └─ parameters: 1 entries
-             │       └─ [0] AnnotationParameter
-             │           ├─ name: "value"
-             │           └─ value: AnnotationValue
-             │               ├─ tag: Array
-             │               └─ value: ArrayAnnotationValue
-             │                   └─ values: 4 entries
-             │                       ├─ [0] AnnotationValue
-             │                       │   ├─ tag: Enum
-             │                       │   └─ value: EnumAnnotationValue
-             │                       │       ├─ type: java.lang.annotation.ElementType
-             │                       │       └─ value: PACKAGE
-             │                       ├─ [1] AnnotationValue
-             │                       │   ├─ tag: Enum
-             │                       │   └─ value: EnumAnnotationValue
-             │                       │       ├─ type: java.lang.annotation.ElementType
-             │                       │       └─ value: TYPE_PARAMETER
-             │                       ├─ [2] AnnotationValue
-             │                       │   ├─ tag: Enum
-             │                       │   └─ value: EnumAnnotationValue
-             │                       │       ├─ type: java.lang.annotation.ElementType
-             │                       │       └─ value: TYPE_USE
-             │                       └─ [3] AnnotationValue
-             │                           ├─ tag: Enum
-             │                           └─ value: EnumAnnotationValue
-             │                               ├─ type: java.lang.annotation.ElementType
-             │                               └─ value: MODULE
-             └─ [1] Annotation
-                 ├─ type: java.lang.annotation.Retention
-                 └─ parameters: 1 entries
-                     └─ [0] AnnotationParameter
-                         ├─ name: "value"
-                         └─ value: AnnotationValue
-                             ├─ tag: Enum
-                             └─ value: EnumAnnotationValue
-                                 ├─ type: java.lang.annotation.RetentionPolicy
-                                 └─ value: RUNTIME
+■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1, superClass = java.lang.Object
+├─■ interfaces: 1 items
+│ └─■ [0] java.lang.annotation.Annotation
+├─■ extraConstants: 0 items
+├─■ fields: 0 items
+├─■ methods: 13 items
+│ ├─■ [0] ByteCodeMethod accessFlags = [public, abstract], name = "annotationParameter", descriptor = java.lang.SuppressWarnings()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: AnnotationAnnotationValue type = java.lang.SuppressWarnings; 1 parameters
+│ │       └─■ [0] AnnotationParameter name = "value"
+│ │         └─■ value: ArrayAnnotationValue; 1 values
+│ │           └─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "" )
+│ ├─■ [1] ByteCodeMethod accessFlags = [public, abstract], name = "arrayParameter", descriptor = java.lang.String[]()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ArrayAnnotationValue; 3 values
+│ │       ├─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "a" )
+│ │       ├─■ [1] ConstAnnotationValue tag = String value = Mutf8Constant( "b" )
+│ │       └─■ [2] ConstAnnotationValue tag = String value = Mutf8Constant( "c" )
+│ ├─■ [2] ByteCodeMethod accessFlags = [public, abstract], name = "booleanParameter", descriptor = boolean()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Boolean value = IntegerConstant( 1 (boolean true) )
+│ ├─■ [3] ByteCodeMethod accessFlags = [public, abstract], name = "byteParameter", descriptor = byte()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Byte value = IntegerConstant( 1 (byte) )
+│ ├─■ [4] ByteCodeMethod accessFlags = [public, abstract], name = "charParameter", descriptor = char()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Character value = IntegerConstant( 99 (char 'c') )
+│ ├─■ [5] ByteCodeMethod accessFlags = [public, abstract], name = "doubleParameter", descriptor = double()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Double value = DoubleConstant( 0.5 )
+│ ├─■ [6] ByteCodeMethod accessFlags = [public, abstract], name = "floatParameter", descriptor = float()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Float value = FloatConstant( 0.25f )
+│ ├─■ [7] ByteCodeMethod accessFlags = [public, abstract], name = "intParameter", descriptor = int()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 2 )
+│ ├─■ [8] ByteCodeMethod accessFlags = [public, abstract], name = "longParameter", descriptor = long()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Long value = LongConstant( 3L )
+│ ├─■ [9] ByteCodeMethod accessFlags = [public, abstract], name = "shortParameter", descriptor = short()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = Short value = IntegerConstant( 4 (short) )
+│ ├─■ [10] ByteCodeMethod accessFlags = [public, abstract], name = "stringParameter", descriptor = java.lang.String()
+│ │ └─■ attributes: 1 items
+│ │   └─■ [0] AnnotationDefaultAttribute
+│ │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "x" )
+│ ├─■ [11] ByteCodeMethod accessFlags = [public, abstract], name = "classParameter", descriptor = java.lang.Class()
+│ │ └─■ attributes: 2 items
+│ │   ├─■ [0] AnnotationDefaultAttribute
+│ │   │ └─■ value: ClassAnnotationValue name = java.lang.Object
+│ │   └─■ [1] SignatureAttribute ()Ljava/lang/Class<*>;
+│ └─■ [12] ByteCodeMethod accessFlags = [public, abstract], name = "value", descriptor = int()
+│   └─■ attributes: 1 items
+│     └─■ [0] AnnotationDefaultAttribute
+│       └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 5 )
+└─■ attributeSet: 2 items
+  ├─■ [0] SourceFileAttribute "RuntimeVisibleTypeAnnotation1.java"
+  └─■ [1] RuntimeVisibleAnnotationsAttribute; 2 items
+    ├─■ [0] Annotation type = java.lang.annotation.Target; 1 parameters
+    │ └─■ [0] AnnotationParameter name = "value"
+    │   └─■ value: ArrayAnnotationValue; 4 values
+    │     ├─■ [0] EnumAnnotationValue type = java.lang.annotation.ElementType, value = PACKAGE
+    │     ├─■ [1] EnumAnnotationValue type = java.lang.annotation.ElementType, value = TYPE_PARAMETER
+    │     ├─■ [2] EnumAnnotationValue type = java.lang.annotation.ElementType, value = TYPE_USE
+    │     └─■ [3] EnumAnnotationValue type = java.lang.annotation.ElementType, value = MODULE
+    └─■ [1] Annotation type = java.lang.annotation.Retention; 1 parameters
+      └─■ [0] AnnotationParameter name = "value"
+        └─■ value: EnumAnnotationValue type = java.lang.annotation.RetentionPolicy, value = RUNTIME

@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -32,6 +33,8 @@ public final class EnumAnnotationValue extends AnnotationValue
 
 	public Mutf8Constant typeNameConstant()	{ return typeNameConstant; }
 	public ClassDesc typeDescriptor() { return ClassDesc.ofDescriptor( typeNameConstant.stringValue() ); }
+	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( typeDescriptor() ); }
+
 	public Mutf8Constant valueNameConstant() { return valueNameConstant; }
 	public String valueName() { return valueNameConstant.stringValue(); }
 

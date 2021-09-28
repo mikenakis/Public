@@ -5,19 +5,29 @@ import java.util.Map;
 
 public abstract class Twig
 {
-	public static Twig leaf( String payload )
+	public static Twig leaf( String text )
 	{
-		return new LeafTwig( payload );
+		return new LeafTwig( text );
 	}
 
-	public static Twig array( String payload, List<Twig> children )
+	public static Twig array( String header, List<Twig> children )
 	{
-		return new ArrayTwig( payload, children );
+		return array( header, children, "items" );
 	}
 
 	public static Twig array( List<Twig> children )
 	{
-		return new ArrayTwig( children.size() + " entries", children );
+		return array( "", children );
+	}
+
+	public static Twig array( List<Twig> children, String itemName )
+	{
+		return array( "", children, itemName );
+	}
+
+	public static Twig array( String header, List<Twig> children, String itemName )
+	{
+		return new ArrayTwig( (header.isEmpty() ? "" : (header + "; ")) + children.size() + " " + itemName, children );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs public static Twig group( String payload, Map.Entry<String,Twig>... children )

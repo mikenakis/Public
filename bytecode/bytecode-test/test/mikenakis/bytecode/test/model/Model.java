@@ -26,6 +26,7 @@ public class Model
 		RuntimeInvisibleAnnotation1.class,
 		RuntimeInvisibleTypeAnnotation1.class,
 		RuntimeVisibleAnnotation1.class,
+		RuntimeVisibleAnnotation2.class,
 		RuntimeVisibleTypeAnnotation1.class
 	);
 
@@ -34,6 +35,7 @@ public class Model
 		Path modelClassPathName = TestKit.getPathToClassFile( Model.class );
 		List<Path> classFilePathNames = TestKit.collectResourcePaths( modelClassPathName.getParent(), false, ".class" )
 			.stream().filter( c -> !c.equals( modelClassPathName ) ).toList();
+		//If this assertion fails, it probably means that a class was just added to the model. The class needs to also be added to the list of all classes.
 		assert classFilePathNames.stream().filter( c -> !c.toString().contains( "$" ) ).toList().size() == allClasses.size();
 		return classFilePathNames;
 	}

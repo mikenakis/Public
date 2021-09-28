@@ -1,15 +1,11 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation2, superClass = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] java.lang.annotation.Annotation
 ├─■ extraConstants: 0 items
 ├─■ fields: 0 items
-├─■ methods: 1 items
-│ └─■ [0] ByteCodeMethod accessFlags = [public, abstract], name = "value", descriptor = int()
-│   └─■ attributes: 1 items
-│     └─■ [0] AnnotationDefaultAttribute
-│       └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 5 )
+├─■ methods: 0 items
 └─■ attributeSet: 2 items
-  ├─■ [0] SourceFileAttribute "RuntimeInvisibleAnnotation1.java"
+  ├─■ [0] SourceFileAttribute "RuntimeVisibleAnnotation2.java"
   └─■ [1] RuntimeVisibleAnnotationsAttribute; 2 items
     ├─■ [0] Annotation type = java.lang.annotation.Target; 1 parameters
     │ └─■ [0] AnnotationParameter name = "value"
@@ -23,4 +19,4 @@
     │     └─■ [6] EnumAnnotationValue type = java.lang.annotation.ElementType, value = ANNOTATION_TYPE
     └─■ [1] Annotation type = java.lang.annotation.Retention; 1 parameters
       └─■ [0] AnnotationParameter name = "value"
-        └─■ value: EnumAnnotationValue type = java.lang.annotation.RetentionPolicy, value = CLASS
+        └─■ value: EnumAnnotationValue type = java.lang.annotation.RetentionPolicy, value = RUNTIME

@@ -27,6 +27,7 @@ public final class Annotation
 		this.parameters = parameters;
 	}
 
+	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( typeDescriptor() ); }
 	public ClassDesc typeDescriptor() {	return ClassDesc.ofDescriptor( typeConstant.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
