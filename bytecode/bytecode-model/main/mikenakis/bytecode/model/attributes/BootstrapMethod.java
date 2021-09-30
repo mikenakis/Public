@@ -1,11 +1,12 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ConstantDesc;
-import java.lang.constant.DynamicConstantDesc;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +32,9 @@ public final class BootstrapMethod
 		this.argumentConstants = argumentConstants;
 	}
 
+	public MethodDescriptor invocationMethodDescriptor() { return MethodDescriptor.ofDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantInvocation( methodHandleConstant ) ); }
+	public TypeDescriptor ownerTypeDescriptor() { return TypeDescriptor.ofDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantOwner( methodHandleConstant ) ); }
+
 	private static boolean isBootstrapArgumentConstant( Constant constant )
 	{
 		return switch( constant.tag )
@@ -38,24 +42,6 @@ public final class BootstrapMethod
 				case Constant.tag_Class, Constant.tag_MethodType, Constant.tag_String, Constant.tag_MethodHandle -> true;
 				default -> false;
 			};
-	}
-
-	public DynamicConstantDesc<?> constantDescriptor()
-	{
-		ConstantDesc[] argumentConstantDescriptors = new ConstantDesc[argumentConstants.size()];
-		for( int i = 0; i < argumentConstantDescriptors.length; i++ )
-		{
-			Constant constant = argumentConstants.get( i );
-			argumentConstantDescriptors[i] = switch( constant.tag )
-				{
-					case Constant.tag_Class -> constant.asClassConstant().classDesc();
-					case Constant.tag_MethodType -> constant.asMethodTypeConstant().constantDescriptor();
-					case Constant.tag_String -> constant.asStringConstant().constantDescriptor();
-					case Constant.tag_MethodHandle -> constant.asMethodHandleConstant().constantDescriptor();
-					default -> throw new AssertionError( constant );
-				};
-		}
-		return DynamicConstantDesc.of( methodHandleConstant.descriptor(), argumentConstantDescriptors );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "methodHandle = " + methodHandleConstant + ", " + argumentConstants.size() + " arguments"; }

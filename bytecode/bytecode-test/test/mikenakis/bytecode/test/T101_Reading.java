@@ -39,11 +39,11 @@ public class T101_Reading
 		Path classFilePathName = TestKit.getPathToClassFile( Class1WithFields.class );
 		ByteCodeType byteCodeType = create( classFilePathName );
 		assert byteCodeType.modifierSet.equals( ByteCodeType.modifierFlagsEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Super, ByteCodeType.Modifier.Abstract ) );
-		assert byteCodeType.typeDescriptor().equalsClassDesc( Class1WithFields.class.describeConstable().orElseThrow() );
+		assert byteCodeType.typeDescriptor().descriptorString().equals( Class1WithFields.class.describeConstable().orElseThrow().descriptorString() );
 		assert byteCodeType.typeName().equals( Class1WithFields.class.getTypeName() );
-		assert byteCodeType.superTypeDescriptor().orElseThrow().equalsClassDesc( Object.class.describeConstable().orElseThrow() );
+		assert byteCodeType.superTypeDescriptor().orElseThrow().descriptorString().equals( Object.class.describeConstable().orElseThrow().descriptorString() );
 		assert byteCodeType.superTypeName().orElseThrow().equals( Object.class.getTypeName() );
-		assert byteCodeType.interfaceClassDescriptors().isEmpty();
+		assert byteCodeType.interfaceTypeDescriptors().isEmpty();
 		assert byteCodeType.methods.size() == 3;
 		List<ByteCodeMethod> methods = new ArrayList<>( byteCodeType.methods );
 		assert methods.get( 0 ).name().equals( "<init>" );

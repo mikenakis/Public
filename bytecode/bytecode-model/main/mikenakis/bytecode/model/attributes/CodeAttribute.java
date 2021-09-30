@@ -23,7 +23,6 @@ import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruct
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -102,7 +101,7 @@ public final class CodeAttribute extends KnownAttribute
 	}
 
 	//@formatter:off
-	public InvokeInterfaceInstruction           /**/ addInvokeInterface   /**/ ( InterfaceMethodReferenceConstant constant, int argumentCount ) /**/ { return add( InvokeInterfaceInstruction.of( constant, argumentCount ) ); }
+	public InvokeInterfaceInstruction           /**/ addInvokeInterface   /**/ ( MethodReferenceConstant constant, int argumentCount ) /**/ { return add( InvokeInterfaceInstruction.of( constant, argumentCount ) ); }
 	public InvokeDynamicInstruction             /**/ addInvokeDynamic     /**/ ( InvokeDynamicConstant constant )                               /**/ { return add( InvokeDynamicInstruction.of( constant ) ); }
 	public MultiANewArrayInstruction            /**/ addMultiANewArray    /**/ ( ClassConstant constant, int dimensionCount )                   /**/ { return add( MultiANewArrayInstruction.of( constant, dimensionCount ) ); }
 	public FieldConstantReferencingInstruction  /**/ addGetStatic         /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.GETSTATIC, constant ) ); }

@@ -2,7 +2,7 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], name = "this$0", descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass
+│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Class7WithInnerClass this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 2 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class7WithInnerClass )
@@ -33,10 +33,8 @@
 │       │ ├─■         ALOAD_0 0
 │       │ ├─■         GETFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
 │       │ ├─■         INVOKEVIRTUAL type = java.lang.Object, name = toString, descriptor = java.lang.String()
-│       │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String ), arguments = inner class of 
-│       │ │ ├─■                 referenceKind: InvokeStatic
-│       │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│       │ │ └─■                 methodName: makeConcatWithConstants
+│       │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )
 │       │ └─■         ARETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items

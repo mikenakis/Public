@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.constants;
 
-import java.lang.constant.ClassDesc;
+import mikenakis.bytecode.model.descriptors.FieldDescriptor;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 
 /**
  * Represents the JVMS::CONSTANT_Fieldref_info structure.
@@ -27,9 +28,9 @@ public final class FieldReferenceConstant extends ReferenceConstant
 	// 1: nameAndDescriptorConstant.descriptorConstant
 	// 2: typeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public ClassDesc fieldTypeDescriptor() { return ClassDesc.ofDescriptor( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ); }
-	public ClassDesc declaringClassDescriptor() { return getDeclaringTypeConstant().classDesc(); }
 	public String fieldName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
+	public FieldDescriptor fieldDescriptor() { return FieldDescriptor.of( TypeDescriptor.ofDescriptorString( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ) ); }
+	public TypeDescriptor declaringTypeDescriptor() { return TypeDescriptor.ofDescriptorString( getDeclaringTypeConstant().descriptorString() ); }
 
 	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant()
 	{

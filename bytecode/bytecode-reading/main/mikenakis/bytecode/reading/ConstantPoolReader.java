@@ -11,14 +11,13 @@ import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
+import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Procedure0;
@@ -66,8 +65,7 @@ final class ConstantPoolReader
 					case Constant.tag_String -> readStringConstant();
 					case Constant.tag_MethodType -> readMethodTypeConstant();
 					case Constant.tag_FieldReference -> readFieldReferenceConstant();
-					case Constant.tag_InterfaceMethodReference -> readInterfaceMethodReferenceConstant();
-					case Constant.tag_MethodReference -> readPlainMethodReferenceConstant();
+					case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> readMethodReferenceConstant( constantTag );
 					case Constant.tag_InvokeDynamic -> readInvokeDynamicConstant();
 					case Constant.tag_Double -> readDoubleConstant();
 					case Constant.tag_Float -> readFloatConstant();
@@ -152,17 +150,9 @@ final class ConstantPoolReader
 		return invokeDynamicConstant;
 	}
 
-	private PlainMethodReferenceConstant readPlainMethodReferenceConstant()
+	private MethodReferenceConstant readMethodReferenceConstant( int tag )
 	{
-		PlainMethodReferenceConstant plainMethodReferenceConstant = new PlainMethodReferenceConstant();
-		readIndexAndSetConstant( c -> plainMethodReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
-		readIndexAndSetConstant( c -> plainMethodReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
-		return plainMethodReferenceConstant;
-	}
-
-	private InterfaceMethodReferenceConstant readInterfaceMethodReferenceConstant()
-	{
-		InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = new InterfaceMethodReferenceConstant();
+		MethodReferenceConstant interfaceMethodReferenceConstant = MethodReferenceConstant.of( tag );
 		readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
 		readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
 		return interfaceMethodReferenceConstant;

@@ -3,7 +3,7 @@
 │ └─■ [0] mikenakis.bytecode.test.model.Interface2
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [private, final], name = "interface1", descriptor = mikenakis.bytecode.test.model.Interface1
+│ └─■ [0] ByteCodeField accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Interface1 interface1
 │   └─■ attributeSet: 1 items
 │     └─■ [0] RuntimeVisibleAnnotationsAttribute; 1 items
 │       └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 2 parameters

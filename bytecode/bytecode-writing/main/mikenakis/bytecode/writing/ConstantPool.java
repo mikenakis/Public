@@ -61,7 +61,6 @@ import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationTyp
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
@@ -404,13 +403,13 @@ final class ConstantPool
 
 	private void internEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue )
 	{
-		internMutf8Constant( enumAnnotationValue.typeNameConstant() );
-		internMutf8Constant( enumAnnotationValue.valueNameConstant() );
+		internMutf8Constant( enumAnnotationValue.typeNameConstant );
+		internMutf8Constant( enumAnnotationValue.valueNameConstant );
 	}
 
 	private void internClassAnnotationValue( ClassAnnotationValue classAnnotationValue )
 	{
-		internMutf8Constant( classAnnotationValue.nameConstant() );
+		internMutf8Constant( classAnnotationValue.nameConstant );
 	}
 
 	private void internAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue )
@@ -446,7 +445,7 @@ final class ConstantPool
 
 	private void internInvokeInterfaceInstruction( InvokeInterfaceInstruction invokeInterfaceInstruction )
 	{
-		internReferenceConstant( invokeInterfaceInstruction.interfaceMethodReferenceConstant );
+		internReferenceConstant( invokeInterfaceInstruction.methodReferenceConstant );
 	}
 
 	private void internInvokeDynamicInstruction( InvokeDynamicInstruction invokeDynamicInstruction )
@@ -478,13 +477,7 @@ final class ConstantPool
 
 	private void internMethodConstantReferencingInstruction( MethodConstantReferencingInstruction methodConstantReferencingInstruction )
 	{
-		MethodReferenceConstant methodReferenceConstant = methodConstantReferencingInstruction.methodReferenceConstant;
-		switch( methodReferenceConstant.tag )
-		{
-			case Constant.tag_InterfaceMethodReference -> internReferenceConstant( methodReferenceConstant.asInterfaceMethodReferenceConstant() );
-			case Constant.tag_MethodReference -> internReferenceConstant( methodReferenceConstant.asPlainMethodReferenceConstant() );
-			default -> throw new AssertionError( methodReferenceConstant );
-		}
+		internReferenceConstant( methodConstantReferencingInstruction.methodReferenceConstant );
 	}
 
 	private void internAnnotation( Annotation annotation )

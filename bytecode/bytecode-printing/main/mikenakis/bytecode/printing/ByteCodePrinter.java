@@ -7,7 +7,6 @@ import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
@@ -98,26 +97,22 @@ import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.bytecode.printing.twig.Twig;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnumSet;
 import mikenakis.kit.functional.Procedure1;
 
-import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDesc;
-import java.lang.constant.DynamicCallSiteDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -351,7 +346,7 @@ public final class ByteCodePrinter
 		Integer
 	}
 
-	private static void valueConstantToStringBuilder( ValueConstant<?> constant, StringBuilder builder )
+	private static void appendValueConstant( ValueConstant<?> constant, StringBuilder builder )
 	{
 		switch( constant.tag )
 		{
@@ -360,7 +355,7 @@ public final class ByteCodePrinter
 			case Constant.tag_Float -> appendFloatConstant( constant.asFloatConstant(), builder );
 			case Constant.tag_Long -> appendLongConstant( constant.asLongConstant(), builder );
 			case Constant.tag_Double -> appendDoubleConstant( constant.asDoubleConstant(), builder );
-			case Constant.tag_String -> stringConstantToStringBuilder( constant.asStringConstant(), builder );
+			case Constant.tag_String -> appendStringConstant( constant.asStringConstant(), builder );
 			default -> throw new AssertionError( constant );
 		}
 	}
@@ -437,7 +432,7 @@ public final class ByteCodePrinter
 		builder.append( " )" );
 	}
 
-	private static void stringConstantToStringBuilder( StringConstant stringConstant, StringBuilder builder )
+	private static void appendStringConstant( StringConstant stringConstant, StringBuilder builder )
 	{
 		builder.append( StringConstant.class.getSimpleName() ).append( "( " );
 		appendMutf8Constant( stringConstant.getValueConstant(), builder );
@@ -594,10 +589,11 @@ public final class ByteCodePrinter
 		headerBuilder.append( " enclosingClass = " ).append( enclosingMethodAttribute.enclosingClassTypeName() );
 		// Java-bollocks: the enclosing method attribute, if present, will always have an enclosing class,
 		// but it may not necessarily have an enclosing method.
-		enclosingMethodAttribute.enclosingMethodNameAndDescriptorConstant.ifPresent( c -> {
+		enclosingMethodAttribute.enclosingMethodNameAndDescriptorConstant.ifPresent( c -> //
+		{
+			MethodDescriptor methodDescriptor = MethodDescriptor.ofDescriptorString( c.getDescriptorConstant().stringValue() );
 			headerBuilder.append( ", enclosingMethodName = \"" ).append( c.getNameConstant().stringValue() ).append( "\"" );
-			headerBuilder.append( ", enclosingMethodDescriptor = " );
-			appendMethodDescriptor( headerBuilder, MethodTypeDesc.ofDescriptor( c.getDescriptorConstant().stringValue() ) );
+			headerBuilder.append( ", enclosingMethodDescriptor = " ).append( methodDescriptor.name() );
 		} );
 		return Twig.leaf( headerBuilder.toString() );
 	}
@@ -615,7 +611,7 @@ public final class ByteCodePrinter
 		headerBuilder.append( constantValueAttribute.getClass().getSimpleName() );
 		headerBuilder.append( " " );
 		ValueConstant<?> valueConstant = constantValueAttribute.valueConstant;
-		valueConstantToStringBuilder( valueConstant, headerBuilder );
+		appendValueConstant( valueConstant, headerBuilder );
 		return Twig.leaf( headerBuilder.toString() );
 	}
 
@@ -698,7 +694,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromBootstrapMethodsAttribute( BootstrapMethodsAttribute bootstrapMethodsAttribute )
 	{
 		return Twig.array( bootstrapMethodsAttribute.getClass().getSimpleName(), //
-				bootstrapMethodsAttribute.bootstrapMethods.stream().map( ByteCodePrinter::twigFromBootstrapMethod ).toList() );
+				bootstrapMethodsAttribute.bootstrapMethods.stream().map( bootstrapMethod -> twigFromBootstrapMethod( "", bootstrapMethod ) ).toList() );
 	}
 
 	private static Twig twigFromUnknownAttribute( UnknownAttribute unknownAttribute )
@@ -712,12 +708,13 @@ public final class ByteCodePrinter
 		return Twig.array( exceptionInfos.stream().map( e -> twigFromExceptionInfo( e, labeler ) ).toList() );
 	}
 
-	private static Twig twigFromBootstrapMethod( BootstrapMethod bootstrapMethod )
+	private static Twig twigFromBootstrapMethod( String prefix, BootstrapMethod bootstrapMethod )
 	{
 		var builder = new StringBuilder();
+		//builder.append( prefix );
 		builder.append( bootstrapMethod.getClass().getSimpleName() );
 		builder.append( " methodHandle = " );
-		summarizeMethodHandleConstant( bootstrapMethod.methodHandleConstant, builder );
+		appendMethodHandleConstant( bootstrapMethod.methodHandleConstant, builder );
 		List<Constant> argumentConstants = bootstrapMethod.argumentConstants;
 		builder.append( " arguments: " );
 		boolean first = true;
@@ -726,10 +723,10 @@ public final class ByteCodePrinter
 			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
 			switch( argumentConstant.tag )
 			{
-				case Constant.tag_String -> stringConstantToStringBuilder( argumentConstant.asStringConstant(), builder );
-				case Constant.tag_MethodType -> methodTypeConstantToStringBuilder( argumentConstant.asMethodTypeConstant(), builder );
-				case Constant.tag_MethodHandle -> summarizeMethodHandleConstant( argumentConstant.asMethodHandleConstant(), builder );
-				case Constant.tag_Class -> summarizeClassConstant( argumentConstant.asClassConstant(), builder );
+				case Constant.tag_String -> appendStringConstant( argumentConstant.asStringConstant(), builder );
+				case Constant.tag_MethodType -> appendMethodTypeConstant( argumentConstant.asMethodTypeConstant(), builder );
+				case Constant.tag_MethodHandle -> appendMethodHandleConstant( argumentConstant.asMethodHandleConstant(), builder );
+				case Constant.tag_Class -> appendClassConstant( argumentConstant.asClassConstant(), builder );
 				default -> throw new AssertionError( argumentConstant );
 			}
 		}
@@ -752,14 +749,9 @@ public final class ByteCodePrinter
 
 	private Twig twigFromByteCodeField( ByteCodeField byteCodeField )
 	{
-		StringBuilder headerBuilder = new StringBuilder();
-		headerBuilder.append( byteCodeField.getClass().getSimpleName() );
-		headerBuilder.append( " accessFlags = " ).append( stringFromFlags( byteCodeField.modifierSet ) );
-		headerBuilder.append( ", name = \"" ).append( byteCodeField.name() ).append( "\"" );
-		headerBuilder.append( ", descriptor = " );
-		appendClassDescriptor( headerBuilder, byteCodeField.descriptor() );
-		String header = headerBuilder.toString();
-		return Twig.group( header, //
+		return Twig.group( byteCodeField.getClass().getSimpleName() + //
+			" accessFlags = " + stringFromFlags( byteCodeField.modifierSet ) + //
+			", name+descriptor = " + byteCodeField.fieldDescriptor().name( byteCodeField.name() ),
 			Map.entry( "attributeSet", //
 				twigFromAttributeSet( byteCodeField.attributeSet, Optional.empty() ) ) );
 	}
@@ -771,27 +763,22 @@ public final class ByteCodePrinter
 		headerBuilder.append( " accessFlags = " ).append( stringFromFlags( byteCodeMethod.modifierSet ) );
 		headerBuilder.append( ", name = \"" ).append( byteCodeMethod.name() ).append( "\"" );
 		headerBuilder.append( ", descriptor = " );
-		appendMethodDescriptor( headerBuilder, byteCodeMethod.descriptor() );
+		appendMethodDescriptor( headerBuilder, byteCodeMethod.getMethodDescriptor() );
 		String header = headerBuilder.toString();
 		return Twig.group( header, //
 			Map.entry( "attributes", twigFromAttributeSet( byteCodeMethod.attributeSet, Optional.empty() ) ) );
 	}
 
-	private static void appendClassDescriptor( StringBuilder builder, ClassDesc descriptor )
+	private static void appendMethodDescriptor( StringBuilder builder, MethodDescriptor descriptor )
 	{
-		builder.append( ByteCodeHelpers.typeNameFromClassDesc( descriptor ) );
-	}
-
-	private static void appendMethodDescriptor( StringBuilder builder, MethodTypeDesc descriptor )
-	{
-		builder.append( ByteCodeHelpers.typeNameFromClassDesc( descriptor.returnType() ) );
-		List<ClassDesc> parameterDescriptors = descriptor.parameterList();
+		builder.append( descriptor.returnTypeDescriptor.name() );
+		List<TypeDescriptor> parameterDescriptors = descriptor.parameterTypeDescriptors;
 		builder.append( parameterDescriptors.isEmpty() ? "(" : "( " );
 		boolean first = true;
-		for( ClassDesc parameterDescriptor : parameterDescriptors )
+		for( TypeDescriptor parameterDescriptor : parameterDescriptors )
 		{
 			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			builder.append( ByteCodeHelpers.typeNameFromClassDesc( parameterDescriptor ) );
+			builder.append( parameterDescriptor.name() );
 		}
 		builder.append( parameterDescriptors.isEmpty() ? ")" : " )" );
 	}
@@ -880,8 +867,7 @@ public final class ByteCodePrinter
 		builder.append( ", end = " );
 		summarizeAbsoluteInstruction( localVariableTableEntry.endInstruction, builder, labeler );
 		builder.append( ", name = " ).append( localVariableTableEntry.name() );
-		builder.append( ", descriptor = " );
-		appendClassDescriptor( builder, localVariableTableEntry.descriptor() );
+		builder.append( ", descriptor = " ).append( localVariableTableEntry.typeDescriptor().name() );
 		String header = builder.toString();
 		return Twig.leaf( header );
 	}
@@ -923,12 +909,12 @@ public final class ByteCodePrinter
 		builder.append( label );
 	}
 
-	private static void summarizeClassConstant( ClassConstant classConstant, StringBuilder builder )
+	private static void appendClassConstant( ClassConstant classConstant, StringBuilder builder )
 	{
 		builder.append( classConstant.typeName() );
 	}
 
-	private static void summarizeMethodHandleConstant( MethodHandleConstant methodHandleConstant, StringBuilder builder )
+	private static void appendMethodHandleConstant( MethodHandleConstant methodHandleConstant, StringBuilder builder )
 	{
 		builder.append( methodHandleConstant.getClass().getSimpleName() );
 		builder.append( " referenceKind = " ).append( methodHandleConstant.referenceKind().name() );
@@ -936,48 +922,32 @@ public final class ByteCodePrinter
 		ReferenceConstant referenceConstant = methodHandleConstant.getReferenceConstant();
 		switch( referenceConstant.tag )
 		{
-			case Constant.tag_FieldReference -> //
-				summarizeFieldReferenceConstant( referenceConstant.asFieldReferenceConstant(), builder );
-			case Constant.tag_InterfaceMethodReference -> //
-				summarizeInterfaceMethodReferenceConstant( referenceConstant.asInterfaceMethodReferenceConstant(), builder );
-			case Constant.tag_MethodReference -> //
-				summarizePlainMethodReferenceConstant( referenceConstant.asPlainMethodReferenceConstant(), builder );
+			case Constant.tag_FieldReference -> summarizeFieldReferenceConstant( referenceConstant.asFieldReferenceConstant(), builder );
+			case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> appendMethodReferenceConstant( referenceConstant.asMethodReferenceConstant(), builder );
 			default -> throw new AssertionError( referenceConstant );
 		}
 	}
 
 	private static void summarizeFieldReferenceConstant( FieldReferenceConstant fieldReferenceConstant, StringBuilder builder )
 	{
-		builder.append( ByteCodeHelpers.typeNameFromClassDesc( fieldReferenceConstant.fieldTypeDescriptor() ) );
+		builder.append( fieldReferenceConstant.fieldDescriptor().name() );//ByteCodeHelpers.typeNameFromClassDesc( fieldReferenceConstant.fieldClassDesc() ) );
 		builder.append( ' ' );
-		builder.append( ByteCodeHelpers.typeNameFromClassDesc( fieldReferenceConstant.declaringClassDescriptor() ) );
+		builder.append( fieldReferenceConstant.declaringTypeDescriptor().name() );
 		builder.append( '.' );
 		builder.append( fieldReferenceConstant.fieldName() );
 	}
 
-	private static void summarizeInterfaceMethodReferenceConstant( InterfaceMethodReferenceConstant interfaceMethodReferenceConstant, StringBuilder builder )
+	private static void appendMethodReferenceConstant( MethodReferenceConstant methodReferenceConstant, StringBuilder builder )
 	{
-		//
 		builder.append( "type = " );
-		builder.append( ByteCodeHelpers.typeNameFromClassDesc( interfaceMethodReferenceConstant.owningClassDescriptor() ) );
+		builder.append( methodReferenceConstant.declaringTypeDescriptor().name() );
 		builder.append( ", name = " );
-		builder.append( interfaceMethodReferenceConstant.methodName() );
+		builder.append( methodReferenceConstant.methodName() );
 		builder.append( ", descriptor = " );
-		appendMethodDescriptor( builder, interfaceMethodReferenceConstant.methodDescriptor() );
+		appendMethodDescriptor( builder, methodReferenceConstant.methodDescriptor() );
 	}
 
-	private static void summarizePlainMethodReferenceConstant( PlainMethodReferenceConstant plainMethodReferenceConstant, StringBuilder builder )
-	{
-		//
-		builder.append( "type = " );
-		builder.append( ByteCodeHelpers.typeNameFromClassDesc( plainMethodReferenceConstant.owningClassDescriptor() ) );
-		builder.append( ", name = " );
-		builder.append( plainMethodReferenceConstant.methodName() );
-		builder.append( ", descriptor = " );
-		appendMethodDescriptor( builder, plainMethodReferenceConstant.methodDescriptor() );
-	}
-
-	private static void methodTypeConstantToStringBuilder( MethodTypeConstant methodTypeConstant, StringBuilder builder )
+	private static void appendMethodTypeConstant( MethodTypeConstant methodTypeConstant, StringBuilder builder )
 	{
 		builder.append( MethodTypeConstant.class.getSimpleName() );
 		builder.append( " " );
@@ -1229,8 +1199,7 @@ public final class ByteCodePrinter
 		MethodReferenceConstant constant = methodConstantReferencingInstruction.methodReferenceConstant;
 		switch( constant.tag )
 		{
-			case Constant.tag_InterfaceMethodReference -> summarizeInterfaceMethodReferenceConstant( constant.asInterfaceMethodReferenceConstant(), builder );
-			case Constant.tag_MethodReference -> summarizePlainMethodReferenceConstant( constant.asPlainMethodReferenceConstant(), builder );
+			case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> appendMethodReferenceConstant( constant, builder );
 			default -> throw new AssertionError( constant );
 		}
 		return Twig.leaf( buildInstructionHeader( prefix, methodConstantReferencingInstruction.opCode, builder.toString() ) );
@@ -1248,40 +1217,34 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromIndirectLoadConstantInstruction( String prefix, IndirectLoadConstantInstruction indirectLoadConstantInstruction )
 	{
+		return Twig.leaf( buildInstructionHeader( prefix, indirectLoadConstantInstruction.opCode, stringFromConstant( indirectLoadConstantInstruction.constant ) ) );
+	}
+
+	private static String stringFromConstant( Constant constant )
+	{
 		var builder = new StringBuilder();
-		Constant constant = indirectLoadConstantInstruction.constant;
 		switch( constant.tag )
 		{
-			case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double, Constant.tag_String -> valueConstantToStringBuilder( constant.asValueConstant(), builder );
-			case Constant.tag_Class -> summarizeClassConstant( constant.asClassConstant(), builder );
+			case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double, //
+				Constant.tag_String -> appendValueConstant( constant.asValueConstant(), builder );
+			case Constant.tag_Class -> appendClassConstant( constant.asClassConstant(), builder );
 			default -> throw new AssertionError( constant );
 		}
-		return Twig.leaf( buildInstructionHeader( prefix, indirectLoadConstantInstruction.opCode, builder.toString() ) );
+		return builder.toString();
 	}
 
 	private static Twig twigFromInvokeDynamicInstruction( String prefix, InvokeDynamicInstruction invokeDynamicInstruction )
 	{
 		var builder = new StringBuilder();
-		DynamicCallSiteDesc invokeDynamicDescriptor = invokeDynamicInstruction.invokeDynamicConstant.descriptor();
-		builder.append( "name = " ).append( invokeDynamicDescriptor.invocationName() );
-		builder.append( ", descriptor = " );
-		appendMethodDescriptor( builder, invokeDynamicDescriptor.invocationType() );
-		builder.append( ", arguments = " );
-		boolean first = true;
-		for( ConstantDesc argumentDescriptor : invokeDynamicDescriptor.bootstrapArgs() )
-		{
-			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			builder.append( argumentDescriptor.toString() );
-		}
-		//return Twig.leaf( buildInstructionHeader( prefix, OpCode.INVOKEDYNAMIC, builder.toString() ) );
+		builder.append( "name+descriptor = " ).append( invokeDynamicInstruction.methodDescriptor().stringFrom( invokeDynamicInstruction.methodName() ) );
 		return Twig.group( buildInstructionHeader( prefix, OpCode.INVOKEDYNAMIC, builder.toString() ), //
-			Map.entry( indentation + indentation + "referenceKind", Twig.leaf( invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod().methodHandleConstant.referenceKind().name() ) ), Map.entry( indentation + indentation + "referenceType", Twig.leaf( invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod().methodHandleConstant.getReferenceConstant().declaringTypeName() ) ), Map.entry( indentation + indentation + "methodName", Twig.leaf( invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod().methodHandleConstant.getReferenceConstant().getNameAndDescriptorConstant().getNameConstant().stringValue() ) ) );
+			Map.entry( indentation + indentation + "bootstrapMethod", twigFromBootstrapMethod( indentation + indentation, invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod() ) ) );
 	}
 
 	private static Twig twigFromInvokeInterfaceInstruction( String prefix, InvokeInterfaceInstruction invokeInterfaceInstruction )
 	{
 		var builder = new StringBuilder();
-		summarizeInterfaceMethodReferenceConstant( invokeInterfaceInstruction.interfaceMethodReferenceConstant, builder );
+		appendMethodReferenceConstant( invokeInterfaceInstruction.methodReferenceConstant, builder );
 		return Twig.leaf( buildInstructionHeader( prefix, OpCode.INVOKEINTERFACE, "interfaceMethodReferenceConstant = " + builder.toString(), invokeInterfaceInstruction.argumentCount + " arguments" ) );
 	}
 
@@ -1307,7 +1270,7 @@ public final class ByteCodePrinter
 	{
 		var builder = new StringBuilder();
 		builder.append( "class = " );
-		summarizeClassConstant( multiANewArrayInstruction.targetClassConstant, builder );
+		appendClassConstant( multiANewArrayInstruction.targetClassConstant, builder );
 		return Twig.leaf( buildInstructionHeader( prefix, OpCode.MULTIANEWARRAY, builder.toString(), multiANewArrayInstruction.dimensionCount + " dimensions" ) );
 	}
 

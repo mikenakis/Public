@@ -3,7 +3,7 @@
 │ └─■ [0] mikenakis.bytecode.test.model.Interface1
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], name = "this$0", descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass
+│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 3 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class8WithAnonymousClass )

@@ -2,7 +2,7 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final], name = "foos", descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ └─■ [0] ByteCodeField accessFlags = [final], name+descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
 │ └─■ [0] ByteCodeMethod accessFlags = [varargs], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )

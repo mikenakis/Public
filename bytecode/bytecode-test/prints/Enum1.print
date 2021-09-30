@@ -2,13 +2,13 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 4 items
-│ ├─■ [0] ByteCodeField accessFlags = [public, static, final, enum], name = "ENUM_CONSTANT_A", descriptor = mikenakis.bytecode.test.model.Enum1
+│ ├─■ [0] ByteCodeField accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_A
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [1] ByteCodeField accessFlags = [public, static, final, enum], name = "ENUM_CONSTANT_B", descriptor = mikenakis.bytecode.test.model.Enum1
+│ ├─■ [1] ByteCodeField accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_B
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [2] ByteCodeField accessFlags = [public, static, final, enum], name = "ENUM_CONSTANT_C", descriptor = mikenakis.bytecode.test.model.Enum1
+│ ├─■ [2] ByteCodeField accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_C
 │ │ └─■ attributeSet: 0 items
-│ └─■ [3] ByteCodeField accessFlags = [private, static, final, synthetic], name = "$VALUES", descriptor = mikenakis.bytecode.test.model.Enum1[]
+│ └─■ [3] ByteCodeField accessFlags = [private, static, final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Enum1[] $VALUES
 │   └─■ attributeSet: 0 items
 ├─■ methods: 5 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public, static], name = "values", descriptor = mikenakis.bytecode.test.model.Enum1[]()

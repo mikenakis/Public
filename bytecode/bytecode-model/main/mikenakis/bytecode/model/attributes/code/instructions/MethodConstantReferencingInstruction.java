@@ -23,28 +23,13 @@ public final class MethodConstantReferencingInstruction extends Instruction
 	private MethodConstantReferencingInstruction( int opCode, MethodReferenceConstant methodReferenceConstant )
 	{
 		super( groupTag_MethodConstantReferencing );
-		switch( methodReferenceConstant.tag )
-		{
-			case Constant.tag_InterfaceMethodReference:
-			case Constant.tag_MethodReference:
-				break;
-			default:
-				throw new AssertionError( methodReferenceConstant );
-		}
+		assert methodReferenceConstant.tag == Constant.tag_PlainMethodReference || methodReferenceConstant.tag == Constant.tag_InterfaceMethodReference;
 		assert opCodes.contains( opCode );
 		this.opCode = opCode;
 		this.methodReferenceConstant = methodReferenceConstant;
 	}
 
-	@Deprecated @Override public MethodConstantReferencingInstruction asMethodConstantReferencingInstruction()
-	{
-		return this;
-	}
-
-	public int getOpCode()
-	{
-		return opCode;
-	}
+	@Deprecated @Override public MethodConstantReferencingInstruction asMethodConstantReferencingInstruction() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

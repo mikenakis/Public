@@ -2,7 +2,6 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ConstantDesc;
 import java.util.Objects;
 
 /**
@@ -39,11 +38,9 @@ public final class StringConstant extends ValueConstant<String>
 		this.valueConstant = valueConstant;
 	}
 
-	public ConstantDesc constantDescriptor() { return valueConstant.stringValue(); }
-
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "value = " + valueConstant.toString();
+		return "value = " + (valueConstant == null ? "(uninitialized)" : valueConstant.toString());
 	}
 
 	@Deprecated @Override public StringConstant asStringConstant()

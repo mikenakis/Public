@@ -1,11 +1,9 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-
-import java.lang.constant.ClassDesc;
 
 /**
  * Represents a class {@link AnnotationValue}.
@@ -27,7 +25,7 @@ public final class ClassAnnotationValue extends AnnotationValue
 		return new ClassAnnotationValue( nameConstant );
 	}
 
-	private final Mutf8Constant nameConstant;
+	public final Mutf8Constant nameConstant;
 
 	private ClassAnnotationValue( Mutf8Constant nameConstant )
 	{
@@ -35,9 +33,8 @@ public final class ClassAnnotationValue extends AnnotationValue
 		this.nameConstant = nameConstant;
 	}
 
-	public Mutf8Constant nameConstant() { return nameConstant; }
-	public ClassDesc classDescriptor() { return ClassDesc.ofDescriptor( nameConstant.stringValue() ); }
-	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( classDescriptor() ); }
+	public String typeName() { return typeDescriptor().name(); }
+	public TypeDescriptor typeDescriptor() { return TypeDescriptor.ofDescriptorString( nameConstant.stringValue() ); }
 
 	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue()
 	{

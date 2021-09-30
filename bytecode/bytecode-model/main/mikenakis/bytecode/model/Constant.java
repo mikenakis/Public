@@ -6,7 +6,6 @@ import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
@@ -14,7 +13,6 @@ import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
@@ -36,7 +34,7 @@ public abstract class Constant
 	public static final int tag_Class                    /**/ = 7; // JVMS::CONSTANT_Class addresses JVMS::CONSTANT_Class_info
 	public static final int tag_String                   /**/ = 8; // JVMS::CONSTANT_String addresses JVMS::CONSTANT_String_info
 	public static final int tag_FieldReference           /**/ = 9; // JVMS::CONSTANT_Fieldref addresses JVMS::CONSTANT_Fieldref_info
-	public static final int tag_MethodReference          /**/ = 10; // JVMS::CONSTANT_MethodRef addresses JVMS::CONSTANT_MethodRef_info
+	public static final int tag_PlainMethodReference          /**/ = 10; // JVMS::CONSTANT_MethodRef addresses JVMS::CONSTANT_MethodRef_info
 	public static final int tag_InterfaceMethodReference /**/ = 11; // JVMS::CONSTANT_InterfaceMethodRef addresses JVMS::CONSTANT_InterfaceMethodRef_info
 	public static final int tag_NameAndDescriptor        /**/ = 12; // JVMS::CONSTANT_NameAndType addresses JVMS::CONSTANT_NameAndType_info
 	public static final int tag_MethodHandle             /**/ = 15; // JVMS::CONSTANT_MethodHandle addresses JVMS::CONSTANT_MethodHandle_info
@@ -55,7 +53,7 @@ public abstract class Constant
 				case tag_Class                    /**/ -> "Class";
 				case tag_String                   /**/ -> "String";
 				case tag_FieldReference           /**/ -> "FieldReference";
-				case tag_MethodReference          /**/ -> "MethodReference";
+				case tag_PlainMethodReference          /**/ -> "MethodReference";
 				case tag_InterfaceMethodReference /**/ -> "InterfaceMethodReference";
 				case tag_NameAndDescriptor        /**/ -> "NameAndDescriptor";
 				case tag_MethodHandle             /**/ -> "MethodHandle";
@@ -87,8 +85,6 @@ public abstract class Constant
 	@ExcludeFromJacocoGeneratedReport public ReferenceConstant                          /**/ asReferenceConstant                /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public FieldReferenceConstant                     /**/ asFieldReferenceConstant           /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public MethodReferenceConstant                    /**/ asMethodReferenceConstant          /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public PlainMethodReferenceConstant               /**/ asPlainMethodReferenceConstant     /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InterfaceMethodReferenceConstant           /**/ asInterfaceMethodReferenceConstant /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public NameAndDescriptorConstant                  /**/ asNameAndDescriptorConstant        /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public MethodHandleConstant                       /**/ asMethodHandleConstant             /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public MethodTypeConstant                         /**/ asMethodTypeConstant               /**/() { return Kit.fail(); }

@@ -3,9 +3,9 @@
 │ └─■ [0] mikenakis.bytecode.test.model.Interface2
 ├─■ extraConstants: 0 items
 ├─■ fields: 2 items
-│ ├─■ [0] ByteCodeField accessFlags = [private, final], name = "interface1", descriptor = mikenakis.bytecode.test.model.Interface1
+│ ├─■ [0] ByteCodeField accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Interface1 interface1
 │ │ └─■ attributeSet: 0 items
-│ └─■ [1] ByteCodeField accessFlags = [private, final], name = "nestedObject", descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
+│ └─■ [1] ByteCodeField accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass nestedObject
 │   └─■ attributeSet: 0 items
 ├─■ methods: 9 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()
@@ -72,10 +72,8 @@
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
 │ │     ├─■ instructions: 5 entries
 │ │     │ ├─■ L35: // Runnable runnable = () -> new Class4ExtendingClass3();
-│ │     │ ├─■         INVOKEDYNAMIC name = run, descriptor = java.lang.Runnable(), arguments = MethodTypeDesc[()void], MethodHandleDesc[STATIC/Class4ExtendingClass3::lambda$testMethodHandle$0()void], MethodTypeDesc[()void]
-│ │     │ │ ├─■                 referenceKind: InvokeStatic
-│ │     │ │ ├─■                 referenceType: java.lang.invoke.LambdaMetafactory
-│ │     │ │ └─■                 methodName: metafactory
+│ │     │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.Runnable run()
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.LambdaMetafactory, name = metafactory, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "()V" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = mikenakis.bytecode.test.model.Class4ExtendingClass3, name = lambda$testMethodHandle$0, descriptor = void(), MethodTypeConstant Mutf8Constant( "()V" )
 │ │     │ ├─■         ASTORE_1 1
 │ │     │ ├─■ L36: // runnable.run();
 │ │     │ ├─■         ALOAD_1 1
@@ -96,10 +94,8 @@
 │ │   └─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │     ├─■ instructions: 7 entries
 │ │     │ ├─■ L46: // Foo foo = s -> s + "x";
-│ │     │ ├─■         INVOKEDYNAMIC name = x, descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo(), arguments = MethodTypeDesc[(String)String], MethodHandleDesc[STATIC/Class4ExtendingClass3::lambda$testInvokeDynamic$1(String)String], MethodTypeDesc[(String)String]
-│ │     │ │ ├─■                 referenceKind: InvokeStatic
-│ │     │ │ ├─■                 referenceType: java.lang.invoke.LambdaMetafactory
-│ │     │ │ └─■                 methodName: metafactory
+│ │     │ ├─■         INVOKEDYNAMIC name+descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo x()
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.LambdaMetafactory, name = metafactory, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;)Ljava/lang/String;" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = mikenakis.bytecode.test.model.Class4ExtendingClass3, name = lambda$testInvokeDynamic$1, descriptor = java.lang.String( java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;)Ljava/lang/String;" )
 │ │     │ ├─■         ASTORE_1 1
 │ │     │ ├─■ L47: // foo.x( "aaa" );
 │ │     │ ├─■         ALOAD_1 1
@@ -159,10 +155,8 @@
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L46: // Foo foo = s -> s + "x";
 │ │     │ ├─■         ALOAD_0 0
-│ │     │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String ), arguments = x
-│ │     │ │ ├─■                 referenceKind: InvokeStatic
-│ │     │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│ │     │ │ └─■                 methodName: makeConcatWithConstants
+│ │     │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01x" ) )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items

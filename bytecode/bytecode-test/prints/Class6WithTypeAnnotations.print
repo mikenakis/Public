@@ -2,7 +2,7 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [public, final], name = "fieldWithAnnotation", descriptor = int
+│ └─■ [0] ByteCodeField accessFlags = [public, final], name+descriptor = int fieldWithAnnotation
 │   └─■ attributeSet: 3 items
 │     ├─■ [0] ConstantValueAttribute IntegerConstant( 5 )
 │     ├─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
@@ -232,10 +232,8 @@
 │     │ │ ├─■         ILOAD_1 1
 │     │ │ ├─■         ILOAD_2 2
 │     │ │ ├─■         ILOAD_3 3
-│     │ │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( int, int, int ), arguments = a=, b=, c=
-│     │ │ │ ├─■                 referenceKind: InvokeStatic
-│     │ │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│     │ │ │ └─■                 methodName: makeConcatWithConstants
+│     │ │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( int, int, int )
+│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
 │     │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
 │     │ │ ├─■ L72: // }
 │     │ │ └─■         RETURN

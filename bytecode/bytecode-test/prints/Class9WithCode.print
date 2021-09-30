@@ -2,11 +2,11 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 3 items
-│ ├─■ [0] ByteCodeField accessFlags = [private, final], name = "str", descriptor = java.lang.String
+│ ├─■ [0] ByteCodeField accessFlags = [private, final], name+descriptor = java.lang.String str
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [1] ByteCodeField accessFlags = [private], name = "pos", descriptor = int
+│ ├─■ [1] ByteCodeField accessFlags = [private], name+descriptor = int pos
 │ │ └─■ attributeSet: 0 items
-│ └─■ [2] ByteCodeField accessFlags = [private], name = "ch", descriptor = int
+│ └─■ [2] ByteCodeField accessFlags = [private], name+descriptor = int ch
 │   └─■ attributeSet: 0 items
 ├─■ methods: 8 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public, static], name = "eval", descriptor = double( java.lang.String )
@@ -174,10 +174,8 @@
 │ │     │ ├─■         ALOAD_0 0
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │     │ ├─■         I2C
-│ │     │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( char ), arguments = Unexpected: 
-│ │     │ │ ├─■                 referenceKind: InvokeStatic
-│ │     │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│ │     │ │ └─■                 methodName: makeConcatWithConstants
+│ │     │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( char )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
 │ │     │ ├─■         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
 │ │     │ ├─■         ATHROW
 │ │     │ ├─■ L46: // return x;
@@ -511,10 +509,8 @@
 │       │ ├─■         NEW java.lang.RuntimeException
 │       │ ├─■         DUP
 │       │ ├─■         ALOAD
-│       │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String ), arguments = Unknown function: 
-│       │ │ ├─■                 referenceKind: InvokeStatic
-│       │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│       │ │ └─■                 methodName: makeConcatWithConstants
+│       │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
 │       │ ├─■         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
 │       │ ├─■         ATHROW
 │       │ ├─■ T11:    DSTORE_1 1
@@ -526,10 +522,8 @@
 │       │ ├─■         ALOAD_0 0
 │       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         I2C
-│       │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( char ), arguments = Unexpected: 
-│       │ │ ├─■                 referenceKind: InvokeStatic
-│       │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│       │ │ └─■                 methodName: makeConcatWithConstants
+│       │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( char )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
 │       │ ├─■         INVOKESPECIAL type = java.lang.RuntimeException, name = <init>, descriptor = void( java.lang.String )
 │       │ ├─■         ATHROW
 │       │ ├─■ L128: // if( eat( '^' ) )

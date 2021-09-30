@@ -41,20 +41,19 @@ import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificat
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
+import mikenakis.bytecode.model.descriptors.FieldDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import org.junit.Test;
 
-import java.lang.constant.ClassDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -135,7 +134,7 @@ public class T999_Coverage
 		codeAttribute.addGoto();
 		codeAttribute.addJsr();
 		codeAttribute.addIInc( 0, 0 );
-		InterfaceMethodReferenceConstant interfaceMethodReferenceConstant = InterfaceMethodReferenceConstant.of( classConstant, nameAndDescriptorConstant );
+		MethodReferenceConstant interfaceMethodReferenceConstant = MethodReferenceConstant.interfaceOf( classConstant, nameAndDescriptorConstant );
 		codeAttribute.addInvokeInterface( interfaceMethodReferenceConstant, 0 );
 		InvokeDynamicConstant invokeDynamicConstant = InvokeDynamicConstant.of( bootstrapMethod, nameAndDescriptorConstant );
 		codeAttribute.addInvokeDynamic( invokeDynamicConstant );
@@ -155,7 +154,7 @@ public class T999_Coverage
 		codeAttribute.addPutStatic( fieldReferenceConstant );
 		codeAttribute.addGetField( fieldReferenceConstant );
 		codeAttribute.addPutField( fieldReferenceConstant );
-		MethodReferenceConstant methodReferenceConstant = PlainMethodReferenceConstant.of( classConstant, nameAndDescriptorConstant );
+		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.plainOf( classConstant, nameAndDescriptorConstant );
 		codeAttribute.addInvokeVirtual( methodReferenceConstant );
 		codeAttribute.addInvokeSpecial( methodReferenceConstant );
 		codeAttribute.addInvokeStatic( methodReferenceConstant );
@@ -263,7 +262,7 @@ public class T999_Coverage
 		attributeSet.replaceAttribute( codeAttribute );
 		attributeSet.removeAttribute( codeAttribute );
 
-		ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "testField", ClassDesc.ofDescriptor( "Ljava/lang/Object;" ) );
+		ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "testField", FieldDescriptor.of( TerminalTypeDescriptor.of( Object.class ) ) );
 		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), "test.testClass", Optional.empty() ); //FIXME things fail if a package name is not specified.
 		byteCodeType.createOrGetBootstrapMethodsAttribute();
 
@@ -287,7 +286,7 @@ public class T999_Coverage
 		//		assert invalidAnnotationValueTagException.tag == '_';
 
 		for( int constantTag : List.of( Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, //
-			Constant.tag_Class, Constant.tag_String, Constant.tag_FieldReference, Constant.tag_MethodReference, Constant.tag_InterfaceMethodReference, //
+			Constant.tag_Class, Constant.tag_String, Constant.tag_FieldReference, Constant.tag_PlainMethodReference, Constant.tag_InterfaceMethodReference, //
 			Constant.tag_NameAndDescriptor, Constant.tag_MethodHandle, Constant.tag_MethodType, Constant.tag_InvokeDynamic ) )
 			Kit.get( Constant.tagName( constantTag ) );
 		InvalidConstantTagException invalidConstantTagException = Kit.testing.expectException( //
@@ -347,7 +346,7 @@ public class T999_Coverage
 			assert false;
 			return null;
 		};
-		descendantByteCodeType.getMethodByNameAndDescriptor( "testMethod", MethodTypeDesc.ofDescriptor( "()V" ), byteCodeTypeResolver );
-		descendantByteCodeType.getMethodByNameAndDescriptor( "nonExistentTestMethod", MethodTypeDesc.ofDescriptor( "()V" ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethodByNameAndDescriptor( "testMethod", MethodDescriptor.ofDescriptorString( "()V" ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethodByNameAndDescriptor( "nonExistentTestMethod", MethodDescriptor.ofDescriptorString( "()V" ), byteCodeTypeResolver );
 	}
 }

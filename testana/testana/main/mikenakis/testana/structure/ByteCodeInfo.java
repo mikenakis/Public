@@ -42,12 +42,12 @@ import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstru
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.bytecode.model.signature.ArrayTypeSignature;
 import mikenakis.bytecode.model.signature.BooleanSignature;
 import mikenakis.bytecode.model.signature.ByteSignature;
@@ -71,12 +71,6 @@ import mikenakis.bytecode.model.signature.VoidDescriptor;
 import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.kit.Kit;
 
-import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDesc;
-import java.lang.constant.DynamicCallSiteDesc;
-import java.lang.constant.DynamicConstantDesc;
-import java.lang.constant.MethodHandleDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -109,13 +103,13 @@ final class ByteCodeInfo
 		return ByteCodeHelpers.getClassSourceLocation( byteCodeType );
 	}
 
-	String getMethodSourceLocation( String methodName, MethodTypeDesc methodDescriptor, Function<String,ByteCodeType> byteCodeTypeByName )
+	String getMethodSourceLocation( String methodName, MethodDescriptor methodDescriptor, Function<String,ByteCodeType> byteCodeTypeByName )
 	{
 		ByteCodeMethod byteCodeMethod = byteCodeType.getMethodByNameAndDescriptor( methodName, methodDescriptor, byteCodeTypeByName ).orElseThrow();
 		return ByteCodeHelpers.getMethodSourceLocation( byteCodeType, byteCodeMethod );
 	}
 
-	public int getDeclaredMethodIndex( String methodName, MethodTypeDesc methodDescriptor )
+	public int getDeclaredMethodIndex( String methodName, MethodDescriptor methodDescriptor )
 	{
 		return byteCodeType.findDeclaredMethodByNameAndDescriptor( methodName, methodDescriptor );
 	}
@@ -124,11 +118,11 @@ final class ByteCodeInfo
 	{
 		addDependencyTypeName( byteCodeType.typeName(), mutableDependencyNames );
 		byteCodeType.superTypeName().ifPresent( c -> addDependencyTypeName( c, mutableDependencyNames ) );
-		for( TerminalTypeDescriptor interfaceDescriptor : byteCodeType.interfaceClassDescriptors() )
+		for( TerminalTypeDescriptor interfaceDescriptor : byteCodeType.interfaceTypeDescriptors() )
 			addDependencyTypeName( interfaceDescriptor.name(), mutableDependencyNames );
 		for( ByteCodeField byteCodeField : byteCodeType.fields )
 		{
-			addDependencyTypeNameFromClassDescriptor( byteCodeField.descriptor(), mutableDependencyNames );
+			addDependencyTypeNameFromTypeDescriptor( byteCodeField.fieldDescriptor().typeDescriptor, mutableDependencyNames );
 			for( KnownAttribute knownAttribute : byteCodeField.attributeSet.knownAttributes() )
 			{
 				switch( knownAttribute.tag )
@@ -146,7 +140,7 @@ final class ByteCodeInfo
 		}
 		for( ByteCodeMethod byteCodeMethod : byteCodeType.methods )
 		{
-			addDependencyTypeNamesFromMethodDescriptor( byteCodeMethod.descriptor(), mutableDependencyNames );
+			addDependencyTypeNamesFromMethodDescriptor( byteCodeMethod.getMethodDescriptor(), mutableDependencyNames );
 			for( KnownAttribute knownAttribute : byteCodeMethod.attributeSet.knownAttributes() )
 			{
 				switch( knownAttribute.tag )
@@ -190,7 +184,10 @@ final class ByteCodeInfo
 			}
 		}
 		for( Constant constant : byteCodeType.extraConstants )
-			addDependencyTypeNamesFromConstant( constant, mutableDependencyNames );
+		{
+			assert constant.tag == Constant.tag_Class;
+			addDependencyTypeName( constant.asClassConstant().typeName(), mutableDependencyNames );
+		}
 	}
 
 	private static void addDependencyTypeNamesFromNestMembersAttribute( NestMembersAttribute nestMembersAttribute, Collection<String> mutableDependencyNames )
@@ -261,7 +258,7 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromInvokeInterfaceInstruction( InvokeInterfaceInstruction invokeInterfaceInstruction, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNamesFromInterfaceMethodReferenceConstant( invokeInterfaceInstruction.interfaceMethodReferenceConstant, mutableDependencyNames );
+		addDependencyTypeNamesFromMethodReferenceConstant( invokeInterfaceInstruction.methodReferenceConstant, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromInvokeDynamicInstruction( InvokeDynamicInstruction invokeDynamicInstruction, Collection<String> mutableDependencyNames )
@@ -287,18 +284,14 @@ final class ByteCodeInfo
 	private static void addDependencyTypeNamesFromFieldConstantReferencingInstruction( FieldConstantReferencingInstruction fieldConstantReferencingInstruction, Collection<String> mutableDependencyNames )
 	{
 		addDependencyTypeName( fieldConstantReferencingInstruction.fieldDeclaringTypeName(), mutableDependencyNames );
-		addDependencyTypeNameFromClassDescriptor( fieldConstantReferencingInstruction.fieldReferenceConstant.fieldTypeDescriptor(), mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( fieldConstantReferencingInstruction.fieldReferenceConstant.fieldDescriptor().typeDescriptor, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromMethodConstantReferencingInstruction( MethodConstantReferencingInstruction methodConstantReferencingInstruction, Collection<String> mutableDependencyNames )
 	{
 		MethodReferenceConstant methodReferenceConstant = methodConstantReferencingInstruction.methodReferenceConstant;
-		switch( methodReferenceConstant.tag )
-		{
-			case Constant.tag_InterfaceMethodReference -> addDependencyTypeNamesFromInterfaceMethodReferenceConstant( methodReferenceConstant.asInterfaceMethodReferenceConstant(), mutableDependencyNames );
-			case Constant.tag_MethodReference -> addDependencyTypeNamesFromPlainMethodReferenceConstant( methodReferenceConstant.asPlainMethodReferenceConstant(), mutableDependencyNames );
-			default -> throw new AssertionError( methodReferenceConstant );
-		}
+		assert methodReferenceConstant.tag == Constant.tag_InterfaceMethodReference || methodReferenceConstant.tag == Constant.tag_PlainMethodReference;
+		addDependencyTypeNamesFromMethodReferenceConstant( methodReferenceConstant, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromConstantValueAttribute( ConstantValueAttribute constantValueAttribute )
@@ -315,7 +308,7 @@ final class ByteCodeInfo
 		addDependencyTypeName( attribute.enclosingClassTypeName(), mutableDependencyNames );
 		attribute.enclosingMethodNameAndDescriptorConstant.ifPresent( nameAndDescriptorConstant -> //
 		{
-			MethodTypeDesc methodDescriptor = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
+			MethodDescriptor methodDescriptor = MethodDescriptor.ofDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 			addDependencyTypeNamesFromMethodDescriptor( methodDescriptor, mutableDependencyNames );
 		} );
 	}
@@ -338,7 +331,7 @@ final class ByteCodeInfo
 	private static void addDependencyTypeNamesFromLocalVariableTableAttribute( LocalVariableTableAttribute attribute, Collection<String> mutableDependencyNames )
 	{
 		for( LocalVariableTableEntry localVariable : attribute.entrys )
-			addDependencyTypeNamesFromTypeNameConstant( localVariable.descriptorConstant, mutableDependencyNames );
+			addDependencyTypeNameFromTypeDescriptor( localVariable.typeDescriptor(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromLocalVariableTypeTableAttribute( LocalVariableTypeTableAttribute attribute, Collection<String> mutableDependencyNames )
@@ -394,17 +387,17 @@ final class ByteCodeInfo
 
 	private static void addDependencyTypeNamesFromEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassDescriptor( enumAnnotationValue.typeDescriptor(), mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( enumAnnotationValue.typeDescriptor(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromClassAnnotationValue( ClassAnnotationValue classAnnotationValue, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassDescriptor( classAnnotationValue.classDescriptor(), mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( classAnnotationValue.typeDescriptor(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromAnnotation( Annotation byteCodeAnnotation, Collection<String> mutableDependencyNames )
 	{
-		addDependencyTypeNameFromClassDescriptor( byteCodeAnnotation.typeDescriptor(), mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( byteCodeAnnotation.typeDescriptor(), mutableDependencyNames );
 		for( AnnotationParameter annotationParameter : byteCodeAnnotation.parameters )
 			addDependencyTypeNamesFromElementValue( annotationParameter.value, mutableDependencyNames );
 	}
@@ -525,77 +518,51 @@ final class ByteCodeInfo
 		return typeName;
 	}
 
-	private static void addDependencyTypeNamesFromConstant( Constant constant, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromMethodReferenceConstant( MethodReferenceConstant methodReferenceConstant, Collection<String> mutableDependencyNames )
 	{
-		switch( constant.tag )
-		{
-			case Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, Constant.tag_String -> { /* nothing to do */ }
-			case Constant.tag_Class -> addDependencyTypeName( constant.asClassConstant().typeName(), mutableDependencyNames );
-			default -> throw new AssertionError( constant );
-		}
-	}
-
-	private static void addDependencyTypeNamesFromTypeNameConstant( Mutf8Constant typeNameConstant, Collection<String> mutableDependencyNames )
-	{
-		ClassDesc classDescriptor = ClassDesc.ofDescriptor( typeNameConstant.stringValue() );
-		addDependencyTypeNameFromClassDescriptor( classDescriptor, mutableDependencyNames );
-	}
-
-	private static void addDependencyTypeNamesFromPlainMethodReferenceConstant( PlainMethodReferenceConstant plainMethodReferenceConstant, Collection<String> mutableDependencyNames )
-	{
-		addDependencyTypeName( plainMethodReferenceConstant.declaringTypeName(), mutableDependencyNames );
-		addDependencyTypeNamesFromMethodDescriptor( plainMethodReferenceConstant.methodDescriptor(), mutableDependencyNames );
-	}
-
-	private static void addDependencyTypeNamesFromInterfaceMethodReferenceConstant( InterfaceMethodReferenceConstant interfaceMethodReferenceConstant, Collection<String> mutableDependencyNames )
-	{
-		addDependencyTypeName( interfaceMethodReferenceConstant.declaringTypeName(), mutableDependencyNames );
-		addDependencyTypeNamesFromMethodDescriptor( interfaceMethodReferenceConstant.methodDescriptor(), mutableDependencyNames );
+		addDependencyTypeName( methodReferenceConstant.declaringTypeName(), mutableDependencyNames );
+		addDependencyTypeNamesFromMethodDescriptor( methodReferenceConstant.methodDescriptor(), mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromBootstrapMethod( BootstrapMethod bootstrapMethod, Collection<String> mutableDependencyNames )
 	{
-		DynamicConstantDesc<?> dynamicConstantDesc = bootstrapMethod.constantDescriptor();
-		addDependencyTypeNamesFromMethodDescriptor( dynamicConstantDesc.bootstrapMethod().invocationType(), mutableDependencyNames );
-		addDependencyTypeNameFromClassDescriptor( dynamicConstantDesc.bootstrapMethod().owner(), mutableDependencyNames );
-		for( ConstantDesc bootstrapArgumentDescriptor : dynamicConstantDesc.bootstrapArgs() )
-			addDependencyTypeNamesFromConstantDescriptor( bootstrapArgumentDescriptor, mutableDependencyNames );
+		addDependencyTypeNamesFromMethodDescriptor( bootstrapMethod.invocationMethodDescriptor(), mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( bootstrapMethod.ownerTypeDescriptor(), mutableDependencyNames );
+		for( Constant bootstrapArgumentDescriptor : bootstrapMethod.argumentConstants )
+			addDependencyTypeNamesFromBootstrapArgument( bootstrapArgumentDescriptor, mutableDependencyNames );
 	}
 
 	private static void addDependencyTypeNamesFromInvokeDynamicConstant( InvokeDynamicConstant invokeDynamicConstant, Collection<String> mutableDependencyNames )
 	{
-		DynamicCallSiteDesc invokeDynamicDescriptor = invokeDynamicConstant.descriptor();
-		addDependencyTypeNamesFromDynamicCallSiteDescriptor( invokeDynamicDescriptor, mutableDependencyNames );
+		addDependencyTypeNamesFromMethodDescriptor( invokeDynamicConstant.getBootstrapMethod().invocationMethodDescriptor(), mutableDependencyNames );
+		addDependencyTypeNamesFromMethodDescriptor( invokeDynamicConstant.methodDescriptor(), mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( invokeDynamicConstant.getBootstrapMethod().ownerTypeDescriptor(), mutableDependencyNames );
+		for( Constant argumentConstant : invokeDynamicConstant.getBootstrapMethod().argumentConstants )
+			addDependencyTypeNamesFromBootstrapArgument( argumentConstant, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromDynamicCallSiteDescriptor( DynamicCallSiteDesc dynamicCallSiteDescriptor, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromMethodDescriptor( MethodDescriptor methodDescriptor, Collection<String> mutableDependencyNames )
 	{
-		MethodHandleDesc bootstrapMethod = dynamicCallSiteDescriptor.bootstrapMethod();
-		addDependencyTypeNamesFromMethodDescriptor( bootstrapMethod.invocationType(), mutableDependencyNames );
-		addDependencyTypeNamesFromMethodDescriptor( dynamicCallSiteDescriptor.invocationType(), mutableDependencyNames );
-		for( ConstantDesc bootstrapArgument : dynamicCallSiteDescriptor.bootstrapArgs() )
-			addDependencyTypeNamesFromConstantDescriptor( bootstrapArgument, mutableDependencyNames );
+		addDependencyTypeNameFromTypeDescriptor( methodDescriptor.returnTypeDescriptor, mutableDependencyNames );
+		for( TypeDescriptor parameterTypeDescriptor : methodDescriptor.parameterTypeDescriptors )
+			addDependencyTypeNameFromTypeDescriptor( parameterTypeDescriptor, mutableDependencyNames );
 	}
 
-	private static void addDependencyTypeNamesFromConstantDescriptor( ConstantDesc constantDescriptor, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNamesFromBootstrapArgument( Constant constant, Collection<String> mutableDependencyNames )
 	{
-		if( constantDescriptor instanceof MethodTypeDesc methodDescriptor )
-		{
-			addDependencyTypeNameFromClassDescriptor( methodDescriptor.returnType(), mutableDependencyNames );
-			for( ClassDesc parameterDescriptor : methodDescriptor.parameterList() )
-				addDependencyTypeNameFromClassDescriptor( parameterDescriptor, mutableDependencyNames );
-		}
-		else if( constantDescriptor instanceof MethodHandleDesc methodHandleDescriptor )
-		{
-			MethodTypeDesc invocationType = methodHandleDescriptor.invocationType();
-			addDependencyTypeNamesFromMethodDescriptor( invocationType, mutableDependencyNames );
-		}
-		else if( constantDescriptor instanceof String )
-			Kit.nop();
-		else if( constantDescriptor instanceof ClassDesc classDescriptor )
-			addDependencyTypeNameFromClassDescriptor( classDescriptor, mutableDependencyNames );
-		else
-			assert false;
+		switch( constant.tag )
+			{
+				case Constant.tag_Class -> addDependencyTypeName( constant.asClassConstant().typeName(), mutableDependencyNames );
+				case Constant.tag_MethodType -> addDependencyTypeNamesFromMethodDescriptor( constant.asMethodTypeConstant().methodDescriptor(), mutableDependencyNames );
+				case Constant.tag_String -> { /* nothing to do */ }
+				case Constant.tag_MethodHandle -> //
+					{
+						MethodHandleDescriptor methodHandleDescriptor = constant.asMethodHandleConstant().methodHandleDescriptor();
+						addDependencyTypeNamesFromMethodDescriptor( methodHandleDescriptor.methodDescriptor, mutableDependencyNames );
+						addDependencyTypeNameFromTypeDescriptor( methodHandleDescriptor.ownerTypeDescriptor, mutableDependencyNames );
+					}
+				default -> throw new AssertionError( constant );
+			}
 	}
 
 	//DirectMethodHandleDesc java.lang.constant.ConstantDescs.ofCallsiteBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
@@ -622,18 +589,10 @@ final class ByteCodeInfo
 	//java.lang.constant.ConstantDescs.ofConstantBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
 	//java.lang.constant.ConstantDescs.ofCallsiteBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
 
-	private static void addDependencyTypeNamesFromMethodDescriptor( MethodTypeDesc methodTypeDesc, Collection<String> mutableDependencyNames )
-	{
-		addDependencyTypeNameFromClassDescriptor( methodTypeDesc.returnType(), mutableDependencyNames );
-		for( ClassDesc argumentDescriptor : methodTypeDesc.parameterArray() )
-			addDependencyTypeNameFromClassDescriptor( argumentDescriptor, mutableDependencyNames );
-	}
-
-	private static void addDependencyTypeNameFromClassDescriptor( ClassDesc classDesc, Collection<String> mutableDependencyNames )
+	private static void addDependencyTypeNameFromTypeDescriptor( TypeDescriptor typeDescriptor, Collection<String> mutableDependencyNames )
 	{
 		if( !includeDescriptors )
 			return;
-		String typeName = ByteCodeHelpers.typeNameFromClassDesc( classDesc );
-		addDependencyTypeName( typeName, mutableDependencyNames );
+		addDependencyTypeName( typeDescriptor.name(), mutableDependencyNames );
 	}
 }

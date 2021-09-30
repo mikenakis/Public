@@ -2,11 +2,9 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.DynamicCallSiteDesc;
-import java.lang.constant.DynamicConstantDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.util.Objects;
 
 /**
@@ -58,24 +56,12 @@ public final class InvokeDynamicConstant extends Constant
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
-//	public MethodDescriptor methodDescriptor()
-//	{
-//		MethodTypeDesc methodTypeDesc = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
-//		ClassDesc returnClassDesc = methodTypeDesc.returnType();
-//		TypeDescriptor typeDescriptor = TypeDescriptor.
-//		MethodDescriptor.of( methodTypeDesc.)
-//	}
-
-	public DynamicCallSiteDesc descriptor()
-	{
-		DynamicConstantDesc<?> dynamicConstantDescriptor = getBootstrapMethod().constantDescriptor();
-		MethodTypeDesc methodTypeDesc = MethodTypeDesc.ofDescriptor( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
-		return DynamicCallSiteDesc.of( dynamicConstantDescriptor.bootstrapMethod(), nameAndDescriptorConstant.getNameConstant().stringValue(), methodTypeDesc, dynamicConstantDescriptor.bootstrapArgs() );
-	}
+	public MethodDescriptor methodDescriptor() { return MethodDescriptor.ofDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() ); }
+	public String methodName() { return nameAndDescriptorConstant.getNameConstant().stringValue(); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "bootstrapMethod nameAndDescriptor = " + nameAndDescriptorConstant; //TODO add more
+		return "bootstrapMethod = {" + bootstrapMethod + "}; nameAndDescriptor = " + nameAndDescriptorConstant;
 	}
 
 	@Deprecated @Override public InvokeDynamicConstant asInvokeDynamicConstant() { return this; }

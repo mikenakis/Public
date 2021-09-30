@@ -97,7 +97,6 @@ import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
@@ -199,8 +198,7 @@ public class ByteCodeWriter
 			case Constant.tag_Class -> writeClassConstant( constantPool, bufferWriter, constant.asClassConstant() );
 			case Constant.tag_String -> writeStringConstant( constantPool, bufferWriter, constant.asStringConstant() );
 			case Constant.tag_FieldReference -> writeFieldReferenceConstant( constantPool, bufferWriter, constant.asFieldReferenceConstant() );
-			case Constant.tag_MethodReference -> writeMethodReferenceConstant( constantPool, bufferWriter, constant.asMethodReferenceConstant() );
-			case Constant.tag_InterfaceMethodReference -> writeInterfaceMethodReferenceConstant( constantPool, bufferWriter, constant.asInterfaceMethodReferenceConstant() );
+			case Constant.tag_PlainMethodReference, Constant.tag_InterfaceMethodReference -> writeMethodReferenceConstant( constantPool, bufferWriter, constant.asMethodReferenceConstant() );
 			case Constant.tag_NameAndDescriptor -> writeNameAndDescriptorConstant( constantPool, bufferWriter, constant.asNameAndDescriptorConstant() );
 			case Constant.tag_MethodHandle -> writeMethodHandleConstant( constantPool, bufferWriter, constant.asMethodHandleConstant() );
 			case Constant.tag_MethodType -> writeMethodTypeConstant( constantPool, bufferWriter, constant.asMethodTypeConstant() );
@@ -256,12 +254,6 @@ public class ByteCodeWriter
 	{
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.getDeclaringTypeConstant() ) );
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( methodReferenceConstant.getNameAndDescriptorConstant() ) );
-	}
-
-	private static void writeInterfaceMethodReferenceConstant( ConstantPool constantPool, BufferWriter bufferWriter, InterfaceMethodReferenceConstant interfaceMethodReferenceConstant )
-	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.getDeclaringTypeConstant() ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( interfaceMethodReferenceConstant.getNameAndDescriptorConstant() ) );
 	}
 
 	private static void writeNameAndDescriptorConstant( ConstantPool constantPool, BufferWriter bufferWriter, NameAndDescriptorConstant nameAndDescriptorConstant )
@@ -841,7 +833,7 @@ public class ByteCodeWriter
 
 	private static void writeInvokeInterfaceInstruction( InstructionWriter instructionWriter, InvokeInterfaceInstruction invokeInterfaceInstruction )
 	{
-		int constantIndex = instructionWriter.getIndex( invokeInterfaceInstruction.interfaceMethodReferenceConstant );
+		int constantIndex = instructionWriter.getIndex( invokeInterfaceInstruction.methodReferenceConstant );
 		instructionWriter.writeUnsignedByte( OpCode.INVOKEINTERFACE );
 		instructionWriter.writeUnsignedShort( constantIndex );
 		instructionWriter.writeUnsignedByte( invokeInterfaceInstruction.argumentCount );
@@ -999,13 +991,13 @@ public class ByteCodeWriter
 
 	private static void writeEnumAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, EnumAnnotationValue enumAnnotationValue )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.typeNameConstant() ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.valueNameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.typeNameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.valueNameConstant ) );
 	}
 
 	private static void writeClassAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ClassAnnotationValue classAnnotationValue )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.nameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.nameConstant ) );
 	}
 
 	private static void writeAnnotationAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationAnnotationValue annotationAnnotationValue )

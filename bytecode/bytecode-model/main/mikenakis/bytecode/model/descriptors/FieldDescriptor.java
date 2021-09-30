@@ -1,6 +1,5 @@
 package mikenakis.bytecode.model.descriptors;
 
-import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.Field;
 
 public class FieldDescriptor extends Descriptor
@@ -20,11 +19,11 @@ public class FieldDescriptor extends Descriptor
 		return new FieldDescriptor( fieldTypeDescriptor );
 	}
 
-	public final TypeDescriptor fieldTypeDescriptor;
+	public final TypeDescriptor typeDescriptor;
 
-	private FieldDescriptor( TypeDescriptor fieldTypeDescriptor )
+	private FieldDescriptor( TypeDescriptor typeDescriptor )
 	{
-		this.fieldTypeDescriptor = fieldTypeDescriptor;
+		this.typeDescriptor = typeDescriptor;
 	}
 
 	@Override public String name()
@@ -35,15 +34,14 @@ public class FieldDescriptor extends Descriptor
 	public String name( String fieldName )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append( fieldTypeDescriptor.name() );
+		stringBuilder.append( typeDescriptor.name() );
 		if( !fieldName.isEmpty() )
 			stringBuilder.append( " " ).append( fieldName );
 		return stringBuilder.toString();
 	}
 
-	public boolean equalsMethodTypeDesc( MethodTypeDesc methodTypeDesc )
+	public String descriptorString()
 	{
-		assert false; //todo
-		return false;
+		return typeDescriptor.descriptorString();
 	}
 }

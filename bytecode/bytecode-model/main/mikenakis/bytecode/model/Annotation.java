@@ -1,9 +1,9 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ClassDesc;
 import java.util.List;
 
 /**
@@ -27,8 +27,8 @@ public final class Annotation
 		this.parameters = parameters;
 	}
 
-	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( typeDescriptor() ); }
-	public ClassDesc typeDescriptor() {	return ClassDesc.ofDescriptor( typeConstant.stringValue() ); }
+	public String typeName() { return typeDescriptor().name(); }
+	public TypeDescriptor typeDescriptor() { return TypeDescriptor.ofDescriptorString( typeConstant.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

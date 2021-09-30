@@ -25,7 +25,6 @@ import mikenakis.bytecode.model.attributes.code.instructions.OperandlessLoadCons
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.InterfaceMethodReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.kit.functional.Procedure1;
@@ -173,11 +172,11 @@ final class InstructionReader
 	{
 		assert !wide;
 		assert opCode == OpCode.INVOKEINTERFACE;
-		InterfaceMethodReferenceConstant constant = readIndexAndGetConstant().asInterfaceMethodReferenceConstant();
+		MethodReferenceConstant methodReferenceConstant = readIndexAndGetConstant().asMethodReferenceConstant();
 		int argumentCount = readUnsignedByte();
 		int extraByte = readUnsignedByte(); //one extra byte, unused.
 		assert extraByte == 0;
-		return InvokeInterfaceInstruction.of( constant, argumentCount );
+		return InvokeInterfaceInstruction.of( methodReferenceConstant, argumentCount );
 	}
 
 	private ClassConstantReferencingInstruction readClassConstantReferencingInstruction( boolean wide, int opCode )

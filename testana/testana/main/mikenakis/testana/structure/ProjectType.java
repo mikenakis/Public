@@ -1,11 +1,10 @@
 package mikenakis.testana.structure;
 
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.testana.TestEngine;
 import mikenakis.testana.discovery.OutputFile;
 
-import java.lang.constant.ConstantDescs;
-import java.lang.constant.MethodTypeDesc;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -114,9 +113,9 @@ public class ProjectType
 		return byteCodeInfo().getClassSourceLocation();
 	}
 
-	private static MethodTypeDesc testMethodDescriptor()
+	private static MethodDescriptor testMethodDescriptor()
 	{
-		return MethodTypeDesc.of( ConstantDescs.CD_void ); //MethodTypeDesc.ofDescriptor( "()V" ) );
+		return MethodDescriptor.ofDescriptorString( "()V" );
 	}
 
 	public String getMethodSourceLocation( String methodName )

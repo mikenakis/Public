@@ -1,12 +1,11 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ConstantDesc;
-import java.lang.constant.DirectMethodHandleDesc;
-import java.lang.constant.MethodHandleDesc;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,30 +69,16 @@ public final class MethodHandleConstant extends Constant
 	{
 		assert this.referenceConstant == null;
 		assert referenceConstant != null;
-		assert referenceConstant.tag == tag_FieldReference || referenceConstant.tag == tag_MethodReference || referenceConstant.tag == tag_InterfaceMethodReference;
+		assert referenceConstant.tag == tag_FieldReference || referenceConstant.tag == tag_PlainMethodReference || referenceConstant.tag == tag_InterfaceMethodReference;
 		this.referenceConstant = referenceConstant;
 	}
 
-	public ConstantDesc constantDescriptor() { return descriptor(); }
-
-	public DirectMethodHandleDesc descriptor()
-	{
-		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.getNameAndDescriptorConstant();
-		//I do not know why the isInterface parameter is needed, but it does not work otherwise.
-		return MethodHandleDesc.of( DirectMethodHandleDesc.Kind.valueOf( referenceKind.number, referenceKind == ReferenceKind.InvokeInterface ), //
-			referenceConstant.getDeclaringTypeConstant().classDesc(), //
-			nameAndDescriptorConstant.getNameConstant().stringValue(), //
-			nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
-	}
+	@Deprecated @Override public MethodHandleConstant asMethodHandleConstant() { return this; }
+	public MethodHandleDescriptor methodHandleDescriptor() { return ByteCodeHelpers.methodHandleDescriptorFromMethodHandleConstant( this ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return "kind = " + referenceKind.name() + ", referenceConstant = " + referenceConstant;
-	}
-
-	@Deprecated @Override public MethodHandleConstant asMethodHandleConstant()
-	{
-		return this;
 	}
 
 	@Deprecated @Override public boolean equals( Object other )

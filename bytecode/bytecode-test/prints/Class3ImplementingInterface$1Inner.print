@@ -3,9 +3,9 @@
 │ └─■ [0] java.util.function.Supplier
 ├─■ extraConstants: 0 items
 ├─■ fields: 2 items
-│ ├─■ [0] ByteCodeField accessFlags = [final], name = "i", descriptor = int
+│ ├─■ [0] ByteCodeField accessFlags = [final], name+descriptor = int i
 │ │ └─■ attributeSet: 0 items
-│ └─■ [1] ByteCodeField accessFlags = [final, synthetic], name = "this$0", descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+│ └─■ [1] ByteCodeField accessFlags = [final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 3 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )

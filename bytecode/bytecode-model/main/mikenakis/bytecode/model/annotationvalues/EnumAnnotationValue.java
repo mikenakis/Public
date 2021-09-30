@@ -1,11 +1,10 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-
-import java.lang.constant.ClassDesc;
 
 /**
  * Represents an enum {@link AnnotationValue}.
@@ -21,8 +20,8 @@ public final class EnumAnnotationValue extends AnnotationValue
 		return new EnumAnnotationValue( typeNameConstant, valueNameConstant );
 	}
 
-	private final Mutf8Constant typeNameConstant;
-	private final Mutf8Constant valueNameConstant;
+	public final Mutf8Constant typeNameConstant;
+	public final Mutf8Constant valueNameConstant;
 
 	private EnumAnnotationValue( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
 	{
@@ -31,11 +30,8 @@ public final class EnumAnnotationValue extends AnnotationValue
 		this.valueNameConstant = valueNameConstant;
 	}
 
-	public Mutf8Constant typeNameConstant()	{ return typeNameConstant; }
-	public ClassDesc typeDescriptor() { return ClassDesc.ofDescriptor( typeNameConstant.stringValue() ); }
-	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( typeDescriptor() ); }
-
-	public Mutf8Constant valueNameConstant() { return valueNameConstant; }
+	public String typeName() { return typeDescriptor().name(); }
+	public TypeDescriptor typeDescriptor() { return TerminalTypeDescriptor.ofDescriptorString( typeNameConstant.stringValue() ); }
 	public String valueName() { return valueNameConstant.stringValue(); }
 
 	@Deprecated @Override public EnumAnnotationValue asEnumAnnotationValue()

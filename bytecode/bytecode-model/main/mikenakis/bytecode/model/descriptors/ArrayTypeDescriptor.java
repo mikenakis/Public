@@ -1,5 +1,7 @@
 package mikenakis.bytecode.model.descriptors;
 
+import java.util.Objects;
+
 public class ArrayTypeDescriptor extends TypeDescriptor
 {
 	public static ArrayTypeDescriptor ofArrayClass( Class<?> arrayClass )
@@ -31,9 +33,25 @@ public class ArrayTypeDescriptor extends TypeDescriptor
 		return componentTypeDescriptor.name() + "[]";
 	}
 
-	public boolean equalsTypeDesc( java.lang.invoke.TypeDescriptor javaTypeDescriptor )
+	@Override public String descriptorString()
 	{
-		assert false; //todo
+		return "[" + componentTypeDescriptor.descriptorString();
+	}
+
+	@Deprecated @Override public boolean equals( Object other )
+	{
+		if( other instanceof ArrayTypeDescriptor kin )
+			return equals( kin );
 		return false;
+	}
+
+	public boolean equals( ArrayTypeDescriptor other )
+	{
+		return componentTypeDescriptor.equals( other.componentTypeDescriptor );
+	}
+
+	@Override public int hashCode()
+	{
+		return Objects.hash( ArrayTypeDescriptor.class.hashCode(), componentTypeDescriptor.hashCode() );
 	}
 }

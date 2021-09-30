@@ -18,7 +18,7 @@ public abstract class ReferenceConstant extends Constant
 	protected ReferenceConstant( int tag )
 	{
 		super( tag );
-		assert tag == Constant.tag_FieldReference || tag == Constant.tag_MethodReference || tag == Constant.tag_InterfaceMethodReference;
+		assert tag == Constant.tag_FieldReference || tag == Constant.tag_PlainMethodReference || tag == Constant.tag_InterfaceMethodReference;
 	}
 
 	public ClassConstant getDeclaringTypeConstant()

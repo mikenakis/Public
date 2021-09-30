@@ -2,7 +2,7 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [private], name = "foo", descriptor = boolean
+│ └─■ [0] ByteCodeField accessFlags = [private], name+descriptor = boolean foo
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
 │ └─■ [0] ByteCodeMethod accessFlags = [private], name = "<init>", descriptor = void()

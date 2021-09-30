@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ClassDesc;
 import java.util.Objects;
 
 /**
@@ -41,10 +40,8 @@ public final class ClassConstant extends Constant
 		this.nameConstant = nameConstant;
 	}
 
-	public String internalName() { return nameConstant.stringValue(); }
-	public String descriptorString() { return ByteCodeHelpers.descriptorStringFromInternalName( internalName() ); }
-	public ClassDesc classDesc() { return ClassDesc.ofDescriptor( descriptorString() ); }
-	public String typeName() { return ByteCodeHelpers.typeNameFromClassDesc( classDesc() );	}
+	public String descriptorString() { return ByteCodeHelpers.descriptorStringFromInternalName( nameConstant.stringValue() ); }
+	public String typeName() { return ByteCodeHelpers.typeNameFromClassConstant( this );	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return nameConstant.stringValue(); }
 

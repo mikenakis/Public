@@ -3,59 +3,59 @@
 │ └─■ [0] mikenakis.bytecode.test.model.Interface1
 ├─■ extraConstants: 0 items
 ├─■ fields: 19 items
-│ ├─■ [0] ByteCodeField accessFlags = [public, static, final], name = "stringLiteral", descriptor = java.lang.String
+│ ├─■ [0] ByteCodeField accessFlags = [public, static, final], name+descriptor = java.lang.String stringLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute StringConstant( Mutf8Constant( "aΦ됔b" ) )
-│ ├─■ [1] ByteCodeField accessFlags = [public, static, final], name = "booleanLiteral", descriptor = boolean
+│ ├─■ [1] ByteCodeField accessFlags = [public, static, final], name+descriptor = boolean booleanLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
-│ ├─■ [2] ByteCodeField accessFlags = [public, static, final], name = "byteLiteral", descriptor = byte
+│ ├─■ [2] ByteCodeField accessFlags = [public, static, final], name+descriptor = byte byteLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
-│ ├─■ [3] ByteCodeField accessFlags = [public, static, final], name = "charLiteral", descriptor = char
+│ ├─■ [3] ByteCodeField accessFlags = [public, static, final], name+descriptor = char charLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 99 )
-│ ├─■ [4] ByteCodeField accessFlags = [public, static, final], name = "doubleLiteral", descriptor = double
+│ ├─■ [4] ByteCodeField accessFlags = [public, static, final], name+descriptor = double doubleLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute DoubleConstant( 0.5 )
-│ ├─■ [5] ByteCodeField accessFlags = [public, static, final], name = "floatLiteral", descriptor = float
+│ ├─■ [5] ByteCodeField accessFlags = [public, static, final], name+descriptor = float floatLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute FloatConstant( 0.25f )
-│ ├─■ [6] ByteCodeField accessFlags = [public, static, final], name = "intLiteral", descriptor = int
+│ ├─■ [6] ByteCodeField accessFlags = [public, static, final], name+descriptor = int intLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 2 )
-│ ├─■ [7] ByteCodeField accessFlags = [public, static, final], name = "longLiteral", descriptor = long
+│ ├─■ [7] ByteCodeField accessFlags = [public, static, final], name+descriptor = long longLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute LongConstant( 3L )
-│ ├─■ [8] ByteCodeField accessFlags = [public, static, final], name = "shortLiteral", descriptor = short
+│ ├─■ [8] ByteCodeField accessFlags = [public, static, final], name+descriptor = short shortLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 4 )
-│ ├─■ [9] ByteCodeField accessFlags = [private, final], name = "enum1", descriptor = mikenakis.bytecode.test.model.Enum1
+│ ├─■ [9] ByteCodeField accessFlags = [private, final], name+descriptor = mikenakis.bytecode.test.model.Enum1 enum1
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [10] ByteCodeField accessFlags = [private, final], name = "booleanMember", descriptor = boolean
+│ ├─■ [10] ByteCodeField accessFlags = [private, final], name+descriptor = boolean booleanMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
-│ ├─■ [11] ByteCodeField accessFlags = [private, final], name = "byteMember", descriptor = byte
+│ ├─■ [11] ByteCodeField accessFlags = [private, final], name+descriptor = byte byteMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
-│ ├─■ [12] ByteCodeField accessFlags = [private, final], name = "charMember", descriptor = char
+│ ├─■ [12] ByteCodeField accessFlags = [private, final], name+descriptor = char charMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 99 )
-│ ├─■ [13] ByteCodeField accessFlags = [private], name = "doubleMember", descriptor = double
+│ ├─■ [13] ByteCodeField accessFlags = [private], name+descriptor = double doubleMember
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [14] ByteCodeField accessFlags = [private, final], name = "floatMember", descriptor = float
+│ ├─■ [14] ByteCodeField accessFlags = [private, final], name+descriptor = float floatMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute FloatConstant( 0.25f )
-│ ├─■ [15] ByteCodeField accessFlags = [private, final], name = "intMember", descriptor = int
+│ ├─■ [15] ByteCodeField accessFlags = [private, final], name+descriptor = int intMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 2 )
-│ ├─■ [16] ByteCodeField accessFlags = [private, final], name = "longMember", descriptor = long
+│ ├─■ [16] ByteCodeField accessFlags = [private, final], name+descriptor = long longMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute LongConstant( 3L )
-│ ├─■ [17] ByteCodeField accessFlags = [private, final], name = "shortMember", descriptor = short
+│ ├─■ [17] ByteCodeField accessFlags = [private, final], name+descriptor = short shortMember
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerConstant( 4 )
-│ └─■ [18] ByteCodeField accessFlags = [private, final], name = "stringMember", descriptor = java.lang.String
+│ └─■ [18] ByteCodeField accessFlags = [private, final], name+descriptor = java.lang.String stringMember
 │   └─■ attributeSet: 1 items
 │     └─■ [0] ConstantValueAttribute StringConstant( Mutf8Constant( "aΦ됔b" ) )
 ├─■ methods: 11 items
@@ -317,10 +317,8 @@
 │ │     │ ├─■         INVOKEVIRTUAL type = java.lang.Class, name = getName, descriptor = java.lang.String()
 │ │     │ ├─■         ALOAD_0 0
 │ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
-│ │     │ ├─■         INVOKEDYNAMIC name = makeConcatWithConstants, descriptor = java.lang.String( java.lang.String, mikenakis.bytecode.test.model.Enum1 ), arguments =  
-│ │     │ │ ├─■                 referenceKind: InvokeStatic
-│ │     │ │ ├─■                 referenceType: java.lang.invoke.StringConcatFactory
-│ │     │ │ └─■                 methodName: makeConcatWithConstants
+│ │     │ ├─■         INVOKEDYNAMIC name+descriptor = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.StringConcatFactory, name = makeConcatWithConstants, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items

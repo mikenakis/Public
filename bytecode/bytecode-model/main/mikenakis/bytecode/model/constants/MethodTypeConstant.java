@@ -1,10 +1,9 @@
 package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ConstantDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.util.Objects;
 
 /**
@@ -14,11 +13,6 @@ import java.util.Objects;
  */
 public final class MethodTypeConstant extends Constant
 {
-//	public static MethodTypeConstant of( String descriptor )
-//	{
-//		return of( Mutf8Constant.of( descriptor ) );
-//	}
-
 	private Mutf8Constant descriptorConstant; //null means that it has not been set yet.
 
 	public MethodTypeConstant()
@@ -39,19 +33,13 @@ public final class MethodTypeConstant extends Constant
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public ConstantDesc constantDescriptor()
-	{
-		return MethodTypeDesc.ofDescriptor( descriptorConstant.stringValue() );
-	}
+	public MethodDescriptor methodDescriptor() { return MethodDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
+	public String methodDescriptorString() { return descriptorConstant.stringValue(); }
+	@Deprecated @Override public MethodTypeConstant asMethodTypeConstant() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return "descriptor = " + descriptorConstant;
-	}
-
-	@Deprecated @Override public MethodTypeConstant asMethodTypeConstant()
-	{
-		return this;
 	}
 
 	@Override public boolean equals( Object other )

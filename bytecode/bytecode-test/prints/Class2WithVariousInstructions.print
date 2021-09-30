@@ -162,10 +162,8 @@
 │ │     │ ├─■         POP
 │ │     │ ├─■ L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
 │ │     │ ├─■         ALOAD_1 1
-│ │     │ ├─■         INVOKEDYNAMIC name = compare, descriptor = java.util.Comparator(), arguments = MethodTypeDesc[(Object,Object)int], MethodHandleDesc[STATIC/Class2WithVariousInstructions::lambda$methodWithLambda$0(String,String)int], MethodTypeDesc[(String,String)int]
-│ │     │ │ ├─■                 referenceKind: InvokeStatic
-│ │     │ │ ├─■                 referenceType: java.lang.invoke.LambdaMetafactory
-│ │     │ │ └─■                 methodName: metafactory
+│ │     │ ├─■         INVOKEDYNAMIC name+descriptor = java.util.Comparator compare()
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = java.lang.invoke.LambdaMetafactory, name = metafactory, descriptor = java.lang.invoke.CallSite( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = type = mikenakis.bytecode.test.model.Class2WithVariousInstructions, name = lambda$methodWithLambda$0, descriptor = int( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
 │ │     │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = type = java.util.List, name = sort, descriptor = void( java.util.Comparator ), 2 arguments
 │ │     │ ├─■ L62: // return list.get( 0 );
 │ │     │ ├─■         ALOAD_1 1

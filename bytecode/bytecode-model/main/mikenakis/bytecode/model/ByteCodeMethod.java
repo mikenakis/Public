@@ -1,11 +1,11 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagEnumSet;
 
-import java.lang.constant.MethodTypeDesc;
 import java.util.Map;
 
 /**
@@ -50,10 +50,7 @@ public final class ByteCodeMethod extends ByteCodeMember
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public MethodTypeDesc descriptor()
-	{
-		return MethodTypeDesc.ofDescriptor( descriptorConstant.stringValue() );
-	}
+	public MethodDescriptor getMethodDescriptor() { return MethodDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

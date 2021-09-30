@@ -2,9 +2,9 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.lang.constant.ClassDesc;
 import java.util.Optional;
 
 /**
@@ -44,7 +44,7 @@ public final class LocalVariableTableEntry
 	}
 
 	public String name() { return nameConstant.stringValue(); }
-	public ClassDesc descriptor() {	return ClassDesc.ofDescriptor( descriptorConstant.stringValue() ); }
+	public TypeDescriptor typeDescriptor() { return TypeDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

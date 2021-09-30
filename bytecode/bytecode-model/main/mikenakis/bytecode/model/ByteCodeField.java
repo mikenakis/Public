@@ -1,11 +1,12 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.descriptors.FieldDescriptor;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagEnumSet;
 
-import java.lang.constant.ClassDesc;
 import java.util.Map;
 
 /**
@@ -15,9 +16,9 @@ import java.util.Map;
  */
 public final class ByteCodeField extends ByteCodeMember
 {
-	public static ByteCodeField of( FlagEnumSet<Modifier> modifierSet, String name, @SuppressWarnings( "TypeMayBeWeakened" ) ClassDesc fieldTypeDescriptor )
+	public static ByteCodeField of( FlagEnumSet<Modifier> modifierSet, String name, FieldDescriptor fieldDescriptor )
 	{
-		String descriptorString = fieldTypeDescriptor.descriptorString();
+		String descriptorString = fieldDescriptor.descriptorString();
 		return of( modifierSet, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
 	}
 
@@ -52,10 +53,7 @@ public final class ByteCodeField extends ByteCodeMember
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public ClassDesc descriptor()
-	{
-		return ClassDesc.ofDescriptor( descriptorConstant.stringValue() );
-	}
+	public FieldDescriptor fieldDescriptor() { return FieldDescriptor.of( TypeDescriptor.ofDescriptorString( descriptorConstant.stringValue() ) ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

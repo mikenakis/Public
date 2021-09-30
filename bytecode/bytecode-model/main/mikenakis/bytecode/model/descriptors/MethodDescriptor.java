@@ -1,11 +1,12 @@
 package mikenakis.bytecode.model.descriptors;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.kit.Kit;
 
-import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class MethodDescriptor extends Descriptor
 {
@@ -34,6 +35,11 @@ public class MethodDescriptor extends Descriptor
 		return new MethodDescriptor( returnTypeDescriptor, parameterTypeDescriptors );
 	}
 
+	public static MethodDescriptor ofDescriptorString( String descriptorString )
+	{
+		return ByteCodeHelpers.methodDescriptorFromDescriptorString( descriptorString );
+	}
+
 	public final TypeDescriptor returnTypeDescriptor;
 	public final List<TypeDescriptor> parameterTypeDescriptors;
 
@@ -45,34 +51,58 @@ public class MethodDescriptor extends Descriptor
 
 	@Override public String name()
 	{
-		return name( "" );
+		return stringFrom();
 	}
 
-	public String name( String methodName )
+	public String stringFrom()
+	{
+		return stringFrom( Optional.empty() );
+	}
+
+	public String stringFrom( String methodName )
+	{
+		return stringFrom( Optional.of( methodName ) );
+	}
+
+	public String stringFrom( Optional<String> methodName )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append( returnTypeDescriptor.name() );
-		if( !methodName.isEmpty() )
-			stringBuilder.append( " " ).append( methodName );
+		methodName.ifPresent( s -> stringBuilder.append( " " ).append( s ) );
 		if( parameterTypeDescriptors.isEmpty() )
 			stringBuilder.append( "()" );
 		else
 		{
 			stringBuilder.append( "( " );
 			boolean first = true;
-			for( var argumentType : parameterTypeDescriptors )
+			for( TypeDescriptor parameterTypeDescriptor : parameterTypeDescriptors )
 			{
 				first = Kit.stringBuilder.appendDelimiter( stringBuilder, first, ", " );
-				stringBuilder.append( argumentType.name() );
+				stringBuilder.append( parameterTypeDescriptor.name() );
 			}
 			stringBuilder.append( " )" );
 		}
 		return stringBuilder.toString();
 	}
 
-	public boolean equalsMethodTypeDesc( MethodTypeDesc methodTypeDesc )
+	@Override public boolean equals( Object other )
 	{
-		assert false; //todo
+		if( other instanceof MethodDescriptor kin )
+			return equals( kin );
 		return false;
+	}
+
+	public boolean equals( MethodDescriptor other )
+	{
+		return returnTypeDescriptor.equals( other.returnTypeDescriptor ) && parameterTypeDescriptors.equals( other.parameterTypeDescriptors );
+	}
+
+	@Override public int hashCode()
+	{
+		int result = 1;
+		result = 31 * result + returnTypeDescriptor.hashCode();
+		for( var parameterTypeDescriptor : parameterTypeDescriptors )
+			result = 31 * result + parameterTypeDescriptor.hashCode();
+		return result;
 	}
 }

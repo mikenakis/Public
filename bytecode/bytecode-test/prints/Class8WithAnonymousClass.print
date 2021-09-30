@@ -2,7 +2,7 @@
 ├─■ interfaces: 0 items
 ├─■ extraConstants: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [public, final], name = "field", descriptor = mikenakis.bytecode.test.model.Interface1
+│ └─■ [0] ByteCodeField accessFlags = [public, final], name+descriptor = mikenakis.bytecode.test.model.Interface1 field
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
 │ └─■ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()

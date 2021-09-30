@@ -4,9 +4,9 @@ import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
+import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.PlainMethodReferenceConstant;
 import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.model.Class9WithCode;
 import mikenakis.kit.Kit;
@@ -66,7 +66,7 @@ public class T401_Generating
 		Mutf8Constant initMethodNameConstant = Mutf8Constant.of( "<init>" );
 		Mutf8Constant initMethodTypeConstant = Mutf8Constant.of( "(Ljava/lang/String;)V" );
 		NameAndDescriptorConstant initMethodNameAndDescriptorConstant = NameAndDescriptorConstant.of( initMethodNameConstant, initMethodTypeConstant );
-		PlainMethodReferenceConstant initMethodReferenceConstant = PlainMethodReferenceConstant.of( byteCodeType.classConstant(), initMethodNameAndDescriptorConstant );
+		MethodReferenceConstant initMethodReferenceConstant = MethodReferenceConstant.plainOf( byteCodeType.classConstant(), initMethodNameAndDescriptorConstant );
 		codeAttribute.addInvokeSpecial( initMethodReferenceConstant );
 		codeAttribute.addAStore( 1 );
 		codeAttribute.addALoad( 1 );
@@ -74,7 +74,7 @@ public class T401_Generating
 		Mutf8Constant parseMethodNameConstant = Mutf8Constant.of( "parse" );
 		Mutf8Constant parseMethodTypeConstant = Mutf8Constant.of( "()D" );
 		NameAndDescriptorConstant parseMethodNameAndDescriptorConstant = NameAndDescriptorConstant.of( parseMethodNameConstant, parseMethodTypeConstant );
-		PlainMethodReferenceConstant parseMethodReferenceConstant = PlainMethodReferenceConstant.of( byteCodeType.classConstant(), parseMethodNameAndDescriptorConstant );
+		MethodReferenceConstant parseMethodReferenceConstant = MethodReferenceConstant.plainOf( byteCodeType.classConstant(), parseMethodNameAndDescriptorConstant );
 		codeAttribute.addInvokeVirtual( parseMethodReferenceConstant );
 	}
 }
