@@ -1,37 +1,37 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, final, super, enum], thisClass = mikenakis.bytecode.test.model.Enum1, superClass = java.lang.Enum
+■ ByteCodeType version = 60.0, accessFlags = [public, final, super, enum], this = mikenakis.bytecode.test.model.Enum1, super = java.lang.Enum
 ├─■ interfaces: 0 items
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 4 items
-│ ├─■ [0] ByteCodeField accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_A
+│ ├─■ [0] ByteCodeField accessFlags = [public, static, final, enum], prototype = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_A
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [1] ByteCodeField accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_B
+│ ├─■ [1] ByteCodeField accessFlags = [public, static, final, enum], prototype = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_B
 │ │ └─■ attributeSet: 0 items
-│ ├─■ [2] ByteCodeField accessFlags = [public, static, final, enum], name+descriptor = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_C
+│ ├─■ [2] ByteCodeField accessFlags = [public, static, final, enum], prototype = mikenakis.bytecode.test.model.Enum1 ENUM_CONSTANT_C
 │ │ └─■ attributeSet: 0 items
-│ └─■ [3] ByteCodeField accessFlags = [private, static, final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Enum1[] $VALUES
+│ └─■ [3] ByteCodeField accessFlags = [private, static, final, synthetic], prototype = mikenakis.bytecode.test.model.Enum1[] $VALUES
 │   └─■ attributeSet: 0 items
 ├─■ methods: 5 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [public, static], name = "values", descriptor = mikenakis.bytecode.test.model.Enum1[]()
+│ ├─■ [0] ByteCodeMethod accessFlags = [public, static], prototype = mikenakis.bytecode.test.model.Enum1[] values()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 0
 │ │     ├─■ instructions: 4 entries
 │ │     │ ├─■ L8: // @SuppressWarnings( "unused" )
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
-│ │     │ ├─■         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Enum1[], name = clone, descriptor = java.lang.Object()
+│ │     │ ├─■         INVOKEVIRTUAL reference = [Plain] java.lang.Object mikenakis.bytecode.test.model.Enum1[].clone()
 │ │     │ ├─■         CHECKCAST mikenakis.bytecode.test.model.Enum1[]
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 1 items
 │ │       └─■ [0] LineNumberTableAttribute; 1 items
 │ │         └─■ [0] LineNumberTableEntry lineNumber = 8, start = L8
-│ ├─■ [1] ByteCodeMethod accessFlags = [public, static], name = "valueOf", descriptor = mikenakis.bytecode.test.model.Enum1( java.lang.String )
+│ ├─■ [1] ByteCodeMethod accessFlags = [public, static], prototype = mikenakis.bytecode.test.model.Enum1 valueOf( java.lang.String )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
 │ │   │ ├─■ instructions: 5 entries
 │ │   │ │ ├─■ L8: // @SuppressWarnings( "unused" )
 │ │   │ │ ├─■         LDC mikenakis.bytecode.test.model.Enum1
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         INVOKESTATIC type = java.lang.Enum, name = valueOf, descriptor = java.lang.Enum( java.lang.Class, java.lang.String )
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         INVOKESTATIC reference = [Plain] java.lang.Enum java.lang.Enum.valueOf( java.lang.Class, java.lang.String )
 │ │   │ │ ├─■         CHECKCAST mikenakis.bytecode.test.model.Enum1
 │ │   │ │ └─■         ARETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -39,18 +39,18 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 8, start = L8
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L8, end = @end, name = name, descriptor = java.lang.String
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L8, end = @end, prototype = java.lang.String name
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [mandated], name = "name"
-│ ├─■ [2] ByteCodeMethod accessFlags = [private], name = "<init>", descriptor = void( java.lang.String, int )
+│ ├─■ [2] ByteCodeMethod accessFlags = [private], prototype = void <init>( java.lang.String, int )
 │ │ └─■ attributes: 3 items
 │ │   ├─■ [0] CodeAttribute maxStack = 3, maxLocals = 3
 │ │   │ ├─■ instructions: 5 entries
 │ │   │ │ ├─■ L16: // {
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         ALOAD_1 1
-│ │   │ │ ├─■         ILOAD_2 2
-│ │   │ │ ├─■         INVOKESPECIAL type = java.lang.Enum, name = <init>, descriptor = void( java.lang.String, int )
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         ALOAD 1
+│ │   │ │ ├─■         ILOAD 2
+│ │   │ │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Enum.<init>( java.lang.String, int )
 │ │   │ │ ├─■ L17: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -59,28 +59,28 @@
 │ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 16, start = L16
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 17, start = L17
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L16, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Enum1
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L16, end = @end, prototype = mikenakis.bytecode.test.model.Enum1 this
 │ │   ├─■ [1] MethodParametersAttribute; 2 items
 │ │   │ ├─■ [0] MethodParameter accessFlags = [synthetic], name = "$enum$name"
 │ │   │ └─■ [1] MethodParameter accessFlags = [synthetic], name = "$enum$ordinal"
 │ │   └─■ [2] SignatureAttribute ()V
-│ ├─■ [3] ByteCodeMethod accessFlags = [private, static, synthetic], name = "$values", descriptor = mikenakis.bytecode.test.model.Enum1[]()
+│ ├─■ [3] ByteCodeMethod accessFlags = [private, static, synthetic], prototype = mikenakis.bytecode.test.model.Enum1[] $values()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 4, maxLocals = 0
 │ │     ├─■ instructions: 15 entries
 │ │     │ ├─■ L8: // @SuppressWarnings( "unused" )
-│ │     │ ├─■         ICONST_3
+│ │     │ ├─■         LDC 3
 │ │     │ ├─■         ANEWARRAY mikenakis.bytecode.test.model.Enum1
 │ │     │ ├─■         DUP
-│ │     │ ├─■         ICONST_0
+│ │     │ ├─■         LDC 0
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
 │ │     │ ├─■         AASTORE
 │ │     │ ├─■         DUP
-│ │     │ ├─■         ICONST_1
+│ │     │ ├─■         LDC 1
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_B
 │ │     │ ├─■         AASTORE
 │ │     │ ├─■         DUP
-│ │     │ ├─■         ICONST_2
+│ │     │ ├─■         LDC 2
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_C
 │ │     │ ├─■         AASTORE
 │ │     │ └─■         ARETURN
@@ -88,33 +88,33 @@
 │ │     └─■ attributeSet: 1 items
 │ │       └─■ [0] LineNumberTableAttribute; 1 items
 │ │         └─■ [0] LineNumberTableEntry lineNumber = 8, start = L8
-│ └─■ [4] ByteCodeMethod accessFlags = [static], name = "<clinit>", descriptor = void()
+│ └─■ [4] ByteCodeMethod accessFlags = [static], prototype = void <clinit>()
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 4, maxLocals = 0
 │       ├─■ instructions: 21 entries
 │       │ ├─■ L11: // ENUM_CONSTANT_A, //
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Enum1
 │       │ ├─■         DUP
-│       │ ├─■         LDC StringConstant( Mutf8Constant( "ENUM_CONSTANT_A" ) )
-│       │ ├─■         ICONST_0
-│       │ ├─■         INVOKESPECIAL type = mikenakis.bytecode.test.model.Enum1, name = <init>, descriptor = void( java.lang.String, int )
+│       │ ├─■         LDC "ENUM_CONSTANT_A"
+│       │ ├─■         LDC 0
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
 │       │ ├─■ L12: // ENUM_CONSTANT_B, //
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Enum1
 │       │ ├─■         DUP
-│       │ ├─■         LDC StringConstant( Mutf8Constant( "ENUM_CONSTANT_B" ) )
-│       │ ├─■         ICONST_1
-│       │ ├─■         INVOKESPECIAL type = mikenakis.bytecode.test.model.Enum1, name = <init>, descriptor = void( java.lang.String, int )
+│       │ ├─■         LDC "ENUM_CONSTANT_B"
+│       │ ├─■         LDC 1
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_B
 │       │ ├─■ L13: // ENUM_CONSTANT_C; //
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Enum1
 │       │ ├─■         DUP
-│       │ ├─■         LDC StringConstant( Mutf8Constant( "ENUM_CONSTANT_C" ) )
-│       │ ├─■         ICONST_2
-│       │ ├─■         INVOKESPECIAL type = mikenakis.bytecode.test.model.Enum1, name = <init>, descriptor = void( java.lang.String, int )
+│       │ ├─■         LDC "ENUM_CONSTANT_C"
+│       │ ├─■         LDC 2
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_C
 │       │ ├─■ L8: // @SuppressWarnings( "unused" )
-│       │ ├─■         INVOKESTATIC type = mikenakis.bytecode.test.model.Enum1, name = $values, descriptor = mikenakis.bytecode.test.model.Enum1[]()
+│       │ ├─■         INVOKESTATIC reference = [Plain] mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$values()
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items

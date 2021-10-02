@@ -1,7 +1,7 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation2, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], this = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation2, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] java.lang.annotation.Annotation
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 0 items
 ├─■ methods: 0 items
 └─■ attributeSet: 2 items

@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -47,9 +48,13 @@ public abstract class ReferenceConstant extends Constant
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
-	public final String declaringTypeName() { return declaringTypeConstant.typeName(); }
-	@ExcludeFromJacocoGeneratedReport @Override public final String toString() { return "declaringType = " + declaringTypeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant; }
+	public final TypeDescriptor declaringType() { return TypeDescriptor.ofDescriptorString( declaringTypeConstant.descriptorString() ); }
 	@Deprecated @Override public final ReferenceConstant asReferenceConstant() { return this; }
+
+	@ExcludeFromJacocoGeneratedReport @Override public final String toString()
+	{
+		return "declaringType = " + declaringTypeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant;
+	}
 
 	@Override public final boolean equals( Object other )
 	{

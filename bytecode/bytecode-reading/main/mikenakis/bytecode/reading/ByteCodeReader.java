@@ -86,7 +86,7 @@ import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.kit.Kit;
-import mikenakis.kit.collections.FlagEnumSet;
+import mikenakis.kit.collections.FlagSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,7 +118,7 @@ public class ByteCodeReader
 
 	private ByteCodeType readByteCodeType()
 	{
-		FlagEnumSet<ByteCodeType.Modifier> modifierSet = ByteCodeType.modifierFlagsEnum.fromBits( bufferReader.readUnsignedShort() );
+		FlagSet<ByteCodeType.Modifier> modifiers = ByteCodeType.modifierEnum.fromBits( bufferReader.readUnsignedShort() );
 		ClassConstant thisClassConstant = readIndexAndGetConstant().asClassConstant();
 		Optional<ClassConstant> superClassConstant = tryReadIndexAndGetConstant().map( Constant::asClassConstant );
 		int interfaceCount = bufferReader.readUnsignedShort();
@@ -132,22 +132,22 @@ public class ByteCodeReader
 		List<ByteCodeField> fields = new ArrayList<>( fieldCount );
 		for( int i = 0; i < fieldCount; i++ )
 		{
-			FlagEnumSet<ByteCodeField.Modifier> fieldModifierSet = ByteCodeField.modifierFlagsEnum.fromBits( bufferReader.readUnsignedShort() );
+			FlagSet<ByteCodeField.Modifier> fieldModifiers = ByteCodeField.modifierEnum.fromBits( bufferReader.readUnsignedShort() );
 			Mutf8Constant nameConstant = readIndexAndGetConstant().asMutf8Constant();
 			Mutf8Constant descriptorConstant = readIndexAndGetConstant().asMutf8Constant();
 			AttributeSet attributes = readAttributes( Optional.empty() );
-			ByteCodeField byteCodeField = ByteCodeField.of( fieldModifierSet, nameConstant, descriptorConstant, attributes );
+			ByteCodeField byteCodeField = ByteCodeField.of( fieldModifiers, nameConstant, descriptorConstant, attributes );
 			fields.add( byteCodeField );
 		}
 		int methodCount = bufferReader.readUnsignedShort();
 		List<ByteCodeMethod> methods = new ArrayList<>( methodCount );
 		for( int i = 0; i < methodCount; i++ )
 		{
-			FlagEnumSet<ByteCodeMethod.Modifier> methodModifierSet = ByteCodeMethod.modifierFlagsEnum.fromBits( bufferReader.readUnsignedShort() );
+			FlagSet<ByteCodeMethod.Modifier> methodModifiers = ByteCodeMethod.modifierEnum.fromBits( bufferReader.readUnsignedShort() );
 			Mutf8Constant nameConstant = readIndexAndGetConstant().asMutf8Constant();
 			Mutf8Constant descriptorConstant = readIndexAndGetConstant().asMutf8Constant();
 			AttributeSet attributes = readAttributes( Optional.empty() );
-			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( methodModifierSet, nameConstant, descriptorConstant, attributes );
+			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( methodModifiers, nameConstant, descriptorConstant, attributes );
 			methods.add( byteCodeMethod );
 		}
 		AttributeSet attributes = readAttributes( Optional.empty() );
@@ -161,9 +161,9 @@ public class ByteCodeReader
 				if( Kit.get( false ) ) //TODO: enable this once the troubleshooting is over.
 					attributes.removeAttribute( bootstrapMethodsAttribute );
 			} );
-		Collection<Constant> extraConstants = constantPool.getExtraConstants();
-		return ByteCodeType.of( version, modifierSet, thisClassConstant, superClassConstant, interfaceClassConstants, fields, methods, //
-			attributes, extraConstants );
+		Collection<ClassConstant> extraClassReferences = constantPool.getExtraClassReferences();
+		return ByteCodeType.of( version, modifiers, thisClassConstant, superClassConstant, interfaceClassConstants, fields, methods, //
+			attributes, extraClassReferences );
 	}
 
 	private static ByteCodeType.Version readVersion( BufferReader bufferReader )
@@ -304,9 +304,9 @@ public class ByteCodeReader
 		List<MethodParameter> entries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			Mutf8Constant nameConstant1 = readIndexAndGetConstant().asMutf8Constant();
-			FlagEnumSet<MethodParameter.Modifier> modifierSet = MethodParameter.modifierFlagEnum.fromBits( bufferReader.readUnsignedShort() );
-			MethodParameter entry = MethodParameter.of( nameConstant1, modifierSet );
+			Mutf8Constant nameConstant = readIndexAndGetConstant().asMutf8Constant();
+			FlagSet<MethodParameter.Modifier> modifiers = MethodParameter.modifierEnum.fromBits( bufferReader.readUnsignedShort() );
+			MethodParameter entry = MethodParameter.of( nameConstant, modifiers );
 			entries.add( entry );
 		}
 		return MethodParametersAttribute.of( entries );
@@ -322,8 +322,8 @@ public class ByteCodeReader
 			ClassConstant innerClassConstant = readIndexAndGetConstant().asClassConstant();
 			Optional<ClassConstant> outerClassConstant = Kit.upCast( tryReadIndexAndGetConstant() );
 			Optional<Mutf8Constant> innerNameConstant = Kit.upCast( tryReadIndexAndGetConstant() );
-			FlagEnumSet<InnerClass.InnerClassModifier> modifierSet = InnerClass.innerClassModifierFlagsEnum.fromBits( bufferReader.readUnsignedShort() );
-			InnerClass innerClass = InnerClass.of( innerClassConstant, outerClassConstant, innerNameConstant, modifierSet );
+			FlagSet<InnerClass.InnerClassModifier> modifiers = InnerClass.innerClassModifierFlagsEnum.fromBits( bufferReader.readUnsignedShort() );
+			InnerClass innerClass = InnerClass.of( innerClassConstant, outerClassConstant, innerNameConstant, modifiers );
 			innerClasses.add( innerClass );
 		}
 		return InnerClassesAttribute.of( innerClasses );

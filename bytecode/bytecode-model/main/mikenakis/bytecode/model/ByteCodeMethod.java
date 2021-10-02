@@ -2,9 +2,10 @@ package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
-import mikenakis.kit.collections.FlagEnumSet;
+import mikenakis.kit.collections.FlagSet;
 
 import java.util.Map;
 
@@ -20,7 +21,7 @@ public final class ByteCodeMethod extends ByteCodeMember
 		Public, Private, Protected, Static, Final, Synchronized, Bridge, Varargs, Native, Abstract, Strict, Synthetic
 	}
 
-	public static final FlagEnum<Modifier> modifierFlagsEnum = FlagEnum.of( Modifier.class, //
+	public static final FlagEnum<Modifier> modifierEnum = FlagEnum.of( Modifier.class, //
 		Map.entry( Modifier.Public       /**/, 0x0001 ), // ACC_PUBLIC       = 0x0001
 		Map.entry( Modifier.Private      /**/, 0x0002 ), // ACC_PRIVATE      = 0x0002
 		Map.entry( Modifier.Protected    /**/, 0x0004 ), // ACC_PROTECTED    = 0x0004
@@ -35,25 +36,31 @@ public final class ByteCodeMethod extends ByteCodeMember
 		Map.entry( Modifier.Synthetic    /**/, 0x1000 )  // ACC_SYNTHETIC    = 0x1000
 	);
 
-	public static ByteCodeMethod of( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, MethodPrototype methodPrototype )
 	{
-		return new ByteCodeMethod( modifierSet, nameConstant, descriptorConstant, attributeSet );
+		return new ByteCodeMethod( modifiers, Mutf8Constant.of( methodPrototype.name ), Mutf8Constant.of( methodPrototype.descriptor.descriptorString() ), AttributeSet.of() );
 	}
 
-	public final FlagEnumSet<Modifier> modifierSet;
+	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	{
+		return new ByteCodeMethod( modifiers, nameConstant, descriptorConstant, attributeSet );
+	}
+
+	public final FlagSet<Modifier> modifiers;
 	public final Mutf8Constant descriptorConstant;
 
-	private ByteCodeMethod( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeMethod( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		super( nameConstant, attributeSet );
-		this.modifierSet = modifierSet;
+		this.modifiers = modifiers;
 		this.descriptorConstant = descriptorConstant;
 	}
 
 	public MethodDescriptor getMethodDescriptor() { return MethodDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
+	public MethodPrototype prototype() { return MethodPrototype.of( nameConstant.stringValue(), getMethodDescriptor() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "accessFlags = " + modifierSet + ", name = " + nameConstant + ", descriptor = " + descriptorConstant;
+		return "accessFlags = " + modifiers + ", name = " + nameConstant + ", descriptor = " + descriptorConstant;
 	}
 }

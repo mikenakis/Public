@@ -2,7 +2,7 @@ package mikenakis.bytecode.model.descriptors;
 
 import java.lang.reflect.Field;
 
-public class FieldDescriptor extends Descriptor
+public class FieldDescriptor
 {
 	public static FieldDescriptor of( Field field )
 	{
@@ -26,22 +26,6 @@ public class FieldDescriptor extends Descriptor
 		this.typeDescriptor = typeDescriptor;
 	}
 
-	@Override public String name()
-	{
-		return name( "" );
-	}
-
-	public String name( String fieldName )
-	{
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append( typeDescriptor.name() );
-		if( !fieldName.isEmpty() )
-			stringBuilder.append( " " ).append( fieldName );
-		return stringBuilder.toString();
-	}
-
-	public String descriptorString()
-	{
-		return typeDescriptor.descriptorString();
-	}
+	public String asString() { return typeDescriptor.typeName(); }
+	public String descriptorString() { return typeDescriptor.descriptorString(); }
 }

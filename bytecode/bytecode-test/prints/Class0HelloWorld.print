@@ -1,39 +1,39 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class0HelloWorld, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class0HelloWorld, super = java.lang.Object
 ├─■ interfaces: 0 items
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 0 items
 ├─■ methods: 2 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()
+│ ├─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 3 entries
-│ │     │ ├─■ L9: // public abstract class Class0HelloWorld
-│ │     │ ├─■         ALOAD_0 0
-│ │     │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│ │     │ ├─■ L3: // public abstract class Class0HelloWorld
+│ │     │ ├─■         ALOAD 0
+│ │     │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
-│ │       │ └─■ [0] LineNumberTableEntry lineNumber = 9, start = L9
+│ │       │ └─■ [0] LineNumberTableEntry lineNumber = 3, start = L3
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class0HelloWorld
-│ └─■ [1] ByteCodeMethod accessFlags = [public, static], name = "main", descriptor = void( java.lang.String[] )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L3, end = @end, prototype = mikenakis.bytecode.test.model.Class0HelloWorld this
+│ └─■ [1] ByteCodeMethod accessFlags = [public, static], prototype = void main( java.lang.String[] )
 │   └─■ attributes: 2 items
 │     ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
 │     │ ├─■ instructions: 4 entries
-│     │ │ ├─■ L13: // System.out.println( "Hello, world!" );
+│     │ │ ├─■ L7: // System.out.print( "Hello, world!\n" );
 │     │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│     │ │ ├─■         LDC StringConstant( Mutf8Constant( "Hello, world!" ) )
-│     │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
-│     │ │ ├─■ L14: // }
+│     │ │ ├─■         LDC "Hello, world!\n"
+│     │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.print( java.lang.String )
+│     │ │ ├─■ L8: // }
 │     │ │ └─■         RETURN
 │     │ ├─■ exceptionInfos: 0 items
 │     │ └─■ attributeSet: 2 items
 │     │   ├─■ [0] LineNumberTableAttribute; 2 items
-│     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 13, start = L13
-│     │   │ └─■ [1] LineNumberTableEntry lineNumber = 14, start = L14
+│     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 7, start = L7
+│     │   │ └─■ [1] LineNumberTableEntry lineNumber = 8, start = L8
 │     │   └─■ [1] LocalVariableTableAttribute; 1 items
-│     │     └─■ [0] LocalVariableTableEntry index = 0, start = L13, end = @end, name = args, descriptor = java.lang.String[]
+│     │     └─■ [0] LocalVariableTableEntry index = 0, start = L7, end = @end, prototype = java.lang.String[] args
 │     └─■ [1] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "args"
 └─■ attributeSet: 1 items

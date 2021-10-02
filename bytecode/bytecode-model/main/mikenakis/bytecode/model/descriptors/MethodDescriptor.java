@@ -3,12 +3,13 @@ package mikenakis.bytecode.model.descriptors;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.kit.Kit;
 
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
-public class MethodDescriptor extends Descriptor
+public class MethodDescriptor
 {
 	public static MethodDescriptor of( Method method )
 	{
@@ -49,26 +50,31 @@ public class MethodDescriptor extends Descriptor
 		this.parameterTypeDescriptors = parameterTypeDescriptors;
 	}
 
-	@Override public String name()
-	{
-		return stringFrom();
-	}
-
-	public String stringFrom()
-	{
-		return stringFrom( Optional.empty() );
-	}
-
-	public String stringFrom( String methodName )
-	{
-		return stringFrom( Optional.of( methodName ) );
-	}
-
-	public String stringFrom( Optional<String> methodName )
+	public String asString()
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append( returnTypeDescriptor.name() );
-		methodName.ifPresent( s -> stringBuilder.append( " " ).append( s ) );
+		stringBuilder.append( returnTypeDescriptor.typeName() );
+		appendParameters( stringBuilder );
+		return stringBuilder.toString();
+	}
+
+	public String descriptorString()
+	{
+		ClassDesc returnDesc = classDescFromTypeDescriptor( returnTypeDescriptor );
+		ClassDesc[] paramDescs = new ClassDesc[parameterTypeDescriptors.size()];
+		for( int i = 0;  i < paramDescs.length;  i++ )
+			paramDescs[i] = ClassDesc.ofDescriptor( parameterTypeDescriptors.get( i ).descriptorString() );
+		MethodTypeDesc methodTypeDesc = MethodTypeDesc.of( returnDesc, paramDescs );
+		return methodTypeDesc.descriptorString();
+	}
+
+	private static ClassDesc classDescFromTypeDescriptor( TypeDescriptor typeDescriptor )
+	{
+		return ClassDesc.ofDescriptor( typeDescriptor.descriptorString() );
+	}
+
+	void appendParameters( StringBuilder stringBuilder )
+	{
 		if( parameterTypeDescriptors.isEmpty() )
 			stringBuilder.append( "()" );
 		else
@@ -78,11 +84,10 @@ public class MethodDescriptor extends Descriptor
 			for( TypeDescriptor parameterTypeDescriptor : parameterTypeDescriptors )
 			{
 				first = Kit.stringBuilder.appendDelimiter( stringBuilder, first, ", " );
-				stringBuilder.append( parameterTypeDescriptor.name() );
+				stringBuilder.append( parameterTypeDescriptor.typeName() );
 			}
 			stringBuilder.append( " )" );
 		}
-		return stringBuilder.toString();
 	}
 
 	@Override public boolean equals( Object other )

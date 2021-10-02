@@ -34,7 +34,7 @@ public abstract class Constant
 	public static final int tag_Class                    /**/ = 7; // JVMS::CONSTANT_Class addresses JVMS::CONSTANT_Class_info
 	public static final int tag_String                   /**/ = 8; // JVMS::CONSTANT_String addresses JVMS::CONSTANT_String_info
 	public static final int tag_FieldReference           /**/ = 9; // JVMS::CONSTANT_Fieldref addresses JVMS::CONSTANT_Fieldref_info
-	public static final int tag_PlainMethodReference          /**/ = 10; // JVMS::CONSTANT_MethodRef addresses JVMS::CONSTANT_MethodRef_info
+	public static final int tag_PlainMethodReference     /**/ = 10; // JVMS::CONSTANT_MethodRef addresses JVMS::CONSTANT_MethodRef_info
 	public static final int tag_InterfaceMethodReference /**/ = 11; // JVMS::CONSTANT_InterfaceMethodRef addresses JVMS::CONSTANT_InterfaceMethodRef_info
 	public static final int tag_NameAndDescriptor        /**/ = 12; // JVMS::CONSTANT_NameAndType addresses JVMS::CONSTANT_NameAndType_info
 	public static final int tag_MethodHandle             /**/ = 15; // JVMS::CONSTANT_MethodHandle addresses JVMS::CONSTANT_MethodHandle_info

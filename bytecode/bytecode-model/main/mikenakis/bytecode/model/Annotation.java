@@ -27,7 +27,6 @@ public final class Annotation
 		this.parameters = parameters;
 	}
 
-	public String typeName() { return typeDescriptor().name(); }
 	public TypeDescriptor typeDescriptor() { return TypeDescriptor.ofDescriptorString( typeConstant.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

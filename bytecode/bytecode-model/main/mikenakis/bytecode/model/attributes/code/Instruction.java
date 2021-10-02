@@ -5,17 +5,15 @@ import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantRefere
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ImmediateLoadConstantInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.OperandlessLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -32,18 +30,16 @@ public abstract class Instruction
 	public static final int groupTag_ClassConstantReferencing  /**/ = 3;
 	public static final int groupTag_FieldConstantReferencing  /**/ = 4;
 	public static final int groupTag_IInc                      /**/ = 5;
-	public static final int groupTag_ImmediateLoadConstant     /**/ = 6;
-	public static final int groupTag_IndirectLoadConstant      /**/ = 7;
-	public static final int groupTag_InvokeDynamic             /**/ = 8;
-	public static final int groupTag_InvokeInterface           /**/ = 9;
-	public static final int groupTag_LocalVariable             /**/ = 10;
-	public static final int groupTag_LookupSwitch              /**/ = 11;
-	public static final int groupTag_MethodConstantReferencing /**/ = 12;
-	public static final int groupTag_MultiANewArray            /**/ = 13;
-	public static final int groupTag_NewPrimitiveArray         /**/ = 14;
-	public static final int groupTag_Operandless               /**/ = 15;
-	public static final int groupTag_OperandlessLoadConstant   /**/ = 16;
-	public static final int groupTag_TableSwitch               /**/ = 17;
+	public static final int groupTag_InvokeDynamic             /**/ = 6;
+	public static final int groupTag_InvokeInterface           /**/ = 7;
+	public static final int groupTag_LocalVariable             /**/ = 8;
+	public static final int groupTag_LookupSwitch              /**/ = 9;
+	public static final int groupTag_MethodConstantReferencing /**/ = 10;
+	public static final int groupTag_MultiANewArray            /**/ = 11;
+	public static final int groupTag_NewPrimitiveArray         /**/ = 12;
+	public static final int groupTag_Operandless               /**/ = 13;
+	public static final int groupTag_TableSwitch               /**/ = 14;
+	public static final int groupTag_LoadConstant              /**/ = 15;
 
 	public static int groupFromOpCode( int opCode )
 	{
@@ -60,9 +56,8 @@ public abstract class Instruction
 					OpCode.DASTORE, OpCode.FASTORE, OpCode.LASTORE, OpCode.IASTORE, OpCode.SALOAD, OpCode.CALOAD, OpCode.BALOAD, OpCode.AALOAD, OpCode.DALOAD,
 					OpCode.FALOAD, OpCode.LALOAD, OpCode.IALOAD, OpCode.ACONST_NULL -> groupTag_Operandless;
 				case OpCode.ICONST_M1, OpCode.DCONST_1, OpCode.DCONST_0, OpCode.FCONST_2, OpCode.FCONST_1, OpCode.FCONST_0, OpCode.LCONST_1, OpCode.LCONST_0,
-					OpCode.ICONST_5, OpCode.ICONST_4, OpCode.ICONST_3, OpCode.ICONST_2, OpCode.ICONST_1, OpCode.ICONST_0 -> groupTag_OperandlessLoadConstant;
-				case OpCode.BIPUSH, OpCode.SIPUSH -> groupTag_ImmediateLoadConstant;
-				case OpCode.LDC, OpCode.LDC_W, OpCode.LDC2_W -> groupTag_IndirectLoadConstant;
+					OpCode.ICONST_5, OpCode.ICONST_4, OpCode.ICONST_3, OpCode.ICONST_2, OpCode.ICONST_1, OpCode.ICONST_0, OpCode.BIPUSH, OpCode.SIPUSH,
+					OpCode.LDC, OpCode.LDC_W, OpCode.LDC2_W -> groupTag_LoadConstant;
 				case OpCode.ILOAD, OpCode.LLOAD, OpCode.ASTORE_3, OpCode.ASTORE_2, OpCode.ASTORE_1, OpCode.ASTORE_0, OpCode.DSTORE_3, OpCode.DSTORE_2,
 					OpCode.DSTORE_1, OpCode.DSTORE_0, OpCode.FSTORE_3, OpCode.FSTORE_2, OpCode.FSTORE_1, OpCode.FSTORE_0, OpCode.LSTORE_3, OpCode.LSTORE_2,
 					OpCode.LSTORE_1, OpCode.LSTORE_0, OpCode.ISTORE_3, OpCode.ISTORE_2, OpCode.ISTORE_1, OpCode.ISTORE_0, OpCode.ASTORE, OpCode.DSTORE,
@@ -100,8 +95,6 @@ public abstract class Instruction
 	@ExcludeFromJacocoGeneratedReport public ClassConstantReferencingInstruction  /**/ asClassConstantReferencingInstruction  /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public FieldConstantReferencingInstruction  /**/ asFieldConstantReferencingInstruction  /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public IIncInstruction                      /**/ asIIncInstruction                      /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ImmediateLoadConstantInstruction     /**/ asImmediateLoadConstantInstruction     /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public IndirectLoadConstantInstruction      /**/ asIndirectLoadConstantInstruction      /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public InvokeDynamicInstruction             /**/ asInvokeDynamicInstruction             /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public InvokeInterfaceInstruction           /**/ asInvokeInterfaceInstruction           /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public LocalVariableInstruction             /**/ asLocalVariableInstruction             /**/ () { return Kit.fail(); }
@@ -110,8 +103,8 @@ public abstract class Instruction
 	@ExcludeFromJacocoGeneratedReport public MultiANewArrayInstruction            /**/ asMultiANewArrayInstruction            /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public NewPrimitiveArrayInstruction         /**/ asNewPrimitiveArrayInstruction         /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public OperandlessInstruction               /**/ asOperandlessInstruction               /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public OperandlessLoadConstantInstruction   /**/ asOperandlessLoadConstantInstruction   /**/ () { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public TableSwitchInstruction               /**/ asTableSwitchInstruction               /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public LoadConstantInstruction              /**/ asLoadConstantInstruction              /**/ () { return Kit.fail(); }
 
 	@Override public final int hashCode()
 	{

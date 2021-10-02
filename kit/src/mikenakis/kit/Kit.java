@@ -20,6 +20,7 @@ import mikenakis.kit.functional.ThrowingProcedure1;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.logging.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -31,6 +32,7 @@ import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URL;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
@@ -215,6 +217,19 @@ public final class Kit
 			return "null";
 		int hashCode = System.identityHashCode( object );  //note: the default Object.toString() invokes own hashCode() instead of System.identityHashCode() !
 		return object.getClass().getName() + "@" + Integer.toHexString( hashCode );
+	}
+
+	/**
+	 * Note: the documentation of Class.newInstance() gives the following justification for its deprecation:
+	 * <p>
+	 * "This method propagates any exception thrown by the nullary constructor, including a checked exception.
+	 * Use of this method effectively bypasses the compile-time exception checking that would otherwise be performed by the compiler."
+	 *
+	 * Yes, yes, that is precisely what we want.
+	 */
+	@SuppressWarnings( "deprecation" ) public static Object newInstance( Class<?> javaClass )
+	{
+		return unchecked( () -> javaClass.newInstance() );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2807,6 +2822,16 @@ public final class Kit
 		public static PrintStream nullPrintStream()
 		{
 			return new PrintStream( OutputStream.nullOutputStream() );
+		}
+
+		public static String withCapturedOutputStream( Procedure0 procedure )
+		{
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			PrintStream printStream = new PrintStream( byteArrayOutputStream );
+			PrintStream oldSystemOut = System.out;
+			System.setOut( printStream );
+			tryFinally( procedure, () -> System.setOut( oldSystemOut ) );
+			return byteArrayOutputStream.toString( StandardCharsets.UTF_8 );
 		}
 	}
 

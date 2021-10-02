@@ -33,7 +33,6 @@ public final class ClassAnnotationValue extends AnnotationValue
 		this.nameConstant = nameConstant;
 	}
 
-	public String typeName() { return typeDescriptor().name(); }
 	public TypeDescriptor typeDescriptor() { return TypeDescriptor.ofDescriptorString( nameConstant.stringValue() ); }
 
 	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue()

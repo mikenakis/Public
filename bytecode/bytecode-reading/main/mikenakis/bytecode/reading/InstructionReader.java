@@ -10,10 +10,9 @@ import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantRefere
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ImmediateLoadConstantInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchEntry;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
@@ -21,11 +20,14 @@ import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantRefer
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.OperandlessLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.constants.DoubleConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
+import mikenakis.bytecode.model.constants.FloatConstant;
+import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
+import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.kit.functional.Procedure1;
 
@@ -90,10 +92,10 @@ final class InstructionReader
 			fix( sourceInstructionLocation, targetInstructionOffset, setter );
 		else
 			fixUps.add( () -> //
-				{
-					assert sourceInstructionLocation == locationMap.getLocation( sourceInstruction );
-					fix( sourceInstructionLocation, targetInstructionOffset, setter );
-				} );
+			{
+				assert sourceInstructionLocation == locationMap.getLocation( sourceInstruction );
+				fix( sourceInstructionLocation, targetInstructionOffset, setter );
+			} );
 	}
 
 	private void fix( int sourceInstructionLocation, int targetInstructionOffset, Procedure1<Instruction> setter )
@@ -121,9 +123,6 @@ final class InstructionReader
 		return switch( instructionGroupTag )
 			{
 				case Instruction.groupTag_Operandless -> readOperandlessInstruction( wide, opCode );
-				case Instruction.groupTag_OperandlessLoadConstant -> readOperandlessLoadConstantInstruction( wide, opCode );
-				case Instruction.groupTag_ImmediateLoadConstant -> readImmediateLoadConstantInstruction( wide, opCode );
-				case Instruction.groupTag_IndirectLoadConstant -> readIndirectLoadConstantInstruction( wide, opCode );
 				case Instruction.groupTag_LocalVariable -> readLocalVariableInstruction( wide, opCode );
 				case Instruction.groupTag_IInc -> readIIncInstruction( wide );
 				case Instruction.groupTag_ConditionalBranch -> readConditionalBranchInstruction( wide, opCode );
@@ -137,6 +136,7 @@ final class InstructionReader
 				case Instruction.groupTag_InvokeDynamic -> readInvokeDynamicInstruction( wide, opCode );
 				case Instruction.groupTag_NewPrimitiveArray -> readNewPrimitiveArrayInstruction( wide, opCode );
 				case Instruction.groupTag_MultiANewArray -> readMultiANewArrayInstruction( wide, opCode );
+				case Instruction.groupTag_LoadConstant -> readLoadConstantInstruction( wide, opCode );
 				default -> throw new AssertionError( instructionGroupTag );
 			};
 	}
@@ -296,30 +296,72 @@ final class InstructionReader
 		return LocalVariableInstruction.of( opCode, index );
 	}
 
-	private IndirectLoadConstantInstruction readIndirectLoadConstantInstruction( boolean wide, int opCode )
-	{
-		assert !wide;
-		int constantIndexValue = IndirectLoadConstantInstruction.isWide( opCode ) ? readUnsignedShort() : readUnsignedByte();
-		Constant constant = getConstant( constantIndexValue );
-		return IndirectLoadConstantInstruction.of( opCode, constant );
-	}
+	private static final Constant iConstM1 = IntegerConstant.of( -1 );
+	private static final Constant iConst0 = IntegerConstant.of( 0 );
+	private static final Constant iConst1 = IntegerConstant.of( 1 );
+	private static final Constant iConst2 = IntegerConstant.of( 2 );
+	private static final Constant iConst3 = IntegerConstant.of( 3 );
+	private static final Constant iConst4 = IntegerConstant.of( 4 );
+	private static final Constant iConst5 = IntegerConstant.of( 5 );
+	private static final Constant fConst0 = FloatConstant.of( 0.0f );
+	private static final Constant fConst1 = FloatConstant.of( 1.0f );
+	private static final Constant fConst2 = FloatConstant.of( 2.0f );
+	private static final Constant lConst0 = LongConstant.of( 0L );
+	private static final Constant lConst1 = LongConstant.of( 1L );
+	private static final Constant dConst0 = DoubleConstant.of( 0.0 );
+	private static final Constant dConst1 = DoubleConstant.of( 1.0 );
 
-	private ImmediateLoadConstantInstruction readImmediateLoadConstantInstruction( boolean wide, int opCode )
+	private LoadConstantInstruction readLoadConstantInstruction( boolean wide, int opCode )
 	{
 		assert !wide;
-		int immediateValue = switch( opCode )
+		Constant constant = switch( opCode )
 			{
-				case OpCode.BIPUSH -> readUnsignedByte();
-				case OpCode.SIPUSH -> readUnsignedShort();
-				default -> throw new IllegalArgumentException();
+				case OpCode.ICONST_M1 -> iConstM1;
+				case OpCode.ICONST_0 -> iConst0;
+				case OpCode.ICONST_1 -> iConst1;
+				case OpCode.ICONST_2 -> iConst2;
+				case OpCode.ICONST_3 -> iConst3;
+				case OpCode.ICONST_4 -> iConst4;
+				case OpCode.ICONST_5 -> iConst5;
+				case OpCode.FCONST_0 -> fConst0;
+				case OpCode.FCONST_1 -> fConst1;
+				case OpCode.FCONST_2 -> fConst2;
+				case OpCode.LCONST_0 -> lConst0;
+				case OpCode.LCONST_1 -> lConst1;
+				case OpCode.DCONST_0 -> dConst0;
+				case OpCode.DCONST_1 -> dConst1;
+				case OpCode.BIPUSH -> IntegerConstant.of( readUnsignedByte() );
+				case OpCode.SIPUSH -> IntegerConstant.of( readUnsignedShort() );
+				case OpCode.LDC -> readLdcConstant();
+				case OpCode.LDC_W -> readLdcWConstant();
+				case OpCode.LDC2_W -> readLdc2WConstant();
+				default -> throw new AssertionError( opCode );
 			};
-		return ImmediateLoadConstantInstruction.of( opCode, immediateValue );
+		return LoadConstantInstruction.of( constant );
 	}
 
-	private static OperandlessLoadConstantInstruction readOperandlessLoadConstantInstruction( boolean wide, int opCode )
+	private Constant readLdcConstant()
 	{
-		assert !wide;
-		return OperandlessLoadConstantInstruction.of( opCode );
+		int constantIndexValue = readUnsignedByte();
+		Constant c = getConstant( constantIndexValue );
+		assert c.tag == Constant.tag_Integer || c.tag == Constant.tag_Float || c.tag == Constant.tag_String || c.tag == Constant.tag_Class;
+		return c;
+	}
+
+	private Constant readLdcWConstant()
+	{
+		int constantIndexValue = readUnsignedShort();
+		Constant c = getConstant( constantIndexValue );
+		assert c.tag == Constant.tag_Integer || c.tag == Constant.tag_Float || c.tag == Constant.tag_String || c.tag == Constant.tag_Class;
+		return c;
+	}
+
+	private Constant readLdc2WConstant()
+	{
+		int constantIndexValue = readUnsignedShort();
+		Constant c = getConstant( constantIndexValue );
+		assert c.tag == Constant.tag_Long || c.tag == Constant.tag_Double;
+		return c;
 	}
 
 	private static OperandlessInstruction readOperandlessInstruction( boolean wide, int opCode )

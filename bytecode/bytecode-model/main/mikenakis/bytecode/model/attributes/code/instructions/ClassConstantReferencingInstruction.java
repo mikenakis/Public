@@ -3,6 +3,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Set;
@@ -27,7 +28,11 @@ public final class ClassConstantReferencingInstruction extends Instruction
 		this.targetClassConstant = targetClassConstant;
 	}
 
-	public String targetTypeName() { return targetClassConstant.typeName(); }
+	public TypeDescriptor target() { return targetClassConstant.typeDescriptor(); }
 	@Deprecated @Override public ClassConstantReferencingInstruction asClassConstantReferencingInstruction() { return this; }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return OpCode.getOpCodeName( opCode );
+	}
 }

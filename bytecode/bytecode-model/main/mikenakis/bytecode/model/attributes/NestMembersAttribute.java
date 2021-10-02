@@ -3,6 +3,7 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -39,7 +40,11 @@ public final class NestMembersAttribute extends KnownAttribute
 		this.memberClassConstants = memberClassConstants;
 	}
 
-	public List<String> memberTypeNames() { return memberClassConstants.stream().map( c -> c.typeName() ).toList(); }
+	public List<TerminalTypeDescriptor> members() { return memberClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
 	@Deprecated @Override public NestMembersAttribute asNestMembersAttribute() { return this; }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return memberClassConstants.size() + " entries"; }
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return memberClassConstants.size() + " entries";
+	}
 }

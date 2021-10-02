@@ -1,7 +1,6 @@
 package mikenakis.bytecode.model.descriptors;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
-import mikenakis.bytecode.model.constants.ClassConstant;
 
 import java.util.Objects;
 
@@ -10,34 +9,36 @@ public class TerminalTypeDescriptor extends TypeDescriptor
 	public static TerminalTypeDescriptor of( Class<?> javaClass )
 	{
 		assert !javaClass.isArray();
-		return new TerminalTypeDescriptor( javaClass.descriptorString() );
+		assert !javaClass.isPrimitive();
+		return ofTypeName( javaClass.getTypeName() );
 	}
 
 	public static TerminalTypeDescriptor ofTypeName( String typeName )
 	{
-		String descriptorString = descriptorStringFromTypeName( typeName );
-		return new TerminalTypeDescriptor( descriptorString );
+		String internalName = ByteCodeHelpers.internalFromBinary( typeName );
+		return ofInternalName( internalName );
 	}
 
-	public static TerminalTypeDescriptor ofDescriptorString( String descriptorString )
+	public static TerminalTypeDescriptor ofInternalName( String internalName )
 	{
-		return new TerminalTypeDescriptor( descriptorString );
+		return new TerminalTypeDescriptor( internalName );
 	}
 
-	public static TerminalTypeDescriptor of( ClassConstant classConstant )
+	private final String internalName;
+
+	private TerminalTypeDescriptor( String internalName )
 	{
-		return new TerminalTypeDescriptor( classConstant.descriptorString() );
+		assert ByteCodeHelpers.isValidInternalName( internalName );
+		this.internalName = internalName;
 	}
 
-	private final String descriptorString;
-
-	private TerminalTypeDescriptor( String descriptorString )
-	{
-		assert !ByteCodeHelpers.isArrayDescriptorString( descriptorString );
-		this.descriptorString = descriptorString;
-	}
-
-	@Override public String descriptorString() { return descriptorString; }
+	public String internalName() { return internalName; }
+	@Override public String typeName() { return ByteCodeHelpers.binaryFromInternal( internalName ); }
+	@Deprecated @Override public boolean isArray() { return false; }
+	@Deprecated @Override public boolean isPrimitive() { return false; }
+	@Deprecated @Override public boolean isTerminal() {	return true; }
+	@Deprecated @Override public TerminalTypeDescriptor asTerminalTypeDescriptor() { return this; }
+	@Override public String descriptorString() { return "L" + internalName + ";"; }
 
 	@Deprecated @Override public boolean equals( Object other )
 	{
@@ -48,37 +49,11 @@ public class TerminalTypeDescriptor extends TypeDescriptor
 
 	public boolean equals( TerminalTypeDescriptor other )
 	{
-		return descriptorString.equals( other.descriptorString );
+		return internalName.equals( other.internalName );
 	}
 
 	@Override public int hashCode()
 	{
-		return Objects.hash( TerminalTypeDescriptor.class, descriptorString );
-	}
-
-	@Override public String name()
-	{
-		return ByteCodeHelpers.typeNameFromDescriptorString( descriptorString );
-	}
-
-	private static String descriptorStringFromTypeName( String typeName )
-	{
-		if( typeName.equals( "boolean" ) )
-			return "Z";
-		if( typeName.equals( "byte" ) )
-			return "B";
-		if( typeName.equals( "char" ) )
-			return "C";
-		if( typeName.equals( "double" ) )
-			return "D";
-		if( typeName.equals( "float" ) )
-			return "F";
-		if( typeName.equals( "integer" ) )
-			return "I";
-		if( typeName.equals( "long" ) )
-			return "J";
-		if( typeName.equals( "short" ) )
-			return "S";
-		return "L" + typeName.replace( '.', '/' ) + ";";
+		return Objects.hash( TerminalTypeDescriptor.class, internalName );
 	}
 }

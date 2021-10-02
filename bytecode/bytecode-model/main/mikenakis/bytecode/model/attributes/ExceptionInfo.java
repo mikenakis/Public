@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -33,6 +34,6 @@ public final class ExceptionInfo
 		this.catchTypeConstant = catchTypeConstant;
 	}
 
-	public Optional<String> catchTypeName() { return catchTypeConstant.map( c -> c.typeName() ); }
+	public Optional<TerminalTypeDescriptor> catchType() { return catchTypeConstant.map( c -> c.terminalTypeDescriptor() ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + (catchTypeConstant.isPresent()? ", catchType = " + catchTypeConstant : ""); }
 }

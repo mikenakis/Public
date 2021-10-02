@@ -183,7 +183,7 @@ final class ConstantPoolReader
 	private ClassConstant readClassConstant()
 	{
 		ClassConstant classConstant = new ClassConstant();
-		readIndexAndSetConstant( c -> classConstant.setNameConstant( c.asMutf8Constant() ) );
+		readIndexAndSetConstant( c -> classConstant.setInternalNameOrDescriptorStringConstant( c.asMutf8Constant() ) );
 		return classConstant;
 	}
 

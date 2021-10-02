@@ -1,23 +1,23 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class8WithAnonymousClass, super = java.lang.Object
 ├─■ interfaces: 0 items
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [public, final], name+descriptor = mikenakis.bytecode.test.model.Interface1 field
+│ └─■ [0] ByteCodeField accessFlags = [public, final], prototype = mikenakis.bytecode.test.model.Interface1 field
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
-│ └─■ [0] ByteCodeMethod accessFlags = [public], name = "<init>", descriptor = void()
+│ └─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>()
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 4, maxLocals = 1
 │       ├─■ instructions: 9 entries
 │       │ ├─■ L9: // public abstract class Class8WithAnonymousClass
-│       │ ├─■         ALOAD_0 0
-│       │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│       │ ├─■         ALOAD 0
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │       │ ├─■ L11: // public final Interface1 field = new Interface1()
-│       │ ├─■         ALOAD_0 0
+│       │ ├─■         ALOAD 0
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
 │       │ ├─■         DUP
-│       │ ├─■         ALOAD_0 0
-│       │ ├─■         INVOKESPECIAL type = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, name = <init>, descriptor = void( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+│       │ ├─■         ALOAD 0
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.<init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
 │       │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
@@ -26,7 +26,7 @@
 │         │ ├─■ [0] LineNumberTableEntry lineNumber = 9, start = L9
 │         │ └─■ [1] LineNumberTableEntry lineNumber = 11, start = L11
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class8WithAnonymousClass.java"
   ├─■ [1] NestMembersAttribute; 1 items

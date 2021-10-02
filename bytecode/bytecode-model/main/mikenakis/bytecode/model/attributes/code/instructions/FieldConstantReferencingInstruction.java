@@ -2,14 +2,27 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.descriptors.FieldDescriptor;
+import mikenakis.bytecode.model.descriptors.FieldReference;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Set;
 
 public final class FieldConstantReferencingInstruction extends Instruction
 {
+	public static FieldConstantReferencingInstruction of( int opCode, FieldReference fieldReference )
+	{
+		ClassConstant declaringTypeConstant = ClassConstant.ofTypeName( fieldReference.declaringTypeDescriptor.typeName() );
+		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( Mutf8Constant.of( fieldReference.fieldPrototype.fieldName ), Mutf8Constant.of( fieldReference.fieldPrototype.descriptor.descriptorString() ) );
+		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( declaringTypeConstant, nameAndDescriptorConstant );
+		return new FieldConstantReferencingInstruction( opCode, fieldReferenceConstant );
+	}
+
 	public static FieldConstantReferencingInstruction of( int opCode, FieldReferenceConstant fieldReferenceConstant )
 	{
 		return new FieldConstantReferencingInstruction( opCode, fieldReferenceConstant );
@@ -28,10 +41,10 @@ public final class FieldConstantReferencingInstruction extends Instruction
 		this.fieldReferenceConstant = fieldReferenceConstant;
 	}
 
-	public String fieldDeclaringTypeName() { return fieldReferenceConstant.declaringTypeName(); }
+	public TypeDescriptor fieldDeclaringType() { return fieldReferenceConstant.declaringTypeDescriptor(); }
 	public String fieldName() { return fieldReferenceConstant.fieldName(); }
 	public FieldDescriptor fieldDescriptor() { return fieldReferenceConstant.fieldDescriptor(); }
-	public String fieldTypeName() { return fieldDescriptor().typeDescriptor.name(); }
+	public TypeDescriptor fieldType() { return fieldDescriptor().typeDescriptor; }
 
 	@Deprecated @Override public FieldConstantReferencingInstruction asFieldConstantReferencingInstruction() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }

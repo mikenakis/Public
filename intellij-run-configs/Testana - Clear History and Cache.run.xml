@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Testana - Clear History and Cache" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="mikenakis.testana.console.TestanaConsoleMain" />
+    <module name="testana-console" />
+    <option name="PROGRAM_PARAMETERS" value="--clear-history --clear-cache" />
+    <option name="VM_PARAMETERS" value="-ea" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="mikenakis.testana.console.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

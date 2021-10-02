@@ -1,8 +1,9 @@
 package mikenakis.bytecode.model.descriptors;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
+import mikenakis.kit.Kit;
 
-public abstract class TypeDescriptor extends Descriptor
+public abstract class TypeDescriptor
 {
 	public static TypeDescriptor of( Class<?> javaClass )
 	{
@@ -20,6 +21,13 @@ public abstract class TypeDescriptor extends Descriptor
 		return ByteCodeHelpers.typeDescriptorFromDescriptorString( descriptorString );
 	}
 
+	public abstract String typeName();
+	public abstract boolean isArray();
+	public abstract boolean isPrimitive();
+	public abstract boolean isTerminal();
+	public ArrayTypeDescriptor asArrayTypeDescriptor() { return Kit.fail(); }
+	public PrimitiveTypeDescriptor asPrimitiveTypeDescriptor() { return Kit.fail(); }
+	public TerminalTypeDescriptor asTerminalTypeDescriptor() { return Kit.fail(); }
 	public abstract String descriptorString();
 
 	@Override public abstract boolean equals( Object other );

@@ -13,6 +13,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>bytecode-dependencies</module>
 		<module>bytecode-model</module>
 		<module>bytecode-printing</module>
 		<module>bytecode-reading</module>

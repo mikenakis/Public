@@ -1,16 +1,16 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], thisClass = mikenakis.bytecode.test.model.Class2WithTableswitch, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class2WithTableswitch, super = java.lang.Object
 ├─■ interfaces: 0 items
-├─■ extraConstants: 2 items
-│ ├─■ [0] ClassConstant typeName = mikenakis.bytecode.test.model.Class1WithFields
-│ └─■ [1] ClassConstant typeName = mikenakis.bytecode.test.model.Class3ImplementingInterface
+├─■ extraTypes: 2 items
+│ ├─■ [0] mikenakis.bytecode.test.model.Class1WithFields
+│ └─■ [1] mikenakis.bytecode.test.model.Class3ImplementingInterface
 ├─■ fields: 0 items
 ├─■ methods: 2 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [public, final], name = "methodWithTableSwitchInstruction", descriptor = void( int )
+│ ├─■ [0] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithTableSwitchInstruction( int )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 30 entries
 │ │   │ │ ├─■ L13: // switch( i )
-│ │   │ │ ├─■         ILOAD_1 1
+│ │   │ │ ├─■         ILOAD 1
 │ │   │ │ ├─■         TABLESWITCH lowValue = 100, default = L42; 6 items
 │ │   │ │ │ ├─■ [0]         L16
 │ │   │ │ │ ├─■ [1]         L19
@@ -20,44 +20,44 @@
 │ │   │ │ │ └─■ [5]         L31
 │ │   │ │ ├─■ L16: // System.out.println( "100" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "100" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "100"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L17: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L19: // System.out.println( "101" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "101" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "101"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L20: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L22: // System.out.println( "102" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "102" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "102"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L23: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L25: // System.out.println( "103" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "103" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "103"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L26: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L28: // System.out.println( "104" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "104" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "104"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L29: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L31: // System.out.println( "105" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "105" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "105"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L32: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L42: // System.out.println( Class1WithFields.PublicStringConstant + Class3ImplementingInterface.stringLiteral );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
-│ │   │ │ ├─■         LDC StringConstant( Mutf8Constant( "publicConstantValueaΦ됔b" ) )
-│ │   │ │ ├─■         INVOKEVIRTUAL type = java.io.PrintStream, name = println, descriptor = void( java.lang.String )
+│ │   │ │ ├─■         LDC "publicConstantValueaΦ됔b"
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L45: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -79,8 +79,8 @@
 │ │   │   │ ├─■ [13] LineNumberTableEntry lineNumber = 42, start = L42
 │ │   │   │ └─■ [14] LineNumberTableEntry lineNumber = 45, start = L45
 │ │   │   ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L13, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithTableswitch
-│ │   │   │ └─■ [1] LocalVariableTableEntry index = 1, start = L13, end = @end, name = i, descriptor = int
+│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L13, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithTableswitch this
+│ │   │   │ └─■ [1] LocalVariableTableEntry index = 1, start = L13, end = @end, prototype = int i
 │ │   │   └─■ [2] StackMapTableAttribute; 8 items
 │ │   │     ├─■ [0] SameFrame target = L16
 │ │   │     ├─■ [1] SameFrame target = L19
@@ -92,13 +92,13 @@
 │ │   │     └─■ [7] SameFrame target = L45
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "i"
-│ └─■ [1] ByteCodeMethod accessFlags = [protected], name = "<init>", descriptor = void()
+│ └─■ [1] ByteCodeMethod accessFlags = [protected], prototype = void <init>()
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │       ├─■ instructions: 3 entries
 │       │ ├─■ L48: // {
-│       │ ├─■         ALOAD_0 0
-│       │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│       │ ├─■         ALOAD 0
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │       │ ├─■ L49: // }
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
@@ -107,6 +107,6 @@
 │         │ ├─■ [0] LineNumberTableEntry lineNumber = 48, start = L48
 │         │ └─■ [1] LineNumberTableEntry lineNumber = 49, start = L49
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L48, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithTableswitch
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L48, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithTableswitch this
 └─■ attributeSet: 1 items
   └─■ [0] SourceFileAttribute "Class2WithTableswitch.java"

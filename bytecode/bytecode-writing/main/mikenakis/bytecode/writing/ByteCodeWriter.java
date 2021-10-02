@@ -56,10 +56,9 @@ import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantRefere
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ImmediateLoadConstantInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchEntry;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
@@ -67,7 +66,6 @@ import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantRefer
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.OperandlessLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.ChopStackMapFrame;
@@ -150,7 +148,7 @@ public class ByteCodeWriter
 
 		constantPool.internAttributeSet( byteCodeType.attributeSet );
 
-		for( Constant extraConstant : byteCodeType.extraConstants )
+		for( Constant extraConstant : byteCodeType.extraClassConstants )
 			constantPool.internExtraConstant( extraConstant );
 
 		//TODO: optimize the constant pool by moving the constants most frequently used by the IndirectLoadConstantInstruction to the first 256 entries!
@@ -158,7 +156,7 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( constantPool.size() );
 		for( Constant constant : constantPool.constants() )
 			writeConstant( constantPool, bootstrapPool, bufferWriter, constant );
-		bufferWriter.writeUnsignedShort( byteCodeType.modifierSet.getBits() );
+		bufferWriter.writeUnsignedShort( byteCodeType.modifiers.getBits() );
 		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeType.classConstant() ) );
 		bufferWriter.writeUnsignedShort( byteCodeType.superClassConstant().map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
 		List<ClassConstant> interfaceClassConstants = byteCodeType.interfaceClassConstants();
@@ -168,7 +166,7 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( byteCodeType.fields.size() );
 		for( ByteCodeField field : byteCodeType.fields )
 		{
-			bufferWriter.writeUnsignedShort( field.modifierSet.getBits() );
+			bufferWriter.writeUnsignedShort( field.modifiers.getBits() );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.nameConstant ) );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.descriptorConstant ) );
 			writeAttributeSet( bufferWriter, constantPool, field.attributeSet, Optional.empty() );
@@ -176,7 +174,7 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( byteCodeType.methods.size() );
 		for( ByteCodeMethod method : byteCodeType.methods )
 		{
-			bufferWriter.writeUnsignedShort( method.modifierSet.getBits() );
+			bufferWriter.writeUnsignedShort( method.modifiers.getBits() );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.nameConstant ) );
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.descriptorConstant ) );
 			writeAttributeSet( bufferWriter, constantPool, method.attributeSet, Optional.empty() );
@@ -236,7 +234,7 @@ public class ByteCodeWriter
 
 	private static void writeClassConstant( ConstantPool constantPool, BufferWriter bufferWriter, ClassConstant classConstant )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( classConstant.getNameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( classConstant.getInternalNameOrDescriptorStringConstant() ) );
 	}
 
 	private static void writeStringConstant( ConstantPool constantPool, BufferWriter bufferWriter, StringConstant stringConstant )
@@ -409,7 +407,7 @@ public class ByteCodeWriter
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( innerClass.innerClassConstant ) );
 			bufferWriter.writeUnsignedShort( innerClass.outerClassConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
 			bufferWriter.writeUnsignedShort( innerClass.innerNameConstant.map( c -> constantPool.getIndex( c ) ).orElse( 0 ) );
-			bufferWriter.writeUnsignedShort( innerClass.modifierSet.getBits() );
+			bufferWriter.writeUnsignedShort( innerClass.modifiers.getBits() );
 		}
 	}
 
@@ -430,7 +428,7 @@ public class ByteCodeWriter
 		for( MethodParameter methodParameter : methodParametersAttribute.methodParameters )
 		{
 			bufferWriter.writeUnsignedShort( constantPool.getIndex( methodParameter.nameConstant ) );
-			bufferWriter.writeUnsignedShort( methodParameter.modifierSet.getBits() );
+			bufferWriter.writeUnsignedShort( methodParameter.modifiers.getBits() );
 		}
 	}
 
@@ -744,8 +742,6 @@ public class ByteCodeWriter
 			case Instruction.groupTag_ClassConstantReferencing -> writeClassConstantReferencingInstruction( instructionWriter, instruction.asClassConstantReferencingInstruction() );
 			case Instruction.groupTag_FieldConstantReferencing -> writeFieldConstantReferencingInstruction( instructionWriter, instruction.asFieldConstantReferencingInstruction() );
 			case Instruction.groupTag_IInc -> writeIIncInstruction( instructionWriter, instruction.asIIncInstruction() );
-			case Instruction.groupTag_ImmediateLoadConstant -> writeImmediateLoadConstantInstruction( instructionWriter, instruction.asImmediateLoadConstantInstruction() );
-			case Instruction.groupTag_IndirectLoadConstant -> writeIndirectLoadConstantInstruction( instructionWriter, instruction.asIndirectLoadConstantInstruction() );
 			case Instruction.groupTag_InvokeDynamic -> writeInvokeDynamicInstruction( instructionWriter, instruction.asInvokeDynamicInstruction() );
 			case Instruction.groupTag_InvokeInterface -> writeInvokeInterfaceInstruction( instructionWriter, instruction.asInvokeInterfaceInstruction() );
 			case Instruction.groupTag_LocalVariable -> writeLocalVariableInstruction( instructionWriter, instruction.asLocalVariableInstruction() );
@@ -754,8 +750,8 @@ public class ByteCodeWriter
 			case Instruction.groupTag_MultiANewArray -> writeMultiANewArrayInstruction( instructionWriter, instruction.asMultiANewArrayInstruction() );
 			case Instruction.groupTag_NewPrimitiveArray -> writeNewPrimitiveArrayInstruction( instructionWriter, instruction.asNewPrimitiveArrayInstruction() );
 			case Instruction.groupTag_Operandless -> writeOperandlessInstruction( instructionWriter, instruction.asOperandlessInstruction() );
-			case Instruction.groupTag_OperandlessLoadConstant -> writeOperandlessLoadConstantInstruction( instructionWriter, instruction.asOperandlessLoadConstantInstruction() );
 			case Instruction.groupTag_TableSwitch -> writeTableSwitchInstruction( instructionWriter, instruction.asTableSwitchInstruction() );
+			case Instruction.groupTag_LoadConstant -> writeLoadConstantInstruction( instructionWriter, instruction.asLoadConstantInstruction() );
 			default -> throw new AssertionError( instruction );
 		}
 	}
@@ -773,11 +769,6 @@ public class ByteCodeWriter
 			int targetInstructionOffset = instructionWriter.getOffset( tableSwitchInstruction, targetInstruction );
 			instructionWriter.writeInt( targetInstructionOffset );
 		}
-	}
-
-	private static void writeOperandlessLoadConstantInstruction( InstructionWriter instructionWriter, OperandlessLoadConstantInstruction operandlessLoadConstantInstruction )
-	{
-		instructionWriter.writeUnsignedByte( operandlessLoadConstantInstruction.opCode );
 	}
 
 	private static void writeOperandlessInstruction( InstructionWriter instructionWriter, OperandlessInstruction operandlessInstruction )
@@ -849,10 +840,113 @@ public class ByteCodeWriter
 		instructionWriter.writeUnsignedByte( 0 );
 	}
 
-	private static void writeIndirectLoadConstantInstruction( InstructionWriter instructionWriter, IndirectLoadConstantInstruction indirectLoadConstantInstruction )
+	private static void writeLoadConstantInstruction( InstructionWriter instructionWriter, LoadConstantInstruction loadConstantInstruction )
 	{
-		int constantIndex = instructionWriter.getIndex( indirectLoadConstantInstruction.constant );
-		if( indirectLoadConstantInstruction.opCode == OpCode.LDC2_W ) //FIXME whether the "2" form should be used depends on the type of the constant!
+		switch( loadConstantInstruction.constant.tag )
+		{
+			case Constant.tag_Integer:
+			{
+				IntegerConstant integerConstant = loadConstantInstruction.constant.asIntegerConstant();
+				switch( integerConstant.value )
+				{
+					case -1:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_M1 );
+						return;
+					case 0:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_0 );
+						return;
+					case 1:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_1 );
+						return;
+					case 2:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_2 );
+						return;
+					case 3:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_3 );
+						return;
+					case 4:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_4 );
+						return;
+					case 5:
+						instructionWriter.writeUnsignedByte( OpCode.ICONST_5 );
+						return;
+					default:
+						if( Helpers.isSignedByte( integerConstant.value ) )
+						{
+							instructionWriter.writeUnsignedByte( OpCode.BIPUSH );
+							instructionWriter.writeUnsignedByte( integerConstant.value );
+							return;
+						}
+						else if( Helpers.isSignedShort( integerConstant.value ) )
+						{
+							instructionWriter.writeUnsignedByte( OpCode.SIPUSH );
+							instructionWriter.writeUnsignedShort( integerConstant.value );
+							return;
+						}
+						break;
+				}
+				break;
+			}
+			case Constant.tag_Float:
+			{
+				FloatConstant floatConstant = loadConstantInstruction.constant.asFloatConstant();
+				if( floatConstant.value == 0.0f )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.FCONST_0 );
+					return;
+				}
+				else if( floatConstant.value == 1.0f )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.FCONST_1 );
+					return;
+				}
+				else if( floatConstant.value == 2.0f )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.FCONST_2 );
+					return;
+				}
+				break;
+			}
+			case Constant.tag_Long:
+			{
+				LongConstant longConstant = loadConstantInstruction.constant.asLongConstant();
+				if( longConstant.value == 0L )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.LCONST_0 );
+					return;
+				}
+				else if( longConstant.value == 1L )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.LCONST_1 );
+					return;
+				}
+				break;
+			}
+			case Constant.tag_Double:
+			{
+				DoubleConstant doubleConstant = loadConstantInstruction.constant.asDoubleConstant();
+				if( doubleConstant.value == 0.0 )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.DCONST_0 );
+					return;
+				}
+				else if( doubleConstant.value == 1.0 )
+				{
+					instructionWriter.writeUnsignedByte( OpCode.DCONST_1 );
+					return;
+				}
+				break;
+			}
+			case Constant.tag_String:
+			case Constant.tag_Class:
+				break;
+			default:
+				assert false;
+				break;
+		}
+
+		int constantIndex = instructionWriter.getIndex( loadConstantInstruction.constant );
+		if( loadConstantInstruction.constant.tag == Constant.tag_Long || loadConstantInstruction.constant.tag == Constant.tag_Double )
 		{
 			instructionWriter.writeUnsignedByte( OpCode.LDC2_W );
 			instructionWriter.writeUnsignedShort( constantIndex );
@@ -869,23 +963,6 @@ public class ByteCodeWriter
 				instructionWriter.writeUnsignedByte( OpCode.LDC_W );
 				instructionWriter.writeUnsignedShort( constantIndex );
 			}
-		}
-	}
-
-	private static void writeImmediateLoadConstantInstruction( InstructionWriter instructionWriter, ImmediateLoadConstantInstruction immediateLoadConstantInstruction )
-	{
-		instructionWriter.writeUnsignedByte( immediateLoadConstantInstruction.opCode );
-		switch( immediateLoadConstantInstruction.opCode )
-		{
-			case OpCode.BIPUSH:
-				instructionWriter.writeUnsignedByte( immediateLoadConstantInstruction.immediateValue );
-				break;
-			case OpCode.SIPUSH:
-				instructionWriter.writeUnsignedShort( immediateLoadConstantInstruction.immediateValue );
-				break;
-			default:
-				assert false;
-				break;
 		}
 	}
 

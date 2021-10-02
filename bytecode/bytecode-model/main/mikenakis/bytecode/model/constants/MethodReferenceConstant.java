@@ -1,6 +1,8 @@
 package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
+import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 
 /**
@@ -44,9 +46,23 @@ public final class MethodReferenceConstant extends ReferenceConstant
 	// 1: nameAndDescriptorConstant.descriptorConstant
 	// 2: declaringTypeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
-	public String methodName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
-	public MethodDescriptor methodDescriptor() { return MethodDescriptor.ofDescriptorString( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ); }
-	public TypeDescriptor declaringTypeDescriptor() { return TypeDescriptor.ofDescriptorString( getDeclaringTypeConstant().descriptorString() ); }
+	public MethodReference methodReference()
+	{
+		return MethodReference.of( methodReferenceKind(), //
+			getDeclaringTypeConstant().typeDescriptor(), //
+			MethodPrototype.of( getNameAndDescriptorConstant().getNameConstant().stringValue(), //
+				MethodDescriptor.ofDescriptorString( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ) ) );
+	}
+
+	private MethodReference.Kind methodReferenceKind()
+	{
+		return switch( tag )
+			{
+				case tag_PlainMethodReference -> MethodReference.Kind.Plain;
+				case tag_InterfaceMethodReference -> MethodReference.Kind.Interface;
+				default -> throw new AssertionError( tag );
+			};
+	}
 
 	@Deprecated @Override public MethodReferenceConstant asMethodReferenceConstant() { return this; }
 }

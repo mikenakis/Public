@@ -30,8 +30,14 @@ public final class EnumAnnotationValue extends AnnotationValue
 		this.valueNameConstant = valueNameConstant;
 	}
 
-	public String typeName() { return typeDescriptor().name(); }
-	public TypeDescriptor typeDescriptor() { return TerminalTypeDescriptor.ofDescriptorString( typeNameConstant.stringValue() ); }
+	public TypeDescriptor typeDescriptor()
+	{
+		String descriptorString = typeNameConstant.stringValue();
+		assert descriptorString.charAt( 0 ) == 'L' && descriptorString.charAt( descriptorString.length() - 1 ) == ';';
+		String internalName = descriptorString.substring( 1, descriptorString.length() - 1 );
+		return TerminalTypeDescriptor.ofInternalName( internalName );
+	}
+
 	public String valueName() { return valueNameConstant.stringValue(); }
 
 	@Deprecated @Override public EnumAnnotationValue asEnumAnnotationValue()

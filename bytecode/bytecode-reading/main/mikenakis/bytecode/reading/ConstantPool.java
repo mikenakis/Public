@@ -2,7 +2,7 @@ package mikenakis.bytecode.reading;
 
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
-import mikenakis.kit.Kit;
+import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Procedure1;
 
@@ -43,9 +43,9 @@ final class ConstantPool
 		return constants.get( constantIndex );
 	}
 
-	Collection<Constant> getExtraConstants()
+	Collection<ClassConstant> getExtraClassReferences()
 	{
-		Collection<Constant> extraConstants = new ArrayList<>();
+		Collection<ClassConstant> extraClassReferences = new ArrayList<>();
 		for( int i = 0;  i < constants.size();  i++ )
 		{
 			Constant constant = constants.get( i );
@@ -53,9 +53,10 @@ final class ConstantPool
 				continue;
 			if( used[i] )
 				continue;
-			extraConstants.add( constant );
+			assert constant.tag == Constant.tag_Class;
+			extraClassReferences.add( constant.asClassConstant() );
 		}
-		return extraConstants;
+		return extraClassReferences;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

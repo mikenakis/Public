@@ -34,7 +34,6 @@ public final class MethodTypeConstant extends Constant
 	}
 
 	public MethodDescriptor methodDescriptor() { return MethodDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
-	public String methodDescriptorString() { return descriptorConstant.stringValue(); }
 	@Deprecated @Override public MethodTypeConstant asMethodTypeConstant() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

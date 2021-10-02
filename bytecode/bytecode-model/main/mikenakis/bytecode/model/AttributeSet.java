@@ -45,7 +45,7 @@ public final class AttributeSet
 		return Kit.map.getOptional( knownAttributesByTag, knownAttributeTag );
 	}
 
-	public void addAttribute( Attribute attribute )
+	public <T extends Attribute> T addAttribute( T attribute )
 	{
 		Kit.map.add( attributesByName, attribute.mutf8Name, attribute );
 		if( attribute.isKnown() )
@@ -53,6 +53,7 @@ public final class AttributeSet
 			KnownAttribute knownAttribute = attribute.asKnownAttribute();
 			Kit.map.add( knownAttributesByTag, knownAttribute.tag, knownAttribute );
 		}
+		return attribute;
 	}
 
 	public void addOrReplaceAttribute( Attribute attribute )

@@ -4,7 +4,7 @@ import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class InvokeDynamicInstruction extends Instruction
@@ -22,8 +22,7 @@ public final class InvokeDynamicInstruction extends Instruction
 		this.invokeDynamicConstant = invokeDynamicConstant;
 	}
 
-	public String methodName() { return invokeDynamicConstant.methodName(); }
-	public MethodDescriptor methodDescriptor() { return invokeDynamicConstant.methodDescriptor(); }
+	public MethodPrototype methodPrototype() { return invokeDynamicConstant.methodPrototype(); }
 	public BootstrapMethod bootstrapMethod() { return invokeDynamicConstant.getBootstrapMethod(); }
 	@Deprecated @Override public InvokeDynamicInstruction asInvokeDynamicInstruction() { return this; }
 

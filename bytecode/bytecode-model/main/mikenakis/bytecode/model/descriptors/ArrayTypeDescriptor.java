@@ -1,5 +1,8 @@
 package mikenakis.bytecode.model.descriptors;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
+
+import java.lang.constant.ClassDesc;
 import java.util.Objects;
 
 public class ArrayTypeDescriptor extends TypeDescriptor
@@ -21,6 +24,15 @@ public class ArrayTypeDescriptor extends TypeDescriptor
 		return new ArrayTypeDescriptor( componentTypeDescriptor );
 	}
 
+	public static ArrayTypeDescriptor ofDescriptorString( String descriptorString )
+	{
+		assert ByteCodeHelpers.isValidDescriptorString( descriptorString );
+		ClassDesc classDesc = ClassDesc.ofDescriptor( descriptorString );
+		assert classDesc.isArray();
+		TypeDescriptor componentType = TypeDescriptor.ofDescriptorString( classDesc.componentType().descriptorString() );
+		return of( componentType );
+	}
+
 	public final TypeDescriptor componentTypeDescriptor;
 
 	private ArrayTypeDescriptor( TypeDescriptor componentTypeDescriptor )
@@ -28,15 +40,12 @@ public class ArrayTypeDescriptor extends TypeDescriptor
 		this.componentTypeDescriptor = componentTypeDescriptor;
 	}
 
-	@Override public String name()
-	{
-		return componentTypeDescriptor.name() + "[]";
-	}
-
-	@Override public String descriptorString()
-	{
-		return "[" + componentTypeDescriptor.descriptorString();
-	}
+	@Override public String typeName() { return componentTypeDescriptor.typeName() + "[]"; }
+	@Deprecated @Override public boolean isArray() { return true; }
+	@Deprecated @Override public boolean isPrimitive() { return false; }
+	@Deprecated @Override public boolean isTerminal() {	return false; }
+	@Deprecated @Override public ArrayTypeDescriptor asArrayTypeDescriptor() { return this; }
+	@Override public String descriptorString() { return "[" + componentTypeDescriptor.descriptorString(); }
 
 	@Deprecated @Override public boolean equals( Object other )
 	{

@@ -32,6 +32,11 @@
 			<artifactId>bytecode-reading</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>mikenakis</groupId>
+			<artifactId>bytecode-dependencies</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 		<!-- TODO get rid of! -->
 		<dependency>
 			<groupId>mikenakis</groupId>

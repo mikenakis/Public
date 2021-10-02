@@ -55,10 +55,11 @@ import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantRefere
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ImmediateLoadConstantInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
+//import mikenakis.bytecode.model.attributes.code.instructions.ImmediateLoadConstantInstruction;
+//import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchEntry;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
@@ -66,7 +67,7 @@ import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantRefer
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.OperandlessLoadConstantInstruction;
+//import mikenakis.bytecode.model.attributes.code.instructions.OperandlessLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.ChopStackMapFrame;
@@ -106,17 +107,19 @@ import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.bytecode.printing.twig.Twig;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.collections.FlagEnumSet;
+import mikenakis.kit.collections.FlagSet;
 import mikenakis.kit.functional.Procedure1;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -439,14 +442,14 @@ public final class ByteCodePrinter
 		builder.append( " )" );
 	}
 
-	private static <E extends Enum<E>> String stringFromFlags( FlagEnumSet<E> flagSet )
+	private static <E extends Enum<E>> String stringFromFlags( FlagSet<E> flagSet )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		flagsToStringBuilder( flagSet, stringBuilder );
 		return stringBuilder.toString();
 	}
 
-	private static <E extends Enum<E>> void flagsToStringBuilder( FlagEnumSet<E> flagSet, StringBuilder stringBuilder )
+	private static <E extends Enum<E>> void flagsToStringBuilder( FlagSet<E> flagSet, StringBuilder stringBuilder )
 	{
 		stringBuilder.append( "[" );
 		boolean first = true;
@@ -568,9 +571,9 @@ public final class ByteCodePrinter
 		var builder = new StringBuilder();
 		builder.append( innerClass.getClass().getSimpleName() );
 		builder.append( " " );
-		builder.append( "accessFlags = " ).append( stringFromFlags( innerClass.modifierSet ) );
-		builder.append( ", innerClass = " ).append( innerClass.innerTypeName() );
-		innerClass.outerTypeName().ifPresent( s -> builder.append( ", outerClass = " ).append( s ) );
+		builder.append( "accessFlags = " ).append( stringFromFlags( innerClass.modifiers ) );
+		builder.append( ", innerClass = " ).append( innerClass.innerType().typeName() );
+		innerClass.outerType().ifPresent( t -> builder.append( ", outerClass = " ).append( t.typeName() ) );
 		innerClass.innerName().ifPresent( s -> builder.append( ", innerName = " ).append( s ) );
 		String header = builder.toString();
 		return Twig.leaf( header );
@@ -579,22 +582,17 @@ public final class ByteCodePrinter
 	private static Twig twigFromExceptionsAttribute( ExceptionsAttribute exceptionsAttribute )
 	{
 		return Twig.array( exceptionsAttribute.getClass().getSimpleName(), //
-			exceptionsAttribute.exceptionTypeNames().stream().map( c -> Twig.leaf( c ) ).toList() );
+			exceptionsAttribute.exceptions().stream().map( c -> Twig.leaf( c.typeName() ) ).toList() );
 	}
 
 	private static Twig twigFromEnclosingMethodAttribute( EnclosingMethodAttribute enclosingMethodAttribute )
 	{
 		StringBuilder headerBuilder = new StringBuilder();
 		headerBuilder.append( enclosingMethodAttribute.getClass().getSimpleName() );
-		headerBuilder.append( " enclosingClass = " ).append( enclosingMethodAttribute.enclosingClassTypeName() );
+		headerBuilder.append( " enclosingClass = " ).append( enclosingMethodAttribute.enclosingClassTypeDescriptor().typeName() );
 		// Java-bollocks: the enclosing method attribute, if present, will always have an enclosing class,
 		// but it may not necessarily have an enclosing method.
-		enclosingMethodAttribute.enclosingMethodNameAndDescriptorConstant.ifPresent( c -> //
-		{
-			MethodDescriptor methodDescriptor = MethodDescriptor.ofDescriptorString( c.getDescriptorConstant().stringValue() );
-			headerBuilder.append( ", enclosingMethodName = \"" ).append( c.getNameConstant().stringValue() ).append( "\"" );
-			headerBuilder.append( ", enclosingMethodDescriptor = " ).append( methodDescriptor.name() );
-		} );
+		enclosingMethodAttribute.enclosingMethodPrototype().ifPresent( p -> headerBuilder.append( ", enclosingMethodPrototype = " ).append( p.asString() ) );
 		return Twig.leaf( headerBuilder.toString() );
 	}
 
@@ -618,12 +616,12 @@ public final class ByteCodePrinter
 	private static Twig twigFromNestMembersAttribute( NestMembersAttribute nestMembersAttribute )
 	{
 		return Twig.array( nestMembersAttribute.getClass().getSimpleName(), //
-				nestMembersAttribute.memberTypeNames().stream().map( s -> Twig.leaf( s ) ).toList() );
+			nestMembersAttribute.members().stream().map( t -> Twig.leaf( t.typeName() ) ).toList() );
 	}
 
 	private static Twig twigFromNestHostAttribute( NestHostAttribute nestHostAttribute )
 	{
-		return Twig.leaf( nestHostAttribute.getClass().getSimpleName() + " " + nestHostAttribute.hostClassTypeName() );
+		return Twig.leaf( nestHostAttribute.getClass().getSimpleName() + " " + nestHostAttribute.hostClass().typeName() );
 	}
 
 	private static Twig twigFromLocalVariableTypeTableAttribute( Labeler labeler, LocalVariableTypeTableAttribute localVariableTypeTableAttribute )
@@ -635,7 +633,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromLocalVariableTableAttribute( Labeler labeler, LocalVariableTableAttribute localVariableTableAttribute )
 	{
 		return Twig.array( localVariableTableAttribute.getClass().getSimpleName(), //
-				localVariableTableAttribute.entrys.stream().map( e -> twigFromLocalVariableTableEntry( e, labeler ) ).toList() );
+			localVariableTableAttribute.entrys.stream().map( e -> twigFromLocalVariableTableEntry( e, labeler ) ).toList() );
 	}
 
 	private static Twig twigFromLineNumberTableAttribute( Labeler labeler, LineNumberTableAttribute lineNumberTableAttribute )
@@ -676,7 +674,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromAnnotationsAttribute( AnnotationsAttribute annotationsAttribute )
 	{
 		return Twig.array( annotationsAttribute.getClass().getSimpleName(), //
-				annotationsAttribute.annotations.stream().map( a -> twigFromAnnotation( a ) ).toList() );
+			annotationsAttribute.annotations.stream().map( a -> twigFromAnnotation( a ) ).toList() );
 	}
 
 	private static Twig twigFromAnnotationDefaultAttribute( AnnotationDefaultAttribute annotationDefaultAttribute )
@@ -694,7 +692,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromBootstrapMethodsAttribute( BootstrapMethodsAttribute bootstrapMethodsAttribute )
 	{
 		return Twig.array( bootstrapMethodsAttribute.getClass().getSimpleName(), //
-				bootstrapMethodsAttribute.bootstrapMethods.stream().map( bootstrapMethod -> twigFromBootstrapMethod( "", bootstrapMethod ) ).toList() );
+			bootstrapMethodsAttribute.bootstrapMethods.stream().map( bootstrapMethod -> twigFromBootstrapMethod( "", bootstrapMethod ) ).toList() );
 	}
 
 	private static Twig twigFromUnknownAttribute( UnknownAttribute unknownAttribute )
@@ -736,49 +734,44 @@ public final class ByteCodePrinter
 	private static Twig twigFromAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue )
 	{
 		return Twig.array( annotationAnnotationValue.getClass().getSimpleName() + //
-				" type = " + annotationAnnotationValue.annotation.typeName(), //
+				" type = " + annotationAnnotationValue.annotation.typeDescriptor().typeName(), //
 			annotationAnnotationValue.annotation.parameters.stream().map( a -> twigFromAnnotationParameter( a ) ).toList(), "parameters" );
 	}
 
 	private static Twig twigFromAnnotation( Annotation byteCodeAnnotation )
 	{
 		return Twig.array( byteCodeAnnotation.getClass().getSimpleName() + //
-				" type = " + byteCodeAnnotation.typeName(), //
+				" type = " + byteCodeAnnotation.typeDescriptor().typeName(), //
 			byteCodeAnnotation.parameters.stream().map( a -> twigFromAnnotationParameter( a ) ).toList(), "parameters" );
 	}
 
 	private Twig twigFromByteCodeField( ByteCodeField byteCodeField )
 	{
 		return Twig.group( byteCodeField.getClass().getSimpleName() + //
-			" accessFlags = " + stringFromFlags( byteCodeField.modifierSet ) + //
-			", name+descriptor = " + byteCodeField.fieldDescriptor().name( byteCodeField.name() ),
+				" accessFlags = " + stringFromFlags( byteCodeField.modifiers ) + //
+				", prototype = " + byteCodeField.prototype().asString(), //
 			Map.entry( "attributeSet", //
 				twigFromAttributeSet( byteCodeField.attributeSet, Optional.empty() ) ) );
 	}
 
 	private Twig twigFromByteCodeMethod( ByteCodeMethod byteCodeMethod )
 	{
-		StringBuilder headerBuilder = new StringBuilder();
-		headerBuilder.append( byteCodeMethod.getClass().getSimpleName() );
-		headerBuilder.append( " accessFlags = " ).append( stringFromFlags( byteCodeMethod.modifierSet ) );
-		headerBuilder.append( ", name = \"" ).append( byteCodeMethod.name() ).append( "\"" );
-		headerBuilder.append( ", descriptor = " );
-		appendMethodDescriptor( headerBuilder, byteCodeMethod.getMethodDescriptor() );
-		String header = headerBuilder.toString();
-		return Twig.group( header, //
+		return Twig.group( byteCodeMethod.getClass().getSimpleName() + //
+			" accessFlags = " + stringFromFlags( byteCodeMethod.modifiers ) + //
+			", prototype = " + byteCodeMethod.prototype().asString(),
 			Map.entry( "attributes", twigFromAttributeSet( byteCodeMethod.attributeSet, Optional.empty() ) ) );
 	}
 
 	private static void appendMethodDescriptor( StringBuilder builder, MethodDescriptor descriptor )
 	{
-		builder.append( descriptor.returnTypeDescriptor.name() );
+		builder.append( descriptor.returnTypeDescriptor.typeName() );
 		List<TypeDescriptor> parameterDescriptors = descriptor.parameterTypeDescriptors;
 		builder.append( parameterDescriptors.isEmpty() ? "(" : "( " );
 		boolean first = true;
 		for( TypeDescriptor parameterDescriptor : parameterDescriptors )
 		{
 			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
-			builder.append( parameterDescriptor.name() );
+			builder.append( parameterDescriptor.typeName() );
 		}
 		builder.append( parameterDescriptors.isEmpty() ? ")" : " )" );
 	}
@@ -788,37 +781,23 @@ public final class ByteCodePrinter
 		StringBuilder builder = new StringBuilder( 1024 );
 		builder.append( ByteCodeType.class.getSimpleName() );
 		builder.append( " version = " ).append( byteCodeType.version.major() ).append( '.' ).append( byteCodeType.version.minor() );
-		builder.append( ", accessFlags = " ).append( stringFromFlags( byteCodeType.modifierSet ) );
-		builder.append( ", thisClass = " ).append( byteCodeType.typeName() );
-		builder.append( ", superClass = " ).append( byteCodeType.superTypeName().orElse( "<none>" ) );
+		builder.append( ", accessFlags = " ).append( stringFromFlags( byteCodeType.modifiers ) );
+		builder.append( ", this = " ).append( byteCodeType.typeDescriptor().typeName() );
+		builder.append( ", super = " ).append( byteCodeType.superTypeDescriptor().map( d -> d.typeName() ).orElse( "<none>" ) );
 		return Twig.group( builder.toString(), //
-			Map.entry( "interfaces", twigFromStrings( byteCodeType.interfaceTypeNames() ) ), //
-			Map.entry( "extraConstants", twigFromExtraConstants( byteCodeType.extraConstants ) ), //
+			Map.entry( "interfaces", twigFromTerminalTypeDescriptors( byteCodeType.interfaces(), false ) ), //
+			Map.entry( "extraTypes", twigFromTerminalTypeDescriptors( byteCodeType.extraTypes(), true ) ), //
 			Map.entry( "fields", twigFromByteCodeFields( byteCodeType.fields ) ), //
 			Map.entry( "methods", twigFromByteCodeMethods( byteCodeType.methods ) ), //
 			Map.entry( "attributeSet", twigFromAttributeSet( byteCodeType.attributeSet, Optional.empty() ) ) );
 	}
 
-	private static Twig twigFromStrings( Collection<String> strings )
+	private static Twig twigFromTerminalTypeDescriptors( Collection<TerminalTypeDescriptor> extraTypes, boolean sort )
 	{
-		return Twig.array( strings.stream().map( Twig::leaf ).toList() );
-	}
-
-	private static Twig twigFromExtraConstants( Collection<Constant> extraConstants )
-	{
-		return Twig.array( extraConstants.stream().sorted( ByteCodePrinter::compareExtraConstants ).map( ByteCodePrinter::twigFromExtraConstant ).toList() );
-	}
-
-	private static int compareExtraConstants( Constant a, Constant b )
-	{
-		int d = Integer.compare( a.tag, b.tag );
-		if( d != 0 )
-			return d;
-		return switch( a.tag )
-			{
-				case Constant.tag_Class -> a.asClassConstant().typeName().compareTo( b.asClassConstant().typeName() );
-				default -> throw new AssertionError( a.tag ); //I have not witnessed any other kind of extra constants.
-			};
+		return Twig.array( extraTypes.stream() //
+			.sorted( sort ? Comparator.comparing( TerminalTypeDescriptor::typeName ) : ( a, b ) -> 0 ) //
+			.map( t -> Twig.leaf( t.typeName() ) ) //
+			.toList() );
 	}
 
 	private Twig twigFromByteCodeFields( Collection<ByteCodeField> fields )
@@ -841,7 +820,7 @@ public final class ByteCodePrinter
 		summarizeAbsoluteInstruction( exceptionInfo.endInstruction, builder, labeler );
 		builder.append( ", handler = " );
 		summarizeAbsoluteInstruction( exceptionInfo.handlerInstruction, builder, labeler );
-		exceptionInfo.catchTypeName().ifPresent( s -> builder.append( ", catchType = " ).append( s ) );
+		exceptionInfo.catchType().ifPresent( t -> builder.append( ", catchType = " ).append( t.typeName() ) );
 		String header = builder.toString();
 		return Twig.leaf( header );
 	}
@@ -866,8 +845,7 @@ public final class ByteCodePrinter
 		summarizeAbsoluteInstruction( localVariableTableEntry.startInstruction, builder, labeler );
 		builder.append( ", end = " );
 		summarizeAbsoluteInstruction( localVariableTableEntry.endInstruction, builder, labeler );
-		builder.append( ", name = " ).append( localVariableTableEntry.name() );
-		builder.append( ", descriptor = " ).append( localVariableTableEntry.typeDescriptor().name() );
+		builder.append( ", prototype = " ).append( localVariableTableEntry.prototype().asString() );
 		String header = builder.toString();
 		return Twig.leaf( header );
 	}
@@ -894,13 +872,13 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromMethodParameter( MethodParameter methodParameter )
 	{
-		return Twig.leaf( methodParameter.getClass().getSimpleName() + " accessFlags = " + stringFromFlags( methodParameter.modifierSet ) + ", name = \"" + methodParameter.name() + "\"" );
+		return Twig.leaf( methodParameter.getClass().getSimpleName() + " accessFlags = " + stringFromFlags( methodParameter.modifiers ) + ", name = \"" + methodParameter.name() + "\"" );
 	}
 
 	private static Twig twigFromParameterAnnotationSet( ParameterAnnotationSet parameterAnnotationSet )
 	{
 		return Twig.array( parameterAnnotationSet.getClass().getSimpleName(), //
-				parameterAnnotationSet.annotations.stream().map( a -> twigFromAnnotation( a ) ).toList(), "annotations" );
+			parameterAnnotationSet.annotations.stream().map( a -> twigFromAnnotation( a ) ).toList(), "annotations" );
 	}
 
 	private static void appendRelativeInstructionReference( Instruction instruction, StringBuilder builder, Labeler labeler )
@@ -911,7 +889,7 @@ public final class ByteCodePrinter
 
 	private static void appendClassConstant( ClassConstant classConstant, StringBuilder builder )
 	{
-		builder.append( classConstant.typeName() );
+		builder.append( classConstant.typeDescriptor().typeName() );
 	}
 
 	private static void appendMethodHandleConstant( MethodHandleConstant methodHandleConstant, StringBuilder builder )
@@ -930,21 +908,16 @@ public final class ByteCodePrinter
 
 	private static void summarizeFieldReferenceConstant( FieldReferenceConstant fieldReferenceConstant, StringBuilder builder )
 	{
-		builder.append( fieldReferenceConstant.fieldDescriptor().name() );//ByteCodeHelpers.typeNameFromClassDesc( fieldReferenceConstant.fieldClassDesc() ) );
+		builder.append( fieldReferenceConstant.fieldDescriptor().asString() );
 		builder.append( ' ' );
-		builder.append( fieldReferenceConstant.declaringTypeDescriptor().name() );
+		builder.append( fieldReferenceConstant.declaringTypeDescriptor().typeName() );
 		builder.append( '.' );
 		builder.append( fieldReferenceConstant.fieldName() );
 	}
 
 	private static void appendMethodReferenceConstant( MethodReferenceConstant methodReferenceConstant, StringBuilder builder )
 	{
-		builder.append( "type = " );
-		builder.append( methodReferenceConstant.declaringTypeDescriptor().name() );
-		builder.append( ", name = " );
-		builder.append( methodReferenceConstant.methodName() );
-		builder.append( ", descriptor = " );
-		appendMethodDescriptor( builder, methodReferenceConstant.methodDescriptor() );
+		builder.append( "reference = " ).append( methodReferenceConstant.methodReference().asString() );
 	}
 
 	private static void appendMethodTypeConstant( MethodTypeConstant methodTypeConstant, StringBuilder builder )
@@ -952,21 +925,6 @@ public final class ByteCodePrinter
 		builder.append( MethodTypeConstant.class.getSimpleName() );
 		builder.append( " " );
 		appendMutf8Constant( methodTypeConstant.getDescriptorConstant(), builder );
-	}
-
-	private static Twig twigFromExtraConstant( Constant constant )
-	{
-		return switch( constant.tag )
-			{
-				case Constant.tag_Class -> twigFromClassConstant( constant.asClassConstant() );
-				default -> throw new AssertionError( constant );
-			};
-	}
-
-	private static Twig twigFromClassConstant( ClassConstant classConstant )
-	{
-		return Twig.leaf( classConstant.getClass().getSimpleName() + //
-			" typeName = " + classConstant.typeName() );
 	}
 
 	private static Twig twigFromAnnotationValue( AnnotationValue annotationValue )
@@ -986,8 +944,8 @@ public final class ByteCodePrinter
 	private static Twig twigFromConstAnnotationValue( ConstAnnotationValue constAnnotationValue )
 	{
 		return Twig.leaf( constAnnotationValue.getClass().getSimpleName() + //
-				" tag = " + AnnotationValue.tagName( constAnnotationValue.tag ) + //
-				" value = " + stringFromValueConstant( constAnnotationValue.valueConstant, constAnnotationValue.tag ) );
+			" tag = " + AnnotationValue.tagName( constAnnotationValue.tag ) + //
+			" value = " + stringFromValueConstant( constAnnotationValue.valueConstant, constAnnotationValue.tag ) );
 	}
 
 	private static String stringFromValueConstant( ValueConstant<?> valueConstant, int annotationValueTag )
@@ -1012,20 +970,20 @@ public final class ByteCodePrinter
 	private static Twig twigFromClassAnnotationValue( ClassAnnotationValue classAnnotationValue )
 	{
 		return Twig.leaf( classAnnotationValue.getClass().getSimpleName() + //
-			" name = " + classAnnotationValue.typeName() );
+			" name = " + classAnnotationValue.typeDescriptor().typeName() );
 	}
 
 	private static Twig twigFromEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue )
 	{
 		return Twig.leaf( enumAnnotationValue.getClass().getSimpleName() + //
-			" type = " + enumAnnotationValue.typeName() + //
+			" type = " + enumAnnotationValue.typeDescriptor().typeName() + //
 			", value = " + enumAnnotationValue.valueName() );
 	}
 
 	private static Twig twigFromArrayAnnotationValue( ArrayAnnotationValue arrayAnnotationValue )
 	{
 		return Twig.array( arrayAnnotationValue.getClass().getSimpleName(), //
-				arrayAnnotationValue.annotationValues.stream().map( a -> twigFromAnnotationValue( a ) ).toList(), "values" );
+			arrayAnnotationValue.annotationValues.stream().map( a -> twigFromAnnotationValue( a ) ).toList(), "values" );
 	}
 
 	private static Twig twigFromTypeAnnotation( TypeAnnotation typeAnnotation )
@@ -1040,7 +998,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromTypePath( TypePath typePath )
 	{
 		return Twig.array( typePath.getClass().getSimpleName(), //
-				typePath.entries().stream().map( e -> twigFromTypePathEntry( e ) ).toList() );
+			typePath.entries().stream().map( e -> twigFromTypePathEntry( e ) ).toList() );
 	}
 
 	private static Twig twigFromTypePathEntry( TypePathEntry entry )
@@ -1101,7 +1059,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromLocalVariableTarget( LocalVariableTarget localVariableTarget )
 	{
 		return Twig.array( localVariableTarget.getClass().getSimpleName() + " tag = " + Target.tagName( localVariableTarget.tag ), //
-				localVariableTarget.entries.stream().map( e -> twigFromLocalVariableTargetEntry( e ) ).toList() );
+			localVariableTarget.entries.stream().map( e -> twigFromLocalVariableTargetEntry( e ) ).toList() );
 	}
 
 	private static Twig twigFromLocalVariableTargetEntry( LocalVariableTargetEntry localVariableTargetEntry )
@@ -1183,13 +1141,13 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromClassConstantReferencingInstruction( String prefix, ClassConstantReferencingInstruction classConstantReferencingInstruction )
 	{
-		String text = classConstantReferencingInstruction.targetTypeName();
-		return Twig.leaf( buildInstructionHeader( prefix, classConstantReferencingInstruction.opCode, text ) );
+		String targetName = classConstantReferencingInstruction.target().typeName();
+		return Twig.leaf( buildInstructionHeader( prefix, classConstantReferencingInstruction.opCode, targetName ) );
 	}
 
 	private static Twig twigFromFieldConstantReferencingInstruction( String prefix, FieldConstantReferencingInstruction fieldConstantReferencingInstruction )
 	{
-		String text = fieldConstantReferencingInstruction.fieldTypeName() + " " + fieldConstantReferencingInstruction.fieldDeclaringTypeName() + "." + fieldConstantReferencingInstruction.fieldName();
+		String text = fieldConstantReferencingInstruction.fieldType().typeName() + " " + fieldConstantReferencingInstruction.fieldDeclaringType().typeName() + "." + fieldConstantReferencingInstruction.fieldName();
 		return Twig.leaf( buildInstructionHeader( prefix, fieldConstantReferencingInstruction.opCode, text ) );
 	}
 
@@ -1210,33 +1168,35 @@ public final class ByteCodePrinter
 		return Twig.leaf( buildInstructionHeader( prefix, OpCode.IINC, "index = " + iIncInstruction.index, "delta = " + iIncInstruction.delta ) );
 	}
 
-	private static Twig twigFromImmediateLoadConstantInstruction( String prefix, ImmediateLoadConstantInstruction immediateLoadConstantInstruction )
-	{
-		return Twig.leaf( buildInstructionHeader( prefix, immediateLoadConstantInstruction.opCode, "immediateValue = " + immediateLoadConstantInstruction.immediateValue ) );
-	}
+//	private static Twig twigFromImmediateLoadConstantInstruction( String prefix, ImmediateLoadConstantInstruction immediateLoadConstantInstruction )
+//	{
+//		return Twig.leaf( buildInstructionHeader( prefix, immediateLoadConstantInstruction.opCode, "immediateValue = " + immediateLoadConstantInstruction.immediateValue ) );
+//	}
+//
+//	private static Twig twigFromIndirectLoadConstantInstruction( String prefix, IndirectLoadConstantInstruction indirectLoadConstantInstruction )
+//	{
+//		return Twig.leaf( buildInstructionHeader( prefix, indirectLoadConstantInstruction.opCode, stringFromConstant( indirectLoadConstantInstruction.constant ) ) );
+//	}
 
-	private static Twig twigFromIndirectLoadConstantInstruction( String prefix, IndirectLoadConstantInstruction indirectLoadConstantInstruction )
+	private static Twig twigFromLoadConstantInstruction( String prefix, LoadConstantInstruction loadConstantInstruction )
 	{
-		return Twig.leaf( buildInstructionHeader( prefix, indirectLoadConstantInstruction.opCode, stringFromConstant( indirectLoadConstantInstruction.constant ) ) );
-	}
-
-	private static String stringFromConstant( Constant constant )
-	{
-		var builder = new StringBuilder();
-		switch( constant.tag )
-		{
-			case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double, //
-				Constant.tag_String -> appendValueConstant( constant.asValueConstant(), builder );
-			case Constant.tag_Class -> appendClassConstant( constant.asClassConstant(), builder );
-			default -> throw new AssertionError( constant );
-		}
-		return builder.toString();
+		String valueAsString = switch( loadConstantInstruction.constant.tag )
+			{
+				case Constant.tag_Integer -> String.valueOf( loadConstantInstruction.constant.asIntegerConstant().value );
+				case Constant.tag_Float -> String.valueOf( loadConstantInstruction.constant.asFloatConstant().value );
+				case Constant.tag_Long -> String.valueOf( loadConstantInstruction.constant.asLongConstant().value );
+				case Constant.tag_Double -> String.valueOf( loadConstantInstruction.constant.asDoubleConstant().value );
+				case Constant.tag_String -> Kit.string.escapeForJava( loadConstantInstruction.constant.asStringConstant().getValueConstant().stringValue() );
+				case Constant.tag_Class -> loadConstantInstruction.constant.asClassConstant().typeDescriptor().typeName();
+				default -> throw new AssertionError( loadConstantInstruction.constant );
+			};
+		return Twig.leaf( buildInstructionHeader( prefix, LoadConstantInstruction.opCode, valueAsString ) );
 	}
 
 	private static Twig twigFromInvokeDynamicInstruction( String prefix, InvokeDynamicInstruction invokeDynamicInstruction )
 	{
 		var builder = new StringBuilder();
-		builder.append( "name+descriptor = " ).append( invokeDynamicInstruction.methodDescriptor().stringFrom( invokeDynamicInstruction.methodName() ) );
+		builder.append( "prototype = " ).append( invokeDynamicInstruction.methodPrototype().asString() );
 		return Twig.group( buildInstructionHeader( prefix, OpCode.INVOKEDYNAMIC, builder.toString() ), //
 			Map.entry( indentation + indentation + "bootstrapMethod", twigFromBootstrapMethod( indentation + indentation, invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod() ) ) );
 	}
@@ -1269,8 +1229,8 @@ public final class ByteCodePrinter
 	private static Twig twigFromMultiANewArrayInstruction( String prefix, MultiANewArrayInstruction multiANewArrayInstruction )
 	{
 		var builder = new StringBuilder();
-		builder.append( "class = " );
-		appendClassConstant( multiANewArrayInstruction.targetClassConstant, builder );
+		builder.append( "class = " ).append( multiANewArrayInstruction.targetType().typeName() );
+		//appendClassConstant( multiANewArrayInstruction.targetClassConstant, builder );
 		return Twig.leaf( buildInstructionHeader( prefix, OpCode.MULTIANEWARRAY, builder.toString(), multiANewArrayInstruction.dimensionCount + " dimensions" ) );
 	}
 
@@ -1284,10 +1244,10 @@ public final class ByteCodePrinter
 		return Twig.leaf( buildInstructionHeader( prefix, operandlessInstruction.opCode ) );
 	}
 
-	private static Twig twigFromOperandlessLoadConstantInstruction( String prefix, OperandlessLoadConstantInstruction operandlessLoadConstantInstruction )
-	{
-		return Twig.leaf( buildInstructionHeader( prefix, operandlessLoadConstantInstruction.opCode ) );
-	}
+//	private static Twig twigFromOperandlessLoadConstantInstruction( String prefix, OperandlessLoadConstantInstruction operandlessLoadConstantInstruction )
+//	{
+//		return Twig.leaf( buildInstructionHeader( prefix, operandlessLoadConstantInstruction.opCode ) );
+//	}
 
 	private static Twig twigFromRelativeInstructionReference( String prefix, Instruction instruction, Labeler labeler )
 	{
@@ -1316,7 +1276,7 @@ public final class ByteCodePrinter
 		return Twig.array( buildInstructionHeader( prefix, OpCode.TABLESWITCH ) + //
 				" lowValue = " + tableSwitchInstruction.lowValue + //
 				", default = " + labeler.getLabel( tableSwitchInstruction.getDefaultInstruction() ), //
-				tableSwitchInstruction.targetInstructions().stream().map( i -> twigFromRelativeInstructionReference( indentation, i, labeler ) ).toList() );
+			tableSwitchInstruction.targetInstructions().stream().map( i -> twigFromRelativeInstructionReference( indentation, i, labeler ) ).toList() );
 	}
 
 	private static Twig twigFromInstructionList( InstructionList instructionList, Labeler labeler )
@@ -1347,8 +1307,8 @@ public final class ByteCodePrinter
 				case Instruction.groupTag_FieldConstantReferencing -> twigFromFieldConstantReferencingInstruction( prefix, instruction.asFieldConstantReferencingInstruction() );
 				case Instruction.groupTag_MethodConstantReferencing -> twigFromMethodConstantReferencingInstruction( prefix, instruction.asMethodConstantReferencingInstruction() );
 				case Instruction.groupTag_IInc -> twigFromIIncInstruction( prefix, instruction.asIIncInstruction() );
-				case Instruction.groupTag_ImmediateLoadConstant -> twigFromImmediateLoadConstantInstruction( prefix, instruction.asImmediateLoadConstantInstruction() );
-				case Instruction.groupTag_IndirectLoadConstant -> twigFromIndirectLoadConstantInstruction( prefix, instruction.asIndirectLoadConstantInstruction() );
+//				case Instruction.groupTag_ImmediateLoadConstant -> twigFromImmediateLoadConstantInstruction( prefix, instruction.asImmediateLoadConstantInstruction() );
+//				case Instruction.groupTag_IndirectLoadConstant -> twigFromIndirectLoadConstantInstruction( prefix, instruction.asIndirectLoadConstantInstruction() );
 				case Instruction.groupTag_InvokeDynamic -> twigFromInvokeDynamicInstruction( prefix, instruction.asInvokeDynamicInstruction() );
 				case Instruction.groupTag_InvokeInterface -> twigFromInvokeInterfaceInstruction( prefix, instruction.asInvokeInterfaceInstruction() );
 				case Instruction.groupTag_LocalVariable -> twigFromLocalVariableInstruction( prefix, instruction.asLocalVariableInstruction() );
@@ -1356,7 +1316,8 @@ public final class ByteCodePrinter
 				case Instruction.groupTag_MultiANewArray -> twigFromMultiANewArrayInstruction( prefix, instruction.asMultiANewArrayInstruction() );
 				case Instruction.groupTag_NewPrimitiveArray -> twigFromNewPrimitiveArrayInstruction( prefix, instruction.asNewPrimitiveArrayInstruction() );
 				case Instruction.groupTag_Operandless -> twigFromOperandlessInstruction( prefix, instruction.asOperandlessInstruction() );
-				case Instruction.groupTag_OperandlessLoadConstant -> twigFromOperandlessLoadConstantInstruction( prefix, instruction.asOperandlessLoadConstantInstruction() );
+//				case Instruction.groupTag_OperandlessLoadConstant -> twigFromOperandlessLoadConstantInstruction( prefix, instruction.asOperandlessLoadConstantInstruction() );
+				case Instruction.groupTag_LoadConstant -> twigFromLoadConstantInstruction( prefix, instruction.asLoadConstantInstruction() );
 				case Instruction.groupTag_Branch -> twigFromBranchInstruction( prefix, instruction.asBranchInstruction(), labeler );
 				default -> throw new AssertionError( instruction );
 			};
@@ -1437,7 +1398,7 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromObjectVerificationType( ObjectVerificationType objectVerificationType )
 	{
-		return Twig.leaf( objectVerificationType.getClass().getSimpleName() + " type = " + objectVerificationType.typeName() );
+		return Twig.leaf( objectVerificationType.getClass().getSimpleName() + " type = " + objectVerificationType.typeDescriptor().typeName() );
 	}
 
 	private static Twig twigFromSimpleVerificationType( SimpleVerificationType simpleVerificationType )

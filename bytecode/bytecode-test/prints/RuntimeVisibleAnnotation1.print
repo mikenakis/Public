@@ -1,65 +1,65 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], thisClass = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [public, interface, abstract, annotation], this = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] java.lang.annotation.Annotation
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 0 items
 ├─■ methods: 13 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [public, abstract], name = "annotationParameter", descriptor = java.lang.SuppressWarnings()
+│ ├─■ [0] ByteCodeMethod accessFlags = [public, abstract], prototype = java.lang.SuppressWarnings annotationParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: AnnotationAnnotationValue type = java.lang.SuppressWarnings; 1 parameters
 │ │       └─■ [0] AnnotationParameter name = "value"
 │ │         └─■ value: ArrayAnnotationValue; 1 values
 │ │           └─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "" )
-│ ├─■ [1] ByteCodeMethod accessFlags = [public, abstract], name = "arrayParameter", descriptor = java.lang.String[]()
+│ ├─■ [1] ByteCodeMethod accessFlags = [public, abstract], prototype = java.lang.String[] arrayParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ArrayAnnotationValue; 3 values
 │ │       ├─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "a" )
 │ │       ├─■ [1] ConstAnnotationValue tag = String value = Mutf8Constant( "b" )
 │ │       └─■ [2] ConstAnnotationValue tag = String value = Mutf8Constant( "c" )
-│ ├─■ [2] ByteCodeMethod accessFlags = [public, abstract], name = "booleanParameter", descriptor = boolean()
+│ ├─■ [2] ByteCodeMethod accessFlags = [public, abstract], prototype = boolean booleanParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Boolean value = IntegerConstant( 1 (boolean true) )
-│ ├─■ [3] ByteCodeMethod accessFlags = [public, abstract], name = "byteParameter", descriptor = byte()
+│ ├─■ [3] ByteCodeMethod accessFlags = [public, abstract], prototype = byte byteParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Byte value = IntegerConstant( 1 (byte) )
-│ ├─■ [4] ByteCodeMethod accessFlags = [public, abstract], name = "charParameter", descriptor = char()
+│ ├─■ [4] ByteCodeMethod accessFlags = [public, abstract], prototype = char charParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Character value = IntegerConstant( 99 (char 'c') )
-│ ├─■ [5] ByteCodeMethod accessFlags = [public, abstract], name = "doubleParameter", descriptor = double()
+│ ├─■ [5] ByteCodeMethod accessFlags = [public, abstract], prototype = double doubleParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Double value = DoubleConstant( 0.5 )
-│ ├─■ [6] ByteCodeMethod accessFlags = [public, abstract], name = "floatParameter", descriptor = float()
+│ ├─■ [6] ByteCodeMethod accessFlags = [public, abstract], prototype = float floatParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Float value = FloatConstant( 0.25f )
-│ ├─■ [7] ByteCodeMethod accessFlags = [public, abstract], name = "intParameter", descriptor = int()
+│ ├─■ [7] ByteCodeMethod accessFlags = [public, abstract], prototype = int intParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 2 )
-│ ├─■ [8] ByteCodeMethod accessFlags = [public, abstract], name = "longParameter", descriptor = long()
+│ ├─■ [8] ByteCodeMethod accessFlags = [public, abstract], prototype = long longParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Long value = LongConstant( 3L )
-│ ├─■ [9] ByteCodeMethod accessFlags = [public, abstract], name = "shortParameter", descriptor = short()
+│ ├─■ [9] ByteCodeMethod accessFlags = [public, abstract], prototype = short shortParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = Short value = IntegerConstant( 4 (short) )
-│ ├─■ [10] ByteCodeMethod accessFlags = [public, abstract], name = "stringParameter", descriptor = java.lang.String()
+│ ├─■ [10] ByteCodeMethod accessFlags = [public, abstract], prototype = java.lang.String stringParameter()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] AnnotationDefaultAttribute
 │ │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "x" )
-│ ├─■ [11] ByteCodeMethod accessFlags = [public, abstract], name = "classParameter", descriptor = java.lang.Class()
+│ ├─■ [11] ByteCodeMethod accessFlags = [public, abstract], prototype = java.lang.Class classParameter()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] AnnotationDefaultAttribute
 │ │   │ └─■ value: ClassAnnotationValue name = java.lang.Object
 │ │   └─■ [1] SignatureAttribute ()Ljava/lang/Class<*>;
-│ └─■ [12] ByteCodeMethod accessFlags = [public, abstract], name = "value", descriptor = int()
+│ └─■ [12] ByteCodeMethod accessFlags = [public, abstract], prototype = int value()
 │   └─■ attributes: 1 items
 │     └─■ [0] AnnotationDefaultAttribute
 │       └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 5 )

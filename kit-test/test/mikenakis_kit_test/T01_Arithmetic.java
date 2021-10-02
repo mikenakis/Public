@@ -4,6 +4,7 @@ import mikenakis.benchmark.Benchmarkable;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.kit.logging.Log;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Locale;
@@ -48,8 +49,7 @@ public class T01_Arithmetic
 		checksOut( "Kit.mod1()", -3, 3, 0.0001, T01_Arithmetic::jdkMod1, Kit.math::mod1, 1e-9 );
 	}
 
-	@Test
-	public void Fast_mod1_is_much_faster_than_jdk_mod1()
+	@Ignore @Test public void Fast_mod1_is_much_faster_than_jdk_mod1()
 	{
 		Benchmark benchmark = new Benchmark();
 		double t1 = benchmark.measure( Benchmarkable.of( () -> (int)jdkMod1( π ) ) );

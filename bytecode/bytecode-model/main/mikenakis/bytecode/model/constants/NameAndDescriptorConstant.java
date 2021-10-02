@@ -12,6 +12,11 @@ import java.util.Objects;
  */
 public final class NameAndDescriptorConstant extends Constant
 {
+	public static NameAndDescriptorConstant of( String name, String descriptorString )
+	{
+		return of( Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ) );
+	}
+
 	public static NameAndDescriptorConstant of( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant ) //TODO: remove
 	{
 		NameAndDescriptorConstant nameAndDescriptorConstant = new NameAndDescriptorConstant();

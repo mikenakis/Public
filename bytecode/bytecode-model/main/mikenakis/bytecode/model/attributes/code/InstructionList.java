@@ -1,6 +1,5 @@
 package mikenakis.bytecode.model.attributes.code;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -12,21 +11,27 @@ import java.util.List;
  */
 public final class InstructionList
 {
-	public static InstructionList of()
-	{
-		return of( new ArrayList<>() );
-	}
-
 	public static InstructionList of( List<Instruction> instructions )
 	{
 		return new InstructionList( instructions );
 	}
 
 	private final List<Instruction> instructions;
+	private int insertionPoint;
 
 	private InstructionList( List<Instruction> instructions )
 	{
 		this.instructions = instructions;
+		insertionPoint = instructions.size();
+	}
+
+	public int getInsertionPoint() { return insertionPoint; }
+
+	public void setInsertionPoint( int insertionPoint )
+	{
+		assert insertionPoint >= 0;
+		assert insertionPoint <= size();
+		this.insertionPoint = insertionPoint;
 	}
 
 	public Collection<Instruction> all()
@@ -36,7 +41,7 @@ public final class InstructionList
 
 	public void add( Instruction instruction )
 	{
-		instructions.add( instruction );
+		instructions.add( insertionPoint++, instruction );
 	}
 
 	public void insert( int index, Instruction instruction )

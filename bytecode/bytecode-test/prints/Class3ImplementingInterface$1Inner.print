@@ -1,26 +1,26 @@
-■ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] java.util.function.Supplier
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 2 items
-│ ├─■ [0] ByteCodeField accessFlags = [final], name+descriptor = int i
+│ ├─■ [0] ByteCodeField accessFlags = [final], prototype = int i
 │ │ └─■ attributeSet: 0 items
-│ └─■ [1] ByteCodeField accessFlags = [final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
+│ └─■ [1] ByteCodeField accessFlags = [final, synthetic], prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 3 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
+│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 3
 │ │   │ ├─■ instructions: 9 entries
 │ │   │ │ ├─■ L101: // {
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         ALOAD_1 1
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         ALOAD 1
 │ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class3ImplementingInterface mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.this$0
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │ │   │ │ ├─■ L102: // this.i = i;
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         ILOAD_2 2
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         ILOAD 2
 │ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
 │ │   │ │ ├─■ L103: // }
 │ │   │ │ └─■         RETURN
@@ -31,45 +31,45 @@
 │ │   │   │ ├─■ [1] LineNumberTableEntry lineNumber = 102, start = L102
 │ │   │   │ └─■ [2] LineNumberTableEntry lineNumber = 103, start = L103
 │ │   │   └─■ [1] LocalVariableTableAttribute; 3 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L101, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
-│ │   │     ├─■ [1] LocalVariableTableEntry index = 1, start = L101, end = @end, name = this$0, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
-│ │   │     └─■ [2] LocalVariableTableEntry index = 2, start = L101, end = @end, name = i, descriptor = int
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L101, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
+│ │   │     ├─■ [1] LocalVariableTableEntry index = 1, start = L101, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
+│ │   │     └─■ [2] LocalVariableTableEntry index = 2, start = L101, end = @end, prototype = int i
 │ │   └─■ [1] MethodParametersAttribute; 2 items
 │ │     ├─■ [0] MethodParameter accessFlags = [final, mandated], name = "this$0"
 │ │     └─■ [1] MethodParameter accessFlags = [], name = "i"
-│ ├─■ [1] ByteCodeMethod accessFlags = [public], name = "get", descriptor = java.lang.Integer()
+│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = java.lang.Integer get()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 4 entries
 │ │     │ ├─■ L107: // return i;
-│ │     │ ├─■         ALOAD_0 0
+│ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
-│ │     │ ├─■         INVOKESTATIC type = java.lang.Integer, name = valueOf, descriptor = java.lang.Integer( int )
+│ │     │ ├─■         INVOKESTATIC reference = [Plain] java.lang.Integer java.lang.Integer.valueOf( int )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 107, start = L107
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L107, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
-│ └─■ [2] ByteCodeMethod accessFlags = [public, bridge, synthetic], name = "get", descriptor = java.lang.Object()
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L107, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
+│ └─■ [2] ByteCodeMethod accessFlags = [public, bridge, synthetic], prototype = java.lang.Object get()
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │       ├─■ instructions: 3 entries
 │       │ ├─■ L96: // class Inner implements Supplier<Integer>
-│       │ ├─■         ALOAD_0 0
-│       │ ├─■         INVOKEVIRTUAL type = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, name = get, descriptor = java.lang.Integer()
+│       │ ├─■         ALOAD 0
+│       │ ├─■         INVOKEVIRTUAL reference = [Plain] java.lang.Integer mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.get()
 │       │ └─■         ARETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items
 │         ├─■ [0] LineNumberTableAttribute; 1 items
 │         │ └─■ [0] LineNumberTableEntry lineNumber = 96, start = L96
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L96, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L96, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
 └─■ attributeSet: 5 items
   ├─■ [0] SignatureAttribute Ljava/lang/Object;Ljava/util/function/Supplier<Ljava/lang/Integer;>;
   ├─■ [1] SourceFileAttribute "Class3ImplementingInterface.java"
-  ├─■ [2] EnclosingMethodAttribute enclosingClass = mikenakis.bytecode.test.model.Class3ImplementingInterface, enclosingMethodName = "methodWithInnerClass", enclosingMethodDescriptor = java.util.function.Supplier( int )
+  ├─■ [2] EnclosingMethodAttribute enclosingClass = mikenakis.bytecode.test.model.Class3ImplementingInterface, enclosingMethodPrototype = java.util.function.Supplier methodWithInnerClass( int )
   ├─■ [3] NestHostAttribute mikenakis.bytecode.test.model.Class3ImplementingInterface
   └─■ [4] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Inner

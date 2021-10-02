@@ -81,7 +81,7 @@ public class T999_Coverage
 
 	@Test public void Cover_Misc_Methods()
 	{
-		ClassConstant classConstant = ClassConstant.of( java.util.HashMap.class.getName() );
+		ClassConstant classConstant = ClassConstant.ofTypeName( java.util.HashMap.class.getName() );
 		Mutf8Constant nameConstant = Mutf8Constant.of( "name" );
 		Mutf8Constant descriptorConstant = Mutf8Constant.of( "descriptor" );
 		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
@@ -262,8 +262,8 @@ public class T999_Coverage
 		attributeSet.replaceAttribute( codeAttribute );
 		attributeSet.removeAttribute( codeAttribute );
 
-		ByteCodeField.of( ByteCodeField.modifierFlagsEnum.of(), "testField", FieldDescriptor.of( TerminalTypeDescriptor.of( Object.class ) ) );
-		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), "test.testClass", Optional.empty() ); //FIXME things fail if a package name is not specified.
+		ByteCodeField.of( ByteCodeField.modifierEnum.of(), "testField", FieldDescriptor.of( TerminalTypeDescriptor.of( Object.class ) ) );
+		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.ofTypeName( "test.testClass" ), Optional.empty() ); //FIXME things fail if a package name is not specified.
 		byteCodeType.createOrGetBootstrapMethodsAttribute();
 
 		//		InvalidAnnotationValueTagException invalidAnnotationValueTagException = Kit.testing.expectException( //
@@ -332,13 +332,13 @@ public class T999_Coverage
 		KnownAttribute syntheticAttribute = SyntheticAttribute.of();
 		syntheticAttribute.asSyntheticAttribute();
 
-		InstructionList instructionList = InstructionList.of();
-		instructionList.add( instruction1 );
-		instructionList.insert( 0, instruction2 );
+		//InstructionList instructionList = InstructionList.of();
+		//instructionList.add( instruction1 );
+		//instructionList.insert( 0, instruction2 );
 
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierFlagsEnum.of(), Mutf8Constant.of( "testMethod" ), Mutf8Constant.of( "()V" ), AttributeSet.of() );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), Mutf8Constant.of( "testMethod" ), Mutf8Constant.of( "()V" ), AttributeSet.of() );
 		byteCodeType.methods.add( byteCodeMethod );
-		ByteCodeType descendantByteCodeType = ByteCodeType.of( ByteCodeType.modifierFlagsEnum.of(), "test.test2", Optional.of( "test.testClass" ) );
+		ByteCodeType descendantByteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.ofTypeName( "test.test2" ), Optional.of( TerminalTypeDescriptor.ofTypeName( "test.testClass" ) ) );
 		Function<String,ByteCodeType> byteCodeTypeResolver = s ->
 		{
 			if( s.equals( "test.testClass" ) )

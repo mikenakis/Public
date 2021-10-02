@@ -1,20 +1,20 @@
-■ ByteCodeType version = 60.0, accessFlags = [final, super], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [final, super], this = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, super = java.lang.Object
 ├─■ interfaces: 0 items
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [private], name+descriptor = boolean foo
+│ └─■ [0] ByteCodeField accessFlags = [private], prototype = boolean foo
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
-│ └─■ [0] ByteCodeMethod accessFlags = [private], name = "<init>", descriptor = void()
+│ └─■ [0] ByteCodeMethod accessFlags = [private], prototype = void <init>()
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
 │       ├─■ instructions: 6 entries
 │       │ ├─■ L11: // private static final class NestedClass
-│       │ ├─■         ALOAD_0 0
-│       │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│       │ ├─■         ALOAD 0
+│       │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │       │ ├─■ L13: // private boolean foo = false;
-│       │ ├─■         ALOAD_0 0
-│       │ ├─■         ICONST_0
+│       │ ├─■         ALOAD 0
+│       │ ├─■         LDC 0
 │       │ ├─■         PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
@@ -23,7 +23,7 @@
 │         │ ├─■ [0] LineNumberTableEntry lineNumber = 11, start = L11
 │         │ └─■ [1] LineNumberTableEntry lineNumber = 13, start = L13
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class4ExtendingClass3.java"
   ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class4ExtendingClass3

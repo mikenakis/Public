@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model.descriptors;
 
-public class MethodHandleDescriptor extends Descriptor
+public class MethodHandleDescriptor
 {
 	public static MethodHandleDescriptor of( MethodDescriptor methodDescriptor, TypeDescriptor ownerTypeDescriptor )
 	{
@@ -14,10 +14,5 @@ public class MethodHandleDescriptor extends Descriptor
 	{
 		this.methodDescriptor = methodDescriptor;
 		this.ownerTypeDescriptor = ownerTypeDescriptor;
-	}
-
-	@Override public String name()
-	{
-		return methodDescriptor.name();
 	}
 }

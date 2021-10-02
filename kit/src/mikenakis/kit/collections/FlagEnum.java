@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * Necessary because Java's {@link java.util.EnumSet} does not expose the `int` containing the bits.
  *
- * See {@link FlagEnumSet}
+ * See {@link FlagSet}
  *
  * @param <E>
  */
@@ -46,9 +46,9 @@ public class FlagEnum<E extends Enum<E>>
 		this.mask = mask;
 	}
 
-	public FlagEnumSet<E> fromBits( int bits )
+	public FlagSet<E> fromBits( int bits )
 	{
-		return FlagEnumSet.of( this, bits );
+		return FlagSet.of( this, bits );
 	}
 
 	public int getBit( E value )
@@ -67,12 +67,12 @@ public class FlagEnum<E extends Enum<E>>
 		return valuesFromBits.keySet();
 	}
 
-	@SafeVarargs @SuppressWarnings( "varargs" ) public final FlagEnumSet<E> of( E... values )
+	@SafeVarargs @SuppressWarnings( "varargs" ) public final FlagSet<E> of( E... values )
 	{
 		return of( List.of( values ) );
 	}
 
-	public FlagEnumSet<E> of( Iterable<E> values )
+	public FlagSet<E> of( Iterable<E> values )
 	{
 		int flags = 0;
 		for( E value : values )
@@ -80,6 +80,6 @@ public class FlagEnum<E extends Enum<E>>
 			int bit = Kit.map.get( valuesFromBits, value );
 			flags |= bit;
 		}
-		return FlagEnumSet.of( this, flags );
+		return FlagSet.of( this, flags );
 	}
 }

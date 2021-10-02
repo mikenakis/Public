@@ -1,5 +1,6 @@
 package mikenakis.bytecode.writing;
 
+import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.AnnotationParameter;
 import mikenakis.bytecode.model.AnnotationValue;
@@ -43,9 +44,9 @@ import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.IndirectLoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
@@ -59,7 +60,11 @@ import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificat
 import mikenakis.bytecode.model.attributes.stackmap.verification.UninitializedVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.constants.DoubleConstant;
+import mikenakis.bytecode.model.constants.FloatConstant;
+import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
+import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
@@ -188,7 +193,7 @@ final class ConstantPool
 	void internClassConstant( ClassConstant classConstant )
 	{
 		internConstant( classConstant );
-		internMutf8Constant( classConstant.getNameConstant() );
+		internMutf8Constant( classConstant.getInternalNameOrDescriptorStringConstant() );
 	}
 
 	void internField( ByteCodeField byteCodeField )
@@ -430,7 +435,8 @@ final class ConstantPool
 			case Instruction.groupTag_ClassConstantReferencing -> internClassConstantReferencingInstruction( instruction.asClassConstantReferencingInstruction() );
 			case Instruction.groupTag_FieldConstantReferencing -> internFieldConstantReferencingInstruction( instruction.asFieldConstantReferencingInstruction() );
 			case Instruction.groupTag_MethodConstantReferencing -> internMethodConstantReferencingInstruction( instruction.asMethodConstantReferencingInstruction() );
-			case Instruction.groupTag_IndirectLoadConstant -> internIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction() );
+//			case Instruction.groupTag_IndirectLoadConstant -> internIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction() );
+			case Instruction.groupTag_LoadConstant -> internLoadConstantInstruction( instruction.asLoadConstantInstruction() );
 			case Instruction.groupTag_InvokeDynamic -> internInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction() );
 			case Instruction.groupTag_InvokeInterface -> internInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction() );
 			case Instruction.groupTag_MultiANewArray -> internMultiANewArrayInstruction( instruction.asMultiANewArrayInstruction() );
@@ -453,16 +459,59 @@ final class ConstantPool
 		internInvokeDynamicConstant( invokeDynamicInstruction.invokeDynamicConstant );
 	}
 
-	private void internIndirectLoadConstantInstruction( IndirectLoadConstantInstruction indirectLoadConstantInstruction )
+//	private void internIndirectLoadConstantInstruction( IndirectLoadConstantInstruction indirectLoadConstantInstruction )
+//	{
+//		Constant constant = indirectLoadConstantInstruction.constant;
+//		switch( constant.tag )
+//		{
+//			case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double -> internConstant( constant );
+//			case Constant.tag_String -> internStringConstant( constant.asStringConstant() );
+//			case Constant.tag_Class -> internClassConstant( constant.asClassConstant() );
+//			default -> throw new AssertionError( constant );
+//		}
+//	}
+
+	private void internLoadConstantInstruction( LoadConstantInstruction indirectLoadConstantInstruction )
 	{
 		Constant constant = indirectLoadConstantInstruction.constant;
 		switch( constant.tag )
 		{
-			case Constant.tag_Integer, Constant.tag_Long, Constant.tag_Float, Constant.tag_Double -> internConstant( constant );
+			case Constant.tag_Integer -> internIntegerConstant( constant.asIntegerConstant() );
+			case Constant.tag_Float -> internFloatConstant( constant.asFloatConstant() );
+			case Constant.tag_Long -> internLongConstant( constant.asLongConstant() );
+			case Constant.tag_Double -> internDoubleConstant( constant.asDoubleConstant() );
 			case Constant.tag_String -> internStringConstant( constant.asStringConstant() );
 			case Constant.tag_Class -> internClassConstant( constant.asClassConstant() );
 			default -> throw new AssertionError( constant );
 		}
+	}
+
+	private void internIntegerConstant( IntegerConstant integerConstant )
+	{
+		if( Helpers.isSignedShort( integerConstant.value ) )
+			return;
+		internConstant( integerConstant );
+	}
+
+	private void internFloatConstant( FloatConstant floatConstant )
+	{
+		if( floatConstant.value == 0.0f || floatConstant.value == 1.0f )
+			return;
+		internConstant( floatConstant );
+	}
+
+	private void internLongConstant( LongConstant longConstant )
+	{
+		if( longConstant.value == 0L || longConstant.value == 1L )
+			return;
+		internConstant( longConstant );
+	}
+
+	private void internDoubleConstant( DoubleConstant doubleConstant )
+	{
+		if( doubleConstant.value == 0.0 || doubleConstant.value == 1.0 )
+			return;
+		internConstant( doubleConstant );
 	}
 
 	private void internClassConstantReferencingInstruction( ClassConstantReferencingInstruction classConstantReferencingInstruction )

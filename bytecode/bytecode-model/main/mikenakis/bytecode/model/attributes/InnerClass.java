@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.kit.collections.FlagEnumSet;
+import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.kit.collections.FlagSet;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
@@ -17,9 +18,9 @@ import java.util.Optional;
 public final class InnerClass
 {
 	public static InnerClass of( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
-		FlagEnumSet<InnerClassModifier> modifierSet )
+		FlagSet<InnerClassModifier> modifiers )
 	{
-		return new InnerClass( innerClassConstant, outerClassConstant, innerNameConstant, modifierSet );
+		return new InnerClass( innerClassConstant, outerClassConstant, innerNameConstant, modifiers );
 	}
 
 	public enum InnerClassModifier
@@ -51,19 +52,23 @@ public final class InnerClass
 	public final ClassConstant innerClassConstant;
 	public final Optional<ClassConstant> outerClassConstant;
 	public final Optional<Mutf8Constant> innerNameConstant;
-	public final FlagEnumSet<InnerClassModifier> modifierSet;
+	public final FlagSet<InnerClassModifier> modifiers;
 
 	private InnerClass( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
-		FlagEnumSet<InnerClassModifier> modifierSet )
+		FlagSet<InnerClassModifier> modifiers )
 	{
 		this.innerClassConstant = innerClassConstant;
 		this.outerClassConstant = outerClassConstant;
 		this.innerNameConstant = innerNameConstant;
-		this.modifierSet = modifierSet;
+		this.modifiers = modifiers;
 	}
 
-	public String innerTypeName() { return innerClassConstant.typeName(); }
-	public Optional<String> outerTypeName() { return outerClassConstant.map( c -> c.typeName() ); }
+	public TerminalTypeDescriptor innerType() { return innerClassConstant.terminalTypeDescriptor(); }
+	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> c.terminalTypeDescriptor() ); }
 	public Optional<String> innerName() { return innerNameConstant.map( c -> c.stringValue() ); }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "outerClass = " + outerClassConstant + " accessFlags = " + modifierSet + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant; }
+
+	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	{
+		return "outerClass = " + outerClassConstant + " accessFlags = " + modifiers + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant;
+	}
 }

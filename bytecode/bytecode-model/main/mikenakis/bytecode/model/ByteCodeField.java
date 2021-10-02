@@ -2,10 +2,11 @@ package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.descriptors.FieldDescriptor;
+import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
-import mikenakis.kit.collections.FlagEnumSet;
+import mikenakis.kit.collections.FlagSet;
 
 import java.util.Map;
 
@@ -16,15 +17,15 @@ import java.util.Map;
  */
 public final class ByteCodeField extends ByteCodeMember
 {
-	public static ByteCodeField of( FlagEnumSet<Modifier> modifierSet, String name, FieldDescriptor fieldDescriptor )
+	public static ByteCodeField of( FlagSet<Modifier> modifiers, String name, FieldDescriptor fieldDescriptor )
 	{
 		String descriptorString = fieldDescriptor.descriptorString();
-		return of( modifierSet, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
+		return of( modifiers, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
 	}
 
-	public static ByteCodeField of( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeField of( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
-		return new ByteCodeField( modifierSet, nameConstant, descriptorConstant, attributeSet );
+		return new ByteCodeField( modifiers, nameConstant, descriptorConstant, attributeSet );
 	}
 
 	public enum Modifier
@@ -32,7 +33,7 @@ public final class ByteCodeField extends ByteCodeMember
 		Public, Private, Protected, Static, Final, Volatile, Transient, Synthetic, Enum
 	}
 
-	public static final FlagEnum<Modifier> modifierFlagsEnum = FlagEnum.of( Modifier.class, //
+	public static final FlagEnum<Modifier> modifierEnum = FlagEnum.of( Modifier.class, //
 		Map.entry( Modifier.Public    /**/, 0x0001 ),   // ACC_PUBLIC    = 0x0001;
 		Map.entry( Modifier.Private   /**/, 0x0002 ),   // ACC_PRIVATE   = 0x0002;
 		Map.entry( Modifier.Protected /**/, 0x0004 ),   // ACC_PROTECTED = 0x0004;
@@ -43,20 +44,21 @@ public final class ByteCodeField extends ByteCodeMember
 		Map.entry( Modifier.Synthetic /**/, 0x1000 ),   // ACC_SYNTHETIC = 0x1000;
 		Map.entry( Modifier.Enum      /**/, 0x4000 ) ); // ACC_ENUM      = 0x4000;
 
-	public final FlagEnumSet<Modifier> modifierSet;
+	public final FlagSet<Modifier> modifiers;
 	public final Mutf8Constant descriptorConstant;
 
-	private ByteCodeField( FlagEnumSet<Modifier> modifierSet, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeField( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
 	{
 		super( nameConstant, attributeSet );
-		this.modifierSet = modifierSet;
+		this.modifiers = modifiers;
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public FieldDescriptor fieldDescriptor() { return FieldDescriptor.of( TypeDescriptor.ofDescriptorString( descriptorConstant.stringValue() ) ); }
+	public FieldDescriptor descriptor() { return FieldDescriptor.of( TypeDescriptor.ofDescriptorString( descriptorConstant.stringValue() ) ); }
+	public FieldPrototype prototype() { return FieldPrototype.of( name(), descriptor() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "accessFlags = " + modifierSet + ", name = " + nameConstant + ", descriptor = " + descriptorConstant;
+		return "accessFlags = " + modifiers + ", name = " + nameConstant + ", descriptor = " + descriptorConstant;
 	}
 }

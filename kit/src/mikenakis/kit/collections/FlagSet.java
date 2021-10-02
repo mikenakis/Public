@@ -13,17 +13,17 @@ import java.util.Objects;
  *
  * @param <E>
  */
-public class FlagEnumSet<E extends Enum<E>>
+public class FlagSet<E extends Enum<E>>
 {
-	public static <E extends Enum<E>> FlagEnumSet<E> of( FlagEnum<E> flagEnum, int flags )
+	public static <E extends Enum<E>> FlagSet<E> of( FlagEnum<E> flagEnum, int flags )
 	{
-		return new FlagEnumSet<>( flagEnum, flags );
+		return new FlagSet<>( flagEnum, flags );
 	}
 
 	private final FlagEnum<E> flagEnum;
 	private final int bits;
 
-	private FlagEnumSet( FlagEnum<E> flagEnum, int bits )
+	private FlagSet( FlagEnum<E> flagEnum, int bits )
 	{
 		assert flagEnum.isValidIntAssertion( bits );
 		this.flagEnum = flagEnum;
@@ -66,37 +66,37 @@ public class FlagEnumSet<E extends Enum<E>>
 		return bits;
 	}
 
-	public FlagEnumSet<E> tryWithout( E value )
+	public FlagSet<E> tryWithout( E value )
 	{
 		int bit = flagEnum.getBit( value );
 		int newFlags = bits & ~bit;
-		return newFlags == bits ? this : new FlagEnumSet<>( flagEnum, newFlags );
+		return newFlags == bits ? this : new FlagSet<>( flagEnum, newFlags );
 	}
 
-	public FlagEnumSet<E> tryWith( E value )
+	public FlagSet<E> tryWith( E value )
 	{
 		int bit = flagEnum.getBit( value );
 		int newFlags = bits | bit;
-		return newFlags == bits ? this : new FlagEnumSet<>( flagEnum, newFlags );
+		return newFlags == bits ? this : new FlagSet<>( flagEnum, newFlags );
 	}
 
-	public FlagEnumSet<E> tryWithout( FlagEnumSet<E> other )
+	public FlagSet<E> tryWithout( FlagSet<E> other )
 	{
 		assert other.flagEnum == flagEnum;
 		int newFlags = bits & ~other.bits;
-		return newFlags == bits ? this : new FlagEnumSet<>( flagEnum, newFlags );
+		return newFlags == bits ? this : new FlagSet<>( flagEnum, newFlags );
 	}
 
-	public FlagEnumSet<E> tryWith( FlagEnumSet<E> other )
+	public FlagSet<E> tryWith( FlagSet<E> other )
 	{
 		assert other.flagEnum == flagEnum;
 		int newFlags = bits | other.bits;
-		return newFlags == bits ? this : new FlagEnumSet<>( flagEnum, newFlags );
+		return newFlags == bits ? this : new FlagSet<>( flagEnum, newFlags );
 	}
 
 	@Deprecated @Override public boolean equals( Object other )
 	{
-		return other instanceof FlagEnumSet<?> kin ? equals( kin ) : Kit.fail();
+		return other instanceof FlagSet<?> kin ? equals( kin ) : Kit.fail();
 	}
 
 	@Override public int hashCode()
@@ -104,7 +104,7 @@ public class FlagEnumSet<E extends Enum<E>>
 		return Objects.hash( flagEnum, bits );
 	}
 
-	public boolean equals( FlagEnumSet<?> other )
+	public boolean equals( FlagSet<?> other )
 	{
 		return flagEnum == other.flagEnum ? bits == other.bits : Kit.fail();
 	}

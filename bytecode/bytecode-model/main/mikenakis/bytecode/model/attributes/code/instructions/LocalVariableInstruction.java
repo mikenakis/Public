@@ -10,8 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public final class LocalVariableInstruction extends Instruction
 {
@@ -174,8 +172,6 @@ public final class LocalVariableInstruction extends Instruction
 		new OpCodeInfo( OpCode.RET      /**/, PseudoOpCode.Ret    /**/, IndexType.ByOperand )  //
 	);
 
-	private static final Set<Integer> opCodes = opCodeInfos.stream().map( c -> c.opCode ).collect( Collectors.toSet() );
-
 	private static final class Model
 	{
 		final int opCode;
@@ -214,9 +210,9 @@ public final class LocalVariableInstruction extends Instruction
 	private LocalVariableInstruction( int opCode, int index )
 	{
 		super( groupTag_LocalVariable );
-		assert opCodes.contains( opCode );
+		assert modelsFromOpCodes.containsKey( opCode );
 		assert index >= 0;
-		this.opCode = opCode;
+		this.opCode = Kit.map.get( modelsFromOpCodes, opCode ).opCodeInfo.pseudoOpCode.posterOpCode;
 		this.index = index;
 	}
 

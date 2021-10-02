@@ -1,20 +1,20 @@
-■ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, super = java.lang.Object
 ├─■ interfaces: 0 items
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final], name+descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
+│ └─■ [0] ByteCodeField accessFlags = [final], prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
-│ └─■ [0] ByteCodeMethod accessFlags = [varargs], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ └─■ [0] ByteCodeMethod accessFlags = [varargs], prototype = void <init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │   └─■ attributes: 2 items
 │     ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │     │ ├─■ instructions: 6 entries
 │     │ │ ├─■ L70: // {
-│     │ │ ├─■         ALOAD_0 0
-│     │ │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│     │ │ ├─■         ALOAD 0
+│     │ │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │     │ │ ├─■ L71: // this.foos = foos;
-│     │ │ ├─■         ALOAD_0 0
-│     │ │ ├─■         ALOAD_1 1
+│     │ │ ├─■         ALOAD 0
+│     │ │ ├─■         ALOAD 1
 │     │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.foos
 │     │ │ ├─■ L72: // }
 │     │ │ └─■         RETURN
@@ -25,8 +25,8 @@
 │     │   │ ├─■ [1] LineNumberTableEntry lineNumber = 71, start = L71
 │     │   │ └─■ [2] LineNumberTableEntry lineNumber = 72, start = L72
 │     │   └─■ [1] LocalVariableTableAttribute; 2 items
-│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L70, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
-│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L70, end = @end, name = foos, descriptor = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L70, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo this
+│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L70, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
 │     └─■ [1] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "foos"
 └─■ attributeSet: 3 items

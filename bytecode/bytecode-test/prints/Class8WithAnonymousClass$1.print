@@ -1,32 +1,32 @@
-■ ByteCodeType version = 60.0, accessFlags = [super], thisClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] mikenakis.bytecode.test.model.Interface1
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], name+descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
+│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 3 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [], name = "<init>", descriptor = void( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 6 entries
 │ │   │ │ ├─■ L12: // {
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         ALOAD_1 1
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         ALOAD 1
 │ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class8WithAnonymousClass mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
-│ │   │ │ ├─■         ALOAD_0 0
-│ │   │ │ ├─■         INVOKESPECIAL type = java.lang.Object, name = <init>, descriptor = void()
+│ │   │ │ ├─■         ALOAD 0
+│ │   │ │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 12, start = L12
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L12, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L12, end = @end, name = this$0, descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L12, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L12, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [final, mandated], name = "this$0"
-│ ├─■ [1] ByteCodeMethod accessFlags = [public], name = "getEnum1", descriptor = mikenakis.bytecode.test.model.Enum1()
+│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = mikenakis.bytecode.test.model.Enum1 getEnum1()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 2 entries
@@ -38,21 +38,21 @@
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 15, start = L15
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
-│ └─■ [2] ByteCodeMethod accessFlags = [public], name = "getInteger", descriptor = int( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
+│ └─■ [2] ByteCodeMethod accessFlags = [public], prototype = int getInteger( mikenakis.bytecode.test.model.Class3ImplementingInterface )
 │   └─■ attributes: 2 items
 │     ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
 │     │ ├─■ instructions: 2 entries
 │     │ │ ├─■ L19: // return 0;
-│     │ │ ├─■         ICONST_0
+│     │ │ ├─■         LDC 0
 │     │ │ └─■         IRETURN
 │     │ ├─■ exceptionInfos: 0 items
 │     │ └─■ attributeSet: 2 items
 │     │   ├─■ [0] LineNumberTableAttribute; 1 items
 │     │   │ └─■ [0] LineNumberTableEntry lineNumber = 19, start = L19
 │     │   └─■ [1] LocalVariableTableAttribute; 2 items
-│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, name = this, descriptor = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
-│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L19, end = @end, name = class3ImplementingInterface, descriptor = mikenakis.bytecode.test.model.Class3ImplementingInterface
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
+│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L19, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
 │     └─■ [1] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
 └─■ attributeSet: 4 items

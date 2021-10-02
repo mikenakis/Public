@@ -1,9 +1,9 @@
-■ ByteCodeType version = 60.0, accessFlags = [interface, abstract], thisClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, superClass = java.lang.Object
+■ ByteCodeType version = 60.0, accessFlags = [interface, abstract], this = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, super = java.lang.Object
 ├─■ interfaces: 0 items
-├─■ extraConstants: 0 items
+├─■ extraTypes: 0 items
 ├─■ fields: 0 items
 ├─■ methods: 1 items
-│ └─■ [0] ByteCodeMethod accessFlags = [public, abstract], name = "x", descriptor = java.lang.String( java.lang.String )
+│ └─■ [0] ByteCodeMethod accessFlags = [public, abstract], prototype = java.lang.String x( java.lang.String )
 │   └─■ attributes: 1 items
 │     └─■ [0] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "s"

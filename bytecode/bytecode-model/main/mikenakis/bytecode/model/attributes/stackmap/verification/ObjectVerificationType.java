@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -23,7 +24,7 @@ public final class ObjectVerificationType extends VerificationType
 		this.classConstant = classConstant;
 	}
 
-	public String typeName() { return classConstant.typeName(); }
+	public TypeDescriptor typeDescriptor() { return classConstant.typeDescriptor(); }
 
 	@Deprecated @Override public ObjectVerificationType asObjectVerificationType() { return this; }
 

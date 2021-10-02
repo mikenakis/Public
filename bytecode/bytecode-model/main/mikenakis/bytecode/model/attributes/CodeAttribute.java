@@ -25,6 +25,8 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
+import mikenakis.bytecode.model.descriptors.FieldReference;
+import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -105,11 +107,14 @@ public final class CodeAttribute extends KnownAttribute
 	public InvokeDynamicInstruction             /**/ addInvokeDynamic     /**/ ( InvokeDynamicConstant constant )                               /**/ { return add( InvokeDynamicInstruction.of( constant ) ); }
 	public MultiANewArrayInstruction            /**/ addMultiANewArray    /**/ ( ClassConstant constant, int dimensionCount )                   /**/ { return add( MultiANewArrayInstruction.of( constant, dimensionCount ) ); }
 	public FieldConstantReferencingInstruction  /**/ addGetStatic         /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.GETSTATIC, constant ) ); }
+	public FieldConstantReferencingInstruction  /**/ addGetStatic         /**/ ( FieldReference fieldReference )                                /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.GETSTATIC, fieldReference ) ); }
 	public FieldConstantReferencingInstruction  /**/ addPutStatic         /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.PUTSTATIC, constant ) ); }
 	public FieldConstantReferencingInstruction  /**/ addGetField          /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.GETFIELD, constant ) ); }
 	public FieldConstantReferencingInstruction  /**/ addPutField          /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.PUTFIELD, constant ) ); }
 	public MethodConstantReferencingInstruction /**/ addInvokeVirtual     /**/ ( MethodReferenceConstant constant )                             /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKEVIRTUAL, constant ) ); }
+	public MethodConstantReferencingInstruction /**/ addInvokeVirtual     /**/ ( MethodReference methodReference )                              /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKEVIRTUAL, methodReference ) ); }
 	public MethodConstantReferencingInstruction /**/ addInvokeSpecial     /**/ ( MethodReferenceConstant constant )                             /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESPECIAL, constant ) ); }
+	public MethodConstantReferencingInstruction /**/ addInvokeSpecial     /**/ ( MethodReference methodReference )                              /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESPECIAL, methodReference ) ); }
 	public MethodConstantReferencingInstruction /**/ addInvokeStatic      /**/ ( MethodReferenceConstant constant )                             /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESTATIC, constant ) ); }
 	public ClassConstantReferencingInstruction  /**/ addNew               /**/ ( ClassConstant constant )                                       /**/ { return add( ClassConstantReferencingInstruction.of ( OpCode.NEW, constant ) ); }
 	public ClassConstantReferencingInstruction  /**/ addANewArray         /**/ ( ClassConstant constant )                                       /**/ { return add( ClassConstantReferencingInstruction.of ( OpCode.ANEWARRAY, constant ) ); }
@@ -258,6 +263,7 @@ public final class CodeAttribute extends KnownAttribute
 
 	private <T extends Instruction> T add( T instruction )
 	{
+		instructions.add( instruction );
 		return instruction;
 	}
 }
