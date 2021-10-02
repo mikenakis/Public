@@ -1,15 +1,14 @@
 package mikenakis.testana.test_engines.junit;
 
-import mikenakis.kit.functional.Function0;
 import mikenakis.kit.Kit;
+import mikenakis.kit.functional.Function0;
 import mikenakis.testana.runtime.result.FailedMethodTestResult;
 import mikenakis.testana.runtime.result.IgnoredMethodTestResult;
 import mikenakis.testana.runtime.result.SucceededMethodTestResult;
 import mikenakis.testana.runtime.result.TestMethodResult;
 import mikenakis.testana.testplan.TestMethod;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.BufferedOutputStream;
 import java.io.PrintStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
@@ -80,32 +79,9 @@ class JunitTestMethod extends TestMethod
 	private static <T> T withRedirectedOutput( Function0<T> procedure )
 	{
 		PrintStream oldSystemOut = System.out;
-		System.setOut( new PrintStream( new MyOutputStream( oldSystemOut ), false ) );
+		PrintStream newSystemOut = new PrintStream( LinePrefixingOutputStream.of( oldSystemOut, "\\~" ), false );
+		System.setOut( newSystemOut );
 		return Kit.tryFinally( procedure, () -> System.setOut( oldSystemOut ) );
-	}
-
-	private static class MyOutputStream extends OutputStream
-	{
-		private final OutputStream delegee;
-		private boolean bol = true;
-
-		MyOutputStream( OutputStream delegee )
-		{
-			this.delegee = delegee;
-		}
-
-		@Override public void write( int b ) throws IOException
-		{
-			if( bol )
-			{
-				delegee.write( '\\' );
-				delegee.write( '~' );
-				bol = false;
-			}
-			delegee.write( b );
-			if( b == '\n' )
-				bol = true;
-		}
 	}
 
 	@Override public String toString()

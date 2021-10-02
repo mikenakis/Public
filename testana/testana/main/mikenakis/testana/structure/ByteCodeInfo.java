@@ -43,7 +43,7 @@ final class ByteCodeInfo
 		return ByteCodeHelpers.getMethodSourceLocation( byteCodeType, byteCodeMethod );
 	}
 
-	public int getDeclaredMethodIndex( String methodName, MethodDescriptor methodDescriptor )
+	int getDeclaredMethodIndex( String methodName, MethodDescriptor methodDescriptor )
 	{
 		return byteCodeType.findDeclaredMethodByNameAndDescriptor( methodName, methodDescriptor );
 	}
