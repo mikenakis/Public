@@ -200,7 +200,7 @@ public class T01_TestanaTest
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<String> names = collectMethodNames( testPlan );
-		assert names.equals( List.of( "ClaireTest()", "ZAliceTest()", "ZAliceTest()" ) );
+		assert names.equals( List.of( "T01_ClaireTest.ClaireTest()", "T01_ClaireTest.ZAliceTest()", "T02_AliceTest.ZAliceTest()" ) );
 	}
 
 	@Test public void Order_of_Test_Method_Execution_is_by_Inheritance_When_Run_Ancestors_First_Is_Enabled()
@@ -210,7 +210,7 @@ public class T01_TestanaTest
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<String> names = collectMethodNames( testPlan );
-		assert names.equals( List.of( "ZAliceTest()", "ClaireTest()", "ZAliceTest()" ) );
+		assert names.equals( List.of( "T01_ClaireTest.ZAliceTest()", "T01_ClaireTest.ClaireTest()", "T02_AliceTest.ZAliceTest()" ) );
 	}
 
 	private static void setLastModifiedTime( ProjectStructure projectStructure, Class<?> javaClass, Instant lastModifiedTime )
@@ -234,16 +234,15 @@ public class T01_TestanaTest
 	{
 		return testPlan.testModules().stream() //
 			.flatMap( testModule -> testModule.testClasses().stream() ) //
-			.flatMap( testClass -> testClass.testMethods().stream() ) //
-			.map( testMethod -> testMethod.name() ) //
-			.collect( Collectors.toList() );
+			.flatMap( testClass -> testClass.testMethods().stream().map( m -> testClass.simpleName() + "." + m.name() ) ) //
+			.toList();
 	}
 
 	private static List<Node> collectNodes( TestPlan testPlan )
 	{
 		return testPlan.testModules().stream() //
 			.flatMap( testModule -> testModule.testClasses().stream() ) //
-			.map( entry -> new Node( entry.name(), testPlan.getIntent( entry ) ) ) //
+			.map( entry -> new Node( entry.fullName(), testPlan.getIntent( entry ) ) ) //
 			.collect( Collectors.toList() );
 	}
 

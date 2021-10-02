@@ -83,7 +83,7 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return keys;
 	}
 
-	@Override public Key<Procedure0> keyById( int id )
+	@Override public Key<Procedure0> keyByIndex( int id )
 	{
 		return keys.get( id );
 	}

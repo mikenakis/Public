@@ -18,9 +18,14 @@ public abstract class TestClass
 		this.projectType = projectType;
 	}
 
-	public final String name()
+	public final String fullName()
 	{
 		return projectType.className();
+	}
+
+	public final String simpleName()
+	{
+		return projectType.simpleName();
 	}
 
 	public abstract Collection<TestMethod> testMethods();

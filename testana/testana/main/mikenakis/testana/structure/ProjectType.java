@@ -29,7 +29,7 @@ public class ProjectType
 		return new ProjectType( projectModule, outputFile, testEngine, Optional.empty() );
 	}
 
-	private final ProjectModule projectModule;
+	public final ProjectModule projectModule;
 	private final OutputFile outputFile;
 	private Instant lastModifiedTime;
 	private Optional<Collection<String>> lazyDependencyNames;
@@ -49,6 +49,15 @@ public class ProjectType
 	public String className()
 	{
 		return outputFile.className();
+	}
+
+	public String simpleName()
+	{
+		String fullName = outputFile.className();
+		int i = fullName.lastIndexOf( '.' );
+		if( i != -1 )
+			return fullName.substring( i + 1 );
+		return fullName;
 	}
 
 	public Collection<String> dependencyNames()
@@ -100,12 +109,13 @@ public class ProjectType
 
 	private ByteCodeInfo byteCodeInfo()
 	{
-		if( _byteCodeInfo.isEmpty() )
+		return _byteCodeInfo.orElseGet( () -> //
 		{
 			ByteCodeType byteCodeType = projectModule.getProjectByteCodeTypeByNameTransitively( className() );
-			_byteCodeInfo = Optional.of( new ByteCodeInfo( byteCodeType ) );
-		}
-		return _byteCodeInfo.orElseThrow();
+			ByteCodeInfo byteCodeInfo = new ByteCodeInfo( byteCodeType );
+			_byteCodeInfo = Optional.of( byteCodeInfo );
+			return byteCodeInfo;
+		} );
 	}
 
 	public final String getClassSourceLocation()
@@ -123,7 +133,7 @@ public class ProjectType
 		return byteCodeInfo().getMethodSourceLocation( methodName, testMethodDescriptor(), projectModule::getProjectByteCodeTypeByNameTransitively );
 	}
 
-	public int getDeclaredMethodIndex( String methodName )
+	public int getMethodIndex( String methodName )
 	{
 		return byteCodeInfo().getDeclaredMethodIndex( methodName, testMethodDescriptor() );
 	}

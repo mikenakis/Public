@@ -52,7 +52,7 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 		return Kit.collection.downCast( keys );
 	}
 
-	@Override public Key<T> keyById( int id )
+	@Override public Key<T> keyByIndex( int id )
 	{
 		return keys.get( id );
 	}

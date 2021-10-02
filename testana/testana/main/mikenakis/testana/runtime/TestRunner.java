@@ -59,13 +59,13 @@ public final class TestRunner
 			TestMethodResult testMethodResult = runTestMethod( intent.isToRun(), testMethod );
 			childTestResults.add( testMethodResult );
 		}
-		NonLeafTestResult result = new NonLeafTestResult( testClass.name(), childTestResults );
+		NonLeafTestResult result = new NonLeafTestResult( testClass.fullName(), childTestResults );
 		if( intent.isToRun() )
 		{
 			if( result.failureCount() > 0 )
-				TestanaLog.report( "        " + testClass.name() + " " + result.getOutcomeMessage() );
+				TestanaLog.report( "        " + testClass.fullName() + " " + result.getOutcomeMessage() );
 			else
-				persistence.setTimeOfLastRun( testClass.name(), Instant.now() );
+				persistence.setTimeOfLastRun( testClass.fullName(), Instant.now() );
 		}
 		return result;
 	}

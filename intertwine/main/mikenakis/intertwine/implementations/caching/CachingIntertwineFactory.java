@@ -27,12 +27,12 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 	 *
 	 * @param intertwine the {@link Intertwine} to add.
 	 */
-	public final void add( Intertwine<?> intertwine )
+	public void add( Intertwine<?> intertwine )
 	{
 		Kit.map.add( cache, intertwine.interfaceType(), intertwine );
 	}
 
-	@Override public final <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
+	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
 		synchronized( cache )

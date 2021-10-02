@@ -43,9 +43,9 @@ public interface Intertwine<T>
 	Collection<Key<T>> keys();
 
 	/**
-	 * Obtains a key given an id. (Useful only if binary compatibility is guaranteed or it has somehow been negotiated.)
+	 * Obtains a key given the zero-based index of the method. (Useful only if binary compatibility is guaranteed or it has somehow been negotiated.)
 	 */
-	Key<T> keyById( int id );
+	Key<T> keyByIndex( int id );
 
 	/**
 	 * Obtains a key given a signature string.

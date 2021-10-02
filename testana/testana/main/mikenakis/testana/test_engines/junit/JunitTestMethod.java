@@ -8,7 +8,6 @@ import mikenakis.testana.runtime.result.SucceededMethodTestResult;
 import mikenakis.testana.runtime.result.TestMethodResult;
 import mikenakis.testana.testplan.TestMethod;
 
-import java.io.BufferedOutputStream;
 import java.io.PrintStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
@@ -23,14 +22,18 @@ import java.util.Optional;
 class JunitTestMethod extends TestMethod
 {
 	private final JunitTestClass junitTestClass;
-	private final Method javaMethod;
+	final Method javaMethod;
 	private final boolean ignored;
+	final int derivationDepth;
+	final int methodIndex;
 
-	JunitTestMethod( JunitTestClass junitTestClass, Method javaMethod, boolean ignored )
+	JunitTestMethod( JunitTestClass junitTestClass, Method javaMethod, boolean ignored, int derivationDepth, int methodIndex )
 	{
 		this.junitTestClass = junitTestClass;
 		this.javaMethod = javaMethod;
 		this.ignored = ignored || Kit.reflect.hasAnnotation( javaMethod, "org.junit.Ignore" );
+		this.derivationDepth = derivationDepth;
+		this.methodIndex = methodIndex;
 	}
 
 	@Override public String name()
