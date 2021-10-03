@@ -6,6 +6,7 @@ import mikenakis.bytecode.exceptions.InvalidConstantTagException;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
@@ -36,7 +37,6 @@ import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.attributes.code.InstructionList;
 import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.constants.ClassConstant;
@@ -48,9 +48,8 @@ import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.descriptors.FieldDescriptor;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.java_type_model.FieldDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import org.junit.Test;
 
@@ -346,7 +345,7 @@ public class T999_Coverage
 			assert false;
 			return null;
 		};
-		descendantByteCodeType.getMethodByNameAndDescriptor( "testMethod", MethodDescriptor.ofDescriptorString( "()V" ), byteCodeTypeResolver );
-		descendantByteCodeType.getMethodByNameAndDescriptor( "nonExistentTestMethod", MethodDescriptor.ofDescriptorString( "()V" ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethodByNameAndDescriptor( "testMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethodByNameAndDescriptor( "nonExistentTestMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ), byteCodeTypeResolver );
 	}
 }

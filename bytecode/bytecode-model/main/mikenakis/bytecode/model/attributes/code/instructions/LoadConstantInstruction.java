@@ -9,7 +9,7 @@ import mikenakis.bytecode.model.constants.FloatConstant;
 import mikenakis.bytecode.model.constants.IntegerConstant;
 import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public class LoadConstantInstruction extends Instruction

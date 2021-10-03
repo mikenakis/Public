@@ -1,5 +1,6 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
@@ -7,6 +8,7 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.descriptors.MethodReference;
+import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -14,15 +16,15 @@ import java.util.Set;
 
 public final class MethodConstantReferencingInstruction extends Instruction
 {
-	public static MethodConstantReferencingInstruction of( int opCode, MethodReference methodReference )
+	public static MethodConstantReferencingInstruction of( int opCode, MethodReferenceKind methodReferenceKind, MethodReference methodReference )
 	{
-		int tag = switch( methodReference.kind )
+		int tag = switch( methodReferenceKind )
 			{
 				case Plain -> Constant.tag_PlainMethodReference;
 				case Interface -> Constant.tag_InterfaceMethodReference;
 			};
 		ClassConstant declaringTypeConstant = ClassConstant.ofTypeName( methodReference.declaringTypeDescriptor.typeName() );
-		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype.name, methodReference.methodPrototype.descriptor.descriptorString() );
+		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype.name, ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodReference.methodPrototype.descriptor ) );
 		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( tag, declaringTypeConstant, nameAndDescriptorConstant );
 		return new MethodConstantReferencingInstruction( opCode, methodReferenceConstant );
 	}

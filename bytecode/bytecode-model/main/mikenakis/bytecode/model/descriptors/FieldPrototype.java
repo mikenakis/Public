@@ -1,6 +1,9 @@
 package mikenakis.bytecode.model.descriptors;
 
-public class FieldPrototype
+import mikenakis.java_type_model.FieldDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
+
+public final class FieldPrototype
 {
 	public static FieldPrototype of( String fieldName, Class<?> declaringClass )
 	{

@@ -1,6 +1,7 @@
 package mikenakis.bytecode.test;
 
 import mikenakis.bytecode.model.ByteCodeField;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.reading.ByteCodeReader;
@@ -39,10 +40,10 @@ public class T101_Reading
 		Path classFilePathName = TestKit.getPathToClassFile( Class1WithFields.class );
 		ByteCodeType byteCodeType = create( classFilePathName );
 		assert byteCodeType.modifiers.equals( ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Super, ByteCodeType.Modifier.Abstract ) );
-		assert byteCodeType.typeDescriptor().descriptorString().equals( Class1WithFields.class.describeConstable().orElseThrow().descriptorString() );
-		assert byteCodeType.typeDescriptor().typeName().equals( Class1WithFields.class.getTypeName() );
-		assert byteCodeType.superTypeDescriptor().orElseThrow().descriptorString().equals( Object.class.describeConstable().orElseThrow().descriptorString() );
-		assert byteCodeType.superTypeDescriptor().orElseThrow().typeName().equals( Object.class.getTypeName() );
+		assert ByteCodeHelpers.descriptorStringFromTypeDescriptor( byteCodeType.typeDescriptor() ).equals( Class1WithFields.class.describeConstable().orElseThrow().descriptorString() );
+		assert byteCodeType.typeDescriptor().typeName.equals( Class1WithFields.class.getTypeName() );
+		assert ByteCodeHelpers.descriptorStringFromTypeDescriptor( byteCodeType.superTypeDescriptor().orElseThrow() ).equals( Object.class.describeConstable().orElseThrow().descriptorString() );
+		assert byteCodeType.superTypeDescriptor().orElseThrow().typeName.equals( Object.class.getTypeName() );
 		assert byteCodeType.interfaces().isEmpty();
 		assert byteCodeType.methods.size() == 3;
 		List<ByteCodeMethod> methods = new ArrayList<>( byteCodeType.methods );

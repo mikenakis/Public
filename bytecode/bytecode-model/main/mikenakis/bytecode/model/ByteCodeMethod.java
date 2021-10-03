@@ -1,8 +1,8 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
@@ -38,7 +38,7 @@ public final class ByteCodeMethod extends ByteCodeMember
 
 	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, MethodPrototype methodPrototype )
 	{
-		return new ByteCodeMethod( modifiers, Mutf8Constant.of( methodPrototype.name ), Mutf8Constant.of( methodPrototype.descriptor.descriptorString() ), AttributeSet.of() );
+		return new ByteCodeMethod( modifiers, Mutf8Constant.of( methodPrototype.name ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ), AttributeSet.of() );
 	}
 
 	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
@@ -56,7 +56,7 @@ public final class ByteCodeMethod extends ByteCodeMember
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public MethodDescriptor getMethodDescriptor() { return MethodDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
+	public MethodDescriptor getMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( descriptorConstant.stringValue() ); }
 	public MethodPrototype prototype() { return MethodPrototype.of( nameConstant.stringValue(), getMethodDescriptor() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

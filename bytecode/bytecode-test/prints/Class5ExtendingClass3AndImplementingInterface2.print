@@ -18,7 +18,7 @@
 │ │     ├─■ instructions: 6 entries
 │ │     │ ├─■ L14: // {
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
+│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
 │ │     │ ├─■ L10: // @RuntimeVisibleAnnotation1( charParameter = 'x', doubleParameter = 1.1 ) //
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         ALOAD 0
@@ -52,8 +52,8 @@
 │     ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 4
 │     │ ├─■ instructions: 5 entries
 │     │ │ ├─■ L25: // long id = Thread.currentThread().getId();
-│     │ │ ├─■         INVOKESTATIC reference = [Plain] java.lang.Thread java.lang.Thread.currentThread()
-│     │ │ ├─■         INVOKEVIRTUAL reference = [Plain] long java.lang.Thread.getId()
+│     │ │ ├─■         INVOKESTATIC kind = Plain, reference =  java.lang.Thread java.lang.Thread.currentThread()
+│     │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  long java.lang.Thread.getId()
 │     │ │ ├─■         LSTORE 2
 │     │ │ ├─■ L26: // return id;
 │     │ │ ├─■         LLOAD 2

@@ -1,7 +1,8 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -33,7 +34,7 @@ public final class MethodTypeConstant extends Constant
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public MethodDescriptor methodDescriptor() { return MethodDescriptor.ofDescriptorString( descriptorConstant.stringValue() ); }
+	public MethodDescriptor methodDescriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( descriptorConstant.stringValue() ); }
 	@Deprecated @Override public MethodTypeConstant asMethodTypeConstant() { return this; }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

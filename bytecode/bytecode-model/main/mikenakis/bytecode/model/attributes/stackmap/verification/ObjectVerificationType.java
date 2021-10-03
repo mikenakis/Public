@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**

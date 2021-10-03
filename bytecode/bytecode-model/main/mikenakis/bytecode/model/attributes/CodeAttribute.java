@@ -27,6 +27,7 @@ import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodReference;
+import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public final class CodeAttribute extends KnownAttribute
 	}
 
 	//@formatter:off
-	public InvokeInterfaceInstruction           /**/ addInvokeInterface   /**/ ( MethodReferenceConstant constant, int argumentCount ) /**/ { return add( InvokeInterfaceInstruction.of( constant, argumentCount ) ); }
+	public InvokeInterfaceInstruction           /**/ addInvokeInterface   /**/ ( MethodReferenceConstant constant, int argumentCount )          /**/ { return add( InvokeInterfaceInstruction.of( constant, argumentCount ) ); }
 	public InvokeDynamicInstruction             /**/ addInvokeDynamic     /**/ ( InvokeDynamicConstant constant )                               /**/ { return add( InvokeDynamicInstruction.of( constant ) ); }
 	public MultiANewArrayInstruction            /**/ addMultiANewArray    /**/ ( ClassConstant constant, int dimensionCount )                   /**/ { return add( MultiANewArrayInstruction.of( constant, dimensionCount ) ); }
 	public FieldConstantReferencingInstruction  /**/ addGetStatic         /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.GETSTATIC, constant ) ); }
@@ -112,9 +113,9 @@ public final class CodeAttribute extends KnownAttribute
 	public FieldConstantReferencingInstruction  /**/ addGetField          /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.GETFIELD, constant ) ); }
 	public FieldConstantReferencingInstruction  /**/ addPutField          /**/ ( FieldReferenceConstant constant )                              /**/ { return add( FieldConstantReferencingInstruction.of ( OpCode.PUTFIELD, constant ) ); }
 	public MethodConstantReferencingInstruction /**/ addInvokeVirtual     /**/ ( MethodReferenceConstant constant )                             /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKEVIRTUAL, constant ) ); }
-	public MethodConstantReferencingInstruction /**/ addInvokeVirtual     /**/ ( MethodReference methodReference )                              /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKEVIRTUAL, methodReference ) ); }
+	public MethodConstantReferencingInstruction /**/ addInvokeVirtual     /**/ ( MethodReferenceKind kind, MethodReference methodReference )    /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKEVIRTUAL, kind, methodReference ) ); }
 	public MethodConstantReferencingInstruction /**/ addInvokeSpecial     /**/ ( MethodReferenceConstant constant )                             /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESPECIAL, constant ) ); }
-	public MethodConstantReferencingInstruction /**/ addInvokeSpecial     /**/ ( MethodReference methodReference )                              /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESPECIAL, methodReference ) ); }
+	public MethodConstantReferencingInstruction /**/ addInvokeSpecial     /**/ ( MethodReferenceKind kind, MethodReference methodReference )    /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESPECIAL, kind, methodReference ) ); }
 	public MethodConstantReferencingInstruction /**/ addInvokeStatic      /**/ ( MethodReferenceConstant constant )                             /**/ { return add( MethodConstantReferencingInstruction.of ( OpCode.INVOKESTATIC, constant ) ); }
 	public ClassConstantReferencingInstruction  /**/ addNew               /**/ ( ClassConstant constant )                                       /**/ { return add( ClassConstantReferencingInstruction.of ( OpCode.NEW, constant ) ); }
 	public ClassConstantReferencingInstruction  /**/ addANewArray         /**/ ( ClassConstant constant )                                       /**/ { return add( ClassConstantReferencingInstruction.of ( OpCode.ANEWARRAY, constant ) ); }

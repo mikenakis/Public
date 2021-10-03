@@ -44,11 +44,8 @@ import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantRefer
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodReference;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.bytecode.model.signature.ArrayTypeSignature;
 import mikenakis.bytecode.model.signature.BooleanSignature;
 import mikenakis.bytecode.model.signature.ByteSignature;
@@ -69,6 +66,9 @@ import mikenakis.bytecode.model.signature.TypeSignature;
 import mikenakis.bytecode.model.signature.TypeTree;
 import mikenakis.bytecode.model.signature.TypeVariableSignature;
 import mikenakis.bytecode.model.signature.VoidDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 
 import java.util.Collection;
@@ -288,7 +288,7 @@ public final class ByteCodeDependencies
 		visitTerminalTypeDescriptor( attribute.enclosingClassTypeDescriptor() );
 		attribute.enclosingMethodNameAndDescriptorConstant.ifPresent( nameAndDescriptorConstant -> //
 		{
-			MethodDescriptor methodDescriptor = MethodDescriptor.ofDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
+			MethodDescriptor methodDescriptor = ByteCodeHelpers.methodDescriptorFromDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 			visitMethodDescriptor( methodDescriptor );
 		} );
 	}

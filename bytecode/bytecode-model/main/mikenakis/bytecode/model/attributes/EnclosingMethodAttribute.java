@@ -1,11 +1,12 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -37,7 +38,7 @@ public final class EnclosingMethodAttribute extends KnownAttribute
 	}
 
 	public TerminalTypeDescriptor enclosingClassTypeDescriptor() { return enclosingClassConstant.terminalTypeDescriptor(); }
-	public Optional<MethodPrototype> enclosingMethodPrototype() { return enclosingMethodNameAndDescriptorConstant.map( c -> MethodPrototype.of( c ) ); }
+	public Optional<MethodPrototype> enclosingMethodPrototype() { return enclosingMethodNameAndDescriptorConstant.map( c -> ByteCodeHelpers.methodPrototypeFromNameAndDescriptorConstant( c ) ); }
 	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "class = " + enclosingClassConstant + ", methodNameAndDescriptor = { " + enclosingMethodNameAndDescriptorConstant + " }"; }
 }

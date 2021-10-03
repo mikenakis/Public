@@ -5,9 +5,9 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 
 import java.lang.reflect.InvocationHandler;

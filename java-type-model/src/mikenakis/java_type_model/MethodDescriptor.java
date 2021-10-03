@@ -1,15 +1,12 @@
-package mikenakis.bytecode.model.descriptors;
+package mikenakis.java_type_model;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.kit.Kit;
 
-import java.lang.constant.ClassDesc;
-import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
-public class MethodDescriptor
+public final class MethodDescriptor
 {
 	public static MethodDescriptor of( Method method )
 	{
@@ -36,11 +33,6 @@ public class MethodDescriptor
 		return new MethodDescriptor( returnTypeDescriptor, parameterTypeDescriptors );
 	}
 
-	public static MethodDescriptor ofDescriptorString( String descriptorString )
-	{
-		return ByteCodeHelpers.methodDescriptorFromDescriptorString( descriptorString );
-	}
-
 	public final TypeDescriptor returnTypeDescriptor;
 	public final List<TypeDescriptor> parameterTypeDescriptors;
 
@@ -58,22 +50,7 @@ public class MethodDescriptor
 		return stringBuilder.toString();
 	}
 
-	public String descriptorString()
-	{
-		ClassDesc returnDesc = classDescFromTypeDescriptor( returnTypeDescriptor );
-		ClassDesc[] paramDescs = new ClassDesc[parameterTypeDescriptors.size()];
-		for( int i = 0;  i < paramDescs.length;  i++ )
-			paramDescs[i] = ClassDesc.ofDescriptor( parameterTypeDescriptors.get( i ).descriptorString() );
-		MethodTypeDesc methodTypeDesc = MethodTypeDesc.of( returnDesc, paramDescs );
-		return methodTypeDesc.descriptorString();
-	}
-
-	private static ClassDesc classDescFromTypeDescriptor( TypeDescriptor typeDescriptor )
-	{
-		return ClassDesc.ofDescriptor( typeDescriptor.descriptorString() );
-	}
-
-	void appendParameters( StringBuilder stringBuilder )
+	public void appendParameters( StringBuilder stringBuilder )
 	{
 		if( parameterTypeDescriptors.isEmpty() )
 			stringBuilder.append( "()" );
@@ -90,7 +67,7 @@ public class MethodDescriptor
 		}
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
 		if( other instanceof MethodDescriptor kin )
 			return equals( kin );

@@ -1,8 +1,9 @@
-package mikenakis.bytecode.model.descriptors;
+package mikenakis.java_type_model;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
-public class FieldDescriptor
+public final class FieldDescriptor
 {
 	public static FieldDescriptor of( Field field )
 	{
@@ -27,5 +28,21 @@ public class FieldDescriptor
 	}
 
 	public String asString() { return typeDescriptor.typeName(); }
-	public String descriptorString() { return typeDescriptor.descriptorString(); }
+
+	@Deprecated @Override public boolean equals( Object other )
+	{
+		if( other instanceof FieldDescriptor kin )
+			return equals( kin );
+		return false;
+	}
+
+	public boolean equals( FieldDescriptor other )
+	{
+		return typeDescriptor.equals( other.typeDescriptor );
+	}
+
+	@Override public int hashCode()
+	{
+		return Objects.hash( FieldDescriptor.class, typeDescriptor );
+	}
 }

@@ -106,10 +106,10 @@ import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.bytecode.printing.twig.Twig;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagSet;
@@ -572,8 +572,8 @@ public final class ByteCodePrinter
 		builder.append( innerClass.getClass().getSimpleName() );
 		builder.append( " " );
 		builder.append( "accessFlags = " ).append( stringFromFlags( innerClass.modifiers ) );
-		builder.append( ", innerClass = " ).append( innerClass.innerType().typeName() );
-		innerClass.outerType().ifPresent( t -> builder.append( ", outerClass = " ).append( t.typeName() ) );
+		builder.append( ", innerClass = " ).append( innerClass.innerType().typeName );
+		innerClass.outerType().ifPresent( t -> builder.append( ", outerClass = " ).append( t.typeName ) );
 		innerClass.innerName().ifPresent( s -> builder.append( ", innerName = " ).append( s ) );
 		String header = builder.toString();
 		return Twig.leaf( header );
@@ -582,14 +582,14 @@ public final class ByteCodePrinter
 	private static Twig twigFromExceptionsAttribute( ExceptionsAttribute exceptionsAttribute )
 	{
 		return Twig.array( exceptionsAttribute.getClass().getSimpleName(), //
-			exceptionsAttribute.exceptions().stream().map( c -> Twig.leaf( c.typeName() ) ).toList() );
+			exceptionsAttribute.exceptions().stream().map( c -> Twig.leaf( c.typeName ) ).toList() );
 	}
 
 	private static Twig twigFromEnclosingMethodAttribute( EnclosingMethodAttribute enclosingMethodAttribute )
 	{
 		StringBuilder headerBuilder = new StringBuilder();
 		headerBuilder.append( enclosingMethodAttribute.getClass().getSimpleName() );
-		headerBuilder.append( " enclosingClass = " ).append( enclosingMethodAttribute.enclosingClassTypeDescriptor().typeName() );
+		headerBuilder.append( " enclosingClass = " ).append( enclosingMethodAttribute.enclosingClassTypeDescriptor().typeName );
 		// Java-bollocks: the enclosing method attribute, if present, will always have an enclosing class,
 		// but it may not necessarily have an enclosing method.
 		enclosingMethodAttribute.enclosingMethodPrototype().ifPresent( p -> headerBuilder.append( ", enclosingMethodPrototype = " ).append( p.asString() ) );
@@ -616,12 +616,12 @@ public final class ByteCodePrinter
 	private static Twig twigFromNestMembersAttribute( NestMembersAttribute nestMembersAttribute )
 	{
 		return Twig.array( nestMembersAttribute.getClass().getSimpleName(), //
-			nestMembersAttribute.members().stream().map( t -> Twig.leaf( t.typeName() ) ).toList() );
+			nestMembersAttribute.members().stream().map( t -> Twig.leaf( t.typeName ) ).toList() );
 	}
 
 	private static Twig twigFromNestHostAttribute( NestHostAttribute nestHostAttribute )
 	{
-		return Twig.leaf( nestHostAttribute.getClass().getSimpleName() + " " + nestHostAttribute.hostClass().typeName() );
+		return Twig.leaf( nestHostAttribute.getClass().getSimpleName() + " " + nestHostAttribute.hostClass().typeName );
 	}
 
 	private static Twig twigFromLocalVariableTypeTableAttribute( Labeler labeler, LocalVariableTypeTableAttribute localVariableTypeTableAttribute )
@@ -692,7 +692,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromBootstrapMethodsAttribute( BootstrapMethodsAttribute bootstrapMethodsAttribute )
 	{
 		return Twig.array( bootstrapMethodsAttribute.getClass().getSimpleName(), //
-			bootstrapMethodsAttribute.bootstrapMethods.stream().map( bootstrapMethod -> twigFromBootstrapMethod( "", bootstrapMethod ) ).toList() );
+			bootstrapMethodsAttribute.bootstrapMethods.stream().map( bootstrapMethod -> twigFromBootstrapMethod( bootstrapMethod ) ).toList() );
 	}
 
 	private static Twig twigFromUnknownAttribute( UnknownAttribute unknownAttribute )
@@ -706,7 +706,7 @@ public final class ByteCodePrinter
 		return Twig.array( exceptionInfos.stream().map( e -> twigFromExceptionInfo( e, labeler ) ).toList() );
 	}
 
-	private static Twig twigFromBootstrapMethod( String prefix, BootstrapMethod bootstrapMethod )
+	private static Twig twigFromBootstrapMethod( BootstrapMethod bootstrapMethod )
 	{
 		var builder = new StringBuilder();
 		//builder.append( prefix );
@@ -782,8 +782,8 @@ public final class ByteCodePrinter
 		builder.append( ByteCodeType.class.getSimpleName() );
 		builder.append( " version = " ).append( byteCodeType.version.major() ).append( '.' ).append( byteCodeType.version.minor() );
 		builder.append( ", accessFlags = " ).append( stringFromFlags( byteCodeType.modifiers ) );
-		builder.append( ", this = " ).append( byteCodeType.typeDescriptor().typeName() );
-		builder.append( ", super = " ).append( byteCodeType.superTypeDescriptor().map( d -> d.typeName() ).orElse( "<none>" ) );
+		builder.append( ", this = " ).append( byteCodeType.typeDescriptor().typeName );
+		builder.append( ", super = " ).append( byteCodeType.superTypeDescriptor().map( d -> d.typeName ).orElse( "<none>" ) );
 		return Twig.group( builder.toString(), //
 			Map.entry( "interfaces", twigFromTerminalTypeDescriptors( byteCodeType.interfaces(), false ) ), //
 			Map.entry( "extraTypes", twigFromTerminalTypeDescriptors( byteCodeType.extraTypes(), true ) ), //
@@ -795,8 +795,8 @@ public final class ByteCodePrinter
 	private static Twig twigFromTerminalTypeDescriptors( Collection<TerminalTypeDescriptor> extraTypes, boolean sort )
 	{
 		return Twig.array( extraTypes.stream() //
-			.sorted( sort ? Comparator.comparing( TerminalTypeDescriptor::typeName ) : ( a, b ) -> 0 ) //
-			.map( t -> Twig.leaf( t.typeName() ) ) //
+			.sorted( sort ? Comparator.comparing( ( TerminalTypeDescriptor terminalTypeDescriptor ) -> terminalTypeDescriptor.typeName ) : ( a, b ) -> 0 ) //
+			.map( t -> Twig.leaf( t.typeName ) ) //
 			.toList() );
 	}
 
@@ -820,7 +820,7 @@ public final class ByteCodePrinter
 		summarizeAbsoluteInstruction( exceptionInfo.endInstruction, builder, labeler );
 		builder.append( ", handler = " );
 		summarizeAbsoluteInstruction( exceptionInfo.handlerInstruction, builder, labeler );
-		exceptionInfo.catchType().ifPresent( t -> builder.append( ", catchType = " ).append( t.typeName() ) );
+		exceptionInfo.catchType().ifPresent( t -> builder.append( ", catchType = " ).append( t.typeName ) );
 		String header = builder.toString();
 		return Twig.leaf( header );
 	}
@@ -917,7 +917,8 @@ public final class ByteCodePrinter
 
 	private static void appendMethodReferenceConstant( MethodReferenceConstant methodReferenceConstant, StringBuilder builder )
 	{
-		builder.append( "reference = " ).append( methodReferenceConstant.methodReference().asString() );
+		builder.append( "kind = " ).append( methodReferenceConstant.methodReferenceKind().name() );
+		builder.append( ", reference = " ).append( methodReferenceConstant.methodReference().asString() );
 	}
 
 	private static void appendMethodTypeConstant( MethodTypeConstant methodTypeConstant, StringBuilder builder )
@@ -1198,7 +1199,7 @@ public final class ByteCodePrinter
 		var builder = new StringBuilder();
 		builder.append( "prototype = " ).append( invokeDynamicInstruction.methodPrototype().asString() );
 		return Twig.group( buildInstructionHeader( prefix, OpCode.INVOKEDYNAMIC, builder.toString() ), //
-			Map.entry( indentation + indentation + "bootstrapMethod", twigFromBootstrapMethod( indentation + indentation, invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod() ) ) );
+			Map.entry( indentation + indentation + "bootstrapMethod", twigFromBootstrapMethod( invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod() ) ) );
 	}
 
 	private static Twig twigFromInvokeInterfaceInstruction( String prefix, InvokeInterfaceInstruction invokeInterfaceInstruction )

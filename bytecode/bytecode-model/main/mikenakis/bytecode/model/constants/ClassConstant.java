@@ -2,9 +2,9 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.descriptors.ArrayTypeDescriptor;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.ArrayTypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -19,11 +19,11 @@ public final class ClassConstant extends Constant
 	public static ClassConstant of( TypeDescriptor typeDescriptor )
 	{
 		if( typeDescriptor.isArray() )
-			return ofInternalNameOrDescriptorString( typeDescriptor.descriptorString() );
+			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromTypeDescriptor( typeDescriptor ) );
 		if( typeDescriptor.isPrimitive() )
-			return ofInternalNameOrDescriptorString( typeDescriptor.descriptorString() );
+			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromTypeDescriptor( typeDescriptor ) );
 		assert typeDescriptor.isTerminal();
-		return ofInternalNameOrDescriptorString( typeDescriptor.asTerminalTypeDescriptor().internalName() );
+		return ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( typeDescriptor.asTerminalTypeDescriptor() ) );
 	}
 
 	public static ClassConstant ofTypeName( String typeName )
@@ -86,22 +86,22 @@ public final class ClassConstant extends Constant
 	public TerminalTypeDescriptor terminalTypeDescriptor()
 	{
 		String internalName = internalNameOrDescriptorStringConstant.stringValue();
-		return TerminalTypeDescriptor.ofInternalName( internalName );
+		return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalName );
 	}
 
 	public TypeDescriptor typeDescriptor()
 	{
 		String internalNameOrDescriptorString = internalNameOrDescriptorStringConstant.stringValue();
 		if( internalNameOrDescriptorString.charAt( 0 ) == '[' )
-			return ArrayTypeDescriptor.ofDescriptorString( internalNameOrDescriptorString );
-		return TerminalTypeDescriptor.ofInternalName( internalNameOrDescriptorString );
+			return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( internalNameOrDescriptorString );
+		return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalNameOrDescriptorString );
 	}
 
 	public ArrayTypeDescriptor arrayTypeDescriptor()
 	{
 		String descriptorString = internalNameOrDescriptorStringConstant.stringValue();
 		assert descriptorString.charAt( 0 ) == '[';
-		return ArrayTypeDescriptor.ofDescriptorString( descriptorString );
+		return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( descriptorString );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

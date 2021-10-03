@@ -1,8 +1,8 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -60,7 +60,7 @@ public final class InvokeDynamicConstant extends Constant
 	public MethodPrototype methodPrototype()
 	{
 		return MethodPrototype.of( nameAndDescriptorConstant.getNameConstant().stringValue(), //
-			MethodDescriptor.ofDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() ) );
+			ByteCodeHelpers.methodDescriptorFromDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() ) );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

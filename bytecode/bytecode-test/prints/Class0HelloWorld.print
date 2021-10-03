@@ -9,7 +9,7 @@
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L3: // public abstract class Class0HelloWorld
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
+│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
@@ -24,7 +24,7 @@
 │     │ │ ├─■ L7: // System.out.print( "Hello, world!\n" );
 │     │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │     │ │ ├─■         LDC "Hello, world!\n"
-│     │ │ ├─■         INVOKEVIRTUAL reference = [Plain] void java.io.PrintStream.print( java.lang.String )
+│     │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.print( java.lang.String )
 │     │ │ ├─■ L8: // }
 │     │ │ └─■         RETURN
 │     │ ├─■ exceptionInfos: 0 items

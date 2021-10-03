@@ -1,24 +1,16 @@
-package mikenakis.bytecode.model.descriptors;
+package mikenakis.java_type_model;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.kit.Kit;
 
 public abstract class TypeDescriptor
 {
 	public static TypeDescriptor of( Class<?> javaClass )
 	{
+		if( javaClass.isPrimitive() )
+			return PrimitiveTypeDescriptor.of( javaClass );
 		if( javaClass.isArray() )
-		{
-			Class<?> componentJavaClass = javaClass.componentType();
-			TypeDescriptor componentTypeDescriptor = of( componentJavaClass );
-			return ArrayTypeDescriptor.of( componentTypeDescriptor );
-		}
-		return ofDescriptorString( javaClass.descriptorString() );
-	}
-
-	public static TypeDescriptor ofDescriptorString( String descriptorString )
-	{
-		return ByteCodeHelpers.typeDescriptorFromDescriptorString( descriptorString );
+			return ArrayTypeDescriptor.ofArray( javaClass );
+		return TerminalTypeDescriptor.of( javaClass );
 	}
 
 	public abstract String typeName();
@@ -28,7 +20,6 @@ public abstract class TypeDescriptor
 	public ArrayTypeDescriptor asArrayTypeDescriptor() { return Kit.fail(); }
 	public PrimitiveTypeDescriptor asPrimitiveTypeDescriptor() { return Kit.fail(); }
 	public TerminalTypeDescriptor asTerminalTypeDescriptor() { return Kit.fail(); }
-	public abstract String descriptorString();
 
 	@Override public abstract boolean equals( Object other );
 	@Override public abstract int hashCode();

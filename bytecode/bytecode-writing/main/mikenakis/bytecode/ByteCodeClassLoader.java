@@ -17,7 +17,7 @@ public class ByteCodeClassLoader extends ClassLoader
 
 	public Class<?> load( ByteCodeType byteCodeType )
 	{
-		String name = byteCodeType.typeDescriptor().typeName();
+		String name = byteCodeType.typeDescriptor().typeName;
 		byte[] bytes = ByteCodeWriter.write( byteCodeType );
 		Kit.map.add( classes, name, bytes );
 		return Kit.unchecked( () -> loadClass( name ) );

@@ -1,6 +1,6 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.collections.FlagSet;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.bytecode.model.constants.ClassConstant;

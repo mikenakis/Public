@@ -4,9 +4,9 @@ import mikenakis.bytecode.dependencies.ByteCodeDependencies;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
 import mikenakis.bytecode.printing.ByteCodePrinter;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ final class ByteCodeInfo
 	{
 		ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ); //TODO this is only here for testing, must be removed!
 		Collection<TerminalTypeDescriptor> dependencies = ByteCodeDependencies.getDependencies( byteCodeType, includeDescriptorOnlyDependencies, includeSignatureDependencies );
-		return dependencies.stream().map( d -> d.typeName() ).toList();
+		return dependencies.stream().map( d -> d.typeName ).toList();
 	}
 
 	String getClassSourceLocation()

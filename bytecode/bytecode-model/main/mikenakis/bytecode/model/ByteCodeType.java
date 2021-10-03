@@ -3,9 +3,8 @@ package mikenakis.bytecode.model;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
@@ -63,8 +62,8 @@ public final class ByteCodeType
 		Optional<TerminalTypeDescriptor> superTypeDescriptor )
 	{
 		Version version = new Version( 60, 0 ); //TODO: add full support for this version!
-		return of( version, modifiers, ClassConstant.ofInternalNameOrDescriptorString( typeDescriptor.internalName() ), //
-			superTypeDescriptor.map( c -> ClassConstant.ofInternalNameOrDescriptorString( c.internalName() ) ), //
+		return of( version, modifiers, ClassConstant.ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( typeDescriptor ) ), //
+			superTypeDescriptor.map( c -> ClassConstant.ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( c ) ) ), //
 			new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), AttributeSet.of(), new ArrayList<>() );
 	}
 
@@ -135,7 +134,7 @@ public final class ByteCodeType
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return TypeDescriptor.ofDescriptorString( classConstant.descriptorString() ).typeName();
+		return ByteCodeHelpers.typeDescriptorFromDescriptorString( classConstant.descriptorString() ).typeName();
 	}
 
 	public int findDeclaredMethodByNameAndDescriptor( String name, MethodDescriptor descriptor )
@@ -157,7 +156,7 @@ public final class ByteCodeType
 			int index = byteCodeType.findDeclaredMethodByNameAndDescriptor( name, descriptor );
 			if( index != -1 )
 				return Optional.of( byteCodeType.methods.get( index ) );
-			Optional<ByteCodeType> superType = byteCodeType.superTypeDescriptor().map( d -> byteCodeTypeByName.apply( d.typeName() ) );
+			Optional<ByteCodeType> superType = byteCodeType.superTypeDescriptor().map( d -> byteCodeTypeByName.apply( d.typeName ) );
 			if( superType.isEmpty() )
 				break;
 			byteCodeType = superType.get();

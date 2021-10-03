@@ -1,9 +1,9 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -44,7 +44,8 @@ public final class LocalVariableTableEntry
 		this.index = index;
 	}
 
-	public FieldPrototype prototype() { return FieldPrototype.of( nameConstant.stringValue(), TypeDescriptor.ofDescriptorString( descriptorConstant.stringValue() ) ); }
+	public FieldPrototype prototype() {
+		return FieldPrototype.of( nameConstant.stringValue(), ByteCodeHelpers.typeDescriptorFromDescriptorString( descriptorConstant.stringValue() ) ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{

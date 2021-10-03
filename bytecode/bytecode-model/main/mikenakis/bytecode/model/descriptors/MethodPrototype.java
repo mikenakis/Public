@@ -1,8 +1,9 @@
 package mikenakis.bytecode.model.descriptors;
 
-import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 
-public class MethodPrototype
+public final class MethodPrototype
 {
 	public static MethodPrototype of( String name, MethodDescriptor descriptor )
 	{
@@ -12,13 +13,6 @@ public class MethodPrototype
 	public static MethodPrototype of( String name, TypeDescriptor returnType, TypeDescriptor... parameterTypes )
 	{
 		return new MethodPrototype( name, MethodDescriptor.of( returnType, parameterTypes ) );
-	}
-
-	public static MethodPrototype of( NameAndDescriptorConstant nameAndDescriptorConstant )
-	{
-		String name = nameAndDescriptorConstant.getNameConstant().stringValue();
-		MethodDescriptor descriptor = MethodDescriptor.ofDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
-		return of( name, descriptor );
 	}
 
 	public final String name;

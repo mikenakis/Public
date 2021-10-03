@@ -1,9 +1,9 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -35,7 +35,7 @@ public final class EnumAnnotationValue extends AnnotationValue
 		String descriptorString = typeNameConstant.stringValue();
 		assert descriptorString.charAt( 0 ) == 'L' && descriptorString.charAt( descriptorString.length() - 1 ) == ';';
 		String internalName = descriptorString.substring( 1, descriptorString.length() - 1 );
-		return TerminalTypeDescriptor.ofInternalName( internalName );
+		return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalName );
 	}
 
 	public String valueName() { return valueNameConstant.stringValue(); }

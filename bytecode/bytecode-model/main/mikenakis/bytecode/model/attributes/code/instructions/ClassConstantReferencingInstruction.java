@@ -3,7 +3,7 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Set;

@@ -3,7 +3,7 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.descriptors.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;

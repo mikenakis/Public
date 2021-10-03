@@ -1,9 +1,8 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.bytecode.model.descriptors.FieldDescriptor;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
@@ -19,7 +18,7 @@ public final class ByteCodeField extends ByteCodeMember
 {
 	public static ByteCodeField of( FlagSet<Modifier> modifiers, String name, FieldDescriptor fieldDescriptor )
 	{
-		String descriptorString = fieldDescriptor.descriptorString();
+		String descriptorString = ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldDescriptor.typeDescriptor );
 		return of( modifiers, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
 	}
 
@@ -54,7 +53,8 @@ public final class ByteCodeField extends ByteCodeMember
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	public FieldDescriptor descriptor() { return FieldDescriptor.of( TypeDescriptor.ofDescriptorString( descriptorConstant.stringValue() ) ); }
+	public FieldDescriptor descriptor() {
+		return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorString( descriptorConstant.stringValue() ) ); }
 	public FieldPrototype prototype() { return FieldPrototype.of( name(), descriptor() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

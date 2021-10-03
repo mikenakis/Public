@@ -1,7 +1,8 @@
 package mikenakis.testana.structure;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.testana.TestEngine;
 import mikenakis.testana.discovery.OutputFile;
 
@@ -125,7 +126,7 @@ public class ProjectType
 
 	private static MethodDescriptor testMethodDescriptor()
 	{
-		return MethodDescriptor.ofDescriptorString( "()V" );
+		return ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" );
 	}
 
 	public String getMethodSourceLocation( String methodName )

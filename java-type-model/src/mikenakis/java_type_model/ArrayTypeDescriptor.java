@@ -1,36 +1,24 @@
-package mikenakis.bytecode.model.descriptors;
+package mikenakis.java_type_model;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
-
-import java.lang.constant.ClassDesc;
 import java.util.Objects;
 
-public class ArrayTypeDescriptor extends TypeDescriptor
+public final class ArrayTypeDescriptor extends TypeDescriptor
 {
-	public static ArrayTypeDescriptor ofArrayClass( Class<?> arrayClass )
+	public static ArrayTypeDescriptor ofArray( Class<?> arrayClass )
 	{
 		assert arrayClass.isArray();
-		return ofComponentClass( arrayClass.componentType() );
+		return ofComponent( arrayClass.componentType() );
 	}
 
-	public static ArrayTypeDescriptor ofComponentClass( Class<?> componentClass )
+	public static ArrayTypeDescriptor ofComponent( Class<?> componentClass )
 	{
 		TypeDescriptor componentTypeDescriptor = TypeDescriptor.of( componentClass );
 		return new ArrayTypeDescriptor( componentTypeDescriptor );
 	}
 
-	public static ArrayTypeDescriptor of( TypeDescriptor componentTypeDescriptor )
+	public static ArrayTypeDescriptor ofComponent( TypeDescriptor componentTypeDescriptor )
 	{
 		return new ArrayTypeDescriptor( componentTypeDescriptor );
-	}
-
-	public static ArrayTypeDescriptor ofDescriptorString( String descriptorString )
-	{
-		assert ByteCodeHelpers.isValidDescriptorString( descriptorString );
-		ClassDesc classDesc = ClassDesc.ofDescriptor( descriptorString );
-		assert classDesc.isArray();
-		TypeDescriptor componentType = TypeDescriptor.ofDescriptorString( classDesc.componentType().descriptorString() );
-		return of( componentType );
 	}
 
 	public final TypeDescriptor componentTypeDescriptor;
@@ -45,7 +33,6 @@ public class ArrayTypeDescriptor extends TypeDescriptor
 	@Deprecated @Override public boolean isPrimitive() { return false; }
 	@Deprecated @Override public boolean isTerminal() {	return false; }
 	@Deprecated @Override public ArrayTypeDescriptor asArrayTypeDescriptor() { return this; }
-	@Override public String descriptorString() { return "[" + componentTypeDescriptor.descriptorString(); }
 
 	@Deprecated @Override public boolean equals( Object other )
 	{

@@ -1,6 +1,9 @@
 package mikenakis.bytecode.model.descriptors;
 
-public class MethodHandleDescriptor
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
+
+public final class MethodHandleDescriptor
 {
 	public static MethodHandleDescriptor of( MethodDescriptor methodDescriptor, TypeDescriptor ownerTypeDescriptor )
 	{

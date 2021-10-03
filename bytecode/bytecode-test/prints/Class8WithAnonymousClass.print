@@ -11,13 +11,13 @@
 │       ├─■ instructions: 9 entries
 │       │ ├─■ L9: // public abstract class Class8WithAnonymousClass
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Object.<init>()
+│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
 │       │ ├─■ L11: // public final Interface1 field = new Interface1()
 │       │ ├─■         ALOAD 0
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
 │       │ ├─■         DUP
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.<init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.<init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
 │       │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items

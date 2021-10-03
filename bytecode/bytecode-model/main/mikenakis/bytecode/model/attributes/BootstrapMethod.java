@@ -3,8 +3,8 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.descriptors.MethodDescriptor;
-import mikenakis.bytecode.model.descriptors.TypeDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public final class BootstrapMethod
 		this.argumentConstants = argumentConstants;
 	}
 
-	public MethodDescriptor invocationMethodDescriptor() { return MethodDescriptor.ofDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantInvocation( methodHandleConstant ) ); }
-	public TypeDescriptor ownerTypeDescriptor() { return TypeDescriptor.ofDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantOwner( methodHandleConstant ) ); }
+	public MethodDescriptor invocationMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantInvocation( methodHandleConstant ) ); }
+	public TypeDescriptor ownerTypeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantOwner( methodHandleConstant ) ); }
 
 	private static boolean isBootstrapArgumentConstant( Constant constant )
 	{

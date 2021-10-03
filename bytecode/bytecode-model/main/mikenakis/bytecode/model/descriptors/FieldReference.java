@@ -1,6 +1,8 @@
 package mikenakis.bytecode.model.descriptors;
 
-public class FieldReference
+import mikenakis.java_type_model.TypeDescriptor;
+
+public final class FieldReference
 {
 	public static FieldReference of( TypeDescriptor declaringTypeDescriptor, FieldPrototype fieldPrototype )
 	{

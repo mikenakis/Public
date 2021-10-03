@@ -17,7 +17,7 @@
 │ │     ├─■ instructions: 4 entries
 │ │     │ ├─■ L8: // @SuppressWarnings( "unused" )
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
-│ │     │ ├─■         INVOKEVIRTUAL reference = [Plain] java.lang.Object mikenakis.bytecode.test.model.Enum1[].clone()
+│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.Object mikenakis.bytecode.test.model.Enum1[].clone()
 │ │     │ ├─■         CHECKCAST mikenakis.bytecode.test.model.Enum1[]
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -31,7 +31,7 @@
 │ │   │ │ ├─■ L8: // @SuppressWarnings( "unused" )
 │ │   │ │ ├─■         LDC mikenakis.bytecode.test.model.Enum1
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESTATIC reference = [Plain] java.lang.Enum java.lang.Enum.valueOf( java.lang.Class, java.lang.String )
+│ │   │ │ ├─■         INVOKESTATIC kind = Plain, reference =  java.lang.Enum java.lang.Enum.valueOf( java.lang.Class, java.lang.String )
 │ │   │ │ ├─■         CHECKCAST mikenakis.bytecode.test.model.Enum1
 │ │   │ │ └─■         ARETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -50,7 +50,7 @@
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
 │ │   │ │ ├─■         ILOAD 2
-│ │   │ │ ├─■         INVOKESPECIAL reference = [Plain] void java.lang.Enum.<init>( java.lang.String, int )
+│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Enum.<init>( java.lang.String, int )
 │ │   │ │ ├─■ L17: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -97,24 +97,24 @@
 │       │ ├─■         DUP
 │       │ ├─■         LDC "ENUM_CONSTANT_A"
 │       │ ├─■         LDC 0
-│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
+│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
 │       │ ├─■ L12: // ENUM_CONSTANT_B, //
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Enum1
 │       │ ├─■         DUP
 │       │ ├─■         LDC "ENUM_CONSTANT_B"
 │       │ ├─■         LDC 1
-│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
+│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_B
 │       │ ├─■ L13: // ENUM_CONSTANT_C; //
 │       │ ├─■         NEW mikenakis.bytecode.test.model.Enum1
 │       │ ├─■         DUP
 │       │ ├─■         LDC "ENUM_CONSTANT_C"
 │       │ ├─■         LDC 2
-│       │ ├─■         INVOKESPECIAL reference = [Plain] void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
+│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Enum1.<init>( java.lang.String, int )
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_C
 │       │ ├─■ L8: // @SuppressWarnings( "unused" )
-│       │ ├─■         INVOKESTATIC reference = [Plain] mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$values()
+│       │ ├─■         INVOKESTATIC kind = Plain, reference =  mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$values()
 │       │ ├─■         PUTSTATIC mikenakis.bytecode.test.model.Enum1[] mikenakis.bytecode.test.model.Enum1.$VALUES
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
