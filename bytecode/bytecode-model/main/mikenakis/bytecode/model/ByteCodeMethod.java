@@ -38,29 +38,25 @@ public final class ByteCodeMethod extends ByteCodeMember
 
 	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, MethodPrototype methodPrototype )
 	{
-		return new ByteCodeMethod( modifiers, Mutf8Constant.of( methodPrototype.name ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ), AttributeSet.of() );
+		return new ByteCodeMethod( modifiers, Mutf8Constant.of( methodPrototype.methodName ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ), AttributeSet.of() );
 	}
 
-	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Mutf8Constant methodNameConstant, Mutf8Constant methodDescriptorStringConstant, AttributeSet attributeSet )
 	{
-		return new ByteCodeMethod( modifiers, nameConstant, descriptorConstant, attributeSet );
+		return new ByteCodeMethod( modifiers, methodNameConstant, methodDescriptorStringConstant, attributeSet );
 	}
 
 	public final FlagSet<Modifier> modifiers;
-	public final Mutf8Constant descriptorConstant;
+	public final Mutf8Constant methodDescriptorStringConstant;
 
-	private ByteCodeMethod( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeMethod( FlagSet<Modifier> modifiers, Mutf8Constant methodNameConstant, Mutf8Constant methodDescriptorStringConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, attributeSet );
+		super( methodNameConstant, attributeSet );
 		this.modifiers = modifiers;
-		this.descriptorConstant = descriptorConstant;
+		this.methodDescriptorStringConstant = methodDescriptorStringConstant;
 	}
 
-	public MethodDescriptor getMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( descriptorConstant.stringValue() ); }
-	public MethodPrototype prototype() { return MethodPrototype.of( nameConstant.stringValue(), getMethodDescriptor() ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "accessFlags = " + modifiers + ", name = " + nameConstant + ", descriptor = " + descriptorConstant;
-	}
+	public MethodDescriptor descriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( methodDescriptorStringConstant.stringValue() ); }
+	public MethodPrototype prototype() { return MethodPrototype.of( memberNameConstant.stringValue(), descriptor() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "accessFlags = " + modifiers + ", name = " + memberNameConstant + ", descriptor = " + methodDescriptorStringConstant; }
 }

@@ -9,14 +9,14 @@ import mikenakis.bytecode.model.constants.Mutf8Constant;
  */
 public abstract class ByteCodeMember
 {
-	public final Mutf8Constant nameConstant;
+	public final Mutf8Constant memberNameConstant;
 	public final AttributeSet attributeSet;
 
-	protected ByteCodeMember( Mutf8Constant nameConstant, AttributeSet attributeSet )
+	protected ByteCodeMember( Mutf8Constant memberNameConstant, AttributeSet attributeSet )
 	{
-		this.nameConstant = nameConstant;
+		this.memberNameConstant = memberNameConstant;
 		this.attributeSet = attributeSet;
 	}
 
-	public final String name() { return nameConstant.stringValue(); }
+	public final String name() { return memberNameConstant.stringValue(); }
 }

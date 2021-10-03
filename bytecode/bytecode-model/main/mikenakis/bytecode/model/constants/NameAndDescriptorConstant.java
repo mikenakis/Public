@@ -1,6 +1,9 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
+import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -12,9 +15,14 @@ import java.util.Objects;
  */
 public final class NameAndDescriptorConstant extends Constant
 {
-	public static NameAndDescriptorConstant of( String name, String descriptorString )
+	public static NameAndDescriptorConstant of( String name, TypeDescriptor typeDescriptor )
 	{
-		return of( Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ) );
+		return of( Mutf8Constant.of( name ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( typeDescriptor ) ) );
+	}
+
+	public static NameAndDescriptorConstant of( String name, MethodDescriptor methodDescriptor )
+	{
+		return of( Mutf8Constant.of( name ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodDescriptor ) ) );
 	}
 
 	public static NameAndDescriptorConstant of( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant ) //TODO: remove
@@ -59,34 +67,17 @@ public final class NameAndDescriptorConstant extends Constant
 		this.descriptorConstant = descriptorConstant;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "name = " + nameConstant + ", descriptor = " + descriptorConstant;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "name = " + nameConstant + ", descriptor = " + descriptorConstant; }
+	@Deprecated @Override public NameAndDescriptorConstant asNameAndDescriptorConstant() { return this; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof NameAndDescriptorConstant kin && equals( kin ); }
+	@Override public int hashCode() { return Objects.hash( tag, nameConstant, descriptorConstant ); }
 
-	@Deprecated @Override public NameAndDescriptorConstant asNameAndDescriptorConstant()
-	{
-		return this;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof NameAndDescriptorConstant otherNameAndDescriptorConstant )
-			return equalsNameAndDescriptorConstant( otherNameAndDescriptorConstant );
-		return false;
-	}
-
-	public boolean equalsNameAndDescriptorConstant( NameAndDescriptorConstant other )
+	public boolean equals( NameAndDescriptorConstant other )
 	{
 		if( !nameConstant.equalsMutf8Constant( other.nameConstant ) )
 			return false;
 		if( !descriptorConstant.equalsMutf8Constant( other.descriptorConstant ) )
 			return false;
 		return true;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, nameConstant, descriptorConstant );
 	}
 }

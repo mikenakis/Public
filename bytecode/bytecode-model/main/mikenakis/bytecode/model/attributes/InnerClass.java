@@ -1,5 +1,6 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.collections.FlagSet;
 import mikenakis.kit.collections.FlagEnum;
@@ -63,8 +64,8 @@ public final class InnerClass
 		this.modifiers = modifiers;
 	}
 
-	public TerminalTypeDescriptor innerType() { return innerClassConstant.terminalTypeDescriptor(); }
-	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> c.terminalTypeDescriptor() ); }
+	public TerminalTypeDescriptor innerType() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( innerClassConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
+	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ); }
 	public Optional<String> innerName() { return innerNameConstant.map( c -> c.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

@@ -748,9 +748,9 @@ public class ByteCodeReader
 
 	private Annotation readByteCodeAnnotation()
 	{
-		Mutf8Constant nameConstant = readIndexAndGetConstant().asMutf8Constant();
+		Mutf8Constant typeNameConstant = readIndexAndGetConstant().asMutf8Constant();
 		List<AnnotationParameter> annotationParameters = readAnnotationParameters();
-		return Annotation.of( nameConstant, annotationParameters );
+		return Annotation.of( typeNameConstant, annotationParameters );
 	}
 
 	private List<ParameterAnnotationSet> readParameterAnnotationsAttributeEntries()

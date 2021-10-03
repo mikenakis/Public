@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
@@ -34,12 +35,7 @@ public final class NestHostAttribute extends KnownAttribute
 		this.hostClassConstant = hostClassConstant;
 	}
 
-	public TerminalTypeDescriptor hostClass() { return hostClassConstant.terminalTypeDescriptor(); }
-
+	public TerminalTypeDescriptor hostClass() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( hostClassConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
 	@Deprecated @Override public NestHostAttribute asNestHostAttribute() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return " -> " + hostClassConstant;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return " -> " + hostClassConstant; }
 }

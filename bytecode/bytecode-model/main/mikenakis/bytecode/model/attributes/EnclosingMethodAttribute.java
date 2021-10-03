@@ -37,7 +37,7 @@ public final class EnclosingMethodAttribute extends KnownAttribute
 		this.enclosingMethodNameAndDescriptorConstant = enclosingMethodNameAndDescriptorConstant;
 	}
 
-	public TerminalTypeDescriptor enclosingClassTypeDescriptor() { return enclosingClassConstant.terminalTypeDescriptor(); }
+	public TerminalTypeDescriptor enclosingClassTypeDescriptor() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( enclosingClassConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
 	public Optional<MethodPrototype> enclosingMethodPrototype() { return enclosingMethodNameAndDescriptorConstant.map( c -> ByteCodeHelpers.methodPrototypeFromNameAndDescriptorConstant( c ) ); }
 	@Deprecated @Override public EnclosingMethodAttribute asEnclosingMethodAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "class = " + enclosingClassConstant + ", methodNameAndDescriptor = { " + enclosingMethodNameAndDescriptorConstant + " }"; }

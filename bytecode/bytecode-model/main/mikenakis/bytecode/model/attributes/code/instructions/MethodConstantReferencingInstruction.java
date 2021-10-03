@@ -1,6 +1,5 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
@@ -24,7 +23,7 @@ public final class MethodConstantReferencingInstruction extends Instruction
 				case Interface -> Constant.tag_InterfaceMethodReference;
 			};
 		ClassConstant declaringTypeConstant = ClassConstant.ofTypeName( methodReference.declaringTypeDescriptor.typeName() );
-		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype.name, ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodReference.methodPrototype.descriptor ) );
+		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype.methodName, methodReference.methodPrototype.descriptor );
 		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( tag, declaringTypeConstant, nameAndDescriptorConstant );
 		return new MethodConstantReferencingInstruction( opCode, methodReferenceConstant );
 	}

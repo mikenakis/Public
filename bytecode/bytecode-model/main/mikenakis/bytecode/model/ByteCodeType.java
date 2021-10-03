@@ -3,7 +3,7 @@ package mikenakis.bytecode.model;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.java_type_model.MethodDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
@@ -62,8 +62,8 @@ public final class ByteCodeType
 		Optional<TerminalTypeDescriptor> superTypeDescriptor )
 	{
 		Version version = new Version( 60, 0 ); //TODO: add full support for this version!
-		return of( version, modifiers, ClassConstant.ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( typeDescriptor ) ), //
-			superTypeDescriptor.map( c -> ClassConstant.ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( c ) ) ), //
+		return of( version, modifiers, ByteCodeHelpers.classConstantFromTerminalTypeDescriptor( typeDescriptor ), //
+			superTypeDescriptor.map( c -> ByteCodeHelpers.classConstantFromTerminalTypeDescriptor( c ) ), //
 			new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), AttributeSet.of(), new ArrayList<>() );
 	}
 
@@ -101,12 +101,12 @@ public final class ByteCodeType
 	}
 
 	public ClassConstant classConstant() { return classConstant; }
-	public TerminalTypeDescriptor typeDescriptor() { return classConstant.terminalTypeDescriptor(); }
+	public TerminalTypeDescriptor typeDescriptor() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( classConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
 	public Optional<ClassConstant> superClassConstant() { return superClassConstant; }
-	public Optional<TerminalTypeDescriptor> superTypeDescriptor() { return superClassConstant.map( c -> c.terminalTypeDescriptor() ); }
+	public Optional<TerminalTypeDescriptor> superTypeDescriptor() { return superClassConstant.map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ); }
 	public List<ClassConstant> interfaceClassConstants() { return interfaceConstants; }
-	public List<TerminalTypeDescriptor> interfaces() { return interfaceConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
-	public List<TerminalTypeDescriptor> extraTypes() { return extraClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
+	public List<TerminalTypeDescriptor> interfaces() { return interfaceConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
+	public List<TerminalTypeDescriptor> extraTypes() { return extraClassConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
 
 	public ByteCodeMethod addMethod( ByteCodeMethod method )
 	{
@@ -132,28 +132,25 @@ public final class ByteCodeType
 			} );
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return ByteCodeHelpers.typeDescriptorFromDescriptorString( classConstant.descriptorString() ).typeName();
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return classConstant.toString(); }
 
-	public int findDeclaredMethodByNameAndDescriptor( String name, MethodDescriptor descriptor )
+	public int findDeclaredMethodByNameAndDescriptor( MethodPrototype methodPrototype )
 	{
 		int index = 0;
 		for( ByteCodeMethod method : methods )
 		{
-			if( match( method, name, descriptor ) )
+			if( match( method, methodPrototype ) )
 				return index;
 			index++;
 		}
 		return -1;
 	}
 
-	public Optional<ByteCodeMethod> getMethodByNameAndDescriptor( String name, MethodDescriptor descriptor, Function<String,ByteCodeType> byteCodeTypeByName )
+	public Optional<ByteCodeMethod> getMethod( MethodPrototype methodPrototype, Function<String,ByteCodeType> byteCodeTypeByName )
 	{
 		for( ByteCodeType byteCodeType = this; ; )
 		{
-			int index = byteCodeType.findDeclaredMethodByNameAndDescriptor( name, descriptor );
+			int index = byteCodeType.findDeclaredMethodByNameAndDescriptor( methodPrototype );
 			if( index != -1 )
 				return Optional.of( byteCodeType.methods.get( index ) );
 			Optional<ByteCodeType> superType = byteCodeType.superTypeDescriptor().map( d -> byteCodeTypeByName.apply( d.typeName ) );
@@ -164,10 +161,10 @@ public final class ByteCodeType
 		return Optional.empty();
 	}
 
-	private static boolean match( ByteCodeMethod method, String name, MethodDescriptor descriptor )
+	private static boolean match( ByteCodeMethod method, MethodPrototype methodPrototype )
 	{
-		if( !method.name().equals( name ) )
+		if( !method.name().equals( methodPrototype.methodName ) )
 			return false;
-		return method.getMethodDescriptor().equals( descriptor );
+		return method.descriptor().equals( methodPrototype.descriptor );
 	}
 }

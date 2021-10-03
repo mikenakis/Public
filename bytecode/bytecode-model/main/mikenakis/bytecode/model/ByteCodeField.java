@@ -16,15 +16,15 @@ import java.util.Map;
  */
 public final class ByteCodeField extends ByteCodeMember
 {
-	public static ByteCodeField of( FlagSet<Modifier> modifiers, String name, FieldDescriptor fieldDescriptor )
+	public static ByteCodeField of( FlagSet<Modifier> modifiers, String fieldName, FieldDescriptor fieldDescriptor )
 	{
 		String descriptorString = ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldDescriptor.typeDescriptor );
-		return of( modifiers, Mutf8Constant.of( name ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
+		return of( modifiers, Mutf8Constant.of( fieldName ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
 	}
 
-	public static ByteCodeField of( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	public static ByteCodeField of( FlagSet<Modifier> modifiers, Mutf8Constant fieldNameConstant, Mutf8Constant fieldDescriptorStringConstant, AttributeSet attributeSet )
 	{
-		return new ByteCodeField( modifiers, nameConstant, descriptorConstant, attributeSet );
+		return new ByteCodeField( modifiers, fieldNameConstant, fieldDescriptorStringConstant, attributeSet );
 	}
 
 	public enum Modifier
@@ -44,21 +44,20 @@ public final class ByteCodeField extends ByteCodeMember
 		Map.entry( Modifier.Enum      /**/, 0x4000 ) ); // ACC_ENUM      = 0x4000;
 
 	public final FlagSet<Modifier> modifiers;
-	public final Mutf8Constant descriptorConstant;
+	public final Mutf8Constant fieldDescriptorStringConstant;
 
-	private ByteCodeField( FlagSet<Modifier> modifiers, Mutf8Constant nameConstant, Mutf8Constant descriptorConstant, AttributeSet attributeSet )
+	private ByteCodeField( FlagSet<Modifier> modifiers, Mutf8Constant fieldNameConstant, Mutf8Constant fieldDescriptorStringConstant, AttributeSet attributeSet )
 	{
-		super( nameConstant, attributeSet );
+		super( fieldNameConstant, attributeSet );
 		this.modifiers = modifiers;
-		this.descriptorConstant = descriptorConstant;
+		this.fieldDescriptorStringConstant = fieldDescriptorStringConstant;
 	}
 
-	public FieldDescriptor descriptor() {
-		return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorString( descriptorConstant.stringValue() ) ); }
+	public FieldDescriptor descriptor() { return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorString( fieldDescriptorStringConstant.stringValue() ) ); }
 	public FieldPrototype prototype() { return FieldPrototype.of( name(), descriptor() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "accessFlags = " + modifiers + ", name = " + nameConstant + ", descriptor = " + descriptorConstant;
+		return "accessFlags = " + modifiers + ", name = " + memberNameConstant + ", descriptor = " + fieldDescriptorStringConstant;
 	}
 }

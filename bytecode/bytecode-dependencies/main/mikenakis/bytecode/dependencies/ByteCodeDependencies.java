@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.AnnotationParameter;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.ByteCodeField;
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
@@ -122,7 +121,7 @@ public final class ByteCodeDependencies
 		}
 		for( ByteCodeMethod byteCodeMethod : byteCodeType.methods )
 		{
-			visitMethodDescriptor( byteCodeMethod.getMethodDescriptor() );
+			visitMethodDescriptor( byteCodeMethod.descriptor() );
 			for( KnownAttribute knownAttribute : byteCodeMethod.attributeSet.knownAttributes() )
 			{
 				switch( knownAttribute.tag )
@@ -286,11 +285,7 @@ public final class ByteCodeDependencies
 	private void visitEnclosingMethodAttribute( EnclosingMethodAttribute attribute )
 	{
 		visitTerminalTypeDescriptor( attribute.enclosingClassTypeDescriptor() );
-		attribute.enclosingMethodNameAndDescriptorConstant.ifPresent( nameAndDescriptorConstant -> //
-		{
-			MethodDescriptor methodDescriptor = ByteCodeHelpers.methodDescriptorFromDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
-			visitMethodDescriptor( methodDescriptor );
-		} );
+		attribute.enclosingMethodPrototype().ifPresent( p -> visitMethodDescriptor( p.descriptor ) );
 	}
 
 	private void visitExceptionsAttribute( ExceptionsAttribute attribute )
@@ -497,7 +492,6 @@ public final class ByteCodeDependencies
 	{
 		assert dependencyName != null;
 		dependencyName = stripArrayNotation( dependencyName );
-		assert ByteCodeHelpers.isValidTerminalTypeName( dependencyName );
 		TypeDescriptor typeDescriptor = TerminalTypeDescriptor.ofTypeName( dependencyName );
 		visitTypeDescriptor( typeDescriptor );
 	}

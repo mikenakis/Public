@@ -14,10 +14,10 @@
     ├─■ [0] Annotation type = java.lang.annotation.Target; 1 parameters
     │ └─■ [0] AnnotationParameter name = "value"
     │   └─■ value: ArrayAnnotationValue; 4 values
-    │     ├─■ [0] EnumAnnotationValue type = java.lang.annotation.ElementType, value = PACKAGE
-    │     ├─■ [1] EnumAnnotationValue type = java.lang.annotation.ElementType, value = TYPE_PARAMETER
-    │     ├─■ [2] EnumAnnotationValue type = java.lang.annotation.ElementType, value = TYPE_USE
-    │     └─■ [3] EnumAnnotationValue type = java.lang.annotation.ElementType, value = MODULE
+    │     ├─■ [0] EnumAnnotationValue java.lang.annotation.ElementType.PACKAGE
+    │     ├─■ [1] EnumAnnotationValue java.lang.annotation.ElementType.TYPE_PARAMETER
+    │     ├─■ [2] EnumAnnotationValue java.lang.annotation.ElementType.TYPE_USE
+    │     └─■ [3] EnumAnnotationValue java.lang.annotation.ElementType.MODULE
     └─■ [1] Annotation type = java.lang.annotation.Retention; 1 parameters
       └─■ [0] AnnotationParameter name = "value"
-        └─■ value: EnumAnnotationValue type = java.lang.annotation.RetentionPolicy, value = CLASS
+        └─■ value: EnumAnnotationValue java.lang.annotation.RetentionPolicy.CLASS

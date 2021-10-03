@@ -75,30 +75,8 @@ public final class MethodHandleConstant extends Constant
 
 	@Deprecated @Override public MethodHandleConstant asMethodHandleConstant() { return this; }
 	public MethodHandleDescriptor methodHandleDescriptor() { return ByteCodeHelpers.methodHandleDescriptorFromMethodHandleConstant( this ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "kind = " + referenceKind.name() + ", referenceConstant = " + referenceConstant;
-	}
-
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof MethodHandleConstant otherMethodHandleConstant )
-			return equals( otherMethodHandleConstant );
-		return false;
-	}
-
-	public boolean equals( MethodHandleConstant other )
-	{
-		if( referenceKind != other.referenceKind )
-			return false;
-		if( !referenceConstant.equalsReferenceConstant( other.referenceConstant ) )
-			return false;
-		return true;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, referenceKind, referenceConstant );
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "kind = " + referenceKind.name() + ", referenceConstant = " + referenceConstant; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof MethodHandleConstant kin && equals( kin ); }
+	public boolean equals( MethodHandleConstant other ) { return referenceKind == other.referenceKind && referenceConstant.equals( other.referenceConstant ); }
+	@Override public int hashCode() { return Objects.hash( tag, referenceKind, referenceConstant ); }
 }

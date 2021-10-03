@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
+import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
@@ -40,11 +41,7 @@ public final class NestMembersAttribute extends KnownAttribute
 		this.memberClassConstants = memberClassConstants;
 	}
 
-	public List<TerminalTypeDescriptor> members() { return memberClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
+	public List<TerminalTypeDescriptor> members() { return memberClassConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
 	@Deprecated @Override public NestMembersAttribute asNestMembersAttribute() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return memberClassConstants.size() + " entries";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return memberClassConstants.size() + " entries"; }
 }

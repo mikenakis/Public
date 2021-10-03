@@ -79,7 +79,7 @@ public final class InvokeDynamicConstant extends Constant
 
 	public boolean equals( InvokeDynamicConstant other )
 	{
-		if( !nameAndDescriptorConstant.equalsNameAndDescriptorConstant( other.nameAndDescriptorConstant ) )
+		if( !nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ) )
 			return false;
 		if( !getBootstrapMethod().equals( other.getBootstrapMethod() ) )
 			return false;

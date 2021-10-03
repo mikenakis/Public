@@ -15,36 +15,20 @@ public final class ClassAnnotationValue extends AnnotationValue
 {
 	public static final String NAME = "class";
 
-	public static ClassAnnotationValue of( String name )
+	public static ClassAnnotationValue of( Mutf8Constant classDescriptorStringConstant )
 	{
-		Mutf8Constant classConstant = Mutf8Constant.of( name );
-		return of( classConstant );
+		return new ClassAnnotationValue( classDescriptorStringConstant );
 	}
 
-	public static ClassAnnotationValue of( Mutf8Constant nameConstant )
-	{
-		return new ClassAnnotationValue( nameConstant );
-	}
+	public final Mutf8Constant classDescriptorStringConstant;
 
-	public final Mutf8Constant nameConstant;
-
-	private ClassAnnotationValue( Mutf8Constant nameConstant )
+	private ClassAnnotationValue( Mutf8Constant classDescriptorStringConstant )
 	{
 		super( tagClass );
-		this.nameConstant = nameConstant;
+		this.classDescriptorStringConstant = classDescriptorStringConstant;
 	}
 
-	public TypeDescriptor typeDescriptor() {
-		return ByteCodeHelpers.typeDescriptorFromDescriptorString( nameConstant.stringValue() );
-	}
-
-	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "class = " + nameConstant;
-	}
+	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( classDescriptorStringConstant.stringValue() ); }
+	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "class = " + classDescriptorStringConstant; }
 }

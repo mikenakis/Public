@@ -10,13 +10,13 @@
     ├─■ [0] Annotation type = java.lang.annotation.Target; 1 parameters
     │ └─■ [0] AnnotationParameter name = "value"
     │   └─■ value: ArrayAnnotationValue; 7 values
-    │     ├─■ [0] EnumAnnotationValue type = java.lang.annotation.ElementType, value = TYPE
-    │     ├─■ [1] EnumAnnotationValue type = java.lang.annotation.ElementType, value = FIELD
-    │     ├─■ [2] EnumAnnotationValue type = java.lang.annotation.ElementType, value = METHOD
-    │     ├─■ [3] EnumAnnotationValue type = java.lang.annotation.ElementType, value = PARAMETER
-    │     ├─■ [4] EnumAnnotationValue type = java.lang.annotation.ElementType, value = CONSTRUCTOR
-    │     ├─■ [5] EnumAnnotationValue type = java.lang.annotation.ElementType, value = LOCAL_VARIABLE
-    │     └─■ [6] EnumAnnotationValue type = java.lang.annotation.ElementType, value = ANNOTATION_TYPE
+    │     ├─■ [0] EnumAnnotationValue java.lang.annotation.ElementType.TYPE
+    │     ├─■ [1] EnumAnnotationValue java.lang.annotation.ElementType.FIELD
+    │     ├─■ [2] EnumAnnotationValue java.lang.annotation.ElementType.METHOD
+    │     ├─■ [3] EnumAnnotationValue java.lang.annotation.ElementType.PARAMETER
+    │     ├─■ [4] EnumAnnotationValue java.lang.annotation.ElementType.CONSTRUCTOR
+    │     ├─■ [5] EnumAnnotationValue java.lang.annotation.ElementType.LOCAL_VARIABLE
+    │     └─■ [6] EnumAnnotationValue java.lang.annotation.ElementType.ANNOTATION_TYPE
     └─■ [1] Annotation type = java.lang.annotation.Retention; 1 parameters
       └─■ [0] AnnotationParameter name = "value"
-        └─■ value: EnumAnnotationValue type = java.lang.annotation.RetentionPolicy, value = RUNTIME
+        └─■ value: EnumAnnotationValue java.lang.annotation.RetentionPolicy.RUNTIME

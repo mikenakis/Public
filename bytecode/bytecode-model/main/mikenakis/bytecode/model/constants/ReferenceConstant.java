@@ -1,8 +1,6 @@
 package mikenakis.bytecode.model.constants;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -49,32 +47,9 @@ public abstract class ReferenceConstant extends Constant
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
-	public final TypeDescriptor declaringType() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( declaringTypeConstant.descriptorString() ); }
 	@Deprecated @Override public final ReferenceConstant asReferenceConstant() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public final String toString()
-	{
-		return "declaringType = " + declaringTypeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant;
-	}
-
-	@Override public final boolean equals( Object other )
-	{
-		if( other instanceof ReferenceConstant otherReferenceConstant )
-			return equalsReferenceConstant( otherReferenceConstant );
-		return false;
-	}
-
-	public boolean equalsReferenceConstant( ReferenceConstant other )
-	{
-		if( !declaringTypeConstant.equalsClassConstant( other.declaringTypeConstant ) )
-			return false;
-		if( !nameAndDescriptorConstant.equalsNameAndDescriptorConstant( other.nameAndDescriptorConstant ) )
-			return false;
-		return true;
-	}
-
-	@Override public final int hashCode()
-	{
-		return Objects.hash( tag, declaringTypeConstant, nameAndDescriptorConstant );
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public final String toString() { return "declaringType = " + declaringTypeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant; }
+	@Deprecated @Override public final boolean equals( Object other ) { return other instanceof ReferenceConstant kin && equals( kin ); }
+	public boolean equals( ReferenceConstant other ) { return declaringTypeConstant.equalsClassConstant( other.declaringTypeConstant ) && nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ); }
+	@Override public final int hashCode() { return Objects.hash( tag, declaringTypeConstant, nameAndDescriptorConstant ); }
 }

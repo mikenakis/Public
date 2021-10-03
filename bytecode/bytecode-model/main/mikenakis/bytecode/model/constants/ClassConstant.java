@@ -16,12 +16,17 @@ import java.util.Objects;
  */
 public final class ClassConstant extends Constant
 {
+	public static ClassConstant of( TerminalTypeDescriptor terminalTypeDescriptor )
+	{
+		return ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( terminalTypeDescriptor ) );
+	}
+
 	public static ClassConstant of( TypeDescriptor typeDescriptor )
 	{
-		if( typeDescriptor.isArray() )
-			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromTypeDescriptor( typeDescriptor ) );
 		if( typeDescriptor.isPrimitive() )
-			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromTypeDescriptor( typeDescriptor ) );
+			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromPrimitiveTypeDescriptor( typeDescriptor.asPrimitiveTypeDescriptor() ) );
+		if( typeDescriptor.isArray() )
+			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromArrayTypeDescriptor( typeDescriptor.asArrayTypeDescriptor() ) );
 		assert typeDescriptor.isTerminal();
 		return ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( typeDescriptor.asTerminalTypeDescriptor() ) );
 	}
@@ -34,9 +39,14 @@ public final class ClassConstant extends Constant
 
 	public static ClassConstant ofInternalNameOrDescriptorString( String internalName )
 	{
-		ClassConstant classConstant = new ClassConstant();
+		ClassConstant classConstant = of();
 		classConstant.setInternalNameOrDescriptorStringConstant( Mutf8Constant.of( internalName ) );
 		return classConstant;
+	}
+
+	public static ClassConstant of()
+	{
+		return new ClassConstant();
 	}
 
 	// According to §4.4.1 this is supposed to be a "binary class or interface name encoded in internal form."
@@ -44,7 +54,7 @@ public final class ClassConstant extends Constant
 	//        in class java.lang.constants.ConstantUtils there exist methods binaryToInternal() and internalToBinary().
 	private Mutf8Constant internalNameOrDescriptorStringConstant;
 
-	public ClassConstant()
+	private ClassConstant()
 	{
 		super( tag_Class );
 	}
@@ -65,7 +75,7 @@ public final class ClassConstant extends Constant
 
 	// PEARL: the vast majority of ClassConstant instances will contain strings of the form `java/lang/String`, but you cannot rely on this to always be the
 	//        case: every once in a while you will find a string of the form `Ljava/lang/String;`.
-	//        There is a cryptic sentence further down in §4.4.1 which kind of points to this, by saying: "Because arrays are objects, the opcodes anewarray and
+	//        There is a cryptic sentence in §4.4.1 which kind of points to this, by saying: "Because arrays are objects, the opcodes anewarray and
 	//        multianewarray - but not the opcode new - can reference array "classes" via CONSTANT_Class_info structures in the constant_pool table. For such
 	//        array classes, the name of the class is the descriptor of the array type (§4.3.2)." However, even if we concede any meaningfulness to this
 	//        sentence, it still does not cover all cases. An array-descriptor-style class constant can be encountered in other contexts, for example an
@@ -78,23 +88,9 @@ public final class ClassConstant extends Constant
 		return ByteCodeHelpers.isValidInternalName( name );
 	}
 
-	public String descriptorString()
-	{
-		return ByteCodeHelpers.descriptorStringFromInternalName( internalNameOrDescriptorStringConstant.stringValue() );
-	}
-
-	public TerminalTypeDescriptor terminalTypeDescriptor()
-	{
-		String internalName = internalNameOrDescriptorStringConstant.stringValue();
-		return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalName );
-	}
-
 	public TypeDescriptor typeDescriptor()
 	{
-		String internalNameOrDescriptorString = internalNameOrDescriptorStringConstant.stringValue();
-		if( internalNameOrDescriptorString.charAt( 0 ) == '[' )
-			return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( internalNameOrDescriptorString );
-		return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalNameOrDescriptorString );
+		return ByteCodeHelpers.typeDescriptorFromInternalNameOrDescriptorString( getInternalNameOrDescriptorStringConstant().stringValue() );
 	}
 
 	public ArrayTypeDescriptor arrayTypeDescriptor()

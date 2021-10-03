@@ -22,7 +22,7 @@ public final class MethodReference
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append( " " ).append( methodPrototype.descriptor.returnTypeDescriptor.typeName() );
-		stringBuilder.append( " " ).append( declaringTypeDescriptor.typeName() ).append( "." ).append( methodPrototype.name );
+		stringBuilder.append( " " ).append( declaringTypeDescriptor.typeName() ).append( "." ).append( methodPrototype.methodName );
 		methodPrototype.descriptor.appendParameters( stringBuilder );
 		return stringBuilder.toString();
 	}

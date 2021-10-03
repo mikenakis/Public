@@ -32,8 +32,8 @@ public final class BootstrapMethod
 		this.argumentConstants = argumentConstants;
 	}
 
-	public MethodDescriptor invocationMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantInvocation( methodHandleConstant ) ); }
-	public TypeDescriptor ownerTypeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( ByteCodeHelpers.descriptorStringFromMethodHandleConstantOwner( methodHandleConstant ) ); }
+	public MethodDescriptor invocationMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromMethodHandleConstantInvocation( methodHandleConstant ); }
+	public TypeDescriptor ownerTypeDescriptor() { return ByteCodeHelpers.typeDescriptorFromMethodHandleConstantOwner( methodHandleConstant ); }
 
 	private static boolean isBootstrapArgumentConstant( Constant constant )
 	{

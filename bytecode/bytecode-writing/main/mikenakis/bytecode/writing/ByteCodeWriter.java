@@ -167,16 +167,16 @@ public class ByteCodeWriter
 		for( ByteCodeField field : byteCodeType.fields )
 		{
 			bufferWriter.writeUnsignedShort( field.modifiers.getBits() );
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.nameConstant ) );
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.descriptorConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.memberNameConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( field.fieldDescriptorStringConstant ) );
 			writeAttributeSet( bufferWriter, constantPool, field.attributeSet, Optional.empty() );
 		}
 		bufferWriter.writeUnsignedShort( byteCodeType.methods.size() );
 		for( ByteCodeMethod method : byteCodeType.methods )
 		{
 			bufferWriter.writeUnsignedShort( method.modifiers.getBits() );
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.nameConstant ) );
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.descriptorConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.memberNameConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( method.methodDescriptorStringConstant ) );
 			writeAttributeSet( bufferWriter, constantPool, method.attributeSet, Optional.empty() );
 		}
 		writeAttributeSet( bufferWriter, constantPool, byteCodeType.attributeSet, Optional.empty() );
@@ -551,9 +551,9 @@ public class ByteCodeWriter
 			int endLocation = locationMap.getLocation( localVariable.endInstruction );
 			bufferWriter.writeUnsignedShort( startLocation );
 			bufferWriter.writeUnsignedShort( endLocation - startLocation );
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( localVariable.nameConstant ) );
-			bufferWriter.writeUnsignedShort( constantPool.getIndex( localVariable.descriptorConstant ) );
-			bufferWriter.writeUnsignedShort( localVariable.index );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( localVariable.variableNameConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getIndex( localVariable.variableTypeDescriptorStringConstant ) );
+			bufferWriter.writeUnsignedShort( localVariable.variableIndex );
 		}
 	}
 	private static void writeCodeAttribute( ConstantPool constantPool, BufferWriter bufferWriter, CodeAttribute codeAttribute )
@@ -1068,19 +1068,19 @@ public class ByteCodeWriter
 
 	private static void writeEnumAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, EnumAnnotationValue enumAnnotationValue )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.typeNameConstant ) );
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.valueNameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.enumClassDescriptorStringConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( enumAnnotationValue.enumValueNameConstant ) );
 	}
 
 	private static void writeClassAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, ClassAnnotationValue classAnnotationValue )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.nameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( classAnnotationValue.classDescriptorStringConstant ) );
 	}
 
 	private static void writeAnnotationAnnotationValue( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationAnnotationValue annotationAnnotationValue )
 	{
 		Annotation annotation = annotationAnnotationValue.annotation;
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotation.typeConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( annotation.typeNameConstant ) );
 		bufferWriter.writeUnsignedShort( annotation.parameters.size() );
 		for( AnnotationParameter annotationParameter : annotation.parameters )
 			writeAnnotationParameter( constantPool, bufferWriter, annotationParameter );
@@ -1159,7 +1159,7 @@ public class ByteCodeWriter
 
 	private static void writeAnnotation( ConstantPool constantPool, BufferWriter bufferWriter, Annotation byteCodeAnnotation )
 	{
-		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeAnnotation.typeConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getIndex( byteCodeAnnotation.typeNameConstant ) );
 		writeAnnotationParameters( constantPool, bufferWriter, byteCodeAnnotation.parameters );
 	}
 

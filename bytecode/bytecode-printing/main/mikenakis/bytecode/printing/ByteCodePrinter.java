@@ -840,7 +840,7 @@ public final class ByteCodePrinter
 	{
 		var builder = new StringBuilder();
 		builder.append( localVariableTableEntry.getClass().getSimpleName() );
-		builder.append( " index = " ).append( localVariableTableEntry.index );
+		builder.append( " index = " ).append( localVariableTableEntry.variableIndex );
 		builder.append( ", start = " );
 		summarizeAbsoluteInstruction( localVariableTableEntry.startInstruction, builder, labeler );
 		builder.append( ", end = " );
@@ -976,9 +976,7 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue )
 	{
-		return Twig.leaf( enumAnnotationValue.getClass().getSimpleName() + //
-			" type = " + enumAnnotationValue.typeDescriptor().typeName() + //
-			", value = " + enumAnnotationValue.valueName() );
+		return Twig.leaf( enumAnnotationValue.getClass().getSimpleName() + " " + enumAnnotationValue.typeDescriptor().typeName + "." + enumAnnotationValue.valueName() );
 	}
 
 	private static Twig twigFromArrayAnnotationValue( ArrayAnnotationValue arrayAnnotationValue )

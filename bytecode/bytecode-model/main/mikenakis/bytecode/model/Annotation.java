@@ -13,24 +13,21 @@ import java.util.List;
  */
 public final class Annotation
 {
-	public static Annotation of( Mutf8Constant typeConstant, List<AnnotationParameter> parameters )
+	public static Annotation of( Mutf8Constant typeNameConstant, List<AnnotationParameter> parameters )
 	{
-		return new Annotation( typeConstant, parameters );
+		return new Annotation( typeNameConstant, parameters );
 	}
 
-	public final Mutf8Constant typeConstant;
+	public final Mutf8Constant typeNameConstant;
 	public final List<AnnotationParameter> parameters;
 
-	private Annotation( Mutf8Constant typeConstant, List<AnnotationParameter> parameters )
+	private Annotation( Mutf8Constant typeNameConstant, List<AnnotationParameter> parameters )
 	{
-		this.typeConstant = typeConstant;
+		this.typeNameConstant = typeNameConstant;
 		this.parameters = parameters;
 	}
 
-	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( typeConstant.stringValue() ); }
+	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( typeNameConstant.stringValue() ); }
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "type = " + typeConstant + ", " + parameters.size() + " parameters";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "type = " + typeNameConstant + ", " + parameters.size() + " parameters"; }
 }

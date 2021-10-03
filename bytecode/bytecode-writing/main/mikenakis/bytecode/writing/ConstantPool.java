@@ -198,15 +198,15 @@ final class ConstantPool
 
 	void internField( ByteCodeField byteCodeField )
 	{
-		internMutf8Constant( byteCodeField.nameConstant );
-		internMutf8Constant( byteCodeField.descriptorConstant );
+		internMutf8Constant( byteCodeField.memberNameConstant );
+		internMutf8Constant( byteCodeField.fieldDescriptorStringConstant );
 		internAttributeSet( byteCodeField.attributeSet );
 	}
 
 	void internMethod( ByteCodeMethod byteCodeMethod )
 	{
-		internMutf8Constant( byteCodeMethod.nameConstant );
-		internMutf8Constant( byteCodeMethod.descriptorConstant );
+		internMutf8Constant( byteCodeMethod.memberNameConstant );
+		internMutf8Constant( byteCodeMethod.methodDescriptorStringConstant );
 		internAttributeSet( byteCodeMethod.attributeSet );
 	}
 
@@ -326,8 +326,8 @@ final class ConstantPool
 	{
 		for( LocalVariableTableEntry localVariable : localVariableTableAttribute.entrys )
 		{
-			internMutf8Constant( localVariable.nameConstant );
-			internMutf8Constant( localVariable.descriptorConstant );
+			internMutf8Constant( localVariable.variableNameConstant );
+			internMutf8Constant( localVariable.variableTypeDescriptorStringConstant );
 		}
 	}
 
@@ -408,13 +408,13 @@ final class ConstantPool
 
 	private void internEnumAnnotationValue( EnumAnnotationValue enumAnnotationValue )
 	{
-		internMutf8Constant( enumAnnotationValue.typeNameConstant );
-		internMutf8Constant( enumAnnotationValue.valueNameConstant );
+		internMutf8Constant( enumAnnotationValue.enumClassDescriptorStringConstant );
+		internMutf8Constant( enumAnnotationValue.enumValueNameConstant );
 	}
 
 	private void internClassAnnotationValue( ClassAnnotationValue classAnnotationValue )
 	{
-		internMutf8Constant( classAnnotationValue.nameConstant );
+		internMutf8Constant( classAnnotationValue.classDescriptorStringConstant );
 	}
 
 	private void internAnnotationAnnotationValue( AnnotationAnnotationValue annotationAnnotationValue )
@@ -531,7 +531,7 @@ final class ConstantPool
 
 	private void internAnnotation( Annotation annotation )
 	{
-		internMutf8Constant( annotation.typeConstant );
+		internMutf8Constant( annotation.typeNameConstant );
 		internAnnotationParameters( annotation.parameters );
 	}
 

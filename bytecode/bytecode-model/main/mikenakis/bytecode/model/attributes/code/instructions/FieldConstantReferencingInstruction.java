@@ -19,7 +19,7 @@ public final class FieldConstantReferencingInstruction extends Instruction
 	public static FieldConstantReferencingInstruction of( int opCode, FieldReference fieldReference )
 	{
 		ClassConstant declaringTypeConstant = ClassConstant.ofTypeName( fieldReference.declaringTypeDescriptor.typeName() );
-		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( Mutf8Constant.of( fieldReference.fieldPrototype.fieldName ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldReference.fieldPrototype.descriptor.typeDescriptor ) ) );
+		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( fieldReference.fieldPrototype.fieldName, fieldReference.fieldPrototype.descriptor.typeDescriptor );
 		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( declaringTypeConstant, nameAndDescriptorConstant );
 		return new FieldConstantReferencingInstruction( opCode, fieldReferenceConstant );
 	}

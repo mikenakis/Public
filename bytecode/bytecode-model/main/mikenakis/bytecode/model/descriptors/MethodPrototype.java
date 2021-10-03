@@ -5,22 +5,22 @@ import mikenakis.java_type_model.TypeDescriptor;
 
 public final class MethodPrototype
 {
-	public static MethodPrototype of( String name, MethodDescriptor descriptor )
+	public static MethodPrototype of( String methodName, MethodDescriptor descriptor )
 	{
-		return new MethodPrototype( name, descriptor );
+		return new MethodPrototype( methodName, descriptor );
 	}
 
-	public static MethodPrototype of( String name, TypeDescriptor returnType, TypeDescriptor... parameterTypes )
+	public static MethodPrototype of( String methodName, TypeDescriptor returnType, TypeDescriptor... parameterTypes )
 	{
-		return new MethodPrototype( name, MethodDescriptor.of( returnType, parameterTypes ) );
+		return new MethodPrototype( methodName, MethodDescriptor.of( returnType, parameterTypes ) );
 	}
 
-	public final String name;
+	public final String methodName;
 	public final MethodDescriptor descriptor;
 
-	private MethodPrototype( String name, MethodDescriptor descriptor )
+	private MethodPrototype( String methodName, MethodDescriptor descriptor )
 	{
-		this.name = name;
+		this.methodName = methodName;
 		this.descriptor = descriptor;
 	}
 
@@ -28,7 +28,7 @@ public final class MethodPrototype
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append( descriptor.returnTypeDescriptor.typeName() );
-		stringBuilder.append( " " ).append( name );
+		stringBuilder.append( " " ).append( methodName );
 		descriptor.appendParameters( stringBuilder );
 		return stringBuilder.toString();
 	}

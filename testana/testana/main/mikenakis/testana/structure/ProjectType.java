@@ -2,6 +2,7 @@ package mikenakis.testana.structure;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.testana.TestEngine;
 import mikenakis.testana.discovery.OutputFile;
@@ -131,12 +132,12 @@ public class ProjectType
 
 	public String getMethodSourceLocation( String methodName )
 	{
-		return byteCodeInfo().getMethodSourceLocation( methodName, testMethodDescriptor(), projectModule::getProjectByteCodeTypeByNameTransitively );
+		return byteCodeInfo().getMethodSourceLocation( MethodPrototype.of( methodName, testMethodDescriptor() ), projectModule::getProjectByteCodeTypeByNameTransitively );
 	}
 
 	public int getMethodIndex( String methodName )
 	{
-		return byteCodeInfo().getDeclaredMethodIndex( methodName, testMethodDescriptor() );
+		return byteCodeInfo().getDeclaredMethodIndex( MethodPrototype.of( methodName, testMethodDescriptor() ) );
 	}
 
 	public Optional<TestEngine> testEngine()

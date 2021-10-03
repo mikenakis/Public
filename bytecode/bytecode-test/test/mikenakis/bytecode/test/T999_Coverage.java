@@ -11,7 +11,6 @@ import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
 import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
@@ -48,6 +47,8 @@ import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
+import mikenakis.bytecode.model.descriptors.FieldPrototype;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
@@ -297,7 +298,6 @@ public class T999_Coverage
 		assert invalidAnnotationValueTagException.annotationValueTag == '_';
 
 		ArrayAnnotationValue.of();
-		ClassAnnotationValue.of( "test" );
 		ConstAnnotationValue.of( true );
 
 		InvalidConstAnnotationValueTagException invalidConstElementValueTagException = Kit.testing.expectException( //
@@ -307,7 +307,8 @@ public class T999_Coverage
 		ExceptionsAttribute.of();
 		InnerClassesAttribute.of();
 		LineNumberTableAttribute.of();
-		LocalVariableTableEntry.of( instruction1, Optional.of( instruction2 ), "name", "", 0 );
+		FieldPrototype variablePrototype = FieldPrototype.of( "test", String.class );
+		LocalVariableTableEntry.of( instruction1, Optional.of( instruction2 ), variablePrototype, 0 );
 		LocalVariableTableAttribute.of();
 		LocalVariableTypeTableAttribute.of();
 		MethodParametersAttribute.of();
@@ -345,7 +346,7 @@ public class T999_Coverage
 			assert false;
 			return null;
 		};
-		descendantByteCodeType.getMethodByNameAndDescriptor( "testMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ), byteCodeTypeResolver );
-		descendantByteCodeType.getMethodByNameAndDescriptor( "nonExistentTestMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ) ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ) ), byteCodeTypeResolver );
 	}
 }

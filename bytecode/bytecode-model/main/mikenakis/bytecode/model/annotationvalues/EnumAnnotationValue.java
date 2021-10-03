@@ -3,7 +3,7 @@ package mikenakis.bytecode.model.annotationvalues;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.Mutf8Constant;
-import mikenakis.java_type_model.TypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -15,38 +15,23 @@ public final class EnumAnnotationValue extends AnnotationValue
 {
 	public static final String NAME = "enum";
 
-	public static EnumAnnotationValue of( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
+	public static EnumAnnotationValue of( Mutf8Constant enumClassDescriptorStringConstant, Mutf8Constant enumValueNameConstant )
 	{
-		return new EnumAnnotationValue( typeNameConstant, valueNameConstant );
+		return new EnumAnnotationValue( enumClassDescriptorStringConstant, enumValueNameConstant );
 	}
 
-	public final Mutf8Constant typeNameConstant;
-	public final Mutf8Constant valueNameConstant;
+	public final Mutf8Constant enumClassDescriptorStringConstant;
+	public final Mutf8Constant enumValueNameConstant;
 
-	private EnumAnnotationValue( Mutf8Constant typeNameConstant, Mutf8Constant valueNameConstant )
+	private EnumAnnotationValue( Mutf8Constant enumClassDescriptorStringConstant, Mutf8Constant enumValueNameConstant )
 	{
 		super( tagEnum );
-		this.typeNameConstant = typeNameConstant;
-		this.valueNameConstant = valueNameConstant;
+		this.enumClassDescriptorStringConstant = enumClassDescriptorStringConstant;
+		this.enumValueNameConstant = enumValueNameConstant;
 	}
 
-	public TypeDescriptor typeDescriptor()
-	{
-		String descriptorString = typeNameConstant.stringValue();
-		assert descriptorString.charAt( 0 ) == 'L' && descriptorString.charAt( descriptorString.length() - 1 ) == ';';
-		String internalName = descriptorString.substring( 1, descriptorString.length() - 1 );
-		return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalName );
-	}
-
-	public String valueName() { return valueNameConstant.stringValue(); }
-
-	@Deprecated @Override public EnumAnnotationValue asEnumAnnotationValue()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "type = " + typeNameConstant + ", value = " + valueNameConstant;
-	}
+	public TerminalTypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( enumClassDescriptorStringConstant.stringValue() ).asTerminalTypeDescriptor(); }
+	public String valueName() { return enumValueNameConstant.stringValue(); }
+	@Deprecated @Override public EnumAnnotationValue asEnumAnnotationValue() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "type = " + enumClassDescriptorStringConstant + ", value = " + enumValueNameConstant; }
 }

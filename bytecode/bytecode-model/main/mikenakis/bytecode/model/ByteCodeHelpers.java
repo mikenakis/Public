@@ -5,7 +5,6 @@ import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
@@ -65,25 +64,7 @@ public final class ByteCodeHelpers
 		return typeNameFromClassDesc( classDesc.componentType() ) + "[]";
 	}
 
-	public static boolean isValidTerminalTypeName( String typeName )
-	{
-		if( typeName.isEmpty() ) //NOTE: this will probably fail for a single-letter class name in the global scope (outside any package.)
-			return false;
-		char c = typeName.charAt( 0 );
-		if( c == '[' )
-			return false;
-		if( typeName.startsWith( "L" ) )
-			return false;
-		if( typeName.endsWith( ";" ) )
-			return false;
-		if( typeName.contains( "/" ) )
-			return false;
-		if( typeName.endsWith( "[]" ) )
-			return false;
-		return true;
-	}
-
-	public static String descriptorStringFromInternalName( String internalName )
+	private static String descriptorStringFromInternalName( String internalName )
 	{
 		assert isValidInternalName( internalName );
 		if( internalName.startsWith( "[" ) )
@@ -93,19 +74,17 @@ public final class ByteCodeHelpers
 		return internalName;
 	}
 
-	public static ClassConstant classConstantFromTerminalTypeDescriptor( TerminalTypeDescriptor typeDescriptor )
+	public static ClassConstant classConstantFromTerminalTypeDescriptor( TerminalTypeDescriptor terminalTypeDescriptor )
 	{
-		ClassConstant classConstant = new ClassConstant();
-		classConstant.setInternalNameOrDescriptorStringConstant( Mutf8Constant.of( descriptorStringFromTypeDescriptor( typeDescriptor ) ) );
-		return classConstant;
+		return ClassConstant.of( terminalTypeDescriptor );
 	}
 
-	public static ClassDesc classDescFromClassConstant( ClassConstant classConstant )
+	private static ClassDesc classDescFromClassConstant( ClassConstant classConstant )
 	{
-		return ClassDesc.ofDescriptor( classConstant.descriptorString() );
+		return ClassDesc.ofDescriptor( descriptorStringFromInternalName( classConstant.getInternalNameOrDescriptorStringConstant().stringValue() ) );
 	}
 
-	public static DirectMethodHandleDesc directMethodHandleDescFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
+	private static DirectMethodHandleDesc directMethodHandleDescFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
 	{
 		NameAndDescriptorConstant nameAndDescriptorConstant = methodHandleConstant.getReferenceConstant().getNameAndDescriptorConstant();
 		return MethodHandleDesc.of( //
@@ -151,28 +130,29 @@ public final class ByteCodeHelpers
 
 	private static String internalFromDescriptor( String descriptorString )
 	{
+		assert descriptorString.charAt( 0 ) == 'L';
+		assert descriptorString.charAt( descriptorString.length() - 1 ) == ';';
 		return descriptorString.substring( 1, descriptorString.length() - 1 );
 	}
 
-	public static boolean isArrayDescriptorString( String descriptorString )
-	{
-		return descriptorString.charAt( 0 ) == '[';
-		//return ClassDesc.ofDescriptor( descriptorString ).isArray();
-	}
-
-	public static String typeNameFromDescriptorString( String descriptorString )
-	{
-		return typeNameFromClassDesc( ClassDesc.ofDescriptor( descriptorString ) );
-	}
-
-	public static String descriptorStringFromMethodHandleConstantInvocation( MethodHandleConstant methodHandleConstant )
+	private static String descriptorStringFromMethodHandleConstantInvocation( MethodHandleConstant methodHandleConstant )
 	{
 		return directMethodHandleDescFromMethodHandleConstant( methodHandleConstant ).invocationType().descriptorString();
 	}
 
-	public static String descriptorStringFromMethodHandleConstantOwner( MethodHandleConstant methodHandleConstant )
+	private static String descriptorStringFromMethodHandleConstantOwner( MethodHandleConstant methodHandleConstant )
 	{
 		return directMethodHandleDescFromMethodHandleConstant( methodHandleConstant ).owner().descriptorString();
+	}
+
+	public static TypeDescriptor typeDescriptorFromMethodHandleConstantOwner( MethodHandleConstant methodHandleConstant )
+	{
+		return typeDescriptorFromDescriptorString( descriptorStringFromMethodHandleConstantOwner( methodHandleConstant ) );
+	}
+
+	public static MethodDescriptor methodDescriptorFromMethodHandleConstantInvocation( MethodHandleConstant methodHandleConstant )
+	{
+		return methodDescriptorFromDescriptorString( descriptorStringFromMethodHandleConstantInvocation( methodHandleConstant ) );
 	}
 
 	public static MethodHandleDescriptor methodHandleDescriptorFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
@@ -255,46 +235,9 @@ public final class ByteCodeHelpers
 		return name.replace( '.', '/' );
 	}
 
-	public static String binaryFromInternal( String name )
+	private static String binaryFromInternal( String name )
 	{
 		return name.replace( '/', '.' );
-	}
-
-	public static String descriptorStringFromTypeName( String typeName )
-	{
-		if( typeName.equals( "boolean" ) )
-			return "Z";
-		if( typeName.equals( "byte" ) )
-			return "B";
-		if( typeName.equals( "char" ) )
-			return "C";
-		if( typeName.equals( "double" ) )
-			return "D";
-		if( typeName.equals( "float" ) )
-			return "F";
-		if( typeName.equals( "integer" ) )
-			return "I";
-		if( typeName.equals( "long" ) )
-			return "J";
-		if( typeName.equals( "short" ) )
-			return "S";
-		if( typeName.equals( "void" ) )
-			return "V";
-		return "L" + typeName.replace( '.', '/' ) + ";";
-	}
-
-	public static boolean isValidPrimitiveDescriptorString( String descriptorString )
-	{
-		if( descriptorString.isEmpty() )
-			return false;
-		if( descriptorString.length() > 1 )
-			return false;
-		char c = descriptorString.charAt( 0 );
-		return switch( c )
-			{
-				case 'Z', 'B', 'C', 'D', 'F', 'I', 'J', 'S', 'V' -> true;
-				default -> false;
-			};
 	}
 
 	public static ArrayTypeDescriptor arrayTypeDescriptorFromDescriptorString( String descriptorString )
@@ -316,18 +259,24 @@ public final class ByteCodeHelpers
 		return descriptorStringFromTerminalTypeDescriptor( typeDescriptor.asTerminalTypeDescriptor() );
 	}
 
+	public static String descriptorStringFromPrimitiveTypeDescriptor( PrimitiveTypeDescriptor primitiveTypeDescriptor )
+	{
+		char character = Kit.map.get( charByPrimitiveType, primitiveTypeDescriptor );
+		return String.valueOf( character );
+	}
+
+	public static String descriptorStringFromArrayTypeDescriptor( ArrayTypeDescriptor arrayTypeDescriptor )
+	{
+		return "[" + descriptorStringFromTypeDescriptor( arrayTypeDescriptor.componentTypeDescriptor );
+	}
+
 	private static String descriptorStringFromTerminalTypeDescriptor( TerminalTypeDescriptor terminalTypeDescriptor )
 	{
 		String internalName = internalFromBinary( terminalTypeDescriptor.typeName );
 		return "L" + internalName + ";";
 	}
 
-	private static String descriptorStringFromArrayTypeDescriptor( ArrayTypeDescriptor arrayTypeDescriptor )
-	{
-		return "[" + descriptorStringFromTypeDescriptor( arrayTypeDescriptor.componentTypeDescriptor );
-	}
-
-	public static PrimitiveTypeDescriptor primitiveTypeDescriptorFromDescriptorString( String descriptorString )
+	private static PrimitiveTypeDescriptor primitiveTypeDescriptorFromDescriptorString( String descriptorString )
 	{
 		assert descriptorString.length() == 1;
 		char descriptorChar = descriptorString.charAt( 0 );
@@ -346,45 +295,13 @@ public final class ByteCodeHelpers
 			};
 	}
 
-	private static boolean isValidPrimitiveDescriptorChar( char descriptorChar )
-	{
-		return switch( descriptorChar )
-			{
-				case 'Z', 'B', 'C', 'D', 'F', 'I', 'J', 'S', 'V' -> true;
-				default -> false;
-			};
-	}
-
-	private static String primitiveTypeNameByDescriptorChar( char descriptorChar )
-	{
-		return switch( descriptorChar )
-			{
-				case 'Z' -> "boolean";
-				case 'B' -> "byte";
-				case 'C' -> "char";
-				case 'D' -> "double";
-				case 'F' -> "float";
-				case 'I' -> "integer";
-				case 'J' -> "long";
-				case 'S' -> "short";
-				case 'V' -> "void";
-				default -> throw new AssertionError( descriptorChar );
-			};
-	}
-
-	private static String descriptorStringFromPrimitiveTypeDescriptor( PrimitiveTypeDescriptor primitiveTypeDescriptor )
-	{
-		char character = Kit.map.get( charByPrimitiveType, primitiveTypeDescriptor );
-		return String.valueOf( character );
-	}
-
 	private static final Map<PrimitiveTypeDescriptor,Character> charByPrimitiveType = Map.of( //
 		PrimitiveTypeDescriptor.Boolean /**/, 'Z',  //
 		PrimitiveTypeDescriptor.Byte    /**/, 'B',  //
 		PrimitiveTypeDescriptor.Char    /**/, 'C',  //
 		PrimitiveTypeDescriptor.Double  /**/, 'D',  //
 		PrimitiveTypeDescriptor.Float   /**/, 'F',  //
-		PrimitiveTypeDescriptor.Int /**/, 'I',  //
+		PrimitiveTypeDescriptor.Int     /**/, 'I',  //
 		PrimitiveTypeDescriptor.Long    /**/, 'J',  //
 		PrimitiveTypeDescriptor.Short   /**/, 'S',  //
 		PrimitiveTypeDescriptor.Void    /**/, 'V' );
@@ -421,5 +338,12 @@ public final class ByteCodeHelpers
 		String name = nameAndDescriptorConstant.getNameConstant().stringValue();
 		MethodDescriptor descriptor = methodDescriptorFromDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 		return MethodPrototype.of( name, descriptor );
+	}
+
+	public static TypeDescriptor typeDescriptorFromInternalNameOrDescriptorString( String internalNameOrDescriptorString )
+	{
+		if( internalNameOrDescriptorString.charAt( 0 ) == '[' )
+			return arrayTypeDescriptorFromDescriptorString( internalNameOrDescriptorString );
+		return terminalTypeDescriptorFromInternalName( internalNameOrDescriptorString );
 	}
 }
