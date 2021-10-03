@@ -13,13 +13,15 @@ class ReflectingKey<T> implements Intertwine.Key<T>
 {
 	private final ReflectingIntertwine<T> intertwine;
 	final Method method;
-	final String signatureString;
+	final String prototypeString;
+	final int index;
 
-	ReflectingKey( ReflectingIntertwine<T> intertwine, Method method, String signatureString )
+	ReflectingKey( ReflectingIntertwine<T> intertwine, Method method, String prototypeString, int index )
 	{
 		this.intertwine = intertwine;
 		this.method = method;
-		this.signatureString = signatureString;
+		this.prototypeString = prototypeString;
+		this.index = index;
 	}
 
 	@Override public final Intertwine<T> getIntertwine()
@@ -27,8 +29,13 @@ class ReflectingKey<T> implements Intertwine.Key<T>
 		return intertwine;
 	}
 
-	@Override public String getSignatureString()
+	@Override public int getIndex()
 	{
-		return signatureString;
+		return index;
+	}
+
+	@Override public String getPrototypeString()
+	{
+		return prototypeString;
 	}
 }

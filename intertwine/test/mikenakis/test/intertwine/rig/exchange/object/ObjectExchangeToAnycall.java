@@ -17,7 +17,7 @@ public class ObjectExchangeToAnycall<T> implements ObjectExchange<AnycallRespons
 
 	@Override public AnycallResponse doExchange( AnycallRequest request )
 	{
-		Intertwine.Key<T> key = intertwine.keyBySignatureString( request.signatureString );
+		Intertwine.Key<T> key = intertwine.keyByPrototypeString( request.signatureString );
 		try
 		{
 			Object result = anycall.anyCall( key, request.arguments );

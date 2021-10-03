@@ -57,9 +57,14 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 	private final List<Key<Procedure0>> keys;
 	private final Key<Procedure0> key = new Key<>()
 	{
-		@Override public String getSignatureString()
+		@Override public String getPrototypeString()
 		{
 			return INVOKE_METHOD_NAME;
+		}
+
+		@Override public int getIndex()
+		{
+			return 0;
 		}
 
 		@Override public Intertwine<Procedure0> getIntertwine()
@@ -83,14 +88,14 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return keys;
 	}
 
-	@Override public Key<Procedure0> keyByIndex( int id )
+	@Override public Key<Procedure0> keyByIndex( int index )
 	{
-		return keys.get( id );
+		return keys.get( index );
 	}
 
-	@Override public Key<Procedure0> keyBySignatureString( String signatureString )
+	@Override public Key<Procedure0> keyByPrototypeString( String prototypeString )
 	{
-		assert signatureString.equals( INVOKE_METHOD_NAME ) : new KeyNotFoundException( signatureString );
+		assert prototypeString.equals( INVOKE_METHOD_NAME ) : new KeyNotFoundException( prototypeString );
 		return key;
 	}
 

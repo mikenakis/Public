@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Method Handle {@link Intertwine}.
@@ -23,7 +24,7 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 {
 	private final Class<? super T> interfaceType;
 	final List<MethodHandleKey<T>> keys;
-	private final Map<String,MethodHandleKey<T>> keysBySignatureString;
+	private final Map<String,MethodHandleKey<T>> keysByPrototypeString;
 	private final Map<Method,MethodHandleKey<T>> keysByMethod;
 
 	MethodHandleIntertwine( Class<? super T> interfaceType )
@@ -33,17 +34,17 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 			throw new RuntimeException( new IllegalAccessException() );
 		this.interfaceType = interfaceType;
 		MethodHandles.Lookup lookup = MethodHandles.publicLookup().in( interfaceType );
-		List<Method> methods = List.of( interfaceType.getMethods() );
-		keys = methods.stream().map( m -> createKey( lookup, m ) ).collect( Collectors.toList() );
-		keysBySignatureString = keys.stream().collect( Collectors.toMap( k -> k.signatureString, k -> k ) );
+		Method[] methods = interfaceType.getMethods();
+		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( lookup, methods[i], i ) ).collect( Collectors.toList());
+		keysByPrototypeString = keys.stream().collect( Collectors.toMap( k -> k.prototypeString, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
-	private MethodHandleKey<T> createKey( MethodHandles.Lookup lookup, Method method )
+	private MethodHandleKey<T> createKey( MethodHandles.Lookup lookup, Method method, int index )
 	{
-		String signatureString = Intertwine.signatureString( method );
+		String prototypeString = Intertwine.prototypeString( method );
 		MethodHandle methodHandle = Kit.unchecked( () -> lookup.unreflect( method ) );
-		return new MethodHandleKey<>( this, method, signatureString, methodHandle );
+		return new MethodHandleKey<>( this, method, prototypeString, methodHandle, index );
 	}
 
 	@Override public Class<? super T> interfaceType()
@@ -56,14 +57,14 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		return Kit.collection.downCast( keys );
 	}
 
-	@Override public Key<T> keyByIndex( int id )
+	@Override public Key<T> keyByIndex( int index )
 	{
-		return keys.get( id );
+		return keys.get( index );
 	}
 
-	@Override public Key<T> keyBySignatureString( String signatureString )
+	@Override public Key<T> keyByPrototypeString( String prototypeString )
 	{
-		return Kit.map.get( keysBySignatureString, signatureString );
+		return Kit.map.get( keysByPrototypeString, prototypeString );
 	}
 
 	@Override public T newEntwiner( AnyCall<T> exitPoint )

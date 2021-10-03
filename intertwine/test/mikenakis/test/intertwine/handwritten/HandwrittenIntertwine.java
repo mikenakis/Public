@@ -14,28 +14,28 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Hand-written {@link Intertwine}.
+ * Hand-written {@link Intertwine} for a specific interface: {@link FooInterface}.
  *
  * @author Michael Belivanakis (michael.gr)
  */
 class HandwrittenIntertwine implements Intertwine<FooInterface>
 {
 	private final List<HandwrittenKey> keys;
-	private final Map<String,HandwrittenKey> keysBySignatureString;
+	private final Map<String,HandwrittenKey> keysByPrototypeString;
 	private final Map<Method,HandwrittenKey> keysByMethod;
 
 	HandwrittenIntertwine()
 	{
 		Method[] methods = FooInterface.class.getMethods() ;
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( i, methods[i] ) ).collect( Collectors.toList());
-		keysBySignatureString = keys.stream().collect( Collectors.toMap( k -> k.signatureString, k -> k ) );
+		keysByPrototypeString = keys.stream().collect( Collectors.toMap( k -> k.prototypeString, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
 	private HandwrittenKey createKey( int index, Method method )
 	{
-		String signatureString = Intertwine.signatureString( method );
-		return new HandwrittenKey( this, index, method, signatureString );
+		String prototypeString = Intertwine.prototypeString( method );
+		return new HandwrittenKey( this, index, method, prototypeString );
 	}
 
 	@Override public Class<FooInterface> interfaceType()
@@ -48,14 +48,14 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 		return Kit.collection.downCast( keys );
 	}
 
-	@Override public Key<FooInterface> keyByIndex( int id )
+	@Override public Key<FooInterface> keyByIndex( int index )
 	{
-		return keys.get( id );
+		return keys.get( index );
 	}
 
-	@Override public Key<FooInterface> keyBySignatureString( String signatureString )
+	@Override public Key<FooInterface> keyByPrototypeString( String prototypeString )
 	{
-		return Kit.map.get( keysBySignatureString, signatureString );
+		return Kit.map.get( keysByPrototypeString, prototypeString );
 	}
 
 	@Override public FooInterface newEntwiner( AnyCall<FooInterface> exitPoint )

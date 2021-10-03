@@ -16,7 +16,7 @@ public class AnycallToObjectExchange<T> implements AnyCall<T>
 
 	@Override public Object anyCall( Intertwine.Key<T> key, Object[] arguments )
 	{
-		AnycallRequest anycallRequest = new AnycallRequest( key.getSignatureString(), arguments );
+		AnycallRequest anycallRequest = new AnycallRequest( key.getPrototypeString(), arguments );
 		AnycallResponse anycallResponse = objectExchange.doExchange( anycallRequest );
 		if( !anycallResponse.success )
 			throw Kit.sneakyException( anycallResponse.throwable() );

@@ -15,15 +15,17 @@ class MethodHandleKey<T> implements Intertwine.Key<T>
 {
 	private final MethodHandleIntertwine<T> intertwine;
 	final Method method;
-	final String signatureString;
+	final String prototypeString;
 	final MethodHandle methodHandle;
+	final int index;
 
-	MethodHandleKey( MethodHandleIntertwine<T> intertwine, Method method, String signatureString, MethodHandle methodHandle )
+	MethodHandleKey( MethodHandleIntertwine<T> intertwine, Method method, String prototypeString, MethodHandle methodHandle, int index )
 	{
 		this.intertwine = intertwine;
 		this.method = method;
-		this.signatureString = signatureString;
+		this.prototypeString = prototypeString;
 		this.methodHandle = methodHandle;
+		this.index = index;
 	}
 
 	@Override public final Intertwine<T> getIntertwine()
@@ -31,14 +33,19 @@ class MethodHandleKey<T> implements Intertwine.Key<T>
 		return intertwine;
 	}
 
-	@Override public String getSignatureString()
+	@Override public int getIndex()
 	{
-		return signatureString;
+		return index;
+	}
+
+	@Override public String getPrototypeString()
+	{
+		return prototypeString;
 	}
 
 	@Override public String toString()
 	{
-		return signatureString;
+		return prototypeString;
 	}
 
 	@Override public boolean equals( Object o )
@@ -52,7 +59,7 @@ class MethodHandleKey<T> implements Intertwine.Key<T>
 	{
 		assert intertwine == that.intertwine; //this probably means that you forgot to make use of the caching intertwine factory.
 		return method.equals( that.method ) &&
-			signatureString.equals( that.signatureString ) &&
+			prototypeString.equals( that.prototypeString ) &&
 			methodHandle.equals( that.methodHandle );
 	}
 
@@ -60,6 +67,6 @@ class MethodHandleKey<T> implements Intertwine.Key<T>
 	{
 		//NOTE: we intentionally refrain from including the methodHandle in the hash, so that two keys that only differ by methodHandle will have
 		//      the same hashCode, so equals() will eventually be called to check whether they are equal.  (See the equals() method.)
-		return Objects.hash( method, signatureString/*, methodHandle*/ );
+		return Objects.hash( method, prototypeString/*, methodHandle*/ );
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Creates entwiners and untwiners for a given interface; provides mapping between method keys and method signatures.
+ * Creates Entwiners and Untwiners for a given interface; provides mapping between method {@link Key}s indexes, and prototype strings.
  *
  * @param <T> the type of the interface.
  *
@@ -27,9 +27,14 @@ public interface Intertwine<T>
 		Intertwine<T> getIntertwine();
 
 		/**
-		 * Gets the name of this key, uniquely identifying this key among all other keys of the {@link Intertwine}.
+		 * Gets the index of this {@link Key}.
 		 */
-		String getSignatureString();
+		int getIndex();
+
+		/**
+		 * Gets the prototype string of this {@link Key}, uniquely identifying this {@link Key} among all other {@link Key}s of the {@link Intertwine}.
+		 */
+		String getPrototypeString();
 	}
 
 	/**
@@ -48,12 +53,12 @@ public interface Intertwine<T>
 	Key<T> keyByIndex( int id );
 
 	/**
-	 * Obtains a key given a signature string.
+	 * Obtains a {@link Key} given a prototype string.
 	 */
-	Key<T> keyBySignatureString( String signatureString );
+	Key<T> keyByPrototypeString( String prototypeString );
 
 	/**
-	 * Creates a new implementation of the target interface which delegates to the given implementation of {@link AnyCall}.
+	 * Creates a new implementation of the target interface which delegates to the given instance of {@link AnyCall}.
 	 */
 	T newEntwiner( AnyCall<T> exitPoint );
 
@@ -63,13 +68,13 @@ public interface Intertwine<T>
 	AnyCall<T> newUntwiner( T exitPoint );
 
 	/**
-	 * Builds a signature string from a method.
+	 * Builds a prototype string from a method.
 	 *
-	 * @param method the method to get the signature string of.
+	 * @param method the method to get the prototype string of.
 	 *
-	 * @return the signature string of the method.
+	 * @return the prototype string of the method.
 	 */
-	static String signatureString( Method method )
+	static String prototypeString( Method method )
 	{
 		Collection<Class<?>> parameterTypes = List.of( method.getParameterTypes() );
 		return parameterTypes.stream().map( Class::getCanonicalName ).collect( Collectors.joining( ",", method.getName() + "(", ")" ) );

@@ -15,14 +15,14 @@ class HandwrittenKey implements Intertwine.Key<FooInterface>
 	private final HandwrittenIntertwine intertwine;
 	final int index;
 	final Method method;
-	final String signatureString;
+	final String prototypeString;
 
-	HandwrittenKey( HandwrittenIntertwine intertwine, int index, Method method, String signatureString )
+	HandwrittenKey( HandwrittenIntertwine intertwine, int index, Method method, String prototypeString )
 	{
 		this.intertwine = intertwine;
 		this.index = index;
 		this.method = method;
-		this.signatureString = signatureString;
+		this.prototypeString = prototypeString;
 	}
 
 	@Override public final Intertwine<FooInterface> getIntertwine()
@@ -30,8 +30,13 @@ class HandwrittenKey implements Intertwine.Key<FooInterface>
 		return intertwine;
 	}
 
-	@Override public String getSignatureString()
+	@Override public int getIndex()
 	{
-		return signatureString;
+		return index;
+	}
+
+	@Override public String getPrototypeString()
+	{
+		return prototypeString;
 	}
 }
