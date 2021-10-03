@@ -53,7 +53,7 @@ public final class ByteCodeField extends ByteCodeMember
 		this.fieldDescriptorStringConstant = fieldDescriptorStringConstant;
 	}
 
-	public FieldDescriptor descriptor() { return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorString( fieldDescriptorStringConstant.stringValue() ) ); }
+	public FieldDescriptor descriptor() { return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( fieldDescriptorStringConstant ) ); }
 	public FieldPrototype prototype() { return FieldPrototype.of( name(), descriptor() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

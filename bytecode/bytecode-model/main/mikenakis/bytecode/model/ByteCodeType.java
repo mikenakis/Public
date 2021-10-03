@@ -62,8 +62,8 @@ public final class ByteCodeType
 		Optional<TerminalTypeDescriptor> superTypeDescriptor )
 	{
 		Version version = new Version( 60, 0 ); //TODO: add full support for this version!
-		return of( version, modifiers, ByteCodeHelpers.classConstantFromTerminalTypeDescriptor( typeDescriptor ), //
-			superTypeDescriptor.map( c -> ByteCodeHelpers.classConstantFromTerminalTypeDescriptor( c ) ), //
+		return of( version, modifiers, ClassConstant.of( typeDescriptor ), //
+			superTypeDescriptor.map( c -> ClassConstant.of( c ) ), //
 			new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), AttributeSet.of(), new ArrayList<>() );
 	}
 
@@ -101,12 +101,12 @@ public final class ByteCodeType
 	}
 
 	public ClassConstant classConstant() { return classConstant; }
-	public TerminalTypeDescriptor typeDescriptor() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( classConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
+	public TerminalTypeDescriptor typeDescriptor() { return classConstant.terminalTypeDescriptor(); }
 	public Optional<ClassConstant> superClassConstant() { return superClassConstant; }
-	public Optional<TerminalTypeDescriptor> superTypeDescriptor() { return superClassConstant.map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ); }
+	public Optional<TerminalTypeDescriptor> superTypeDescriptor() { return superClassConstant.map( c -> c.terminalTypeDescriptor() ); }
 	public List<ClassConstant> interfaceClassConstants() { return interfaceConstants; }
-	public List<TerminalTypeDescriptor> interfaces() { return interfaceConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
-	public List<TerminalTypeDescriptor> extraTypes() { return extraClassConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
+	public List<TerminalTypeDescriptor> interfaces() { return interfaceConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
+	public List<TerminalTypeDescriptor> extraTypes() { return extraClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
 
 	public ByteCodeMethod addMethod( ByteCodeMethod method )
 	{

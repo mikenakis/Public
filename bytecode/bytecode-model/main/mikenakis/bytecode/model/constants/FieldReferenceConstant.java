@@ -30,8 +30,7 @@ public final class FieldReferenceConstant extends ReferenceConstant
 	// 2: typeConstant
 	// 3: nameAndDescriptorConstant.nameConstant
 	public String fieldName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
-	public FieldDescriptor fieldDescriptor() {
-		return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorString( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ) ); }
+	public FieldDescriptor fieldDescriptor() { return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( getNameAndDescriptorConstant().getDescriptorConstant() ) ); }
 	public TypeDescriptor declaringTypeDescriptor() { return getDeclaringTypeConstant().typeDescriptor(); }
 
 	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant()

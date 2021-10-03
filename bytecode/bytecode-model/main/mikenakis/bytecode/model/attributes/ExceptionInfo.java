@@ -35,6 +35,6 @@ public final class ExceptionInfo
 		this.catchTypeConstant = catchTypeConstant;
 	}
 
-	public Optional<TerminalTypeDescriptor> catchType() { return catchTypeConstant.map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ); }
+	public Optional<TerminalTypeDescriptor> catchType() { return catchTypeConstant.map( c -> c.terminalTypeDescriptor() ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "start = {" + startInstruction + "}, end = {" + endInstruction + "}, handler = {" + handlerInstruction + "}" + (catchTypeConstant.isPresent()? ", catchType = " + catchTypeConstant : ""); }
 }

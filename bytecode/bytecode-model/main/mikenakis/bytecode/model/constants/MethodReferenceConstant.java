@@ -1,7 +1,6 @@
 package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
-import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 
@@ -49,8 +48,7 @@ public final class MethodReferenceConstant extends ReferenceConstant
 	public MethodReference methodReference()
 	{
 		return MethodReference.of( getDeclaringTypeConstant().typeDescriptor(), //
-			MethodPrototype.of( getNameAndDescriptorConstant().getNameConstant().stringValue(), //
-				ByteCodeHelpers.methodDescriptorFromDescriptorString( getNameAndDescriptorConstant().getDescriptorConstant().stringValue() ) ) );
+			ByteCodeHelpers.methodPrototypeFromNameAndDescriptorConstant( getNameAndDescriptorConstant() ) );
 	}
 
 	public MethodReferenceKind methodReferenceKind()

@@ -28,7 +28,7 @@ public final class ClassAnnotationValue extends AnnotationValue
 		this.classDescriptorStringConstant = classDescriptorStringConstant;
 	}
 
-	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( classDescriptorStringConstant.stringValue() ); }
+	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( classDescriptorStringConstant ); }
 	@Deprecated @Override public ClassAnnotationValue asClassAnnotationValue() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "class = " + classDescriptorStringConstant; }
 }

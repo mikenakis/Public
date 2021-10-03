@@ -64,8 +64,8 @@ public final class InnerClass
 		this.modifiers = modifiers;
 	}
 
-	public TerminalTypeDescriptor innerType() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( innerClassConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
-	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ); }
+	public TerminalTypeDescriptor innerType() { return innerClassConstant.terminalTypeDescriptor(); }
+	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> c.terminalTypeDescriptor() ); }
 	public Optional<String> innerName() { return innerNameConstant.map( c -> c.stringValue() ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

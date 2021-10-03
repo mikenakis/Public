@@ -39,7 +39,7 @@ public final class ExceptionsAttribute extends KnownAttribute
 		this.exceptionClassConstants = exceptionClassConstants;
 	}
 
-	public List<TerminalTypeDescriptor> exceptions() { return exceptionClassConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
+	public List<TerminalTypeDescriptor> exceptions() { return exceptionClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
 	@Deprecated @Override public ExceptionsAttribute asExceptionsAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return exceptionClassConstants.size() + " entries"; }
 }

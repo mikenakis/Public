@@ -73,54 +73,28 @@ public final class ClassConstant extends Constant
 		this.internalNameOrDescriptorStringConstant = internalNameOrDescriptorStringConstant;
 	}
 
-	// PEARL: the vast majority of ClassConstant instances will contain strings of the form `java/lang/String`, but you cannot rely on this to always be the
-	//        case: every once in a while you will find a string of the form `Ljava/lang/String;`.
+	public TerminalTypeDescriptor terminalTypeDescriptor() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( getInternalNameOrDescriptorStringConstant().stringValue() ); }
+	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromInternalNameOrDescriptorString( getInternalNameOrDescriptorStringConstant().stringValue() ); }
+	public ArrayTypeDescriptor arrayTypeDescriptor() { return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( internalNameOrDescriptorStringConstant.stringValue() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return internalNameOrDescriptorStringConstant == null? "(uninitialized)" : internalNameOrDescriptorStringConstant.stringValue(); }
+	@Deprecated @Override public ClassConstant asClassConstant() { return this; }
+	@Override public boolean equals( Object other ) { return other instanceof ClassConstant kin && equalsClassConstant( kin ); }
+	public boolean equalsClassConstant( ClassConstant other ) { return internalNameOrDescriptorStringConstant.equalsMutf8Constant( other.internalNameOrDescriptorStringConstant ); }
+	@Override public int hashCode() { return Objects.hash( tag, internalNameOrDescriptorStringConstant ); }
+
+	// PEARL: the vast majority of ClassConstant instances will contain strings of the form `java/lang/String`, but every once in a while you will find a string
+	//        of the form `Ljava/lang/String;`.
 	//        There is a cryptic sentence in §4.4.1 which kind of points to this, by saying: "Because arrays are objects, the opcodes anewarray and
 	//        multianewarray - but not the opcode new - can reference array "classes" via CONSTANT_Class_info structures in the constant_pool table. For such
-	//        array classes, the name of the class is the descriptor of the array type (§4.3.2)." However, even if we concede any meaningfulness to this
-	//        sentence, it still does not cover all cases. An array-descriptor-style class constant can be encountered in other contexts, for example an
-	//        invokevirtual instruction has a method reference constant which has a class constant that specifies the declaring type, which is going to be an
-	//        array type if `array.clone()` is being invoked.
+	//        array classes, the name of the class is the descriptor of the array type (§4.3.2)."
+	//        However, even if we concede any meaningfulness to this sentence, it still does not cover all cases.
+	//        An array-descriptor-style class constant can be encountered in other contexts.
+	//        For example, an invokevirtual instruction has a method reference constant which has a class constant that specifies the declaring type, which is
+	//        going to be an array type if the invokevirtual instruction is invoking `array.clone()`.
 	private static boolean isValidInternalNameOrDescriptorString( String name )
 	{
 		if( name.charAt( 0 ) == '[' )
 			return ByteCodeHelpers.isValidDescriptorString( name );
 		return ByteCodeHelpers.isValidInternalName( name );
-	}
-
-	public TypeDescriptor typeDescriptor()
-	{
-		return ByteCodeHelpers.typeDescriptorFromInternalNameOrDescriptorString( getInternalNameOrDescriptorStringConstant().stringValue() );
-	}
-
-	public ArrayTypeDescriptor arrayTypeDescriptor()
-	{
-		String descriptorString = internalNameOrDescriptorStringConstant.stringValue();
-		assert descriptorString.charAt( 0 ) == '[';
-		return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( descriptorString );
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return internalNameOrDescriptorStringConstant == null? "(uninitialized)" : internalNameOrDescriptorStringConstant.stringValue();
-	}
-
-	@Deprecated @Override public ClassConstant asClassConstant() { return this; }
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof ClassConstant otherClassConstant )
-			return equalsClassConstant( otherClassConstant );
-		return false;
-	}
-
-	public boolean equalsClassConstant( ClassConstant other )
-	{
-		return internalNameOrDescriptorStringConstant.equalsMutf8Constant( other.internalNameOrDescriptorStringConstant );
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, internalNameOrDescriptorStringConstant );
 	}
 }

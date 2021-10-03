@@ -35,7 +35,7 @@ public final class NestHostAttribute extends KnownAttribute
 		this.hostClassConstant = hostClassConstant;
 	}
 
-	public TerminalTypeDescriptor hostClass() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( hostClassConstant.getInternalNameOrDescriptorStringConstant().stringValue() ); }
+	public TerminalTypeDescriptor hostClass() { return hostClassConstant.terminalTypeDescriptor(); }
 	@Deprecated @Override public NestHostAttribute asNestHostAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return " -> " + hostClassConstant; }
 }

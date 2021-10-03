@@ -6,7 +6,6 @@ import mikenakis.bytecode.exceptions.InvalidConstantTagException;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
@@ -50,6 +49,7 @@ import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.FieldDescriptor;
+import mikenakis.java_type_model.PrimitiveTypeDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import org.junit.Test;
@@ -346,7 +346,7 @@ public class T999_Coverage
 			assert false;
 			return null;
 		};
-		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ) ), byteCodeTypeResolver );
-		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", ByteCodeHelpers.methodDescriptorFromDescriptorString( "()V" ) ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", PrimitiveTypeDescriptor.Void ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", PrimitiveTypeDescriptor.Void ), byteCodeTypeResolver );
 	}
 }

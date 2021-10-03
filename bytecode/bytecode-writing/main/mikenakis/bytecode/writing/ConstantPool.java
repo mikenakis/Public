@@ -531,7 +531,7 @@ final class ConstantPool
 
 	private void internAnnotation( Annotation annotation )
 	{
-		internMutf8Constant( annotation.typeNameConstant );
+		internMutf8Constant( annotation.annotationTypeDescriptorStringConstant );
 		internAnnotationParameters( annotation.parameters );
 	}
 

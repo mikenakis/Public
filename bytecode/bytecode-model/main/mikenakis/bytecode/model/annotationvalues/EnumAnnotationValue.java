@@ -30,7 +30,7 @@ public final class EnumAnnotationValue extends AnnotationValue
 		this.enumValueNameConstant = enumValueNameConstant;
 	}
 
-	public TerminalTypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorString( enumClassDescriptorStringConstant.stringValue() ).asTerminalTypeDescriptor(); }
+	public TerminalTypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( enumClassDescriptorStringConstant ).asTerminalTypeDescriptor(); }
 	public String valueName() { return enumValueNameConstant.stringValue(); }
 	@Deprecated @Override public EnumAnnotationValue asEnumAnnotationValue() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "type = " + enumClassDescriptorStringConstant + ", value = " + enumValueNameConstant; }

@@ -57,37 +57,10 @@ public final class InvokeDynamicConstant extends Constant
 		this.nameAndDescriptorConstant = nameAndDescriptorConstant;
 	}
 
-	public MethodPrototype methodPrototype()
-	{
-		return MethodPrototype.of( nameAndDescriptorConstant.getNameConstant().stringValue(), //
-			ByteCodeHelpers.methodDescriptorFromDescriptorString( nameAndDescriptorConstant.getDescriptorConstant().stringValue() ) );
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "bootstrapMethod = {" + bootstrapMethod + "}; nameAndDescriptor = " + nameAndDescriptorConstant;
-	}
-
+	public MethodPrototype methodPrototype() { return ByteCodeHelpers.methodPrototypeFromNameAndDescriptorConstant( nameAndDescriptorConstant ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "bootstrapMethod = {" + bootstrapMethod + "}; nameAndDescriptor = " + nameAndDescriptorConstant; }
 	@Deprecated @Override public InvokeDynamicConstant asInvokeDynamicConstant() { return this; }
-
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof InvokeDynamicConstant otherInvokeDynamicConstant )
-			return equals( otherInvokeDynamicConstant );
-		return false;
-	}
-
-	public boolean equals( InvokeDynamicConstant other )
-	{
-		if( !nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ) )
-			return false;
-		if( !getBootstrapMethod().equals( other.getBootstrapMethod() ) )
-			return false;
-		return true;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, nameAndDescriptorConstant, getBootstrapMethod() );
-	}
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof InvokeDynamicConstant kin && equals( kin ); }
+	public boolean equals( InvokeDynamicConstant other ) { return nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ) && getBootstrapMethod().equals( other.getBootstrapMethod() ); }
+	@Override public int hashCode() { return Objects.hash( tag, nameAndDescriptorConstant, getBootstrapMethod() ); }
 }

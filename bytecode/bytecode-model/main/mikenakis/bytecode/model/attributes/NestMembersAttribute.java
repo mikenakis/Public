@@ -41,7 +41,7 @@ public final class NestMembersAttribute extends KnownAttribute
 		this.memberClassConstants = memberClassConstants;
 	}
 
-	public List<TerminalTypeDescriptor> members() { return memberClassConstants.stream().map( c -> ByteCodeHelpers.terminalTypeDescriptorFromInternalName( c.getInternalNameOrDescriptorStringConstant().stringValue() ) ).toList(); }
+	public List<TerminalTypeDescriptor> members() { return memberClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
 	@Deprecated @Override public NestMembersAttribute asNestMembersAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return memberClassConstants.size() + " entries"; }
 }

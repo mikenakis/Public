@@ -1,11 +1,10 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.attributes.CodeAttribute;
-import mikenakis.bytecode.model.attributes.KnownAttribute;
-import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
+import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
+import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.ArrayTypeDescriptor;
@@ -22,7 +21,6 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * ByteCode helpers.
@@ -33,25 +31,6 @@ public final class ByteCodeHelpers
 {
 	private ByteCodeHelpers()
 	{
-	}
-
-	public static String getClassSourceLocation( ByteCodeType byteCodeType )
-	{
-		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
-		return byteCodeType.typeDescriptor().typeName + "(" + (sourceFileName.orElse( "?" )) + ":" + 1 + ")";
-	}
-
-	public static String getMethodSourceLocation( ByteCodeType byteCodeType, ByteCodeMethod byteCodeMethod )
-	{
-		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_Code ) //
-			.map( a -> a.asCodeAttribute() );
-		Optional<LineNumberTableAttribute> lineNumberTableAttribute = codeAttribute //
-			.flatMap( a -> a.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_LineNumberTable ) ) //
-			.map( a -> a.asLineNumberTableAttribute() );
-		int lineNumber = lineNumberTableAttribute.map( a -> a.entrys.get( 0 ).lineNumber() ).orElse( 0 );
-		String methodName = byteCodeMethod.name();
-		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
-		return byteCodeType.typeDescriptor().typeName + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";
 	}
 
 	public static String typeNameFromClassDesc( ClassDesc classDesc )
@@ -74,11 +53,6 @@ public final class ByteCodeHelpers
 		return internalName;
 	}
 
-	public static ClassConstant classConstantFromTerminalTypeDescriptor( TerminalTypeDescriptor terminalTypeDescriptor )
-	{
-		return ClassConstant.of( terminalTypeDescriptor );
-	}
-
 	private static ClassDesc classDescFromClassConstant( ClassConstant classConstant )
 	{
 		return ClassDesc.ofDescriptor( descriptorStringFromInternalName( classConstant.getInternalNameOrDescriptorStringConstant().stringValue() ) );
@@ -86,12 +60,13 @@ public final class ByteCodeHelpers
 
 	private static DirectMethodHandleDesc directMethodHandleDescFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
 	{
-		NameAndDescriptorConstant nameAndDescriptorConstant = methodHandleConstant.getReferenceConstant().getNameAndDescriptorConstant();
+		ReferenceConstant referenceConstant = methodHandleConstant.getReferenceConstant();
+		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.getNameAndDescriptorConstant();
 		return MethodHandleDesc.of( //
 			DirectMethodHandleDesc.Kind.valueOf( //
 				methodHandleConstant.referenceKind().number, //
 				methodHandleConstant.referenceKind() == MethodHandleConstant.ReferenceKind.InvokeInterface ), //I do not know why the isInterface parameter is needed here, but it does not work otherwise.
-			classDescFromClassConstant( methodHandleConstant.getReferenceConstant().getDeclaringTypeConstant() ), //
+			classDescFromClassConstant( referenceConstant.getDeclaringTypeConstant() ), //
 			nameAndDescriptorConstant.getNameConstant().stringValue(), //
 			nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 	}
@@ -110,7 +85,12 @@ public final class ByteCodeHelpers
 		return MethodDescriptor.of( returnTypeDescriptor, parameterTypeDescriptors );
 	}
 
-	public static TypeDescriptor typeDescriptorFromDescriptorString( String descriptorString )
+	public static TypeDescriptor typeDescriptorFromDescriptorStringConstant( Mutf8Constant descriptorStringConstant )
+	{
+		return typeDescriptorFromDescriptorString( descriptorStringConstant.stringValue() );
+	}
+
+	private static TypeDescriptor typeDescriptorFromDescriptorString( String descriptorString )
 	{
 		ClassDesc classDesc = ClassDesc.ofDescriptor( descriptorString );
 		if( classDesc.isArray() )
@@ -135,24 +115,18 @@ public final class ByteCodeHelpers
 		return descriptorString.substring( 1, descriptorString.length() - 1 );
 	}
 
-	private static String descriptorStringFromMethodHandleConstantInvocation( MethodHandleConstant methodHandleConstant )
-	{
-		return directMethodHandleDescFromMethodHandleConstant( methodHandleConstant ).invocationType().descriptorString();
-	}
-
-	private static String descriptorStringFromMethodHandleConstantOwner( MethodHandleConstant methodHandleConstant )
-	{
-		return directMethodHandleDescFromMethodHandleConstant( methodHandleConstant ).owner().descriptorString();
-	}
-
 	public static TypeDescriptor typeDescriptorFromMethodHandleConstantOwner( MethodHandleConstant methodHandleConstant )
 	{
-		return typeDescriptorFromDescriptorString( descriptorStringFromMethodHandleConstantOwner( methodHandleConstant ) );
+		DirectMethodHandleDesc methodHandleDesc = directMethodHandleDescFromMethodHandleConstant( methodHandleConstant );
+		String descriptorString = methodHandleDesc.owner().descriptorString();
+		return typeDescriptorFromDescriptorString( descriptorString );
 	}
 
 	public static MethodDescriptor methodDescriptorFromMethodHandleConstantInvocation( MethodHandleConstant methodHandleConstant )
 	{
-		return methodDescriptorFromDescriptorString( descriptorStringFromMethodHandleConstantInvocation( methodHandleConstant ) );
+		DirectMethodHandleDesc methodHandleDesc = directMethodHandleDescFromMethodHandleConstant( methodHandleConstant );
+		String descriptorString = methodHandleDesc.invocationType().descriptorString();
+		return methodDescriptorFromDescriptorString( descriptorString );
 	}
 
 	public static MethodHandleDescriptor methodHandleDescriptorFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
@@ -256,7 +230,8 @@ public final class ByteCodeHelpers
 		if( typeDescriptor.isArray() )
 			return descriptorStringFromArrayTypeDescriptor( typeDescriptor.asArrayTypeDescriptor() );
 		assert typeDescriptor.isTerminal();
-		return descriptorStringFromTerminalTypeDescriptor( typeDescriptor.asTerminalTypeDescriptor() );
+		String internalName = internalFromBinary( typeDescriptor.asTerminalTypeDescriptor().typeName );
+		return "L" + internalName + ";";
 	}
 
 	public static String descriptorStringFromPrimitiveTypeDescriptor( PrimitiveTypeDescriptor primitiveTypeDescriptor )
@@ -268,12 +243,6 @@ public final class ByteCodeHelpers
 	public static String descriptorStringFromArrayTypeDescriptor( ArrayTypeDescriptor arrayTypeDescriptor )
 	{
 		return "[" + descriptorStringFromTypeDescriptor( arrayTypeDescriptor.componentTypeDescriptor );
-	}
-
-	private static String descriptorStringFromTerminalTypeDescriptor( TerminalTypeDescriptor terminalTypeDescriptor )
-	{
-		String internalName = internalFromBinary( terminalTypeDescriptor.typeName );
-		return "L" + internalName + ";";
 	}
 
 	private static PrimitiveTypeDescriptor primitiveTypeDescriptorFromDescriptorString( String descriptorString )
@@ -323,7 +292,7 @@ public final class ByteCodeHelpers
 		ClassDesc returnDesc = classDescFromTypeDescriptor( methodDescriptor.returnTypeDescriptor );
 		ClassDesc[] paramDescs = new ClassDesc[methodDescriptor.parameterTypeDescriptors.size()];
 		for( int i = 0;  i < paramDescs.length;  i++ )
-			paramDescs[i] = ClassDesc.ofDescriptor( descriptorStringFromTypeDescriptor( methodDescriptor.parameterTypeDescriptors.get( i ) ) );
+			paramDescs[i] = classDescFromTypeDescriptor( methodDescriptor.parameterTypeDescriptors.get( i ) );
 		MethodTypeDesc methodTypeDesc = MethodTypeDesc.of( returnDesc, paramDescs );
 		return methodTypeDesc.descriptorString();
 	}

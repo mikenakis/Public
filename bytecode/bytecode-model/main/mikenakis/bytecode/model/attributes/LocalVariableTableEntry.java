@@ -44,7 +44,7 @@ public final class LocalVariableTableEntry
 		this.variableIndex = variableIndex;
 	}
 
-	public FieldPrototype prototype() { return FieldPrototype.of( variableNameConstant.stringValue(), ByteCodeHelpers.typeDescriptorFromDescriptorString( variableTypeDescriptorStringConstant.stringValue() ) ); }
+	public FieldPrototype prototype() { return FieldPrototype.of( variableNameConstant.stringValue(), ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( variableTypeDescriptorStringConstant ) ); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
