@@ -3,8 +3,8 @@ package mikenakis.java_type_model;
 import mikenakis.kit.Kit;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public final class MethodDescriptor
 {
@@ -18,14 +18,19 @@ public final class MethodDescriptor
 		return of( returnType, List.of( parameterTypes ) );
 	}
 
-	public static MethodDescriptor of( Class<?> returnType, Collection<Class<?>> parameterTypes )
+	public static MethodDescriptor of( Class<?> returnType, Iterable<Class<?>> parameterTypes )
 	{
-		return of( TypeDescriptor.of( returnType ), parameterTypes.stream().map( c -> TypeDescriptor.of( c ) ).toList() );
+		return of( TypeDescriptor.of( returnType ), Kit.collection.stream.fromIterable( parameterTypes ).map( c -> TypeDescriptor.of( c ) ).toList() );
 	}
 
 	public static MethodDescriptor of( TypeDescriptor returnTypeDescriptor, TypeDescriptor... parameterTypeDescriptors )
 	{
 		return of( returnTypeDescriptor, List.of( parameterTypeDescriptors ) );
+	}
+
+	public static MethodDescriptor of( TypeDescriptor returnTypeDescriptor, Iterable<TypeDescriptor> parameterTypeDescriptors )
+	{
+		return new MethodDescriptor( returnTypeDescriptor, Kit.collection.stream.fromIterable( parameterTypeDescriptors ).toList() );
 	}
 
 	public static MethodDescriptor of( TypeDescriptor returnTypeDescriptor, List<TypeDescriptor> parameterTypeDescriptors )
@@ -67,24 +72,8 @@ public final class MethodDescriptor
 		}
 	}
 
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof MethodDescriptor kin )
-			return equals( kin );
-		return false;
-	}
-
-	public boolean equals( MethodDescriptor other )
-	{
-		return returnTypeDescriptor.equals( other.returnTypeDescriptor ) && parameterTypeDescriptors.equals( other.parameterTypeDescriptors );
-	}
-
-	@Override public int hashCode()
-	{
-		int result = 1;
-		result = 31 * result + returnTypeDescriptor.hashCode();
-		for( var parameterTypeDescriptor : parameterTypeDescriptors )
-			result = 31 * result + parameterTypeDescriptor.hashCode();
-		return result;
-	}
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof MethodDescriptor kin && equals( kin ); }
+	public boolean equals( MethodDescriptor other ) { return returnTypeDescriptor.equals( other.returnTypeDescriptor ) && parameterTypeDescriptors.equals( other.parameterTypeDescriptors ); }
+	@Override public int hashCode() { return Objects.hash( returnTypeDescriptor, parameterTypeDescriptors ); }
+	@Deprecated @Override public String toString() { return asString(); }
 }

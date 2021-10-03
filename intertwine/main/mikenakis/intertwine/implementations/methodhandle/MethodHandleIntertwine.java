@@ -1,5 +1,6 @@
 package mikenakis.intertwine.implementations.methodhandle;
 
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.kit.Kit;
@@ -24,7 +25,7 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 {
 	private final Class<? super T> interfaceType;
 	final List<MethodHandleKey<T>> keys;
-	private final Map<String,MethodHandleKey<T>> keysByPrototypeString;
+	private final Map<MethodPrototype,MethodHandleKey<T>> keysByPrototype;
 	private final Map<Method,MethodHandleKey<T>> keysByMethod;
 
 	MethodHandleIntertwine( Class<? super T> interfaceType )
@@ -36,15 +37,15 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		MethodHandles.Lookup lookup = MethodHandles.publicLookup().in( interfaceType );
 		Method[] methods = interfaceType.getMethods();
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( lookup, methods[i], i ) ).collect( Collectors.toList());
-		keysByPrototypeString = keys.stream().collect( Collectors.toMap( k -> k.prototypeString, k -> k ) );
+		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
 	private MethodHandleKey<T> createKey( MethodHandles.Lookup lookup, Method method, int index )
 	{
-		String prototypeString = Intertwine.prototypeString( method );
+		MethodPrototype methodPrototype = MethodPrototype.of( method );
 		MethodHandle methodHandle = Kit.unchecked( () -> lookup.unreflect( method ) );
-		return new MethodHandleKey<>( this, method, prototypeString, methodHandle, index );
+		return new MethodHandleKey<>( this, method, methodPrototype, methodHandle, index );
 	}
 
 	@Override public Class<? super T> interfaceType()
@@ -62,9 +63,9 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		return keys.get( index );
 	}
 
-	@Override public Key<T> keyByPrototypeString( String prototypeString )
+	@Override public Key<T> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
-		return Kit.map.get( keysByPrototypeString, prototypeString );
+		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
 	@Override public T newEntwiner( AnyCall<T> exitPoint )

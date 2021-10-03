@@ -1,5 +1,6 @@
 package mikenakis.intertwine.implementations.compiling;
 
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.kit.Kit;
@@ -22,7 +23,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 {
 	private final Class<? super T> interfaceType;
 	private final List<CompilingKey<T>> keys;
-	private final Map<String,CompilingKey<T>> keysByPrototypeString;
+	private final Map<MethodPrototype,CompilingKey<T>> keysByPrototype;
 	private final Map<Method,CompilingKey<T>> keysByMethod;
 
 	CompilingIntertwine( Class<? super T> interfaceType )
@@ -33,14 +34,14 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		this.interfaceType = interfaceType;
 		Method[] methods = interfaceType.getMethods();
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( methods[i], i ) ).collect( Collectors.toList());
-		keysByPrototypeString = keys.stream().collect( Collectors.toMap( k -> k.prototypeString, k -> k ) );
+		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
 	private CompilingKey<T> createKey( Method method, int index )
 	{
-		String prototypeString = Intertwine.prototypeString( method );
-		return new CompilingKey<>( this, method, prototypeString, index );
+		MethodPrototype methodPrototype = MethodPrototype.of( method );
+		return new CompilingKey<>( this, method, methodPrototype, index );
 	}
 
 	@Override public Class<? super T> interfaceType()
@@ -58,9 +59,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return keys.get( index );
 	}
 
-	@Override public Key<T> keyByPrototypeString( String prototypeString )
+	@Override public Key<T> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
-		return Kit.map.get( keysByPrototypeString, prototypeString );
+		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
 	@Override public T newEntwiner( AnyCall<T> exitPoint )

@@ -4,6 +4,8 @@ import java.util.Objects;
 
 public final class TerminalTypeDescriptor extends TypeDescriptor
 {
+	public static final TerminalTypeDescriptor Object = of( Object.class );
+
 	public static TerminalTypeDescriptor of( Class<?> javaClass )
 	{
 		assert !javaClass.isArray();

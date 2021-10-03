@@ -1,5 +1,6 @@
 package mikenakis.test.intertwine.handwritten;
 
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.kit.Kit;
@@ -9,7 +10,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,21 +21,19 @@ import java.util.stream.IntStream;
 class HandwrittenIntertwine implements Intertwine<FooInterface>
 {
 	private final List<HandwrittenKey> keys;
-	private final Map<String,HandwrittenKey> keysByPrototypeString;
-	private final Map<Method,HandwrittenKey> keysByMethod;
+	private final Map<MethodPrototype,HandwrittenKey> keysByPrototype;
 
 	HandwrittenIntertwine()
 	{
 		Method[] methods = FooInterface.class.getMethods() ;
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( i, methods[i] ) ).collect( Collectors.toList());
-		keysByPrototypeString = keys.stream().collect( Collectors.toMap( k -> k.prototypeString, k -> k ) );
-		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
+		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 	}
 
 	private HandwrittenKey createKey( int index, Method method )
 	{
-		String prototypeString = Intertwine.prototypeString( method );
-		return new HandwrittenKey( this, index, method, prototypeString );
+		MethodPrototype methodPrototype = MethodPrototype.of( method );
+		return new HandwrittenKey( this, index, methodPrototype );
 	}
 
 	@Override public Class<FooInterface> interfaceType()
@@ -53,9 +51,9 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 		return keys.get( index );
 	}
 
-	@Override public Key<FooInterface> keyByPrototypeString( String prototypeString )
+	@Override public Key<FooInterface> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
-		return Kit.map.get( keysByPrototypeString, prototypeString );
+		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
 	@Override public FooInterface newEntwiner( AnyCall<FooInterface> exitPoint )
@@ -66,10 +64,5 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 	@Override public AnyCall<FooInterface> newUntwiner( FooInterface exitPoint )
 	{
 		return new HandwrittenUntwiner( this, exitPoint ).anycall;
-	}
-
-	Optional<HandwrittenKey> tryGetKeyByMethod( Method method )
-	{
-		return Kit.map.getOptional( keysByMethod, method );
 	}
 }

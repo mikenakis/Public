@@ -1,5 +1,6 @@
 package mikenakis.intertwine.implementations.compiling;
 
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;
 
 import java.lang.reflect.Method;
@@ -13,14 +14,14 @@ class CompilingKey<T> implements Intertwine.Key<T>
 {
 	private final CompilingIntertwine<T> intertwine;
 	final Method method;
-	final String prototypeString;
+	final MethodPrototype methodPrototype;
 	final int index;
 
-	CompilingKey( CompilingIntertwine<T> intertwine, Method method, String prototypeString, int index )
+	CompilingKey( CompilingIntertwine<T> intertwine, Method method, MethodPrototype methodPrototype, int index )
 	{
 		this.intertwine = intertwine;
 		this.method = method;
-		this.prototypeString = prototypeString;
+		this.methodPrototype = methodPrototype;
 		this.index = index;
 	}
 
@@ -34,8 +35,8 @@ class CompilingKey<T> implements Intertwine.Key<T>
 		return index;
 	}
 
-	@Override public String getPrototypeString()
+	@Override public MethodPrototype getMethodPrototype()
 	{
-		return prototypeString;
+		return methodPrototype;
 	}
 }

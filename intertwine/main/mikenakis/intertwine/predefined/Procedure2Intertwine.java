@@ -1,7 +1,10 @@
 package mikenakis.intertwine.predefined;
 
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.java_type_model.PrimitiveTypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure2;
@@ -54,13 +57,13 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		};
 	}
 
-	private static final String INVOKE_METHOD_NAME = "invoke";
+	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", PrimitiveTypeDescriptor.Void, TerminalTypeDescriptor.Object, TerminalTypeDescriptor.Object );
 	private final List<Key<Procedure2<Object,Object>>> keys;
 	private final Key<Procedure2<Object,Object>> key = new Key<>()
 	{
-		@Override public String getPrototypeString()
+		@Override public MethodPrototype getMethodPrototype()
 		{
-			return INVOKE_METHOD_NAME;
+			return invokeMethodPrototype;
 		}
 
 		@Override public int getIndex()
@@ -94,9 +97,9 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		return keys.get( index );
 	}
 
-	@Override public Key<Procedure2<Object,Object>> keyByPrototypeString( String prototypeString )
+	@Override public Key<Procedure2<Object,Object>> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
-		assert prototypeString.equals( INVOKE_METHOD_NAME ) : new KeyNotFoundException( prototypeString );
+		assert methodPrototype.equals( invokeMethodPrototype ) : new MethodNotFoundException( this, methodPrototype );
 		return key;
 	}
 
