@@ -30,8 +30,5 @@ public final class RuntimeVisibleAnnotationsAttribute extends AnnotationsAttribu
 		super( tag_RuntimeVisibleAnnotations, annotations );
 	}
 
-	@Deprecated @Override public RuntimeVisibleAnnotationsAttribute asRuntimeVisibleAnnotationsAttribute()
-	{
-		return this;
-	}
+	@Deprecated @Override public RuntimeVisibleAnnotationsAttribute asRuntimeVisibleAnnotationsAttribute() { return this; }
 }

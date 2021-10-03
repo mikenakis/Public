@@ -34,28 +34,9 @@ public final class InstructionList
 		this.insertionPoint = insertionPoint;
 	}
 
-	public Collection<Instruction> all()
-	{
-		return Collections.unmodifiableCollection( instructions );
-	}
-
-	public void add( Instruction instruction )
-	{
-		instructions.add( insertionPoint++, instruction );
-	}
-
-	public void insert( int index, Instruction instruction )
-	{
-		instructions.add( index, instruction );
-	}
-
-	public boolean contains( Instruction instruction )
-	{
-		return instructions.contains( instruction );
-	}
-
-	public int size()
-	{
-		return instructions.size();
-	}
+	public Collection<Instruction> all() { return Collections.unmodifiableCollection( instructions ); }
+	public void add( Instruction instruction ) { instructions.add( insertionPoint++, instruction ); }
+	public void insert( int index, Instruction instruction ) { instructions.add( index, instruction ); }
+	public boolean contains( Instruction instruction ) { return instructions.contains( instruction ); }
+	public int size() { return instructions.size(); }
 }

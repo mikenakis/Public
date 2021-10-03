@@ -36,21 +36,8 @@ public final class MethodTypeConstant extends Constant
 
 	public MethodDescriptor methodDescriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( descriptorConstant.stringValue() ); }
 	@Deprecated @Override public MethodTypeConstant asMethodTypeConstant() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "descriptor = " + descriptorConstant;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof MethodTypeConstant otherMethodTypeConstant )
-			return descriptorConstant.equalsMutf8Constant( otherMethodTypeConstant.descriptorConstant );
-		return false;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, descriptorConstant );
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "descriptor = " + descriptorConstant; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof MethodTypeConstant kin && equals( kin ); }
+	public boolean equals( MethodTypeConstant other ) { return descriptorConstant.equalsMutf8Constant( other.descriptorConstant ); }
+	@Override public int hashCode() { return Objects.hash( tag, descriptorConstant ); }
 }

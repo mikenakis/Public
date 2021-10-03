@@ -25,9 +25,5 @@ public final class InvokeDynamicInstruction extends Instruction
 	public MethodPrototype methodPrototype() { return invokeDynamicConstant.methodPrototype(); }
 	public BootstrapMethod bootstrapMethod() { return invokeDynamicConstant.getBootstrapMethod(); }
 	@Deprecated @Override public InvokeDynamicInstruction asInvokeDynamicInstruction() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( OpCode.INVOKEDYNAMIC );
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( OpCode.INVOKEDYNAMIC ); }
 }

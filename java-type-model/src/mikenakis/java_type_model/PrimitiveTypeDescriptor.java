@@ -2,64 +2,50 @@ package mikenakis.java_type_model;
 
 import mikenakis.kit.Kit;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class PrimitiveTypeDescriptor extends TypeDescriptor
 {
-	public static final PrimitiveTypeDescriptor Boolean /**/ = new PrimitiveTypeDescriptor( "boolean" );
-	public static final PrimitiveTypeDescriptor Byte    /**/ = new PrimitiveTypeDescriptor( "byte" );
-	public static final PrimitiveTypeDescriptor Char    /**/ = new PrimitiveTypeDescriptor( "char" );
-	public static final PrimitiveTypeDescriptor Double  /**/ = new PrimitiveTypeDescriptor( "double" );
-	public static final PrimitiveTypeDescriptor Float   /**/ = new PrimitiveTypeDescriptor( "float" );
-	public static final PrimitiveTypeDescriptor Int     /**/ = new PrimitiveTypeDescriptor( "int" );
-	public static final PrimitiveTypeDescriptor Long    /**/ = new PrimitiveTypeDescriptor( "long" );
-	public static final PrimitiveTypeDescriptor Short   /**/ = new PrimitiveTypeDescriptor( "short" );
-	public static final PrimitiveTypeDescriptor Void    /**/ = new PrimitiveTypeDescriptor( "void" );
+	private static final PrimitiveTypeDescriptor Boolean /**/ = new PrimitiveTypeDescriptor( boolean.class );
+	private static final PrimitiveTypeDescriptor Byte    /**/ = new PrimitiveTypeDescriptor( byte.class );
+	private static final PrimitiveTypeDescriptor Char    /**/ = new PrimitiveTypeDescriptor( char.class );
+	private static final PrimitiveTypeDescriptor Double  /**/ = new PrimitiveTypeDescriptor( double.class );
+	private static final PrimitiveTypeDescriptor Float   /**/ = new PrimitiveTypeDescriptor( float.class );
+	private static final PrimitiveTypeDescriptor Int     /**/ = new PrimitiveTypeDescriptor( int.class );
+	private static final PrimitiveTypeDescriptor Long    /**/ = new PrimitiveTypeDescriptor( long.class );
+	private static final PrimitiveTypeDescriptor Short   /**/ = new PrimitiveTypeDescriptor( short.class );
+	private static final PrimitiveTypeDescriptor Void    /**/ = new PrimitiveTypeDescriptor( void.class );
+	private static final Collection<PrimitiveTypeDescriptor> all = List.of( Boolean, Byte, Char, Double, Float, Int, Long, Short, Void );
+	private static final Map<Class<?>,PrimitiveTypeDescriptor> byJvmClass = all.stream().collect( Collectors.toMap( t -> t.jvmClass, t -> t ) );
+	private static final Map<String,PrimitiveTypeDescriptor> byTypeName = all.stream().collect( Collectors.toMap( t -> t.typeName(), t -> t ) );
 
-	private static final Map<String,PrimitiveTypeDescriptor> byTypeName = Stream.of( Boolean, Byte, Char, Double, Float, Int, Long, Short, Void ) //
-		.collect( Collectors.toMap( t -> t.typeName(), t -> t ) );
-
-	public static PrimitiveTypeDescriptor of( Class<?> javaClass )
+	public static PrimitiveTypeDescriptor of( Class<?> jvmClass )
 	{
-		assert javaClass.isPrimitive();
-		return ofTypeName( javaClass.getTypeName() );
+		return Kit.map.get( byJvmClass, jvmClass );
 	}
 
-	public static PrimitiveTypeDescriptor ofTypeName( String typeName )
+	public static PrimitiveTypeDescriptor of( String typeName )
 	{
 		return Kit.map.get( byTypeName, typeName );
 	}
 
-	public final String typeName;
+	public final Class<?> jvmClass;
 
-	private PrimitiveTypeDescriptor( String typeName )
+	private PrimitiveTypeDescriptor( Class<?> jvmClass )
 	{
-		this.typeName = typeName;
+		this.jvmClass = jvmClass;
 	}
 
-	@Deprecated @Override public String typeName() { return typeName; }
+	@Deprecated @Override public String typeName() { return jvmClass.getTypeName(); }
 	@Deprecated @Override public boolean isArray() { return false; }
 	@Deprecated @Override public boolean isTerminal() { return false; }
 	@Deprecated @Override public boolean isPrimitive() { return true; }
 	@Deprecated @Override public PrimitiveTypeDescriptor asPrimitiveTypeDescriptor() { return this; }
-
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof PrimitiveTypeDescriptor kin )
-			return equals( kin );
-		return false;
-	}
-
-	public boolean equals( PrimitiveTypeDescriptor other )
-	{
-		return typeName.equals( other.typeName );
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( PrimitiveTypeDescriptor.class, typeName );
-	}
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof PrimitiveTypeDescriptor kin && equals( kin ); }
+	public boolean equals( PrimitiveTypeDescriptor other ) { return jvmClass == other.jvmClass; }
+	@Override public int hashCode() { return Objects.hash( PrimitiveTypeDescriptor.class, jvmClass ); }
 }

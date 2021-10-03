@@ -11,6 +11,12 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class ObjectVerificationType extends VerificationType
 {
+	public static ObjectVerificationType of( TypeDescriptor typeDescriptor )
+	{
+		ClassConstant classConstant = ClassConstant.of( typeDescriptor );
+		return of( classConstant );
+	}
+
 	public static ObjectVerificationType of( ClassConstant classConstant )
 	{
 		return new ObjectVerificationType( classConstant );
@@ -25,11 +31,6 @@ public final class ObjectVerificationType extends VerificationType
 	}
 
 	public TypeDescriptor typeDescriptor() { return classConstant.typeDescriptor(); }
-
 	@Deprecated @Override public ObjectVerificationType asObjectVerificationType() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return super.toString() + " classConstant = " + classConstant;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return super.toString() + " classConstant = " + classConstant; }
 }

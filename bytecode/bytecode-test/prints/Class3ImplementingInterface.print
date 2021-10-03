@@ -66,7 +66,7 @@
 │ │     │ ├─■ L39: // this( Enum1.ENUM_CONSTANT_A );
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
-│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>( mikenakis.bytecode.test.model.Enum1 )
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>( mikenakis.bytecode.test.model.Enum1 )
 │ │     │ ├─■ L40: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -82,7 +82,7 @@
 │ │   │ ├─■ instructions: 33 entries
 │ │   │ │ ├─■ L43: // {
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ ├─■ L27: // private final boolean booleanMember = booleanLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
@@ -164,8 +164,8 @@
 │ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
 │ │   │ ├─■ instructions: 3 entries
 │ │   │ │ ├─■ L55: // return Collections.emptyList().size();
-│ │   │ │ ├─■         INVOKESTATIC kind = Plain, reference =  java.util.List java.util.Collections.emptyList()
-│ │   │ │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  int java.util.List.size(), 1 arguments
+│ │   │ │ ├─■         INVOKESTATIC reference = Plain; java.util.List java.util.Collections.emptyList()
+│ │   │ │ ├─■         INVOKEINTERFACE reference = Interface; int java.util.List.size(), 1 arguments
 │ │   │ │ └─■         IRETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
@@ -205,11 +205,11 @@
 │ │   │ │ ├─■ L65: // File tempFile = File.createTempFile( "", "" );
 │ │   │ │ ├─■         LDC ""
 │ │   │ │ ├─■         LDC ""
-│ │   │ │ ├─■         INVOKESTATIC kind = Plain, reference =  java.io.File java.io.File.createTempFile( java.lang.String, java.lang.String )
+│ │   │ │ ├─■         INVOKESTATIC reference = Plain; java.io.File java.io.File.createTempFile( java.lang.String, java.lang.String )
 │ │   │ │ ├─■         ASTORE 1
 │ │   │ │ ├─■ L66: // return tempFile.exists();
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.io.File.exists()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.io.File.exists()
 │ │   │ │ └─■         IRETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
@@ -231,14 +231,14 @@
 │ │     │ ├─■ L74: // tempFile = File.createTempFile( "", "" );
 │ │     │ ├─■         LDC ""
 │ │     │ ├─■         LDC ""
-│ │     │ ├─■         INVOKESTATIC kind = Plain, reference =  java.io.File java.io.File.createTempFile( java.lang.String, java.lang.String )
+│ │     │ ├─■         INVOKESTATIC reference = Plain; java.io.File java.io.File.createTempFile( java.lang.String, java.lang.String )
 │ │     │ ├─■         ASTORE 1
 │ │     │ ├─■ L82: // if( tempFile != null )
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         IFNULL L86
 │ │     │ ├─■ L84: // tempFile.delete();
 │ │     │ ├─■         ALOAD 1
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.io.File.delete()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.io.File.delete()
 │ │     │ ├─■         POP
 │ │     │ ├─■         GOTO L86
 │ │     │ ├─■ L76: // catch( IOException ignore )
@@ -246,15 +246,15 @@
 │ │     │ ├─■ L78: // System.out.println( getClass().getName() );
 │ │     │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.Class java.lang.Object.getClass()
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.String java.lang.Class.getName()
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Class java.lang.Object.getClass()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Class.getName()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │     │ ├─■ L82: // if( tempFile != null )
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         IFNULL L86
 │ │     │ ├─■ L84: // tempFile.delete();
 │ │     │ ├─■         ALOAD 1
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.io.File.delete()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.io.File.delete()
 │ │     │ ├─■         POP
 │ │     │ ├─■         GOTO L86
 │ │     │ ├─■ L82: // if( tempFile != null )
@@ -263,7 +263,7 @@
 │ │     │ ├─■         IFNULL L85
 │ │     │ ├─■ L84: // tempFile.delete();
 │ │     │ ├─■         ALOAD 1
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.io.File.delete()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.io.File.delete()
 │ │     │ ├─■         POP
 │ │     │ ├─■ L85: // }
 │ │     │ ├─■         ALOAD 3
@@ -313,12 +313,12 @@
 │ │     ├─■ instructions: 7 entries
 │ │     │ ├─■ L91: // return getClass().getName() + " " + enum1;
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.Class java.lang.Object.getClass()
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.String java.lang.Class.getName()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Class java.lang.Object.getClass()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Class.getName()
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
@@ -335,7 +335,7 @@
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ILOAD 1
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.<init>( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.<init>( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
 │ │   │ │ └─■         ARETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
@@ -354,7 +354,7 @@
 │ │   │ │ ├─■ L115: // System.out.println( "deprecated" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "deprecated"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L116: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -384,7 +384,7 @@
   ├─■ [1] NestMembersAttribute; 1 items
   │ └─■ [0] mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
   ├─■ [2] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
   └─■ [3] InnerClassesAttribute; 2 items
     ├─■ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Inner
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -52,9 +52,9 @@ import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.attributes.code.instructions.BranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
@@ -62,7 +62,7 @@ import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruc
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchEntry;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
@@ -346,7 +346,7 @@ public class ByteCodeWriter
 
 	private static void writeAnnotationDefaultAttribute( ConstantPool constantPool, BufferWriter bufferWriter, AnnotationDefaultAttribute annotationDefaultAttribute )
 	{
-		AnnotationValue annotationValue = annotationDefaultAttribute.annotationValue();
+		AnnotationValue annotationValue = annotationDefaultAttribute.annotationValue;
 		bufferWriter.writeUnsignedByte( annotationValue.tag );
 		switch( annotationValue.tag )
 		{
@@ -416,9 +416,9 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( lineNumberTableAttribute.entrys.size() );
 		for( LineNumberTableEntry lineNumber : lineNumberTableAttribute.entrys )
 		{
-			int location = locationMap.orElseThrow().getLocation( lineNumber.instruction() );
+			int location = locationMap.orElseThrow().getLocation( lineNumber.instruction );
 			bufferWriter.writeUnsignedShort( location );
-			bufferWriter.writeUnsignedShort( lineNumber.lineNumber() );
+			bufferWriter.writeUnsignedShort( lineNumber.lineNumber );
 		}
 	}
 
@@ -477,7 +477,7 @@ public class ByteCodeWriter
 			bufferWriter.writeUnsignedByte( SameLocals1StackItemStackMapFrame.EXTENDED_FRAME_TYPE );
 			bufferWriter.writeUnsignedShort( offsetDelta );
 		}
-		writeVerificationType( constantPool, bufferWriter, sameLocals1StackItemStackMapFrame.stackVerificationType(), locationMap );
+		writeVerificationType( constantPool, bufferWriter, sameLocals1StackItemStackMapFrame.stackVerificationType, locationMap );
 	}
 
 	private static void writeSameStackMapFrame( BufferWriter bufferWriter, LocationMap locationMap, Optional<StackMapFrame> previousFrame, SameStackMapFrame sameStackMapFrame )
@@ -497,11 +497,11 @@ public class ByteCodeWriter
 		int offsetDelta = getOffsetDelta( fullStackMapFrame, previousFrame, locationMap );
 		bufferWriter.writeUnsignedByte( FullStackMapFrame.type );
 		bufferWriter.writeUnsignedShort( offsetDelta );
-		List<VerificationType> localVerificationTypes = fullStackMapFrame.localVerificationTypes();
+		List<VerificationType> localVerificationTypes = fullStackMapFrame.localVerificationTypes;
 		bufferWriter.writeUnsignedShort( localVerificationTypes.size() );
 		for( VerificationType verificationType : localVerificationTypes )
 			writeVerificationType( constantPool, bufferWriter, verificationType, locationMap );
-		List<VerificationType> stackVerificationTypes = fullStackMapFrame.stackVerificationTypes();
+		List<VerificationType> stackVerificationTypes = fullStackMapFrame.stackVerificationTypes;
 		bufferWriter.writeUnsignedShort( stackVerificationTypes.size() );
 		for( VerificationType verificationType : stackVerificationTypes )
 			writeVerificationType( constantPool, bufferWriter, verificationType, locationMap );
@@ -612,12 +612,12 @@ public class ByteCodeWriter
 					Target.tag_IdentifierMethodArgument -> writeTypeArgumentTarget( bufferWriter, target.asTypeArgumentTarget() );
 				default -> throw new AssertionError( target );
 			}
-			List<TypePathEntry> entries = typeAnnotation.typePath.entries();
+			List<TypePathEntry> entries = typeAnnotation.typePath.entries;
 			bufferWriter.writeUnsignedByte( entries.size() );
 			for( TypePathEntry entry : entries )
 			{
-				bufferWriter.writeUnsignedByte( entry.pathKind() );
-				bufferWriter.writeUnsignedByte( entry.argumentIndex() );
+				bufferWriter.writeUnsignedByte( entry.pathKind );
+				bufferWriter.writeUnsignedByte( entry.argumentIndex );
 			}
 			bufferWriter.writeUnsignedShort( typeAnnotation.typeIndex );
 			writeAnnotationParameters( constantPool, bufferWriter, typeAnnotation.parameters );
@@ -645,9 +645,9 @@ public class ByteCodeWriter
 		bufferWriter.writeUnsignedShort( localVariableTarget.entries.size() );
 		for( LocalVariableTargetEntry entry : localVariableTarget.entries )
 		{
-			bufferWriter.writeUnsignedShort( entry.startPc() );
-			bufferWriter.writeUnsignedShort( entry.length() );
-			bufferWriter.writeUnsignedShort( entry.index() );
+			bufferWriter.writeUnsignedShort( entry.startPc );
+			bufferWriter.writeUnsignedShort( entry.length );
+			bufferWriter.writeUnsignedShort( entry.index );
 		}
 	}
 
@@ -739,14 +739,14 @@ public class ByteCodeWriter
 		{
 			case Instruction.groupTag_Branch -> writeBranchInstruction( instructionWriter, instruction.asBranchInstruction() );
 			case Instruction.groupTag_ConditionalBranch -> writeConditionalBranchInstruction( instructionWriter, instruction.asConditionalBranchInstruction() );
-			case Instruction.groupTag_ClassConstantReferencing -> writeClassConstantReferencingInstruction( instructionWriter, instruction.asClassConstantReferencingInstruction() );
-			case Instruction.groupTag_FieldConstantReferencing -> writeFieldConstantReferencingInstruction( instructionWriter, instruction.asFieldConstantReferencingInstruction() );
+			case Instruction.groupTag_ClassConstantReferencing -> writeClassReferencingInstruction( instructionWriter, instruction.asClassReferencingInstruction() );
+			case Instruction.groupTag_FieldConstantReferencing -> writeFieldReferencingInstruction( instructionWriter, instruction.asFieldReferencingInstruction() );
 			case Instruction.groupTag_IInc -> writeIIncInstruction( instructionWriter, instruction.asIIncInstruction() );
 			case Instruction.groupTag_InvokeDynamic -> writeInvokeDynamicInstruction( instructionWriter, instruction.asInvokeDynamicInstruction() );
 			case Instruction.groupTag_InvokeInterface -> writeInvokeInterfaceInstruction( instructionWriter, instruction.asInvokeInterfaceInstruction() );
 			case Instruction.groupTag_LocalVariable -> writeLocalVariableInstruction( instructionWriter, instruction.asLocalVariableInstruction() );
 			case Instruction.groupTag_LookupSwitch -> writeLookupSwitchInstruction( instructionWriter, instruction.asLookupSwitchInstruction() );
-			case Instruction.groupTag_MethodConstantReferencing -> writeMethodConstantReferencingInstruction( instructionWriter, instruction.asMethodConstantReferencingInstruction() );
+			case Instruction.groupTag_MethodConstantReferencing -> writeMethodReferencingInstruction( instructionWriter, instruction.asMethodReferencingInstruction() );
 			case Instruction.groupTag_MultiANewArray -> writeMultiANewArrayInstruction( instructionWriter, instruction.asMultiANewArrayInstruction() );
 			case Instruction.groupTag_NewPrimitiveArray -> writeNewPrimitiveArrayInstruction( instructionWriter, instruction.asNewPrimitiveArrayInstruction() );
 			case Instruction.groupTag_Operandless -> writeOperandlessInstruction( instructionWriter, instruction.asOperandlessInstruction() );
@@ -763,8 +763,8 @@ public class ByteCodeWriter
 		int defaultInstructionOffset = instructionWriter.getOffset( tableSwitchInstruction, tableSwitchInstruction.getDefaultInstruction() );
 		instructionWriter.writeInt( defaultInstructionOffset );
 		instructionWriter.writeInt( tableSwitchInstruction.lowValue );
-		instructionWriter.writeInt( tableSwitchInstruction.lowValue + tableSwitchInstruction.getTargetInstructionCount() - 1 );
-		for( Instruction targetInstruction : tableSwitchInstruction.targetInstructions() )
+		instructionWriter.writeInt( tableSwitchInstruction.lowValue + tableSwitchInstruction.targetInstructions.size() - 1 );
+		for( Instruction targetInstruction : tableSwitchInstruction.targetInstructions )
 		{
 			int targetInstructionOffset = instructionWriter.getOffset( tableSwitchInstruction, targetInstruction );
 			instructionWriter.writeInt( targetInstructionOffset );
@@ -799,7 +799,7 @@ public class ByteCodeWriter
 		instructionWriter.writeInt( lookupSwitchInstruction.entries.size() );
 		for( LookupSwitchEntry lookupSwitchEntry : lookupSwitchInstruction.entries )
 		{
-			instructionWriter.writeInt( lookupSwitchEntry.value() );
+			instructionWriter.writeInt( lookupSwitchEntry.value );
 			int entryInstructionOffset = instructionWriter.getOffset( lookupSwitchInstruction, lookupSwitchEntry.getTargetInstruction() );
 			instructionWriter.writeInt( entryInstructionOffset );
 		}
@@ -984,24 +984,24 @@ public class ByteCodeWriter
 		}
 	}
 
-	private static void writeClassConstantReferencingInstruction( InstructionWriter instructionWriter, ClassConstantReferencingInstruction classConstantReferencingInstruction )
+	private static void writeClassReferencingInstruction( InstructionWriter instructionWriter, ClassReferencingInstruction classReferencingInstruction )
 	{
-		instructionWriter.writeUnsignedByte( classConstantReferencingInstruction.opCode );
-		int constantIndex = instructionWriter.getIndex( classConstantReferencingInstruction.targetClassConstant );
+		instructionWriter.writeUnsignedByte( classReferencingInstruction.opCode );
+		int constantIndex = instructionWriter.getIndex( classReferencingInstruction.targetClassConstant );
 		instructionWriter.writeUnsignedShort( constantIndex );
 	}
 
-	private static void writeFieldConstantReferencingInstruction( InstructionWriter instructionWriter, FieldConstantReferencingInstruction fieldConstantReferencingInstruction )
+	private static void writeFieldReferencingInstruction( InstructionWriter instructionWriter, FieldReferencingInstruction fieldReferencingInstruction )
 	{
-		instructionWriter.writeUnsignedByte( fieldConstantReferencingInstruction.opCode );
-		int constantIndex = instructionWriter.getIndex( fieldConstantReferencingInstruction.fieldReferenceConstant );
+		instructionWriter.writeUnsignedByte( fieldReferencingInstruction.opCode );
+		int constantIndex = instructionWriter.getIndex( fieldReferencingInstruction.fieldReferenceConstant );
 		instructionWriter.writeUnsignedShort( constantIndex );
 	}
 
-	private static void writeMethodConstantReferencingInstruction( InstructionWriter instructionWriter, MethodConstantReferencingInstruction methodConstantReferencingInstruction )
+	private static void writeMethodReferencingInstruction( InstructionWriter instructionWriter, MethodReferencingInstruction methodReferencingInstruction )
 	{
-		instructionWriter.writeUnsignedByte( methodConstantReferencingInstruction.opCode );
-		int constantIndex = instructionWriter.getIndex( methodConstantReferencingInstruction.methodReferenceConstant );
+		instructionWriter.writeUnsignedByte( methodReferencingInstruction.opCode );
+		int constantIndex = instructionWriter.getIndex( methodReferencingInstruction.methodReferenceConstant );
 		instructionWriter.writeUnsignedShort( constantIndex );
 	}
 

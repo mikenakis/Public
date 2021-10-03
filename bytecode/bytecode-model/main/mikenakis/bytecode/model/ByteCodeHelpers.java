@@ -251,29 +251,29 @@ public final class ByteCodeHelpers
 		char descriptorChar = descriptorString.charAt( 0 );
 		return switch( descriptorChar )
 			{
-				case 'Z' -> PrimitiveTypeDescriptor.Boolean;
-				case 'B' -> PrimitiveTypeDescriptor.Byte;
-				case 'C' -> PrimitiveTypeDescriptor.Char;
-				case 'D' -> PrimitiveTypeDescriptor.Double;
-				case 'F' -> PrimitiveTypeDescriptor.Float;
-				case 'I' -> PrimitiveTypeDescriptor.Int;
-				case 'J' -> PrimitiveTypeDescriptor.Long;
-				case 'S' -> PrimitiveTypeDescriptor.Short;
-				case 'V' -> PrimitiveTypeDescriptor.Void;
+				case 'Z' -> PrimitiveTypeDescriptor.of( boolean.class );
+				case 'B' -> PrimitiveTypeDescriptor.of( byte.class );
+				case 'C' -> PrimitiveTypeDescriptor.of( char.class );
+				case 'D' -> PrimitiveTypeDescriptor.of( double.class );
+				case 'F' -> PrimitiveTypeDescriptor.of( float.class );
+				case 'I' -> PrimitiveTypeDescriptor.of( int.class );
+				case 'J' -> PrimitiveTypeDescriptor.of( long.class );
+				case 'S' -> PrimitiveTypeDescriptor.of( short.class );
+				case 'V' -> PrimitiveTypeDescriptor.of( void.class );
 				default -> throw new AssertionError( descriptorChar );
 			};
 	}
 
 	private static final Map<PrimitiveTypeDescriptor,Character> charByPrimitiveType = Map.of( //
-		PrimitiveTypeDescriptor.Boolean /**/, 'Z',  //
-		PrimitiveTypeDescriptor.Byte    /**/, 'B',  //
-		PrimitiveTypeDescriptor.Char    /**/, 'C',  //
-		PrimitiveTypeDescriptor.Double  /**/, 'D',  //
-		PrimitiveTypeDescriptor.Float   /**/, 'F',  //
-		PrimitiveTypeDescriptor.Int     /**/, 'I',  //
-		PrimitiveTypeDescriptor.Long    /**/, 'J',  //
-		PrimitiveTypeDescriptor.Short   /**/, 'S',  //
-		PrimitiveTypeDescriptor.Void    /**/, 'V' );
+		PrimitiveTypeDescriptor.of( boolean.class ) /**/, 'Z',  //
+		PrimitiveTypeDescriptor.of( byte.class )    /**/, 'B',  //
+		PrimitiveTypeDescriptor.of( char.class )    /**/, 'C',  //
+		PrimitiveTypeDescriptor.of( double.class )  /**/, 'D',  //
+		PrimitiveTypeDescriptor.of( float.class )   /**/, 'F',  //
+		PrimitiveTypeDescriptor.of( int.class )     /**/, 'I',  //
+		PrimitiveTypeDescriptor.of( long.class )    /**/, 'J',  //
+		PrimitiveTypeDescriptor.of( short.class )   /**/, 'S',  //
+		PrimitiveTypeDescriptor.of( void.class )    /**/, 'V' );
 
 	public static String internalNameFromTerminalTypeDescriptor( TerminalTypeDescriptor terminalTypeDescriptor )
 	{
@@ -284,7 +284,7 @@ public final class ByteCodeHelpers
 	public static TerminalTypeDescriptor terminalTypeDescriptorFromInternalName( String internalName )
 	{
 		String binaryName = binaryFromInternal( internalName );
-		return TerminalTypeDescriptor.ofTypeName( binaryName );
+		return TerminalTypeDescriptor.of( binaryName );
 	}
 
 	public static String descriptorStringFromMethodDescriptor( MethodDescriptor methodDescriptor )

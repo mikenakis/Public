@@ -17,11 +17,11 @@
 │ │   │ │ ├─■         NEW mikenakis.bytecode.test.model.Class9WithCode
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class9WithCode.<init>( java.lang.String )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.<init>( java.lang.String )
 │ │   │ │ ├─■         ASTORE 1
 │ │   │ │ ├─■ L10: // return parser.parse();
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parse()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parse()
 │ │   │ │ └─■         DRETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
@@ -39,7 +39,7 @@
 │ │   │ ├─■ instructions: 9 entries
 │ │   │ │ ├─■ L18: // {
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ ├─■ L14: // private int pos = -1;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC -1
@@ -77,13 +77,13 @@
 │ │     │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  int java.lang.String.length()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.length()
 │ │     │ ├─■         IF_ICMPGE T1
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  char java.lang.String.charAt( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; char java.lang.String.charAt( int )
 │ │     │ ├─■         GOTO T2
 │ │     │ ├─■ T1:     LDC -1
 │ │     │ ├─■ T2:     PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
@@ -116,7 +116,7 @@
 │ │   │ │ ├─■         IF_ICMPNE L32
 │ │   │ │ ├─■ L31: // nextChar();
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │ │   │ │ ├─■         GOTO L30
 │ │   │ │ ├─■ L32: // if( ch == charToEat )
 │ │   │ │ ├─■         ALOAD 0
@@ -125,7 +125,7 @@
 │ │   │ │ ├─■         IF_ICMPNE L37
 │ │   │ │ ├─■ L34: // nextChar();
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │ │   │ │ ├─■ L35: // return true;
 │ │   │ │ ├─■         LDC 1
 │ │   │ │ ├─■         IRETURN
@@ -156,17 +156,17 @@
 │ │     ├─■ instructions: 21 entries
 │ │     │ ├─■ L42: // nextChar();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │ │     │ ├─■ L43: // double x = parseExpression();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■ L44: // if( pos < str.length() )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  int java.lang.String.length()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.length()
 │ │     │ ├─■         IF_ICMPGE L46
 │ │     │ ├─■ L45: // throw new RuntimeException( "Unexpected: " + (char)ch );
 │ │     │ ├─■         NEW java.lang.RuntimeException
@@ -175,8 +175,8 @@
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │     │ ├─■         I2C
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( char )
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
-│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.RuntimeException.<init>( java.lang.String )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )
 │ │     │ ├─■         ATHROW
 │ │     │ ├─■ L46: // return x;
 │ │     │ ├─■         DLOAD 1
@@ -202,29 +202,29 @@
 │ │     ├─■ instructions: 25 entries
 │ │     │ ├─■ L57: // double x = parseTerm();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■ L60: // if( eat( '+' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 43
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L62
 │ │     │ ├─■ L61: // x += parseTerm(); // addition
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
 │ │     │ ├─■         DADD
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L60
 │ │     │ ├─■ L62: // else if( eat( '-' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 45
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L65
 │ │     │ ├─■ L63: // x -= parseTerm(); // subtraction
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
 │ │     │ ├─■         DSUB
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L60
@@ -255,29 +255,29 @@
 │ │     ├─■ instructions: 25 entries
 │ │     │ ├─■ L71: // double x = parseFactor();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■ L74: // if( eat( '*' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 42
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L76
 │ │     │ ├─■ L75: // x *= parseFactor(); // multiplication
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │ │     │ ├─■         DMUL
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L74
 │ │     │ ├─■ L76: // else if( eat( '/' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 47
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L79
 │ │     │ ├─■ L77: // x /= parseFactor(); // division
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │ │     │ ├─■         DDIV
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L74
@@ -309,20 +309,20 @@
 │       │ ├─■ L85: // if( eat( '+' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 43
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L87
 │       │ ├─■ L86: // return parseFactor(); // unary plus
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DRETURN
 │       │ ├─■ L87: // if( eat( '-' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 45
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L91
 │       │ ├─■ L88: // return -parseFactor(); // unary minus
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DNEG
 │       │ ├─■         DRETURN
 │       │ ├─■ L91: // int startPos = pos;
@@ -332,16 +332,16 @@
 │       │ ├─■ L92: // if( eat( '(' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 40
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L98
 │       │ ├─■ L95: // x = parseExpression();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L96: // eat( ')' );
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 41
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         POP
 │       │ ├─■         GOTO L128
 │       │ ├─■ L98: // else if( (ch >= '0' && ch <= '9') || ch == '.' )
@@ -372,7 +372,7 @@
 │       │ ├─■         IF_ICMPNE L103
 │       │ ├─■ L102: // nextChar();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │       │ ├─■         GOTO L101
 │       │ ├─■ L103: // x = Double.parseDouble( str.substring( startPos, pos ) );
 │       │ ├─■         ALOAD 0
@@ -380,8 +380,8 @@
 │       │ ├─■         ILOAD 3
 │       │ ├─■         ALOAD 0
 │       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.String java.lang.String.substring( int, int )
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Double.parseDouble( java.lang.String )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.String.substring( int, int )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Double.parseDouble( java.lang.String )
 │       │ ├─■         DSTORE 1
 │       │ ├─■ T3:     GOTO L128
 │       │ ├─■ L105: // else if( ch >= 'a' && ch <= 'z' )
@@ -404,7 +404,7 @@
 │       │ ├─■         IF_ICMPGT L110
 │       │ ├─■ L109: // nextChar();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │       │ ├─■         GOTO L108
 │       │ ├─■ L110: // String func = str.substring( startPos, pos );
 │       │ ├─■         ALOAD 0
@@ -412,11 +412,11 @@
 │       │ ├─■         ILOAD 3
 │       │ ├─■         ALOAD 0
 │       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.String java.lang.String.substring( int, int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.String.substring( int, int )
 │       │ ├─■         ASTORE
 │       │ ├─■ L111: // x = parseFactor();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L112: // x = switch( func )
 │       │ ├─■         ALOAD
@@ -424,7 +424,7 @@
 │       │ ├─■         LDC -1
 │       │ ├─■         ISTORE
 │       │ ├─■         ALOAD
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  int java.lang.String.hashCode()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.hashCode()
 │       │ ├─■         LOOKUPSWITCH default = T10; 6 items
 │       │ │ ├─■ [0]         LookupSwitchEntry value = 98695, target = T6
 │       │ │ ├─■ [1]         LookupSwitchEntry value = 99334, target = T9
@@ -434,42 +434,42 @@
 │       │ │ └─■ [5]         LookupSwitchEntry value = 3538208, target = T4
 │       │ ├─■ T4:     ALOAD
 │       │ ├─■         LDC "sqrt"
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.lang.String.equals( java.lang.Object )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 0
 │       │ ├─■         ISTORE
 │       │ ├─■         GOTO T10
 │       │ ├─■ T5:     ALOAD
 │       │ ├─■         LDC "sin"
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.lang.String.equals( java.lang.Object )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 1
 │       │ ├─■         ISTORE
 │       │ ├─■         GOTO T10
 │       │ ├─■ T6:     ALOAD
 │       │ ├─■         LDC "cos"
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.lang.String.equals( java.lang.Object )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 2
 │       │ ├─■         ISTORE
 │       │ ├─■         GOTO T10
 │       │ ├─■ T7:     ALOAD
 │       │ ├─■         LDC "tan"
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.lang.String.equals( java.lang.Object )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 3
 │       │ ├─■         ISTORE
 │       │ ├─■         GOTO T10
 │       │ ├─■ T8:     ALOAD
 │       │ ├─■         LDC "rad"
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.lang.String.equals( java.lang.Object )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 4
 │       │ ├─■         ISTORE
 │       │ ├─■         GOTO T10
 │       │ ├─■ T9:     ALOAD
 │       │ ├─■         LDC "deg"
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean java.lang.String.equals( java.lang.Object )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 5
 │       │ ├─■         ISTORE
@@ -483,35 +483,35 @@
 │       │ │ └─■ [5]         L119
 │       │ ├─■ L114: // case "sqrt" -> Math.sqrt( x );
 │       │ ├─■         DLOAD 1
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.sqrt( double )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.sqrt( double )
 │       │ ├─■         GOTO T11
 │       │ ├─■ L115: // case "sin" -> Math.sin( x );
 │       │ ├─■         DLOAD 1
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.sin( double )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.sin( double )
 │       │ ├─■         GOTO T11
 │       │ ├─■ L116: // case "cos" -> Math.cos( x );
 │       │ ├─■         DLOAD 1
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.cos( double )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.cos( double )
 │       │ ├─■         GOTO T11
 │       │ ├─■ L117: // case "tan" -> Math.tan( x );
 │       │ ├─■         DLOAD 1
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.tan( double )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.tan( double )
 │       │ ├─■         GOTO T11
 │       │ ├─■ L118: // case "rad" -> Math.toRadians( x );
 │       │ ├─■         DLOAD 1
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.toRadians( double )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.toRadians( double )
 │       │ ├─■         GOTO T11
 │       │ ├─■ L119: // case "deg" -> Math.toDegrees( x );
 │       │ ├─■         DLOAD 1
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.toDegrees( double )
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.toDegrees( double )
 │       │ ├─■         GOTO T11
 │       │ ├─■ L120: // default -> throw new RuntimeException( "Unknown function: " + func );
 │       │ ├─■         NEW java.lang.RuntimeException
 │       │ ├─■         DUP
 │       │ ├─■         ALOAD
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String )
-│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
-│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.RuntimeException.<init>( java.lang.String )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
+│       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )
 │       │ ├─■         ATHROW
 │       │ ├─■ T11:    DSTORE 1
 │       │ ├─■ L122: // }
@@ -523,19 +523,19 @@
 │       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         I2C
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( char )
-│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
-│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.RuntimeException.<init>( java.lang.String )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
+│       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )
 │       │ ├─■         ATHROW
 │       │ ├─■ L128: // if( eat( '^' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 94
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L131
 │       │ ├─■ L129: // x = Math.pow( x, parseFactor() ); // exponentiation
 │       │ ├─■         DLOAD 1
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
-│       │ ├─■         INVOKESTATIC kind = Plain, reference =  double java.lang.Math.pow( double, double )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.pow( double, double )
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L131: // return x;
 │       │ ├─■         DLOAD 1
@@ -644,7 +644,7 @@
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class9WithCode.java"
   ├─■ [1] BootstrapMethodsAttribute; 2 items
-  │ ├─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
-  │ └─■ [1] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
+  │ ├─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
+  │ └─■ [1] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
   └─■ [2] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -275,27 +275,8 @@ public final class Clio
 
 	private <T> Supplier<T> add( Argument<T> argument )
 	{
-		assert argumentIsOkAssertion( argument );
 		arguments.add( argument );
 		return argument;
-	}
-
-	private boolean argumentIsOkAssertion( Argument<?> argument )
-	{
-		if( !argument.isPositional() )
-		{
-			Argument<?> positionalArgument = findFirstPositionalArgument();
-			assert positionalArgument == null : "non-positional argument '" + argument.name() + "' must appear before positional argument '" + positionalArgument.name() + "'.";
-		}
-		return true;
-	}
-
-	private Argument<?> findFirstPositionalArgument()
-	{
-		for( Argument<?> argument : arguments )
-			if( argument.isPositional() )
-				return argument;
-		return null;
 	}
 
 	/**

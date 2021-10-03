@@ -38,9 +38,5 @@ public final class SameStackMapFrame extends StackMapFrame
 	}
 
 	@Deprecated @Override public Optional<SameStackMapFrame> tryAsSameStackMapFrame() { return Optional.of( this ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "targetInstruction = " + getTargetInstruction();
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "targetInstruction = " + getTargetInstruction(); }
 }

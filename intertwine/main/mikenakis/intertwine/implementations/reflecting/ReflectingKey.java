@@ -2,15 +2,16 @@ package mikenakis.intertwine.implementations.reflecting;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
 
 import java.lang.reflect.Method;
 
 /**
- * A {@link Intertwine.Key} for the {@link ReflectingIntertwine}.
+ * A {@link MethodKey} for the {@link ReflectingIntertwine}.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-class ReflectingKey<T> implements Intertwine.Key<T>
+class ReflectingKey<T> implements MethodKey<T>
 {
 	private final ReflectingIntertwine<T> intertwine;
 	final Method method;
@@ -30,12 +31,12 @@ class ReflectingKey<T> implements Intertwine.Key<T>
 		return intertwine;
 	}
 
-	@Override public int getIndex()
+	@Override public int methodIndex()
 	{
 		return index;
 	}
 
-	@Override public MethodPrototype getMethodPrototype()
+	@Override public MethodPrototype methodPrototype()
 	{
 		return methodPrototype;
 	}

@@ -15,9 +15,5 @@ public final class OffsetTarget extends Target
 	}
 
 	@Deprecated @Override public OffsetTarget asOffsetTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "offset = " + offset;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "offset = " + offset; }
 }

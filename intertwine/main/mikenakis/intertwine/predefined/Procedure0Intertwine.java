@@ -3,7 +3,8 @@ package mikenakis.intertwine.predefined;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
-import mikenakis.java_type_model.PrimitiveTypeDescriptor;
+import mikenakis.intertwine.MethodKey;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 
@@ -45,7 +46,7 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 
 		private final AnyCall<Procedure0> anyCall = new AnyCall<>()
 		{
-			@Override public Object anyCall( Key<Procedure0> key0, Object[] arguments )
+			@Override public Object anyCall( MethodKey<Procedure0> key0, Object[] arguments )
 			{
 				assert key0 == key;
 				assert arguments.length == 0;
@@ -55,16 +56,16 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		};
 	}
 
-	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", PrimitiveTypeDescriptor.Void );
-	private final List<Key<Procedure0>> keys;
-	private final Key<Procedure0> key = new Key<>()
+	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", TypeDescriptor.of( void.class ) );
+	private final List<MethodKey<Procedure0>> keys;
+	private final MethodKey<Procedure0> key = new MethodKey<>()
 	{
-		@Override public MethodPrototype getMethodPrototype()
+		@Override public MethodPrototype methodPrototype()
 		{
 			return invokeMethodPrototype;
 		}
 
-		@Override public int getIndex()
+		@Override public int methodIndex()
 		{
 			return 0;
 		}
@@ -85,17 +86,17 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return Procedure0.class;
 	}
 
-	@Override public Collection<Key<Procedure0>> keys()
+	@Override public Collection<MethodKey<Procedure0>> keys()
 	{
 		return keys;
 	}
 
-	@Override public Key<Procedure0> keyByIndex( int index )
+	@Override public MethodKey<Procedure0> keyByIndex( int index )
 	{
 		return keys.get( index );
 	}
 
-	@Override public Key<Procedure0> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<Procedure0> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
 		assert methodPrototype.equals( invokeMethodPrototype ) : new MethodNotFoundException( this, methodPrototype );
 		return key;

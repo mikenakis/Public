@@ -1,8 +1,8 @@
 package mikenakis.test.intertwine.rig.exchange.object;
 
+import mikenakis.intertwine.MethodKey;
 import mikenakis.test.intertwine.rig.exchange.ObjectExchange;
 import mikenakis.intertwine.AnyCall;
-import mikenakis.intertwine.Intertwine;
 import mikenakis.kit.Kit;
 
 public class AnycallToObjectExchange<T> implements AnyCall<T>
@@ -14,9 +14,9 @@ public class AnycallToObjectExchange<T> implements AnyCall<T>
 		this.objectExchange = objectExchange;
 	}
 
-	@Override public Object anyCall( Intertwine.Key<T> key, Object[] arguments )
+	@Override public Object anyCall( MethodKey<T> key, Object[] arguments )
 	{
-		AnycallRequest anycallRequest = new AnycallRequest( key.getMethodPrototype(), arguments );
+		AnycallRequest anycallRequest = new AnycallRequest( key.methodPrototype(), arguments );
 		AnycallResponse anycallResponse = objectExchange.doExchange( anycallRequest );
 		if( !anycallResponse.success )
 			throw Kit.sneakyException( anycallResponse.throwable() );

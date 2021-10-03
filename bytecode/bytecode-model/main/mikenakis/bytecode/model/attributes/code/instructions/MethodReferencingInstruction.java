@@ -3,34 +3,24 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
-import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.descriptors.MethodReference;
-import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Set;
 
-public final class MethodConstantReferencingInstruction extends Instruction
+public final class MethodReferencingInstruction extends Instruction
 {
-	public static MethodConstantReferencingInstruction of( int opCode, MethodReferenceKind methodReferenceKind, MethodReference methodReference )
+	public static MethodReferencingInstruction of( int opCode, MethodReference methodReference )
 	{
-		int tag = switch( methodReferenceKind )
-			{
-				case Plain -> Constant.tag_PlainMethodReference;
-				case Interface -> Constant.tag_InterfaceMethodReference;
-			};
-		ClassConstant declaringTypeConstant = ClassConstant.ofTypeName( methodReference.declaringTypeDescriptor.typeName() );
-		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype.methodName, methodReference.methodPrototype.descriptor );
-		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( tag, declaringTypeConstant, nameAndDescriptorConstant );
-		return new MethodConstantReferencingInstruction( opCode, methodReferenceConstant );
+		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( methodReference );
+		return new MethodReferencingInstruction( opCode, methodReferenceConstant );
 	}
 
-	public static MethodConstantReferencingInstruction of( int opCode, MethodReferenceConstant methodReferenceConstant )
+	public static MethodReferencingInstruction of( int opCode, MethodReferenceConstant methodReferenceConstant )
 	{
-		return new MethodConstantReferencingInstruction( opCode, methodReferenceConstant );
+		return new MethodReferencingInstruction( opCode, methodReferenceConstant );
 	}
 
 	private static final Set<Integer> opCodes = Set.of( OpCode.INVOKEVIRTUAL, OpCode.INVOKESPECIAL, OpCode.INVOKESTATIC );
@@ -38,7 +28,7 @@ public final class MethodConstantReferencingInstruction extends Instruction
 	public final int opCode;
 	public final MethodReferenceConstant methodReferenceConstant;
 
-	private MethodConstantReferencingInstruction( int opCode, MethodReferenceConstant methodReferenceConstant )
+	private MethodReferencingInstruction( int opCode, MethodReferenceConstant methodReferenceConstant )
 	{
 		super( groupTag_MethodConstantReferencing );
 		assert methodReferenceConstant.tag == Constant.tag_PlainMethodReference || methodReferenceConstant.tag == Constant.tag_InterfaceMethodReference;
@@ -89,10 +79,6 @@ public final class MethodConstantReferencingInstruction extends Instruction
 		this.methodReferenceConstant = methodReferenceConstant;
 	}
 
-	@Deprecated @Override public MethodConstantReferencingInstruction asMethodConstantReferencingInstruction() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( opCode );
-	}
+	@Deprecated @Override public MethodReferencingInstruction asMethodReferencingInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
 }

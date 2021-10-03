@@ -26,13 +26,6 @@ public final class AnnotationAnnotationValue extends AnnotationValue
 		this.annotation = annotation;
 	}
 
-	@Deprecated @Override public AnnotationAnnotationValue asAnnotationAnnotationValue()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "annotation = { " + annotation + " }";
-	}
+	@Deprecated @Override public AnnotationAnnotationValue asAnnotationAnnotationValue() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "annotation = { " + annotation + " }"; }
 }

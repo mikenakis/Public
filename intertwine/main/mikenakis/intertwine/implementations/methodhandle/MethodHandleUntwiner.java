@@ -1,7 +1,7 @@
 package mikenakis.intertwine.implementations.methodhandle;
 
 import mikenakis.intertwine.AnyCall;
-import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 
@@ -32,7 +32,7 @@ class MethodHandleUntwiner<T>
 
 	final AnyCall<T> anycall = new AnyCall<>()
 	{
-		@Override public Object anyCall( Intertwine.Key<T> key0, Object[] arguments )
+		@Override public Object anyCall( MethodKey<T> key0, Object[] arguments )
 		{
 			MethodHandleKey<T> key = (MethodHandleKey<T>)key0;
 			MethodHandle boundMethodHandle = Kit.map.get( boundMethodHandles, key );

@@ -11,7 +11,7 @@
 │     │ ├─■ instructions: 6 entries
 │     │ │ ├─■ L70: // {
 │     │ │ ├─■         ALOAD 0
-│     │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│     │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │     │ │ ├─■ L71: // this.foos = foos;
 │     │ │ ├─■         ALOAD 0
 │     │ │ ├─■         ALOAD 1

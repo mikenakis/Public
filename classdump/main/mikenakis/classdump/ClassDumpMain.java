@@ -33,6 +33,7 @@ public class ClassDumpMain
 		Supplier<Optional<String>> sources = clio.addOptionalStringNamedArgument( "--sources | -s", "the root directory of sources (for locating .java files)." );
 		Supplier<Path> binaries = clio.addMandatoryPathPositionalArgument( "binaries-path", "root directory of binaries (for locating .class files) or path to single .class file to dump." );
 		Supplier<Optional<String>> className = clio.addOptionalStringPositionalArgument( "class-name", "fully qualified class name (or package name, or prefix thereof) of class(es) to dump. (Default is to dump everything.)" );
+		Supplier<Boolean> skipOptionalAttributes = clio.addOptionalSwitchArgument( "--skip-optional-attributes", "skip optional attributes" );
 		if( !clio.parse( commandLineArguments ) )
 		{
 			System.out.println( "example: " + clio.programName + " --sources C:\\Users\\MBV\\Personal\\IdeaProjects\\mikenakis-personal\\public\\bytecode\\bytecode-test\\test C:\\Users\\MBV\\Out\\mikenakis\\bytecode-test\\test-classes bytecode_tests.model.Class1" );
@@ -41,7 +42,7 @@ public class ClassDumpMain
 
 		Kit.tryCatch( () ->
 		{
-			run( loop.get(), output.get(), sources.get(), binaries.get(), className.get() );
+			run( loop.get(), output.get(), sources.get(), binaries.get(), className.get(), skipOptionalAttributes.get() );
 			System.exit( 0 );
 		}, throwable ->	handleThrowable( throwable, clio.programName ) );
 	}
@@ -61,12 +62,12 @@ public class ClassDumpMain
 	{
 	}
 
-	private static void run( boolean loop, Optional<String> output, Optional<String> sources, Path binaries, Optional<String> className )
+	private static void run( boolean loop, Optional<String> output, Optional<String> sources, Path binaries, Optional<String> className, boolean skipOptionalAttributes )
 	{
 		for( ; ; )
 		{
 			PrintStream printStream = getPrintStream( output );
-			run1( printStream, sources, binaries, className );
+			run1( printStream, sources, binaries, className, skipOptionalAttributes );
 			if( printStream != System.out )
 				printStream.close();
 			if( !loop )
@@ -74,16 +75,14 @@ public class ClassDumpMain
 		}
 	}
 
-	private static void run1( PrintStream printStream, Optional<String> sources, Path binaries, Optional<String> className )
+	private static void run1( PrintStream printStream, Optional<String> sources, Path binaries, Optional<String> className, boolean skipOptionalAttributes )
 	{
-		Optional<Path> sourcesRootPath = sources.isEmpty() ? Optional.empty() : Optional.of( Paths.get( sources.get() ).toAbsolutePath().normalize() );
-		Optional<Path> sourcesRootPath2 = sources.map( s -> Paths.get( s ).toAbsolutePath().normalize() );
-		assert sourcesRootPath.equals( sourcesRootPath2 );
+		Optional<Path> sourcesRootPath = skipOptionalAttributes ? Optional.empty() : sources.map( s -> Paths.get( s ).toAbsolutePath().normalize() );
 		if( binaries.toFile().isFile() )
 		{
 			if( className.isPresent() )
 				throw new ApplicationException( "binaries-path '" + binaries.toString() + "' is a file, so class-name argument should not be given." );
-			classDump( binaries, sourcesRootPath, printStream );
+			classDump( binaries, sourcesRootPath, printStream, skipOptionalAttributes );
 		}
 		else
 		{
@@ -133,7 +132,7 @@ public class ClassDumpMain
 				if( !relativePathName.startsWith( finalClassName ) )
 					return;
 				Optional<Path> sourcePath = finalSourcesRootPath.isEmpty() ? Optional.empty() : Optional.of( resolveToParentOf( finalSourcesRootPath.get(), relativePath ) );
-				classDump( classFilePathName, sourcePath, printStream );
+				classDump( classFilePathName, sourcePath, printStream, skipOptionalAttributes );
 			} );
 		}
 	}
@@ -146,12 +145,12 @@ public class ClassDumpMain
 		return path.resolve( parent );
 	}
 
-	private static void classDump( Path classFilePathName, Optional<Path> sourcePath, PrintStream printStream )
+	private static void classDump( Path classFilePathName, Optional<Path> sourcePath, PrintStream printStream, boolean skipOptionalAttributes )
 	{
-		Log.debug( "Dumping " + classFilePathName + (sourcePath.isEmpty() ? "" : " (" + sourcePath + ")") );
+		Log.debug( "Dumping " + classFilePathName + (sourcePath.isEmpty() ? "" : " (" + sourcePath.get() + ")") );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
 		ByteCodeType type = ByteCodeReader.read( bytes );
-		String text = ByteCodePrinter.printByteCodeType( type, sourcePath );
+		String text = ByteCodePrinter.printByteCodeType( type, sourcePath, skipOptionalAttributes );
 		printStream.println( text );
 	}
 

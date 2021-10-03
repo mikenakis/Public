@@ -21,7 +21,7 @@ public final class AnnotationDefaultAttribute extends KnownAttribute
 		return new AnnotationDefaultAttribute( annotationValue );
 	}
 
-	private final AnnotationValue annotationValue;
+	public final AnnotationValue annotationValue;
 
 	private AnnotationDefaultAttribute( AnnotationValue annotationValue )
 	{
@@ -29,18 +29,6 @@ public final class AnnotationDefaultAttribute extends KnownAttribute
 		this.annotationValue = annotationValue;
 	}
 
-	public AnnotationValue annotationValue()
-	{
-		return annotationValue;
-	}
-
-	@Deprecated @Override public AnnotationDefaultAttribute asAnnotationDefaultAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "value = " + annotationValue;
-	}
+	@Deprecated @Override public AnnotationDefaultAttribute asAnnotationDefaultAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "value = " + annotationValue; }
 }

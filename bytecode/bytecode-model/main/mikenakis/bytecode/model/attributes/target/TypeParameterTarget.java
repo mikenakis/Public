@@ -14,9 +14,5 @@ public final class TypeParameterTarget extends Target // "type_parameter_target"
 	}
 
 	@Deprecated @Override public TypeParameterTarget asTypeParameterTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "typeParameterIndex = " + typeParameterIndex;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "typeParameterIndex = " + typeParameterIndex; }
 }

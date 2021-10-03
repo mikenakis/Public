@@ -37,21 +37,6 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 		this.bootstrapMethods = bootstrapMethods;
 	}
 
-	@Deprecated @Override public BootstrapMethodsAttribute asBootstrapMethodsAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return bootstrapMethods.size() + " entries";
-	}
-
-	public BootstrapMethod getBootstrapMethodByIndex( int index )
-	{
-		return bootstrapMethods.get( index );
-	}
-
 	public int getIndexOfBootstrapMethod( BootstrapMethod entry )
 	{
 		assert entry != null;
@@ -63,4 +48,8 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 		}
 		return index;
 	}
+
+	public BootstrapMethod getBootstrapMethodByIndex( int index ) { return bootstrapMethods.get( index ); }
+	@Deprecated @Override public BootstrapMethodsAttribute asBootstrapMethodsAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return bootstrapMethods.size() + " entries"; }
 }

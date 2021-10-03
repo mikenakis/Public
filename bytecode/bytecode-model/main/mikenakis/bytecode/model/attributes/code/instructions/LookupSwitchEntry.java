@@ -2,8 +2,6 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 
-import java.util.Optional;
-
 public final class LookupSwitchEntry
 {
 	public static LookupSwitchEntry of( int value )
@@ -11,40 +9,26 @@ public final class LookupSwitchEntry
 		return new LookupSwitchEntry( value );
 	}
 
-	private final int value;
-	private Optional<Instruction> targetInstruction = Optional.empty(); //empty means that it has not been set yet.
+	public final int value;
+	private Instruction targetInstruction; //null means that it has not been set yet.
 
 	private LookupSwitchEntry( int value )
 	{
 		this.value = value;
 	}
 
-	public int value() { return value; }
-
 	public Instruction getTargetInstruction()
 	{
-		assert targetInstruction.isPresent();
-		return targetInstruction.get();
+		assert targetInstruction != null;
+		return targetInstruction;
 	}
 
 	public void setTargetInstruction( Instruction targetInstruction )
 	{
-		this.targetInstruction = Optional.of( targetInstruction );
+		assert this.targetInstruction == null;
+		assert targetInstruction != null;
+		this.targetInstruction = targetInstruction;
 	}
 
-	//	@SuppressWarnings( "EmptyMethod" ) void intern()
-	//	{
-	//		/* nothing to do */
-	//	}
-
-	//	public void write( BufferWriter bufferWriter )
-	//	{
-	//		bufferWriter.writeInt( value );
-	//		instructionReference.write( true, bufferWriter );
-	//	}
-
-	@Override public String toString()
-	{
-		return String.valueOf( value );
-	}
+	@Override public String toString() { return String.valueOf( value ); }
 }

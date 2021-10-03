@@ -2,17 +2,18 @@ package mikenakis.intertwine.implementations.methodhandle;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * A {@link Intertwine.Key} for the {@link MethodHandleIntertwine}.
+ * A {@link MethodKey} for the {@link MethodHandleIntertwine}.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-class MethodHandleKey<T> implements Intertwine.Key<T>
+class MethodHandleKey<T> implements MethodKey<T>
 {
 	private final MethodHandleIntertwine<T> intertwine;
 	final Method method;
@@ -34,12 +35,12 @@ class MethodHandleKey<T> implements Intertwine.Key<T>
 		return intertwine;
 	}
 
-	@Override public int getIndex()
+	@Override public int methodIndex()
 	{
 		return index;
 	}
 
-	@Override public MethodPrototype getMethodPrototype()
+	@Override public MethodPrototype methodPrototype()
 	{
 		return methodPrototype;
 	}

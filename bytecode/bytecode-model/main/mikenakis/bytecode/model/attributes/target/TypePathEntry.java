@@ -2,8 +2,8 @@ package mikenakis.bytecode.model.attributes.target;
 
 public final class TypePathEntry
 {
-	private final int pathKind;
-	private final int argumentIndex;
+	public final int pathKind;
+	public final int argumentIndex;
 
 	public TypePathEntry( int pathKind, int argumentIndex )
 	{
@@ -11,11 +11,5 @@ public final class TypePathEntry
 		this.argumentIndex = argumentIndex;
 	}
 
-	public int pathKind() { return pathKind; }
-	public int argumentIndex() { return argumentIndex; }
-
-	@Override public String toString()
-	{
-		return "pathKind = " + pathKind + ", argumentIndex = " + argumentIndex;
-	}
+	@Override public String toString() { return "pathKind = " + pathKind + ", argumentIndex = " + argumentIndex; }
 }

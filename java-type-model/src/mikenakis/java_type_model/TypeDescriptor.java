@@ -13,6 +13,11 @@ public abstract class TypeDescriptor
 		return TerminalTypeDescriptor.of( javaClass );
 	}
 
+	public static TypeDescriptor of( String typeName )
+	{
+		return TerminalTypeDescriptor.of( typeName );
+	}
+
 	public abstract String typeName();
 	public abstract boolean isArray();
 	public abstract boolean isPrimitive();

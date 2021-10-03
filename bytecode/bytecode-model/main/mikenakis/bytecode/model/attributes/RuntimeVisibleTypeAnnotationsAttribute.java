@@ -39,8 +39,5 @@ public final class RuntimeVisibleTypeAnnotationsAttribute extends TypeAnnotation
 		super( tag_RuntimeVisibleTypeAnnotations, entries );
 	}
 
-	@Deprecated @Override public RuntimeVisibleTypeAnnotationsAttribute asRuntimeVisibleTypeAnnotationsAttribute()
-	{
-		return this;
-	}
+	@Deprecated @Override public RuntimeVisibleTypeAnnotationsAttribute asRuntimeVisibleTypeAnnotationsAttribute() { return this; }
 }

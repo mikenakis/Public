@@ -65,6 +65,9 @@ public class LoadConstantInstruction extends Instruction
 		this.constant = constant;
 	}
 
+	@Deprecated @Override public LoadConstantInstruction asLoadConstantInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "LoadConstant"; }
+
 	private static boolean isValidAssertion( Constant constant )
 	{
 		switch( constant.tag )
@@ -75,12 +78,5 @@ public class LoadConstantInstruction extends Instruction
 				assert false : constant;
 				return false;
 		}
-	}
-
-	@Deprecated @Override public LoadConstantInstruction asLoadConstantInstruction() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "LoadConstant";
 	}
 }

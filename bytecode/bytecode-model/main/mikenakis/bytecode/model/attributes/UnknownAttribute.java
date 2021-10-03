@@ -32,9 +32,5 @@ public final class UnknownAttribute extends Attribute
 
 	@Deprecated @Override public boolean isKnown() { return false; }
 	@Deprecated @Override public UnknownAttribute asUnknownAttribute() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return buffer.length() + " bytes";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return buffer.length() + " bytes"; }
 }

@@ -47,10 +47,12 @@ import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.StringConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
+import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.java_type_model.FieldDescriptor;
-import mikenakis.java_type_model.PrimitiveTypeDescriptor;
+import mikenakis.bytecode.model.descriptors.MethodReference;
+import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 import org.junit.Test;
 
@@ -81,13 +83,17 @@ public class T999_Coverage
 
 	@Test public void Cover_Misc_Methods()
 	{
+		TypeDescriptor typeDescriptor = TypeDescriptor.of( String.class );
+		FieldReference fieldReference = FieldReference.of( typeDescriptor, FieldPrototype.of( "foo", String.class ) );
+		MethodReference methodReference = MethodReference.of( MethodReferenceKind.Plain, typeDescriptor, MethodPrototype.of( "foo", typeDescriptor ) );
 		ClassConstant classConstant = ClassConstant.ofTypeName( java.util.HashMap.class.getName() );
 		Mutf8Constant nameConstant = Mutf8Constant.of( "name" );
 		Mutf8Constant descriptorConstant = Mutf8Constant.of( "descriptor" );
 		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
-		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( classConstant, nameAndDescriptorConstant );
+		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( fieldReference );
+		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( methodReference );
 		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( MethodHandleConstant.ReferenceKind.GetField );
-		methodHandleConstant.setReferenceConstant( fieldReferenceConstant );
+		methodHandleConstant.setReferenceConstant( methodReferenceConstant );
 		List<Constant> argumentConstants = new ArrayList<>();
 		argumentConstants.add( StringConstant.of( "bootstrapMethodArgument" ) );
 		BootstrapMethod bootstrapMethod = BootstrapMethod.of( methodHandleConstant, argumentConstants );
@@ -97,6 +103,9 @@ public class T999_Coverage
 		bootstrapMethodsAttribute.getIndexOfBootstrapMethod( bootstrapMethod );
 		bootstrapMethodsAttribute.bootstrapMethods.add( bootstrapMethod );
 		bootstrapMethodsAttribute.getIndexOfBootstrapMethod( bootstrapMethod );
+
+		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.of( "test.testClass" ), Optional.empty(), List.of() ); //FIXME things fail if a package name is not specified.
+		byteCodeType.createOrGetBootstrapMethodsAttribute();
 
 		CodeAttribute codeAttribute = CodeAttribute.of( 0, 0 );
 		Instruction instruction1 = codeAttribute.addILoad( 0 );
@@ -134,8 +143,8 @@ public class T999_Coverage
 		codeAttribute.addGoto();
 		codeAttribute.addJsr();
 		codeAttribute.addIInc( 0, 0 );
-		MethodReferenceConstant interfaceMethodReferenceConstant = MethodReferenceConstant.interfaceOf( classConstant, nameAndDescriptorConstant );
-		codeAttribute.addInvokeInterface( interfaceMethodReferenceConstant, 0 );
+		MethodReference interfaceMethodReference = MethodReference.of( MethodReferenceKind.Interface, typeDescriptor, methodReference.methodPrototype );
+		codeAttribute.addInvokeInterface( interfaceMethodReference, 0 );
 		InvokeDynamicConstant invokeDynamicConstant = InvokeDynamicConstant.of( bootstrapMethod, nameAndDescriptorConstant );
 		codeAttribute.addInvokeDynamic( invokeDynamicConstant );
 		codeAttribute.addMultiANewArray( classConstant, 0 );
@@ -150,18 +159,17 @@ public class T999_Coverage
 		codeAttribute.addNewArrayOfInt();
 		codeAttribute.addNewArrayOfLong();
 		codeAttribute.addRet( 0 );
-		codeAttribute.addGetStatic( fieldReferenceConstant );
-		codeAttribute.addPutStatic( fieldReferenceConstant );
-		codeAttribute.addGetField( fieldReferenceConstant );
-		codeAttribute.addPutField( fieldReferenceConstant );
-		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.plainOf( classConstant, nameAndDescriptorConstant );
-		codeAttribute.addInvokeVirtual( methodReferenceConstant );
-		codeAttribute.addInvokeSpecial( methodReferenceConstant );
-		codeAttribute.addInvokeStatic( methodReferenceConstant );
-		codeAttribute.addNew( classConstant );
-		codeAttribute.addANewArray( classConstant );
-		codeAttribute.addCheckCast( classConstant );
-		codeAttribute.addInstanceOf( classConstant );
+		codeAttribute.addGetStatic( fieldReference );
+		codeAttribute.addPutStatic( fieldReference );
+		codeAttribute.addGetField( fieldReference );
+		codeAttribute.addPutField( fieldReference );
+		codeAttribute.addInvokeVirtual( methodReference );
+		codeAttribute.addInvokeSpecial( methodReference );
+		codeAttribute.addInvokeStatic( methodReference );
+		codeAttribute.addNew( typeDescriptor );
+		codeAttribute.addANewArray( typeDescriptor );
+		codeAttribute.addCheckCast( typeDescriptor );
+		codeAttribute.addInstanceOf( typeDescriptor );
 		codeAttribute.addNop();
 		codeAttribute.addAConstNull();
 		codeAttribute.addIALoad();
@@ -262,9 +270,7 @@ public class T999_Coverage
 		attributeSet.replaceAttribute( codeAttribute );
 		attributeSet.removeAttribute( codeAttribute );
 
-		ByteCodeField.of( ByteCodeField.modifierEnum.of(), "testField", FieldDescriptor.of( TerminalTypeDescriptor.of( Object.class ) ) );
-		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.ofTypeName( "test.testClass" ), Optional.empty() ); //FIXME things fail if a package name is not specified.
-		byteCodeType.createOrGetBootstrapMethodsAttribute();
+		ByteCodeField.of( ByteCodeField.modifierEnum.of(), fieldReference.fieldPrototype );
 
 		//		InvalidAnnotationValueTagException invalidAnnotationValueTagException = Kit.testing.expectException( //
 		//			InvalidAnnotationValueTagException.class, () -> AnnotationValue.doSwitch( '_', new AnnotationValue.Switcher<>()
@@ -338,7 +344,7 @@ public class T999_Coverage
 
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), Mutf8Constant.of( "testMethod" ), Mutf8Constant.of( "()V" ), AttributeSet.of() );
 		byteCodeType.methods.add( byteCodeMethod );
-		ByteCodeType descendantByteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.ofTypeName( "test.test2" ), Optional.of( TerminalTypeDescriptor.ofTypeName( "test.testClass" ) ) );
+		ByteCodeType descendantByteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.of( "test.test2" ), Optional.of( TerminalTypeDescriptor.of( "test.testClass" ) ), List.of() );
 		Function<String,ByteCodeType> byteCodeTypeResolver = s ->
 		{
 			if( s.equals( "test.testClass" ) )
@@ -346,7 +352,7 @@ public class T999_Coverage
 			assert false;
 			return null;
 		};
-		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", PrimitiveTypeDescriptor.Void ), byteCodeTypeResolver );
-		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", PrimitiveTypeDescriptor.Void ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", TypeDescriptor.of( void.class ) ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", TypeDescriptor.of( void.class ) ), byteCodeTypeResolver );
 	}
 }

@@ -20,7 +20,7 @@ public final class LookupSwitchInstruction extends Instruction
 		return new LookupSwitchInstruction( new ArrayList<>( count ) );
 	}
 
-	private Optional<Instruction> defaultInstruction;
+	private Instruction defaultInstruction; // null means that it has not been set yet.
 	public final List<LookupSwitchEntry> entries;
 
 	private LookupSwitchInstruction( List<LookupSwitchEntry> entries )
@@ -31,22 +31,17 @@ public final class LookupSwitchInstruction extends Instruction
 
 	public Instruction getDefaultInstruction()
 	{
-		assert defaultInstruction.isPresent();
-		return defaultInstruction.get();
+		assert defaultInstruction != null;
+		return defaultInstruction;
 	}
 
 	public void setDefaultInstruction( Instruction defaultInstruction )
 	{
-		this.defaultInstruction = Optional.of( defaultInstruction );
+		assert this.defaultInstruction == null;
+		assert defaultInstruction != null;
+		this.defaultInstruction = defaultInstruction;
 	}
 
-	@Deprecated @Override public LookupSwitchInstruction asLookupSwitchInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( OpCode.LOOKUPSWITCH );
-	}
+	@Deprecated @Override public LookupSwitchInstruction asLookupSwitchInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( OpCode.LOOKUPSWITCH ); }
 }

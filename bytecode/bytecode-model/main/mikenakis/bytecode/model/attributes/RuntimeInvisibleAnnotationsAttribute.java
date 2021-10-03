@@ -30,8 +30,5 @@ public final class RuntimeInvisibleAnnotationsAttribute extends AnnotationsAttri
 		super( tag_RuntimeInvisibleAnnotations, annotations );
 	}
 
-	@Deprecated @Override public RuntimeInvisibleAnnotationsAttribute asRuntimeInvisibleAnnotationsAttribute()
-	{
-		return this;
-	}
+	@Deprecated @Override public RuntimeInvisibleAnnotationsAttribute asRuntimeInvisibleAnnotationsAttribute() { return this; }
 }

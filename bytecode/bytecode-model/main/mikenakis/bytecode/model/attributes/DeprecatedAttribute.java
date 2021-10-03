@@ -29,13 +29,6 @@ public final class DeprecatedAttribute extends KnownAttribute
 		super( tag_Deprecated );
 	}
 
-	@Deprecated @Override public DeprecatedAttribute asDeprecatedAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return mutf8Name.stringValue();
-	}
+	@Deprecated @Override public DeprecatedAttribute asDeprecatedAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return mutf8Name.stringValue(); }
 }

@@ -36,13 +36,7 @@ public final class MethodParametersAttribute extends KnownAttribute
 		this.methodParameters = methodParameters;
 	}
 
-	@Deprecated @Override public MethodParametersAttribute asMethodParametersAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return methodParameters.size() + " entries";
-	}
+	@Deprecated @Override public MethodParametersAttribute asMethodParametersAttribute() { return this; }
+	@Override public boolean isOptional() { return true; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return methodParameters.size() + " entries"; }
 }

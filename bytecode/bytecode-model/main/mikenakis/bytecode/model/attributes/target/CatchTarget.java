@@ -14,9 +14,5 @@ public final class CatchTarget extends Target // "catch_target" in jvms-4.7.20.1
 	}
 
 	@Deprecated @Override public CatchTarget asCatchTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "exceptionTableIndex = " + exceptionTableIndex;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "exceptionTableIndex = " + exceptionTableIndex; }
 }

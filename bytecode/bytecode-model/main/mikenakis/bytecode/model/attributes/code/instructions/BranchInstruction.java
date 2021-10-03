@@ -11,6 +11,16 @@ public final class BranchInstruction extends Instruction
 		return new BranchInstruction( generalFromSpecialOpcode( opCode ) );
 	}
 
+	public static boolean isLong( int opCode )
+	{
+		return switch( opCode )
+			{
+				case OpCode.GOTO, OpCode.JSR -> false;
+				case OpCode.GOTO_W, OpCode.JSR_W -> true;
+				default -> throw new AssertionError( opCode );
+			};
+	}
+
 	public final int opCode;
 	private Instruction targetInstruction; //null means that it has not been set yet.
 
@@ -46,25 +56,8 @@ public final class BranchInstruction extends Instruction
 		return opCode;
 	}
 
-	public static boolean isLong( int opCode )
-	{
-		return switch( opCode )
-			{
-				case OpCode.GOTO, OpCode.JSR -> false;
-				case OpCode.GOTO_W, OpCode.JSR_W -> true;
-				default -> throw new AssertionError( opCode );
-			};
-	}
-
-	@Deprecated @Override public BranchInstruction asBranchInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( opCode );
-	}
+	@Deprecated @Override public BranchInstruction asBranchInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
 
 	private static int generalFromSpecialOpcode( int opcode )
 	{

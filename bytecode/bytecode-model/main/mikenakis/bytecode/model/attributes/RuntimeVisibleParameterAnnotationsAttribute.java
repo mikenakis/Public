@@ -32,8 +32,5 @@ public final class RuntimeVisibleParameterAnnotationsAttribute extends Parameter
 		super( tag_RuntimeVisibleParameterAnnotations, entries );
 	}
 
-	@Deprecated @Override public RuntimeVisibleParameterAnnotationsAttribute asRuntimeVisibleParameterAnnotationsAttribute()
-	{
-		return this;
-	}
+	@Deprecated @Override public RuntimeVisibleParameterAnnotationsAttribute asRuntimeVisibleParameterAnnotationsAttribute() { return this; }
 }

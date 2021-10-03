@@ -3,7 +3,7 @@ package mikenakis.testana.structure;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.MethodDescriptor;
-import mikenakis.java_type_model.PrimitiveTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.testana.TestEngine;
 import mikenakis.testana.discovery.OutputFile;
 
@@ -127,7 +127,7 @@ public class ProjectType
 
 	private static MethodDescriptor testMethodDescriptor()
 	{
-		return MethodDescriptor.of( PrimitiveTypeDescriptor.Void );
+		return MethodDescriptor.of( TypeDescriptor.of( void.class ) );
 	}
 
 	public String getMethodSourceLocation( String methodName )

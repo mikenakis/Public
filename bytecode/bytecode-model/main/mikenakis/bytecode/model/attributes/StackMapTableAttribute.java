@@ -55,16 +55,6 @@ public final class StackMapTableAttribute extends KnownAttribute
 		return Collections.unmodifiableList( frames );
 	}
 
-	@Deprecated @Override public StackMapTableAttribute asStackMapTableAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return frames.size() + " entries";
-	}
-
 	private <T extends StackMapFrame> T addStackMapFrame( T stackMapFrame )
 	{
 		frames.add( stackMapFrame );
@@ -89,6 +79,11 @@ public final class StackMapTableAttribute extends KnownAttribute
 		return addStackMapFrame( frame );
 	}
 
+	public AppendStackMapFrame addAppendFrame( Instruction targetInstruction, VerificationType... localVerificationTypes )
+	{
+		return addAppendFrame( targetInstruction, List.of( localVerificationTypes ) );
+	}
+
 	public AppendStackMapFrame addAppendFrame( Instruction targetInstruction, List<VerificationType> localVerificationTypes )
 	{
 		AppendStackMapFrame frame = AppendStackMapFrame.of( targetInstruction, localVerificationTypes );
@@ -100,4 +95,7 @@ public final class StackMapTableAttribute extends KnownAttribute
 		FullStackMapFrame frame = FullStackMapFrame.of( targetInstruction, localVerificationTypes, stackVerificationTypes );
 		return addStackMapFrame( frame );
 	}
+
+	@Deprecated @Override public StackMapTableAttribute asStackMapTableAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return frames.size() + " entries"; }
 }

@@ -73,6 +73,7 @@ public abstract class Attribute
 	}
 
 	public abstract boolean isKnown();
+	public boolean isOptional() { return false; }
 
 	@ExcludeFromJacocoGeneratedReport public UnknownAttribute                              /**/ asUnknownAttribute                              /**/() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public KnownAttribute                                /**/ asKnownAttribute                                /**/() { return Kit.fail(); }

@@ -44,18 +44,6 @@ public final class ConditionalBranchInstruction extends Instruction
 		this.targetInstruction = targetInstruction;
 	}
 
-	public int getOpCode()
-	{
-		return opCode;
-	}
-
-	@Deprecated @Override public ConditionalBranchInstruction asConditionalBranchInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( opCode );
-	}
+	@Deprecated @Override public ConditionalBranchInstruction asConditionalBranchInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
 }

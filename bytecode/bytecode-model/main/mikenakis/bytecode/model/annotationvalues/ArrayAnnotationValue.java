@@ -33,13 +33,6 @@ public final class ArrayAnnotationValue extends AnnotationValue
 		this.annotationValues = annotationValues;
 	}
 
-	@Deprecated @Override public ArrayAnnotationValue asArrayAnnotationValue()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return annotationValues.size() + " elements";
-	}
+	@Deprecated @Override public ArrayAnnotationValue asArrayAnnotationValue() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return annotationValues.size() + " elements"; }
 }

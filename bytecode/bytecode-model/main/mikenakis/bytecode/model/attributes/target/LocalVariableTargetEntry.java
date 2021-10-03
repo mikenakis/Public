@@ -4,9 +4,9 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class LocalVariableTargetEntry
 {
-	private final int startPc;
-	private final int length;
-	private final int index;
+	public final int startPc; //TODO: this needs to be replaced with an instruction.
+	public final int length;
+	public final int index;
 
 	public LocalVariableTargetEntry( int startPc, int length, int index )
 	{
@@ -15,12 +15,5 @@ public final class LocalVariableTargetEntry
 		this.index = index;
 	}
 
-	public int startPc() { return startPc; }
-	public int length() { return length; }
-	public int index() { return index; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "startPc = " + startPc + ", length = " + length + ", index = " + index;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "startPc = " + startPc + ", length = " + length + ", index = " + index; }
 }

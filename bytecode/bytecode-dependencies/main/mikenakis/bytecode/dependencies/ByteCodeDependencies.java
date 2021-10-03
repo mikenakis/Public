@@ -34,12 +34,12 @@ import mikenakis.bytecode.model.attributes.ParameterAnnotationSet;
 import mikenakis.bytecode.model.attributes.ParameterAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
@@ -181,7 +181,7 @@ public final class ByteCodeDependencies
 
 	private void visitAnnotationDefaultAttribute( AnnotationDefaultAttribute attribute )
 	{
-		visitElementValue( attribute.annotationValue() );
+		visitElementValue( attribute.annotationValue );
 	}
 
 	private void visitBootstrapMethodsAttribute( BootstrapMethodsAttribute attribute )
@@ -201,9 +201,9 @@ public final class ByteCodeDependencies
 				case Instruction.groupTag_Branch, Instruction.groupTag_ConditionalBranch, Instruction.groupTag_IInc, Instruction.groupTag_LocalVariable, //
 					Instruction.groupTag_LookupSwitch, Instruction.groupTag_NewPrimitiveArray, Instruction.groupTag_Operandless,
 					Instruction.groupTag_TableSwitch -> { /* nothing to do */ }
-				case Instruction.groupTag_ClassConstantReferencing -> visitClassConstantReferencingInstruction( instruction.asClassConstantReferencingInstruction() );
-				case Instruction.groupTag_FieldConstantReferencing -> visitFieldConstantReferencingInstruction( instruction.asFieldConstantReferencingInstruction() );
-				case Instruction.groupTag_MethodConstantReferencing -> visitMethodConstantReferencingInstruction( instruction.asMethodConstantReferencingInstruction() );
+				case Instruction.groupTag_ClassConstantReferencing -> visitClassReferencingInstruction( instruction.asClassReferencingInstruction() );
+				case Instruction.groupTag_FieldConstantReferencing -> visitFieldReferencingInstruction( instruction.asFieldReferencingInstruction() );
+				case Instruction.groupTag_MethodConstantReferencing -> visitMethodReferencingInstruction( instruction.asMethodReferencingInstruction() );
 				case Instruction.groupTag_LoadConstant -> visitLoadConstantInstruction( instruction.asLoadConstantInstruction() );
 				case Instruction.groupTag_InvokeDynamic -> visitInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction() );
 				case Instruction.groupTag_InvokeInterface -> visitInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction() );
@@ -255,20 +255,20 @@ public final class ByteCodeDependencies
 		}
 	}
 
-	private void visitClassConstantReferencingInstruction( ClassConstantReferencingInstruction classConstantReferencingInstruction )
+	private void visitClassReferencingInstruction( ClassReferencingInstruction classReferencingInstruction )
 	{
-		visitTypeDescriptor( classConstantReferencingInstruction.target() );
+		visitTypeDescriptor( classReferencingInstruction.target() );
 	}
 
-	private void visitFieldConstantReferencingInstruction( FieldConstantReferencingInstruction fieldConstantReferencingInstruction )
+	private void visitFieldReferencingInstruction( FieldReferencingInstruction fieldReferencingInstruction )
 	{
-		visitTypeDescriptor( fieldConstantReferencingInstruction.fieldDeclaringType() );
-		visitDescriptorTypeDescriptor( fieldConstantReferencingInstruction.fieldReferenceConstant.fieldDescriptor().typeDescriptor );
+		visitTypeDescriptor( fieldReferencingInstruction.fieldDeclaringType() );
+		visitDescriptorTypeDescriptor( fieldReferencingInstruction.fieldReferenceConstant.fieldDescriptor().typeDescriptor );
 	}
 
-	private void visitMethodConstantReferencingInstruction( MethodConstantReferencingInstruction methodConstantReferencingInstruction )
+	private void visitMethodReferencingInstruction( MethodReferencingInstruction methodReferencingInstruction )
 	{
-		MethodReferenceConstant methodReferenceConstant = methodConstantReferencingInstruction.methodReferenceConstant;
+		MethodReferenceConstant methodReferenceConstant = methodReferencingInstruction.methodReferenceConstant;
 		assert methodReferenceConstant.tag == Constant.tag_InterfaceMethodReference || methodReferenceConstant.tag == Constant.tag_PlainMethodReference;
 		visitMethodReferenceConstant( methodReferenceConstant );
 	}
@@ -492,7 +492,7 @@ public final class ByteCodeDependencies
 	{
 		assert dependencyName != null;
 		dependencyName = stripArrayNotation( dependencyName );
-		TypeDescriptor typeDescriptor = TerminalTypeDescriptor.ofTypeName( dependencyName );
+		TypeDescriptor typeDescriptor = TerminalTypeDescriptor.of( dependencyName );
 		visitTypeDescriptor( typeDescriptor );
 	}
 

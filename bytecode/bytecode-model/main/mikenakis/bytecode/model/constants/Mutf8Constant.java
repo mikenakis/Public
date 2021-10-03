@@ -58,10 +58,7 @@ public final class Mutf8Constant extends ValueConstant<String>
 		return stringValue();
 	}
 
-	@Deprecated @Override public Mutf8Constant asMutf8Constant()
-	{
-		return this;
-	}
+	@Deprecated @Override public Mutf8Constant asMutf8Constant() { return this; }
 
 	@Deprecated @Override public boolean equals( Object other )
 	{
@@ -163,13 +160,6 @@ public final class Mutf8Constant extends ValueConstant<String>
 		return Buffer.of( bytes, 0, p );
 	}
 
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, buffer() );
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return Kit.string.escapeForJava( stringValue() );
-	}
+	@Override public int hashCode() { return Objects.hash( tag, buffer() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return Kit.string.escapeForJava( stringValue() ); }
 }

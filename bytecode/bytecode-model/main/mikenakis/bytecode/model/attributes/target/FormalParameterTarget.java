@@ -14,9 +14,5 @@ public final class FormalParameterTarget extends Target // "formal_parameter_tar
 	}
 
 	@Deprecated @Override public FormalParameterTarget asFormalParameterTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "formalParameterIndex = " + formalParameterIndex;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "formalParameterIndex = " + formalParameterIndex; }
 }

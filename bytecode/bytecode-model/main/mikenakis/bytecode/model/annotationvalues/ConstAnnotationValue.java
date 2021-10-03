@@ -34,6 +34,9 @@ public final class ConstAnnotationValue extends AnnotationValue
 		this.valueConstant = valueConstant;
 	}
 
+	@Deprecated @Override public ConstAnnotationValue asConstAnnotationValue() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return tagName( tag ) + " value = " + valueConstant; }
+
 	private static int getConstantTagFromValueTag( char annotationValueTag )
 	{
 		return switch( annotationValueTag )
@@ -45,15 +48,5 @@ public final class ConstAnnotationValue extends AnnotationValue
 				case tagString -> Constant.tag_Mutf8;
 				default -> throw new InvalidConstAnnotationValueTagException( annotationValueTag );
 			};
-	}
-
-	@Deprecated @Override public ConstAnnotationValue asConstAnnotationValue()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return tagName( tag ) + " value = " + valueConstant;
 	}
 }

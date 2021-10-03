@@ -204,7 +204,7 @@ public final class LocalVariableInstruction extends Instruction
 		return indexType.index();
 	}
 
-	private final int opCode;
+	public final int opCode;
 	public final int index;
 
 	private LocalVariableInstruction( int opCode, int index )
@@ -216,12 +216,7 @@ public final class LocalVariableInstruction extends Instruction
 		this.index = index;
 	}
 
-	public int getOpCode()
-	{
-		return opCode;
-	}
-
-	public int getActualOpcode()
+	public int getActualOpcode() //TODO
 	{
 		IndexType indexType = IndexType.of( index, opCode );
 		Model model = Kit.map.get( modelsFromOpCodes, opCode );
@@ -240,13 +235,6 @@ public final class LocalVariableInstruction extends Instruction
 		return selector == IndexType.ByOperand;
 	}
 
-	@Deprecated @Override public LocalVariableInstruction asLocalVariableInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( opCode );
-	}
+	@Deprecated @Override public LocalVariableInstruction asLocalVariableInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
 }

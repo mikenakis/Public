@@ -50,9 +50,5 @@ public abstract class VerificationType
 	@ExcludeFromJacocoGeneratedReport public ObjectVerificationType asObjectVerificationType() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public SimpleVerificationType asSimpleVerificationType() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public UninitializedVerificationType asUninitializedVerificationType() { return Kit.fail(); }
-
-	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString()
-	{
-		return "tag = " + tagName( tag );
-	}
+	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString() { return "tag = " + tagName( tag ); }
 }

@@ -38,30 +38,10 @@ public final class StringConstant extends ValueConstant<String>
 		this.valueConstant = valueConstant;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "value = " + (valueConstant == null ? "(uninitialized)" : valueConstant.toString());
-	}
-
-	@Deprecated @Override public StringConstant asStringConstant()
-	{
-		return this;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof StringConstant stringConstant )
-			return valueConstant.equalsMutf8Constant( stringConstant.valueConstant );
-		return false;
-	}
-
-	@Deprecated @Override public String value()
-	{
-		return valueConstant.toString();
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, valueConstant );
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "value = " + (valueConstant == null ? "(uninitialized)" : valueConstant.toString()); }
+	@Deprecated @Override public StringConstant asStringConstant() { return this; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof StringConstant kin && valueConstant.equalsMutf8Constant( kin.valueConstant ); }
+	public boolean equals( StringConstant other ) { return valueConstant.equalsMutf8Constant( other.valueConstant ); }
+	@Deprecated @Override public String value() { return valueConstant.toString(); }
+	@Override public int hashCode() { return Objects.hash( tag, valueConstant ); }
 }

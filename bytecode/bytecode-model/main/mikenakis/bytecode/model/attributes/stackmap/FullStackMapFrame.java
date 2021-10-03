@@ -23,8 +23,8 @@ public final class FullStackMapFrame extends StackMapFrame
 	public static final int type = 255;
 	public static final String typeName = "FullFrame";
 
-	private final List<VerificationType> localVerificationTypes;
-	private final List<VerificationType> stackVerificationTypes;
+	public final List<VerificationType> localVerificationTypes;
+	public final List<VerificationType> stackVerificationTypes;
 
 	private FullStackMapFrame( Instruction targetInstruction, List<VerificationType> localVerificationTypes, List<VerificationType> stackVerificationTypes )
 	{
@@ -33,18 +33,7 @@ public final class FullStackMapFrame extends StackMapFrame
 		this.stackVerificationTypes = stackVerificationTypes;
 	}
 
-	@Override public String getName( Optional<StackMapFrame> previousFrame )
-	{
-		return typeName;
-	}
-
-	public List<VerificationType> localVerificationTypes() { return Collections.unmodifiableList( localVerificationTypes ); }
-	public List<VerificationType> stackVerificationTypes() { return Collections.unmodifiableList( stackVerificationTypes ); }
-
+	@Override public String getName( Optional<StackMapFrame> previousFrame ) { return typeName; }
 	@Deprecated @Override public Optional<FullStackMapFrame> tryAsFullStackMapFrame() { return Optional.of( this ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return localVerificationTypes.size() + " localVerificationTypes, " + stackVerificationTypes.size() + " stackVerificationTypes";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return localVerificationTypes.size() + " localVerificationTypes, " + stackVerificationTypes.size() + " stackVerificationTypes"; }
 }

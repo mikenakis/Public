@@ -9,7 +9,7 @@
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L12: // public abstract class Class2WithVariousInstructions
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
@@ -67,37 +67,37 @@
 │ │   │ │ ├─■ L30: // System.out.println( "100" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "100"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L31: // break;
 │ │   │ │ ├─■         GOTO L50
 │ │   │ │ ├─■ L33: // System.out.println( "110" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "110"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L34: // break;
 │ │   │ │ ├─■         GOTO L50
 │ │   │ │ ├─■ L36: // System.out.println( "120" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "120"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L37: // break;
 │ │   │ │ ├─■         GOTO L50
 │ │   │ │ ├─■ L39: // System.out.println( "130" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "130"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L40: // break;
 │ │   │ │ ├─■         GOTO L50
 │ │   │ │ ├─■ L42: // System.out.println( "140" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "140"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L43: // break;
 │ │   │ │ ├─■         GOTO L50
 │ │   │ │ ├─■ L45: // System.out.println( "150" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "150"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L46: // break;
 │ │   │ │ ├─■         GOTO L50
 │ │   │ │ ├─■ L50: // }
@@ -138,7 +138,7 @@
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L54: // return Integer.toString( 129 );
 │ │     │ ├─■         LDC 129
-│ │     │ ├─■         INVOKESTATIC kind = Plain, reference =  java.lang.String java.lang.Integer.toString( int )
+│ │     │ ├─■         INVOKESTATIC reference = Plain; java.lang.String java.lang.Integer.toString( int )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
@@ -153,22 +153,22 @@
 │ │     │ ├─■ L59: // List<String> list = new ArrayList<>();
 │ │     │ ├─■         NEW java.util.ArrayList
 │ │     │ ├─■         DUP
-│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.util.ArrayList.<init>()
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void java.util.ArrayList.<init>()
 │ │     │ ├─■         ASTORE 1
 │ │     │ ├─■ L60: // list.add( "x" );
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         LDC "x"
-│ │     │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  boolean java.util.List.add( java.lang.Object ), 2 arguments
+│ │     │ ├─■         INVOKEINTERFACE reference = Interface; boolean java.util.List.add( java.lang.Object ), 2 arguments
 │ │     │ ├─■         POP
 │ │     │ ├─■ L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.util.Comparator compare()
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
-│ │     │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  void java.util.List.sort( java.util.Comparator ), 2 arguments
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
+│ │     │ ├─■         INVOKEINTERFACE reference = Interface; void java.util.List.sort( java.util.Comparator ), 2 arguments
 │ │     │ ├─■ L62: // return list.get( 0 );
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         LDC 0
-│ │     │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  java.lang.Object java.util.List.get( int ), 2 arguments
+│ │     │ ├─■         INVOKEINTERFACE reference = Interface; java.lang.Object java.util.List.get( int ), 2 arguments
 │ │     │ ├─■         CHECKCAST java.lang.String
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -206,13 +206,13 @@
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 0
 │ │   │ │ ├─■         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │ │   │ │ ├─■         GOTO T3
 │ │   │ │ ├─■ T2:     ACONST_NULL
 │ │   │ │ ├─■ T3:     AASTORE
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │ │   │ │ ├─■         AASTORE
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │ │   │ │ └─■         ARETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 3 items
@@ -262,7 +262,7 @@
 │       │ ├─■ L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
 │       │ ├─■         ALOAD 0
 │       │ ├─■         ALOAD 1
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  int java.lang.String.compareTo( java.lang.String )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.compareTo( java.lang.String )
 │       │ ├─■         INEG
 │       │ └─■         IRETURN
 │       ├─■ exceptionInfos: 0 items
@@ -277,7 +277,7 @@
   ├─■ [1] NestMembersAttribute; 1 items
   │ └─■ [0] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
   ├─■ [2] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
   └─■ [3] InnerClassesAttribute; 2 items
     ├─■ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -42,12 +42,12 @@ import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.ChopStackMapFrame;
@@ -250,7 +250,7 @@ final class ConstantPool
 
 	private void internAnnotationDefaultAttribute( AnnotationDefaultAttribute annotationDefaultAttribute )
 	{
-		internAnnotationValue( annotationDefaultAttribute.annotationValue() );
+		internAnnotationValue( annotationDefaultAttribute.annotationValue );
 	}
 
 	private void internBootstrapMethodsAttribute( BootstrapMethodsAttribute bootstrapMethodsAttribute )
@@ -432,10 +432,9 @@ final class ConstantPool
 	{
 		switch( instruction.groupTag )
 		{
-			case Instruction.groupTag_ClassConstantReferencing -> internClassConstantReferencingInstruction( instruction.asClassConstantReferencingInstruction() );
-			case Instruction.groupTag_FieldConstantReferencing -> internFieldConstantReferencingInstruction( instruction.asFieldConstantReferencingInstruction() );
-			case Instruction.groupTag_MethodConstantReferencing -> internMethodConstantReferencingInstruction( instruction.asMethodConstantReferencingInstruction() );
-//			case Instruction.groupTag_IndirectLoadConstant -> internIndirectLoadConstantInstruction( instruction.asIndirectLoadConstantInstruction() );
+			case Instruction.groupTag_ClassConstantReferencing -> internClassReferencingInstruction( instruction.asClassReferencingInstruction() );
+			case Instruction.groupTag_FieldConstantReferencing -> internFieldReferencingInstruction( instruction.asFieldReferencingInstruction() );
+			case Instruction.groupTag_MethodConstantReferencing -> internMethodReferencingInstruction( instruction.asMethodReferencingInstruction() );
 			case Instruction.groupTag_LoadConstant -> internLoadConstantInstruction( instruction.asLoadConstantInstruction() );
 			case Instruction.groupTag_InvokeDynamic -> internInvokeDynamicInstruction( instruction.asInvokeDynamicInstruction() );
 			case Instruction.groupTag_InvokeInterface -> internInvokeInterfaceInstruction( instruction.asInvokeInterfaceInstruction() );
@@ -514,19 +513,19 @@ final class ConstantPool
 		internConstant( doubleConstant );
 	}
 
-	private void internClassConstantReferencingInstruction( ClassConstantReferencingInstruction classConstantReferencingInstruction )
+	private void internClassReferencingInstruction( ClassReferencingInstruction classReferencingInstruction )
 	{
-		internClassConstant( classConstantReferencingInstruction.targetClassConstant );
+		internClassConstant( classReferencingInstruction.targetClassConstant );
 	}
 
-	private void internFieldConstantReferencingInstruction( FieldConstantReferencingInstruction fieldConstantReferencingInstruction )
+	private void internFieldReferencingInstruction( FieldReferencingInstruction fieldReferencingInstruction )
 	{
-		internReferenceConstant( fieldConstantReferencingInstruction.fieldReferenceConstant );
+		internReferenceConstant( fieldReferencingInstruction.fieldReferenceConstant );
 	}
 
-	private void internMethodConstantReferencingInstruction( MethodConstantReferencingInstruction methodConstantReferencingInstruction )
+	private void internMethodReferencingInstruction( MethodReferencingInstruction methodReferencingInstruction )
 	{
-		internReferenceConstant( methodConstantReferencingInstruction.methodReferenceConstant );
+		internReferenceConstant( methodReferencingInstruction.methodReferenceConstant );
 	}
 
 	private void internAnnotation( Annotation annotation )
@@ -573,9 +572,9 @@ final class ConstantPool
 
 	private void internFullStackMapFrame( FullStackMapFrame fullStackMapFrame )
 	{
-		for( VerificationType verificationType : fullStackMapFrame.localVerificationTypes() )
+		for( VerificationType verificationType : fullStackMapFrame.localVerificationTypes )
 			internVerificationType( verificationType );
-		for( VerificationType verificationType : fullStackMapFrame.stackVerificationTypes() )
+		for( VerificationType verificationType : fullStackMapFrame.stackVerificationTypes )
 			internVerificationType( verificationType );
 	}
 
@@ -586,7 +585,7 @@ final class ConstantPool
 
 	private void internSameLocals1StackItemStackMapFrame( SameLocals1StackItemStackMapFrame sameLocals1StackItemStackMapFrame )
 	{
-		internVerificationType( sameLocals1StackItemStackMapFrame.stackVerificationType() );
+		internVerificationType( sameLocals1StackItemStackMapFrame.stackVerificationType );
 	}
 
 	private void internVerificationType( VerificationType verificationType )

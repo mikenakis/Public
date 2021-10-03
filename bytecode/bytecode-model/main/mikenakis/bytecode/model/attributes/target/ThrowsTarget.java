@@ -14,9 +14,5 @@ public final class ThrowsTarget extends Target // "throws_target" in jvms-4.7.20
 	}
 
 	@Deprecated @Override public ThrowsTarget asThrowsTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "throwsTypeIndex = " + throwsTypeIndex;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "throwsTypeIndex = " + throwsTypeIndex; }
 }

@@ -3,8 +3,9 @@ package mikenakis.intertwine.predefined;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
-import mikenakis.java_type_model.PrimitiveTypeDescriptor;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure2;
@@ -47,7 +48,7 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 
 		private final AnyCall<Procedure2<Object,Object>> anyCall = new AnyCall<>()
 		{
-			@Override public Object anyCall( Key<Procedure2<Object,Object>> key0, Object[] arguments )
+			@Override public Object anyCall( MethodKey<Procedure2<Object,Object>> key0, Object[] arguments )
 			{
 				assert key0 == key;
 				assert arguments.length == 2;
@@ -57,16 +58,16 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		};
 	}
 
-	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", PrimitiveTypeDescriptor.Void, TerminalTypeDescriptor.Object, TerminalTypeDescriptor.Object );
-	private final List<Key<Procedure2<Object,Object>>> keys;
-	private final Key<Procedure2<Object,Object>> key = new Key<>()
+	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", TypeDescriptor.of( void.class ), TerminalTypeDescriptor.of( Object.class ), TerminalTypeDescriptor.of( Object.class ) );
+	private final List<MethodKey<Procedure2<Object,Object>>> keys;
+	private final MethodKey<Procedure2<Object,Object>> key = new MethodKey<>()
 	{
-		@Override public MethodPrototype getMethodPrototype()
+		@Override public MethodPrototype methodPrototype()
 		{
 			return invokeMethodPrototype;
 		}
 
-		@Override public int getIndex()
+		@Override public int methodIndex()
 		{
 			return 0;
 		}
@@ -87,17 +88,17 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		return Kit.uncheckedClassCast( Procedure2.class );
 	}
 
-	@Override public Collection<Key<Procedure2<Object,Object>>> keys()
+	@Override public Collection<MethodKey<Procedure2<Object,Object>>> keys()
 	{
 		return keys;
 	}
 
-	@Override public Key<Procedure2<Object,Object>> keyByIndex( int index )
+	@Override public MethodKey<Procedure2<Object,Object>> keyByIndex( int index )
 	{
 		return keys.get( index );
 	}
 
-	@Override public Key<Procedure2<Object,Object>> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<Procedure2<Object,Object>> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
 		assert methodPrototype.equals( invokeMethodPrototype ) : new MethodNotFoundException( this, methodPrototype );
 		return key;

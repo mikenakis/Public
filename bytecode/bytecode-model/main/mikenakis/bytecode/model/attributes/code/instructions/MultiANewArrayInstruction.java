@@ -25,9 +25,5 @@ public final class MultiANewArrayInstruction extends Instruction
 
 	public ArrayTypeDescriptor targetType() { return targetClassConstant.arrayTypeDescriptor(); }
 	@Deprecated @Override public MultiANewArrayInstruction asMultiANewArrayInstruction() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( OpCode.MULTIANEWARRAY ) + " " + targetType().typeName();
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( OpCode.MULTIANEWARRAY ) + " " + targetType().typeName(); }
 }

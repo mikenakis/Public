@@ -67,9 +67,5 @@ public final class InnerClass
 	public TerminalTypeDescriptor innerType() { return innerClassConstant.terminalTypeDescriptor(); }
 	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> c.terminalTypeDescriptor() ); }
 	public Optional<String> innerName() { return innerNameConstant.map( c -> c.stringValue() ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "outerClass = " + outerClassConstant + " accessFlags = " + modifiers + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "outerClass = " + outerClassConstant + " accessFlags = " + modifiers + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant; }
 }

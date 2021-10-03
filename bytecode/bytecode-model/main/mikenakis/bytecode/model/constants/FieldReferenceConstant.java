@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
+import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 
@@ -11,6 +12,14 @@ import mikenakis.java_type_model.TypeDescriptor;
  */
 public final class FieldReferenceConstant extends ReferenceConstant
 {
+	public static FieldReferenceConstant of( FieldReference fieldReference )
+	{
+		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
+		fieldReferenceConstant.setDeclaringTypeConstant( ClassConstant.of( fieldReference.declaringTypeDescriptor ) );
+		fieldReferenceConstant.setNameAndDescriptorConstant( NameAndDescriptorConstant.of( fieldReference.fieldPrototype ) );
+		return fieldReferenceConstant;
+	}
+
 	public static FieldReferenceConstant of( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant ) //TODO remove
 	{
 		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
@@ -32,9 +41,5 @@ public final class FieldReferenceConstant extends ReferenceConstant
 	public String fieldName() { return getNameAndDescriptorConstant().getNameConstant().stringValue(); }
 	public FieldDescriptor fieldDescriptor() { return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( getNameAndDescriptorConstant().getDescriptorConstant() ) ); }
 	public TypeDescriptor declaringTypeDescriptor() { return getDeclaringTypeConstant().typeDescriptor(); }
-
-	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant()
-	{
-		return this;
-	}
+	@Deprecated @Override public FieldReferenceConstant asFieldReferenceConstant() { return this; }
 }

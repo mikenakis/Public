@@ -4,11 +4,11 @@ import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.implementations.caching.CachingIntertwineFactory;
 import mikenakis.intertwine.implementations.compiling.CompilingIntertwineFactory;
 
-public final class T04_Compiling extends Client
+public final class T05_Compiling extends Client
 {
 	private final IntertwineFactory intertwineFactory = new CachingIntertwineFactory( CompilingIntertwineFactory.instance );
 
-	public T04_Compiling()
+	public T05_Compiling()
 	{
 	}
 

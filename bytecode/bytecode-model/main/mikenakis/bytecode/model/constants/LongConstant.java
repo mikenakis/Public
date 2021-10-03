@@ -24,30 +24,10 @@ public final class LongConstant extends ValueConstant<Long>
 		this.value = value;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return value + "L";
-	}
-
-	@Deprecated @Override public LongConstant asLongConstant()
-	{
-		return this;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof LongConstant otherLongConstant )
-			return value == otherLongConstant.value;
-		return false;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, value );
-	}
-
-	@Deprecated @Override public Long value()
-	{
-		return value;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return value + "L"; }
+	@Deprecated @Override public LongConstant asLongConstant() { return this; }
+	@Override public boolean equals( Object other ) { return other instanceof LongConstant kin && value == kin.value; }
+	public boolean equals( LongConstant other ) { return value == other.value; }
+	@Override public int hashCode() { return Objects.hash( tag, value ); }
+	@Deprecated @Override public Long value() { return value; }
 }

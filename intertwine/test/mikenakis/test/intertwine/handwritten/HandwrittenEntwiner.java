@@ -5,32 +5,29 @@ import mikenakis.kit.Kit;
 import mikenakis.test.intertwine.rig.Alpha;
 import mikenakis.test.intertwine.rig.FooInterface;
 
-final class HandwrittenEntwiner
+final class HandwrittenEntwiner implements FooInterface
 {
-	private final HandwrittenIntertwine intertwine;
+	private final HandwrittenKey[] keys;
 	private final AnyCall<FooInterface> exitPoint;
-	final FooInterface entryPoint = new FooInterface()
+
+	public HandwrittenEntwiner( HandwrittenKey[] keys, AnyCall<FooInterface> exitPoint )
 	{
-		@Override public void voidMethod()
-		{
-			exitPoint.anyCall( intertwine.keyByIndex( 0 ), Kit.ARRAY_OF_ZERO_OBJECTS );
-		}
-
-		@Override public Alpha getAlpha( int index )
-		{
-			return (Alpha)exitPoint.anyCall( intertwine.keyByIndex( 1 ), new Object[]{ index } );
-		}
-
-		@Override public void setAlpha( int index, Alpha alpha )
-		{
-			exitPoint.anyCall( intertwine.keyByIndex( 2 ), new Object[]{ index, alpha } );
-		}
-	};
-
-	HandwrittenEntwiner( HandwrittenIntertwine intertwine, AnyCall<FooInterface> exitPoint )
-	{
-		this.intertwine = intertwine;
-		assert exitPoint != null;
+		this.keys = keys;
 		this.exitPoint = exitPoint;
+	}
+
+	@Override public void voidMethod()
+	{
+		exitPoint.anyCall( keys[0], Kit.ARRAY_OF_ZERO_OBJECTS );
+	}
+
+	@Override public Alpha getAlpha( int index )
+	{
+		return (Alpha)exitPoint.anyCall( keys[1], new Object[] { index } );
+	}
+
+	@Override public void setAlpha( int index, Alpha alpha )
+	{
+		exitPoint.anyCall( keys[2], new Object[] { index, alpha } );
 	}
 }

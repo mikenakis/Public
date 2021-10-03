@@ -2,6 +2,7 @@ package mikenakis.intertwine.implementations.compiling;
 
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +13,7 @@ class CompilingUntwiner<T>
 
 	final AnyCall<T> anycall = new AnyCall<>()
 	{
-		@Override public Object anyCall( Intertwine.Key<T> key, Object[] arguments )
+		@Override public Object anyCall( MethodKey<T> key, Object[] arguments )
 		{
 			CompilingKey<T> compilingKey = (CompilingKey<T>)key;
 			try

@@ -11,7 +11,7 @@
 │       ├─■ instructions: 6 entries
 │       │ ├─■ L11: // private static final class NestedClass
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │       │ ├─■ L13: // private boolean foo = false;
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 0

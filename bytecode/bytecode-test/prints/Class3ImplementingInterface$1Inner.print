@@ -17,7 +17,7 @@
 │ │   │ │ ├─■         ALOAD 1
 │ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class3ImplementingInterface mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.this$0
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ ├─■ L102: // this.i = i;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ILOAD 2
@@ -44,7 +44,7 @@
 │ │     │ ├─■ L107: // return i;
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
-│ │     │ ├─■         INVOKESTATIC kind = Plain, reference =  java.lang.Integer java.lang.Integer.valueOf( int )
+│ │     │ ├─■         INVOKESTATIC reference = Plain; java.lang.Integer java.lang.Integer.valueOf( int )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
@@ -58,7 +58,7 @@
 │       ├─■ instructions: 3 entries
 │       │ ├─■ L96: // class Inner implements Supplier<Integer>
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.Integer mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.get()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Integer mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.get()
 │       │ └─■         ARETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items

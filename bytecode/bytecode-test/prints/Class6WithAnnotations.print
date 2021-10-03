@@ -20,7 +20,7 @@
 │ │   │ ├─■ instructions: 6 entries
 │ │   │ │ ├─■ L21: // {
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ ├─■ L13: // @SuppressWarnings( "FieldMayBeStatic" ) //
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 5
@@ -182,8 +182,8 @@
 │     │ │ ├─■         ILOAD 2
 │     │ │ ├─■         ILOAD 3
 │     │ │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( int, int, int )
-│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
-│     │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
+│     │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │     │ │ ├─■ L65: // }
 │     │ │ └─■         RETURN
 │     │ ├─■ exceptionInfos: 0 items
@@ -228,6 +228,6 @@
   │   └─■ [0] AnnotationParameter name = "value"
   │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 6 )
   ├─■ [3] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
   └─■ [4] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

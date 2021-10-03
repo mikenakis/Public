@@ -34,6 +34,10 @@ public final class BootstrapMethod
 
 	public MethodDescriptor invocationMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromMethodHandleConstantInvocation( methodHandleConstant ); }
 	public TypeDescriptor ownerTypeDescriptor() { return ByteCodeHelpers.typeDescriptorFromMethodHandleConstantOwner( methodHandleConstant ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "methodHandle = " + methodHandleConstant + ", " + argumentConstants.size() + " arguments"; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof BootstrapMethod kin && equals( kin ); }
+	public boolean equals( BootstrapMethod other ) { return methodHandleConstant.equals( other.methodHandleConstant ) && argumentConstants.equals( other.argumentConstants ); }
+	@Override public int hashCode() { return Objects.hash( methodHandleConstant, argumentConstants ); }
 
 	private static boolean isBootstrapArgumentConstant( Constant constant )
 	{
@@ -42,24 +46,5 @@ public final class BootstrapMethod
 				case Constant.tag_Class, Constant.tag_MethodType, Constant.tag_String, Constant.tag_MethodHandle -> true;
 				default -> false;
 			};
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "methodHandle = " + methodHandleConstant + ", " + argumentConstants.size() + " arguments"; }
-
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof BootstrapMethod otherBootstrapMethod )
-			return equals( otherBootstrapMethod );
-		return false;
-	}
-
-	public boolean equals( BootstrapMethod other )
-	{
-		return methodHandleConstant.equals( other.methodHandleConstant ) && argumentConstants.equals( other.argumentConstants );
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( methodHandleConstant, argumentConstants );
 	}
 }

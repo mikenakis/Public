@@ -82,7 +82,7 @@ class JunitTestMethod extends TestMethod
 	private static <T> T withRedirectedOutput( Function0<T> procedure )
 	{
 		PrintStream oldSystemOut = System.out;
-		PrintStream newSystemOut = new PrintStream( LinePrefixingOutputStream.of( oldSystemOut, "\\~" ), false );
+		PrintStream newSystemOut = new PrintStream( LinePrefixingOutputStream.of( oldSystemOut, "\\~" ), true );
 		System.setOut( newSystemOut );
 		return Kit.tryFinally( procedure, () -> System.setOut( oldSystemOut ) );
 	}

@@ -3,8 +3,9 @@ package mikenakis.intertwine.predefined;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
-import mikenakis.java_type_model.PrimitiveTypeDescriptor;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
@@ -43,7 +44,7 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 
 		final AnyCall<Procedure1<Object>> anyCall = new AnyCall<>()
 		{
-			@Override public Object anyCall( Key<Procedure1<Object>> key0, Object[] arguments )
+			@Override public Object anyCall( MethodKey<Procedure1<Object>> key0, Object[] arguments )
 			{
 				assert key0 == key;
 				assert arguments.length == 1;
@@ -58,16 +59,16 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 		}
 	}
 
-	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", PrimitiveTypeDescriptor.Void, TerminalTypeDescriptor.Object );
-	private final List<Key<Procedure1<Object>>> keys;
-	private final Key<Procedure1<Object>> key = new Key<>()
+	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", TypeDescriptor.of( void.class ), TerminalTypeDescriptor.of( Object.class ) );
+	private final List<MethodKey<Procedure1<Object>>> keys;
+	private final MethodKey<Procedure1<Object>> key = new MethodKey<>()
 	{
-		@Override public MethodPrototype getMethodPrototype()
+		@Override public MethodPrototype methodPrototype()
 		{
 			return invokeMethodPrototype;
 		}
 
-		@Override public int getIndex()
+		@Override public int methodIndex()
 		{
 			return 0;
 		}
@@ -88,17 +89,17 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 		return Kit.uncheckedClassCast( Procedure1.class );
 	}
 
-	@Override public Collection<Key<Procedure1<Object>>> keys()
+	@Override public Collection<MethodKey<Procedure1<Object>>> keys()
 	{
 		return keys;
 	}
 
-	@Override public Key<Procedure1<Object>> keyByIndex( int index )
+	@Override public MethodKey<Procedure1<Object>> keyByIndex( int index )
 	{
 		return keys.get( index );
 	}
 
-	@Override public Key<Procedure1<Object>> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<Procedure1<Object>> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
 		assert methodPrototype.equals( invokeMethodPrototype ) : new MethodNotFoundException( this, methodPrototype );
 		return key;

@@ -36,13 +36,6 @@ public final class InnerClassesAttribute extends KnownAttribute
 		this.innerClasses = innerClasses;
 	}
 
-	@Deprecated @Override public InnerClassesAttribute asInnerClassesAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return innerClasses.size() + " entries";
-	}
+	@Deprecated @Override public InnerClassesAttribute asInnerClassesAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return innerClasses.size() + " entries"; }
 }

@@ -13,6 +13,7 @@ import mikenakis.kit.Kit;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.Optional;
 
 final class CompilingEntwiner<T>
@@ -50,8 +51,8 @@ final class CompilingEntwiner<T>
 
 	private static Object newProxyInstance( ClassLoader loader, Class<?> theInterface, InvocationHandler handler )
 	{
-		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.ofTypeName( "TestClass" ), Optional.empty() );
-		ByteCodeField byteCodeField = ByteCodeField.of( ByteCodeField.modifierEnum.of(), "handler", Kit.get( null ) );
+		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.of( "TestClass" ), Optional.empty(), List.of() );
+		ByteCodeField byteCodeField = ByteCodeField.of( ByteCodeField.modifierEnum.of(), null );
 		Kit.collection.add( byteCodeType.fields, byteCodeField );
 		for( Method method : theInterface.getMethods() )
 		{

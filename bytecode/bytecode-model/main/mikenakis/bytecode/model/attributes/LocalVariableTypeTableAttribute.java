@@ -35,13 +35,7 @@ public final class LocalVariableTypeTableAttribute extends KnownAttribute
 		this.localVariableTypes = localVariableTypes;
 	}
 
-	@Deprecated @Override public LocalVariableTypeTableAttribute asLocalVariableTypeTableAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return localVariableTypes.size() + " entries";
-	}
+	@Deprecated @Override public LocalVariableTypeTableAttribute asLocalVariableTypeTableAttribute() { return this; }
+	@Override public boolean isOptional() { return true; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return localVariableTypes.size() + " entries"; }
 }

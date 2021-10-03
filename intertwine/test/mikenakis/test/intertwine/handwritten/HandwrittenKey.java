@@ -2,14 +2,15 @@ package mikenakis.test.intertwine.handwritten;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.test.intertwine.rig.FooInterface;
 
 /**
- * A {@link Intertwine.Key} for the {@link HandwrittenIntertwine}.
+ * A {@link MethodKey} for the {@link HandwrittenIntertwine}.
  *
  * @author Michael Belivanakis (michael.gr)
  */
-class HandwrittenKey implements Intertwine.Key<FooInterface>
+class HandwrittenKey implements MethodKey<FooInterface>
 {
 	private final HandwrittenIntertwine intertwine;
 	final int index;
@@ -27,12 +28,12 @@ class HandwrittenKey implements Intertwine.Key<FooInterface>
 		return intertwine;
 	}
 
-	@Override public int getIndex()
+	@Override public int methodIndex()
 	{
 		return index;
 	}
 
-	@Override public MethodPrototype getMethodPrototype()
+	@Override public MethodPrototype methodPrototype()
 	{
 		return methodPrototype;
 	}

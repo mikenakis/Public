@@ -2,8 +2,8 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.java_type_model.MethodDescriptor;
-import mikenakis.java_type_model.TypeDescriptor;
+import mikenakis.bytecode.model.descriptors.FieldPrototype;
+import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -15,14 +15,16 @@ import java.util.Objects;
  */
 public final class NameAndDescriptorConstant extends Constant
 {
-	public static NameAndDescriptorConstant of( String name, TypeDescriptor typeDescriptor )
+	public static NameAndDescriptorConstant of( FieldPrototype fieldPrototype )
 	{
-		return of( Mutf8Constant.of( name ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( typeDescriptor ) ) );
+		return of( Mutf8Constant.of( fieldPrototype.fieldName ), //
+			Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldPrototype.descriptor.typeDescriptor ) ) );
 	}
 
-	public static NameAndDescriptorConstant of( String name, MethodDescriptor methodDescriptor )
+	public static NameAndDescriptorConstant of( MethodPrototype methodPrototype )
 	{
-		return of( Mutf8Constant.of( name ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodDescriptor ) ) );
+		return of( Mutf8Constant.of( methodPrototype.methodName ), //
+			Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ) );
 	}
 
 	public static NameAndDescriptorConstant of( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant ) //TODO: remove
@@ -71,13 +73,5 @@ public final class NameAndDescriptorConstant extends Constant
 	@Deprecated @Override public NameAndDescriptorConstant asNameAndDescriptorConstant() { return this; }
 	@Deprecated @Override public boolean equals( Object other ) { return other instanceof NameAndDescriptorConstant kin && equals( kin ); }
 	@Override public int hashCode() { return Objects.hash( tag, nameConstant, descriptorConstant ); }
-
-	public boolean equals( NameAndDescriptorConstant other )
-	{
-		if( !nameConstant.equalsMutf8Constant( other.nameConstant ) )
-			return false;
-		if( !descriptorConstant.equalsMutf8Constant( other.descriptorConstant ) )
-			return false;
-		return true;
-	}
+	public boolean equals( NameAndDescriptorConstant other ) { return nameConstant.equalsMutf8Constant( other.nameConstant ) && descriptorConstant.equalsMutf8Constant( other.descriptorConstant ); }
 }

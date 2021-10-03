@@ -21,43 +21,43 @@
 │ │   │ │ ├─■ L16: // System.out.println( "100" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "100"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L17: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L19: // System.out.println( "101" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "101"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L20: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L22: // System.out.println( "102" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "102"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L23: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L25: // System.out.println( "103" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "103"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L26: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L28: // System.out.println( "104" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "104"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L29: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L31: // System.out.println( "105" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "105"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L32: // break;
 │ │   │ │ ├─■         GOTO L45
 │ │   │ │ ├─■ L42: // System.out.println( Class1WithFields.PublicStringConstant + Class3ImplementingInterface.stringLiteral );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "publicConstantValueaΦ됔b"
-│ │   │ │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  void java.io.PrintStream.println( java.lang.String )
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │ │   │ │ ├─■ L45: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -98,7 +98,7 @@
 │       ├─■ instructions: 3 entries
 │       │ ├─■ L48: // {
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │       │ ├─■ L49: // }
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items

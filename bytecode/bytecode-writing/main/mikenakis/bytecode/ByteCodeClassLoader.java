@@ -13,14 +13,17 @@ public class ByteCodeClassLoader extends ClassLoader
 
 	public ByteCodeClassLoader()
 	{
+		super( ByteCodeClassLoader.class.getClassLoader() );
 	}
 
-	public Class<?> load( ByteCodeType byteCodeType )
+	public <T> Class<T> load( ByteCodeType byteCodeType )
 	{
 		String name = byteCodeType.typeDescriptor().typeName;
 		byte[] bytes = ByteCodeWriter.write( byteCodeType );
-		Kit.map.add( classes, name, bytes );
-		return Kit.unchecked( () -> loadClass( name ) );
+		Kit.map.add( classes, name, bytes ); //if this fails, the bytecode has already been created.
+		Class<?> javaClass = Kit.unchecked( () -> loadClass( name ) );
+		@SuppressWarnings( "unchecked" ) Class<T> result = (Class<T>)javaClass;
+		return result;
 	}
 
 	@Override protected Class<?> findClass( String name ) throws ClassNotFoundException

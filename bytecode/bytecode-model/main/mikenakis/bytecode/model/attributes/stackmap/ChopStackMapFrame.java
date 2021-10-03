@@ -35,15 +35,7 @@ public final class ChopStackMapFrame extends StackMapFrame
 		return count;
 	}
 
-	@Override public String getName( Optional<StackMapFrame> previousFrame )
-	{
-		return typeName;
-	}
-
+	@Override public String getName( Optional<StackMapFrame> previousFrame ) { return typeName; }
 	@Deprecated @Override public Optional<ChopStackMapFrame> tryAsChopStackMapFrame() { return Optional.of( this ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "count = " + count;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "count = " + count; }
 }

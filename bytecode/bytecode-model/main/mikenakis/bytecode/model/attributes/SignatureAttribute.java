@@ -40,5 +40,6 @@ public final class SignatureAttribute extends KnownAttribute
 
 	public String signatureString() { return signatureConstant.stringValue(); }
 	@Deprecated @Override public SignatureAttribute asSignatureAttribute() { return this; }
+	@Override public boolean isOptional() { return true; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "signature = " + signatureConstant.stringValue(); }
 }

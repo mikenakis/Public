@@ -16,9 +16,5 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 	}
 
 	@Deprecated @Override public LocalVariableTarget asLocalVariableTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return entries.size() + " entries";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return entries.size() + " entries"; }
 }

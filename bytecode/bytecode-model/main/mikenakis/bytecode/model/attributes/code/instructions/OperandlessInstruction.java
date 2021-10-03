@@ -34,18 +34,6 @@ public final class OperandlessInstruction extends Instruction
 		this.opCode = opCode;
 	}
 
-	public int getOpCode()
-	{
-		return opCode;
-	}
-
-	@Deprecated @Override public OperandlessInstruction asOperandlessInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( opCode );
-	}
+	@Deprecated @Override public OperandlessInstruction asOperandlessInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
 }

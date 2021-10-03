@@ -1,5 +1,6 @@
 package mikenakis.test.intertwine.rig.exchange.object;
 
+import mikenakis.intertwine.MethodKey;
 import mikenakis.test.intertwine.rig.exchange.ObjectExchange;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
@@ -17,7 +18,7 @@ public class ObjectExchangeToAnycall<T> implements ObjectExchange<AnycallRespons
 
 	@Override public AnycallResponse doExchange( AnycallRequest request )
 	{
-		Intertwine.Key<T> key = intertwine.keyByMethodPrototype( request.methodPrototype );
+		MethodKey<T> key = intertwine.keyByMethodPrototype( request.methodPrototype );
 		try
 		{
 			Object result = anycall.anyCall( key, request.arguments );

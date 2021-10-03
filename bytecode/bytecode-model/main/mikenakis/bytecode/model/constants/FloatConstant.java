@@ -24,30 +24,10 @@ public final class FloatConstant extends ValueConstant<Float>
 		this.value = value;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return value + "f";
-	}
-
-	@Deprecated @Override public FloatConstant asFloatConstant()
-	{
-		return this;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof FloatConstant otherFloatConstant )
-			return Float.floatToIntBits( value ) == Float.floatToIntBits( otherFloatConstant.value );
-		return false;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, value );
-	}
-
-	@Deprecated @Override public Float value()
-	{
-		return value;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return value + "f"; }
+	@Deprecated @Override public FloatConstant asFloatConstant() { return this; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof FloatConstant kin && equals( kin ); }
+	public boolean equals( FloatConstant otherFloatConstant ) { return Float.floatToIntBits( value ) == Float.floatToIntBits( otherFloatConstant.value ); }
+	@Override public int hashCode() { return Objects.hash( tag, value ); }
+	@Deprecated @Override public Float value() { return value; }
 }

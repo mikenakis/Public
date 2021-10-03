@@ -39,8 +39,6 @@ import java.util.function.Function;
  */
 public final class ByteCodeType
 {
-	public static record Version( int major, int minor ) {}
-
 	public static final int MAGIC = 0xCAFEBABE;
 
 	public enum Modifier
@@ -49,25 +47,26 @@ public final class ByteCodeType
 	}
 
 	public static final FlagEnum<Modifier> modifierEnum = FlagEnum.of( Modifier.class, //
-		Map.entry( Modifier.Public, 0x0001 ),     // ACC_PUBLIC = 0x0001; //bit 0 : Declared public; may be accessed from outside its package.
-		Map.entry( Modifier.Final, 0x0010 ),      // ACC_FINAL = 0x0010; //bit 4: Declared final; no subclasses allowed.
-		Map.entry( Modifier.Super, 0x0020 ),      // ACC_SUPER = 0x0020; //bit 5: Treat superclass methods specially when invoked by the invokespecial instruction.
-		Map.entry( Modifier.Interface, 0x0200 ),  // ACC_INTERFACE = 0x0200; //bit 9: Is an interface, not a class.
-		Map.entry( Modifier.Abstract, 0x0400 ),   // ACC_ABSTRACT = 0x0400; //bit 10: Declared abstract; must not be instantiated.
-		Map.entry( Modifier.Synthetic, 0x1000 ),  // ACC_SYNTHETIC = 0x1000; //bit 12: Declared synthetic; not present in the source code.
-		Map.entry( Modifier.Annotation, 0x2000 ), // ACC_ANNOTATION = 0x2000; //bit 13: Declared as an annotation type.
-		Map.entry( Modifier.Enum, 0x4000 ) );     // ACC_ENUM = 0x4000; //bit 14: Declared as an enum type.
+		Map.entry( Modifier.Public     /**/, 0x0001 ),   // ACC_PUBLIC     -- bit 0: Declared public; may be accessed from outside its package.
+		Map.entry( Modifier.Final      /**/, 0x0010 ),   // ACC_FINAL      -- bit 4: Declared final; no subclasses allowed.
+		Map.entry( Modifier.Super      /**/, 0x0020 ),   // ACC_SUPER      -- bit 5: Treat superclass methods specially when invoked by the invokespecial instruction.
+		Map.entry( Modifier.Interface  /**/, 0x0200 ),   // ACC_INTERFACE  -- bit 9: Is an interface, not a class.
+		Map.entry( Modifier.Abstract   /**/, 0x0400 ),   // ACC_ABSTRACT   -- bit 10: Declared abstract; must not be instantiated.
+		Map.entry( Modifier.Synthetic  /**/, 0x1000 ),   // ACC_SYNTHETIC  -- bit 12: Declared synthetic; not present in the source code.
+		Map.entry( Modifier.Annotation /**/, 0x2000 ),   // ACC_ANNOTATION -- bit 13: Declared as an annotation type.
+		Map.entry( Modifier.Enum       /**/, 0x4000 ) ); // ACC_ENUM       -- bit 14: Declared as an enum type.
 
 	public static ByteCodeType of( FlagSet<Modifier> modifiers, TerminalTypeDescriptor typeDescriptor, //
-		Optional<TerminalTypeDescriptor> superTypeDescriptor )
+		Optional<TerminalTypeDescriptor> superTypeDescriptor, Collection<TerminalTypeDescriptor> interfaces )
 	{
-		Version version = new Version( 60, 0 ); //TODO: add full support for this version!
+		ByteCodeVersion version = new ByteCodeVersion( 60, 0 ); //TODO: add full support for this version!
 		return of( version, modifiers, ClassConstant.of( typeDescriptor ), //
 			superTypeDescriptor.map( c -> ClassConstant.of( c ) ), //
-			new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), AttributeSet.of(), new ArrayList<>() );
+			interfaces.stream().map( i -> ClassConstant.of( i ) ).toList(),
+			new ArrayList<>(), new ArrayList<>(), AttributeSet.of(), new ArrayList<>() );
 	}
 
-	public static ByteCodeType of( Version version, FlagSet<Modifier> modifiers, ClassConstant classConstant, //
+	public static ByteCodeType of( ByteCodeVersion version, FlagSet<Modifier> modifiers, ClassConstant classConstant, //
 		Optional<ClassConstant> superClassConstant, List<ClassConstant> interfaceConstants, List<ByteCodeField> fields, //
 		List<ByteCodeMethod> methods, AttributeSet attributeSet, Collection<ClassConstant> extraClassConstants )
 	{
@@ -75,7 +74,7 @@ public final class ByteCodeType
 			attributeSet, extraClassConstants );
 	}
 
-	public final Version version;
+	public final ByteCodeVersion version;
 	public final FlagSet<Modifier> modifiers;
 	private final ClassConstant classConstant;
 	private final Optional<ClassConstant> superClassConstant;
@@ -85,7 +84,7 @@ public final class ByteCodeType
 	public final AttributeSet attributeSet;
 	public final Collection<ClassConstant> extraClassConstants;
 
-	private ByteCodeType( Version version, FlagSet<Modifier> modifiers, ClassConstant classConstant, //
+	private ByteCodeType( ByteCodeVersion version, FlagSet<Modifier> modifiers, ClassConstant classConstant, //
 		Optional<ClassConstant> superClassConstant, List<ClassConstant> interfaceConstants, List<ByteCodeField> fields, //
 		List<ByteCodeMethod> methods, AttributeSet attributeSet, Collection<ClassConstant> extraClassConstants )
 	{
@@ -134,12 +133,12 @@ public final class ByteCodeType
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return classConstant.toString(); }
 
-	public int findDeclaredMethodByNameAndDescriptor( MethodPrototype methodPrototype )
+	public int findDeclaredMethod( MethodPrototype methodPrototype )
 	{
 		int index = 0;
 		for( ByteCodeMethod method : methods )
 		{
-			if( match( method, methodPrototype ) )
+			if( method.isMatch( methodPrototype ) )
 				return index;
 			index++;
 		}
@@ -150,7 +149,7 @@ public final class ByteCodeType
 	{
 		for( ByteCodeType byteCodeType = this; ; )
 		{
-			int index = byteCodeType.findDeclaredMethodByNameAndDescriptor( methodPrototype );
+			int index = byteCodeType.findDeclaredMethod( methodPrototype );
 			if( index != -1 )
 				return Optional.of( byteCodeType.methods.get( index ) );
 			Optional<ByteCodeType> superType = byteCodeType.superTypeDescriptor().map( d -> byteCodeTypeByName.apply( d.typeName ) );
@@ -159,12 +158,5 @@ public final class ByteCodeType
 			byteCodeType = superType.get();
 		}
 		return Optional.empty();
-	}
-
-	private static boolean match( ByteCodeMethod method, MethodPrototype methodPrototype )
-	{
-		if( !method.name().equals( methodPrototype.methodName ) )
-			return false;
-		return method.descriptor().equals( methodPrototype.descriptor );
 	}
 }

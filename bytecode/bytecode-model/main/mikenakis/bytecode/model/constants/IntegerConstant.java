@@ -24,30 +24,10 @@ public final class IntegerConstant extends ValueConstant<Integer>
 		this.value = value;
 	}
 
-	@Deprecated @Override public IntegerConstant asIntegerConstant()
-	{
-		return this;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof IntegerConstant otherIntegerConstant )
-			return value == otherIntegerConstant.value;
-		return false;
-	}
-
-	@Deprecated @Override public Integer value()
-	{
-		return value;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, value );
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return String.valueOf( value );
-	}
+	@Deprecated @Override public IntegerConstant asIntegerConstant() { return this; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof IntegerConstant kin && equals( kin ); }
+	public boolean equals( IntegerConstant other ) { return value == other.value; }
+	@Deprecated @Override public Integer value() { return value; }
+	@Override public int hashCode() { return Objects.hash( tag, value ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return String.valueOf( value ); }
 }

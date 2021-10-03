@@ -24,7 +24,7 @@ public final class SameLocals1StackItemStackMapFrame extends StackMapFrame
 	public static final String typeName = "SameLocals1StackItemFrame";
 	public static final String extendedTypeName = "SameLocals1StackItemExtendedFrame";
 
-	private final VerificationType stackVerificationType;
+	public final VerificationType stackVerificationType;
 
 	private SameLocals1StackItemStackMapFrame( Instruction targetInstruction, VerificationType stackVerificationType )
 	{
@@ -32,10 +32,7 @@ public final class SameLocals1StackItemStackMapFrame extends StackMapFrame
 		this.stackVerificationType = stackVerificationType;
 	}
 
-	public VerificationType stackVerificationType() { return stackVerificationType; }
-
 	@Deprecated @Override public Optional<SameLocals1StackItemStackMapFrame> tryAsSameLocals1StackItemStackMapFrame() { return Optional.of( this ); }
-
 	@Override public String getName( Optional<StackMapFrame> previousFrame )
 	{
 		return typeName;
@@ -44,9 +41,5 @@ public final class SameLocals1StackItemStackMapFrame extends StackMapFrame
 //			return typeName;
 //		return extendedTypeName;
 	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "stackVerificationType = " + stackVerificationType;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "stackVerificationType = " + stackVerificationType; }
 }

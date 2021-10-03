@@ -3,6 +3,7 @@ package mikenakis.intertwine.implementations.reflecting;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
 
 import java.lang.reflect.Method;
@@ -49,17 +50,17 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 		return interfaceType;
 	}
 
-	@Override public Collection<Key<T>> keys()
+	@Override public Collection<MethodKey<T>> keys()
 	{
 		return Kit.collection.downCast( keys );
 	}
 
-	@Override public Key<T> keyByIndex( int index )
+	@Override public MethodKey<T> keyByIndex( int index )
 	{
 		return keys.get( index );
 	}
 
-	@Override public Key<T> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )
 	{
 		return Kit.map.get( keysByPrototype, methodPrototype );
 	}

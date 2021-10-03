@@ -1,16 +1,16 @@
 package mikenakis.bytecode.model.attributes.code;
 
 import mikenakis.bytecode.model.attributes.code.instructions.BranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
@@ -90,31 +90,23 @@ public abstract class Instruction
 		this.groupTag = groupTag;
 	}
 
-	@ExcludeFromJacocoGeneratedReport public BranchInstruction                    /**/ asBranchInstruction                    /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ConditionalBranchInstruction         /**/ asConditionalBranchInstruction         /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ClassConstantReferencingInstruction  /**/ asClassConstantReferencingInstruction  /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public FieldConstantReferencingInstruction  /**/ asFieldConstantReferencingInstruction  /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public IIncInstruction                      /**/ asIIncInstruction                      /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InvokeDynamicInstruction             /**/ asInvokeDynamicInstruction             /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InvokeInterfaceInstruction           /**/ asInvokeInterfaceInstruction           /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LocalVariableInstruction             /**/ asLocalVariableInstruction             /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LookupSwitchInstruction              /**/ asLookupSwitchInstruction              /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MethodConstantReferencingInstruction /**/ asMethodConstantReferencingInstruction /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MultiANewArrayInstruction            /**/ asMultiANewArrayInstruction            /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public NewPrimitiveArrayInstruction         /**/ asNewPrimitiveArrayInstruction         /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public OperandlessInstruction               /**/ asOperandlessInstruction               /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TableSwitchInstruction               /**/ asTableSwitchInstruction               /**/ () { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LoadConstantInstruction              /**/ asLoadConstantInstruction              /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public BranchInstruction            /**/ asBranchInstruction            /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ConditionalBranchInstruction /**/ asConditionalBranchInstruction /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ClassReferencingInstruction  /**/ asClassReferencingInstruction  /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public FieldReferencingInstruction  /**/ asFieldReferencingInstruction  /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public IIncInstruction              /**/ asIIncInstruction              /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public InvokeDynamicInstruction     /**/ asInvokeDynamicInstruction     /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public InvokeInterfaceInstruction   /**/ asInvokeInterfaceInstruction   /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public LocalVariableInstruction     /**/ asLocalVariableInstruction     /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public LookupSwitchInstruction      /**/ asLookupSwitchInstruction      /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public MethodReferencingInstruction /**/ asMethodReferencingInstruction /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public MultiANewArrayInstruction    /**/ asMultiANewArrayInstruction    /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public NewPrimitiveArrayInstruction /**/ asNewPrimitiveArrayInstruction /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public OperandlessInstruction       /**/ asOperandlessInstruction       /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public TableSwitchInstruction       /**/ asTableSwitchInstruction       /**/ () { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public LoadConstantInstruction      /**/ asLoadConstantInstruction      /**/ () { return Kit.fail(); }
 
-	@Override public final int hashCode()
-	{
-		return super.hashCode();
-	}
-
-	@Override public final boolean equals( Object other )
-	{
-		return this == other;
-	}
-
+	@Override public final int hashCode() { return super.hashCode(); }
+	@Override public final boolean equals( Object other ) { return this == other; }
 	@Override public abstract String toString();
 }

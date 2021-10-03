@@ -58,7 +58,7 @@
 │ │     │ ├─■ L32: // this( Enum1.ENUM_CONSTANT_A );
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
-│ │     │ ├─■         INVOKESPECIAL kind = Plain, reference =  void mikenakis.bytecode.test.model.Class1WithFields.<init>( mikenakis.bytecode.test.model.Enum1 )
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class1WithFields.<init>( mikenakis.bytecode.test.model.Enum1 )
 │ │     │ ├─■ L33: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -74,7 +74,7 @@
 │ │   │ ├─■ instructions: 49 entries
 │ │   │ │ ├─■ L36: // {
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ ├─■ L18: // private final boolean booleanMember = true;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
@@ -163,12 +163,12 @@
 │       ├─■ instructions: 7 entries
 │       │ ├─■ L42: // return getClass().getName() + " " + enumMember;
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.Class java.lang.Object.getClass()
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.String java.lang.Class.getName()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Class java.lang.Object.getClass()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Class.getName()
 │       │ ├─■         ALOAD 0
 │       │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
-│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
 │       │ └─■         ARETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items
@@ -179,6 +179,6 @@
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class1WithFields.java"
   ├─■ [1] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
   └─■ [2] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -5,7 +5,6 @@ import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
-import mikenakis.bytecode.test.model.Class2WithTableswitch;
 import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.bytecode.writing.ByteCodeWriter;

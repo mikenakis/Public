@@ -25,8 +25,5 @@ public final class ParameterAnnotationSet
 		this.annotations = annotations;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return annotations.size() + " annotations";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return annotations.size() + " annotations"; }
 }

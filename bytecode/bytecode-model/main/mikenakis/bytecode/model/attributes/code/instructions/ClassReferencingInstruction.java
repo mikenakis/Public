@@ -8,11 +8,17 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Set;
 
-public final class ClassConstantReferencingInstruction extends Instruction
+public final class ClassReferencingInstruction extends Instruction
 {
-	public static ClassConstantReferencingInstruction of( int opCode, ClassConstant targetClassConstant )
+	public static ClassReferencingInstruction of( int opCode, TypeDescriptor targetTypeDescriptor )
 	{
-		return new ClassConstantReferencingInstruction( opCode, targetClassConstant );
+		ClassConstant targetClassConstant = ClassConstant.of( targetTypeDescriptor );
+		return new ClassReferencingInstruction( opCode, targetClassConstant );
+	}
+
+	public static ClassReferencingInstruction of( int opCode, ClassConstant targetClassConstant )
+	{
+		return new ClassReferencingInstruction( opCode, targetClassConstant );
 	}
 
 	private static final Set<Integer> opCodes = Set.of( OpCode.NEW, OpCode.ANEWARRAY, OpCode.CHECKCAST, OpCode.INSTANCEOF );
@@ -20,7 +26,7 @@ public final class ClassConstantReferencingInstruction extends Instruction
 	public final int opCode;
 	public final ClassConstant targetClassConstant;
 
-	private ClassConstantReferencingInstruction( int opCode, ClassConstant targetClassConstant )
+	private ClassReferencingInstruction( int opCode, ClassConstant targetClassConstant )
 	{
 		super( groupTag_ClassConstantReferencing );
 		assert opCodes.contains( opCode );
@@ -29,10 +35,6 @@ public final class ClassConstantReferencingInstruction extends Instruction
 	}
 
 	public TypeDescriptor target() { return targetClassConstant.typeDescriptor(); }
-	@Deprecated @Override public ClassConstantReferencingInstruction asClassConstantReferencingInstruction() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( opCode );
-	}
+	@Deprecated @Override public ClassReferencingInstruction asClassReferencingInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
 }

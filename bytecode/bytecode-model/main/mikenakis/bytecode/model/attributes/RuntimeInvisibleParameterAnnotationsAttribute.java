@@ -22,13 +22,7 @@ public final class RuntimeInvisibleParameterAnnotationsAttribute extends Paramet
 		return new RuntimeInvisibleParameterAnnotationsAttribute( entries );
 	}
 
-	private RuntimeInvisibleParameterAnnotationsAttribute( List<ParameterAnnotationSet> entries )
-	{
-		super( tag_RuntimeInvisibleParameterAnnotations, entries );
-	}
-
-	@Deprecated @Override public RuntimeInvisibleParameterAnnotationsAttribute asRuntimeInvisibleParameterAnnotationsAttribute()
-	{
-		return this;
-	}
+	private RuntimeInvisibleParameterAnnotationsAttribute( List<ParameterAnnotationSet> entries ) { super( tag_RuntimeInvisibleParameterAnnotations, entries ); }
+	@Override public boolean isOptional() { return true; }
+	@Deprecated @Override public RuntimeInvisibleParameterAnnotationsAttribute asRuntimeInvisibleParameterAnnotationsAttribute() { return this; }
 }

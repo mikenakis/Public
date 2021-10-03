@@ -25,13 +25,6 @@ public abstract class ParameterAnnotationsAttribute extends KnownAttribute
 		this.parameterAnnotationSets = parameterAnnotationSets;
 	}
 
-	@Deprecated @Override public ParameterAnnotationsAttribute asParameterAnnotationsAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return mutf8Name.stringValue() + " " + parameterAnnotationSets.size() + " entries";
-	}
+	@Deprecated @Override public ParameterAnnotationsAttribute asParameterAnnotationsAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return mutf8Name.stringValue() + " " + parameterAnnotationSets.size() + " entries"; }
 }

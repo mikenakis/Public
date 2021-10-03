@@ -29,13 +29,6 @@ public final class SyntheticAttribute extends KnownAttribute
 		super( tag_Synthetic );
 	}
 
-	@Deprecated @Override public SyntheticAttribute asSyntheticAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "synthetic";
-	}
+	@Deprecated @Override public SyntheticAttribute asSyntheticAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "synthetic"; }
 }

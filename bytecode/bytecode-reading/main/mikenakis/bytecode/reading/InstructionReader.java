@@ -6,9 +6,9 @@ import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.attributes.code.instructions.BranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.ClassConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.FieldConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.FieldReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.IIncInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
@@ -16,7 +16,7 @@ import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruc
 import mikenakis.bytecode.model.attributes.code.instructions.LocalVariableInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchEntry;
 import mikenakis.bytecode.model.attributes.code.instructions.LookupSwitchInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.MethodConstantReferencingInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
@@ -129,9 +129,9 @@ final class InstructionReader
 				case Instruction.groupTag_Branch -> readBranchInstruction( wide, opCode );
 				case Instruction.groupTag_TableSwitch -> readTableSwitchInstruction( wide );
 				case Instruction.groupTag_LookupSwitch -> readLookupSwitchInstruction( wide, opCode );
-				case Instruction.groupTag_ClassConstantReferencing -> readClassConstantReferencingInstruction( wide, opCode );
-				case Instruction.groupTag_FieldConstantReferencing -> readFieldConstantReferencingInstruction( wide, opCode );
-				case Instruction.groupTag_MethodConstantReferencing -> readMethodConstantReferencingInstruction( wide, opCode );
+				case Instruction.groupTag_ClassConstantReferencing -> readClassReferencingInstruction( wide, opCode );
+				case Instruction.groupTag_FieldConstantReferencing -> readFieldReferencingInstruction( wide, opCode );
+				case Instruction.groupTag_MethodConstantReferencing -> readMethodReferencingInstruction( wide, opCode );
 				case Instruction.groupTag_InvokeInterface -> readInvokeInterfaceInstruction( wide, opCode );
 				case Instruction.groupTag_InvokeDynamic -> readInvokeDynamicInstruction( wide, opCode );
 				case Instruction.groupTag_NewPrimitiveArray -> readNewPrimitiveArrayInstruction( wide, opCode );
@@ -179,25 +179,25 @@ final class InstructionReader
 		return InvokeInterfaceInstruction.of( methodReferenceConstant, argumentCount );
 	}
 
-	private ClassConstantReferencingInstruction readClassConstantReferencingInstruction( boolean wide, int opCode )
+	private ClassReferencingInstruction readClassReferencingInstruction( boolean wide, int opCode )
 	{
 		assert !wide;
 		ClassConstant classConstant = readIndexAndGetConstant().asClassConstant();
-		return ClassConstantReferencingInstruction.of( opCode, classConstant );
+		return ClassReferencingInstruction.of( opCode, classConstant );
 	}
 
-	private FieldConstantReferencingInstruction readFieldConstantReferencingInstruction( boolean wide, int opCode )
+	private FieldReferencingInstruction readFieldReferencingInstruction( boolean wide, int opCode )
 	{
 		assert !wide;
 		FieldReferenceConstant fieldReferenceConstant = readIndexAndGetConstant().asFieldReferenceConstant();
-		return FieldConstantReferencingInstruction.of( opCode, fieldReferenceConstant );
+		return FieldReferencingInstruction.of( opCode, fieldReferenceConstant );
 	}
 
-	private MethodConstantReferencingInstruction readMethodConstantReferencingInstruction( boolean wide, int opCode )
+	private MethodReferencingInstruction readMethodReferencingInstruction( boolean wide, int opCode )
 	{
 		assert !wide;
 		MethodReferenceConstant methodReferenceConstant = readIndexAndGetConstant().asMethodReferenceConstant();
-		return MethodConstantReferencingInstruction.of( opCode, methodReferenceConstant );
+		return MethodReferencingInstruction.of( opCode, methodReferenceConstant );
 	}
 
 	private LookupSwitchInstruction readLookupSwitchInstruction( boolean wide, int opCode )
@@ -234,9 +234,8 @@ final class InstructionReader
 		for( int index = 0; index < entryCount; index++ )
 		{
 			int targetInstructionOffset = readInt();
-			int targetInstructionIndex = index;
 			setRelativeTargetInstruction( tableSwitchInstruction, targetInstructionOffset, //
-				targetInstruction -> tableSwitchInstruction.targetInstructions().set( targetInstructionIndex, targetInstruction ) );
+				targetInstruction -> tableSwitchInstruction.targetInstructions.add( targetInstruction ) );
 		}
 		return tableSwitchInstruction;
 	}

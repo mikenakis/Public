@@ -11,22 +11,25 @@ import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
  */
 public final class MethodReferenceConstant extends ReferenceConstant
 {
-	public static MethodReferenceConstant plainOf( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public static MethodReferenceConstant of( MethodReference methodReference )
 	{
-		return of( tag_PlainMethodReference, declaringTypeConstant, nameAndDescriptorConstant );
+		ClassConstant declaringTypeConstant = ClassConstant.of( methodReference.declaringTypeDescriptor );
+		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype );
+		MethodReferenceConstant methodReferenceConstant = of( methodReference.kind, declaringTypeConstant, nameAndDescriptorConstant );
+		return methodReferenceConstant;
 	}
 
-	public static MethodReferenceConstant interfaceOf( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
+	public static MethodReferenceConstant of( MethodReferenceKind kind, ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
-		return of( tag_InterfaceMethodReference, declaringTypeConstant, nameAndDescriptorConstant );
-	}
-
-	public static MethodReferenceConstant of( int tag, ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant )
-	{
-		MethodReferenceConstant methodReferenceConstant = of( tag );
+		MethodReferenceConstant methodReferenceConstant = of( kind );
 		methodReferenceConstant.setDeclaringTypeConstant( declaringTypeConstant );
 		methodReferenceConstant.setNameAndDescriptorConstant( nameAndDescriptorConstant );
 		return methodReferenceConstant;
+	}
+
+	public static MethodReferenceConstant of( MethodReferenceKind kind )
+	{
+		return new MethodReferenceConstant( tagFromMethodReferenceKind( kind ) );
 	}
 
 	public static MethodReferenceConstant of( int tag )
@@ -40,6 +43,25 @@ public final class MethodReferenceConstant extends ReferenceConstant
 		assert tag == tag_PlainMethodReference || tag == tag_InterfaceMethodReference;
 	}
 
+	private static int tagFromMethodReferenceKind( MethodReferenceKind kind )
+	{
+		return switch( kind )
+		{
+			case Plain -> tag_PlainMethodReference;
+			case Interface -> tag_InterfaceMethodReference;
+		};
+	}
+
+	private static MethodReferenceKind methodReferenceKindFromTag( int tag )
+	{
+		return switch( tag )
+		{
+			case tag_PlainMethodReference -> MethodReferenceKind.Plain;
+			case tag_InterfaceMethodReference -> MethodReferenceKind.Interface;
+			default -> throw new AssertionError( tag );
+		};
+	}
+
 	// String Customer.name( arguments );
 	//  (1)     (2)     (3)     (1)
 	// 1: nameAndDescriptorConstant.descriptorConstant
@@ -47,18 +69,13 @@ public final class MethodReferenceConstant extends ReferenceConstant
 	// 3: nameAndDescriptorConstant.nameConstant
 	public MethodReference methodReference()
 	{
-		return MethodReference.of( getDeclaringTypeConstant().typeDescriptor(), //
+		return MethodReference.of( methodReferenceKind(), getDeclaringTypeConstant().typeDescriptor(), //
 			ByteCodeHelpers.methodPrototypeFromNameAndDescriptorConstant( getNameAndDescriptorConstant() ) );
 	}
 
 	public MethodReferenceKind methodReferenceKind()
 	{
-		return switch( tag )
-			{
-				case tag_PlainMethodReference -> MethodReferenceKind.Plain;
-				case tag_InterfaceMethodReference -> MethodReferenceKind.Interface;
-				default -> throw new AssertionError( tag );
-			};
+		return methodReferenceKindFromTag( tag );
 	}
 
 	@Deprecated @Override public MethodReferenceConstant asMethodReferenceConstant() { return this; }

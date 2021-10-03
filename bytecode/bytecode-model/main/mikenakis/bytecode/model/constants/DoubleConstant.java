@@ -24,35 +24,10 @@ public final class DoubleConstant extends ValueConstant<Double>
 		this.value = value;
 	}
 
-	@Deprecated @Override public DoubleConstant asDoubleConstant()
-	{
-		return this;
-	}
-
-	@Override public boolean equals( Object other )
-	{
-		if( other instanceof DoubleConstant otherDoubleConstant )
-			return equalsDoubleConstant( otherDoubleConstant );
-		return false;
-	}
-
-	public boolean equalsDoubleConstant( DoubleConstant other )
-	{
-		return Double.doubleToLongBits( value ) == Double.doubleToLongBits( other.value );
-	}
-
-	@Deprecated @Override public Double value()
-	{
-		return value;
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( tag, value );
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return String.valueOf( value );
-	}
+	@Deprecated @Override public DoubleConstant asDoubleConstant() { return this; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof DoubleConstant kin && equalsDoubleConstant( kin ); }
+	public boolean equalsDoubleConstant( DoubleConstant other ) { return Double.doubleToLongBits( value ) == Double.doubleToLongBits( other.value ); }
+	@Deprecated @Override public Double value() { return value; }
+	@Override public int hashCode() { return Objects.hash( tag, value ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return String.valueOf( value ); }
 }

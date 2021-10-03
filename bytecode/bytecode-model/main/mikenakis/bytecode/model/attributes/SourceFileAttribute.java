@@ -36,14 +36,7 @@ public final class SourceFileAttribute extends KnownAttribute
 	}
 
 	public String value() { return valueConstant.stringValue(); }
-
-	@Deprecated @Override public SourceFileAttribute asSourceFileAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "value = " + valueConstant.toString();
-	}
+	@Deprecated @Override public SourceFileAttribute asSourceFileAttribute() { return this; }
+	@Override public boolean isOptional() { return true; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "value = " + valueConstant.toString(); }
 }

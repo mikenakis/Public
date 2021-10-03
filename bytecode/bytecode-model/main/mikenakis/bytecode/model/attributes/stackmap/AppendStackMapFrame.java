@@ -36,15 +36,7 @@ public final class AppendStackMapFrame extends StackMapFrame
 
 	public List<VerificationType> localVerificationTypes() { return Collections.unmodifiableList( localVerificationTypes ); }
 
-	@Override public String getName( Optional<StackMapFrame> previousFrame )
-	{
-		return typeName;
-	}
-
+	@Override public String getName( Optional<StackMapFrame> previousFrame ) { return typeName; }
 	@Deprecated @Override public Optional<AppendStackMapFrame> tryAsAppendStackMapFrame() { return Optional.of( this ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return localVerificationTypes.size() + " localVerificationTypes";
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return localVerificationTypes.size() + " localVerificationTypes"; }
 }

@@ -17,9 +17,5 @@ public final class TypeParameterBoundTarget extends Target // "type_parameter_bo
 	}
 
 	@Deprecated @Override public TypeParameterBoundTarget asTypeParameterBoundTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "typeParameterIndex = " + typeParameterIndex + ", boundIndex = " + boundIndex;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "typeParameterIndex = " + typeParameterIndex + ", boundIndex = " + boundIndex; }
 }

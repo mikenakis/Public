@@ -29,13 +29,6 @@ public final class ConstantValueAttribute extends KnownAttribute
 		this.valueConstant = valueConstant;
 	}
 
-	@Deprecated @Override public ConstantValueAttribute asConstantValueAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "value = " + valueConstant.toString();
-	}
+	@Deprecated @Override public ConstantValueAttribute asConstantValueAttribute() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "value = " + valueConstant.toString(); }
 }

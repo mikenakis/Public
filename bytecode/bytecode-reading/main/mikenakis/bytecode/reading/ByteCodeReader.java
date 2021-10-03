@@ -14,6 +14,7 @@ import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.model.ByteCodeVersion;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.TypeAnnotation;
 import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
@@ -97,6 +98,15 @@ import java.util.Optional;
 
 public class ByteCodeReader
 {
+	public static ByteCodeType read( Class<?> jvmClass )
+	{
+		String resourceName = jvmClass.getSimpleName() + ".class";
+		byte[] bytes = Kit.uncheckedTryGetWithResources( //
+			() -> jvmClass.getResourceAsStream( resourceName ), //
+			i -> i.readAllBytes() );
+		return read( bytes );
+	}
+
 	public static ByteCodeType read( byte[] bytes )
 	{
 		ByteCodeReader byteCodeReader = new ByteCodeReader( bytes );
@@ -104,7 +114,7 @@ public class ByteCodeReader
 	}
 
 	private final BufferReader bufferReader;
-	private final ByteCodeType.Version version;
+	private final ByteCodeVersion version;
 	private final ConstantPool constantPool;
 
 	private ByteCodeReader( byte[] bytes )
@@ -166,11 +176,11 @@ public class ByteCodeReader
 			attributes, extraClassReferences );
 	}
 
-	private static ByteCodeType.Version readVersion( BufferReader bufferReader )
+	private static ByteCodeVersion readVersion( BufferReader bufferReader )
 	{
 		int minor = bufferReader.readUnsignedShort();
 		int major = bufferReader.readUnsignedShort();
-		return new ByteCodeType.Version( major, minor );
+		return new ByteCodeVersion( major, minor );
 	}
 
 	private AttributeSet readAttributes( Optional<LocationMap> locationMap )

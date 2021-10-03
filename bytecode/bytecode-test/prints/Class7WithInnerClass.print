@@ -9,7 +9,7 @@
 │       ├─■ instructions: 3 entries
 │       │ ├─■ L9: // public abstract class Class7WithInnerClass
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items

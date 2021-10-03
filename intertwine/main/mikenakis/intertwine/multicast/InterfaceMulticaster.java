@@ -3,6 +3,7 @@ package mikenakis.intertwine.multicast;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
+import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
 import mikenakis.kit.ExecutionContext;
 import mikenakis.multicast.Multicast;
@@ -36,7 +37,7 @@ public class InterfaceMulticaster<T>
 	};
 	@SuppressWarnings( "FieldCanBeLocal" ) private final AnyCall<T> anyCall = new AnyCall<>()
 	{
-		@Override public Object anyCall( Intertwine.Key<T> key, Object[] arguments )
+		@Override public Object anyCall( MethodKey<T> key, Object[] arguments )
 		{
 			for( AnyCall<T> anyCall : observers.values().stream().toList() )
 			{

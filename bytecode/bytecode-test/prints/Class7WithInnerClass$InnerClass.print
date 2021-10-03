@@ -14,7 +14,7 @@
 │ │   │ │ ├─■         ALOAD 1
 │ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
@@ -32,9 +32,9 @@
 │       │ ├─■ L15: // return "inner class of " + Class7WithInnerClass.this.toString();
 │       │ ├─■         ALOAD 0
 │       │ ├─■         GETFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
-│       │ ├─■         INVOKEVIRTUAL kind = Plain, reference =  java.lang.String java.lang.Object.toString()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Object.toString()
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String )
-│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )
 │       │ └─■         ARETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items
@@ -46,7 +46,7 @@
   ├─■ [0] SourceFileAttribute "Class7WithInnerClass.java"
   ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class7WithInnerClass
   ├─■ [2] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = kind = Plain, reference =  java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "inner class of \x01" ) )
   └─■ [3] InnerClassesAttribute; 2 items
     ├─■ [0] InnerClass accessFlags = [public], innerClass = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, innerName = InnerClass
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

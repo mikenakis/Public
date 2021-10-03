@@ -35,13 +35,7 @@ public final class RuntimeInvisibleTypeAnnotationsAttribute extends TypeAnnotati
 		return new RuntimeInvisibleTypeAnnotationsAttribute( entries );
 	}
 
-	private RuntimeInvisibleTypeAnnotationsAttribute( List<TypeAnnotation> entries )
-	{
-		super( tag_RuntimeInvisibleTypeAnnotations, entries );
-	}
-
-	@Deprecated @Override public RuntimeInvisibleTypeAnnotationsAttribute asRuntimeInvisibleTypeAnnotationsAttribute()
-	{
-		return this;
-	}
+	private RuntimeInvisibleTypeAnnotationsAttribute( List<TypeAnnotation> entries ) { super( tag_RuntimeInvisibleTypeAnnotations, entries ); }
+	@Override public boolean isOptional() { return true; }
+	@Deprecated @Override public RuntimeInvisibleTypeAnnotationsAttribute asRuntimeInvisibleTypeAnnotationsAttribute() { return this; }
 }

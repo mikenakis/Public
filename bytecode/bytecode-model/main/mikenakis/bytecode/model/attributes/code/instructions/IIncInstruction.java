@@ -39,13 +39,6 @@ public final class IIncInstruction extends Instruction
 	//		wide = !(Helpers.isUnsignedByte( index ) && Helpers.isSignedByte( delta ));
 	//	}
 
-	@Deprecated @Override public IIncInstruction asIIncInstruction()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return OpCode.getOpCodeName( OpCode.IINC );
-	}
+	@Deprecated @Override public IIncInstruction asIIncInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( OpCode.IINC ); }
 }

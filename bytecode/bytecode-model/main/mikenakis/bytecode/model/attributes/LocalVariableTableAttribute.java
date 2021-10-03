@@ -35,13 +35,7 @@ public final class LocalVariableTableAttribute extends KnownAttribute
 		this.entrys = entrys;
 	}
 
-	@Deprecated @Override public LocalVariableTableAttribute asLocalVariableTableAttribute()
-	{
-		return this;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return entrys.size() + " entries";
-	}
+	@Deprecated @Override public LocalVariableTableAttribute asLocalVariableTableAttribute() { return this; }
+	@Override public boolean isOptional() { return true; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return entrys.size() + " entries"; }
 }

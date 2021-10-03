@@ -15,8 +15,8 @@ public final class LineNumberTableEntry
 		return new LineNumberTableEntry( instruction, lineNumber );
 	}
 
-	private final Instruction instruction;
-	private final int lineNumber;
+	public final Instruction instruction;
+	public final int lineNumber;
 
 	private LineNumberTableEntry( Instruction instruction, int lineNumber )
 	{
@@ -24,11 +24,5 @@ public final class LineNumberTableEntry
 		this.lineNumber = lineNumber;
 	}
 
-	public Instruction instruction() { return instruction; }
-	public int lineNumber() { return lineNumber; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "lineNumber = " + lineNumber;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "lineNumber = " + lineNumber; }
 }

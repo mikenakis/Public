@@ -17,5 +17,5 @@ public interface AnyCall<T>
 	 *
 	 * @return the return value of the method; {@code null} if the method is of {@code void} return type.
 	 */
-	Object anyCall( Intertwine.Key<T> key, Object[] arguments );
+	Object anyCall( MethodKey<T> key, Object[] arguments );
 }

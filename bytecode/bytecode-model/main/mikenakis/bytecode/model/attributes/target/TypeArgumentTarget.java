@@ -20,9 +20,5 @@ public final class TypeArgumentTarget extends Target // "type_argument_target" i
 	}
 
 	@Deprecated @Override public TypeArgumentTarget asTypeArgumentTarget() { return this; }
-
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
-	{
-		return "offset = " + offset + ", typeArgumentIndex = " + typeArgumentIndex;
-	}
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "offset = " + offset + ", typeArgumentIndex = " + typeArgumentIndex; }
 }
