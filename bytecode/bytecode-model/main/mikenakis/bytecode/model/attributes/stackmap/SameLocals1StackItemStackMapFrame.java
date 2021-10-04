@@ -28,11 +28,11 @@ public final class SameLocals1StackItemStackMapFrame extends StackMapFrame
 
 	private SameLocals1StackItemStackMapFrame( Instruction targetInstruction, VerificationType stackVerificationType )
 	{
-		super( typeName, targetInstruction );
+		super( tag_SameLocals1StackItem, targetInstruction );
 		this.stackVerificationType = stackVerificationType;
 	}
 
-	@Deprecated @Override public Optional<SameLocals1StackItemStackMapFrame> tryAsSameLocals1StackItemStackMapFrame() { return Optional.of( this ); }
+	@Deprecated @Override public SameLocals1StackItemStackMapFrame asSameLocals1StackItemStackMapFrame() { return this; }
 	@Override public String getName( Optional<StackMapFrame> previousFrame )
 	{
 		return typeName;

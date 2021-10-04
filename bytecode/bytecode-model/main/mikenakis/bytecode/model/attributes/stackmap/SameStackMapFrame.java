@@ -25,7 +25,7 @@ public final class SameStackMapFrame extends StackMapFrame
 
 	private SameStackMapFrame( Instruction targetInstruction )
 	{
-		super( typeName, targetInstruction );
+		super( tag_Same, targetInstruction );
 	}
 
 	@Override public String getName( Optional<StackMapFrame> previousFrame )
@@ -37,6 +37,6 @@ public final class SameStackMapFrame extends StackMapFrame
 //		return extendedTypeName;
 	}
 
-	@Deprecated @Override public Optional<SameStackMapFrame> tryAsSameStackMapFrame() { return Optional.of( this ); }
+	@Deprecated @Override public SameStackMapFrame asSameStackMapFrame() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "targetInstruction = " + getTargetInstruction(); }
 }

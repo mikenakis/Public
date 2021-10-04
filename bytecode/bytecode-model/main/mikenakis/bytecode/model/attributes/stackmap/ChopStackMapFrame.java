@@ -25,7 +25,7 @@ public final class ChopStackMapFrame extends StackMapFrame
 
 	private ChopStackMapFrame( Instruction targetInstruction, int count )
 	{
-		super( typeName, targetInstruction );
+		super( tag_Chop, targetInstruction );
 		assert count >= 0 && count <= 3;
 		this.count = count;
 	}
@@ -36,6 +36,6 @@ public final class ChopStackMapFrame extends StackMapFrame
 	}
 
 	@Override public String getName( Optional<StackMapFrame> previousFrame ) { return typeName; }
-	@Deprecated @Override public Optional<ChopStackMapFrame> tryAsChopStackMapFrame() { return Optional.of( this ); }
+	@Deprecated @Override public ChopStackMapFrame asChopStackMapFrame() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "count = " + count; }
 }

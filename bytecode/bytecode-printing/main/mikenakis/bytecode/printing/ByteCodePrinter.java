@@ -305,21 +305,21 @@ public final class ByteCodePrinter
 		for( StackMapFrame frame : stackMapTableAttribute.frames() )
 		{
 			targetInstructionConsumer.invoke( frame.getTargetInstruction() );
-			if( frame.isSameLocals1StackItemStackMapFrame() ) //TODO use switch!
+			switch( frame.tag )
 			{
-				SameLocals1StackItemStackMapFrame sameLocals1StackItemStackMapFrame = frame.asSameLocals1StackItemStackMapFrame();
-				targetsFromVerificationType( targetInstructionConsumer, sameLocals1StackItemStackMapFrame.stackVerificationType );
-			}
-			else if( frame.isAppendStackMapFrame() )
-			{
-				AppendStackMapFrame appendStackMapFrame = frame.asAppendStackMapFrame();
-				targetsFromVerificationTypes( targetInstructionConsumer, appendStackMapFrame.localVerificationTypes() );
-			}
-			else if( frame.isFullStackMapFrame() )
-			{
-				FullStackMapFrame fullStackMapFrame = frame.asFullStackMapFrame();
-				targetsFromVerificationTypes( targetInstructionConsumer, fullStackMapFrame.localVerificationTypes );
-				targetsFromVerificationTypes( targetInstructionConsumer, fullStackMapFrame.stackVerificationTypes );
+				case StackMapFrame.tag_SameLocals1StackItem, StackMapFrame.tag_SameLocals1StackItemExtended:
+					SameLocals1StackItemStackMapFrame sameLocals1StackItemStackMapFrame = frame.asSameLocals1StackItemStackMapFrame();
+					targetsFromVerificationType( targetInstructionConsumer, sameLocals1StackItemStackMapFrame.stackVerificationType );
+					break;
+				case StackMapFrame.tag_Append:
+					AppendStackMapFrame appendStackMapFrame = frame.asAppendStackMapFrame();
+					targetsFromVerificationTypes( targetInstructionConsumer, appendStackMapFrame.localVerificationTypes() );
+					break;
+				case StackMapFrame.tag_Full:
+					FullStackMapFrame fullStackMapFrame = frame.asFullStackMapFrame();
+					targetsFromVerificationTypes( targetInstructionConsumer, fullStackMapFrame.localVerificationTypes );
+					targetsFromVerificationTypes( targetInstructionConsumer, fullStackMapFrame.stackVerificationTypes );
+					break;
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
+import mikenakis.kit.Kit;
 
 import java.util.Optional;
 
@@ -11,39 +12,47 @@ import java.util.Optional;
  */
 public abstract class StackMapFrame
 {
-	public static String getTypeNameFromType( int frameType )
+	public static final int tag_Same                         /**/ = 1;
+	public static final int tag_SameExtended                 /**/ = 2;
+	public static final int tag_SameLocals1StackItem         /**/ = 3;
+	public static final int tag_SameLocals1StackItemExtended /**/ = 4;
+	public static final int tag_Chop                         /**/ = 5;
+	public static final int tag_Append                       /**/ = 6;
+	public static final int tag_Full                         /**/ = 7;
+
+	public static int getTagFromType( int frameType )
 	{
 		if( frameType <= 63 )
-			return SameStackMapFrame.typeName;
+			return tag_Same;
 		if( frameType <= 127 )
-			return SameLocals1StackItemStackMapFrame.typeName;
+			return tag_SameLocals1StackItem;
 		if( frameType <= 246 )
-			return SameStackMapFrame.typeName; //Unknown
+			return tag_Same; //Unknown
 		if( frameType == 247 )
-			return SameLocals1StackItemStackMapFrame.extendedTypeName;
+			return tag_SameLocals1StackItemExtended;
 		if( frameType <= 250 )
-			return ChopStackMapFrame.typeName;
+			return tag_Chop;
 		if( frameType == 251 )
-			return SameStackMapFrame.extendedTypeName;
+			return tag_SameExtended;
 		if( frameType <= 254 )
-			return AppendStackMapFrame.typeName;
+			return tag_Append;
 		assert frameType == 255;
-		return FullStackMapFrame.typeName;
+		return tag_Full;
 	}
 
-	public final String typeName;
+	public final int tag;
 	private Instruction targetInstruction;
 
-	protected StackMapFrame( String typeName, Instruction targetInstruction )
+	protected StackMapFrame( int tag, Instruction targetInstruction )
 	{
 		assert targetInstruction != null;
-		this.typeName = typeName;
+		this.tag = tag;
 		this.targetInstruction = targetInstruction;
 	}
 
 	public String getTypeName()
 	{
-		return typeName;
+		return getTypeNameFromTag( tag );
 	}
 
 	public Instruction getTargetInstruction()
@@ -58,25 +67,26 @@ public abstract class StackMapFrame
 		this.targetInstruction = targetInstruction;
 	}
 
-	//@formatter:off
-	public Optional<AppendStackMapFrame>               tryAsAppendStackMapFrame()               { return Optional.empty(); }
-	public Optional<ChopStackMapFrame>                 tryAsChopStackMapFrame()                 { return Optional.empty(); }
-	public Optional<FullStackMapFrame>                 tryAsFullStackMapFrame()                 { return Optional.empty(); }
-	public Optional<SameStackMapFrame>                 tryAsSameStackMapFrame()                 { return Optional.empty(); }
-	public Optional<SameLocals1StackItemStackMapFrame> tryAsSameLocals1StackItemStackMapFrame() { return Optional.empty(); }
-
-	public final AppendStackMapFrame               asAppendStackMapFrame()               { return tryAsAppendStackMapFrame()              .orElseThrow(); }
-	public final ChopStackMapFrame                 asChopStackMapFrame()                 { return tryAsChopStackMapFrame()                .orElseThrow(); }
-	public final FullStackMapFrame                 asFullStackMapFrame()                 { return tryAsFullStackMapFrame()                .orElseThrow(); }
-	public final SameStackMapFrame                 asSameStackMapFrame()                 { return tryAsSameStackMapFrame()                .orElseThrow(); }
-	public final SameLocals1StackItemStackMapFrame asSameLocals1StackItemStackMapFrame() { return tryAsSameLocals1StackItemStackMapFrame().orElseThrow(); }
-
-	public final boolean isAppendStackMapFrame()               { return tryAsAppendStackMapFrame()              .isPresent(); }
-	public final boolean isChopStackMapFrame()                 { return tryAsChopStackMapFrame()                .isPresent(); }
-	public final boolean isFullStackMapFrame()                 { return tryAsFullStackMapFrame()                .isPresent(); }
-	public final boolean isSameStackMapFrame()                 { return tryAsSameStackMapFrame()                .isPresent(); }
-	public final boolean isSameLocals1StackItemStackMapFrame() { return tryAsSameLocals1StackItemStackMapFrame().isPresent(); }
-	//@formatter:on
+	public AppendStackMapFrame               /**/ asAppendStackMapFrame()               /**/ { return Kit.fail(); }
+	public ChopStackMapFrame                 /**/ asChopStackMapFrame()                 /**/ { return Kit.fail(); }
+	public FullStackMapFrame                 /**/ asFullStackMapFrame()                 /**/ { return Kit.fail(); }
+	public SameStackMapFrame                 /**/ asSameStackMapFrame()                 /**/ { return Kit.fail(); }
+	public SameLocals1StackItemStackMapFrame /**/ asSameLocals1StackItemStackMapFrame() /**/ { return Kit.fail(); }
 
 	public abstract String getName( Optional<StackMapFrame> previousFrame );
+
+	private static String getTypeNameFromTag( int tag )
+	{
+		return switch( tag )
+			{
+				case tag_Same -> SameStackMapFrame.typeName;
+				case tag_SameExtended -> SameStackMapFrame.extendedTypeName;
+				case tag_SameLocals1StackItem -> SameLocals1StackItemStackMapFrame.typeName;
+				case tag_SameLocals1StackItemExtended -> SameLocals1StackItemStackMapFrame.extendedTypeName;
+				case tag_Chop -> ChopStackMapFrame.typeName;
+				case tag_Append -> AppendStackMapFrame.typeName;
+				case tag_Full -> FullStackMapFrame.typeName;
+				default -> throw new AssertionError( tag );
+			};
+	}
 }

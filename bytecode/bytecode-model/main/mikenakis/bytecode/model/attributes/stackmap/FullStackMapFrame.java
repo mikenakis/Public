@@ -28,12 +28,12 @@ public final class FullStackMapFrame extends StackMapFrame
 
 	private FullStackMapFrame( Instruction targetInstruction, List<VerificationType> localVerificationTypes, List<VerificationType> stackVerificationTypes )
 	{
-		super( typeName, targetInstruction );
+		super( tag_Full, targetInstruction );
 		this.localVerificationTypes = localVerificationTypes;
 		this.stackVerificationTypes = stackVerificationTypes;
 	}
 
 	@Override public String getName( Optional<StackMapFrame> previousFrame ) { return typeName; }
-	@Deprecated @Override public Optional<FullStackMapFrame> tryAsFullStackMapFrame() { return Optional.of( this ); }
+	@Deprecated @Override public FullStackMapFrame asFullStackMapFrame() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return localVerificationTypes.size() + " localVerificationTypes, " + stackVerificationTypes.size() + " stackVerificationTypes"; }
 }

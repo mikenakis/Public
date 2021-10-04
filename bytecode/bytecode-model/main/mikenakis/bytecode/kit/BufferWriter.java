@@ -76,6 +76,14 @@ public class BufferWriter
 		writeUnsignedShort( value & 0xffff );
 	}
 
+	public void writeInt( int position, int value )
+	{
+		int oldPosition = this.position;
+		this.position = position;
+		writeInt( value );
+		this.position = oldPosition;
+	}
+
 	public void writeInt( int value )
 	{
 		ensureAdditionalCapacity( 4 );

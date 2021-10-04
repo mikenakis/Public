@@ -483,15 +483,15 @@ public class ByteCodeReader
 		for( int i = 0; i < count; i++ )
 		{
 			int frameType = bufferReader.readUnsignedByte();
-			String typeName = StackMapFrame.getTypeNameFromType( frameType );
-			StackMapFrame frame = switch( typeName )
+			int stackMapFrameTag = StackMapFrame.getTagFromType( frameType );
+			StackMapFrame frame = switch( stackMapFrameTag )
 				{
-					case SameStackMapFrame.typeName, SameStackMapFrame.extendedTypeName -> readSameStackMapFrame( bufferReader, locationMap, previousFrame, frameType );
-					case SameLocals1StackItemStackMapFrame.typeName, SameLocals1StackItemStackMapFrame.extendedTypeName -> readSameLocals1StackItemStackMapFrame( locationMap, previousFrame, frameType );
-					case ChopStackMapFrame.typeName -> readChopStackMapFrame( locationMap, previousFrame, frameType );
-					case AppendStackMapFrame.typeName -> readAppendStackMapFrame( locationMap, previousFrame, frameType );
-					case FullStackMapFrame.typeName -> readFullStackMapFrame( locationMap, previousFrame );
-					default -> throw new AssertionError( typeName );
+					case StackMapFrame.tag_Same, StackMapFrame.tag_SameExtended -> readSameStackMapFrame( bufferReader, locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_SameLocals1StackItem, StackMapFrame.tag_SameLocals1StackItemExtended -> readSameLocals1StackItemStackMapFrame( locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_Chop -> readChopStackMapFrame( locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_Append -> readAppendStackMapFrame( locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_Full -> readFullStackMapFrame( locationMap, previousFrame );
+					default -> throw new AssertionError( frameType );
 				};
 			frames.add( frame );
 			previousFrame = Optional.of( frame );

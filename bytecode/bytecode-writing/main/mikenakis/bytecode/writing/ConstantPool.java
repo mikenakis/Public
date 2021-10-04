@@ -545,18 +545,26 @@ final class ConstantPool
 
 	private void internStackMapFrame( StackMapFrame stackMapFrame )
 	{
-		if( stackMapFrame.isAppendStackMapFrame() ) //TODO use switch!
-			internAppendStackMapFrame( stackMapFrame.asAppendStackMapFrame() );
-		else if( stackMapFrame.isChopStackMapFrame() )
-			internChopStackMapFrame( stackMapFrame.asChopStackMapFrame() );
-		else if( stackMapFrame.isFullStackMapFrame() )
-			internFullStackMapFrame( stackMapFrame.asFullStackMapFrame() );
-		else if( stackMapFrame.isSameStackMapFrame() )
-			internSameStackMapFrame( stackMapFrame.asSameStackMapFrame() );
-		else if( stackMapFrame.isSameLocals1StackItemStackMapFrame() )
-			internSameLocals1StackItemStackMapFrame( stackMapFrame.asSameLocals1StackItemStackMapFrame() );
-		else
-			assert false;
+		switch( stackMapFrame.tag )
+		{
+			case StackMapFrame.tag_Append:
+				internAppendStackMapFrame( stackMapFrame.asAppendStackMapFrame() );
+				break;
+			case StackMapFrame.tag_Chop:
+				internChopStackMapFrame( stackMapFrame.asChopStackMapFrame() );
+				break;
+			case StackMapFrame.tag_Full:
+				internFullStackMapFrame( stackMapFrame.asFullStackMapFrame() );
+				break;
+			case StackMapFrame.tag_Same, StackMapFrame.tag_SameExtended:
+				internSameStackMapFrame( stackMapFrame.asSameStackMapFrame() );
+				break;
+			case StackMapFrame.tag_SameLocals1StackItem, StackMapFrame.tag_SameLocals1StackItemExtended:
+				internSameLocals1StackItemStackMapFrame( stackMapFrame.asSameLocals1StackItemStackMapFrame() );
+				break;
+			default:
+				throw new AssertionError( stackMapFrame );
+		}
 	}
 
 	private void internAppendStackMapFrame( AppendStackMapFrame appendStackMapFrame )
