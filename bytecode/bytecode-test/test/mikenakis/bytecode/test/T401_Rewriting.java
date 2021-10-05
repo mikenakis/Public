@@ -6,7 +6,6 @@ import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class0HelloWorld;
-import mikenakis.bytecode.test.model.Class9WithCode;
 import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 import org.junit.Test;

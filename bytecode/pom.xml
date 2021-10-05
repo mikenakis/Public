@@ -15,10 +15,7 @@
 	<modules>
 		<module>bytecode-dependencies</module>
 		<module>bytecode-model</module>
-		<module>bytecode-printing</module>
-		<module>bytecode-reading</module>
 		<module>bytecode-test</module>
-		<module>bytecode-writing</module>
 	</modules>
 
 </project>
