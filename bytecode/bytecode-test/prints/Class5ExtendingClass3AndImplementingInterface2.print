@@ -8,9 +8,9 @@
 │     └─■ [0] RuntimeVisibleAnnotationsAttribute; 1 items
 │       └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 2 parameters
 │         ├─■ [0] AnnotationParameter name = "charParameter"
-│         │ └─■ value: ConstAnnotationValue tag = Character value = IntegerConstant( 120 (char 'x') )
+│         │ └─■ value: ConstAnnotationValue tag = Character value = IntegerValueConstant( 120 (char 'x') )
 │         └─■ [1] AnnotationParameter name = "doubleParameter"
-│           └─■ value: ConstAnnotationValue tag = Double value = DoubleConstant( 1.1 )
+│           └─■ value: ConstAnnotationValue tag = Double value = DoubleValueConstant( 1.1 )
 ├─■ methods: 3 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>()
 │ │ └─■ attributes: 1 items

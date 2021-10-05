@@ -3,10 +3,11 @@ package mikenakis.bytecode.model.attributes;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.java_type_model.MethodDescriptor;
-import mikenakis.java_type_model.TypeDescriptor;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.lang.constant.DirectMethodHandleDesc;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public final class BootstrapMethod
 		return new BootstrapMethod( methodHandleConstant, argumentConstants );
 	}
 
-	public final MethodHandleConstant methodHandleConstant;
+	private final MethodHandleConstant methodHandleConstant;
 	public final List<Constant> argumentConstants;
 
 	private BootstrapMethod( MethodHandleConstant methodHandleConstant, List<Constant> argumentConstants )
@@ -32,8 +33,7 @@ public final class BootstrapMethod
 		this.argumentConstants = argumentConstants;
 	}
 
-	public MethodDescriptor invocationMethodDescriptor() { return ByteCodeHelpers.methodDescriptorFromMethodHandleConstantInvocation( methodHandleConstant ); }
-	public TypeDescriptor ownerTypeDescriptor() { return ByteCodeHelpers.typeDescriptorFromMethodHandleConstantOwner( methodHandleConstant ); }
+	public DirectMethodHandleDesc directMethodHandleDesc() { return ByteCodeHelpers.directMethodHandleDescFromMethodHandleConstant( methodHandleConstant ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "methodHandle = " + methodHandleConstant + ", " + argumentConstants.size() + " arguments"; }
 	@Deprecated @Override public boolean equals( Object other ) { return other instanceof BootstrapMethod kin && equals( kin ); }
 	public boolean equals( BootstrapMethod other ) { return methodHandleConstant.equals( other.methodHandleConstant ) && argumentConstants.equals( other.argumentConstants ); }
@@ -46,5 +46,20 @@ public final class BootstrapMethod
 				case Constant.tag_Class, Constant.tag_MethodType, Constant.tag_String, Constant.tag_MethodHandle -> true;
 				default -> false;
 			};
+	}
+
+	public void intern( Interner interner )
+	{
+		methodHandleConstant.intern( interner );
+		for( Constant constant : argumentConstants )
+			constant.intern( interner );
+	}
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( methodHandleConstant ) );
+		constantWriter.writeUnsignedShort( argumentConstants.size() );
+		for( Constant argumentConstant : argumentConstants )
+			constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( argumentConstant ) );
 	}
 }

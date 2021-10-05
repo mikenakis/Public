@@ -2,7 +2,12 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import mikenakis.bytecode.reading.ConstantReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.ArrayTypeDescriptor;
+import mikenakis.java_type_model.PrimitiveTypeDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -16,56 +21,57 @@ import java.util.Objects;
  */
 public final class ClassConstant extends Constant
 {
-	public static ClassConstant of( TerminalTypeDescriptor terminalTypeDescriptor )
+	public static ClassConstant read( ConstantReader constantReader, int constantTag )
 	{
-		return ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( terminalTypeDescriptor ) );
+		assert constantTag == tag_Class;
+		ClassConstant classConstant = new ClassConstant();
+		constantReader.readIndexAndSetConstant( c -> classConstant.setInternalNameOrDescriptorStringConstant( c.asMutf8ValueConstant() ) );
+		return classConstant;
 	}
 
 	public static ClassConstant of( TypeDescriptor typeDescriptor )
 	{
 		if( typeDescriptor.isPrimitive() )
-			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromPrimitiveTypeDescriptor( typeDescriptor.asPrimitiveTypeDescriptor() ) );
+			return of( typeDescriptor.asPrimitiveTypeDescriptor() );
 		if( typeDescriptor.isArray() )
-			return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromArrayTypeDescriptor( typeDescriptor.asArrayTypeDescriptor() ) );
+			return of( typeDescriptor.asArrayTypeDescriptor() );
 		assert typeDescriptor.isTerminal();
-		return ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( typeDescriptor.asTerminalTypeDescriptor() ) );
+		return of( typeDescriptor.asTerminalTypeDescriptor() );
 	}
 
-	public static ClassConstant ofTypeName( String typeName )
+	public static ClassConstant of( PrimitiveTypeDescriptor primitiveTypeDescriptor )
 	{
-		String internalName = ByteCodeHelpers.internalFromBinary( typeName );
-		return ofInternalNameOrDescriptorString( internalName );
+		return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromPrimitiveTypeDescriptor( primitiveTypeDescriptor ) );
 	}
 
-	public static ClassConstant ofInternalNameOrDescriptorString( String internalName )
+	public static ClassConstant of( ArrayTypeDescriptor arrayTypeDescriptor )
 	{
-		ClassConstant classConstant = of();
-		classConstant.setInternalNameOrDescriptorStringConstant( Mutf8Constant.of( internalName ) );
+		return ofInternalNameOrDescriptorString( ByteCodeHelpers.descriptorStringFromArrayTypeDescriptor( arrayTypeDescriptor ) );
+	}
+
+	public static ClassConstant of( TerminalTypeDescriptor terminalTypeDescriptor )
+	{
+		return ofInternalNameOrDescriptorString( ByteCodeHelpers.internalNameFromTerminalTypeDescriptor( terminalTypeDescriptor ) );
+	}
+
+	private static ClassConstant ofInternalNameOrDescriptorString( String internalName )
+	{
+		ClassConstant classConstant = new ClassConstant();
+		classConstant.setInternalNameOrDescriptorStringConstant( Mutf8ValueConstant.of( internalName ) );
 		return classConstant;
-	}
-
-	public static ClassConstant of()
-	{
-		return new ClassConstant();
 	}
 
 	// According to §4.4.1 this is supposed to be a "binary class or interface name encoded in internal form."
 	// PEARL: the term "binary name" here is a red herring, because binary names and internal names are different things.
 	//        in class java.lang.constants.ConstantUtils there exist methods binaryToInternal() and internalToBinary().
-	private Mutf8Constant internalNameOrDescriptorStringConstant;
+	private Mutf8ValueConstant internalNameOrDescriptorStringConstant;
 
 	private ClassConstant()
 	{
 		super( tag_Class );
 	}
 
-	public Mutf8Constant getInternalNameOrDescriptorStringConstant()
-	{
-		assert internalNameOrDescriptorStringConstant != null;
-		return internalNameOrDescriptorStringConstant;
-	}
-
-	public void setInternalNameOrDescriptorStringConstant( Mutf8Constant internalNameOrDescriptorStringConstant )
+	public void setInternalNameOrDescriptorStringConstant( Mutf8ValueConstant internalNameOrDescriptorStringConstant )
 	{
 		assert this.internalNameOrDescriptorStringConstant == null;
 		assert internalNameOrDescriptorStringConstant != null;
@@ -73,14 +79,15 @@ public final class ClassConstant extends Constant
 		this.internalNameOrDescriptorStringConstant = internalNameOrDescriptorStringConstant;
 	}
 
-	public TerminalTypeDescriptor terminalTypeDescriptor() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( getInternalNameOrDescriptorStringConstant().stringValue() ); }
-	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromInternalNameOrDescriptorString( getInternalNameOrDescriptorStringConstant().stringValue() ); }
+	public TerminalTypeDescriptor terminalTypeDescriptor() { return ByteCodeHelpers.terminalTypeDescriptorFromInternalName( internalNameOrDescriptorStringConstant.stringValue() ); }
+	public TypeDescriptor typeDescriptor() { return ByteCodeHelpers.typeDescriptorFromInternalNameOrDescriptorString( internalNameOrDescriptorStringConstant.stringValue() ); }
 	public ArrayTypeDescriptor arrayTypeDescriptor() { return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( internalNameOrDescriptorStringConstant.stringValue() ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return internalNameOrDescriptorStringConstant == null? "(uninitialized)" : internalNameOrDescriptorStringConstant.stringValue(); }
 	@Deprecated @Override public ClassConstant asClassConstant() { return this; }
 	@Override public boolean equals( Object other ) { return other instanceof ClassConstant kin && equalsClassConstant( kin ); }
-	public boolean equalsClassConstant( ClassConstant other ) { return internalNameOrDescriptorStringConstant.equalsMutf8Constant( other.internalNameOrDescriptorStringConstant ); }
+	public boolean equalsClassConstant( ClassConstant other ) { return internalNameOrDescriptorStringConstant.equals( other.internalNameOrDescriptorStringConstant ); }
 	@Override public int hashCode() { return Objects.hash( tag, internalNameOrDescriptorStringConstant ); }
+	public String internalNameOrDescriptorString() { return internalNameOrDescriptorStringConstant.stringValue(); }
 
 	// PEARL: the vast majority of ClassConstant instances will contain strings of the form `java/lang/String`, but every once in a while you will find a string
 	//        of the form `Ljava/lang/String;`.
@@ -96,5 +103,18 @@ public final class ClassConstant extends Constant
 		if( name.charAt( 0 ) == '[' )
 			return ByteCodeHelpers.isValidDescriptorString( name );
 		return ByteCodeHelpers.isValidInternalName( name );
+	}
+
+	@Override public void intern( Interner interner )
+	{
+		interner.intern( this );
+		internalNameOrDescriptorStringConstant.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		assert internalNameOrDescriptorStringConstant != null;
+		constantWriter.writeUnsignedByte( tag );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( internalNameOrDescriptorStringConstant ) );
 	}
 }

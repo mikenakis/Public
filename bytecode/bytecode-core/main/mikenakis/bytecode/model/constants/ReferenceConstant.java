@@ -1,6 +1,8 @@
 package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -52,4 +54,18 @@ public abstract class ReferenceConstant extends Constant
 	@Deprecated @Override public final boolean equals( Object other ) { return other instanceof ReferenceConstant kin && equals( kin ); }
 	public boolean equals( ReferenceConstant other ) { return declaringTypeConstant.equalsClassConstant( other.declaringTypeConstant ) && nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ); }
 	@Override public final int hashCode() { return Objects.hash( tag, declaringTypeConstant, nameAndDescriptorConstant ); }
+
+	@Override public final void intern( Interner interner )
+	{
+		interner.intern( this );
+		getDeclaringTypeConstant().intern( interner );
+		getNameAndDescriptorConstant().intern( interner );
+	}
+
+	@Override public final void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedByte( tag );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getDeclaringTypeConstant() ) );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getNameAndDescriptorConstant() ) );
+	}
 }

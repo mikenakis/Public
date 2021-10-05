@@ -1,9 +1,13 @@
-package mikenakis.bytecode.model.constants;
+package mikenakis.bytecode.model.constants.value;
 
 import mikenakis.bytecode.exceptions.IncompleteMutf8Exception;
 import mikenakis.bytecode.exceptions.MalformedMutf8Exception;
 import mikenakis.bytecode.exceptions.StringTooLongException;
 import mikenakis.bytecode.kit.Buffer;
+import mikenakis.bytecode.model.constants.ValueConstant;
+import mikenakis.bytecode.reading.ConstantReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -16,22 +20,30 @@ import java.util.Objects;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public final class Mutf8Constant extends ValueConstant<String>
+public final class Mutf8ValueConstant extends ValueConstant
 {
-	public static Mutf8Constant of( String stringValue )
+	public static Mutf8ValueConstant read( ConstantReader constantReader, int constantTag )
 	{
-		return new Mutf8Constant( null, stringValue );
+		assert constantTag == tag_Mutf8;
+		int length = constantReader.readUnsignedShort();
+		Buffer buffer = constantReader.readBuffer( length );
+		return of( buffer );
 	}
 
-	public static Mutf8Constant of( Buffer buffer )
+	public static Mutf8ValueConstant of( String stringValue )
 	{
-		return new Mutf8Constant( buffer, null );
+		return new Mutf8ValueConstant( null, stringValue );
+	}
+
+	public static Mutf8ValueConstant of( Buffer buffer )
+	{
+		return new Mutf8ValueConstant( buffer, null );
 	}
 
 	@SuppressWarnings( "FieldNamingConvention" ) private Buffer _buffer;
 	@SuppressWarnings( "FieldNamingConvention" ) private String _stringValue;
 
-	private Mutf8Constant( Buffer buffer, String stringValue )
+	private Mutf8ValueConstant( Buffer buffer, String stringValue )
 	{
 		super( tag_Mutf8 );
 		assert (stringValue == null) != (buffer == null);
@@ -53,21 +65,11 @@ public final class Mutf8Constant extends ValueConstant<String>
 		return _stringValue;
 	}
 
-	@Deprecated @Override public String value()
-	{
-		return stringValue();
-	}
+	@Deprecated @Override public Mutf8ValueConstant asMutf8ValueConstant() { return this; }
 
-	@Deprecated @Override public Mutf8Constant asMutf8Constant() { return this; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof Mutf8ValueConstant kin && equals( kin ); }
 
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof Mutf8Constant otherMutf8Constant )
-			return equalsMutf8Constant( otherMutf8Constant );
-		return false;
-	}
-
-	public boolean equalsMutf8Constant( Mutf8Constant other )
+	public boolean equals( Mutf8ValueConstant other )
 	{
 		if( _stringValue != null && other._stringValue != null )
 			return stringValue().equals( other.stringValue() );
@@ -162,4 +164,17 @@ public final class Mutf8Constant extends ValueConstant<String>
 
 	@Override public int hashCode() { return Objects.hash( tag, buffer() ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return Kit.string.escapeForJava( stringValue() ); }
+
+	@Override public void intern( Interner interner )
+	{
+		interner.intern( this );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedByte( tag );
+		Buffer buffer = buffer();
+		constantWriter.writeUnsignedShort( buffer.length() );
+		constantWriter.writeBuffer( buffer );
+	}
 }

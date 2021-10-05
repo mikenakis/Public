@@ -163,7 +163,7 @@
 │ │     │ ├─■ L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.util.Comparator compare()
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;Ljava/lang/String;)I" )
 │ │     │ ├─■         INVOKEINTERFACE reference = Interface; void java.util.List.sort( java.util.Comparator ), 2 arguments
 │ │     │ ├─■ L62: // return list.get( 0 );
 │ │     │ ├─■         ALOAD 1
@@ -182,7 +182,7 @@
 │ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L59, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ │       │ └─■ [1] LocalVariableTableEntry index = 1, start = L60, end = @end, prototype = java.util.List list
 │ │       └─■ [2] LocalVariableTypeTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTypeTableEntry index = 1, start = L60, end = @end, name = "list", signature = "Ljava/util/List<Ljava/lang/String;>;" (list Ljava/util/List<Ljava/lang/String;>;)
+│ │         └─■ [0] LocalVariableTypeTableEntry index = 1, start = L60, end = @end, name = list, signature = Ljava/util/List<Ljava/lang/String;>;
 │ ├─■ [6] ByteCodeMethod accessFlags = [public, final], prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo methodWithUninitializedVerificationType( boolean )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 13, maxLocals = 2
@@ -277,7 +277,7 @@
   ├─■ [1] NestMembersAttribute; 1 items
   │ └─■ [0] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
   ├─■ [2] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.LambdaMetafactory.metafactory( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.invoke.MethodType, java.lang.invoke.MethodHandle, java.lang.invoke.MethodType ) arguments: MethodTypeConstant Mutf8Constant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8Constant( "(Ljava/lang/String;Ljava/lang/String;)I" )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;Ljava/lang/String;)I" )
   └─■ [3] InnerClassesAttribute; 2 items
     ├─■ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

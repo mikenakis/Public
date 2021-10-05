@@ -5,6 +5,8 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.TypeAnnotation;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,12 @@ import java.util.List;
  */
 public final class RuntimeVisibleTypeAnnotationsAttribute extends TypeAnnotationsAttribute
 {
+	public static RuntimeVisibleTypeAnnotationsAttribute read( AttributeReader attributeReader )
+	{
+		List<TypeAnnotation> entries = readTypeAnnotations( attributeReader );
+		return of( entries );
+	}
+
 	public static RuntimeVisibleTypeAnnotationsAttribute of()
 	{
 		return of( new ArrayList<>() );

@@ -7,7 +7,7 @@
 │ └─■ [0] ByteCodeMethod accessFlags = [public, abstract], prototype = int value()
 │   └─■ attributes: 1 items
 │     └─■ [0] AnnotationDefaultAttribute
-│       └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 5 )
+│       └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 5 )
 └─■ attributeSet: 2 items
   ├─■ [0] SourceFileAttribute "RuntimeInvisibleTypeAnnotation1.java"
   └─■ [1] RuntimeVisibleAnnotationsAttribute; 2 items

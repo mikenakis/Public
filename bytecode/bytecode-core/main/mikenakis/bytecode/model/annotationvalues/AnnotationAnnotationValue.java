@@ -1,7 +1,10 @@
 package mikenakis.bytecode.model.annotationvalues;
 
-import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.Annotation;
+import mikenakis.bytecode.model.AnnotationValue;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -11,6 +14,12 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationAnnotationValue extends AnnotationValue
 {
+	public static AnnotationAnnotationValue read( AttributeReader attributeReader )
+	{
+		Annotation annotation = Annotation.read( attributeReader );
+		return of( annotation );
+	}
+
 	public static final String NAME = "annotation";
 
 	public static AnnotationAnnotationValue of( Annotation annotation )
@@ -28,4 +37,15 @@ public final class AnnotationAnnotationValue extends AnnotationValue
 
 	@Deprecated @Override public AnnotationAnnotationValue asAnnotationAnnotationValue() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "annotation = { " + annotation + " }"; }
+
+	@Override public void intern( Interner interner )
+	{
+		annotation.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedByte( tag );
+		annotation.write( constantWriter );
+	}
 }

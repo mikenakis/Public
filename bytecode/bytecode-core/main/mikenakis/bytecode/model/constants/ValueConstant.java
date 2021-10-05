@@ -7,20 +7,12 @@ import mikenakis.bytecode.model.Constant;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-public abstract class ValueConstant<T extends Comparable<T>> extends Constant
+public abstract class ValueConstant extends Constant
 {
 	protected ValueConstant( int tag )
 	{
 		super( tag );
 	}
 
-	public abstract T value();
-
-	@Deprecated @Override public final <TT extends Comparable<TT>> ValueConstant<TT> asValueConstant()
-	{
-		@SuppressWarnings( "unchecked" ) ValueConstant<TT> result = (ValueConstant<TT>)this;
-		return result;
-	}
-
-	@Override public abstract int hashCode();
+	@Deprecated @Override public final ValueConstant asValueConstant() { return this; }
 }

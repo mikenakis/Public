@@ -3,6 +3,7 @@ package mikenakis.bytecode.model.descriptors;
 import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 
+//TODO: replace DirectMethodHandleDesc with this class.
 public final class MethodHandleDescriptor
 {
 	public static MethodHandleDescriptor of( MethodDescriptor methodDescriptor, TypeDescriptor ownerTypeDescriptor )

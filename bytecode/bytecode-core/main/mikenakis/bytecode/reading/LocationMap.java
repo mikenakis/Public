@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-abstract class LocationMap
+public abstract class LocationMap
 {
 	@SuppressWarnings( "WeakerAccess" ) protected final Instruction[] instructionsByLocation;
 	@SuppressWarnings( "WeakerAccess" ) protected final Map<Instruction,Integer> locationsByInstruction = new HashMap<>();
@@ -17,7 +17,7 @@ abstract class LocationMap
 		instructionsByLocation = new Instruction[codeLength];
 	}
 
-	Optional<Instruction> getInstruction( int location ) //returns Optional.empty() if the location is @end.
+	public Optional<Instruction> getInstruction( int location ) //returns Optional.empty() if the location is @end.
 	{
 		if( location == instructionsByLocation.length )
 			return Optional.empty();
@@ -31,7 +31,7 @@ abstract class LocationMap
 		return instructionsByLocation.length;
 	}
 
-	int getLocation( Instruction instruction )
+	public int getLocation( Instruction instruction )
 	{
 		return Kit.map.get( locationsByInstruction, instruction );
 	}

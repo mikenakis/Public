@@ -3,7 +3,7 @@ package mikenakis.bytecode.writing;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 
-interface InstructionWriter
+public interface InstructionWriter
 {
 	void writeUnsignedByte( int value );
 	void writeSignedByte( int value );

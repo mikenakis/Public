@@ -1,12 +1,13 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.model.ByteCodeHelpers;
-import mikenakis.java_type_model.TerminalTypeDescriptor;
-import mikenakis.kit.collections.FlagSet;
-import mikenakis.kit.collections.FlagEnum;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.collections.FlagEnum;
+import mikenakis.kit.collections.FlagSet;
 
 import java.util.Map;
 import java.util.Optional;
@@ -18,7 +19,7 @@ import java.util.Optional;
  */
 public final class InnerClass
 {
-	public static InnerClass of( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
+	public static InnerClass of( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8ValueConstant> innerNameConstant, //
 		FlagSet<InnerClassModifier> modifiers )
 	{
 		return new InnerClass( innerClassConstant, outerClassConstant, innerNameConstant, modifiers );
@@ -50,12 +51,12 @@ public final class InnerClass
 		Map.entry( InnerClassModifier.Annotation, 0x2000 ),   // ACC_
 		Map.entry( InnerClassModifier.Enum      , 0x4000 ) ); // ACC_ENUM
 
-	public final ClassConstant innerClassConstant;
-	public final Optional<ClassConstant> outerClassConstant;
-	public final Optional<Mutf8Constant> innerNameConstant;
+	private final ClassConstant innerClassConstant;
+	private final Optional<ClassConstant> outerClassConstant;
+	private final Optional<Mutf8ValueConstant> innerNameConstant;
 	public final FlagSet<InnerClassModifier> modifiers;
 
-	private InnerClass( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8Constant> innerNameConstant, //
+	private InnerClass( ClassConstant innerClassConstant, Optional<ClassConstant> outerClassConstant, Optional<Mutf8ValueConstant> innerNameConstant, //
 		FlagSet<InnerClassModifier> modifiers )
 	{
 		this.innerClassConstant = innerClassConstant;
@@ -68,4 +69,19 @@ public final class InnerClass
 	public Optional<TerminalTypeDescriptor> outerType() { return outerClassConstant.map( c -> c.terminalTypeDescriptor() ); }
 	public Optional<String> innerName() { return innerNameConstant.map( c -> c.stringValue() ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "outerClass = " + outerClassConstant + " accessFlags = " + modifiers + " innerClass = " + innerClassConstant + " innerName = " + innerNameConstant; }
+
+	public void intern( Interner interner )
+	{
+		innerClassConstant.intern( interner );
+		outerClassConstant.ifPresent( c -> c.intern( interner ) );
+		innerNameConstant.ifPresent( c -> c.intern( interner ) );
+	}
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( innerClassConstant ) );
+		constantWriter.writeUnsignedShort( outerClassConstant.map( c -> constantWriter.getConstantIndex( c ) ).orElse( 0 ) );
+		constantWriter.writeUnsignedShort( innerNameConstant.map( c -> constantWriter.getConstantIndex( c ) ).orElse( 0 ) );
+		constantWriter.writeUnsignedShort( modifiers.getBits() );
+	}
 }

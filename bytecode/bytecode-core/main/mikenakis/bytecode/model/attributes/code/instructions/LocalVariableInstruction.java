@@ -3,6 +3,9 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -13,6 +16,21 @@ import java.util.Optional;
 
 public final class LocalVariableInstruction extends Instruction
 {
+	public static LocalVariableInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	{
+		assert hasOperand( opCode ) || !wide;
+		IndexType indexType = getIndexType( opCode );
+		int index;
+		if( indexType == IndexType.ByOperand )
+			index = wide ? codeAttributeReader.readUnsignedShort() : codeAttributeReader.readUnsignedByte();
+		else
+		{
+			assert !wide;
+			index = indexType.index();
+		}
+		return of( opCode, index );
+	}
+
 	public static LocalVariableInstruction of( int opCode, int index )
 	{
 		return new LocalVariableInstruction( opCode, index );
@@ -186,26 +204,8 @@ public final class LocalVariableInstruction extends Instruction
 
 	private static final Map<Integer,Model> modelsFromOpCodes = Kit.iterable.toMap( opCodeInfos, i -> i.opCode, i -> new Model( i.opCode ) );
 
-	public static IndexType getIndexType( int opCode )
-	{
-		Model model = Kit.map.get( modelsFromOpCodes, opCode );
-		return model.opCodeInfo.indexType;
-	}
-
-	public static boolean hasOperand( int opCode )
-	{
-		IndexType indexType = getIndexType( opCode );
-		return indexType == IndexType.ByOperand;
-	}
-
-	public static int getIndex( int opCode )
-	{
-		IndexType indexType = getIndexType( opCode );
-		return indexType.index();
-	}
-
 	public final int opCode;
-	public final int index;
+	private final int index;
 
 	private LocalVariableInstruction( int opCode, int index )
 	{
@@ -216,7 +216,33 @@ public final class LocalVariableInstruction extends Instruction
 		this.index = index;
 	}
 
-	public int getActualOpcode() //TODO
+	public Optional<Integer> parameter() { return index <= 3 && opCode != OpCode.RET ? Optional.of( index ) : Optional.empty(); }
+	@Deprecated @Override public LocalVariableInstruction asLocalVariableInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+
+	@Override public void intern( Interner interner )
+	{
+		// nothing to do
+	}
+
+	@Override public void write( InstructionWriter instructionWriter )
+	{
+		boolean wide = isWide();
+		int opCode = getActualOpcode();
+		boolean hasOperand = hasOperand();
+		if( wide )
+			instructionWriter.writeUnsignedByte( OpCode.WIDE );
+		instructionWriter.writeUnsignedByte( opCode );
+		if( hasOperand )
+		{
+			if( wide )
+				instructionWriter.writeUnsignedShort( index );
+			else
+				instructionWriter.writeUnsignedByte( index );
+		}
+	}
+
+	private int getActualOpcode() //TODO
 	{
 		IndexType indexType = IndexType.of( index, opCode );
 		Model model = Kit.map.get( modelsFromOpCodes, opCode );
@@ -224,17 +250,26 @@ public final class LocalVariableInstruction extends Instruction
 		return opCodeInfo.opCode;
 	}
 
-	public boolean isWide()
+	private boolean isWide()
 	{
 		return !Helpers.isUnsignedByte( index );
 	}
 
-	public boolean hasOperand()
+	private boolean hasOperand()
 	{
 		IndexType selector = IndexType.of( index, opCode );
 		return selector == IndexType.ByOperand;
 	}
 
-	@Deprecated @Override public LocalVariableInstruction asLocalVariableInstruction() { return this; }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+	private static boolean hasOperand( int opCode )
+	{
+		IndexType indexType = getIndexType( opCode );
+		return indexType == IndexType.ByOperand;
+	}
+
+	private static IndexType getIndexType( int opCode )
+	{
+		Model model = Kit.map.get( modelsFromOpCodes, opCode );
+		return model.opCodeInfo.indexType;
+	}
 }

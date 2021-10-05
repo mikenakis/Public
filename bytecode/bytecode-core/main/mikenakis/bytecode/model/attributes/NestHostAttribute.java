@@ -4,6 +4,9 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -22,12 +25,18 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class NestHostAttribute extends KnownAttribute
 {
+	public static NestHostAttribute read( AttributeReader attributeReader )
+	{
+		ClassConstant hostClassConstant = attributeReader.readIndexAndGetConstant().asClassConstant();
+		return of( hostClassConstant );
+	}
+
 	public static NestHostAttribute of( ClassConstant classConstant )
 	{
 		return new NestHostAttribute( classConstant );
 	}
 
-	public final ClassConstant hostClassConstant;
+	private final ClassConstant hostClassConstant;
 
 	private NestHostAttribute( ClassConstant hostClassConstant )
 	{
@@ -38,4 +47,14 @@ public final class NestHostAttribute extends KnownAttribute
 	public TerminalTypeDescriptor hostClass() { return hostClassConstant.terminalTypeDescriptor(); }
 	@Deprecated @Override public NestHostAttribute asNestHostAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return " -> " + hostClassConstant; }
+
+	@Override public void intern( Interner interner )
+	{
+		hostClassConstant.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( hostClassConstant ) );
+	}
 }

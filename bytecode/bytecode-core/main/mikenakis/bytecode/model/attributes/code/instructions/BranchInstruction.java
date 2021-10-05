@@ -1,24 +1,27 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class BranchInstruction extends Instruction
 {
+	public static BranchInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	{
+		assert !wide;
+		BranchInstruction instruction = of( opCode );
+		int targetInstructionOffset = isLong( opCode ) ? codeAttributeReader.readInt() : codeAttributeReader.readSignedShort();
+		codeAttributeReader.setRelativeTargetInstruction( instruction, targetInstructionOffset, instruction::setTargetInstruction );
+		return instruction;
+	}
+
 	public static BranchInstruction of( int opCode )
 	{
 		return new BranchInstruction( generalFromSpecialOpcode( opCode ) );
-	}
-
-	public static boolean isLong( int opCode )
-	{
-		return switch( opCode )
-			{
-				case OpCode.GOTO, OpCode.JSR -> false;
-				case OpCode.GOTO_W, OpCode.JSR_W -> true;
-				default -> throw new AssertionError( opCode );
-			};
 	}
 
 	public final int opCode;
@@ -44,7 +47,26 @@ public final class BranchInstruction extends Instruction
 		this.targetInstruction = targetInstruction;
 	}
 
-	public int getOpCode( boolean isLong )
+	@Deprecated @Override public BranchInstruction asBranchInstruction() { return this; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+
+	@Override public void intern( Interner interner )
+	{
+		// nothing to do
+	}
+
+	@Override public void write( InstructionWriter instructionWriter )
+	{
+		int offset = instructionWriter.getOffset( this, getTargetInstruction() );
+		boolean isLong = !Helpers.isSignedShort( offset );
+		instructionWriter.writeUnsignedByte( getOpCode( isLong ) );
+		if( isLong )
+			instructionWriter.writeInt( offset );
+		else
+			instructionWriter.writeSignedShort( offset );
+	}
+
+	private int getOpCode( boolean isLong )
 	{
 		if( isLong )
 			return switch( opCode )
@@ -56,9 +78,6 @@ public final class BranchInstruction extends Instruction
 		return opCode;
 	}
 
-	@Deprecated @Override public BranchInstruction asBranchInstruction() { return this; }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
-
 	private static int generalFromSpecialOpcode( int opcode )
 	{
 		return switch( opcode )
@@ -67,6 +86,16 @@ public final class BranchInstruction extends Instruction
 				case OpCode.GOTO_W -> OpCode.GOTO;
 				case OpCode.JSR_W -> OpCode.JSR;
 				default -> throw new AssertionError( opcode );
+			};
+	}
+
+	private static boolean isLong( int opCode )
+	{
+		return switch( opCode )
+			{
+				case OpCode.GOTO, OpCode.JSR -> false;
+				case OpCode.GOTO_W, OpCode.JSR_W -> true;
+				default -> throw new AssertionError( opCode );
 			};
 	}
 }

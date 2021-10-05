@@ -17,7 +17,7 @@ import java.util.List;
  * <p>
  * https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html
  */
-final class ConstantPool
+final class ConstantPool implements ConstantResolver
 {
 	private final List<Constant> constants;
 	private final boolean[] used;
@@ -37,7 +37,7 @@ final class ConstantPool
 		bootstrapFixUps.clear();
 	}
 
-	Constant getConstant( int constantIndex )
+	@Override public Constant getConstant( int constantIndex )
 	{
 		used[constantIndex] = true;
 		return constants.get( constantIndex );

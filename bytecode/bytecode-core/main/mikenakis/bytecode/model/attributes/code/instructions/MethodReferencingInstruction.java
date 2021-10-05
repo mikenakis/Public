@@ -5,6 +5,9 @@ import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.descriptors.MethodReference;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -12,6 +15,13 @@ import java.util.Set;
 
 public final class MethodReferencingInstruction extends Instruction
 {
+	public static MethodReferencingInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	{
+		assert !wide;
+		MethodReferenceConstant methodReferenceConstant = codeAttributeReader.readIndexAndGetConstant().asMethodReferenceConstant();
+		return of( opCode, methodReferenceConstant );
+	}
+
 	public static MethodReferencingInstruction of( int opCode, MethodReference methodReference )
 	{
 		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( methodReference );
@@ -26,7 +36,7 @@ public final class MethodReferencingInstruction extends Instruction
 	private static final Set<Integer> opCodes = Set.of( OpCode.INVOKEVIRTUAL, OpCode.INVOKESPECIAL, OpCode.INVOKESTATIC );
 
 	public final int opCode;
-	public final MethodReferenceConstant methodReferenceConstant;
+	private final MethodReferenceConstant methodReferenceConstant;
 
 	private MethodReferencingInstruction( int opCode, MethodReferenceConstant methodReferenceConstant )
 	{
@@ -80,5 +90,18 @@ public final class MethodReferencingInstruction extends Instruction
 	}
 
 	@Deprecated @Override public MethodReferencingInstruction asMethodReferencingInstruction() { return this; }
+	public MethodReference methodReference() { return methodReferenceConstant.methodReference(); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+
+	@Override public void intern( Interner interner )
+	{
+		methodReferenceConstant.intern( interner );
+	}
+
+	@Override public void write( InstructionWriter instructionWriter )
+	{
+		instructionWriter.writeUnsignedByte( opCode );
+		int constantIndex = instructionWriter.getIndex( methodReferenceConstant );
+		instructionWriter.writeUnsignedShort( constantIndex );
+	}
 }

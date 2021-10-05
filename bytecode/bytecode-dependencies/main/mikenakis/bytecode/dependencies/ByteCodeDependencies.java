@@ -41,9 +41,6 @@ import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstru
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
-import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.MethodReferenceConstant;
-import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.signature.ArrayTypeSignature;
 import mikenakis.bytecode.model.signature.BooleanSignature;
@@ -70,6 +67,7 @@ import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
 
+import java.lang.constant.DirectMethodHandleDesc;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -237,22 +235,19 @@ public final class ByteCodeDependencies
 
 	private void visitInvokeInterfaceInstruction( InvokeInterfaceInstruction invokeInterfaceInstruction )
 	{
-		visitMethodReferenceConstant( invokeInterfaceInstruction.methodReferenceConstant );
+		visitMethodReference( invokeInterfaceInstruction.methodReference() );
 	}
 
 	private void visitInvokeDynamicInstruction( InvokeDynamicInstruction invokeDynamicInstruction )
 	{
-		visitInvokeDynamicConstant( invokeDynamicInstruction.invokeDynamicConstant );
+		visitBootstrapMethod( invokeDynamicInstruction.bootstrapMethod() );
+		visitMethodDescriptor( invokeDynamicInstruction.methodPrototype().descriptor );
 	}
 
 	private void visitLoadConstantInstruction( LoadConstantInstruction loadConstantInstruction )
 	{
-		switch( loadConstantInstruction.constant.tag )
-		{
-			case Constant.tag_Float, Constant.tag_Long, Constant.tag_Integer, Constant.tag_Double, Constant.tag_String -> { /* nothing to do */ }
-			case Constant.tag_Class -> visitTypeDescriptor( loadConstantInstruction.constant.asClassConstant().typeDescriptor() );
-			default -> throw new AssertionError( loadConstantInstruction.constant );
-		}
+		if( loadConstantInstruction.isType() )
+			visitTypeDescriptor( loadConstantInstruction.getTypeDescriptor() );
 	}
 
 	private void visitClassReferencingInstruction( ClassReferencingInstruction classReferencingInstruction )
@@ -263,14 +258,12 @@ public final class ByteCodeDependencies
 	private void visitFieldReferencingInstruction( FieldReferencingInstruction fieldReferencingInstruction )
 	{
 		visitTypeDescriptor( fieldReferencingInstruction.fieldDeclaringType() );
-		visitDescriptorTypeDescriptor( fieldReferencingInstruction.fieldReferenceConstant.fieldDescriptor().typeDescriptor );
+		visitDescriptorTypeDescriptor( fieldReferencingInstruction.fieldDescriptor().typeDescriptor );
 	}
 
 	private void visitMethodReferencingInstruction( MethodReferencingInstruction methodReferencingInstruction )
 	{
-		MethodReferenceConstant methodReferenceConstant = methodReferencingInstruction.methodReferenceConstant;
-		assert methodReferenceConstant.tag == Constant.tag_InterfaceMethodReference || methodReferenceConstant.tag == Constant.tag_PlainMethodReference;
-		visitMethodReferenceConstant( methodReferenceConstant );
+		visitMethodReference( methodReferencingInstruction.methodReference() );
 	}
 
 	private static void visitConstantValueAttribute( ConstantValueAttribute constantValueAttribute )
@@ -305,14 +298,14 @@ public final class ByteCodeDependencies
 
 	private void visitLocalVariableTableAttribute( LocalVariableTableAttribute attribute )
 	{
-		for( LocalVariableTableEntry localVariable : attribute.entrys )
+		for( LocalVariableTableEntry localVariable : attribute.localVariableTableEntries )
 			visitDescriptorTypeDescriptor( localVariable.prototype().descriptor.typeDescriptor );
 	}
 
 	private void visitLocalVariableTypeTableAttribute( LocalVariableTypeTableAttribute attribute )
 	{
-		for( LocalVariableTypeTableEntry localVariableType : attribute.localVariableTypes )
-			visitFieldTypeSignatureString( localVariableType.signatureConstant.stringValue() );
+		for( LocalVariableTypeTableEntry localVariableType : attribute.localVariableTypeTableEntries )
+			visitFieldTypeSignatureString( localVariableType.signatureString() );
 	}
 
 	private void visitAnnotationsAttribute( AnnotationsAttribute attribute )
@@ -332,7 +325,7 @@ public final class ByteCodeDependencies
 	{
 		for( TypeAnnotation typeAnnotation : attribute.typeAnnotations )
 			for( AnnotationParameter annotationParameter : typeAnnotation.parameters )
-				visitElementValue( annotationParameter.value );
+				visitElementValue( annotationParameter.annotationValue );
 	}
 
 	private void visitElementValue( AnnotationValue annotationValue )
@@ -374,7 +367,7 @@ public final class ByteCodeDependencies
 	{
 		visitDescriptorTypeDescriptor( byteCodeAnnotation.typeDescriptor() );
 		for( AnnotationParameter annotationParameter : byteCodeAnnotation.parameters )
-			visitElementValue( annotationParameter.value );
+			visitElementValue( annotationParameter.annotationValue );
 	}
 
 	private void visitFieldTypeSignatureString( String signature )
@@ -521,11 +514,6 @@ public final class ByteCodeDependencies
 		return typeName;
 	}
 
-	private void visitMethodReferenceConstant( MethodReferenceConstant methodReferenceConstant )
-	{
-		visitMethodReference( methodReferenceConstant.methodReference() );
-	}
-
 	private void visitMethodReference( MethodReference methodReference )
 	{
 		visitTypeDescriptor( methodReference.declaringTypeDescriptor );
@@ -534,19 +522,14 @@ public final class ByteCodeDependencies
 
 	private void visitBootstrapMethod( BootstrapMethod bootstrapMethod )
 	{
-		visitMethodDescriptor( bootstrapMethod.invocationMethodDescriptor() );
-		visitDescriptorTypeDescriptor( bootstrapMethod.ownerTypeDescriptor() );
+		visitDirectMethodHandleDesc( bootstrapMethod.directMethodHandleDesc() );
 		for( Constant bootstrapArgumentDescriptor : bootstrapMethod.argumentConstants )
 			visitBootstrapArgument( bootstrapArgumentDescriptor );
 	}
 
-	private void visitInvokeDynamicConstant( InvokeDynamicConstant invokeDynamicConstant )
+	private void visitDirectMethodHandleDesc( DirectMethodHandleDesc directMethodHandleDesc )
 	{
-		visitMethodDescriptor( invokeDynamicConstant.getBootstrapMethod().invocationMethodDescriptor() );
-		visitMethodDescriptor( invokeDynamicConstant.methodPrototype().descriptor );
-		visitDescriptorTypeDescriptor( invokeDynamicConstant.getBootstrapMethod().ownerTypeDescriptor() );
-		for( Constant argumentConstant : invokeDynamicConstant.getBootstrapMethod().argumentConstants )
-			visitBootstrapArgument( argumentConstant );
+		// TODO
 	}
 
 	private void visitMethodDescriptor( MethodDescriptor methodDescriptor )
@@ -565,9 +548,8 @@ public final class ByteCodeDependencies
 				case Constant.tag_String -> { /* nothing to do */ }
 				case Constant.tag_MethodHandle -> //
 					{
-						MethodHandleDescriptor methodHandleDescriptor = constant.asMethodHandleConstant().methodHandleDescriptor();
-						visitMethodDescriptor( methodHandleDescriptor.methodDescriptor );
-						visitDescriptorTypeDescriptor( methodHandleDescriptor.ownerTypeDescriptor );
+						DirectMethodHandleDesc directMethodHandleDesc = constant.asMethodHandleConstant().directMethodHandleDesc();
+						visitDirectMethodHandleDesc( directMethodHandleDesc );
 					}
 				default -> throw new AssertionError( constant );
 			}

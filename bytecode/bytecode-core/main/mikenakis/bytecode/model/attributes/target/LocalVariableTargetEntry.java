@@ -1,5 +1,6 @@
 package mikenakis.bytecode.model.attributes.target;
 
+import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class LocalVariableTargetEntry
@@ -16,4 +17,11 @@ public final class LocalVariableTargetEntry
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "startPc = " + startPc + ", length = " + length + ", index = " + index; }
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( startPc ); //TODO
+		constantWriter.writeUnsignedShort( length );
+		constantWriter.writeUnsignedShort( index );
+	}
 }

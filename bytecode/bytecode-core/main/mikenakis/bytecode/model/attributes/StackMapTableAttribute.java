@@ -9,11 +9,17 @@ import mikenakis.bytecode.model.attributes.stackmap.SameLocals1StackItemStackMap
 import mikenakis.bytecode.model.attributes.stackmap.SameStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.StackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "StackMapTable" {@link Attribute} of a java class file.
@@ -32,6 +38,32 @@ import java.util.List;
  */
 public final class StackMapTableAttribute extends KnownAttribute
 {
+	public static StackMapTableAttribute read( AttributeReader attributeReader )
+	{
+		CodeAttributeReader codeAttributeReader = attributeReader.asCodeAttributeReader();
+		int count = attributeReader.readUnsignedShort();
+		assert count > 0;
+		List<StackMapFrame> frames = new ArrayList<>( count );
+		Optional<StackMapFrame> previousFrame = Optional.empty();
+		for( int i = 0; i < count; i++ )
+		{
+			int frameType = attributeReader.readUnsignedByte();
+			int stackMapFrameTag = StackMapFrame.getTagFromType( frameType );
+			StackMapFrame frame = switch( stackMapFrameTag )
+				{
+					case StackMapFrame.tag_Same, StackMapFrame.tag_SameExtended -> SameStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
+					case StackMapFrame.tag_SameLocals1StackItem, StackMapFrame.tag_SameLocals1StackItemExtended -> SameLocals1StackItemStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
+					case StackMapFrame.tag_Chop -> ChopStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
+					case StackMapFrame.tag_Append -> AppendStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
+					case StackMapFrame.tag_Full -> FullStackMapFrame.read( codeAttributeReader, previousFrame );
+					default -> throw new AssertionError( frameType );
+				};
+			frames.add( frame );
+			previousFrame = Optional.of( frame );
+		}
+		return of( frames );
+	}
+
 	public static StackMapTableAttribute of()
 	{
 		return of( new ArrayList<>() );
@@ -98,4 +130,22 @@ public final class StackMapTableAttribute extends KnownAttribute
 
 	@Deprecated @Override public StackMapTableAttribute asStackMapTableAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return frames.size() + " entries"; }
+
+	@Override public void intern( Interner interner )
+	{
+		for( StackMapFrame frame : frames )
+			frame.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		CodeConstantWriter codeConstantWriter = constantWriter.asCodeConstantWriter();
+		codeConstantWriter.writeUnsignedShort( frames.size() );
+		Optional<StackMapFrame> previousFrame = Optional.empty();
+		for( StackMapFrame frame : frames )
+		{
+			frame.write( codeConstantWriter, previousFrame );
+			previousFrame = Optional.of( frame );
+		}
+	}
 }

@@ -3,8 +3,13 @@ package mikenakis.bytecode.model;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
+import mikenakis.bytecode.reading.ByteCodeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
@@ -40,6 +45,57 @@ import java.util.function.Function;
 public final class ByteCodeType
 {
 	public static final int MAGIC = 0xCAFEBABE;
+
+	public static ByteCodeType read( ByteCodeReader byteCodeReader )
+	{
+		assert byteCodeReader.getMagic() == MAGIC;
+		ByteCodeVersion version = byteCodeReader.getVersion();
+		FlagSet<Modifier> modifiers = ByteCodeType.modifierEnum.fromBits( byteCodeReader.readUnsignedShort() );
+		ClassConstant thisClassConstant = byteCodeReader.readIndexAndGetConstant().asClassConstant();
+		Optional<ClassConstant> superClassConstant = byteCodeReader.tryReadIndexAndGetConstant().map( Constant::asClassConstant );
+		int interfaceCount = byteCodeReader.readUnsignedShort();
+		List<ClassConstant> interfaceClassConstants = new ArrayList<>( interfaceCount );
+		for( int i = 0; i < interfaceCount; i++ )
+		{
+			ClassConstant interfaceClassConstant = byteCodeReader.readIndexAndGetConstant().asClassConstant();
+			interfaceClassConstants.add( interfaceClassConstant );
+		}
+		int fieldCount = byteCodeReader.readUnsignedShort();
+		List<ByteCodeField> fields = new ArrayList<>( fieldCount );
+		for( int i = 0; i < fieldCount; i++ )
+		{
+			FlagSet<ByteCodeField.Modifier> fieldModifiers = ByteCodeField.modifierEnum.fromBits( byteCodeReader.readUnsignedShort() );
+			Mutf8ValueConstant nameConstant = byteCodeReader.readIndexAndGetConstant().asMutf8ValueConstant();
+			Mutf8ValueConstant descriptorConstant = byteCodeReader.readIndexAndGetConstant().asMutf8ValueConstant();
+			AttributeSet attributes = AttributeSet.read( byteCodeReader.getAttributeReader() );
+			ByteCodeField byteCodeField = ByteCodeField.of( fieldModifiers, nameConstant, descriptorConstant, attributes );
+			fields.add( byteCodeField );
+		}
+		int methodCount = byteCodeReader.readUnsignedShort();
+		List<ByteCodeMethod> methods = new ArrayList<>( methodCount );
+		for( int i = 0; i < methodCount; i++ )
+		{
+			FlagSet<ByteCodeMethod.Modifier> methodModifiers = ByteCodeMethod.modifierEnum.fromBits( byteCodeReader.readUnsignedShort() );
+			Mutf8ValueConstant nameConstant = byteCodeReader.readIndexAndGetConstant().asMutf8ValueConstant();
+			Mutf8ValueConstant descriptorConstant = byteCodeReader.readIndexAndGetConstant().asMutf8ValueConstant();
+			AttributeSet attributes = AttributeSet.read( byteCodeReader.getAttributeReader() );
+			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( methodModifiers, nameConstant, descriptorConstant, attributes );
+			methods.add( byteCodeMethod );
+		}
+		AttributeSet attributes = AttributeSet.read( byteCodeReader.getAttributeReader() );
+
+		attributes.tryGetKnownAttributeByTag( KnownAttribute.tag_BootstrapMethods ) //
+			.map( attribute -> attribute.asBootstrapMethodsAttribute() ) //
+			.ifPresent( bootstrapMethodsAttribute -> //
+			{
+				byteCodeReader.applyFixUps( bootstrapMethodsAttribute );
+				if( Kit.get( false ) ) //TODO: enable this once the troubleshooting is over.
+					attributes.removeAttribute( bootstrapMethodsAttribute );
+			} );
+		Collection<ClassConstant> extraClassReferences = byteCodeReader.getExtraClassReferences();
+		return of( version, modifiers, thisClassConstant, superClassConstant, interfaceClassConstants, fields, methods, //
+			attributes, extraClassReferences );
+	}
 
 	public enum Modifier
 	{
@@ -99,11 +155,11 @@ public final class ByteCodeType
 		this.extraClassConstants = extraClassConstants;
 	}
 
-	public ClassConstant classConstant() { return classConstant; }
+	//public ClassConstant classConstant() { return classConstant; }
 	public TerminalTypeDescriptor typeDescriptor() { return classConstant.terminalTypeDescriptor(); }
-	public Optional<ClassConstant> superClassConstant() { return superClassConstant; }
+	//public Optional<ClassConstant> superClassConstant() { return superClassConstant; }
 	public Optional<TerminalTypeDescriptor> superTypeDescriptor() { return superClassConstant.map( c -> c.terminalTypeDescriptor() ); }
-	public List<ClassConstant> interfaceClassConstants() { return interfaceConstants; }
+	//public List<ClassConstant> interfaceClassConstants() { return interfaceConstants; }
 	public List<TerminalTypeDescriptor> interfaces() { return interfaceConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
 	public List<TerminalTypeDescriptor> extraTypes() { return extraClassConstants.stream().map( c -> c.terminalTypeDescriptor() ).toList(); }
 
@@ -158,5 +214,40 @@ public final class ByteCodeType
 			byteCodeType = superType.get();
 		}
 		return Optional.empty();
+	}
+
+	public void intern( Interner interner )
+	{
+		classConstant.intern( interner );
+		superClassConstant.ifPresent( c -> c.intern( interner ) );
+		for( ClassConstant classConstant : interfaceConstants )
+			classConstant.intern( interner );
+		for( ByteCodeField field : fields )
+			field.intern( interner );
+		for( ByteCodeMethod method : methods )
+			method.intern( interner );
+
+		attributeSet.intern( interner );
+
+		for( Constant extraConstant : extraClassConstants )
+			extraConstant.intern( interner );
+	}
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( modifiers.getBits() );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( classConstant ) );
+		constantWriter.writeUnsignedShort( superClassConstant.map( c -> constantWriter.getConstantIndex( c ) ).orElse( 0 ) );
+		List<ClassConstant> interfaceClassConstants = interfaceConstants;
+		constantWriter.writeUnsignedShort( interfaceClassConstants.size() );
+		for( ClassConstant interfaceClassConstant : interfaceClassConstants )
+			constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( interfaceClassConstant ) );
+		constantWriter.writeUnsignedShort( fields.size() );
+		for( ByteCodeField field : fields )
+			field.write( constantWriter );
+		constantWriter.writeUnsignedShort( methods.size() );
+		for( ByteCodeMethod method : methods )
+			method.write( constantWriter );
+		attributeSet.write( constantWriter );
 	}
 }

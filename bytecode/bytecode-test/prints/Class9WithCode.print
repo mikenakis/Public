@@ -175,7 +175,7 @@
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │     │ ├─■         I2C
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( char )
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unexpected: \x01" )
 │ │     │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )
 │ │     │ ├─■         ATHROW
 │ │     │ ├─■ L46: // return x;
@@ -510,7 +510,7 @@
 │       │ ├─■         DUP
 │       │ ├─■         ALOAD
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String )
-│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unknown function: \x01" )
 │       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )
 │       │ ├─■         ATHROW
 │       │ ├─■ T11:    DSTORE 1
@@ -523,7 +523,7 @@
 │       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         I2C
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( char )
-│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
+│       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unexpected: \x01" )
 │       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )
 │       │ ├─■         ATHROW
 │       │ ├─■ L128: // if( eat( '^' ) )
@@ -644,7 +644,7 @@
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class9WithCode.java"
   ├─■ [1] BootstrapMethodsAttribute; 2 items
-  │ ├─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unexpected: \x01" ) )
-  │ └─■ [1] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "Unknown function: \x01" ) )
+  │ ├─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unexpected: \x01" )
+  │ └─■ [1] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unknown function: \x01" )
   └─■ [2] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

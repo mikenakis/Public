@@ -1,6 +1,9 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -10,24 +13,44 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationParameter
 {
-	public static AnnotationParameter of( Mutf8Constant nameConstant, AnnotationValue annotationValue )
+	public static AnnotationParameter read( AttributeReader attributeReader )
+	{
+		Mutf8ValueConstant nameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
+		AnnotationValue annotationValue = AnnotationValue.read( attributeReader );
+		AnnotationParameter annotationParameter = of( nameConstant, annotationValue );
+		return annotationParameter;
+	}
+
+	private static AnnotationParameter of( Mutf8ValueConstant nameConstant, AnnotationValue annotationValue )
 	{
 		return new AnnotationParameter( nameConstant, annotationValue );
 	}
 
-	public final Mutf8Constant nameConstant;
-	public final AnnotationValue value;
+	private final Mutf8ValueConstant nameConstant;
+	public final AnnotationValue annotationValue;
 
-	private AnnotationParameter( Mutf8Constant nameConstant, AnnotationValue value )
+	private AnnotationParameter( Mutf8ValueConstant nameConstant, AnnotationValue annotationValue )
 	{
 		this.nameConstant = nameConstant;
-		this.value = value;
+		this.annotationValue = annotationValue;
 	}
 
 	public String name() { return nameConstant.stringValue(); }
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		return "name = " + nameConstant + ", value = " + value;
+		return "name = " + nameConstant + ", value = " + annotationValue;
+	}
+
+	public void intern( Interner interner )
+	{
+		nameConstant.intern( interner );
+		annotationValue.intern( interner );
+	}
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( nameConstant ) );
+		annotationValue.write( constantWriter );
 	}
 }

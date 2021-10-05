@@ -4,6 +4,9 @@ import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.descriptors.FieldReference;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -12,6 +15,13 @@ import java.util.Set;
 
 public final class FieldReferencingInstruction extends Instruction
 {
+	public static FieldReferencingInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	{
+		assert !wide;
+		FieldReferenceConstant fieldReferenceConstant = codeAttributeReader.readIndexAndGetConstant().asFieldReferenceConstant();
+		return of( opCode, fieldReferenceConstant );
+	}
+
 	public static FieldReferencingInstruction of( int opCode, FieldReference fieldReference )
 	{
 		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( fieldReference );
@@ -26,7 +36,7 @@ public final class FieldReferencingInstruction extends Instruction
 	private static final Set<Integer> opCodes = Set.of( OpCode.GETSTATIC, OpCode.PUTSTATIC, OpCode.GETFIELD, OpCode.PUTFIELD );
 
 	public final int opCode;
-	public final FieldReferenceConstant fieldReferenceConstant;
+	private final FieldReferenceConstant fieldReferenceConstant;
 
 	private FieldReferencingInstruction( int opCode, FieldReferenceConstant fieldReferenceConstant )
 	{
@@ -42,4 +52,16 @@ public final class FieldReferencingInstruction extends Instruction
 	public TypeDescriptor fieldType() { return fieldDescriptor().typeDescriptor; }
 	@Deprecated @Override public FieldReferencingInstruction asFieldReferencingInstruction() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+
+	@Override public void intern( Interner interner )
+	{
+		fieldReferenceConstant.intern( interner );
+	}
+
+	@Override public void write( InstructionWriter instructionWriter )
+	{
+		instructionWriter.writeUnsignedByte( opCode );
+		int constantIndex = instructionWriter.getIndex( fieldReferenceConstant );
+		instructionWriter.writeUnsignedShort( constantIndex );
+	}
 }

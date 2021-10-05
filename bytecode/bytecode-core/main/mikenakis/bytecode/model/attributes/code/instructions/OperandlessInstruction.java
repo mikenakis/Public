@@ -2,6 +2,8 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Collection;
@@ -20,6 +22,12 @@ public final class OperandlessInstruction extends Instruction
 		OpCode.DCMPG, OpCode.IRETURN, OpCode.LRETURN, OpCode.FRETURN, OpCode.DRETURN, OpCode.ARETURN, OpCode.RETURN, OpCode.ARRAYLENGTH, OpCode.ATHROW, //
 		OpCode.MONITORENTER, OpCode.MONITOREXIT );
 
+	public static OperandlessInstruction read( boolean wide, int opCode )
+	{
+		assert !wide;
+		return of( opCode );
+	}
+
 	public static OperandlessInstruction of( int opCode )
 	{
 		return new OperandlessInstruction( opCode );
@@ -36,4 +44,14 @@ public final class OperandlessInstruction extends Instruction
 
 	@Deprecated @Override public OperandlessInstruction asOperandlessInstruction() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+
+	@Override public void intern( Interner interner )
+	{
+		// nothing to do
+	}
+
+	@Override public void write( InstructionWriter instructionWriter )
+	{
+		instructionWriter.writeUnsignedByte( opCode );
+	}
 }

@@ -91,17 +91,16 @@ import mikenakis.bytecode.model.attributes.target.TypeParameterTarget;
 import mikenakis.bytecode.model.attributes.target.TypePath;
 import mikenakis.bytecode.model.attributes.target.TypePathEntry;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.DoubleConstant;
+import mikenakis.bytecode.model.constants.value.DoubleValueConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.FloatConstant;
-import mikenakis.bytecode.model.constants.IntegerConstant;
-import mikenakis.bytecode.model.constants.LongConstant;
+import mikenakis.bytecode.model.constants.value.FloatValueConstant;
+import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
+import mikenakis.bytecode.model.constants.value.LongValueConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
+import mikenakis.bytecode.model.constants.value.StringValueConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.bytecode.printing.twig.Twig;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
@@ -110,6 +109,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagSet;
 import mikenakis.kit.functional.Procedure1;
 
+import java.lang.constant.DirectMethodHandleDesc;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -284,7 +284,7 @@ public final class ByteCodePrinter
 
 	private static void targetsFromLocalVariableTableAttribute( Procedure1<Instruction> targetInstructionConsumer, LocalVariableTableAttribute localVariableTableAttribute )
 	{
-		for( LocalVariableTableEntry localVariable : localVariableTableAttribute.entrys )
+		for( LocalVariableTableEntry localVariable : localVariableTableAttribute.localVariableTableEntries )
 		{
 			targetInstructionConsumer.invoke( localVariable.startInstruction );
 			localVariable.endInstruction.ifPresent( t -> targetInstructionConsumer.invoke( t ) );
@@ -293,7 +293,7 @@ public final class ByteCodePrinter
 
 	private static void targetsFromLocalVariableTypeTableAttribute( Procedure1<Instruction> targetInstructionConsumer, LocalVariableTypeTableAttribute localVariableTypeTableAttribute )
 	{
-		for( LocalVariableTypeTableEntry entry : localVariableTypeTableAttribute.localVariableTypes )
+		for( LocalVariableTypeTableEntry entry : localVariableTypeTableAttribute.localVariableTypeTableEntries )
 		{
 			targetInstructionConsumer.invoke( entry.startInstruction );
 			//FIXME how come we are not feeding the endInstruction?
@@ -363,30 +363,30 @@ public final class ByteCodePrinter
 		Integer
 	}
 
-	private static void appendValueConstant( ValueConstant<?> constant, StringBuilder builder )
+	private static void appendValueConstant( ValueConstant constant, StringBuilder builder )
 	{
 		switch( constant.tag )
 		{
-			case Constant.tag_Mutf8 -> appendMutf8Constant( constant.asMutf8Constant(), builder );
-			case Constant.tag_Integer -> appendIntegerConstant( constant.asIntegerConstant(), builder, IntegerValueHint.Integer );
-			case Constant.tag_Float -> appendFloatConstant( constant.asFloatConstant(), builder );
-			case Constant.tag_Long -> appendLongConstant( constant.asLongConstant(), builder );
-			case Constant.tag_Double -> appendDoubleConstant( constant.asDoubleConstant(), builder );
-			case Constant.tag_String -> appendStringConstant( constant.asStringConstant(), builder );
+			case Constant.tag_Mutf8 -> appendMutf8Constant( constant.asMutf8ValueConstant(), builder );
+			case Constant.tag_Integer -> appendIntegerConstant( constant.asIntegerValueConstant(), builder, IntegerValueHint.Integer );
+			case Constant.tag_Float -> appendFloatConstant( constant.asFloatValueConstant(), builder );
+			case Constant.tag_Long -> appendLongConstant( constant.asLongValueConstant(), builder );
+			case Constant.tag_Double -> appendDoubleConstant( constant.asDoubleValueConstant(), builder );
+			case Constant.tag_String -> appendStringConstant( constant.asStringValueConstant(), builder );
 			default -> throw new AssertionError( constant );
 		}
 	}
 
-	private static void appendMutf8Constant( Mutf8Constant mutf8Constant, StringBuilder builder )
+	private static void appendMutf8Constant( Mutf8ValueConstant mutf8Constant, StringBuilder builder )
 	{
-		builder.append( Mutf8Constant.class.getSimpleName() ).append( "( " );
+		builder.append( Mutf8ValueConstant.class.getSimpleName() ).append( "( " );
 		Kit.stringBuilder.appendEscapedForJava( builder, mutf8Constant.stringValue(), '"' );
 		builder.append( " )" );
 	}
 
-	private static void appendIntegerConstant( IntegerConstant integerConstant, StringBuilder builder, IntegerValueHint integerValueHint )
+	private static void appendIntegerConstant( IntegerValueConstant integerConstant, StringBuilder builder, IntegerValueHint integerValueHint )
 	{
-		builder.append( IntegerConstant.class.getSimpleName() ).append( "( " );
+		builder.append( IntegerValueConstant.class.getSimpleName() ).append( "( " );
 		builder.append( integerConstant.value );
 		switch( integerValueHint )
 		{
@@ -428,31 +428,31 @@ public final class ByteCodePrinter
 		builder.append( " )" );
 	}
 
-	private static void appendFloatConstant( FloatConstant floatConstant, StringBuilder builder )
+	private static void appendFloatConstant( FloatValueConstant floatConstant, StringBuilder builder )
 	{
-		builder.append( FloatConstant.class.getSimpleName() ).append( "( " );
+		builder.append( FloatValueConstant.class.getSimpleName() ).append( "( " );
 		builder.append( floatConstant.value ).append( 'f' );
 		builder.append( " )" );
 	}
 
-	private static void appendLongConstant( LongConstant longConstant, StringBuilder builder )
+	private static void appendLongConstant( LongValueConstant longConstant, StringBuilder builder )
 	{
-		builder.append( LongConstant.class.getSimpleName() ).append( "( " );
+		builder.append( LongValueConstant.class.getSimpleName() ).append( "( " );
 		builder.append( longConstant.value ).append( 'L' );
 		builder.append( " )" );
 	}
 
-	private static void appendDoubleConstant( DoubleConstant doubleConstant, StringBuilder builder )
+	private static void appendDoubleConstant( DoubleValueConstant doubleConstant, StringBuilder builder )
 	{
-		builder.append( DoubleConstant.class.getSimpleName() ).append( "( " );
+		builder.append( DoubleValueConstant.class.getSimpleName() ).append( "( " );
 		builder.append( doubleConstant.value );
 		builder.append( " )" );
 	}
 
-	private static void appendStringConstant( StringConstant stringConstant, StringBuilder builder )
+	private static void appendStringConstant( StringValueConstant stringConstant, StringBuilder builder )
 	{
-		builder.append( StringConstant.class.getSimpleName() ).append( "( " );
-		appendMutf8Constant( stringConstant.getValueConstant(), builder );
+		builder.append( StringValueConstant.class.getSimpleName() ).append( "( " );
+		builder.append( Kit.string.escapeForJava( stringConstant.stringValue() ) );
 		builder.append( " )" );
 	}
 
@@ -484,7 +484,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromAnnotationParameter( AnnotationParameter annotationParameter )
 	{
 		return Twig.group( AnnotationParameter.class.getSimpleName() + " name = \"" + annotationParameter.name() + "\"", //
-			Map.entry( "value", twigFromAnnotationValue( annotationParameter.value ) ) );
+			Map.entry( "value", twigFromAnnotationValue( annotationParameter.annotationValue ) ) );
 	}
 
 	private Twig twigFromAttributeSet( AttributeSet attributeSet, Optional<Labeler> labeler )
@@ -619,7 +619,7 @@ public final class ByteCodePrinter
 		StringBuilder headerBuilder = new StringBuilder();
 		headerBuilder.append( constantValueAttribute.getClass().getSimpleName() );
 		headerBuilder.append( " " );
-		ValueConstant<?> valueConstant = constantValueAttribute.valueConstant;
+		ValueConstant valueConstant = constantValueAttribute.valueConstant;
 		appendValueConstant( valueConstant, headerBuilder );
 		return Twig.leaf( headerBuilder.toString() );
 	}
@@ -638,13 +638,13 @@ public final class ByteCodePrinter
 	private static Twig twigFromLocalVariableTypeTableAttribute( Labeler labeler, LocalVariableTypeTableAttribute localVariableTypeTableAttribute )
 	{
 		return Twig.array( localVariableTypeTableAttribute.getClass().getSimpleName(), //
-			localVariableTypeTableAttribute.localVariableTypes.stream().map( e -> twigFromLocalVariableTypeTableEntry( e, labeler ) ).toList() );
+			localVariableTypeTableAttribute.localVariableTypeTableEntries.stream().map( e -> twigFromLocalVariableTypeTableEntry( e, labeler ) ).toList() );
 	}
 
 	private static Twig twigFromLocalVariableTableAttribute( Labeler labeler, LocalVariableTableAttribute localVariableTableAttribute )
 	{
 		return Twig.array( localVariableTableAttribute.getClass().getSimpleName(), //
-			localVariableTableAttribute.entrys.stream().map( e -> twigFromLocalVariableTableEntry( e, labeler ) ).toList() );
+			localVariableTableAttribute.localVariableTableEntries.stream().map( e -> twigFromLocalVariableTableEntry( e, labeler ) ).toList() );
 	}
 
 	private static Twig twigFromLineNumberTableAttribute( Labeler labeler, LineNumberTableAttribute lineNumberTableAttribute )
@@ -720,10 +720,9 @@ public final class ByteCodePrinter
 	private static Twig twigFromBootstrapMethod( BootstrapMethod bootstrapMethod )
 	{
 		var builder = new StringBuilder();
-		//builder.append( prefix );
 		builder.append( bootstrapMethod.getClass().getSimpleName() );
 		builder.append( " methodHandle = " );
-		appendMethodHandleConstant( bootstrapMethod.methodHandleConstant, builder );
+		appendDirectMethodHandleDesc( bootstrapMethod.directMethodHandleDesc(), builder );
 		List<Constant> argumentConstants = bootstrapMethod.argumentConstants;
 		builder.append( " arguments: " );
 		boolean first = true;
@@ -732,7 +731,7 @@ public final class ByteCodePrinter
 			first = Kit.stringBuilder.appendDelimiter( builder, first, ", " );
 			switch( argumentConstant.tag )
 			{
-				case Constant.tag_String -> appendStringConstant( argumentConstant.asStringConstant(), builder );
+				case Constant.tag_String -> appendStringConstant( argumentConstant.asStringValueConstant(), builder );
 				case Constant.tag_MethodType -> appendMethodTypeConstant( argumentConstant.asMethodTypeConstant(), builder );
 				case Constant.tag_MethodHandle -> appendMethodHandleConstant( argumentConstant.asMethodHandleConstant(), builder );
 				case Constant.tag_Class -> appendClassConstant( argumentConstant.asClassConstant(), builder );
@@ -855,13 +854,8 @@ public final class ByteCodePrinter
 		appendAbsoluteInstruction( localVariableTypeTableEntry.startInstruction, builder, labeler );
 		builder.append( ", end = " );
 		appendAbsoluteInstruction( localVariableTypeTableEntry.endInstruction, builder, labeler );
-		builder.append( ", name = " ).append( localVariableTypeTableEntry.nameConstant );
-		builder.append( ", signature = " ).append( localVariableTypeTableEntry.signatureConstant );
-		builder.append( " (" );
-		builder.append( localVariableTypeTableEntry.nameConstant.stringValue() );
-		builder.append( ' ' );
-		builder.append( localVariableTypeTableEntry.signatureConstant.stringValue() );
-		builder.append( ")" );
+		builder.append( ", name = " ).append( localVariableTypeTableEntry.variableName() );
+		builder.append( ", signature = " ).append( localVariableTypeTableEntry.signatureString() );
 		String header = builder.toString();
 		return Twig.leaf( header );
 	}
@@ -897,9 +891,14 @@ public final class ByteCodePrinter
 		switch( referenceConstant.tag )
 		{
 			case Constant.tag_FieldReference -> appendFieldReferenceConstant( referenceConstant.asFieldReferenceConstant(), builder );
-			case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> appendMethodReferenceConstant( referenceConstant.asMethodReferenceConstant(), builder );
+			case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> builder.append( "reference = " ).append( referenceConstant.asMethodReferenceConstant().methodReference().asString() );
 			default -> throw new AssertionError( referenceConstant );
 		}
+	}
+
+	private static void appendDirectMethodHandleDesc( DirectMethodHandleDesc directMethodHandleDesc, StringBuilder builder )
+	{
+		builder.append( directMethodHandleDesc.toString() );
 	}
 
 	private static void appendFieldReferenceConstant( FieldReferenceConstant fieldReferenceConstant, StringBuilder builder )
@@ -909,11 +908,6 @@ public final class ByteCodePrinter
 		builder.append( fieldReferenceConstant.declaringTypeDescriptor().typeName() );
 		builder.append( '.' );
 		builder.append( fieldReferenceConstant.fieldName() );
-	}
-
-	private static void appendMethodReferenceConstant( MethodReferenceConstant methodReferenceConstant, StringBuilder builder )
-	{
-		builder.append( "reference = " ).append( methodReferenceConstant.methodReference().asString() );
 	}
 
 	private static void appendMethodTypeConstant( MethodTypeConstant methodTypeConstant, StringBuilder builder )
@@ -944,20 +938,20 @@ public final class ByteCodePrinter
 			" value = " + stringFromValueConstant( constAnnotationValue.valueConstant, constAnnotationValue.tag ) );
 	}
 
-	private static String stringFromValueConstant( ValueConstant<?> valueConstant, int annotationValueTag )
+	private static String stringFromValueConstant( ValueConstant valueConstant, int annotationValueTag )
 	{
 		StringBuilder builder = new StringBuilder();
 		switch( annotationValueTag )
 		{
-			case AnnotationValue.tagByte -> appendIntegerConstant( valueConstant.asIntegerConstant(), builder, IntegerValueHint.Byte );
-			case AnnotationValue.tagBoolean -> appendIntegerConstant( valueConstant.asIntegerConstant(), builder, IntegerValueHint.Boolean );
-			case AnnotationValue.tagCharacter -> appendIntegerConstant( valueConstant.asIntegerConstant(), builder, IntegerValueHint.Character );
-			case AnnotationValue.tagDouble -> appendDoubleConstant( valueConstant.asDoubleConstant(), builder );
-			case AnnotationValue.tagFloat -> appendFloatConstant( valueConstant.asFloatConstant(), builder );
-			case AnnotationValue.tagInteger -> appendIntegerConstant( valueConstant.asIntegerConstant(), builder, IntegerValueHint.Integer );
-			case AnnotationValue.tagLong -> appendLongConstant( valueConstant.asLongConstant(), builder );
-			case AnnotationValue.tagShort -> appendIntegerConstant( valueConstant.asIntegerConstant(), builder, IntegerValueHint.Short );
-			case AnnotationValue.tagString -> appendMutf8Constant( valueConstant.asMutf8Constant(), builder );
+			case AnnotationValue.tagByte -> appendIntegerConstant( valueConstant.asIntegerValueConstant(), builder, IntegerValueHint.Byte );
+			case AnnotationValue.tagBoolean -> appendIntegerConstant( valueConstant.asIntegerValueConstant(), builder, IntegerValueHint.Boolean );
+			case AnnotationValue.tagCharacter -> appendIntegerConstant( valueConstant.asIntegerValueConstant(), builder, IntegerValueHint.Character );
+			case AnnotationValue.tagDouble -> appendDoubleConstant( valueConstant.asDoubleValueConstant(), builder );
+			case AnnotationValue.tagFloat -> appendFloatConstant( valueConstant.asFloatValueConstant(), builder );
+			case AnnotationValue.tagInteger -> appendIntegerConstant( valueConstant.asIntegerValueConstant(), builder, IntegerValueHint.Integer );
+			case AnnotationValue.tagLong -> appendLongConstant( valueConstant.asLongValueConstant(), builder );
+			case AnnotationValue.tagShort -> appendIntegerConstant( valueConstant.asIntegerValueConstant(), builder, IntegerValueHint.Short );
+			case AnnotationValue.tagString -> appendMutf8Constant( valueConstant.asMutf8ValueConstant(), builder );
 			default -> throw new AssertionError( annotationValueTag );
 		}
 		return builder.toString();
@@ -983,9 +977,9 @@ public final class ByteCodePrinter
 	private static Twig twigFromTypeAnnotation( TypeAnnotation typeAnnotation )
 	{
 		return Twig.group( TypeAnnotation.class.getSimpleName(), //
-			Map.entry( "typePath", twigFromTypePath( typeAnnotation.typePath ) ), //
-			Map.entry( "typeIndex", Twig.leaf( "" + typeAnnotation.typeIndex ) ), //
 			Map.entry( "target", twigFromTarget( typeAnnotation.target ) ), //
+			Map.entry( "typePath", twigFromTypePath( typeAnnotation.targetPath ) ), //
+			Map.entry( "type", Twig.leaf( typeAnnotation.typeDescriptor().typeName() ) ), //
 			Map.entry( "parameters", Twig.array( typeAnnotation.parameters.stream().map( a -> twigFromAnnotationParameter( a ) ).toList() ) ) );
 	}
 
@@ -1148,12 +1142,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromMethodReferencingInstruction( String prefix, MethodReferencingInstruction methodReferencingInstruction )
 	{
 		var builder = new StringBuilder();
-		MethodReferenceConstant constant = methodReferencingInstruction.methodReferenceConstant;
-		switch( constant.tag )
-		{
-			case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> appendMethodReferenceConstant( constant, builder );
-			default -> throw new AssertionError( constant );
-		}
+		builder.append( "reference = " ).append( methodReferencingInstruction.methodReference().asString() );
 		return Twig.leaf( buildInstructionHeader( prefix, methodReferencingInstruction.opCode, builder.toString() ) );
 	}
 
@@ -1164,17 +1153,29 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromLoadConstantInstruction( String prefix, LoadConstantInstruction loadConstantInstruction )
 	{
-		String valueAsString = switch( loadConstantInstruction.constant.tag )
-			{
-				case Constant.tag_Integer -> String.valueOf( loadConstantInstruction.constant.asIntegerConstant().value );
-				case Constant.tag_Float -> String.valueOf( loadConstantInstruction.constant.asFloatConstant().value );
-				case Constant.tag_Long -> String.valueOf( loadConstantInstruction.constant.asLongConstant().value );
-				case Constant.tag_Double -> String.valueOf( loadConstantInstruction.constant.asDoubleConstant().value );
-				case Constant.tag_String -> Kit.string.escapeForJava( loadConstantInstruction.constant.asStringConstant().getValueConstant().stringValue() );
-				case Constant.tag_Class -> loadConstantInstruction.constant.asClassConstant().typeDescriptor().typeName();
-				default -> throw new AssertionError( loadConstantInstruction.constant );
-			};
+		String valueAsString = stringFromLoadConstantInstruction( loadConstantInstruction );
 		return Twig.leaf( buildInstructionHeader( prefix, LoadConstantInstruction.opCode, valueAsString ) );
+	}
+
+	private static String stringFromLoadConstantInstruction( LoadConstantInstruction loadConstantInstruction )
+	{
+		if( loadConstantInstruction.isValue() )
+		{
+			ValueConstant valueConstant = loadConstantInstruction.getValue();
+			return switch( valueConstant.tag )
+			{
+				case Constant.tag_Integer -> String.valueOf( valueConstant.asIntegerValueConstant().value );
+				case Constant.tag_Float -> String.valueOf( valueConstant.asFloatValueConstant().value );
+				case Constant.tag_Long -> String.valueOf( valueConstant.asLongValueConstant().value );
+				case Constant.tag_Double -> String.valueOf( valueConstant.asDoubleValueConstant().value );
+				case Constant.tag_String -> Kit.string.escapeForJava( valueConstant.asStringValueConstant().stringValue() );
+				default -> throw new AssertionError();
+			};
+		}
+		else
+		{
+			return loadConstantInstruction.getTypeDescriptor().typeName();
+		}
 	}
 
 	private static Twig twigFromInvokeDynamicInstruction( String prefix, InvokeDynamicInstruction invokeDynamicInstruction )
@@ -1182,19 +1183,20 @@ public final class ByteCodePrinter
 		var builder = new StringBuilder();
 		builder.append( "prototype = " ).append( invokeDynamicInstruction.methodPrototype().asString() );
 		return Twig.group( buildInstructionHeader( prefix, OpCode.INVOKEDYNAMIC, builder.toString() ), //
-			Map.entry( indentation + indentation + "bootstrapMethod", twigFromBootstrapMethod( invokeDynamicInstruction.invokeDynamicConstant.getBootstrapMethod() ) ) );
+			Map.entry( indentation + indentation + "bootstrapMethod", twigFromBootstrapMethod( invokeDynamicInstruction.bootstrapMethod() ) ) );
 	}
 
 	private static Twig twigFromInvokeInterfaceInstruction( String prefix, InvokeInterfaceInstruction invokeInterfaceInstruction )
 	{
 		var builder = new StringBuilder();
-		appendMethodReferenceConstant( invokeInterfaceInstruction.methodReferenceConstant, builder );
+		builder.append( "reference = " ).append( invokeInterfaceInstruction.methodReference().asString() );
 		return Twig.leaf( buildInstructionHeader( prefix, OpCode.INVOKEINTERFACE, builder.toString(), invokeInterfaceInstruction.argumentCount + " arguments" ) );
 	}
 
 	private static Twig twigFromLocalVariableInstruction( String prefix, LocalVariableInstruction localVariableInstruction )
 	{
-		String[] arguments = localVariableInstruction.index <= 3 && localVariableInstruction.opCode != OpCode.RET ? new String[] { "" + localVariableInstruction.index } : Kit.ARRAY_OF_ZERO_STRINGS;
+		Optional<Integer> parameter = localVariableInstruction.parameter();
+		String[] arguments = parameter.map( i -> new String[] { "" + i } ).orElse( Kit.ARRAY_OF_ZERO_STRINGS );
 		return Twig.leaf( buildInstructionHeader( prefix, localVariableInstruction.opCode, arguments ) );
 	}
 
@@ -1219,7 +1221,7 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromNewPrimitiveArrayInstruction( String prefix, NewPrimitiveArrayInstruction newPrimitiveArrayInstruction )
 	{
-		return Twig.leaf( buildInstructionHeader( prefix, OpCode.NEWARRAY, "type = " + NewPrimitiveArrayInstruction.Type.fromNumber( newPrimitiveArrayInstruction.type ).name() ) );
+		return Twig.leaf( buildInstructionHeader( prefix, OpCode.NEWARRAY, "type = " + newPrimitiveArrayInstruction.type.name() ) );
 	}
 
 	private static Twig twigFromOperandlessInstruction( String prefix, OperandlessInstruction operandlessInstruction )

@@ -3,9 +3,11 @@ package mikenakis.bytecode.test.model;
 /**
  * test class.
  *
+ * TODO: look at jvms-4.7.20.2 (https://docs.oracle.com/javase/specs/jvms/se14/html/jvms-4.html#jvms-4.7.20.2) for additional ways to specify type annotations
+ *
  * @author Michael Belivanakis (michael.gr)
  */
-@SuppressWarnings( { "unused", "EmptyMethod" } )
+@SuppressWarnings( { "unused", "EmptyMethod", "MethodMayBeStatic" } )
 @RuntimeVisibleTypeAnnotation1( stringParameter = "a" )
 @RuntimeInvisibleTypeAnnotation1( 6 )
 public abstract class Class6WithTypeAnnotations

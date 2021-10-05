@@ -3,11 +3,11 @@ package mikenakis.bytecode.reading;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.kit.Kit;
 
-class ReadingLocationMap extends LocationMap
+public class ReadingLocationMap extends LocationMap
 {
 	private int topLocation;
 
-	ReadingLocationMap( int codeLength )
+	public ReadingLocationMap( int codeLength )
 	{
 		super( codeLength );
 	}

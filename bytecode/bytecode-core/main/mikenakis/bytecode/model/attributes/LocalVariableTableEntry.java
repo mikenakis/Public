@@ -2,8 +2,10 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
+import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -17,25 +19,25 @@ public final class LocalVariableTableEntry
 {
 	public static LocalVariableTableEntry of( Instruction startInstruction, Optional<Instruction> endInstruction, FieldPrototype variablePrototype, int variableIndex )
 	{
-		Mutf8Constant nameConstant = Mutf8Constant.of( variablePrototype.fieldName );
-		Mutf8Constant descriptorConstant = Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( variablePrototype.descriptor.typeDescriptor ) );
+		Mutf8ValueConstant nameConstant = Mutf8ValueConstant.of( variablePrototype.fieldName );
+		Mutf8ValueConstant descriptorConstant = Mutf8ValueConstant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( variablePrototype.descriptor.typeDescriptor ) );
 		return of( startInstruction, endInstruction, nameConstant, descriptorConstant, variableIndex );
 	}
 
-	public static LocalVariableTableEntry of( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant variableNameConstant, //
-		Mutf8Constant variableTypeDescriptorStringConstant, int variableIndex )
+	public static LocalVariableTableEntry of( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8ValueConstant variableNameConstant, //
+		Mutf8ValueConstant variableTypeDescriptorStringConstant, int variableIndex )
 	{
 		return new LocalVariableTableEntry( startInstruction, endInstruction, variableNameConstant, variableTypeDescriptorStringConstant, variableIndex );
 	}
 
 	public final Instruction startInstruction;
 	public final Optional<Instruction> endInstruction;
-	public final Mutf8Constant variableNameConstant;
-	public final Mutf8Constant variableTypeDescriptorStringConstant;
+	private final Mutf8ValueConstant variableNameConstant;
+	private final Mutf8ValueConstant variableTypeDescriptorStringConstant;
 	public final int variableIndex;
 
-	private LocalVariableTableEntry( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8Constant variableNameConstant, //
-		Mutf8Constant variableTypeDescriptorStringConstant, int variableIndex )
+	private LocalVariableTableEntry( Instruction startInstruction, Optional<Instruction> endInstruction, Mutf8ValueConstant variableNameConstant, //
+		Mutf8ValueConstant variableTypeDescriptorStringConstant, int variableIndex )
 	{
 		this.startInstruction = startInstruction;
 		this.endInstruction = endInstruction;
@@ -50,5 +52,22 @@ public final class LocalVariableTableEntry
 	{
 		return "index = " + variableIndex + ", startInstruction = {" + startInstruction + "}, endInstruction = {" + endInstruction + "}" +
 			", name = " + variableNameConstant + ", descriptor = " + variableTypeDescriptorStringConstant;
+	}
+
+	public void intern( Interner interner )
+	{
+		variableNameConstant.intern( interner );
+		variableTypeDescriptorStringConstant.intern( interner );
+	}
+
+	public void write( CodeConstantWriter codeConstantWriter )
+	{
+		int startLocation = codeConstantWriter.getLocation( startInstruction );
+		int endLocation = codeConstantWriter.getLocation( endInstruction );
+		codeConstantWriter.writeUnsignedShort( startLocation );
+		codeConstantWriter.writeUnsignedShort( endLocation - startLocation );
+		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( variableNameConstant ) );
+		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( variableTypeDescriptorStringConstant ) );
+		codeConstantWriter.writeUnsignedShort( variableIndex );
 	}
 }

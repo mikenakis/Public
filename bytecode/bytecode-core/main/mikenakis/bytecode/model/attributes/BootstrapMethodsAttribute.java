@@ -2,6 +2,11 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.model.constants.MethodHandleConstant;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -18,6 +23,28 @@ import java.util.List;
  */
 public final class BootstrapMethodsAttribute extends KnownAttribute
 {
+	public static BootstrapMethodsAttribute read( AttributeReader attributeReader )
+	{
+		int bootstrapMethodCount = attributeReader.readUnsignedShort();
+		assert bootstrapMethodCount > 0;
+		List<BootstrapMethod> entries = new ArrayList<>( bootstrapMethodCount );
+		for( int i = 0; i < bootstrapMethodCount; i++ )
+		{
+			MethodHandleConstant methodHandleConstant = attributeReader.readIndexAndGetConstant().asMethodHandleConstant();
+			int argumentConstantCount = attributeReader.readUnsignedShort();
+			assert argumentConstantCount > 0;
+			List<Constant> argumentConstants = new ArrayList<>( argumentConstantCount );
+			for( int j = 0; j < argumentConstantCount; j++ )
+			{
+				Constant argumentConstant = attributeReader.readIndexAndGetConstant();
+				argumentConstants.add( argumentConstant );
+			}
+			BootstrapMethod entry = BootstrapMethod.of( methodHandleConstant, argumentConstants );
+			entries.add( entry );
+		}
+		return of( entries );
+	}
+
 	public static BootstrapMethodsAttribute of()
 	{
 		List<BootstrapMethod> entries = new ArrayList<>();
@@ -52,4 +79,17 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 	public BootstrapMethod getBootstrapMethodByIndex( int index ) { return bootstrapMethods.get( index ); }
 	@Deprecated @Override public BootstrapMethodsAttribute asBootstrapMethodsAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return bootstrapMethods.size() + " entries"; }
+
+	@Override public void intern( Interner interner )
+	{
+		for( BootstrapMethod bootstrapMethod : bootstrapMethods )
+			bootstrapMethod.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( bootstrapMethods.size() );
+		for( BootstrapMethod bootstrapMethod : bootstrapMethods )
+			bootstrapMethod.write( constantWriter );
+	}
 }

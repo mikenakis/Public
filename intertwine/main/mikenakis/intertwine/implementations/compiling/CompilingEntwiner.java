@@ -4,7 +4,7 @@ import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
@@ -68,8 +68,8 @@ final class CompilingEntwiner<T>
 			assert !method.isSynthetic(); // ?
 			assert !method.isDefault(); // ?
 			assert !method.isBridge(); // ?
-			Mutf8Constant methodNameConstant = Mutf8Constant.of( method.getName() );
-			Mutf8Constant methodDescriptorConstant = Mutf8Constant.of( "" ); //TODO
+			Mutf8ValueConstant methodNameConstant = Mutf8ValueConstant.of( method.getName() );
+			Mutf8ValueConstant methodDescriptorConstant = Mutf8ValueConstant.of( "" ); //TODO
 			ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), methodNameConstant, methodDescriptorConstant, AttributeSet.of() );
 		}
 		return byteCodeType;

@@ -5,8 +5,13 @@ import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,6 +27,19 @@ import java.util.List;
  */
 public abstract class AnnotationsAttribute extends KnownAttribute
 {
+	protected static List<Annotation> readAnnotations( AttributeReader attributeReader )
+	{
+		int count = attributeReader.readUnsignedShort();
+		assert count > 0;
+		List<Annotation> annotations = new ArrayList<>( count );
+		for( int i = 0; i < count; i++ )
+		{
+			Annotation byteCodeAnnotation = Annotation.read( attributeReader );
+			annotations.add( byteCodeAnnotation );
+		}
+		return annotations;
+	}
+
 	public final List<Annotation> annotations;
 
 	AnnotationsAttribute( int tag, List<Annotation> annotations )
@@ -32,4 +50,17 @@ public abstract class AnnotationsAttribute extends KnownAttribute
 
 	@Deprecated @Override public AnnotationsAttribute asAnnotationsAttribute() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return annotations.size() + " entries"; }
+
+	@Override public void intern( Interner interner )
+	{
+		for( Annotation annotation : annotations )
+			annotation.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( ((Collection<Annotation>)annotations).size() );
+		for( Annotation annotation : annotations )
+			annotation.write( constantWriter );
+	}
 }

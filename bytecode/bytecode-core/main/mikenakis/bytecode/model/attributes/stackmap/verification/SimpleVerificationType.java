@@ -1,5 +1,8 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
+import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.writing.Interner;
+
 /**
  * 'Simple' {@link VerificationType}.
  *
@@ -14,4 +17,14 @@ public final class SimpleVerificationType extends VerificationType
 	}
 
 	@Deprecated @Override public SimpleVerificationType asSimpleVerificationType() { return this; }
+
+	@Override public void intern( Interner interner )
+	{
+		// nothing to do
+	}
+
+	@Override public void write( CodeConstantWriter codeConstantWriter )
+	{
+		codeConstantWriter.writeUnsignedByte( tag );
+	}
 }

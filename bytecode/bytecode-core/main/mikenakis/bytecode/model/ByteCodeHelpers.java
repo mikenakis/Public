@@ -1,10 +1,10 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
+import mikenakis.bytecode.model.constants.ReferenceKind;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.MethodHandleDescriptor;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.java_type_model.ArrayTypeDescriptor;
@@ -53,20 +53,15 @@ public final class ByteCodeHelpers
 		return internalName;
 	}
 
-	private static ClassDesc classDescFromClassConstant( ClassConstant classConstant )
-	{
-		return ClassDesc.ofDescriptor( descriptorStringFromInternalName( classConstant.getInternalNameOrDescriptorStringConstant().stringValue() ) );
-	}
-
-	private static DirectMethodHandleDesc directMethodHandleDescFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
+	public static DirectMethodHandleDesc directMethodHandleDescFromMethodHandleConstant( MethodHandleConstant methodHandleConstant )
 	{
 		ReferenceConstant referenceConstant = methodHandleConstant.getReferenceConstant();
 		NameAndDescriptorConstant nameAndDescriptorConstant = referenceConstant.getNameAndDescriptorConstant();
 		return MethodHandleDesc.of( //
 			DirectMethodHandleDesc.Kind.valueOf( //
 				methodHandleConstant.referenceKind().number, //
-				methodHandleConstant.referenceKind() == MethodHandleConstant.ReferenceKind.InvokeInterface ), //I do not know why the isInterface parameter is needed here, but it does not work otherwise.
-			classDescFromClassConstant( referenceConstant.getDeclaringTypeConstant() ), //
+				methodHandleConstant.referenceKind() == ReferenceKind.InvokeInterface ), //I do not know why the isInterface parameter is needed here, but it does not work otherwise.
+			ClassDesc.ofDescriptor( descriptorStringFromInternalName( referenceConstant.getDeclaringTypeConstant().internalNameOrDescriptorString() ) ), //
 			nameAndDescriptorConstant.getNameConstant().stringValue(), //
 			nameAndDescriptorConstant.getDescriptorConstant().stringValue() );
 	}
@@ -85,7 +80,7 @@ public final class ByteCodeHelpers
 		return MethodDescriptor.of( returnTypeDescriptor, parameterTypeDescriptors );
 	}
 
-	public static TypeDescriptor typeDescriptorFromDescriptorStringConstant( Mutf8Constant descriptorStringConstant )
+	public static TypeDescriptor typeDescriptorFromDescriptorStringConstant( Mutf8ValueConstant descriptorStringConstant )
 	{
 		return typeDescriptorFromDescriptorString( descriptorStringConstant.stringValue() );
 	}
@@ -136,11 +131,6 @@ public final class ByteCodeHelpers
 		TypeDescriptor ownerTypeDescriptor = typeDescriptorFromDescriptorString( directMethodHandleDesc.owner().descriptorString() );
 		return MethodHandleDescriptor.of( methodDescriptor, ownerTypeDescriptor );
 	}
-
-//		if( isValidInternalName( nameConstant.stringValue() ) )
-//			Log.debug( nameConstant.stringValue() + " : OK"  );
-//		else
-//			Log.error( nameConstant.stringValue() + " : Not OK"  );
 
 	public static boolean isValidInternalName( String name )
 	{
@@ -291,7 +281,7 @@ public final class ByteCodeHelpers
 	{
 		ClassDesc returnDesc = classDescFromTypeDescriptor( methodDescriptor.returnTypeDescriptor );
 		ClassDesc[] paramDescs = new ClassDesc[methodDescriptor.parameterTypeDescriptors.size()];
-		for( int i = 0;  i < paramDescs.length;  i++ )
+		for( int i = 0; i < paramDescs.length; i++ )
 			paramDescs[i] = classDescFromTypeDescriptor( methodDescriptor.parameterTypeDescriptors.get( i ) );
 		MethodTypeDesc methodTypeDesc = MethodTypeDesc.of( returnDesc, paramDescs );
 		return methodTypeDesc.descriptorString();

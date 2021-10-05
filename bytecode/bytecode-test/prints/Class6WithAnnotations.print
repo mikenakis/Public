@@ -4,15 +4,15 @@
 ├─■ fields: 1 items
 │ └─■ [0] ByteCodeField accessFlags = [public, final], prototype = int fieldWithAnnotation
 │   └─■ attributeSet: 3 items
-│     ├─■ [0] ConstantValueAttribute IntegerConstant( 5 )
+│     ├─■ [0] ConstantValueAttribute IntegerValueConstant( 5 )
 │     ├─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
 │     │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │     │   └─■ [0] AnnotationParameter name = "stringParameter"
-│     │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "b" )
+│     │     └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "b" )
 │     └─■ [2] RuntimeInvisibleAnnotationsAttribute; 1 items
 │       └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1; 1 parameters
 │         └─■ [0] AnnotationParameter name = "value"
-│           └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 7 )
+│           └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 7 )
 ├─■ methods: 9 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [protected], prototype = void <init>()
 │ │ └─■ attributes: 3 items
@@ -38,11 +38,11 @@
 │ │   ├─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
 │ │   │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │ │   │   └─■ [0] AnnotationParameter name = "stringParameter"
-│ │   │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "c" )
+│ │   │     └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "c" )
 │ │   └─■ [2] RuntimeInvisibleAnnotationsAttribute; 1 items
 │ │     └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1; 1 parameters
 │ │       └─■ [0] AnnotationParameter name = "value"
-│ │         └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 8 )
+│ │         └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 8 )
 │ ├─■ [1] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithAnnotationWithAnnotationParameter()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 0, maxLocals = 1
@@ -61,7 +61,7 @@
 │ │         └─■ value: AnnotationAnnotationValue type = java.lang.SuppressWarnings; 1 parameters
 │ │           └─■ [0] AnnotationParameter name = "value"
 │ │             └─■ value: ArrayAnnotationValue; 1 values
-│ │               └─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "foo" )
+│ │               └─■ [0] ConstAnnotationValue tag = String value = Mutf8ValueConstant( "foo" )
 │ ├─■ [2] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithAnnotationWithArrayParameter()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 0, maxLocals = 1
@@ -78,8 +78,8 @@
 │ │     └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │ │       └─■ [0] AnnotationParameter name = "arrayParameter"
 │ │         └─■ value: ArrayAnnotationValue; 2 values
-│ │           ├─■ [0] ConstAnnotationValue tag = String value = Mutf8Constant( "d" )
-│ │           └─■ [1] ConstAnnotationValue tag = String value = Mutf8Constant( "e" )
+│ │           ├─■ [0] ConstAnnotationValue tag = String value = Mutf8ValueConstant( "d" )
+│ │           └─■ [1] ConstAnnotationValue tag = String value = Mutf8ValueConstant( "e" )
 │ ├─■ [3] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithAnnotationWithPrimitiveParameters()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 0, maxLocals = 1
@@ -95,21 +95,21 @@
 │ │   └─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
 │ │     └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 8 parameters
 │ │       ├─■ [0] AnnotationParameter name = "booleanParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Boolean value = IntegerConstant( 0 (boolean false) )
+│ │       │ └─■ value: ConstAnnotationValue tag = Boolean value = IntegerValueConstant( 0 (boolean false) )
 │ │       ├─■ [1] AnnotationParameter name = "byteParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Byte value = IntegerConstant( 2 (byte) )
+│ │       │ └─■ value: ConstAnnotationValue tag = Byte value = IntegerValueConstant( 2 (byte) )
 │ │       ├─■ [2] AnnotationParameter name = "charParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Character value = IntegerConstant( 100 (char 'd') )
+│ │       │ └─■ value: ConstAnnotationValue tag = Character value = IntegerValueConstant( 100 (char 'd') )
 │ │       ├─■ [3] AnnotationParameter name = "doubleParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Double value = DoubleConstant( 0.1 )
+│ │       │ └─■ value: ConstAnnotationValue tag = Double value = DoubleValueConstant( 0.1 )
 │ │       ├─■ [4] AnnotationParameter name = "floatParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Float value = FloatConstant( 0.2f )
+│ │       │ └─■ value: ConstAnnotationValue tag = Float value = FloatValueConstant( 0.2f )
 │ │       ├─■ [5] AnnotationParameter name = "intParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 3 )
+│ │       │ └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 3 )
 │ │       ├─■ [6] AnnotationParameter name = "longParameter"
-│ │       │ └─■ value: ConstAnnotationValue tag = Long value = LongConstant( 4294967296L )
+│ │       │ └─■ value: ConstAnnotationValue tag = Long value = LongValueConstant( 4294967296L )
 │ │       └─■ [7] AnnotationParameter name = "shortParameter"
-│ │         └─■ value: ConstAnnotationValue tag = Short value = IntegerConstant( 1000 (short) )
+│ │         └─■ value: ConstAnnotationValue tag = Short value = IntegerValueConstant( 1000 (short) )
 │ ├─■ [4] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithAnnotationWithStringParameter()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 0, maxLocals = 1
@@ -125,7 +125,7 @@
 │ │   └─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
 │ │     └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │ │       └─■ [0] AnnotationParameter name = "stringParameter"
-│ │         └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "y" )
+│ │         └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "y" )
 │ ├─■ [5] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithAnnotationWithClassParameter()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 0, maxLocals = 1
@@ -171,7 +171,7 @@
 │ │   └─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
 │ │     └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │ │       └─■ [0] AnnotationParameter name = "value"
-│ │         └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 6 )
+│ │         └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 6 )
 │ └─■ [8] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithParameterAnnotations( int, int, int )
 │   └─■ attributes: 4 items
 │     ├─■ [0] CodeAttribute maxStack = 4, maxLocals = 4
@@ -182,7 +182,7 @@
 │     │ │ ├─■         ILOAD 2
 │     │ │ ├─■         ILOAD 3
 │     │ │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( int, int, int )
-│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
+│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "a=\x01, b=\x01, c=\x01" )
 │     │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │     │ │ ├─■ L65: // }
 │     │ │ └─■         RETURN
@@ -205,29 +205,29 @@
 │     │ ├─■ [1] ParameterAnnotationSet; 1 annotations
 │     │ │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │     │ │   └─■ [0] AnnotationParameter name = "stringParameter"
-│     │ │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "g" )
+│     │ │     └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "g" )
 │     │ └─■ [2] ParameterAnnotationSet; 1 annotations
 │     │   └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
 │     │     └─■ [0] AnnotationParameter name = "stringParameter"
-│     │       └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "h" )
+│     │       └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "h" )
 │     └─■ [3] RuntimeInvisibleParameterAnnotationsAttribute; 3 items
 │       ├─■ [0] ParameterAnnotationSet; 0 annotations
 │       ├─■ [1] ParameterAnnotationSet; 0 annotations
 │       └─■ [2] ParameterAnnotationSet; 1 annotations
 │         └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1; 1 parameters
 │           └─■ [0] AnnotationParameter name = "value"
-│             └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 1 )
+│             └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 1 )
 └─■ attributeSet: 5 items
   ├─■ [0] SourceFileAttribute "Class6WithAnnotations.java"
   ├─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
   │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 1 parameters
   │   └─■ [0] AnnotationParameter name = "stringParameter"
-  │     └─■ value: ConstAnnotationValue tag = String value = Mutf8Constant( "a" )
+  │     └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "a" )
   ├─■ [2] RuntimeInvisibleAnnotationsAttribute; 1 items
   │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleAnnotation1; 1 parameters
   │   └─■ [0] AnnotationParameter name = "value"
-  │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerConstant( 6 )
+  │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 6 )
   ├─■ [3] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "a=\x01, b=\x01, c=\x01" ) )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "a=\x01, b=\x01, c=\x01" )
   └─■ [4] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

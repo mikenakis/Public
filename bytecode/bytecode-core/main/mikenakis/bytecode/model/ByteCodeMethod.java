@@ -1,7 +1,9 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
@@ -38,22 +40,25 @@ public final class ByteCodeMethod extends ByteCodeMember
 
 	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, MethodPrototype methodPrototype )
 	{
-		return new ByteCodeMethod( modifiers, Mutf8Constant.of( methodPrototype.methodName ), Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ), AttributeSet.of() );
+		return new ByteCodeMethod( modifiers, Mutf8ValueConstant.of( methodPrototype.methodName ), Mutf8ValueConstant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ), AttributeSet.of() );
 	}
 
-	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Mutf8Constant methodNameConstant, Mutf8Constant methodDescriptorStringConstant, AttributeSet attributeSet )
+	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Mutf8ValueConstant methodNameConstant, Mutf8ValueConstant methodDescriptorStringConstant, AttributeSet attributeSet )
 	{
 		return new ByteCodeMethod( modifiers, methodNameConstant, methodDescriptorStringConstant, attributeSet );
 	}
 
 	public final FlagSet<Modifier> modifiers;
-	public final Mutf8Constant methodDescriptorStringConstant;
+	private final Mutf8ValueConstant methodNameConstant;
+	private final Mutf8ValueConstant methodDescriptorStringConstant;
+	public final AttributeSet attributeSet;
 
-	private ByteCodeMethod( FlagSet<Modifier> modifiers, Mutf8Constant methodNameConstant, Mutf8Constant methodDescriptorStringConstant, AttributeSet attributeSet )
+	private ByteCodeMethod( FlagSet<Modifier> modifiers, Mutf8ValueConstant methodNameConstant, Mutf8ValueConstant methodDescriptorStringConstant, AttributeSet attributeSet )
 	{
-		super( methodNameConstant, attributeSet );
 		this.modifiers = modifiers;
+		this.methodNameConstant = methodNameConstant;
 		this.methodDescriptorStringConstant = methodDescriptorStringConstant;
+		this.attributeSet = attributeSet;
 	}
 
 	public boolean isMatch( MethodPrototype methodPrototype )
@@ -63,7 +68,23 @@ public final class ByteCodeMethod extends ByteCodeMember
 		return descriptor().equals( methodPrototype.descriptor );
 	}
 
+	@Override public String name() { return methodNameConstant.stringValue(); }
 	public MethodDescriptor descriptor() { return ByteCodeHelpers.methodDescriptorFromDescriptorString( methodDescriptorStringConstant.stringValue() ); }
-	public MethodPrototype prototype() { return MethodPrototype.of( memberNameConstant.stringValue(), descriptor() ); }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "accessFlags = " + modifiers + ", name = " + memberNameConstant + ", descriptor = " + methodDescriptorStringConstant; }
+	public MethodPrototype prototype() { return MethodPrototype.of( name(), descriptor() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "accessFlags = " + modifiers + ", name = " + methodNameConstant + ", descriptor = " + methodDescriptorStringConstant; }
+
+	public void intern( Interner interner )
+	{
+		methodNameConstant.intern( interner );
+		attributeSet.intern( interner );
+		methodDescriptorStringConstant.intern( interner );
+	}
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( modifiers.getBits() );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( methodNameConstant ) );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( methodDescriptorStringConstant ) );
+		attributeSet.write( constantWriter );
+	}
 }

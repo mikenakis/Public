@@ -2,6 +2,9 @@ package mikenakis.bytecode.model.attributes.code.instructions;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -9,6 +12,25 @@ import java.util.List;
 
 public final class TableSwitchInstruction extends Instruction
 {
+	public static TableSwitchInstruction read( CodeAttributeReader codeAttributeReader, boolean wide )
+	{
+		assert !wide;
+		codeAttributeReader.skipToAlign();
+		int defaultInstructionOffset = codeAttributeReader.readInt();
+		int lowValue = codeAttributeReader.readInt();
+		int highValue = codeAttributeReader.readInt();
+		int entryCount = highValue - lowValue + 1;
+		TableSwitchInstruction tableSwitchInstruction = of( entryCount, lowValue );
+		codeAttributeReader.setRelativeTargetInstruction( tableSwitchInstruction, defaultInstructionOffset, tableSwitchInstruction::setDefaultInstruction );
+		for( int index = 0; index < entryCount; index++ )
+		{
+			int targetInstructionOffset = codeAttributeReader.readInt();
+			codeAttributeReader.setRelativeTargetInstruction( tableSwitchInstruction, targetInstructionOffset, //
+				targetInstruction -> tableSwitchInstruction.targetInstructions.add( targetInstruction ) );
+		}
+		return tableSwitchInstruction;
+	}
+
 	public static TableSwitchInstruction of( int entryCount, int lowValue )
 	{
 		return new TableSwitchInstruction( entryCount, lowValue );
@@ -40,4 +62,24 @@ public final class TableSwitchInstruction extends Instruction
 
 	@Deprecated @Override public TableSwitchInstruction asTableSwitchInstruction() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( OpCode.TABLESWITCH ); }
+
+	@Override public void intern( Interner interner )
+	{
+		// nothing to do
+	}
+
+	@Override public void write( InstructionWriter instructionWriter )
+	{
+		instructionWriter.writeUnsignedByte( OpCode.TABLESWITCH );
+		instructionWriter.skipToAlign();
+		int defaultInstructionOffset = instructionWriter.getOffset( this, getDefaultInstruction() );
+		instructionWriter.writeInt( defaultInstructionOffset );
+		instructionWriter.writeInt( lowValue );
+		instructionWriter.writeInt( lowValue + targetInstructions.size() - 1 );
+		for( Instruction targetInstruction : targetInstructions )
+		{
+			int targetInstructionOffset = instructionWriter.getOffset( this, targetInstruction );
+			instructionWriter.writeInt( targetInstructionOffset );
+		}
+	}
 }

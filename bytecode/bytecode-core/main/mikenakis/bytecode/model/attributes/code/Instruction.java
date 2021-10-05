@@ -15,6 +15,9 @@ import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstr
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.InstructionWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -25,6 +28,37 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public abstract class Instruction
 {
+	public static Instruction read( CodeAttributeReader codeAttributeReader )
+	{
+		boolean wide = false;
+		int opCode = codeAttributeReader.readUnsignedByte();
+		if( opCode == OpCode.WIDE )
+		{
+			wide = true;
+			opCode = codeAttributeReader.readUnsignedByte();
+		}
+		int instructionGroupTag = groupFromOpCode( opCode );
+		return switch( instructionGroupTag )
+			{
+				case Instruction.groupTag_Operandless -> OperandlessInstruction.read( wide, opCode );
+				case Instruction.groupTag_LocalVariable -> LocalVariableInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_IInc -> IIncInstruction.read( codeAttributeReader, wide );
+				case Instruction.groupTag_ConditionalBranch -> ConditionalBranchInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_Branch -> BranchInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_TableSwitch -> TableSwitchInstruction.read( codeAttributeReader, wide );
+				case Instruction.groupTag_LookupSwitch -> LookupSwitchInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_ClassConstantReferencing -> ClassReferencingInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_FieldConstantReferencing -> FieldReferencingInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_MethodConstantReferencing -> MethodReferencingInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_InvokeInterface -> InvokeInterfaceInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_InvokeDynamic -> InvokeDynamicInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_NewPrimitiveArray -> NewPrimitiveArrayInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_MultiANewArray -> MultiANewArrayInstruction.read( codeAttributeReader, wide, opCode );
+				case Instruction.groupTag_LoadConstant -> LoadConstantInstruction.read( codeAttributeReader, wide, opCode );
+				default -> throw new AssertionError( instructionGroupTag );
+			};
+	}
+
 	public static final int groupTag_Branch                    /**/ = 1;
 	public static final int groupTag_ConditionalBranch         /**/ = 2;
 	public static final int groupTag_ClassConstantReferencing  /**/ = 3;
@@ -109,4 +143,7 @@ public abstract class Instruction
 	@Override public final int hashCode() { return super.hashCode(); }
 	@Override public final boolean equals( Object other ) { return this == other; }
 	@Override public abstract String toString();
+
+	public abstract void intern( Interner interner );
+	public abstract void write( InstructionWriter instructionWriter );
 }

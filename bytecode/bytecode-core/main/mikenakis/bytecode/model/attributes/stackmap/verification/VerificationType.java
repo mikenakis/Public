@@ -1,6 +1,9 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
 import mikenakis.bytecode.exceptions.InvalidVerificationTypeTagException;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -13,6 +16,20 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class VerificationType
 {
+	public static VerificationType read( CodeAttributeReader codeAttributeReader )
+	{
+		int verificationTypeTag = codeAttributeReader.readUnsignedByte();
+		return switch( verificationTypeTag )
+			{
+				case VerificationType.tag_Top, VerificationType.tag_Integer, VerificationType.tag_Float, //
+					VerificationType.tag_Double, VerificationType.tag_Long, VerificationType.tag_Null, //
+					VerificationType.tag_UninitializedThis -> new SimpleVerificationType( verificationTypeTag );
+				case VerificationType.tag_Object -> ObjectVerificationType.read( codeAttributeReader );
+				case VerificationType.tag_Uninitialized -> UninitializedVerificationType.read( codeAttributeReader );
+				default -> throw new InvalidVerificationTypeTagException( verificationTypeTag );
+			};
+	}
+
 	public static final int tag_Top               /**/ = 0;
 	public static final int tag_Integer           /**/ = 1;
 	public static final int tag_Float             /**/ = 2;
@@ -51,4 +68,7 @@ public abstract class VerificationType
 	@ExcludeFromJacocoGeneratedReport public SimpleVerificationType asSimpleVerificationType() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport public UninitializedVerificationType asUninitializedVerificationType() { return Kit.fail(); }
 	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString() { return "tag = " + tagName( tag ); }
+
+	public abstract void intern( Interner interner );
+	public abstract void write( CodeConstantWriter codeConstantWriter );
 }

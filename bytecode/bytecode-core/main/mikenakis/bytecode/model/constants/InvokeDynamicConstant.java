@@ -4,6 +4,9 @@ import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
+import mikenakis.bytecode.reading.ConstantReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -15,6 +18,15 @@ import java.util.Objects;
  */
 public final class InvokeDynamicConstant extends Constant
 {
+	public static InvokeDynamicConstant read( ConstantReader constantReader, int constantTag )
+	{
+		assert constantTag == tag_InvokeDynamic;
+		InvokeDynamicConstant invokeDynamicConstant = new InvokeDynamicConstant();
+		constantReader.readIndexAndSetBootstrap( b -> invokeDynamicConstant.setBootstrapMethod( b ) );
+		constantReader.readIndexAndSetConstant( c -> invokeDynamicConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
+		return invokeDynamicConstant;
+	}
+
 	public static InvokeDynamicConstant of( BootstrapMethod bootstrapMethod, NameAndDescriptorConstant nameAndDescriptorConstant )
 	{
 		InvokeDynamicConstant invokeDynamicConstant = new InvokeDynamicConstant();
@@ -63,4 +75,18 @@ public final class InvokeDynamicConstant extends Constant
 	@Deprecated @Override public boolean equals( Object other ) { return other instanceof InvokeDynamicConstant kin && equals( kin ); }
 	public boolean equals( InvokeDynamicConstant other ) { return nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ) && getBootstrapMethod().equals( other.getBootstrapMethod() ); }
 	@Override public int hashCode() { return Objects.hash( tag, nameAndDescriptorConstant, getBootstrapMethod() ); }
+
+	@Override public void intern( Interner interner )
+	{
+		interner.intern( this );
+		getNameAndDescriptorConstant().intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedByte( tag );
+		int bootstrapMethodIndex = constantWriter.getBootstrapIndex( getBootstrapMethod() );
+		constantWriter.writeUnsignedShort( bootstrapMethodIndex );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getNameAndDescriptorConstant() ) );
+	}
 }

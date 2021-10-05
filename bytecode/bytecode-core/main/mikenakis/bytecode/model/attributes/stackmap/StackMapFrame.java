@@ -1,6 +1,9 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
+import mikenakis.bytecode.reading.LocationMap;
+import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 
 import java.util.Optional;
@@ -89,4 +92,14 @@ public abstract class StackMapFrame
 				default -> throw new AssertionError( tag );
 			};
 	}
+
+	protected static Optional<Instruction> findTargetInstruction( Optional<StackMapFrame> previousFrame, int offsetDelta, LocationMap locationMap )
+	{
+		int previousLocation = previousFrame.isEmpty() ? 0 : (locationMap.getLocation( previousFrame.get().getTargetInstruction() ) + 1);
+		int location = offsetDelta + previousLocation;
+		return locationMap.getInstruction( location );
+	}
+
+	public abstract void intern( Interner interner );
+	public abstract void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame );
 }

@@ -8,19 +8,6 @@ import java.lang.reflect.Modifier;
 @SuppressWarnings( "SpellCheckingInspection" )
 public final class OpCode
 {
-	public static boolean isImmediateLoadConstant( int c )
-	{
-		return c == ICONST_M1 || c == ICONST_0 || c == ICONST_1 || c == ICONST_2 || c == ICONST_3 || c == ICONST_4 || c == ICONST_5 || //
-			c == LCONST_0 || c == LCONST_1 || //
-			c == FCONST_0 || c == FCONST_1 || c == FCONST_2 ||
-			c == DCONST_0 || c == DCONST_1;
-	}
-
-	public static boolean isIndirectLoadConstant( int c )
-	{
-		return c == OpCode.LDC || c == OpCode.LDC_W || c == OpCode.LDC2_W;
-	}
-
 	//Adapted from com.sun.org.apache.bcel.internal.Constants
 	public static final int NOP = 0;
 	public static final int ACONST_NULL = 1;

@@ -5,7 +5,7 @@ import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 
-class RealInstructionWriter implements InstructionWriter
+public class RealInstructionWriter implements InstructionWriter
 {
 	private final BufferWriter bufferWriter;
 	private final LocationMap locationMap;
@@ -35,7 +35,7 @@ class RealInstructionWriter implements InstructionWriter
 		return locationMap.getOffset( sourceInstruction, targetInstruction );
 	}
 
-	byte[] toBytes()
+	public byte[] toBytes()
 	{
 		return bufferWriter.toBytes();
 	}

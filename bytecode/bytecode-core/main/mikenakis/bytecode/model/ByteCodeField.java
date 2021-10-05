@@ -1,7 +1,9 @@
 package mikenakis.bytecode.model;
 
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
@@ -19,10 +21,10 @@ public final class ByteCodeField extends ByteCodeMember
 	public static ByteCodeField of( FlagSet<Modifier> modifiers, FieldPrototype fieldPrototype )
 	{
 		String descriptorString = ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldPrototype.descriptor.typeDescriptor );
-		return of( modifiers, Mutf8Constant.of( fieldPrototype.fieldName ), Mutf8Constant.of( descriptorString ), AttributeSet.of() );
+		return of( modifiers, Mutf8ValueConstant.of( fieldPrototype.fieldName ), Mutf8ValueConstant.of( descriptorString ), AttributeSet.of() );
 	}
 
-	public static ByteCodeField of( FlagSet<Modifier> modifiers, Mutf8Constant fieldNameConstant, Mutf8Constant fieldDescriptorStringConstant, AttributeSet attributeSet )
+	public static ByteCodeField of( FlagSet<Modifier> modifiers, Mutf8ValueConstant fieldNameConstant, Mutf8ValueConstant fieldDescriptorStringConstant, AttributeSet attributeSet )
 	{
 		return new ByteCodeField( modifiers, fieldNameConstant, fieldDescriptorStringConstant, attributeSet );
 	}
@@ -44,20 +46,35 @@ public final class ByteCodeField extends ByteCodeMember
 		Map.entry( Modifier.Enum      /**/, 0x4000 ) ); // ACC_ENUM      -- Declared as an element of an enum.
 
 	public final FlagSet<Modifier> modifiers;
-	public final Mutf8Constant fieldDescriptorStringConstant;
+	private final Mutf8ValueConstant fieldNameConstant;
+	private final Mutf8ValueConstant fieldDescriptorStringConstant;
+	public final AttributeSet attributeSet;
 
-	private ByteCodeField( FlagSet<Modifier> modifiers, Mutf8Constant fieldNameConstant, Mutf8Constant fieldDescriptorStringConstant, AttributeSet attributeSet )
+	private ByteCodeField( FlagSet<Modifier> modifiers, Mutf8ValueConstant fieldNameConstant, Mutf8ValueConstant fieldDescriptorStringConstant, AttributeSet attributeSet )
 	{
-		super( fieldNameConstant, attributeSet );
 		this.modifiers = modifiers;
+		this.fieldNameConstant = fieldNameConstant;
 		this.fieldDescriptorStringConstant = fieldDescriptorStringConstant;
+		this.attributeSet = attributeSet;
 	}
 
+	@Override public String name() { return fieldNameConstant.stringValue(); }
 	public FieldDescriptor descriptor() { return FieldDescriptor.of( ByteCodeHelpers.typeDescriptorFromDescriptorStringConstant( fieldDescriptorStringConstant ) ); }
 	public FieldPrototype prototype() { return FieldPrototype.of( name(), descriptor() ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "accessFlags = " + modifiers + ", name = " + fieldNameConstant + ", descriptor = " + fieldDescriptorStringConstant; }
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString()
+	public void intern( Interner interner )
 	{
-		return "accessFlags = " + modifiers + ", name = " + memberNameConstant + ", descriptor = " + fieldDescriptorStringConstant;
+		fieldNameConstant.intern( interner );
+		attributeSet.intern( interner );
+		fieldDescriptorStringConstant.intern( interner );
+	}
+
+	public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( modifiers.getBits() );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( fieldNameConstant ) );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( fieldDescriptorStringConstant ) );
+		attributeSet.write( constantWriter );
 	}
 }

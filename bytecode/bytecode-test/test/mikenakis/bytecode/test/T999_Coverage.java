@@ -38,14 +38,14 @@ import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.stackmap.verification.SimpleVerificationType;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.LongConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
+import mikenakis.bytecode.model.constants.ReferenceKind;
+import mikenakis.bytecode.model.constants.value.LongValueConstant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import mikenakis.bytecode.model.constants.value.StringValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
@@ -86,16 +86,15 @@ public class T999_Coverage
 		TypeDescriptor typeDescriptor = TypeDescriptor.of( String.class );
 		FieldReference fieldReference = FieldReference.of( typeDescriptor, FieldPrototype.of( "foo", String.class ) );
 		MethodReference methodReference = MethodReference.of( MethodReferenceKind.Plain, typeDescriptor, MethodPrototype.of( "foo", typeDescriptor ) );
-		ClassConstant classConstant = ClassConstant.ofTypeName( java.util.HashMap.class.getName() );
-		Mutf8Constant nameConstant = Mutf8Constant.of( "name" );
-		Mutf8Constant descriptorConstant = Mutf8Constant.of( "descriptor" );
+		ClassConstant classConstant = ClassConstant.of( typeDescriptor );
+		Mutf8ValueConstant nameConstant = Mutf8ValueConstant.of( "name" );
+		Mutf8ValueConstant descriptorConstant = Mutf8ValueConstant.of( "descriptor" );
 		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
-		FieldReferenceConstant fieldReferenceConstant = FieldReferenceConstant.of( fieldReference );
 		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( methodReference );
-		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( MethodHandleConstant.ReferenceKind.GetField );
+		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( ReferenceKind.GetField );
 		methodHandleConstant.setReferenceConstant( methodReferenceConstant );
 		List<Constant> argumentConstants = new ArrayList<>();
-		argumentConstants.add( StringConstant.of( "bootstrapMethodArgument" ) );
+		argumentConstants.add( StringValueConstant.of( "bootstrapMethodArgument" ) );
 		BootstrapMethod bootstrapMethod = BootstrapMethod.of( methodHandleConstant, argumentConstants );
 		//		var x = bootstrapMethod.constantDescriptor();
 
@@ -307,7 +306,7 @@ public class T999_Coverage
 		ConstAnnotationValue.of( true );
 
 		InvalidConstAnnotationValueTagException invalidConstElementValueTagException = Kit.testing.expectException( //
-			InvalidConstAnnotationValueTagException.class, () -> ConstAnnotationValue.of( 'e', LongConstant.of( 1L ) ) );
+			InvalidConstAnnotationValueTagException.class, () -> ConstAnnotationValue.of( 'e', LongValueConstant.of( 1L ) ) );
 		assert invalidConstElementValueTagException.annotationValueTag == 'e';
 
 		ExceptionsAttribute.of();
@@ -342,7 +341,7 @@ public class T999_Coverage
 		//instructionList.add( instruction1 );
 		//instructionList.insert( 0, instruction2 );
 
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), Mutf8Constant.of( "testMethod" ), Mutf8Constant.of( "()V" ), AttributeSet.of() );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), Mutf8ValueConstant.of( "testMethod" ), Mutf8ValueConstant.of( "()V" ), AttributeSet.of() );
 		byteCodeType.methods.add( byteCodeMethod );
 		ByteCodeType descendantByteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of(), TerminalTypeDescriptor.of( "test.test2" ), Optional.of( TerminalTypeDescriptor.of( "test.testClass" ) ), List.of() );
 		Function<String,ByteCodeType> byteCodeTypeResolver = s ->

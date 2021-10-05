@@ -2,8 +2,12 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
+import mikenakis.bytecode.reading.ConstantReader;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -15,19 +19,28 @@ import java.util.Objects;
  */
 public final class NameAndDescriptorConstant extends Constant
 {
+	public static NameAndDescriptorConstant read( ConstantReader constantReader, int constantTag )
+	{
+		assert constantTag == tag_NameAndDescriptor;
+		NameAndDescriptorConstant nameAndDescriptorConstant = new NameAndDescriptorConstant();
+		constantReader.readIndexAndSetConstant( c -> nameAndDescriptorConstant.setNameConstant( c.asMutf8ValueConstant() ) );
+		constantReader.readIndexAndSetConstant( c -> nameAndDescriptorConstant.setDescriptorConstant( c.asMutf8ValueConstant() ) );
+		return nameAndDescriptorConstant;
+	}
+
 	public static NameAndDescriptorConstant of( FieldPrototype fieldPrototype )
 	{
-		return of( Mutf8Constant.of( fieldPrototype.fieldName ), //
-			Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldPrototype.descriptor.typeDescriptor ) ) );
+		return of( Mutf8ValueConstant.of( fieldPrototype.fieldName ), //
+			Mutf8ValueConstant.of( ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldPrototype.descriptor.typeDescriptor ) ) );
 	}
 
 	public static NameAndDescriptorConstant of( MethodPrototype methodPrototype )
 	{
-		return of( Mutf8Constant.of( methodPrototype.methodName ), //
-			Mutf8Constant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ) );
+		return of( Mutf8ValueConstant.of( methodPrototype.methodName ), //
+			Mutf8ValueConstant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ) );
 	}
 
-	public static NameAndDescriptorConstant of( Mutf8Constant nameConstant, Mutf8Constant descriptorConstant ) //TODO: remove
+	public static NameAndDescriptorConstant of( Mutf8ValueConstant nameConstant, Mutf8ValueConstant descriptorConstant ) //TODO: remove
 	{
 		NameAndDescriptorConstant nameAndDescriptorConstant = new NameAndDescriptorConstant();
 		nameAndDescriptorConstant.setNameConstant( nameConstant );
@@ -35,34 +48,34 @@ public final class NameAndDescriptorConstant extends Constant
 		return nameAndDescriptorConstant;
 	}
 
-	private Mutf8Constant nameConstant;
-	private Mutf8Constant descriptorConstant;
+	private Mutf8ValueConstant nameConstant;
+	private Mutf8ValueConstant descriptorConstant;
 
 	public NameAndDescriptorConstant()
 	{
 		super( tag_NameAndDescriptor );
 	}
 
-	public Mutf8Constant getNameConstant()
+	public Mutf8ValueConstant getNameConstant()
 	{
 		assert nameConstant != null;
 		return nameConstant;
 	}
 
-	public void setNameConstant( Mutf8Constant nameConstant )
+	public void setNameConstant( Mutf8ValueConstant nameConstant )
 	{
 		assert this.nameConstant == null;
 		assert nameConstant != null;
 		this.nameConstant = nameConstant;
 	}
 
-	public Mutf8Constant getDescriptorConstant()
+	public Mutf8ValueConstant getDescriptorConstant()
 	{
 		assert descriptorConstant != null;
 		return descriptorConstant;
 	}
 
-	public void setDescriptorConstant( Mutf8Constant descriptorConstant )
+	public void setDescriptorConstant( Mutf8ValueConstant descriptorConstant )
 	{
 		assert this.descriptorConstant == null;
 		assert descriptorConstant != null;
@@ -73,5 +86,19 @@ public final class NameAndDescriptorConstant extends Constant
 	@Deprecated @Override public NameAndDescriptorConstant asNameAndDescriptorConstant() { return this; }
 	@Deprecated @Override public boolean equals( Object other ) { return other instanceof NameAndDescriptorConstant kin && equals( kin ); }
 	@Override public int hashCode() { return Objects.hash( tag, nameConstant, descriptorConstant ); }
-	public boolean equals( NameAndDescriptorConstant other ) { return nameConstant.equalsMutf8Constant( other.nameConstant ) && descriptorConstant.equalsMutf8Constant( other.descriptorConstant ); }
+	public boolean equals( NameAndDescriptorConstant other ) { return nameConstant.equals( other.nameConstant ) && descriptorConstant.equals( other.descriptorConstant ); }
+
+	@Override public void intern( Interner interner )
+	{
+		interner.intern( this );
+		getNameConstant().intern( interner );
+		getDescriptorConstant().intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedByte( tag );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getNameConstant() ) );
+		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getDescriptorConstant() ) );
+	}
 }

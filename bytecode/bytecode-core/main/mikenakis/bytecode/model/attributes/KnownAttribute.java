@@ -1,7 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -43,7 +43,7 @@ public abstract class KnownAttribute extends Attribute
 	public static final int tag_StackMapTable = 22;
 	public static final int tag_Synthetic = 23;
 
-	private static final List<Map.Entry<Integer,Mutf8Constant>> tagEntries = Stream.of(
+	private static final List<Map.Entry<Integer,Mutf8ValueConstant>> tagEntries = Stream.of(
 		Map.entry( tag_AnnotationDefault, "AnnotationDefault" ),
 		Map.entry( tag_BootstrapMethods, "BootstrapMethods" ),
 		Map.entry( tag_Code, "Code" ),
@@ -68,19 +68,19 @@ public abstract class KnownAttribute extends Attribute
 		Map.entry( tag_SourceFile, "SourceFile" ),
 		Map.entry( tag_StackMapTable, "StackMapTable" ),
 		Map.entry( tag_Synthetic, "Synthetic" )
-	).map( e -> Map.entry( e.getKey(), Mutf8Constant.of( e.getValue() ) ) ).toList();
+	).map( e -> Map.entry( e.getKey(), Mutf8ValueConstant.of( e.getValue() ) ) ).toList();
 
-	private static final Map<Integer,Mutf8Constant> namesByTag = tagEntries.stream() //
+	private static final Map<Integer,Mutf8ValueConstant> namesByTag = tagEntries.stream() //
 		.collect( Collectors.toMap( e -> e.getKey(), e -> e.getValue() ) );
-	private static final Map<Mutf8Constant,Integer> tagsByName = tagEntries.stream() //
+	private static final Map<Mutf8ValueConstant,Integer> tagsByName = tagEntries.stream() //
 		.collect( Collectors.toMap( e -> e.getValue(), e -> e.getKey() ) );
 
-	public static Mutf8Constant nameFromTag( int knownAttributeTag )
+	public static Mutf8ValueConstant nameFromTag( int knownAttributeTag )
 	{
 		return Kit.map.get( namesByTag, knownAttributeTag );
 	}
 
-	public static Optional<Integer> tagFromName( Mutf8Constant attributeName )
+	public static Optional<Integer> tagFromName( Mutf8ValueConstant attributeName )
 	{
 		return Kit.map.getOptional( tagsByName, attributeName );
 	}

@@ -2,6 +2,8 @@ package mikenakis.bytecode.model.constants;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.descriptors.FieldReference;
+import mikenakis.bytecode.reading.ConstantReader;
+import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 
@@ -12,6 +14,15 @@ import mikenakis.java_type_model.TypeDescriptor;
  */
 public final class FieldReferenceConstant extends ReferenceConstant
 {
+	public static FieldReferenceConstant read( ConstantReader constantReader, int constantTag )
+	{
+		assert constantTag == tag_FieldReference;
+		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
+		constantReader.readIndexAndSetConstant( c -> fieldReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
+		constantReader.readIndexAndSetConstant( c -> fieldReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
+		return fieldReferenceConstant;
+	}
+
 	public static FieldReferenceConstant of( FieldReference fieldReference )
 	{
 		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();

@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.Attribute;
+import mikenakis.bytecode.reading.AttributeReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,12 @@ import java.util.List;
  */
 public final class RuntimeInvisibleAnnotationsAttribute extends AnnotationsAttribute
 {
+	public static RuntimeInvisibleAnnotationsAttribute read( AttributeReader attributeReader )
+	{
+		List<Annotation> annotations = readAnnotations( attributeReader );
+		return of( annotations );
+	}
+
 	public static RuntimeInvisibleAnnotationsAttribute of()
 	{
 		return of( new ArrayList<>() );

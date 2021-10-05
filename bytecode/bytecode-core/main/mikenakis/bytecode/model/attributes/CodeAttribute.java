@@ -1,5 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.Buffer;
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeMethod;
@@ -22,16 +24,22 @@ import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayIn
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodReference;
+import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingLocationMap;
+import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.TypeDescriptor;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "Code" {@link Attribute} of a java class file.
@@ -44,6 +52,29 @@ import java.util.List;
  */
 public final class CodeAttribute extends KnownAttribute
 {
+	public static CodeAttribute read( AttributeReader attributeReader )
+	{
+		int maxStack = attributeReader.readUnsignedShort();
+		int maxLocals = attributeReader.readUnsignedShort();
+		int codeLength = attributeReader.readInt();
+		Buffer codeBuffer = attributeReader.readBuffer( codeLength );
+		BufferReader codeBufferReader = BufferReader.of( codeBuffer );
+		ReadingLocationMap locationMap = new ReadingLocationMap( codeBuffer.length() );
+		CodeAttributeReader codeAttributeReader = new CodeAttributeReader( codeBufferReader, attributeReader.constantResolver, locationMap );
+		List<Instruction> instructions = codeAttributeReader.readInstructions();
+		assert codeBufferReader.isAtEnd();
+		codeAttributeReader = new CodeAttributeReader( attributeReader.bufferReader, attributeReader.constantResolver, locationMap );
+		int count = codeAttributeReader.readUnsignedShort();
+		List<ExceptionInfo> exceptionInfos = new ArrayList<>( count );
+		for( int i = 0; i < count; i++ )
+		{
+			ExceptionInfo exceptionInfo = ExceptionInfo.read( codeAttributeReader );
+			exceptionInfos.add( exceptionInfo );
+		}
+		AttributeSet attributes = AttributeSet.read( codeAttributeReader );
+		return of( maxStack, maxLocals, instructions, exceptionInfos, attributes );
+	}
+
 	public static final String END_LABEL = "@end";
 
 	public static CodeAttribute of( int maxStack, int maxLocals )
@@ -263,5 +294,36 @@ public final class CodeAttribute extends KnownAttribute
 	{
 		instructions.add( instruction );
 		return instruction;
+	}
+
+	@Override public void intern( Interner interner )
+	{
+		for( ExceptionInfo exceptionInfo : exceptionInfos )
+			exceptionInfo.intern( interner );
+
+		attributeSet.intern( interner );
+
+		for( Instruction instruction : instructions.all() )
+			instruction.intern( interner );
+	}
+
+	@Override public void write( ConstantWriter constantWriter )
+	{
+		constantWriter.writeUnsignedShort( maxStack );
+		constantWriter.writeUnsignedShort( maxLocals );
+
+		CodeConstantWriter codeConstantWriter = new CodeConstantWriter( constantWriter, instructions.all() );
+
+		for( Instruction instruction : instructions.all() )
+			instruction.write( codeConstantWriter.instructionWriter );
+		byte[] bytes = codeConstantWriter.instructionWriter.toBytes();
+		codeConstantWriter.writeInt( bytes.length );
+		codeConstantWriter.writeBytes( bytes );
+
+		codeConstantWriter.writeUnsignedShort( exceptionInfos.size() );
+		for( ExceptionInfo exceptionInfo : exceptionInfos )
+			exceptionInfo.write( codeConstantWriter );
+
+		attributeSet.write( codeConstantWriter );
 	}
 }

@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.model.Attribute;
+import mikenakis.bytecode.reading.AttributeReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,12 @@ import java.util.List;
  */
 public final class RuntimeInvisibleParameterAnnotationsAttribute extends ParameterAnnotationsAttribute
 {
+	public static RuntimeInvisibleParameterAnnotationsAttribute read( AttributeReader attributeReader )
+	{
+		List<ParameterAnnotationSet> entries = readParameterAnnotationsAttributeEntries( attributeReader );
+		return of( entries );
+	}
+
 	public static RuntimeInvisibleParameterAnnotationsAttribute of()
 	{
 		return of( new ArrayList<>() );

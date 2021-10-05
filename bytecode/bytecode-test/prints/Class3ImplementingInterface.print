@@ -5,59 +5,59 @@
 ├─■ fields: 19 items
 │ ├─■ [0] ByteCodeField accessFlags = [public, static, final], prototype = java.lang.String stringLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute StringConstant( Mutf8Constant( "aΦ됔b" ) )
+│ │   └─■ [0] ConstantValueAttribute StringValueConstant( "aΦ됔b" )
 │ ├─■ [1] ByteCodeField accessFlags = [public, static, final], prototype = boolean booleanLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 1 )
 │ ├─■ [2] ByteCodeField accessFlags = [public, static, final], prototype = byte byteLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 1 )
 │ ├─■ [3] ByteCodeField accessFlags = [public, static, final], prototype = char charLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 99 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 99 )
 │ ├─■ [4] ByteCodeField accessFlags = [public, static, final], prototype = double doubleLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute DoubleConstant( 0.5 )
+│ │   └─■ [0] ConstantValueAttribute DoubleValueConstant( 0.5 )
 │ ├─■ [5] ByteCodeField accessFlags = [public, static, final], prototype = float floatLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute FloatConstant( 0.25f )
+│ │   └─■ [0] ConstantValueAttribute FloatValueConstant( 0.25f )
 │ ├─■ [6] ByteCodeField accessFlags = [public, static, final], prototype = int intLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 2 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 2 )
 │ ├─■ [7] ByteCodeField accessFlags = [public, static, final], prototype = long longLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute LongConstant( 3L )
+│ │   └─■ [0] ConstantValueAttribute LongValueConstant( 3L )
 │ ├─■ [8] ByteCodeField accessFlags = [public, static, final], prototype = short shortLiteral
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 4 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 4 )
 │ ├─■ [9] ByteCodeField accessFlags = [private, final], prototype = mikenakis.bytecode.test.model.Enum1 enum1
 │ │ └─■ attributeSet: 0 items
 │ ├─■ [10] ByteCodeField accessFlags = [private, final], prototype = boolean booleanMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 1 )
 │ ├─■ [11] ByteCodeField accessFlags = [private, final], prototype = byte byteMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 1 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 1 )
 │ ├─■ [12] ByteCodeField accessFlags = [private, final], prototype = char charMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 99 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 99 )
 │ ├─■ [13] ByteCodeField accessFlags = [private], prototype = double doubleMember
 │ │ └─■ attributeSet: 0 items
 │ ├─■ [14] ByteCodeField accessFlags = [private, final], prototype = float floatMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute FloatConstant( 0.25f )
+│ │   └─■ [0] ConstantValueAttribute FloatValueConstant( 0.25f )
 │ ├─■ [15] ByteCodeField accessFlags = [private, final], prototype = int intMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 2 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 2 )
 │ ├─■ [16] ByteCodeField accessFlags = [private, final], prototype = long longMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute LongConstant( 3L )
+│ │   └─■ [0] ConstantValueAttribute LongValueConstant( 3L )
 │ ├─■ [17] ByteCodeField accessFlags = [private, final], prototype = short shortMember
 │ │ └─■ attributeSet: 1 items
-│ │   └─■ [0] ConstantValueAttribute IntegerConstant( 4 )
+│ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 4 )
 │ └─■ [18] ByteCodeField accessFlags = [private, final], prototype = java.lang.String stringMember
 │   └─■ attributeSet: 1 items
-│     └─■ [0] ConstantValueAttribute StringConstant( Mutf8Constant( "aΦ됔b" ) )
+│     └─■ [0] ConstantValueAttribute StringValueConstant( "aΦ됔b" )
 ├─■ methods: 11 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [protected], prototype = void <init>()
 │ │ └─■ attributes: 1 items
@@ -318,7 +318,7 @@
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "\x01 \x01" )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
@@ -384,7 +384,7 @@
   ├─■ [1] NestMembersAttribute; 1 items
   │ └─■ [0] mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
   ├─■ [2] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.invoke.CallSite java.lang.invoke.StringConcatFactory.makeConcatWithConstants( java.lang.invoke.MethodHandles$Lookup, java.lang.String, java.lang.invoke.MethodType, java.lang.String, java.lang.Object[] ) arguments: StringConstant( Mutf8Constant( "\x01 \x01" ) )
+  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "\x01 \x01" )
   └─■ [3] InnerClassesAttribute; 2 items
     ├─■ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Inner
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

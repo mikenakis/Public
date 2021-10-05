@@ -3,6 +3,8 @@ package mikenakis.bytecode.model.constants;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
+import mikenakis.bytecode.reading.ConstantReader;
+import mikenakis.bytecode.writing.ConstantWriter;
 
 /**
  * Represents the JVMS::CONSTANT_Methodref_info and JVMS::CONSTANT_InterfaceMethodref_info structures.
@@ -11,6 +13,14 @@ import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
  */
 public final class MethodReferenceConstant extends ReferenceConstant
 {
+	public static MethodReferenceConstant read( ConstantReader constantReader, int tag )
+	{
+		MethodReferenceConstant interfaceMethodReferenceConstant = of( tag );
+		constantReader.readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
+		constantReader.readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
+		return interfaceMethodReferenceConstant;
+	}
+
 	public static MethodReferenceConstant of( MethodReference methodReference )
 	{
 		ClassConstant declaringTypeConstant = ClassConstant.of( methodReference.declaringTypeDescriptor );

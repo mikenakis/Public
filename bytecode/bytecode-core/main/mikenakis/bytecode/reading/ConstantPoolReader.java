@@ -7,18 +7,18 @@ import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.DoubleConstant;
+import mikenakis.bytecode.model.constants.value.DoubleValueConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.FloatConstant;
-import mikenakis.bytecode.model.constants.IntegerConstant;
+import mikenakis.bytecode.model.constants.value.FloatValueConstant;
+import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.LongConstant;
+import mikenakis.bytecode.model.constants.value.LongValueConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.Mutf8Constant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
-import mikenakis.bytecode.model.constants.StringConstant;
+import mikenakis.bytecode.model.constants.value.StringValueConstant;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
@@ -56,24 +56,36 @@ final class ConstantPoolReader
 		constants = new ArrayList<>( count );
 		constants.add( null ); // first entry is empty. (Ancient legacy bollocks.)
 		used = new boolean[count];
+		ConstantReader constantReader = new ConstantReader()
+		{
+			@Override public int readInt() { return bufferReader.readInt(); }
+			@Override public int readUnsignedByte() { return bufferReader.readUnsignedByte(); }
+			@Override public int readUnsignedShort() { return bufferReader.readUnsignedShort(); }
+			@Override public float readFloat() { return bufferReader.readFloat(); }
+			@Override public long readLong() { return bufferReader.readLong(); }
+			@Override public double readDouble() { return bufferReader.readDouble(); }
+			@Override public Buffer readBuffer( int count ) { return bufferReader.readBuffer( count ); }
+			@Override public void readIndexAndSetConstant( Procedure1<Constant> setter ) { ConstantPoolReader.this.readIndexAndSetConstant( setter ); }
+			@Override public void readIndexAndSetBootstrap( Procedure1<BootstrapMethod> setter ) { ConstantPoolReader.this.readIndexAndSetBootstrap( setter ); }
+		};
 		for( int index = 1; index < count; index++ )
 		{
 			int constantTag = bufferReader.readUnsignedByte();
 			Constant constant = switch( constantTag )
 				{
-					case Constant.tag_Class -> readClassConstant();
-					case Constant.tag_String -> readStringConstant();
-					case Constant.tag_MethodType -> readMethodTypeConstant();
-					case Constant.tag_FieldReference -> readFieldReferenceConstant();
-					case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> readMethodReferenceConstant( constantTag );
-					case Constant.tag_InvokeDynamic -> readInvokeDynamicConstant();
-					case Constant.tag_Double -> readDoubleConstant();
-					case Constant.tag_Float -> readFloatConstant();
-					case Constant.tag_Integer -> readIntegerConstant();
-					case Constant.tag_Long -> readLongConstant();
-					case Constant.tag_Mutf8 -> readMutf8Constant();
-					case Constant.tag_NameAndDescriptor -> readNameAndDescriptorConstant();
-					case Constant.tag_MethodHandle -> readMethodHandleConstant();
+					case Constant.tag_Class -> ClassConstant.read( constantReader, constantTag );
+					case Constant.tag_String -> StringValueConstant.read( constantReader, constantTag );
+					case Constant.tag_MethodType -> MethodTypeConstant.read( constantReader, constantTag );
+					case Constant.tag_FieldReference -> FieldReferenceConstant.read( constantReader, constantTag );
+					case Constant.tag_InterfaceMethodReference, Constant.tag_PlainMethodReference -> MethodReferenceConstant.read( constantReader, constantTag );
+					case Constant.tag_InvokeDynamic -> InvokeDynamicConstant.read( constantReader, constantTag );
+					case Constant.tag_Double -> DoubleValueConstant.read( constantReader, constantTag );
+					case Constant.tag_Float -> FloatValueConstant.read( constantReader, constantTag );
+					case Constant.tag_Integer -> IntegerValueConstant.read( constantReader, constantTag );
+					case Constant.tag_Long -> LongValueConstant.read( constantReader, constantTag );
+					case Constant.tag_Mutf8 -> Mutf8ValueConstant.read( constantReader, constantTag );
+					case Constant.tag_NameAndDescriptor -> NameAndDescriptorConstant.read( constantReader, constantTag );
+					case Constant.tag_MethodHandle -> MethodHandleConstant.read( constantReader, constantTag );
 					default -> throw new InvalidConstantTagException( constantTag );
 				};
 			constants.add( constant );
@@ -92,99 +104,6 @@ final class ConstantPoolReader
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		return constants.size() + " constants";
-	}
-
-	private MethodHandleConstant readMethodHandleConstant()
-	{
-		int referenceKindNumber = bufferReader.readUnsignedByte();
-		MethodHandleConstant.ReferenceKind referenceKind = MethodHandleConstant.ReferenceKind.tryFromNumber( referenceKindNumber ).orElseThrow();
-		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( referenceKind );
-		readIndexAndSetConstant( c -> methodHandleConstant.setReferenceConstant( c.asReferenceConstant() ) );
-		return methodHandleConstant;
-	}
-
-	private NameAndDescriptorConstant readNameAndDescriptorConstant()
-	{
-		NameAndDescriptorConstant nameAndDescriptorConstant = new NameAndDescriptorConstant();
-		readIndexAndSetConstant( c -> nameAndDescriptorConstant.setNameConstant( c.asMutf8Constant() ) );
-		readIndexAndSetConstant( c -> nameAndDescriptorConstant.setDescriptorConstant( c.asMutf8Constant() ) );
-		return nameAndDescriptorConstant;
-	}
-
-	private Mutf8Constant readMutf8Constant()
-	{
-		int length = bufferReader.readUnsignedShort();
-		Buffer buffer = bufferReader.readBuffer( length );
-		return Mutf8Constant.of( buffer );
-	}
-
-	private LongConstant readLongConstant()
-	{
-		long value = bufferReader.readLong();
-		return LongConstant.of( value );
-	}
-
-	private IntegerConstant readIntegerConstant()
-	{
-		int value = bufferReader.readInt();
-		return IntegerConstant.of( value );
-	}
-
-	private FloatConstant readFloatConstant()
-	{
-		float value = bufferReader.readFloat();
-		return FloatConstant.of( value );
-	}
-
-	private DoubleConstant readDoubleConstant()
-	{
-		double value = bufferReader.readDouble();
-		return DoubleConstant.of( value );
-	}
-
-	private InvokeDynamicConstant readInvokeDynamicConstant()
-	{
-		InvokeDynamicConstant invokeDynamicConstant = new InvokeDynamicConstant();
-		readIndexAndSetBootstrap( b -> invokeDynamicConstant.setBootstrapMethod( b ) );
-		readIndexAndSetConstant( c -> invokeDynamicConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
-		return invokeDynamicConstant;
-	}
-
-	private MethodReferenceConstant readMethodReferenceConstant( int tag )
-	{
-		MethodReferenceConstant interfaceMethodReferenceConstant = MethodReferenceConstant.of( tag );
-		readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
-		readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
-		return interfaceMethodReferenceConstant;
-	}
-
-	private FieldReferenceConstant readFieldReferenceConstant()
-	{
-		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
-		readIndexAndSetConstant( c -> fieldReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
-		readIndexAndSetConstant( c -> fieldReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
-		return fieldReferenceConstant;
-	}
-
-	private MethodTypeConstant readMethodTypeConstant()
-	{
-		MethodTypeConstant methodTypeConstant = new MethodTypeConstant();
-		readIndexAndSetConstant( c -> methodTypeConstant.setDescriptorConstant( c.asMutf8Constant() ) );
-		return methodTypeConstant;
-	}
-
-	private StringConstant readStringConstant()
-	{
-		StringConstant stringConstant = new StringConstant();
-		readIndexAndSetConstant( c -> stringConstant.setValueConstant( c.asMutf8Constant() ) );
-		return stringConstant;
-	}
-
-	private ClassConstant readClassConstant()
-	{
-		ClassConstant classConstant = ClassConstant.of();
-		readIndexAndSetConstant( c -> classConstant.setInternalNameOrDescriptorStringConstant( c.asMutf8Constant() ) );
-		return classConstant;
 	}
 
 	private void readIndexAndSetConstant( Procedure1<Constant> setter )
