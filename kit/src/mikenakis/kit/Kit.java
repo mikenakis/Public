@@ -31,6 +31,7 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
@@ -224,7 +225,7 @@ public final class Kit
 	 * <p>
 	 * "This method propagates any exception thrown by the nullary constructor, including a checked exception.
 	 * Use of this method effectively bypasses the compile-time exception checking that would otherwise be performed by the compiler."
-	 *
+	 * <p>
 	 * Yes, yes, that is precisely what we want.
 	 */
 	@SuppressWarnings( "deprecation" ) public static Object newInstance( Class<?> javaClass )
@@ -1342,6 +1343,16 @@ public final class Kit
 		public static <T> Iterator<T> unmodifiable( Iterator<T> delegee )
 		{
 			return new UnmodifiableIterator<>( delegee );
+		}
+
+		public static <T> List<T> toList( Iterator<T> iterator )
+		{
+			if( !iterator.hasNext() )
+				return List.of();
+			List<T> list = new ArrayList<>();
+			while( iterator.hasNext() )
+				list.add( iterator.next() );
+			return list;
 		}
 	}
 
@@ -2919,6 +2930,36 @@ public final class Kit
 			{
 				return Optional.empty();
 			}
+		}
+
+		public static Collection<String> troubleshoot( ClassLoader classLoader )
+		{
+			ArrayList<String> mutableContents = new ArrayList<>();
+			addContents( mutableContents, classLoader );
+			return mutableContents;
+		}
+
+		private static void addContents( ArrayList<String> mutableContents, ClassLoader classLoader )
+		{
+			ClassLoader parentClassLoader = classLoader.getParent();
+			if( parentClassLoader != null )
+				addContents( mutableContents, parentClassLoader );
+
+			if( classLoader instanceof URLClassLoader urlClassLoader )
+			{
+				List<URL> urls = Arrays.stream( urlClassLoader.getURLs() ).toList();
+				mutableContents.addAll( urls.stream().map( u -> classLoaderIdentityString( urlClassLoader ) + " " + u.toString() ).toList() );
+				return;
+			}
+
+			mutableContents.add( "Unknown classloader: " + classLoaderIdentityString( classLoader ) );
+			List<URL> urls = iterator.toList( unchecked( () -> classLoader.getResources( "." ) ).asIterator() );
+			mutableContents.addAll( urls.stream().map( u -> classLoaderIdentityString( classLoader ) + " " + u.toString() ).toList() );
+		}
+
+		private static String classLoaderIdentityString( ClassLoader classLoader )
+		{
+			return "'" + classLoader.getName() + "' " + " " + identityString( classLoader );
 		}
 	}
 

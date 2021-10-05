@@ -13,8 +13,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>bytecode-core</module>
 		<module>bytecode-dependencies</module>
-		<module>bytecode-model</module>
 		<module>bytecode-test</module>
 	</modules>
 

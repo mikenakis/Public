@@ -14,12 +14,14 @@ import java.lang.reflect.Modifier;
  */
 public class HandWrittenCompiledIntertwineFactory implements IntertwineFactory
 {
-	public static HandWrittenCompiledIntertwineFactory instance = new HandWrittenCompiledIntertwineFactory();
+	public static HandWrittenCompiledIntertwineFactory instance = new HandWrittenCompiledIntertwineFactory( getClassLoader() );
 
-	ByteCodeClassLoader byteCodeClassLoader = new ByteCodeClassLoader();
+	ByteCodeClassLoader byteCodeClassLoader;
 
-	private HandWrittenCompiledIntertwineFactory()
+	private HandWrittenCompiledIntertwineFactory( ClassLoader parentClassLoader )
 	{
+		//Kit.classLoading.getContents( parentClassLoader ).forEach( s -> Log.debug( s ) );
+		byteCodeClassLoader = new ByteCodeClassLoader( parentClassLoader );
 	}
 
 	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
@@ -29,5 +31,11 @@ public class HandWrittenCompiledIntertwineFactory implements IntertwineFactory
 		assert interfaceType == FooInterface.class;
 		@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)new HandWrittenCompiledIntertwine( this );
 		return result;
+	}
+
+	private static ClassLoader getClassLoader()
+	{
+		//return Thread.currentThread().getContextClassLoader(); does not work
+		return HandWrittenCompiledIntertwineFactory.class.getClassLoader(); // works
 	}
 }

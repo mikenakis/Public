@@ -19,10 +19,15 @@ import java.util.Optional;
  */
 public class T501_Generating
 {
+	private final ByteCodeClassLoader byteCodeClassLoader;
+
 	public T501_Generating()
 	{
 		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
+		ClassLoader classLoader = getClass().getClassLoader();
+		//Kit.classLoading.troubleshoot( classLoader ).forEach( s -> Log.debug( s.toString() ) );
+		byteCodeClassLoader = new ByteCodeClassLoader( classLoader );
 	}
 
 	@Test public void Eval_Works() //this is unrelated to what we are doing here; keep around in case it is useful in the future.
@@ -52,7 +57,6 @@ public class T501_Generating
 	@Test public void Generated_Type_Works()
 	{
 		ByteCodeType byteCodeType = Generator.generateByteCodeType();
-		ByteCodeClassLoader byteCodeClassLoader = new ByteCodeClassLoader();
 		Class<?> javaClass = byteCodeClassLoader.load( byteCodeType );
 		Generator.testGeneratedByteCodeType( javaClass );
 	}

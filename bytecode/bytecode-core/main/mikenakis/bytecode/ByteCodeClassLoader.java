@@ -11,16 +11,16 @@ public class ByteCodeClassLoader extends ClassLoader
 {
 	private final Map<String,byte[]> classes = new HashMap<>();
 
-	public ByteCodeClassLoader()
+	public ByteCodeClassLoader( ClassLoader parentClassLoader )
 	{
-		super( ByteCodeClassLoader.class.getClassLoader() );
+		super( parentClassLoader );
 	}
 
 	public <T> Class<T> load( ByteCodeType byteCodeType )
 	{
 		String name = byteCodeType.typeDescriptor().typeName;
 		byte[] bytes = ByteCodeWriter.write( byteCodeType );
-		Kit.map.add( classes, name, bytes ); //if this fails, the bytecode has already been created.
+		Kit.map.addOrReplace( classes, name, bytes ); //TODO: try exercising replacing, see if defineClass() can redefine a class
 		Class<?> javaClass = Kit.unchecked( () -> loadClass( name ) );
 		@SuppressWarnings( "unchecked" ) Class<T> result = (Class<T>)javaClass;
 		return result;

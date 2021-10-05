@@ -22,10 +22,15 @@ import java.util.Optional;
  */
 public class T401_Rewriting
 {
+	private final ByteCodeClassLoader byteCodeClassLoader;
+
 	public T401_Rewriting()
 	{
 		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
+		ClassLoader classLoader = getClass().getClassLoader();
+		//Kit.classLoading.troubleshoot( classLoader ).forEach( s -> Log.debug( s.toString() ) );
+		byteCodeClassLoader = new ByteCodeClassLoader( classLoader );
 	}
 
 	@Test public void Reading_And_Loading_Compiler_Generated_Class_Works()
@@ -33,7 +38,6 @@ public class T401_Rewriting
 		Path classFilePathName = TestKit.getPathToClassFile( Class0HelloWorld.class );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
 		ByteCodeType byteCodeType = ByteCodeReader.read( bytes );
-		ByteCodeClassLoader byteCodeClassLoader = new ByteCodeClassLoader();
 		Class<?> javaClass = byteCodeClassLoader.load( byteCodeType );
 		testHelloWorldJavaClass( javaClass );
 	}
@@ -50,7 +54,6 @@ public class T401_Rewriting
 		String text2 = ByteCodePrinter.printByteCodeType( byteCodeType2, Optional.empty() );
 		assert text1.equals( text2 );
 
-		ByteCodeClassLoader byteCodeClassLoader = new ByteCodeClassLoader();
 		Class<?> javaClass = byteCodeClassLoader.load( byteCodeType2 );
 		testHelloWorldJavaClass( javaClass );
 	}
