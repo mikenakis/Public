@@ -1,10 +1,12 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -15,9 +17,9 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class ObjectVerificationType extends VerificationType
 {
-	public static ObjectVerificationType read( CodeAttributeReader codeAttributeReader )
+	public static ObjectVerificationType read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		ClassConstant classConstant = codeAttributeReader.readIndexAndGetConstant().asClassConstant();
+		ClassConstant classConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant();
 		return of( classConstant );
 	}
 
@@ -49,9 +51,9 @@ public final class ObjectVerificationType extends VerificationType
 		classConstant.intern( interner );
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap )
 	{
-		codeConstantWriter.writeUnsignedByte( tag );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( classConstant ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( classConstant ) );
 	}
 }

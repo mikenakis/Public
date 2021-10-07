@@ -48,7 +48,7 @@ final class ByteCodeInfo
 		Optional<LineNumberTableAttribute> lineNumberTableAttribute = codeAttribute //
 			.flatMap( a -> a.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_LineNumberTable ) ) //
 			.map( a -> a.asLineNumberTableAttribute() );
-		int lineNumber = lineNumberTableAttribute.map( a -> a.entrys.get( 0 ).lineNumber ).orElse( 0 );
+		int lineNumber = lineNumberTableAttribute.map( a -> a.lineNumberTableEntries.get( 0 ).lineNumber ).orElse( 0 );
 		String methodName = byteCodeMethod.name();
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
 		return byteCodeType.typeDescriptor().typeName + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";

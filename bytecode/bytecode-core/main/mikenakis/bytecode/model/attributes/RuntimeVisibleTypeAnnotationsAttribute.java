@@ -1,15 +1,17 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.TypeAnnotation;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "RuntimeVisibleTypeAnnotations" {@link Attribute} of a java class file.
@@ -26,9 +28,9 @@ import java.util.List;
  */
 public final class RuntimeVisibleTypeAnnotationsAttribute extends TypeAnnotationsAttribute
 {
-	public static RuntimeVisibleTypeAnnotationsAttribute read( AttributeReader attributeReader )
+	public static RuntimeVisibleTypeAnnotationsAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool, Optional<ReadingLocationMap> locationMap )
 	{
-		List<TypeAnnotation> entries = readTypeAnnotations( attributeReader );
+		List<TypeAnnotation> entries = readTypeAnnotations( bufferReader, constantPool, locationMap );
 		return of( entries );
 	}
 

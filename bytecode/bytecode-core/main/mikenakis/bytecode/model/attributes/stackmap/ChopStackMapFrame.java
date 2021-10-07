@@ -1,10 +1,12 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
-import mikenakis.kit.Kit;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -18,10 +20,10 @@ import java.util.Optional;
  */
 public final class ChopStackMapFrame extends StackMapFrame
 {
-	public static ChopStackMapFrame read( CodeAttributeReader codeAttributeReader, Optional<StackMapFrame> previousFrame, int frameType )
+	public static ChopStackMapFrame read( BufferReader bufferReader, ReadingLocationMap locationMap, Optional<StackMapFrame> previousFrame, int frameType )
 	{
 		assert frameType >= 248 && frameType < 251;
-		Instruction targetInstruction = findTargetInstruction( previousFrame, codeAttributeReader.readUnsignedShort(), codeAttributeReader.locationMap ).orElseThrow();
+		Instruction targetInstruction = findTargetInstruction( previousFrame, bufferReader.readUnsignedShort(), locationMap ).orElseThrow();
 		return of( targetInstruction, 251 - frameType );
 	}
 
@@ -55,10 +57,10 @@ public final class ChopStackMapFrame extends StackMapFrame
 		//nothing to do.
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap, Optional<StackMapFrame> previousFrame )
 	{
-		int offsetDelta = codeConstantWriter.getOffsetDelta( this, previousFrame );
-		codeConstantWriter.writeUnsignedByte( 251 - count );
-		codeConstantWriter.writeUnsignedShort( offsetDelta );
+		int offsetDelta = locationMap.getOffsetDelta( this, previousFrame );
+		bufferWriter.writeUnsignedByte( 251 - count );
+		bufferWriter.writeUnsignedShort( offsetDelta );
 	}
 }

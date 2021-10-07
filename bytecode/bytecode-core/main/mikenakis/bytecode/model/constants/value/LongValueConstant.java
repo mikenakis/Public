@@ -1,9 +1,11 @@
 package mikenakis.bytecode.model.constants.value;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -15,10 +17,10 @@ import java.util.Objects;
  */
 public final class LongValueConstant extends ValueConstant
 {
-	public static LongValueConstant read( ConstantReader constantReader, int constantTag )
+	public static LongValueConstant read( BufferReader bufferReader, int constantTag )
 	{
 		assert constantTag == tag_Long;
-		long value = constantReader.readLong();
+		long value = bufferReader.readLong();
 		return of( value );
 	}
 
@@ -46,9 +48,9 @@ public final class LongValueConstant extends ValueConstant
 		interner.intern( this );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeLong( value );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeLong( value );
 	}
 }

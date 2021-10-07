@@ -1,9 +1,11 @@
 package mikenakis.bytecode.model;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -17,20 +19,20 @@ import java.util.List;
  */
 public final class Annotation
 {
-	public static Annotation read( AttributeReader attributeReader )
+	public static Annotation read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		Mutf8ValueConstant typeNameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-		List<AnnotationParameter> annotationParameters = readAnnotationParameters( attributeReader );
+		Mutf8ValueConstant typeNameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		List<AnnotationParameter> annotationParameters = readAnnotationParameters( bufferReader, constantPool );
 		return of( typeNameConstant, annotationParameters );
 	}
 
-	public static List<AnnotationParameter> readAnnotationParameters( AttributeReader attributeReader )
+	static List<AnnotationParameter> readAnnotationParameters( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		List<AnnotationParameter> annotationParameters = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			AnnotationParameter annotationParameter = AnnotationParameter.read( attributeReader );
+			AnnotationParameter annotationParameter = AnnotationParameter.read( bufferReader, constantPool );
 			annotationParameters.add( annotationParameter );
 		}
 		return annotationParameters;
@@ -60,11 +62,11 @@ public final class Annotation
 			annotationParameter.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( annotationTypeNameConstant ) );
-		constantWriter.writeUnsignedShort( parameters.size() );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( annotationTypeNameConstant ) );
+		bufferWriter.writeUnsignedShort( parameters.size() );
 		for( AnnotationParameter annotationParameter : parameters )
-			annotationParameter.write( constantWriter );
+			annotationParameter.write( bufferWriter, constantPool );
 	}
 }

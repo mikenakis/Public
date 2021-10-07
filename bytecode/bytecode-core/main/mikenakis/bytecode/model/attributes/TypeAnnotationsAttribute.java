@@ -1,35 +1,22 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.exceptions.InvalidTargetTagException;
 import mikenakis.bytecode.kit.BufferReader;
-import mikenakis.bytecode.model.Annotation;
-import mikenakis.bytecode.model.AnnotationParameter;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.TypeAnnotation;
-import mikenakis.bytecode.model.attributes.target.CatchTarget;
-import mikenakis.bytecode.model.attributes.target.EmptyTarget;
-import mikenakis.bytecode.model.attributes.target.FormalParameterTarget;
-import mikenakis.bytecode.model.attributes.target.LocalVariableTarget;
-import mikenakis.bytecode.model.attributes.target.OffsetTarget;
-import mikenakis.bytecode.model.attributes.target.SupertypeTarget;
-import mikenakis.bytecode.model.attributes.target.Target;
-import mikenakis.bytecode.model.attributes.target.ThrowsTarget;
-import mikenakis.bytecode.model.attributes.target.TypeArgumentTarget;
-import mikenakis.bytecode.model.attributes.target.TypeParameterBoundTarget;
-import mikenakis.bytecode.model.attributes.target.TypeParameterTarget;
-import mikenakis.bytecode.model.attributes.target.TypePath;
-import mikenakis.bytecode.model.attributes.target.TypePathEntry;
-import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Common base class for the "RuntimeVisibleTypeAnnotations" or "RuntimeInvisibleTypeAnnotations" {@link Attribute} of a java class file.
@@ -42,16 +29,13 @@ import java.util.List;
  */
 public abstract class TypeAnnotationsAttribute extends KnownAttribute
 {
-	protected static List<TypeAnnotation> readTypeAnnotations( AttributeReader attributeReader )
+	protected static List<TypeAnnotation> readTypeAnnotations( BufferReader bufferReader, ReadingConstantPool constantPool, Optional<ReadingLocationMap> locationMap )
 	{
-		int typeAnnotationCount = attributeReader.readUnsignedShort();
+		int typeAnnotationCount = bufferReader.readUnsignedShort();
 		assert typeAnnotationCount > 0;
 		List<TypeAnnotation> typeAnnotations = new ArrayList<>( typeAnnotationCount );
 		for( int i = 0; i < typeAnnotationCount; i++ )
-		{
-			TypeAnnotation entry = TypeAnnotation.read( attributeReader );
-			typeAnnotations.add( entry );
-		}
+			typeAnnotations.add( TypeAnnotation.read( bufferReader, constantPool, locationMap ) );
 		return typeAnnotations;
 	}
 
@@ -72,8 +56,8 @@ public abstract class TypeAnnotationsAttribute extends KnownAttribute
 			typeAnnotation.intern( interner );
 	}
 
-	@Override public final void write( ConstantWriter constantWriter )
+	@Override public final void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		TypeAnnotation.writeTypeAnnotations( constantWriter, typeAnnotations );
+		TypeAnnotation.writeTypeAnnotations( bufferWriter, constantPool, locationMap, typeAnnotations );
 	}
 }

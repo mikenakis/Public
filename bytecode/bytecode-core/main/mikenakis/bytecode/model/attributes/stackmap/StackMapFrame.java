@@ -1,9 +1,11 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.reading.LocationMap;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.Kit;
 
 import java.util.Optional;
@@ -46,7 +48,7 @@ public abstract class StackMapFrame
 	public final int tag;
 	private Instruction targetInstruction;
 
-	protected StackMapFrame( int tag, Instruction targetInstruction )
+	StackMapFrame( int tag, Instruction targetInstruction )
 	{
 		assert targetInstruction != null;
 		this.tag = tag;
@@ -93,7 +95,7 @@ public abstract class StackMapFrame
 			};
 	}
 
-	protected static Optional<Instruction> findTargetInstruction( Optional<StackMapFrame> previousFrame, int offsetDelta, LocationMap locationMap )
+	static Optional<Instruction> findTargetInstruction( Optional<StackMapFrame> previousFrame, int offsetDelta, ReadingLocationMap locationMap )
 	{
 		int previousLocation = previousFrame.isEmpty() ? 0 : (locationMap.getLocation( previousFrame.get().getTargetInstruction() ) + 1);
 		int location = offsetDelta + previousLocation;
@@ -101,5 +103,5 @@ public abstract class StackMapFrame
 	}
 
 	public abstract void intern( Interner interner );
-	public abstract void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame );
+	public abstract void write( BufferWriter bufferWriter, WritingConstantPool writingConstantPool, WritingLocationMap locationMap, Optional<StackMapFrame> previousFrame );
 }

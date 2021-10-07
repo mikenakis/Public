@@ -1,7 +1,6 @@
 package mikenakis.bytecode;
 
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 
 import java.util.HashMap;
@@ -19,7 +18,7 @@ public class ByteCodeClassLoader extends ClassLoader
 	public <T> Class<T> load( ByteCodeType byteCodeType )
 	{
 		String name = byteCodeType.typeDescriptor().typeName;
-		byte[] bytes = ByteCodeWriter.write( byteCodeType );
+		byte[] bytes = byteCodeType.write();
 		Kit.map.addOrReplace( classes, name, bytes ); //TODO: try exercising replacing, see if defineClass() can redefine a class
 		Class<?> javaClass = Kit.unchecked( () -> loadClass( name ) );
 		@SuppressWarnings( "unchecked" ) Class<T> result = (Class<T>)javaClass;

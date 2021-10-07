@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -21,17 +25,17 @@ import java.util.stream.Collectors;
  */
 public final class AttributeSet
 {
-	public static AttributeSet read( AttributeReader attributeReader )
+	public static AttributeSet read( BufferReader bufferReader, ReadingConstantPool constantPool, Optional<ReadingLocationMap> locationMap  )
 	{
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		Map<Mutf8ValueConstant,Attribute> attributesFromNames = new LinkedHashMap<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			Mutf8ValueConstant nameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-			int attributeLength = attributeReader.readInt();
-			int endPosition = attributeReader.bufferReader.getPosition() + attributeLength;
-			Attribute attribute = Attribute.read( attributeReader, nameConstant, attributeLength );
-			assert attributeReader.bufferReader.getPosition() == endPosition;
+			Mutf8ValueConstant nameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+			int attributeLength = bufferReader.readInt();
+			int endPosition = bufferReader.getPosition() + attributeLength;
+			Attribute attribute = Attribute.read( bufferReader, constantPool, locationMap, nameConstant, attributeLength );
+			assert bufferReader.getPosition() == endPosition;
 			Kit.map.add( attributesFromNames, nameConstant, attribute );
 		}
 		return new AttributeSet( attributesFromNames );
@@ -129,18 +133,18 @@ public final class AttributeSet
 		}
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( size() );
+		bufferWriter.writeUnsignedShort( size() );
 		for( Attribute attribute : allAttributes() )
 		{
 			Mutf8ValueConstant nameConstant = attribute.mutf8Name;
-			constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( nameConstant ) );
-			int position = constantWriter.bufferWriter.getPosition();
-			constantWriter.writeInt( 0 );
-			attribute.write( constantWriter );
-			int length = constantWriter.bufferWriter.getPosition() - position - 4;
-			constantWriter.bufferWriter.writeInt( position, length );
+			bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( nameConstant ) );
+			int position = bufferWriter.getPosition();
+			bufferWriter.writeInt( 0 );
+			attribute.write( bufferWriter, constantPool, locationMap );
+			int length = bufferWriter.getPosition() - position - 4;
+			bufferWriter.writeInt( position, length );
 		}
 	}
 }

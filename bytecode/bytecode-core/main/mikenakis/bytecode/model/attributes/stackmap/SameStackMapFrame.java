@@ -1,10 +1,12 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
-import mikenakis.kit.Kit;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -18,11 +20,11 @@ import java.util.Optional;
  */
 public final class SameStackMapFrame extends StackMapFrame
 {
-	public static SameStackMapFrame read( CodeAttributeReader codeAttributeReader, Optional<StackMapFrame> previousFrame, int frameType )
+	public static SameStackMapFrame read( BufferReader bufferReader, ReadingLocationMap locationMap, Optional<StackMapFrame> previousFrame, int frameType )
 	{
 		assert (frameType >= 0 && frameType <= 63) || frameType == SameStackMapFrame.EXTENDED_FRAME_TYPE;
-		int offsetDelta = frameType == SameStackMapFrame.EXTENDED_FRAME_TYPE ? codeAttributeReader.readUnsignedShort() : frameType;
-		Instruction targetInstruction = findTargetInstruction( previousFrame, offsetDelta, codeAttributeReader.locationMap ).orElseThrow();
+		int offsetDelta = frameType == SameStackMapFrame.EXTENDED_FRAME_TYPE ? bufferReader.readUnsignedShort() : frameType;
+		Instruction targetInstruction = findTargetInstruction( previousFrame, offsetDelta, locationMap ).orElseThrow();
 		return of( targetInstruction );
 	}
 
@@ -57,15 +59,15 @@ public final class SameStackMapFrame extends StackMapFrame
 		// nothing to do.
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap, Optional<StackMapFrame> previousFrame )
 	{
-		int offsetDelta = codeConstantWriter.getOffsetDelta( this, previousFrame );
+		int offsetDelta = locationMap.getOffsetDelta( this, previousFrame );
 		if( offsetDelta >= 0 && offsetDelta <= 63 )
-			codeConstantWriter.writeUnsignedByte( offsetDelta );
+			bufferWriter.writeUnsignedByte( offsetDelta );
 		else
 		{
-			codeConstantWriter.writeUnsignedByte( EXTENDED_FRAME_TYPE );
-			codeConstantWriter.writeUnsignedShort( offsetDelta );
+			bufferWriter.writeUnsignedByte( EXTENDED_FRAME_TYPE );
+			bufferWriter.writeUnsignedShort( offsetDelta );
 		}
 	}
 }

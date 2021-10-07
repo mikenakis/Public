@@ -1,16 +1,20 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "BootstrapMethods" {@link Attribute} of a java class file.
@@ -23,20 +27,20 @@ import java.util.List;
  */
 public final class BootstrapMethodsAttribute extends KnownAttribute
 {
-	public static BootstrapMethodsAttribute read( AttributeReader attributeReader )
+	public static BootstrapMethodsAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int bootstrapMethodCount = attributeReader.readUnsignedShort();
+		int bootstrapMethodCount = bufferReader.readUnsignedShort();
 		assert bootstrapMethodCount > 0;
 		List<BootstrapMethod> entries = new ArrayList<>( bootstrapMethodCount );
 		for( int i = 0; i < bootstrapMethodCount; i++ )
 		{
-			MethodHandleConstant methodHandleConstant = attributeReader.readIndexAndGetConstant().asMethodHandleConstant();
-			int argumentConstantCount = attributeReader.readUnsignedShort();
+			MethodHandleConstant methodHandleConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMethodHandleConstant();
+			int argumentConstantCount = bufferReader.readUnsignedShort();
 			assert argumentConstantCount > 0;
 			List<Constant> argumentConstants = new ArrayList<>( argumentConstantCount );
 			for( int j = 0; j < argumentConstantCount; j++ )
 			{
-				Constant argumentConstant = attributeReader.readIndexAndGetConstant();
+				Constant argumentConstant = constantPool.getConstant( bufferReader.readUnsignedShort() );
 				argumentConstants.add( argumentConstant );
 			}
 			BootstrapMethod entry = BootstrapMethod.of( methodHandleConstant, argumentConstants );
@@ -86,10 +90,10 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 			bootstrapMethod.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( bootstrapMethods.size() );
+		bufferWriter.writeUnsignedShort( bootstrapMethods.size() );
 		for( BootstrapMethod bootstrapMethod : bootstrapMethods )
-			bootstrapMethod.write( constantWriter );
+			bootstrapMethod.write( bufferWriter, constantPool );
 	}
 }

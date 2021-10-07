@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-final class BootstrapPool
+public final class WritingBootstrapPool
 {
 	private final List<BootstrapMethod> bootstrapMethods;
 
-	BootstrapPool()
+	public WritingBootstrapPool()
 	{
 		bootstrapMethods = new ArrayList<>();
 	}
@@ -28,14 +28,14 @@ final class BootstrapPool
 		return -1;
 	}
 
-	int getIndex( BootstrapMethod constant )
+	public int getBootstrapIndex( BootstrapMethod constant )
 	{
 		int index = tryGetIndex( constant );
 		assert index != -1;
 		return index;
 	}
 
-	void intern( BootstrapMethod bootstrapMethod )
+	public void intern( BootstrapMethod bootstrapMethod )
 	{
 		assert bootstrapMethod != null;
 		int existingIndex = tryGetIndex( bootstrapMethod );
@@ -43,7 +43,7 @@ final class BootstrapPool
 			bootstrapMethods.add( bootstrapMethod );
 	}
 
-	Collection<BootstrapMethod> bootstrapMethods()
+	public Collection<BootstrapMethod> bootstrapMethods()
 	{
 		return bootstrapMethods;
 	}

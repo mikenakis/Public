@@ -4,6 +4,11 @@ import mikenakis.java_type_model.TypeDescriptor;
 
 public final class FieldReference
 {
+	public static FieldReference of( Class<?> jvmClass, FieldPrototype fieldPrototype )
+	{
+		return of( TypeDescriptor.of( jvmClass ), fieldPrototype );
+	}
+
 	public static FieldReference of( TypeDescriptor declaringTypeDescriptor, FieldPrototype fieldPrototype )
 	{
 		return new FieldReference( declaringTypeDescriptor, fieldPrototype );

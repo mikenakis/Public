@@ -1,13 +1,16 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -19,12 +22,12 @@ import java.util.Objects;
  */
 public final class NameAndDescriptorConstant extends Constant
 {
-	public static NameAndDescriptorConstant read( ConstantReader constantReader, int constantTag )
+	public static NameAndDescriptorConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_NameAndDescriptor;
 		NameAndDescriptorConstant nameAndDescriptorConstant = new NameAndDescriptorConstant();
-		constantReader.readIndexAndSetConstant( c -> nameAndDescriptorConstant.setNameConstant( c.asMutf8ValueConstant() ) );
-		constantReader.readIndexAndSetConstant( c -> nameAndDescriptorConstant.setDescriptorConstant( c.asMutf8ValueConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> nameAndDescriptorConstant.setNameConstant( c.asMutf8ValueConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> nameAndDescriptorConstant.setDescriptorConstant( c.asMutf8ValueConstant() ) );
 		return nameAndDescriptorConstant;
 	}
 
@@ -40,7 +43,7 @@ public final class NameAndDescriptorConstant extends Constant
 			Mutf8ValueConstant.of( ByteCodeHelpers.descriptorStringFromMethodDescriptor( methodPrototype.descriptor ) ) );
 	}
 
-	public static NameAndDescriptorConstant of( Mutf8ValueConstant nameConstant, Mutf8ValueConstant descriptorConstant ) //TODO: remove
+	private static NameAndDescriptorConstant of( Mutf8ValueConstant nameConstant, Mutf8ValueConstant descriptorConstant )
 	{
 		NameAndDescriptorConstant nameAndDescriptorConstant = new NameAndDescriptorConstant();
 		nameAndDescriptorConstant.setNameConstant( nameConstant );
@@ -95,10 +98,10 @@ public final class NameAndDescriptorConstant extends Constant
 		getDescriptorConstant().intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getNameConstant() ) );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getDescriptorConstant() ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getNameConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getDescriptorConstant() ) );
 	}
 }

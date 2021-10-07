@@ -1,8 +1,8 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.reading.CodeAttributeReader;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 
 public final class NewPrimitiveArrayInstruction extends Instruction
 {
-	public static NewPrimitiveArrayInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static NewPrimitiveArrayInstruction read( BufferReader bufferReader, boolean wide, int opCode )
 	{
 		assert !wide;
 		assert opCode == OpCode.NEWARRAY;
-		Type type = Type.fromNumber( codeAttributeReader.readUnsignedByte() );
+		Type type = Type.fromNumber( bufferReader.readUnsignedByte() );
 		return of( type );
 	}
 

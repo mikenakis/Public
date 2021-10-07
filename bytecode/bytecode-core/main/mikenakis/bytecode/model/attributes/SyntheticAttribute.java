@@ -1,13 +1,16 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
-import mikenakis.kit.Kit;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
+import java.util.Optional;
 
 /**
  * Represents the "Synthetic" {@link Attribute} of a java class file.
@@ -40,8 +43,8 @@ public final class SyntheticAttribute extends KnownAttribute
 		// nothing to do
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		Kit.get( constantWriter ); //nothing to do
+		// nothing to do
 	}
 }

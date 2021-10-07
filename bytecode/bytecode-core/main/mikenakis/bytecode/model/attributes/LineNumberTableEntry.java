@@ -1,6 +1,10 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
+import mikenakis.bytecode.reading.ReadingLocationMap;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -10,6 +14,13 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class LineNumberTableEntry
 {
+	public static LineNumberTableEntry read( BufferReader bufferReader, ReadingLocationMap locationMap )
+	{
+		Instruction startInstruction = locationMap.getInstruction( bufferReader.readUnsignedShort() ).orElseThrow();
+		int lineNumber = bufferReader.readUnsignedShort();
+		return of( startInstruction, lineNumber );
+	}
+
 	public static LineNumberTableEntry of( Instruction instruction, int lineNumber )
 	{
 		return new LineNumberTableEntry( instruction, lineNumber );
@@ -25,4 +36,10 @@ public final class LineNumberTableEntry
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "lineNumber = " + lineNumber; }
+
+	public void write( BufferWriter bufferWriter, WritingLocationMap locationMap )
+	{
+		bufferWriter.writeUnsignedShort( locationMap.getLocation( instruction ) );
+		bufferWriter.writeUnsignedShort( lineNumber );
+	}
 }

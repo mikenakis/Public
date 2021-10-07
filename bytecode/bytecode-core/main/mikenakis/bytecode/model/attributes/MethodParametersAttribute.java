@@ -1,16 +1,20 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagSet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "MethodParameters" {@link Attribute} of a java class file.
@@ -23,15 +27,15 @@ import java.util.List;
  */
 public final class MethodParametersAttribute extends KnownAttribute
 {
-	public static MethodParametersAttribute read( AttributeReader attributeReader )
+	public static MethodParametersAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int count = attributeReader.readUnsignedByte();
+		int count = bufferReader.readUnsignedByte();
 		assert count > 0;
 		List<MethodParameter> entries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			Mutf8ValueConstant nameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-			FlagSet<MethodParameter.Modifier> modifiers = MethodParameter.modifierEnum.fromBits( attributeReader.readUnsignedShort() );
+			Mutf8ValueConstant nameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+			FlagSet<MethodParameter.Modifier> modifiers = MethodParameter.modifierEnum.fromBits( bufferReader.readUnsignedShort() );
 			MethodParameter entry = MethodParameter.of( nameConstant, modifiers );
 			entries.add( entry );
 		}
@@ -66,10 +70,10 @@ public final class MethodParametersAttribute extends KnownAttribute
 			methodParameter.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedByte( methodParameters.size() );
+		bufferWriter.writeUnsignedByte( methodParameters.size() );
 		for( MethodParameter methodParameter : methodParameters )
-			methodParameter.write( constantWriter );
+			methodParameter.write( bufferWriter, constantPool );
 	}
 }

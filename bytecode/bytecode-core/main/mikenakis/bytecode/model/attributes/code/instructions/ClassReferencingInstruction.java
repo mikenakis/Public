@@ -1,9 +1,10 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.TypeDescriptor;
@@ -13,10 +14,10 @@ import java.util.Set;
 
 public final class ClassReferencingInstruction extends Instruction
 {
-	public static ClassReferencingInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static ClassReferencingInstruction read( BufferReader bufferReader, ReadingConstantPool constantPool, boolean wide, int opCode )
 	{
 		assert !wide;
-		ClassConstant classConstant = codeAttributeReader.readIndexAndGetConstant().asClassConstant();
+		ClassConstant classConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant();
 		return of( opCode, classConstant );
 	}
 

@@ -8,10 +8,10 @@ import mikenakis.bytecode.model.attributes.code.Instruction;
 public class RealInstructionWriter implements InstructionWriter
 {
 	private final BufferWriter bufferWriter;
-	private final LocationMap locationMap;
-	private final ConstantPool constantPool;
+	private final WritingLocationMap locationMap;
+	private final WritingConstantPool constantPool;
 
-	RealInstructionWriter( LocationMap locationMap, ConstantPool constantPool )
+	public RealInstructionWriter( WritingLocationMap locationMap, WritingConstantPool constantPool )
 	{
 		bufferWriter = new BufferWriter();
 		this.locationMap = locationMap;
@@ -27,7 +27,7 @@ public class RealInstructionWriter implements InstructionWriter
 
 	@Override public int getIndex( Constant constant )
 	{
-		return constantPool.getIndex( constant );
+		return constantPool.getConstantIndex( constant );
 	}
 
 	@Override public int getOffset( Instruction sourceInstruction, Instruction targetInstruction )

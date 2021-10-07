@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  *
  * @author Michael Belivanakis (michael.gr)
  */
-@SuppressWarnings( { "FieldCanBeLocal", "FieldMayBeStatic", "unused" } )
+@SuppressWarnings( { "FieldCanBeLocal", "FieldMayBeStatic", "unused", "MethodMayBeStatic", "WeakerAccess" } )
 public abstract class Class3ImplementingInterface implements Interface1
 {
 	public static final String stringLiteral = "a\u03A6\uB414b"; //these characters are chosen so as to cover all unicode groups.
@@ -93,6 +93,7 @@ public abstract class Class3ImplementingInterface implements Interface1
 
 	public final Supplier<Integer> methodWithInnerClass( int i )
 	{
+		@SuppressWarnings( "WeakerAccess" )
 		class Inner implements Supplier<Integer>
 		{
 			final int i;

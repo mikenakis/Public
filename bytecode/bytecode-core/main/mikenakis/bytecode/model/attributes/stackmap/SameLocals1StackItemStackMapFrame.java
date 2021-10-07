@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -18,12 +22,12 @@ import java.util.Optional;
  */
 public final class SameLocals1StackItemStackMapFrame extends StackMapFrame
 {
-	public static SameLocals1StackItemStackMapFrame read( CodeAttributeReader codeAttributeReader, Optional<StackMapFrame> previousFrame, int frameType )
+	public static SameLocals1StackItemStackMapFrame read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap, Optional<StackMapFrame> previousFrame, int frameType )
 	{
 		assert (frameType >= 64 && frameType <= 127) || frameType == SameLocals1StackItemStackMapFrame.EXTENDED_FRAME_TYPE;
-		int offsetDelta = frameType == SameLocals1StackItemStackMapFrame.EXTENDED_FRAME_TYPE ? codeAttributeReader.readUnsignedShort() : frameType - 64;
-		var targetInstruction = findTargetInstruction( previousFrame, offsetDelta, codeAttributeReader.locationMap ).orElseThrow();
-		VerificationType stackVerificationType = VerificationType.read( codeAttributeReader );
+		int offsetDelta = frameType == SameLocals1StackItemStackMapFrame.EXTENDED_FRAME_TYPE ? bufferReader.readUnsignedShort() : frameType - 64;
+		var targetInstruction = findTargetInstruction( previousFrame, offsetDelta, locationMap ).orElseThrow();
+		VerificationType stackVerificationType = VerificationType.read( bufferReader, constantPool, locationMap );
 		return of( targetInstruction, stackVerificationType );
 	}
 
@@ -60,16 +64,16 @@ public final class SameLocals1StackItemStackMapFrame extends StackMapFrame
 		stackVerificationType.intern( interner );
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap, Optional<StackMapFrame> previousFrame )
 	{
-		int offsetDelta = codeConstantWriter.getOffsetDelta( this, previousFrame );
+		int offsetDelta = locationMap.getOffsetDelta( this, previousFrame );
 		if( offsetDelta <= 127 )
-			codeConstantWriter.writeUnsignedByte( 64 + offsetDelta );
+			bufferWriter.writeUnsignedByte( 64 + offsetDelta );
 		else
 		{
-			codeConstantWriter.writeUnsignedByte( EXTENDED_FRAME_TYPE );
-			codeConstantWriter.writeUnsignedShort( offsetDelta );
+			bufferWriter.writeUnsignedByte( EXTENDED_FRAME_TYPE );
+			bufferWriter.writeUnsignedShort( offsetDelta );
 		}
-		stackVerificationType.write( codeConstantWriter );
+		stackVerificationType.write( bufferWriter, constantPool, locationMap );
 	}
 }

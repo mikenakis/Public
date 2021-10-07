@@ -1,8 +1,10 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -12,22 +14,22 @@ import java.util.List;
 
 public final class LookupSwitchInstruction extends Instruction
 {
-	public static LookupSwitchInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static LookupSwitchInstruction read( BufferReader bufferReader, ReadingLocationMap locationMap, boolean wide, int opCode )
 	{
 		assert !wide;
 		assert opCode == OpCode.LOOKUPSWITCH;
-		codeAttributeReader.skipToAlign();
-		int defaultInstructionOffset = codeAttributeReader.readInt();
-		int count = codeAttributeReader.readInt();
+		bufferReader.skip( Helpers.padding( bufferReader.getPosition() ) );
+		int defaultInstructionOffset = bufferReader.readInt();
+		int count = bufferReader.readInt();
 		assert count > 0;
 		LookupSwitchInstruction instruction = of( count );
-		codeAttributeReader.setRelativeTargetInstruction( instruction, defaultInstructionOffset, instruction::setDefaultInstruction );
+		locationMap.setRelativeTargetInstruction( instruction, defaultInstructionOffset, instruction::setDefaultInstruction );
 		for( int index = 0; index < count; index++ )
 		{
-			int value = codeAttributeReader.readInt();
-			int entryInstructionOffset = codeAttributeReader.readInt();
+			int value = bufferReader.readInt();
+			int entryInstructionOffset = bufferReader.readInt();
 			LookupSwitchEntry lookupSwitchEntry = LookupSwitchEntry.of( value );
-			codeAttributeReader.setRelativeTargetInstruction( instruction, entryInstructionOffset, lookupSwitchEntry::setTargetInstruction );
+			locationMap.setRelativeTargetInstruction( instruction, entryInstructionOffset, lookupSwitchEntry::setTargetInstruction );
 			instruction.entries.add( lookupSwitchEntry );
 		}
 		return instruction;

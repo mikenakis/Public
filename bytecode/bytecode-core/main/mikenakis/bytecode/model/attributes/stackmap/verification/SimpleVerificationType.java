@@ -1,7 +1,9 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 
 /**
  * 'Simple' {@link VerificationType}.
@@ -23,8 +25,8 @@ public final class SimpleVerificationType extends VerificationType
 		// nothing to do
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap )
 	{
-		codeConstantWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedByte( tag );
 	}
 }

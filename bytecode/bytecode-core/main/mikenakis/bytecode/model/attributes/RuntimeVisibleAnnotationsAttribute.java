@@ -1,8 +1,9 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,9 @@ import java.util.List;
  */
 public final class RuntimeVisibleAnnotationsAttribute extends AnnotationsAttribute
 {
-	public static RuntimeVisibleAnnotationsAttribute read( AttributeReader attributeReader )
+	public static RuntimeVisibleAnnotationsAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		List<Annotation> annotations = readAnnotations( attributeReader );
+		List<Annotation> annotations = readAnnotations( bufferReader, constantPool );
 		return of( annotations );
 	}
 

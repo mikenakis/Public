@@ -1,13 +1,15 @@
 package mikenakis.bytecode.model.annotationvalues;
 
 import mikenakis.bytecode.exceptions.InvalidConstAnnotationValueTagException;
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -17,9 +19,9 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class ConstAnnotationValue extends AnnotationValue
 {
-	public static ConstAnnotationValue read( AttributeReader annotationReader,  char annotationValueTag )
+	public static ConstAnnotationValue read( BufferReader bufferReader, ReadingConstantPool constantPool, char annotationValueTag )
 	{
-		Constant constant = annotationReader.readIndexAndGetConstant();
+		Constant constant = constantPool.getConstant( bufferReader.readUnsignedShort() );
 		ValueConstant valueConstant = constant.asValueConstant();
 		return of( annotationValueTag, valueConstant );
 	}
@@ -52,10 +54,10 @@ public final class ConstAnnotationValue extends AnnotationValue
 		valueConstant.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( valueConstant ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( valueConstant ) );
 	}
 
 	private static int getConstantTagFromValueTag( char annotationValueTag )

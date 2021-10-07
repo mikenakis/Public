@@ -1,14 +1,16 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.exceptions.InvalidAnnotationValueTagException;
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
 import mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
 import mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
 import mikenakis.bytecode.model.annotationvalues.ConstAnnotationValue;
 import mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -19,18 +21,18 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public abstract class AnnotationValue
 {
-	public static AnnotationValue read( AttributeReader attributeReader )
+	public static AnnotationValue read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		char annotationValueTag = (char)attributeReader.readUnsignedByte();
+		char annotationValueTag = (char)bufferReader.readUnsignedByte();
 		return switch( annotationValueTag )
 			{
 				case AnnotationValue.tagBoolean, AnnotationValue.tagByte, AnnotationValue.tagCharacter, AnnotationValue.tagDouble, //
 					AnnotationValue.tagFloat, AnnotationValue.tagInteger, AnnotationValue.tagLong, AnnotationValue.tagShort, //
-					AnnotationValue.tagString -> ConstAnnotationValue.read( attributeReader, annotationValueTag );
-				case AnnotationValue.tagAnnotation -> AnnotationAnnotationValue.read( attributeReader );
-				case AnnotationValue.tagArray -> ArrayAnnotationValue.read( attributeReader );
-				case AnnotationValue.tagClass -> ClassAnnotationValue.read( attributeReader );
-				case AnnotationValue.tagEnum -> EnumAnnotationValue.read( attributeReader );
+					AnnotationValue.tagString -> ConstAnnotationValue.read( bufferReader, constantPool, annotationValueTag );
+				case AnnotationValue.tagAnnotation -> AnnotationAnnotationValue.read( bufferReader, constantPool );
+				case AnnotationValue.tagArray -> ArrayAnnotationValue.read( bufferReader, constantPool );
+				case AnnotationValue.tagClass -> ClassAnnotationValue.read( bufferReader, constantPool );
+				case AnnotationValue.tagEnum -> EnumAnnotationValue.read( bufferReader, constantPool );
 				default -> throw new InvalidAnnotationValueTagException( annotationValueTag );
 			};
 	}
@@ -84,5 +86,5 @@ public abstract class AnnotationValue
 	@ExcludeFromJacocoGeneratedReport public ArrayAnnotationValue      /**/ asArrayAnnotationValue()      /**/ { return Kit.fail(); }
 
 	public abstract void intern( Interner interner );
-	public abstract void write( ConstantWriter constantWriter );
+	public abstract void write( BufferWriter bufferWriter, WritingConstantPool constantPool );
 }

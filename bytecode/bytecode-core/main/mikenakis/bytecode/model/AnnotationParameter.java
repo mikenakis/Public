@@ -1,9 +1,11 @@
 package mikenakis.bytecode.model;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -13,10 +15,10 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationParameter
 {
-	public static AnnotationParameter read( AttributeReader attributeReader )
+	public static AnnotationParameter read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		Mutf8ValueConstant nameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-		AnnotationValue annotationValue = AnnotationValue.read( attributeReader );
+		Mutf8ValueConstant nameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		AnnotationValue annotationValue = AnnotationValue.read( bufferReader, constantPool );
 		AnnotationParameter annotationParameter = of( nameConstant, annotationValue );
 		return annotationParameter;
 	}
@@ -48,9 +50,9 @@ public final class AnnotationParameter
 		annotationValue.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( nameConstant ) );
-		annotationValue.write( constantWriter );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( nameConstant ) );
+		annotationValue.write( bufferWriter, constantPool );
 	}
 }

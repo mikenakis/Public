@@ -1,39 +1,38 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.reading.CodeAttributeReader;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class LocalVariableInstruction extends Instruction
 {
-	public static LocalVariableInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static LocalVariableInstruction read( BufferReader bufferReader, boolean wide, int opCode )
 	{
-		assert hasOperand( opCode ) || !wide;
-		IndexType indexType = getIndexType( opCode );
-		int index;
+		OpCodeInfo opCodeInfo = Kit.map.get( opCodeInfosFromOpCodes, opCode );
+		IndexType indexType = opCodeInfo.indexType;
+		int localVariableIndex;
 		if( indexType == IndexType.ByOperand )
-			index = wide ? codeAttributeReader.readUnsignedShort() : codeAttributeReader.readUnsignedByte();
+			localVariableIndex = wide ? bufferReader.readUnsignedShort() : bufferReader.readUnsignedByte();
 		else
 		{
 			assert !wide;
-			index = indexType.index();
+			localVariableIndex = indexType.index();
 		}
-		return of( opCode, index );
+		return of( opCodeInfo.genericOpCode, localVariableIndex );
 	}
 
-	public static LocalVariableInstruction of( int opCode, int index )
+	public static LocalVariableInstruction of( int opCode, int localVariableIndex )
 	{
-		return new LocalVariableInstruction( opCode, index );
+		return new LocalVariableInstruction( opCode, localVariableIndex );
 	}
 
 	public enum IndexType
@@ -77,148 +76,93 @@ public final class LocalVariableInstruction extends Instruction
 	private static final class OpCodeInfo
 	{
 		final int opCode;
-		final PseudoOpCode pseudoOpCode;
+		final int genericOpCode;
 		final IndexType indexType;
 
-		OpCodeInfo( int opCode, PseudoOpCode pseudoOpCode, IndexType indexType )
+		OpCodeInfo( int opCode, int genericOpCode, IndexType indexType )
 		{
 			this.opCode = opCode;
-			this.pseudoOpCode = pseudoOpCode;
+			this.genericOpCode = genericOpCode;
 			this.indexType = indexType;
 		}
 
-		static Optional<OpCodeInfo> tryFromOpCode( int opCode )
+		static OpCodeInfo from( int genericOpCode, IndexType indexType )
 		{
-			for( OpCodeInfo opCodeInfo : opCodeInfos )
-				if( opCodeInfo.opCode == opCode )
-					return Optional.of( opCodeInfo );
-			return Optional.empty();
-		}
-
-		static OpCodeInfo fromOpCode( int opCode )
-		{
-			return tryFromOpCode( opCode ).orElseThrow();
-		}
-
-		static Optional<OpCodeInfo> tryFrom( PseudoOpCode pseudoOpCode, IndexType indexType )
-		{
-			for( OpCodeInfo opCodeInfo : opCodeInfos )
-				if( opCodeInfo.pseudoOpCode == pseudoOpCode && opCodeInfo.indexType == indexType )
-					return Optional.of( opCodeInfo );
-			return Optional.empty();
-		}
-
-		static OpCodeInfo from( PseudoOpCode pseudoOpCode, IndexType indexType )
-		{
-			return tryFrom( pseudoOpCode, indexType ).orElseThrow();
+			for( OpCodeInfo opCodeInfo : opCodeInfosFromOpCodes.values() )
+				if( opCodeInfo.genericOpCode == genericOpCode && opCodeInfo.indexType == indexType )
+					return opCodeInfo;
+			throw new AssertionError( genericOpCode + " " + indexType );
 		}
 	}
 
-	private enum PseudoOpCode
-	{
-		ILoad( OpCode.ILOAD ),   /**/
-		LLoad( OpCode.LLOAD ),   /**/
-		FLoad( OpCode.FLOAD ),   /**/
-		DLoad( OpCode.DLOAD ),   /**/
-		ALoad( OpCode.ALOAD ),   /**/
-		IStore( OpCode.ISTORE ), /**/
-		LStore( OpCode.LSTORE ), /**/
-		FStore( OpCode.FSTORE ), /**/
-		DStore( OpCode.DSTORE ), /**/
-		AStore( OpCode.ASTORE ), /**/
-		Ret( OpCode.RET );
+	private static final Map<Integer,OpCodeInfo> opCodeInfosFromOpCodes = Stream.of( //
+		new OpCodeInfo( OpCode.ILOAD    /**/, OpCode.ILOAD  /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.ILOAD_0  /**/, OpCode.ILOAD  /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.ILOAD_1  /**/, OpCode.ILOAD  /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.ILOAD_2  /**/, OpCode.ILOAD  /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.ILOAD_3  /**/, OpCode.ILOAD  /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.LLOAD    /**/, OpCode.LLOAD  /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.LLOAD_0  /**/, OpCode.LLOAD  /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.LLOAD_1  /**/, OpCode.LLOAD  /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.LLOAD_2  /**/, OpCode.LLOAD  /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.LLOAD_3  /**/, OpCode.LLOAD  /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.FLOAD    /**/, OpCode.FLOAD  /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.FLOAD_0  /**/, OpCode.FLOAD  /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.FLOAD_1  /**/, OpCode.FLOAD  /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.FLOAD_2  /**/, OpCode.FLOAD  /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.FLOAD_3  /**/, OpCode.FLOAD  /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.DLOAD    /**/, OpCode.DLOAD  /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.DLOAD_0  /**/, OpCode.DLOAD  /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.DLOAD_1  /**/, OpCode.DLOAD  /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.DLOAD_2  /**/, OpCode.DLOAD  /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.DLOAD_3  /**/, OpCode.DLOAD  /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.ALOAD    /**/, OpCode.ALOAD  /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.ALOAD_0  /**/, OpCode.ALOAD  /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.ALOAD_1  /**/, OpCode.ALOAD  /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.ALOAD_2  /**/, OpCode.ALOAD  /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.ALOAD_3  /**/, OpCode.ALOAD  /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.ISTORE   /**/, OpCode.ISTORE /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.ISTORE_0 /**/, OpCode.ISTORE /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.ISTORE_1 /**/, OpCode.ISTORE /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.ISTORE_2 /**/, OpCode.ISTORE /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.ISTORE_3 /**/, OpCode.ISTORE /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.LSTORE   /**/, OpCode.LSTORE /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.LSTORE_0 /**/, OpCode.LSTORE /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.LSTORE_1 /**/, OpCode.LSTORE /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.LSTORE_2 /**/, OpCode.LSTORE /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.LSTORE_3 /**/, OpCode.LSTORE /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.FSTORE   /**/, OpCode.FSTORE /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.FSTORE_0 /**/, OpCode.FSTORE /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.FSTORE_1 /**/, OpCode.FSTORE /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.FSTORE_2 /**/, OpCode.FSTORE /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.FSTORE_3 /**/, OpCode.FSTORE /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.DSTORE   /**/, OpCode.DSTORE /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.DSTORE_0 /**/, OpCode.DSTORE /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.DSTORE_1 /**/, OpCode.DSTORE /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.DSTORE_2 /**/, OpCode.DSTORE /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.DSTORE_3 /**/, OpCode.DSTORE /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.ASTORE   /**/, OpCode.ASTORE /**/, IndexType.ByOperand ), //
+		new OpCodeInfo( OpCode.ASTORE_0 /**/, OpCode.ASTORE /**/, IndexType.AtIndex0 ),  //
+		new OpCodeInfo( OpCode.ASTORE_1 /**/, OpCode.ASTORE /**/, IndexType.AtIndex1 ),  //
+		new OpCodeInfo( OpCode.ASTORE_2 /**/, OpCode.ASTORE /**/, IndexType.AtIndex2 ),  //
+		new OpCodeInfo( OpCode.ASTORE_3 /**/, OpCode.ASTORE /**/, IndexType.AtIndex3 ),  //
+		new OpCodeInfo( OpCode.RET      /**/, OpCode.RET    /**/, IndexType.ByOperand )  //
+	).collect( Collectors.toMap( opCodeInfo -> opCodeInfo.opCode, opCodeInfo -> opCodeInfo ) );
 
-		final int posterOpCode;
+	public final int genericOpCode;
+	public final int localVariableIndex; // TO-maybe-DO: introduce an abstraction of a local variable, then realize a reference to such an abstraction instead of the index here.
 
-		PseudoOpCode( int posterOpCode )
-		{
-			this.posterOpCode = posterOpCode;
-		}
-	}
-
-	private static final Collection<OpCodeInfo> opCodeInfos = List.of( //
-		new OpCodeInfo( OpCode.ILOAD    /**/, PseudoOpCode.ILoad  /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.ILOAD_0  /**/, PseudoOpCode.ILoad  /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.ILOAD_1  /**/, PseudoOpCode.ILoad  /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.ILOAD_2  /**/, PseudoOpCode.ILoad  /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.ILOAD_3  /**/, PseudoOpCode.ILoad  /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.LLOAD    /**/, PseudoOpCode.LLoad  /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.LLOAD_0  /**/, PseudoOpCode.LLoad  /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.LLOAD_1  /**/, PseudoOpCode.LLoad  /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.LLOAD_2  /**/, PseudoOpCode.LLoad  /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.LLOAD_3  /**/, PseudoOpCode.LLoad  /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.FLOAD    /**/, PseudoOpCode.FLoad  /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.FLOAD_0  /**/, PseudoOpCode.FLoad  /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.FLOAD_1  /**/, PseudoOpCode.FLoad  /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.FLOAD_2  /**/, PseudoOpCode.FLoad  /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.FLOAD_3  /**/, PseudoOpCode.FLoad  /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.DLOAD    /**/, PseudoOpCode.DLoad  /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.DLOAD_0  /**/, PseudoOpCode.DLoad  /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.DLOAD_1  /**/, PseudoOpCode.DLoad  /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.DLOAD_2  /**/, PseudoOpCode.DLoad  /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.DLOAD_3  /**/, PseudoOpCode.DLoad  /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.ALOAD    /**/, PseudoOpCode.ALoad  /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.ALOAD_0  /**/, PseudoOpCode.ALoad  /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.ALOAD_1  /**/, PseudoOpCode.ALoad  /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.ALOAD_2  /**/, PseudoOpCode.ALoad  /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.ALOAD_3  /**/, PseudoOpCode.ALoad  /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.ISTORE   /**/, PseudoOpCode.IStore /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.ISTORE_0 /**/, PseudoOpCode.IStore /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.ISTORE_1 /**/, PseudoOpCode.IStore /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.ISTORE_2 /**/, PseudoOpCode.IStore /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.ISTORE_3 /**/, PseudoOpCode.IStore /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.LSTORE   /**/, PseudoOpCode.LStore /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.LSTORE_0 /**/, PseudoOpCode.LStore /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.LSTORE_1 /**/, PseudoOpCode.LStore /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.LSTORE_2 /**/, PseudoOpCode.LStore /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.LSTORE_3 /**/, PseudoOpCode.LStore /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.FSTORE   /**/, PseudoOpCode.FStore /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.FSTORE_0 /**/, PseudoOpCode.FStore /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.FSTORE_1 /**/, PseudoOpCode.FStore /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.FSTORE_2 /**/, PseudoOpCode.FStore /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.FSTORE_3 /**/, PseudoOpCode.FStore /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.DSTORE   /**/, PseudoOpCode.DStore /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.DSTORE_0 /**/, PseudoOpCode.DStore /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.DSTORE_1 /**/, PseudoOpCode.DStore /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.DSTORE_2 /**/, PseudoOpCode.DStore /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.DSTORE_3 /**/, PseudoOpCode.DStore /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.ASTORE   /**/, PseudoOpCode.AStore /**/, IndexType.ByOperand ), //
-		new OpCodeInfo( OpCode.ASTORE_0 /**/, PseudoOpCode.AStore /**/, IndexType.AtIndex0 ),  //
-		new OpCodeInfo( OpCode.ASTORE_1 /**/, PseudoOpCode.AStore /**/, IndexType.AtIndex1 ),  //
-		new OpCodeInfo( OpCode.ASTORE_2 /**/, PseudoOpCode.AStore /**/, IndexType.AtIndex2 ),  //
-		new OpCodeInfo( OpCode.ASTORE_3 /**/, PseudoOpCode.AStore /**/, IndexType.AtIndex3 ),  //
-		new OpCodeInfo( OpCode.RET      /**/, PseudoOpCode.Ret    /**/, IndexType.ByOperand )  //
-	);
-
-	private static final class Model
-	{
-		final int opCode;
-		final OpCodeInfo opCodeInfo;
-
-		Model( int opCode )
-		{
-			this.opCode = opCode;
-			opCodeInfo = OpCodeInfo.fromOpCode( opCode );
-		}
-	}
-
-	private static final Map<Integer,Model> modelsFromOpCodes = Kit.iterable.toMap( opCodeInfos, i -> i.opCode, i -> new Model( i.opCode ) );
-
-	public final int opCode;
-	private final int index;
-
-	private LocalVariableInstruction( int opCode, int index )
+	private LocalVariableInstruction( int genericOpCode, int localVariableIndex )
 	{
 		super( groupTag_LocalVariable );
-		assert modelsFromOpCodes.containsKey( opCode );
-		assert index >= 0;
-		this.opCode = Kit.map.get( modelsFromOpCodes, opCode ).opCodeInfo.pseudoOpCode.posterOpCode;
-		this.index = index;
+		assert genericOpCode == Kit.map.get( opCodeInfosFromOpCodes, genericOpCode ).opCode; //must use one of the generic opcodes.
+		assert localVariableIndex >= 0;
+		this.genericOpCode = genericOpCode;
+		this.localVariableIndex = localVariableIndex;
 	}
 
-	public Optional<Integer> parameter() { return index <= 3 && opCode != OpCode.RET ? Optional.of( index ) : Optional.empty(); }
 	@Deprecated @Override public LocalVariableInstruction asLocalVariableInstruction() { return this; }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( opCode ); }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return OpCode.getOpCodeName( genericOpCode ); }
 
 	@Override public void intern( Interner interner )
 	{
@@ -227,49 +171,19 @@ public final class LocalVariableInstruction extends Instruction
 
 	@Override public void write( InstructionWriter instructionWriter )
 	{
-		boolean wide = isWide();
-		int opCode = getActualOpcode();
-		boolean hasOperand = hasOperand();
-		if( wide )
-			instructionWriter.writeUnsignedByte( OpCode.WIDE );
-		instructionWriter.writeUnsignedByte( opCode );
-		if( hasOperand )
+		if( !Helpers.isUnsignedByte( localVariableIndex ) )
 		{
-			if( wide )
-				instructionWriter.writeUnsignedShort( index );
-			else
-				instructionWriter.writeUnsignedByte( index );
+			instructionWriter.writeUnsignedByte( OpCode.WIDE );
+			instructionWriter.writeUnsignedByte( genericOpCode );
+			instructionWriter.writeUnsignedShort( localVariableIndex );
 		}
-	}
-
-	private int getActualOpcode() //TODO
-	{
-		IndexType indexType = IndexType.of( index, opCode );
-		Model model = Kit.map.get( modelsFromOpCodes, opCode );
-		OpCodeInfo opCodeInfo = OpCodeInfo.from( model.opCodeInfo.pseudoOpCode, indexType );
-		return opCodeInfo.opCode;
-	}
-
-	private boolean isWide()
-	{
-		return !Helpers.isUnsignedByte( index );
-	}
-
-	private boolean hasOperand()
-	{
-		IndexType selector = IndexType.of( index, opCode );
-		return selector == IndexType.ByOperand;
-	}
-
-	private static boolean hasOperand( int opCode )
-	{
-		IndexType indexType = getIndexType( opCode );
-		return indexType == IndexType.ByOperand;
-	}
-
-	private static IndexType getIndexType( int opCode )
-	{
-		Model model = Kit.map.get( modelsFromOpCodes, opCode );
-		return model.opCodeInfo.indexType;
+		else
+		{
+			IndexType indexType = IndexType.of( localVariableIndex, genericOpCode );
+			int actualOpCode = OpCodeInfo.from( genericOpCode, indexType ).opCode;
+			instructionWriter.writeUnsignedByte( actualOpCode );
+			if( indexType == IndexType.ByOperand )
+				instructionWriter.writeUnsignedByte( localVariableIndex );
+		}
 	}
 }

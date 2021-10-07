@@ -1,7 +1,8 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.reading.AttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,9 @@ import java.util.List;
  */
 public final class RuntimeInvisibleParameterAnnotationsAttribute extends ParameterAnnotationsAttribute
 {
-	public static RuntimeInvisibleParameterAnnotationsAttribute read( AttributeReader attributeReader )
+	public static RuntimeInvisibleParameterAnnotationsAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		List<ParameterAnnotationSet> entries = readParameterAnnotationsAttributeEntries( attributeReader );
+		List<ParameterAnnotationSet> entries = readParameterAnnotationsAttributeEntries( bufferReader, constantPool );
 		return of( entries );
 	}
 

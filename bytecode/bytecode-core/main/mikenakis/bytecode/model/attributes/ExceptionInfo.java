@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -18,13 +22,13 @@ import java.util.Optional;
  */
 public final class ExceptionInfo
 {
-	public static ExceptionInfo read( CodeAttributeReader codeAttributeReader )
+	public static ExceptionInfo read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap  )
 	{
-		Instruction startInstruction = codeAttributeReader.readAbsoluteInstruction().orElseThrow();
-		Optional<Instruction> endInstruction = codeAttributeReader.readAbsoluteInstruction();
+		Instruction startInstruction = locationMap.getInstruction( bufferReader.readUnsignedShort() ).orElseThrow();
+		Optional<Instruction> endInstruction = locationMap.getInstruction( bufferReader.readUnsignedShort() );
 		assert endInstruction.isPresent();
-		Instruction handlerInstruction = codeAttributeReader.readAbsoluteInstruction().orElseThrow();
-		Optional<ClassConstant> catchTypeConstant = Kit.upCast( codeAttributeReader.tryReadIndexAndGetConstant() );
+		Instruction handlerInstruction = locationMap.getInstruction( bufferReader.readUnsignedShort() ).orElseThrow();
+		Optional<ClassConstant> catchTypeConstant = Kit.upCast( constantPool.tryGetConstant( bufferReader.readUnsignedShort() ) );
 		return of( startInstruction, endInstruction, handlerInstruction, catchTypeConstant );
 	}
 
@@ -56,11 +60,11 @@ public final class ExceptionInfo
 		catchTypeConstant.ifPresent( c -> c.intern( interner ) );
 	}
 
-	public void write( CodeConstantWriter codeConstantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap )
 	{
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getLocation( startInstruction ) );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getLocation( endInstruction ) );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getLocation( handlerInstruction ) );
-		codeConstantWriter.writeUnsignedShort( catchTypeConstant.map( c -> codeConstantWriter.getConstantIndex( c ) ).orElse( 0 ) );
+		bufferWriter.writeUnsignedShort( locationMap.getLocation( startInstruction ) );
+		bufferWriter.writeUnsignedShort( locationMap.getLocation( endInstruction ) );
+		bufferWriter.writeUnsignedShort( locationMap.getLocation( handlerInstruction ) );
+		bufferWriter.writeUnsignedShort( catchTypeConstant.map( c -> constantPool.getConstantIndex( c ) ).orElse( 0 ) );
 	}
 }

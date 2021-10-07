@@ -1,10 +1,11 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import mikenakis.bytecode.model.descriptors.FieldReference;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.FieldDescriptor;
@@ -15,10 +16,10 @@ import java.util.Set;
 
 public final class FieldReferencingInstruction extends Instruction
 {
-	public static FieldReferencingInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static FieldReferencingInstruction read( BufferReader bufferReader, ReadingConstantPool constantPool, boolean wide, int opCode )
 	{
 		assert !wide;
-		FieldReferenceConstant fieldReferenceConstant = codeAttributeReader.readIndexAndGetConstant().asFieldReferenceConstant();
+		FieldReferenceConstant fieldReferenceConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asFieldReferenceConstant();
 		return of( opCode, fieldReferenceConstant );
 	}
 

@@ -12,28 +12,28 @@
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 3
 │ │   │ ├─■ instructions: 9 entries
-│ │   │ │ ├─■ L101: // {
+│ │   │ │ ├─■ L102: // {
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
 │ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class3ImplementingInterface mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.this$0
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
-│ │   │ │ ├─■ L102: // this.i = i;
+│ │   │ │ ├─■ L103: // this.i = i;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ILOAD 2
 │ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
-│ │   │ │ ├─■ L103: // }
+│ │   │ │ ├─■ L104: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
 │ │   │   ├─■ [0] LineNumberTableAttribute; 3 items
-│ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 101, start = L101
-│ │   │   │ ├─■ [1] LineNumberTableEntry lineNumber = 102, start = L102
-│ │   │   │ └─■ [2] LineNumberTableEntry lineNumber = 103, start = L103
+│ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 102, start = L102
+│ │   │   │ ├─■ [1] LineNumberTableEntry lineNumber = 103, start = L103
+│ │   │   │ └─■ [2] LineNumberTableEntry lineNumber = 104, start = L104
 │ │   │   └─■ [1] LocalVariableTableAttribute; 3 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L101, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
-│ │   │     ├─■ [1] LocalVariableTableEntry index = 1, start = L101, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
-│ │   │     └─■ [2] LocalVariableTableEntry index = 2, start = L101, end = @end, prototype = int i
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L102, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
+│ │   │     ├─■ [1] LocalVariableTableEntry index = 1, start = L102, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
+│ │   │     └─■ [2] LocalVariableTableEntry index = 2, start = L102, end = @end, prototype = int i
 │ │   └─■ [1] MethodParametersAttribute; 2 items
 │ │     ├─■ [0] MethodParameter accessFlags = [final, mandated], name = "this$0"
 │ │     └─■ [1] MethodParameter accessFlags = [], name = "i"
@@ -41,7 +41,7 @@
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 4 entries
-│ │     │ ├─■ L107: // return i;
+│ │     │ ├─■ L108: // return i;
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.i
 │ │     │ ├─■         INVOKESTATIC reference = Plain; java.lang.Integer java.lang.Integer.valueOf( int )
@@ -49,14 +49,14 @@
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
-│ │       │ └─■ [0] LineNumberTableEntry lineNumber = 107, start = L107
+│ │       │ └─■ [0] LineNumberTableEntry lineNumber = 108, start = L108
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L107, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L108, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner this
 │ └─■ [2] ByteCodeMethod accessFlags = [public, bridge, synthetic], prototype = java.lang.Object get()
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │       ├─■ instructions: 3 entries
-│       │ ├─■ L96: // class Inner implements Supplier<Integer>
+│       │ ├─■ L96: // @SuppressWarnings( "WeakerAccess" )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Integer mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.get()
 │       │ └─■         ARETURN

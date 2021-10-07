@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -21,17 +25,14 @@ import java.util.Optional;
  */
 public final class AppendStackMapFrame extends StackMapFrame
 {
-	public static AppendStackMapFrame read( CodeAttributeReader codeAttributeReader, Optional<StackMapFrame> previousFrame, int frameType )
+	public static AppendStackMapFrame read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap, Optional<StackMapFrame> previousFrame, int frameType )
 	{
-		Instruction targetInstruction = findTargetInstruction( previousFrame, codeAttributeReader.readUnsignedShort(), codeAttributeReader.locationMap ).orElseThrow();
+		Instruction targetInstruction = findTargetInstruction( previousFrame, bufferReader.readUnsignedShort(), locationMap ).orElseThrow();
 		assert frameType >= 252 && frameType <= 254;
 		int localCount = frameType - 251;
 		List<VerificationType> localVerificationTypes = new ArrayList<>( localCount );
 		for( int j = 0; j < localCount; j++ )
-		{
-			VerificationType verificationType = VerificationType.read( codeAttributeReader );
-			localVerificationTypes.add( verificationType );
-		}
+			localVerificationTypes.add( VerificationType.read( bufferReader, constantPool, locationMap ) );
 		return of( targetInstruction, localVerificationTypes );
 	}
 
@@ -64,13 +65,13 @@ public final class AppendStackMapFrame extends StackMapFrame
 			verificationType.intern( interner );
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap, Optional<StackMapFrame> previousFrame )
 	{
-		int offsetDelta = codeConstantWriter.getOffsetDelta( this, previousFrame );
+		int offsetDelta = locationMap.getOffsetDelta( this, previousFrame );
 		assert localVerificationTypes.size() <= 3;
-		codeConstantWriter.writeUnsignedByte( 251 + localVerificationTypes.size() );
-		codeConstantWriter.writeUnsignedShort( offsetDelta );
+		bufferWriter.writeUnsignedByte( 251 + localVerificationTypes.size() );
+		bufferWriter.writeUnsignedShort( offsetDelta );
 		for( VerificationType verificationType : localVerificationTypes )
-			verificationType.write( codeConstantWriter );
+			verificationType.write( bufferWriter, constantPool, locationMap );
 	}
 }

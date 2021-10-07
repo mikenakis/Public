@@ -14,11 +14,11 @@ import java.util.List;
  * <p>
  * https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html
  */
-final class ConstantPool implements Interner
+public final class WritingConstantPool implements Interner
 {
 	private final List<Constant> entries = new ArrayList<>();
 
-	ConstantPool()
+	public WritingConstantPool()
 	{
 		entries.add( null ); // first entry is empty. (Ancient legacy bollocks.)
 	}
@@ -36,7 +36,7 @@ final class ConstantPool implements Interner
 		return -1;
 	}
 
-	int getIndex( Constant constant )
+	public int getConstantIndex( Constant constant )
 	{
 		int index = tryGetIndex( constant );
 		assert index != -1;
@@ -56,12 +56,12 @@ final class ConstantPool implements Interner
 		}
 	}
 
-	int size()
+	public int size()
 	{
 		return entries.size();
 	}
 
-	Iterable<Constant> constants()
+	public Iterable<Constant> constants()
 	{
 		return Kit.iterable.filtered( entries, c -> c != null );
 	}

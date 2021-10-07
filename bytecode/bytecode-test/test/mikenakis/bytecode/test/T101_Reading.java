@@ -4,7 +4,6 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Model;
@@ -32,7 +31,7 @@ public class T101_Reading
 	private static ByteCodeType create( Path classFilePathName )
 	{
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
-		return ByteCodeReader.read( bytes );
+		return ByteCodeType.read( bytes );
 	}
 
 	@Test public void Simple_Class_Is_Parsed_Ok()
@@ -79,6 +78,6 @@ public class T101_Reading
 			.map( path -> Kit.unchecked( () -> Files.readAllBytes( path ) ) ) //
 			.toList();
 		for( var bytes : bytesList )
-			ByteCodeReader.read( bytes );
+			ByteCodeType.read( bytes );
 	}
 }

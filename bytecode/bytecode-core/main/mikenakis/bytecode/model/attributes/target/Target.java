@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.exceptions.InvalidTargetTagException;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
+import java.util.Optional;
 
 public abstract class Target // "target_info" in jvms-4.7.20.1
 {
@@ -80,5 +84,5 @@ public abstract class Target // "target_info" in jvms-4.7.20.1
 	}
 
 	public abstract void intern( Interner interner );
-	public abstract void write( ConstantWriter constantWriter );
+	public abstract void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap );
 }

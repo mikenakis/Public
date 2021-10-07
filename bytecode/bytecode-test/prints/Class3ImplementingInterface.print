@@ -330,7 +330,7 @@
 │ │ └─■ attributes: 3 items
 │ │   ├─■ [0] CodeAttribute maxStack = 4, maxLocals = 2
 │ │   │ ├─■ instructions: 6 entries
-│ │   │ │ ├─■ L110: // return new Inner( i );
+│ │   │ │ ├─■ L111: // return new Inner( i );
 │ │   │ │ ├─■         NEW mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         ALOAD 0
@@ -340,10 +340,10 @@
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
-│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 110, start = L110
+│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 111, start = L111
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L110, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L110, end = @end, prototype = int i
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L111, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L111, end = @end, prototype = int i
 │ │   ├─■ [1] MethodParametersAttribute; 1 items
 │ │   │ └─■ [0] MethodParameter accessFlags = [], name = "i"
 │ │   └─■ [2] SignatureAttribute (I)Ljava/util/function/Supplier<Ljava/lang/Integer;>;
@@ -351,19 +351,19 @@
 │ │ └─■ attributes: 3 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
 │ │   │ ├─■ instructions: 4 entries
-│ │   │ │ ├─■ L115: // System.out.println( "deprecated" );
+│ │   │ │ ├─■ L116: // System.out.println( "deprecated" );
 │ │   │ │ ├─■         GETSTATIC java.io.PrintStream java.lang.System.out
 │ │   │ │ ├─■         LDC "deprecated"
 │ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
-│ │   │ │ ├─■ L116: // }
+│ │   │ │ ├─■ L117: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
 │ │   │   ├─■ [0] LineNumberTableAttribute; 2 items
-│ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 115, start = L115
-│ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 116, start = L116
+│ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 116, start = L116
+│ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 117, start = L117
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L115, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L116, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ │   ├─■ [1] DeprecatedAttribute
 │ │   └─■ [2] RuntimeVisibleAnnotationsAttribute; 1 items
 │ │     └─■ [0] Annotation type = java.lang.Deprecated; 0 parameters
@@ -371,14 +371,14 @@
 │   └─■ attributes: 1 items
 │     └─■ [0] CodeAttribute maxStack = 0, maxLocals = 1
 │       ├─■ instructions: 1 entries
-│       │ ├─■ L121: // }
+│       │ ├─■ L122: // }
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items
 │         ├─■ [0] LineNumberTableAttribute; 1 items
-│         │ └─■ [0] LineNumberTableEntry lineNumber = 121, start = L121
+│         │ └─■ [0] LineNumberTableEntry lineNumber = 122, start = L122
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L121, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L122, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class3ImplementingInterface.java"
   ├─■ [1] NestMembersAttribute; 1 items

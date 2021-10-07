@@ -4,10 +4,12 @@ import mikenakis.bytecode.exceptions.IncompleteMutf8Exception;
 import mikenakis.bytecode.exceptions.MalformedMutf8Exception;
 import mikenakis.bytecode.exceptions.StringTooLongException;
 import mikenakis.bytecode.kit.Buffer;
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -22,11 +24,11 @@ import java.util.Objects;
  */
 public final class Mutf8ValueConstant extends ValueConstant
 {
-	public static Mutf8ValueConstant read( ConstantReader constantReader, int constantTag )
+	public static Mutf8ValueConstant read( BufferReader bufferReader, int constantTag )
 	{
 		assert constantTag == tag_Mutf8;
-		int length = constantReader.readUnsignedShort();
-		Buffer buffer = constantReader.readBuffer( length );
+		int length = bufferReader.readUnsignedShort();
+		Buffer buffer = bufferReader.readBuffer( length );
 		return of( buffer );
 	}
 
@@ -170,11 +172,11 @@ public final class Mutf8ValueConstant extends ValueConstant
 		interner.intern( this );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedByte( tag );
 		Buffer buffer = buffer();
-		constantWriter.writeUnsignedShort( buffer.length() );
-		constantWriter.writeBuffer( buffer );
+		bufferWriter.writeUnsignedShort( buffer.length() );
+		bufferWriter.writeBuffer( buffer );
 	}
 }

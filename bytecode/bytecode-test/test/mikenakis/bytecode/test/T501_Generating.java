@@ -3,9 +3,7 @@ package mikenakis.bytecode.test;
 import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.model.Class9WithCode;
-import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 import org.junit.Test;
 
@@ -39,9 +37,9 @@ public class T501_Generating
 	@Test public void Writing_And_Reading_Generated_Type_Yields_Same_Bytes()
 	{
 		ByteCodeType byteCodeType = Generator.generateByteCodeType();
-		byte[] bytes1 = ByteCodeWriter.write( byteCodeType );
-		ByteCodeType byteCodeType2 = ByteCodeReader.read( bytes1 );
-		byte[] bytes2 = ByteCodeWriter.write( byteCodeType2 );
+		byte[] bytes1 = byteCodeType.write();
+		ByteCodeType byteCodeType2 = ByteCodeType.read( bytes1 );
+		byte[] bytes2 = byteCodeType2.write();
 		assert Arrays.equals( bytes1, bytes2 );
 	}
 
@@ -49,7 +47,7 @@ public class T501_Generating
 	{
 		ByteCodeType byteCodeType = Generator.generateByteCodeType();
 		String text1 = ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() );
-		ByteCodeType byteCodeType2 = ByteCodeReader.read( ByteCodeWriter.write( byteCodeType ) );
+		ByteCodeType byteCodeType2 = ByteCodeType.read( byteCodeType.write() );
 		String text2 = ByteCodePrinter.printByteCodeType( byteCodeType2, Optional.empty() );
 		assert text1.equals( text2 );
 	}

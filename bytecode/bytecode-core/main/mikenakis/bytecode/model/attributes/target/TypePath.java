@@ -1,8 +1,7 @@
 package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.kit.BufferReader;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -11,12 +10,12 @@ import java.util.List;
 
 public final class TypePath // "type_path" in jvms-4.7.20.2
 {
-	public static TypePath read( AttributeReader attributeReader )
+	public static TypePath read( BufferReader bufferReader )
 	{
-		int entryCount = attributeReader.bufferReader.readUnsignedByte();
+		int entryCount = bufferReader.readUnsignedByte();
 		List<TypePathEntry> entries = new ArrayList<>( entryCount );
 		for( int i = 0; i < entryCount; i++ )
-			entries.add( TypePathEntry.read( attributeReader.bufferReader ) );
+			entries.add( TypePathEntry.read( bufferReader ) );
 		return new TypePath( entries );
 	}
 
@@ -35,10 +34,10 @@ public final class TypePath // "type_path" in jvms-4.7.20.2
 			entry.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter )
 	{
-		constantWriter.writeUnsignedByte( entries.size() );
+		bufferWriter.writeUnsignedByte( entries.size() );
 		for( TypePathEntry entry : entries )
-			entry.write( constantWriter );
+			entry.write( bufferWriter );
 	}
 }

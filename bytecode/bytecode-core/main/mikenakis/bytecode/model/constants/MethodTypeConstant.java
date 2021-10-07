@@ -1,11 +1,14 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -18,11 +21,11 @@ import java.util.Objects;
  */
 public final class MethodTypeConstant extends Constant
 {
-	public static MethodTypeConstant read( ConstantReader constantReader, int constantTag )
+	public static MethodTypeConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_MethodType;
 		MethodTypeConstant methodTypeConstant = new MethodTypeConstant();
-		constantReader.readIndexAndSetConstant( c -> methodTypeConstant.setDescriptorConstant( c.asMutf8ValueConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> methodTypeConstant.setDescriptorConstant( c.asMutf8ValueConstant() ) );
 		return methodTypeConstant;
 	}
 
@@ -59,9 +62,9 @@ public final class MethodTypeConstant extends Constant
 		getDescriptorConstant().intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getDescriptorConstant() ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getDescriptorConstant() ) );
 	}
 }

@@ -1,15 +1,18 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "LocalVariableTypeTable" {@link Attribute} of a java class file.
@@ -22,15 +25,14 @@ import java.util.List;
  */
 public final class LocalVariableTypeTableAttribute extends KnownAttribute
 {
-	public static LocalVariableTypeTableAttribute read( AttributeReader attributeReader )
+	public static LocalVariableTypeTableAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap )
 	{
-		CodeAttributeReader codeAttributeReader = attributeReader.asCodeAttributeReader();
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<LocalVariableTypeTableEntry> localVariableTypeTableEntries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			LocalVariableTypeTableEntry entry = LocalVariableTypeTableEntry.read( codeAttributeReader );
+			LocalVariableTypeTableEntry entry = LocalVariableTypeTableEntry.read( bufferReader, constantPool, locationMap );
 			localVariableTypeTableEntries.add( entry );
 		}
 		return of( localVariableTypeTableEntries );
@@ -64,11 +66,10 @@ public final class LocalVariableTypeTableAttribute extends KnownAttribute
 			localVariableTypeTableEntry.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		CodeConstantWriter codeConstantWriter = constantWriter.asCodeConstantWriter();
-		codeConstantWriter.writeUnsignedShort( localVariableTypeTableEntries.size() );
+		bufferWriter.writeUnsignedShort( localVariableTypeTableEntries.size() );
 		for( LocalVariableTypeTableEntry localVariableTypeTableEntry : localVariableTypeTableEntries )
-			localVariableTypeTableEntry.write( codeConstantWriter );
+			localVariableTypeTableEntry.write( bufferWriter, constantPool, locationMap.orElseThrow() );
 	}
 }

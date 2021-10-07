@@ -1,11 +1,14 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.java_type_model.ArrayTypeDescriptor;
 import mikenakis.java_type_model.PrimitiveTypeDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
@@ -21,11 +24,11 @@ import java.util.Objects;
  */
 public final class ClassConstant extends Constant
 {
-	public static ClassConstant read( ConstantReader constantReader, int constantTag )
+	public static ClassConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_Class;
 		ClassConstant classConstant = new ClassConstant();
-		constantReader.readIndexAndSetConstant( c -> classConstant.setInternalNameOrDescriptorStringConstant( c.asMutf8ValueConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> classConstant.setInternalNameOrDescriptorStringConstant( c.asMutf8ValueConstant() ) );
 		return classConstant;
 	}
 
@@ -111,10 +114,10 @@ public final class ClassConstant extends Constant
 		internalNameOrDescriptorStringConstant.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
 		assert internalNameOrDescriptorStringConstant != null;
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( internalNameOrDescriptorStringConstant ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( internalNameOrDescriptorStringConstant ) );
 	}
 }

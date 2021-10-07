@@ -51,6 +51,7 @@ import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
@@ -85,11 +86,9 @@ public class T999_Coverage
 	{
 		TypeDescriptor typeDescriptor = TypeDescriptor.of( String.class );
 		FieldReference fieldReference = FieldReference.of( typeDescriptor, FieldPrototype.of( "foo", String.class ) );
-		MethodReference methodReference = MethodReference.of( MethodReferenceKind.Plain, typeDescriptor, MethodPrototype.of( "foo", typeDescriptor ) );
+		MethodReference methodReference = MethodReference.of( MethodReferenceKind.Plain, typeDescriptor, MethodPrototype.of( "foo", MethodDescriptor.of( typeDescriptor ) ) );
 		ClassConstant classConstant = ClassConstant.of( typeDescriptor );
-		Mutf8ValueConstant nameConstant = Mutf8ValueConstant.of( "name" );
-		Mutf8ValueConstant descriptorConstant = Mutf8ValueConstant.of( "descriptor" );
-		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( nameConstant, descriptorConstant );
+		NameAndDescriptorConstant nameAndDescriptorConstant = NameAndDescriptorConstant.of( methodReference.methodPrototype );
 		MethodReferenceConstant methodReferenceConstant = MethodReferenceConstant.of( methodReference );
 		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( ReferenceKind.GetField );
 		methodHandleConstant.setReferenceConstant( methodReferenceConstant );
@@ -351,7 +350,7 @@ public class T999_Coverage
 			assert false;
 			return null;
 		};
-		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", TypeDescriptor.of( void.class ) ), byteCodeTypeResolver );
-		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", TypeDescriptor.of( void.class ) ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "testMethod", MethodDescriptor.of( void.class ) ), byteCodeTypeResolver );
+		descendantByteCodeType.getMethod( MethodPrototype.of( "nonExistentTestMethod", MethodDescriptor.of( void.class ) ), byteCodeTypeResolver );
 	}
 }

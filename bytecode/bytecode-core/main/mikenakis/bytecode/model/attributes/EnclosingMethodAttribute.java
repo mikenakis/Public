@@ -1,14 +1,17 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -26,10 +29,10 @@ import java.util.Optional;
  */
 public final class EnclosingMethodAttribute extends KnownAttribute
 {
-	public static EnclosingMethodAttribute read( AttributeReader attributeReader )
+	public static EnclosingMethodAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		ClassConstant classConstant = attributeReader.readIndexAndGetConstant().asClassConstant();
-		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = Kit.upCast( attributeReader.tryReadIndexAndGetConstant() );
+		ClassConstant classConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant();
+		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = Kit.upCast( constantPool.tryGetConstant( bufferReader.readUnsignedShort() ) );
 		return of( classConstant, methodNameAndDescriptorConstant );
 	}
 
@@ -59,10 +62,10 @@ public final class EnclosingMethodAttribute extends KnownAttribute
 		enclosingMethodNameAndDescriptorConstant.ifPresent( c -> c.intern( interner ) );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( enclosingClassConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( enclosingClassConstant ) );
 		Optional<NameAndDescriptorConstant> methodNameAndDescriptorConstant = enclosingMethodNameAndDescriptorConstant;
-		constantWriter.writeUnsignedShort( methodNameAndDescriptorConstant.map( c -> constantWriter.getConstantIndex( c ) ).orElse( 0 ) );
+		bufferWriter.writeUnsignedShort( methodNameAndDescriptorConstant.map( c -> constantPool.getConstantIndex( c ) ).orElse( 0 ) );
 	}
 }

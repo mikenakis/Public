@@ -413,17 +413,17 @@
 │       │ ├─■         ALOAD 0
 │       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.String.substring( int, int )
-│       │ ├─■         ASTORE
+│       │ ├─■         ASTORE 4
 │       │ ├─■ L111: // x = parseFactor();
 │       │ ├─■         ALOAD 0
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L112: // x = switch( func )
-│       │ ├─■         ALOAD
-│       │ ├─■         ASTORE
+│       │ ├─■         ALOAD 4
+│       │ ├─■         ASTORE 5
 │       │ ├─■         LDC -1
-│       │ ├─■         ISTORE
-│       │ ├─■         ALOAD
+│       │ ├─■         ISTORE 6
+│       │ ├─■         ALOAD 5
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.hashCode()
 │       │ ├─■         LOOKUPSWITCH default = T10; 6 items
 │       │ │ ├─■ [0]         LookupSwitchEntry value = 98695, target = T6
@@ -432,48 +432,48 @@
 │       │ │ ├─■ [3]         LookupSwitchEntry value = 113880, target = T5
 │       │ │ ├─■ [4]         LookupSwitchEntry value = 114593, target = T7
 │       │ │ └─■ [5]         LookupSwitchEntry value = 3538208, target = T4
-│       │ ├─■ T4:     ALOAD
+│       │ ├─■ T4:     ALOAD 5
 │       │ ├─■         LDC "sqrt"
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 0
-│       │ ├─■         ISTORE
+│       │ ├─■         ISTORE 6
 │       │ ├─■         GOTO T10
-│       │ ├─■ T5:     ALOAD
+│       │ ├─■ T5:     ALOAD 5
 │       │ ├─■         LDC "sin"
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 1
-│       │ ├─■         ISTORE
+│       │ ├─■         ISTORE 6
 │       │ ├─■         GOTO T10
-│       │ ├─■ T6:     ALOAD
+│       │ ├─■ T6:     ALOAD 5
 │       │ ├─■         LDC "cos"
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 2
-│       │ ├─■         ISTORE
+│       │ ├─■         ISTORE 6
 │       │ ├─■         GOTO T10
-│       │ ├─■ T7:     ALOAD
+│       │ ├─■ T7:     ALOAD 5
 │       │ ├─■         LDC "tan"
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 3
-│       │ ├─■         ISTORE
+│       │ ├─■         ISTORE 6
 │       │ ├─■         GOTO T10
-│       │ ├─■ T8:     ALOAD
+│       │ ├─■ T8:     ALOAD 5
 │       │ ├─■         LDC "rad"
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 4
-│       │ ├─■         ISTORE
+│       │ ├─■         ISTORE 6
 │       │ ├─■         GOTO T10
-│       │ ├─■ T9:     ALOAD
+│       │ ├─■ T9:     ALOAD 5
 │       │ ├─■         LDC "deg"
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean java.lang.String.equals( java.lang.Object )
 │       │ ├─■         IFEQ T10
 │       │ ├─■         LDC 5
-│       │ ├─■         ISTORE
-│       │ ├─■ T10:    ILOAD
+│       │ ├─■         ISTORE 6
+│       │ ├─■ T10:    ILOAD 6
 │       │ ├─■         TABLESWITCH lowValue = 0, default = L120; 6 items
 │       │ │ ├─■ [0]         L114
 │       │ │ ├─■ [1]         L115
@@ -508,7 +508,7 @@
 │       │ ├─■ L120: // default -> throw new RuntimeException( "Unknown function: " + func );
 │       │ ├─■         NEW java.lang.RuntimeException
 │       │ ├─■         DUP
-│       │ ├─■         ALOAD
+│       │ ├─■         ALOAD 4
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String )
 │       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unknown function: \x01" )
 │       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.RuntimeException.<init>( java.lang.String )

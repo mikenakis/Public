@@ -1,42 +1,52 @@
 package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.kit.BufferReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.kit.BufferWriter;
+import mikenakis.bytecode.model.attributes.code.Instruction;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingLocationMap;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
+import java.util.Optional;
 
 public final class LocalVariableTargetEntry
 {
-	public static LocalVariableTargetEntry read( BufferReader bufferReader )
+	public static LocalVariableTargetEntry read( BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
-		int startPc = bufferReader.readUnsignedShort();
+		int startLocation = bufferReader.readUnsignedShort();
 		int length = bufferReader.readUnsignedShort();
 		int index = bufferReader.readUnsignedShort();
-		return new LocalVariableTargetEntry( startPc, length, index );
+		Instruction startInstruction = locationMap.getInstruction( startLocation ).orElseThrow();
+		Optional<Instruction> endInstruction = locationMap.getInstruction( startLocation + length );
+		return new LocalVariableTargetEntry( startInstruction, endInstruction, index );
 	}
 
-	public final int startPc; //TODO: this needs to be replaced with an instruction.
-	public final int length;
+	public final Instruction startInstruction;
+	public final Optional<Instruction> endInstruction;
 	public final int index;
 
-	private LocalVariableTargetEntry( int startPc, int length, int index )
+	private LocalVariableTargetEntry( Instruction startInstruction, Optional<Instruction> endInstruction, int index )
 	{
-		this.startPc = startPc;
-		this.length = length;
+		this.startInstruction = startInstruction;
+		this.endInstruction = endInstruction;
 		this.index = index;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "startPc = " + startPc + ", length = " + length + ", index = " + index; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "startInstruction = " + startInstruction + ", endInstruction = " + endInstruction + ", index = " + index; }
 
-	public void intern( Interner interner )
+	@SuppressWarnings( "MethodMayBeStatic" ) public void intern( Interner interner )
 	{
-		//TODO
+		Kit.get( interner ); // nothing to do
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingLocationMap locationMap )
 	{
-		constantWriter.writeUnsignedShort( startPc ); //TODO
-		constantWriter.writeUnsignedShort( length );
-		constantWriter.writeUnsignedShort( index );
+		int startLocation = locationMap.getLocation( startInstruction );
+		int endLocation = locationMap.getLocation( endInstruction );
+		bufferWriter.writeUnsignedShort( startLocation );
+		bufferWriter.writeUnsignedShort( endLocation - startLocation );
+		bufferWriter.writeUnsignedShort( index );
 	}
 }

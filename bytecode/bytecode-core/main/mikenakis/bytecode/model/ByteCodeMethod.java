@@ -1,15 +1,20 @@
 package mikenakis.bytecode.model;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents a method.
@@ -37,6 +42,15 @@ public final class ByteCodeMethod extends ByteCodeMember
 		Map.entry( Modifier.Strict       /**/, 0x0800 ), // ACC_STRICT       = 0x0800 -- Declared strictfp; floating-point mode is FP-strict.
 		Map.entry( Modifier.Synthetic    /**/, 0x1000 )  // ACC_SYNTHETIC    = 0x1000 -- Declared synthetic; not present in the source code.
 	);
+
+	public static ByteCodeMethod read( BufferReader bufferReader, ReadingConstantPool constantPool )
+	{
+		FlagSet<Modifier> methodModifiers = modifierEnum.fromBits( bufferReader.readUnsignedShort() );
+		Mutf8ValueConstant nameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		Mutf8ValueConstant descriptorConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		AttributeSet attributes = AttributeSet.read( bufferReader, constantPool, Optional.empty() );
+		return of( methodModifiers, nameConstant, descriptorConstant, attributes );
+	}
 
 	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, MethodPrototype methodPrototype )
 	{
@@ -80,11 +94,11 @@ public final class ByteCodeMethod extends ByteCodeMember
 		methodDescriptorStringConstant.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( modifiers.getBits() );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( methodNameConstant ) );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( methodDescriptorStringConstant ) );
-		attributeSet.write( constantWriter );
+		bufferWriter.writeUnsignedShort( modifiers.getBits() );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( methodNameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( methodDescriptorStringConstant ) );
+		attributeSet.write( bufferWriter, constantPool, locationMap );
 	}
 }

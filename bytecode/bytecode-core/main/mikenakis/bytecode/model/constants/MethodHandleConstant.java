@@ -1,10 +1,13 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.DirectMethodHandleDesc;
@@ -17,13 +20,13 @@ import java.util.Objects;
  */
 public final class MethodHandleConstant extends Constant
 {
-	public static MethodHandleConstant read( ConstantReader constantReader, int constantTag )
+	public static MethodHandleConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_MethodHandle;
-		int referenceKindNumber = constantReader.readUnsignedByte();
+		int referenceKindNumber = bufferReader.readUnsignedByte();
 		ReferenceKind referenceKind = ReferenceKind.tryFromNumber( referenceKindNumber ).orElseThrow();
 		MethodHandleConstant methodHandleConstant = new MethodHandleConstant( referenceKind );
-		constantReader.readIndexAndSetConstant( c -> methodHandleConstant.setReferenceConstant( c.asReferenceConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> methodHandleConstant.setReferenceConstant( c.asReferenceConstant() ) );
 		return methodHandleConstant;
 	}
 
@@ -65,10 +68,10 @@ public final class MethodHandleConstant extends Constant
 		getReferenceConstant().intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedByte( referenceKind().number );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getReferenceConstant() ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedByte( referenceKind().number );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getReferenceConstant() ) );
 	}
 }

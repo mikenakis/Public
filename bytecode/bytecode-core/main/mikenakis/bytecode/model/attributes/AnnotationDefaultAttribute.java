@@ -1,12 +1,17 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeMethod;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+
+import java.util.Optional;
 
 /**
  * Represents the "AnnotationDefault" {@link Attribute} of a java class file.
@@ -19,9 +24,9 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationDefaultAttribute extends KnownAttribute
 {
-	public static AnnotationDefaultAttribute read( AttributeReader attributeReader )
+	public static AnnotationDefaultAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		AnnotationValue annotationValue = AnnotationValue.read( attributeReader );
+		AnnotationValue annotationValue = AnnotationValue.read( bufferReader, constantPool );
 		return of( annotationValue );
 	}
 
@@ -46,8 +51,8 @@ public final class AnnotationDefaultAttribute extends KnownAttribute
 		annotationValue.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		annotationValue.write( constantWriter );
+		annotationValue.write( bufferWriter, constantPool );
 	}
 }

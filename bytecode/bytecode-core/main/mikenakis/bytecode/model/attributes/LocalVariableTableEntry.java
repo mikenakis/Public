@@ -1,11 +1,13 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
-import mikenakis.bytecode.writing.CodeConstantWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -60,14 +62,14 @@ public final class LocalVariableTableEntry
 		variableTypeDescriptorStringConstant.intern( interner );
 	}
 
-	public void write( CodeConstantWriter codeConstantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap )
 	{
-		int startLocation = codeConstantWriter.getLocation( startInstruction );
-		int endLocation = codeConstantWriter.getLocation( endInstruction );
-		codeConstantWriter.writeUnsignedShort( startLocation );
-		codeConstantWriter.writeUnsignedShort( endLocation - startLocation );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( variableNameConstant ) );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( variableTypeDescriptorStringConstant ) );
-		codeConstantWriter.writeUnsignedShort( variableIndex );
+		int startLocation = locationMap.getLocation( startInstruction );
+		int endLocation = locationMap.getLocation( endInstruction );
+		bufferWriter.writeUnsignedShort( startLocation );
+		bufferWriter.writeUnsignedShort( endLocation - startLocation );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( variableNameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( variableTypeDescriptorStringConstant ) );
+		bufferWriter.writeUnsignedShort( variableIndex );
 	}
 }

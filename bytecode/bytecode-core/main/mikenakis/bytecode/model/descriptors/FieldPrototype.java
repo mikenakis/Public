@@ -5,9 +5,9 @@ import mikenakis.java_type_model.TypeDescriptor;
 
 public final class FieldPrototype
 {
-	public static FieldPrototype of( String fieldName, Class<?> declaringClass )
+	public static FieldPrototype of( String fieldName, Class<?> fieldType )
 	{
-		return of( fieldName, TypeDescriptor.of( declaringClass ) );
+		return of( fieldName, TypeDescriptor.of( fieldType ) );
 	}
 
 	public static FieldPrototype of( String fieldName, TypeDescriptor fieldType )

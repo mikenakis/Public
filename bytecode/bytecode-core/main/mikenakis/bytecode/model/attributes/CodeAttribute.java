@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes;
 
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.AttributeSet;
 import mikenakis.bytecode.model.ByteCodeMethod;
@@ -27,14 +28,14 @@ import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodReference;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.reading.ReadingLocationMap;
-import mikenakis.bytecode.writing.CodeConstantWriter;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.FakeInstructionWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.RealInstructionWriter;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.TypeDescriptor;
-import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -52,23 +53,33 @@ import java.util.Optional;
  */
 public final class CodeAttribute extends KnownAttribute
 {
-	public static CodeAttribute read( AttributeReader attributeReader )
+	public static CodeAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int maxStack = attributeReader.readUnsignedShort();
-		int maxLocals = attributeReader.readUnsignedShort();
-		int codeLength = attributeReader.readInt();
-		Buffer codeBuffer = attributeReader.readBuffer( codeLength );
+		int maxStack = bufferReader.readUnsignedShort();
+		int maxLocals = bufferReader.readUnsignedShort();
+		int codeLength = bufferReader.readInt();
+		Buffer codeBuffer = bufferReader.readBuffer( codeLength );
 		BufferReader codeBufferReader = BufferReader.of( codeBuffer );
+
 		ReadingLocationMap locationMap = new ReadingLocationMap( codeBuffer.length() );
-		CodeAttributeReader codeAttributeReader = new CodeAttributeReader( codeBufferReader, attributeReader.constantResolver, locationMap );
-		List<Instruction> instructions = codeAttributeReader.readInstructions();
+
+		List<Instruction> instructions = new ArrayList<>();
+		while( !codeBufferReader.isAtEnd() )
+		{
+			int startLocation = codeBufferReader.getPosition();
+			Instruction instruction = Instruction.read( codeBufferReader, constantPool, locationMap );
+			int endLocation = codeBufferReader.getPosition();
+			locationMap.add( startLocation, instruction, endLocation - startLocation );
+			instructions.add( instruction );
+		}
+		locationMap.runFixUps();
+
 		assert codeBufferReader.isAtEnd();
-		codeAttributeReader = new CodeAttributeReader( attributeReader.bufferReader, attributeReader.constantResolver, locationMap );
-		int count = codeAttributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		List<ExceptionInfo> exceptionInfos = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
-			exceptionInfos.add( ExceptionInfo.read( codeAttributeReader ) );
-		AttributeSet attributes = AttributeSet.read( codeAttributeReader );
+			exceptionInfos.add( ExceptionInfo.read( bufferReader, constantPool, locationMap ) );
+		AttributeSet attributes = AttributeSet.read( bufferReader, constantPool, Optional.of( locationMap ) );
 		return of( maxStack, maxLocals, instructions, exceptionInfos, attributes );
 	}
 
@@ -131,7 +142,6 @@ public final class CodeAttribute extends KnownAttribute
 			exceptionInfos.size() + " exceptionInfos, " + attributeSet.size() + " attributes";
 	}
 
-	//@formatter:off
 	public InvokeInterfaceInstruction   /**/ addInvokeInterface   /**/ ( MethodReference methodReference, int argumentCount )  /**/ { return add( InvokeInterfaceInstruction.of( methodReference, argumentCount ) ); }
 	public InvokeDynamicInstruction     /**/ addInvokeDynamic     /**/ ( InvokeDynamicConstant constant )                      /**/ { return add( InvokeDynamicInstruction.of( constant ) ); }
 	public MultiANewArrayInstruction    /**/ addMultiANewArray    /**/ ( ClassConstant constant, int dimensionCount )          /**/ { return add( MultiANewArrayInstruction.of( constant, dimensionCount ) ); }
@@ -285,7 +295,6 @@ public final class CodeAttribute extends KnownAttribute
 	public OperandlessInstruction       /**/ addAThrow            /**/ ()                                                      /**/ { return add( OperandlessInstruction.of( OpCode.ATHROW ) ); }
 	public OperandlessInstruction       /**/ addMonitorEnter      /**/ ()                                                      /**/ { return add( OperandlessInstruction.of( OpCode.MONITORENTER ) ); }
 	public OperandlessInstruction       /**/ addMonitorExit       /**/ ()                                                      /**/ { return add( OperandlessInstruction.of( OpCode.MONITOREXIT ) ); }
-	//@formatter:on
 
 	private <T extends Instruction> T add( T instruction )
 	{
@@ -304,23 +313,63 @@ public final class CodeAttribute extends KnownAttribute
 			instruction.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( maxStack );
-		constantWriter.writeUnsignedShort( maxLocals );
+		assert locationMap.isEmpty();
 
-		CodeConstantWriter codeConstantWriter = new CodeConstantWriter( constantWriter, instructions.all() );
+		bufferWriter.writeUnsignedShort( maxStack );
+		bufferWriter.writeUnsignedShort( maxLocals );
 
+		locationMap = Optional.of( getLocationMap( instructions.all(), constantPool ) );
+
+		RealInstructionWriter instructionWriter = new RealInstructionWriter( locationMap.get(), constantPool );
 		for( Instruction instruction : instructions.all() )
-			instruction.write( codeConstantWriter.instructionWriter );
-		byte[] bytes = codeConstantWriter.instructionWriter.toBytes();
-		codeConstantWriter.writeInt( bytes.length );
-		codeConstantWriter.writeBytes( bytes );
+			instruction.write( instructionWriter );
+		byte[] bytes = instructionWriter.toBytes();
 
-		codeConstantWriter.writeUnsignedShort( exceptionInfos.size() );
+		bufferWriter.writeInt( bytes.length );
+		bufferWriter.writeBytes( bytes );
+
+		bufferWriter.writeUnsignedShort( exceptionInfos.size() );
 		for( ExceptionInfo exceptionInfo : exceptionInfos )
-			exceptionInfo.write( codeConstantWriter );
+			exceptionInfo.write( bufferWriter, constantPool, locationMap.get() );
 
-		attributeSet.write( codeConstantWriter );
+		attributeSet.write( bufferWriter, constantPool, locationMap );
+	}
+
+	private static WritingLocationMap getLocationMap( Iterable<Instruction> instructions, WritingConstantPool constantPool )
+	{
+		WritingLocationMap writingLocationMap = new WritingLocationMap();
+		FakeInstructionWriter instructionWriter = new FakeInstructionWriter( constantPool, writingLocationMap );
+		for( Instruction instruction : instructions )
+		{
+			int startLocation = instructionWriter.location;
+			writingLocationMap.add( instruction );
+			instruction.write( instructionWriter );
+			int length = instructionWriter.location - startLocation;
+			writingLocationMap.setLength( instruction, length );
+		}
+
+		for( ; ; )
+		{
+			boolean anyWorkDone = false;
+			for( Instruction instruction : instructionWriter.sourceInstructions )
+			{
+				int location = writingLocationMap.getLocation( instruction );
+				instructionWriter.location = location;
+				int oldLength = writingLocationMap.getLength( instruction );
+				instruction.write( instructionWriter );
+				int newLength = instructionWriter.location - location;
+				assert newLength <= oldLength;
+				if( newLength == oldLength )
+					continue;
+				writingLocationMap.removeBytes( location + newLength, oldLength - newLength );
+				anyWorkDone = true;
+			}
+			if( !anyWorkDone )
+				break;
+		}
+
+		return writingLocationMap;
 	}
 }

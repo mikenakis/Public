@@ -1,5 +1,7 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
@@ -9,11 +11,11 @@ import mikenakis.bytecode.model.attributes.stackmap.SameLocals1StackItemStackMap
 import mikenakis.bytecode.model.attributes.stackmap.SameStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.StackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -38,24 +40,23 @@ import java.util.Optional;
  */
 public final class StackMapTableAttribute extends KnownAttribute
 {
-	public static StackMapTableAttribute read( AttributeReader attributeReader )
+	public static StackMapTableAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap )
 	{
-		CodeAttributeReader codeAttributeReader = attributeReader.asCodeAttributeReader();
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<StackMapFrame> frames = new ArrayList<>( count );
 		Optional<StackMapFrame> previousFrame = Optional.empty();
 		for( int i = 0; i < count; i++ )
 		{
-			int frameType = attributeReader.readUnsignedByte();
+			int frameType = bufferReader.readUnsignedByte();
 			int stackMapFrameTag = StackMapFrame.getTagFromType( frameType );
 			StackMapFrame frame = switch( stackMapFrameTag )
 				{
-					case StackMapFrame.tag_Same, StackMapFrame.tag_SameExtended -> SameStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
-					case StackMapFrame.tag_SameLocals1StackItem, StackMapFrame.tag_SameLocals1StackItemExtended -> SameLocals1StackItemStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
-					case StackMapFrame.tag_Chop -> ChopStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
-					case StackMapFrame.tag_Append -> AppendStackMapFrame.read( codeAttributeReader, previousFrame, frameType );
-					case StackMapFrame.tag_Full -> FullStackMapFrame.read( codeAttributeReader, previousFrame );
+					case StackMapFrame.tag_Same, StackMapFrame.tag_SameExtended -> SameStackMapFrame.read( bufferReader, locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_SameLocals1StackItem, StackMapFrame.tag_SameLocals1StackItemExtended -> SameLocals1StackItemStackMapFrame.read( bufferReader, constantPool, locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_Chop -> ChopStackMapFrame.read( bufferReader, locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_Append -> AppendStackMapFrame.read( bufferReader, constantPool, locationMap, previousFrame, frameType );
+					case StackMapFrame.tag_Full -> FullStackMapFrame.read( bufferReader, constantPool, locationMap, previousFrame );
 					default -> throw new AssertionError( frameType );
 				};
 			frames.add( frame );
@@ -137,14 +138,13 @@ public final class StackMapTableAttribute extends KnownAttribute
 			frame.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		CodeConstantWriter codeConstantWriter = constantWriter.asCodeConstantWriter();
-		codeConstantWriter.writeUnsignedShort( frames.size() );
+		bufferWriter.writeUnsignedShort( frames.size() );
 		Optional<StackMapFrame> previousFrame = Optional.empty();
 		for( StackMapFrame frame : frames )
 		{
-			frame.write( codeConstantWriter, previousFrame );
+			frame.write( bufferWriter, constantPool, locationMap.orElseThrow(), previousFrame );
 			previousFrame = Optional.of( frame );
 		}
 	}

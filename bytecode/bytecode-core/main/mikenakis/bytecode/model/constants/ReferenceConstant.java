@@ -1,8 +1,10 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Constant;
-import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -62,10 +64,10 @@ public abstract class ReferenceConstant extends Constant
 		getNameAndDescriptorConstant().intern( interner );
 	}
 
-	@Override public final void write( ConstantWriter constantWriter )
+	@Override public final void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getDeclaringTypeConstant() ) );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getNameAndDescriptorConstant() ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getDeclaringTypeConstant() ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getNameAndDescriptorConstant() ) );
 	}
 }

@@ -2,7 +2,6 @@ package mikenakis.bytecode.test;
 
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
@@ -29,7 +28,7 @@ public class T301_Printing
 	private static ByteCodeType load( Path classFilePathName )
 	{
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
-		return ByteCodeReader.read( bytes );
+		return ByteCodeType.read( bytes );
 	}
 
 	@Test public void Printing_Checks_Out()

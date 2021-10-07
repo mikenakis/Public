@@ -1,16 +1,19 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeMethod;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Common base class for the "RuntimeVisibleParameterAnnotations" and "RuntimeInvisibleParameterAnnotations" {@link Attribute}s of a java class file.
@@ -23,19 +26,19 @@ import java.util.List;
  */
 public abstract class ParameterAnnotationsAttribute extends KnownAttribute
 {
-	protected static List<ParameterAnnotationSet> readParameterAnnotationsAttributeEntries( AttributeReader attributeReader )
+	protected static List<ParameterAnnotationSet> readParameterAnnotationsAttributeEntries( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int entryCount = attributeReader.readUnsignedByte();
+		int entryCount = bufferReader.readUnsignedByte();
 		assert entryCount > 0;
 		List<ParameterAnnotationSet> entries = new ArrayList<>( entryCount );
 		for( int i = 0; i < entryCount; i++ )
 		{
-			int annotationCount = attributeReader.readUnsignedShort();
+			int annotationCount = bufferReader.readUnsignedShort();
 			assert annotationCount >= 0;
 			List<Annotation> annotations = new ArrayList<>( annotationCount );
 			for( int i1 = 0; i1 < annotationCount; i1++ )
 			{
-				Annotation byteCodeAnnotation = Annotation.read( attributeReader );
+				Annotation byteCodeAnnotation = Annotation.read( bufferReader, constantPool );
 				annotations.add( byteCodeAnnotation );
 			}
 			ParameterAnnotationSet entry = ParameterAnnotationSet.of( annotations );
@@ -62,14 +65,14 @@ public abstract class ParameterAnnotationsAttribute extends KnownAttribute
 				annotation.intern( interner );
 	}
 
-	@Override public final void write( ConstantWriter constantWriter )
+	@Override public final void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedByte( ((Collection<ParameterAnnotationSet>)parameterAnnotationSets).size() );
+		bufferWriter.writeUnsignedByte( parameterAnnotationSets.size() );
 		for( ParameterAnnotationSet parameterAnnotationSet : parameterAnnotationSets )
 		{
-			constantWriter.writeUnsignedShort( ((Collection<Annotation>)parameterAnnotationSet.annotations).size() );
+			bufferWriter.writeUnsignedShort( parameterAnnotationSet.annotations.size() );
 			for( Annotation annotation : parameterAnnotationSet.annotations )
-				annotation.write( constantWriter );
+				annotation.write( bufferWriter, constantPool );
 		}
 	}
 }

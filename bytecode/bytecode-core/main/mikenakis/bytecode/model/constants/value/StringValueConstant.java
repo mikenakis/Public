@@ -1,9 +1,12 @@
 package mikenakis.bytecode.model.constants.value;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -15,11 +18,11 @@ import java.util.Objects;
  */
 public final class StringValueConstant extends ValueConstant
 {
-	public static StringValueConstant read( ConstantReader constantReader, int constantTag )
+	public static StringValueConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_String;
 		StringValueConstant stringConstant = new StringValueConstant();
-		constantReader.readIndexAndSetConstant( c -> stringConstant.setValueConstant( c.asMutf8ValueConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> stringConstant.setValueConstant( c.asMutf8ValueConstant() ) );
 		return stringConstant;
 	}
 
@@ -50,10 +53,10 @@ public final class StringValueConstant extends ValueConstant
 		getValueConstant().intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getValueConstant() ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getValueConstant() ) );
 	}
 
 	private Mutf8ValueConstant getValueConstant()

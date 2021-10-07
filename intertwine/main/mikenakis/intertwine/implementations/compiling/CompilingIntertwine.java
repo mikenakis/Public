@@ -13,6 +13,7 @@ import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.FieldDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
@@ -37,10 +38,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private static final FieldReference arrayOfZeroObjectsFieldReference = FieldReference.of( TypeDescriptor.of( Kit.class ), FieldPrototype.of( "ARRAY_OF_ZERO_OBJECTS", Object[].class ) );
 
 	private static final MethodReference anyCallMethodReference = MethodReference.of( MethodReferenceKind.Interface, TypeDescriptor.of( AnyCall.class ), //
-		MethodPrototype.of( "anyCall", TypeDescriptor.of( MethodKey.class ), TypeDescriptor.of( Object[].class ) ) );
+		MethodPrototype.of( "anyCall", MethodDescriptor.of( MethodKey.class, Object[].class ) ) );
 
 	private static final MethodReference boxIntMethodReference = MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Integer.class ), //
-		MethodPrototype.of( "valueOf", TypeDescriptor.of( Integer.class ), TypeDescriptor.of( int.class ) ) );
+		MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) );
 
 	private final Class<? super T> interfaceType;
 	private final List<CompilingKey<T>> keys;
@@ -145,11 +146,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			MethodPrototype.of( "voidMethod", TypeDescriptor.of( void.class ), //
 				List.of() ) );
 		addInterfaceMethod1( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "getAlpha", TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ), //
-				TypeDescriptor.of( int.class ) ) );
+			MethodPrototype.of( "getAlpha", MethodDescriptor.of( TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ), TypeDescriptor.of( int.class ) ) ) );
 		addInterfaceMethod2( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "setAlpha", TypeDescriptor.of( void.class ), //
-				TypeDescriptor.of( int.class ), TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) ) );
+			MethodPrototype.of( "setAlpha", MethodDescriptor.of( TypeDescriptor.of( void.class ), TypeDescriptor.of( int.class ), TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) ) ) );
 
 		return new CompilingEntwiner<>( this, exitPoint ).entryPoint;
 	}
@@ -362,12 +361,12 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private static void addInitMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField )
 	{
 		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), //
-			MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, exitPointField.descriptor().typeDescriptor ) );
+			MethodPrototype.of( "<init>", MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, exitPointField.descriptor().typeDescriptor ) ) );
 		byteCodeType.methods.add( method );
 		CodeAttribute code = CodeAttribute.of( 2, 3 );
 		method.attributeSet.addAttribute( code );
 		code.addALoad( 0 );
-		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ) ) ) );
+		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 		code.addALoad( 0 );
 		code.addALoad( 1 );
 		code.addPutField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );

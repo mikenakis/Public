@@ -4,6 +4,11 @@ import mikenakis.java_type_model.TypeDescriptor;
 
 public final class MethodReference
 {
+	public static MethodReference of( MethodReferenceKind kind, Class<?> declaringType, MethodPrototype methodPrototype )
+	{
+		return of( kind, TypeDescriptor.of( declaringType ), methodPrototype );
+	}
+
 	public static MethodReference of( MethodReferenceKind kind, TypeDescriptor declaringTypeDescriptor, MethodPrototype methodPrototype )
 	{
 		return new MethodReference( kind, declaringTypeDescriptor, methodPrototype );

@@ -2,17 +2,41 @@ package mikenakis.bytecode.reading;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.kit.Kit;
+import mikenakis.kit.functional.Procedure1;
 
-public class ReadingLocationMap extends LocationMap
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+public class ReadingLocationMap
 {
 	private int topLocation;
+	private final Collection<Runnable> fixUps = new ArrayList<>();
+	private final Instruction[] instructionsByLocation;
+	private final Map<Instruction,Integer> locationsByInstruction = new HashMap<>();
 
 	public ReadingLocationMap( int codeLength )
 	{
-		super( codeLength );
+		instructionsByLocation = new Instruction[codeLength];
 	}
 
-	void add( int location, Instruction instruction, int length )
+	public Optional<Instruction> getInstruction( int location ) //returns Optional.empty() if the location is @end.
+	{
+		if( location == instructionsByLocation.length )
+			return Optional.empty();
+		Instruction instruction = instructionsByLocation[location];
+		assert instruction != null;
+		return Optional.of( instruction );
+	}
+
+	public int getLocation( Instruction instruction )
+	{
+		return Kit.map.get( locationsByInstruction, instruction );
+	}
+
+	public void add( int location, Instruction instruction, int length )
 	{
 		assert location == topLocation;
 		assert instructionsByLocation[location] == null;
@@ -21,13 +45,31 @@ public class ReadingLocationMap extends LocationMap
 		topLocation += length;
 	}
 
-	boolean contains( Instruction instruction )
+	public void setRelativeTargetInstruction( Instruction sourceInstruction, int targetInstructionOffset, Procedure1<Instruction> setter )
 	{
-		return locationsByInstruction.containsKey( instruction );
+		assert !locationsByInstruction.containsKey( sourceInstruction );
+		int sourceInstructionLocation = topLocation;
+		assert sourceInstructionLocation + targetInstructionOffset < instructionsByLocation.length;
+		if( targetInstructionOffset < 0 )
+			fix( sourceInstructionLocation, targetInstructionOffset, setter );
+		else
+			fixUps.add( () -> //
+			{
+				assert sourceInstructionLocation == getLocation( sourceInstruction );
+				fix( sourceInstructionLocation, targetInstructionOffset, setter );
+			} );
 	}
 
-	int getPosition()
+	private void fix( int sourceInstructionLocation, int targetInstructionOffset, Procedure1<Instruction> setter )
 	{
-		return topLocation;
+		int targetInstructionLocation = sourceInstructionLocation + targetInstructionOffset;
+		Instruction targetInstruction = getInstruction( targetInstructionLocation ).orElseThrow();
+		setter.invoke( targetInstruction );
+	}
+
+	public void runFixUps()
+	{
+		for( Runnable fixUp : fixUps )
+			fixUp.run();
 	}
 }

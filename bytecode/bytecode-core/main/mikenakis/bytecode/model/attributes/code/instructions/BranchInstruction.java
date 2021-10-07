@@ -1,21 +1,22 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class BranchInstruction extends Instruction
 {
-	public static BranchInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static BranchInstruction read( BufferReader bufferReader, ReadingLocationMap locationMap, boolean wide, int opCode )
 	{
 		assert !wide;
 		BranchInstruction instruction = of( opCode );
-		int targetInstructionOffset = isLong( opCode ) ? codeAttributeReader.readInt() : codeAttributeReader.readSignedShort();
-		codeAttributeReader.setRelativeTargetInstruction( instruction, targetInstructionOffset, instruction::setTargetInstruction );
+		int targetInstructionOffset = isLong( opCode ) ? bufferReader.readInt() : bufferReader.readSignedShort();
+		locationMap.setRelativeTargetInstruction( instruction, targetInstructionOffset, instruction::setTargetInstruction );
 		return instruction;
 	}
 

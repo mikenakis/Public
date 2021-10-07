@@ -1,9 +1,10 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
@@ -77,11 +78,11 @@ public final class InnerClass
 		innerNameConstant.ifPresent( c -> c.intern( interner ) );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( innerClassConstant ) );
-		constantWriter.writeUnsignedShort( outerClassConstant.map( c -> constantWriter.getConstantIndex( c ) ).orElse( 0 ) );
-		constantWriter.writeUnsignedShort( innerNameConstant.map( c -> constantWriter.getConstantIndex( c ) ).orElse( 0 ) );
-		constantWriter.writeUnsignedShort( modifiers.getBits() );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( innerClassConstant ) );
+		bufferWriter.writeUnsignedShort( outerClassConstant.map( c -> constantPool.getConstantIndex( c ) ).orElse( 0 ) );
+		bufferWriter.writeUnsignedShort( innerNameConstant.map( c -> constantPool.getConstantIndex( c ) ).orElse( 0 ) );
+		bufferWriter.writeUnsignedShort( modifiers.getBits() );
 	}
 }

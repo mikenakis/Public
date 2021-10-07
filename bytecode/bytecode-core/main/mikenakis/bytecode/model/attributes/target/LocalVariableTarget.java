@@ -1,22 +1,26 @@
 package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.kit.BufferReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.kit.BufferWriter;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class LocalVariableTarget extends Target // "localvar_target" in jvms-4.7.20.1
 {
-	public static LocalVariableTarget read( BufferReader bufferReader, int targetTag )
+	public static LocalVariableTarget read( BufferReader bufferReader, ReadingLocationMap locationMap, int targetTag )
 	{
 		int entryCount = bufferReader.readUnsignedShort();
 		assert entryCount > 0;
 		List<LocalVariableTargetEntry> entries = new ArrayList<>( entryCount );
 		for( int i = 0; i < entryCount; i++ )
-			entries.add( LocalVariableTargetEntry.read( bufferReader ) );
+			entries.add( LocalVariableTargetEntry.read( bufferReader, locationMap ) );
 		return new LocalVariableTarget( targetTag, entries );
 	}
 
@@ -38,10 +42,10 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 			entry.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( entries.size() );
+		bufferWriter.writeUnsignedShort( entries.size() );
 		for( LocalVariableTargetEntry entry : entries )
-			entry.write( constantWriter );
+			entry.write( bufferWriter, locationMap.orElseThrow() );
 	}
 }

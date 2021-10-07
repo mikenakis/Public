@@ -1,7 +1,6 @@
 package mikenakis.testana.structure;
 
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.kit.Kit;
 
 import java.nio.file.Files;
@@ -25,6 +24,6 @@ final class ByteCodeLoader
 	{
 		Path path = Kit.classLoading.getPathFromClassLoaderAndTypeName( classLoader, className );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( path ) );
-		return ByteCodeReader.read( bytes );
+		return ByteCodeType.read( bytes );
 	}
 }

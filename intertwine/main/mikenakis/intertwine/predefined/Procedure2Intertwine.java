@@ -4,8 +4,7 @@ import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
-import mikenakis.java_type_model.TerminalTypeDescriptor;
-import mikenakis.java_type_model.TypeDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure2;
@@ -58,7 +57,7 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		};
 	}
 
-	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", TypeDescriptor.of( void.class ), TerminalTypeDescriptor.of( Object.class ), TerminalTypeDescriptor.of( Object.class ) );
+	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", MethodDescriptor.of( void.class, Object.class, Object.class ) );
 	private final List<MethodKey<Procedure2<Object,Object>>> keys;
 	private final MethodKey<Procedure2<Object,Object>> key = new MethodKey<>()
 	{

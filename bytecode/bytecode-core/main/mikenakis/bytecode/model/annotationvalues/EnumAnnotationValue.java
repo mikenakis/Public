@@ -1,11 +1,13 @@
 package mikenakis.bytecode.model.annotationvalues;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.AnnotationValue;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -16,10 +18,10 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class EnumAnnotationValue extends AnnotationValue
 {
-	public static EnumAnnotationValue read( AttributeReader attributeReader )
+	public static EnumAnnotationValue read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		Mutf8ValueConstant typeNameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-		Mutf8ValueConstant valueNameConstant = attributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
+		Mutf8ValueConstant typeNameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		Mutf8ValueConstant valueNameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
 		return of( typeNameConstant, valueNameConstant );
 	}
 
@@ -51,10 +53,10 @@ public final class EnumAnnotationValue extends AnnotationValue
 		enumValueNameConstant.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( enumClassDescriptorStringConstant ) );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( enumValueNameConstant ) );
+		bufferWriter.writeUnsignedByte( tag );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( enumClassDescriptorStringConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( enumValueNameConstant ) );
 	}
 }

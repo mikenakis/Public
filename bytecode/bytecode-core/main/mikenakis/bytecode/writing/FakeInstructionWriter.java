@@ -9,19 +9,19 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 /**
- * Special {@link InstructionWriter} used for building the {@link LocationMap}.
+ * Special {@link InstructionWriter} used for building the {@link WritingLocationMap}.
  *   - The getOffset() method always returns Short.MAX_VALUE + 1 to fool branch instructions into thinking that their target instruction is far,
  *     thus causing them to emit their longest form.
  *   - All write...() methods are fake, they discard the bytes being written.
  */
-class FakeInstructionWriter implements InstructionWriter
+public class FakeInstructionWriter implements InstructionWriter
 {
-	private final ConstantPool constantPool;
+	private final WritingConstantPool constantPool;
 	private final WritingLocationMap writingLocationMap;
-	int location;
-	final Collection<Instruction> sourceInstructions = new LinkedHashSet<>();
+	public int location;
+	public final Collection<Instruction> sourceInstructions = new LinkedHashSet<>();
 
-	FakeInstructionWriter( ConstantPool constantPool, WritingLocationMap writingLocationMap )
+	public FakeInstructionWriter( WritingConstantPool constantPool, WritingLocationMap writingLocationMap )
 	{
 		this.constantPool = constantPool;
 		this.writingLocationMap = writingLocationMap;
@@ -36,7 +36,7 @@ class FakeInstructionWriter implements InstructionWriter
 
 	@Override public int getIndex( Constant constant )
 	{
-		return constantPool.getIndex( constant );
+		return constantPool.getConstantIndex( constant );
 	}
 
 	@Override public int getOffset( Instruction sourceInstruction, Instruction targetInstruction )

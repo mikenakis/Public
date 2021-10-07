@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model.attributes.stackmap;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.stackmap.verification.VerificationType;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -18,23 +22,20 @@ import java.util.Optional;
  */
 public final class FullStackMapFrame extends StackMapFrame
 {
-	public static FullStackMapFrame read( CodeAttributeReader codeAttributeReader, Optional<StackMapFrame> previousFrame )
+	public static FullStackMapFrame read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap, Optional<StackMapFrame> previousFrame )
 	{
-		Instruction targetInstruction = findTargetInstruction( previousFrame, codeAttributeReader.readUnsignedShort(), codeAttributeReader.locationMap ).orElseThrow();
-		List<VerificationType> localVerificationTypes = readVerificationTypes( codeAttributeReader );
-		List<VerificationType> stackVerificationTypes = readVerificationTypes( codeAttributeReader );
+		Instruction targetInstruction = findTargetInstruction( previousFrame, bufferReader.readUnsignedShort(), locationMap ).orElseThrow();
+		List<VerificationType> localVerificationTypes = readVerificationTypes( bufferReader, constantPool, locationMap );
+		List<VerificationType> stackVerificationTypes = readVerificationTypes( bufferReader, constantPool, locationMap );
 		return of( targetInstruction, localVerificationTypes, stackVerificationTypes );
 	}
 
-	private static List<VerificationType> readVerificationTypes( CodeAttributeReader codeAttributeReader )
+	private static List<VerificationType> readVerificationTypes( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap )
 	{
-		int count = codeAttributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		List<VerificationType> verificationTypes = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
-		{
-			VerificationType verificationType = VerificationType.read( codeAttributeReader );
-			verificationTypes.add( verificationType );
-		}
+			verificationTypes.add( VerificationType.read( bufferReader, constantPool, locationMap ) );
 		return verificationTypes;
 	}
 
@@ -68,16 +69,16 @@ public final class FullStackMapFrame extends StackMapFrame
 			verificationType.intern( interner );
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter, Optional<StackMapFrame> previousFrame )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap, Optional<StackMapFrame> previousFrame )
 	{
-		int offsetDelta = codeConstantWriter.getOffsetDelta( this, previousFrame );
-		codeConstantWriter.writeUnsignedByte( type );
-		codeConstantWriter.writeUnsignedShort( offsetDelta );
-		codeConstantWriter.writeUnsignedShort( localVerificationTypes.size() );
+		int offsetDelta = locationMap.getOffsetDelta( this, previousFrame );
+		bufferWriter.writeUnsignedByte( type );
+		bufferWriter.writeUnsignedShort( offsetDelta );
+		bufferWriter.writeUnsignedShort( localVerificationTypes.size() );
 		for( VerificationType verificationType : localVerificationTypes )
-			verificationType.write( codeConstantWriter );
-		codeConstantWriter.writeUnsignedShort( stackVerificationTypes.size() );
+			verificationType.write( bufferWriter, constantPool, locationMap );
+		bufferWriter.writeUnsignedShort( stackVerificationTypes.size() );
 		for( VerificationType verificationType : stackVerificationTypes )
-			verificationType.write( codeConstantWriter );
+			verificationType.write( bufferWriter, constantPool, locationMap );
 	}
 }

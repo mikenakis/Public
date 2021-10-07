@@ -1,11 +1,13 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.descriptors.MethodReference;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
@@ -15,10 +17,10 @@ import java.util.Set;
 
 public final class MethodReferencingInstruction extends Instruction
 {
-	public static MethodReferencingInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static MethodReferencingInstruction read( BufferReader bufferReader, ReadingConstantPool constantPool, boolean wide, int opCode )
 	{
 		assert !wide;
-		MethodReferenceConstant methodReferenceConstant = codeAttributeReader.readIndexAndGetConstant().asMethodReferenceConstant();
+		MethodReferenceConstant methodReferenceConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMethodReferenceConstant();
 		return of( opCode, methodReferenceConstant );
 	}
 

@@ -4,7 +4,7 @@ import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
-import mikenakis.java_type_model.TypeDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 
@@ -56,7 +56,7 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		};
 	}
 
-	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", TypeDescriptor.of( void.class ) );
+	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", MethodDescriptor.of( void.class ) );
 	private final List<MethodKey<Procedure0>> keys;
 	private final MethodKey<Procedure0> key = new MethodKey<>()
 	{

@@ -2,7 +2,6 @@ package mikenakis.classdump;
 
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.classdump.kit.Helpers;
 import mikenakis.clio.Clio;
 import mikenakis.kit.Kit;
@@ -149,7 +148,7 @@ public class ClassDumpMain
 	{
 		Log.debug( "Dumping " + classFilePathName + (sourcePath.isEmpty() ? "" : " (" + sourcePath.get() + ")") );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
-		ByteCodeType type = ByteCodeReader.read( bytes );
+		ByteCodeType type = ByteCodeType.read( bytes );
 		String text = ByteCodePrinter.printByteCodeType( type, sourcePath, skipOptionalAttributes );
 		printStream.println( text );
 	}

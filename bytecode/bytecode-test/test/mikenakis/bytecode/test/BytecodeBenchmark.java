@@ -4,7 +4,6 @@ import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
 
@@ -34,7 +33,7 @@ public class BytecodeBenchmark
 			int sum = 0;
 			for( var bytes : bytesList )
 			{
-				ByteCodeType byteCodeType = ByteCodeReader.read( bytes );
+				ByteCodeType byteCodeType = ByteCodeType.read( bytes );
 				sum += byteCodeType.hashCode();
 			}
 			return sum;
@@ -49,7 +48,7 @@ public class BytecodeBenchmark
 			int sum = 0;
 			for( var bytes : bytesList )
 			{
-				ByteCodeType byteCodeType = ByteCodeReader.read( bytes );
+				ByteCodeType byteCodeType = ByteCodeType.read( bytes );
 				ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() );
 				sum += byteCodeType.hashCode();
 			}

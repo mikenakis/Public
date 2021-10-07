@@ -1,10 +1,12 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
-import mikenakis.kit.Kit;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 
 /**
  * 'Uninitialized' {@link VerificationType}.
@@ -13,9 +15,9 @@ import mikenakis.kit.Kit;
  */
 public final class UninitializedVerificationType extends VerificationType
 {
-	public static UninitializedVerificationType read( CodeAttributeReader codeAttributeReader )
+	public static UninitializedVerificationType read( BufferReader bufferReader, ReadingLocationMap locationMap )
 	{
-		Instruction instruction = codeAttributeReader.readAbsoluteInstruction().orElseThrow();
+		Instruction instruction = locationMap.getInstruction( bufferReader.readUnsignedShort() ).orElseThrow();
 		return of( instruction );
 	}
 
@@ -39,10 +41,10 @@ public final class UninitializedVerificationType extends VerificationType
 		// nothing to do
 	}
 
-	@Override public void write( CodeConstantWriter codeConstantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap )
 	{
-		codeConstantWriter.writeUnsignedByte( tag );
-		int targetLocation = codeConstantWriter.getLocation( instruction );
-		codeConstantWriter.writeUnsignedShort( targetLocation );
+		bufferWriter.writeUnsignedByte( tag );
+		int targetLocation = locationMap.getLocation( instruction );
+		bufferWriter.writeUnsignedShort( targetLocation );
 	}
 }

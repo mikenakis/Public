@@ -1,9 +1,13 @@
 package mikenakis.bytecode.model.attributes.stackmap.verification;
 
 import mikenakis.bytecode.exceptions.InvalidVerificationTypeTagException;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -16,16 +20,16 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class VerificationType
 {
-	public static VerificationType read( CodeAttributeReader codeAttributeReader )
+	public static VerificationType read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap  )
 	{
-		int verificationTypeTag = codeAttributeReader.readUnsignedByte();
+		int verificationTypeTag = bufferReader.readUnsignedByte();
 		return switch( verificationTypeTag )
 			{
 				case VerificationType.tag_Top, VerificationType.tag_Integer, VerificationType.tag_Float, //
 					VerificationType.tag_Double, VerificationType.tag_Long, VerificationType.tag_Null, //
 					VerificationType.tag_UninitializedThis -> new SimpleVerificationType( verificationTypeTag );
-				case VerificationType.tag_Object -> ObjectVerificationType.read( codeAttributeReader );
-				case VerificationType.tag_Uninitialized -> UninitializedVerificationType.read( codeAttributeReader );
+				case VerificationType.tag_Object -> ObjectVerificationType.read( bufferReader, constantPool );
+				case VerificationType.tag_Uninitialized -> UninitializedVerificationType.read( bufferReader, locationMap );
 				default -> throw new InvalidVerificationTypeTagException( verificationTypeTag );
 			};
 	}
@@ -70,5 +74,5 @@ public abstract class VerificationType
 	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString() { return "tag = " + tagName( tag ); }
 
 	public abstract void intern( Interner interner );
-	public abstract void write( CodeConstantWriter codeConstantWriter );
+	public abstract void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap );
 }

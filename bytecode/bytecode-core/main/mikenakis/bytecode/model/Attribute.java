@@ -2,6 +2,8 @@ package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.exceptions.InvalidKnownAttributeTagException;
 import mikenakis.bytecode.kit.Buffer;
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
@@ -29,9 +31,11 @@ import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import mikenakis.bytecode.model.attributes.UnknownAttribute;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -69,43 +73,43 @@ import java.util.Optional;
  */
 public abstract class Attribute
 {
-	public static Attribute read( AttributeReader attributeReader, Mutf8ValueConstant nameConstant, int attributeLength )
+	public static Attribute read( BufferReader bufferReader, ReadingConstantPool constantPool, Optional<ReadingLocationMap> locationMap, Mutf8ValueConstant nameConstant, int attributeLength )
 	{
 		Optional<Integer> knownAttributeTag = KnownAttribute.tagFromName( nameConstant );
 		if( knownAttributeTag.isPresent() )
 		{
 			return switch( knownAttributeTag.get() )
 				{
-					case KnownAttribute.tag_AnnotationDefault -> AnnotationDefaultAttribute.read( attributeReader );
-					case KnownAttribute.tag_BootstrapMethods -> BootstrapMethodsAttribute.read( attributeReader );
-					case KnownAttribute.tag_Code -> CodeAttribute.read( attributeReader );
-					case KnownAttribute.tag_ConstantValue -> ConstantValueAttribute.read( attributeReader );
+					case KnownAttribute.tag_AnnotationDefault -> AnnotationDefaultAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_BootstrapMethods -> BootstrapMethodsAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_Code -> CodeAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_ConstantValue -> ConstantValueAttribute.read( bufferReader, constantPool );
 					case KnownAttribute.tag_Deprecated -> DeprecatedAttribute.of();
-					case KnownAttribute.tag_EnclosingMethod -> EnclosingMethodAttribute.read( attributeReader );
-					case KnownAttribute.tag_Exceptions -> ExceptionsAttribute.read( attributeReader );
-					case KnownAttribute.tag_InnerClasses -> InnerClassesAttribute.read( attributeReader );
-					case KnownAttribute.tag_LineNumberTable -> LineNumberTableAttribute.read( attributeReader );
-					case KnownAttribute.tag_LocalVariableTable -> LocalVariableTableAttribute.read( attributeReader );
-					case KnownAttribute.tag_LocalVariableTypeTable -> LocalVariableTypeTableAttribute.read( attributeReader );
-					case KnownAttribute.tag_MethodParameters -> MethodParametersAttribute.read( attributeReader );
-					case KnownAttribute.tag_NestHost -> NestHostAttribute.read( attributeReader );
-					case KnownAttribute.tag_NestMembers -> NestMembersAttribute.read( attributeReader );
-					case KnownAttribute.tag_RuntimeInvisibleAnnotations -> RuntimeInvisibleAnnotationsAttribute.read( attributeReader );
-					case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> RuntimeInvisibleParameterAnnotationsAttribute.read( attributeReader );
-					case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> RuntimeInvisibleTypeAnnotationsAttribute.read( attributeReader );
-					case KnownAttribute.tag_RuntimeVisibleAnnotations -> RuntimeVisibleAnnotationsAttribute.read( attributeReader );
-					case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> RuntimeVisibleParameterAnnotationsAttribute.read( attributeReader );
-					case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> RuntimeVisibleTypeAnnotationsAttribute.read( attributeReader );
-					case KnownAttribute.tag_Signature -> SignatureAttribute.read( attributeReader );
-					case KnownAttribute.tag_SourceFile -> SourceFileAttribute.read( attributeReader );
-					case KnownAttribute.tag_StackMapTable -> StackMapTableAttribute.read( attributeReader );
+					case KnownAttribute.tag_EnclosingMethod -> EnclosingMethodAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_Exceptions -> ExceptionsAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_InnerClasses -> InnerClassesAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_LineNumberTable -> LineNumberTableAttribute.read( bufferReader, locationMap.orElseThrow() );
+					case KnownAttribute.tag_LocalVariableTable -> LocalVariableTableAttribute.read( bufferReader, constantPool, locationMap.orElseThrow() );
+					case KnownAttribute.tag_LocalVariableTypeTable -> LocalVariableTypeTableAttribute.read( bufferReader, constantPool, locationMap.orElseThrow() );
+					case KnownAttribute.tag_MethodParameters -> MethodParametersAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_NestHost -> NestHostAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_NestMembers -> NestMembersAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_RuntimeInvisibleAnnotations -> RuntimeInvisibleAnnotationsAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> RuntimeInvisibleParameterAnnotationsAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> RuntimeInvisibleTypeAnnotationsAttribute.read( bufferReader, constantPool, locationMap );
+					case KnownAttribute.tag_RuntimeVisibleAnnotations -> RuntimeVisibleAnnotationsAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_RuntimeVisibleParameterAnnotations -> RuntimeVisibleParameterAnnotationsAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_RuntimeVisibleTypeAnnotations -> RuntimeVisibleTypeAnnotationsAttribute.read( bufferReader, constantPool, locationMap );
+					case KnownAttribute.tag_Signature -> SignatureAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_SourceFile -> SourceFileAttribute.read( bufferReader, constantPool );
+					case KnownAttribute.tag_StackMapTable -> StackMapTableAttribute.read( bufferReader, constantPool, locationMap.orElseThrow() );
 					case KnownAttribute.tag_Synthetic -> SyntheticAttribute.of();
 					default -> throw new InvalidKnownAttributeTagException( knownAttributeTag.get() );
 				};
 		}
 		else
 		{
-			Buffer buffer = attributeReader.readBuffer( attributeLength );
+			Buffer buffer = bufferReader.readBuffer( attributeLength );
 			return UnknownAttribute.of( nameConstant, buffer );
 		}
 	}
@@ -121,9 +125,9 @@ public abstract class Attribute
 	public abstract boolean isKnown();
 	public boolean isOptional() { return false; }
 
-	@ExcludeFromJacocoGeneratedReport public UnknownAttribute                              /**/ asUnknownAttribute                              /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public KnownAttribute                                /**/ asKnownAttribute                                /**/() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public UnknownAttribute /**/ asUnknownAttribute /**/() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public KnownAttribute   /**/ asKnownAttribute   /**/() { return Kit.fail(); }
 
 	public abstract void intern( Interner interner );
-	public abstract void write( ConstantWriter constantWriter );
+	public abstract void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap );
 }

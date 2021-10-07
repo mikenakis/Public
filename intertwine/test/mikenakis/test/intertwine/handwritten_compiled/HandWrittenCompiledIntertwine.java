@@ -14,12 +14,11 @@ import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
-import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.FieldDescriptor;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
@@ -47,14 +46,7 @@ import java.util.stream.Stream;
  */
 class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 {
-	private static final FieldReference arrayOfZeroObjectsFieldReference = FieldReference.of( TypeDescriptor.of( Kit.class ), //
-		FieldPrototype.of( "ARRAY_OF_ZERO_OBJECTS", Object[].class ) );
-	private static final MethodReference anyCallMethodReference = MethodReference.of( MethodReferenceKind.Interface, TypeDescriptor.of( AnyCall.class ), //
-		MethodPrototype.of( "anyCall", TypeDescriptor.of( Object.class ), TypeDescriptor.of( MethodKey.class ), TypeDescriptor.of( Object[].class ) ) );
-	private static final MethodReference boxIntMethodReference = MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Integer.class ), //
-		MethodPrototype.of( "valueOf", TypeDescriptor.of( Integer.class ), TypeDescriptor.of( int.class ) ) );
-
-	final HandWrittenCompiledIntertwineFactory factory;
+	private final HandWrittenCompiledIntertwineFactory factory;
 	private final HandWrittenCompiledKey[] keys;
 	private final Map<MethodPrototype,HandWrittenCompiledKey> keysByPrototype;
 	private final Map<Method,HandWrittenCompiledKey> keysByMethod;
@@ -64,7 +56,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	HandWrittenCompiledIntertwine( HandWrittenCompiledIntertwineFactory factory )
 	{
 		this.factory = factory;
-		ByteCodeType interfaceByteCodeType = ByteCodeReader.read( FooInterface.class );
+		ByteCodeType interfaceByteCodeType = ByteCodeType.read( FooInterface.class );
 		List<ByteCodeMethod> byteCodeMethods = interfaceByteCodeType.methods;
 		keys = IntStream.range( 0, byteCodeMethods.size() ).mapToObj( i -> createKey( i, byteCodeMethods.get( i ), FooInterface.class ) ).toArray( HandWrittenCompiledKey[]::new );
 		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
@@ -174,17 +166,11 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 						Stream.of( method.getParameterTypes() ).map( c -> TypeDescriptor.of( c ) ).toList() ) );
 			}
 		}
-		addEntwinerInterfaceMethod0( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "voidMethod", TypeDescriptor.of( void.class ), //
-				List.of() ) );
-		addEntwinerInterfaceMethod1( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "getAlpha", TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ), //
-				TypeDescriptor.of( int.class ) ) );
-		addEntwinerInterfaceMethod2( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "setAlpha", TypeDescriptor.of( void.class ), //
-				TypeDescriptor.of( int.class ), TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) ) );
+		addEntwinerInterfaceMethod0( byteCodeType, keysField, exitPointField, MethodPrototype.of( "voidMethod", TypeDescriptor.of( void.class ), List.of() ) );
+		addEntwinerInterfaceMethod1( byteCodeType, keysField, exitPointField, MethodPrototype.of( "getAlpha", MethodDescriptor.of( TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ), TypeDescriptor.of( int.class ) ) ) );
+		addEntwinerInterfaceMethod2( byteCodeType, keysField, exitPointField, MethodPrototype.of( "setAlpha", MethodDescriptor.of( TypeDescriptor.of( void.class ), TypeDescriptor.of( int.class ), TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) ) ) );
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), ByteCodeWriter.write( byteCodeType ) );
+		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
 		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
 
 		return factory.byteCodeClassLoader.load( byteCodeType );
@@ -213,13 +199,12 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	*/
 	private static void addEntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
-			MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, exitPointField.descriptor().typeDescriptor ) );
+		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), MethodPrototype.of( "<init>", MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, exitPointField.descriptor().typeDescriptor ) ) );
 		byteCodeType.methods.add( method );
 		CodeAttribute code = CodeAttribute.of( 2, 3 );
 		method.attributeSet.addAttribute( code );
 		code.addALoad( 0 );
-		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ) ) ) );
+		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, Object.class, MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 		code.addALoad( 0 );
 		code.addALoad( 1 );
 		code.addPutField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
@@ -261,8 +246,8 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
 		code.addLdc( 0 );
 		code.addAALoad();
-		code.addGetStatic( arrayOfZeroObjectsFieldReference );
-		code.addInvokeInterface( anyCallMethodReference, 3 );
+		code.addGetStatic( FieldReference.of( Kit.class, FieldPrototype.of( "ARRAY_OF_ZERO_OBJECTS", Object[].class ) ) );
+		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
 		code.addPop();
 		code.addReturn();
 	}
@@ -309,9 +294,9 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.addDup();
 		code.addLdc( 0 );
 		code.addILoad( 1 );
-		code.addInvokeStatic( boxIntMethodReference );
+		code.addInvokeStatic( MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) ) );
 		code.addAAStore();
-		code.addInvokeInterface( anyCallMethodReference, 3 );
+		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
 		code.addCheckCast( TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) );
 		code.addAReturn();
 	}
@@ -364,13 +349,13 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.addDup();
 		code.addLdc( 0 );
 		code.addILoad( 1 );
-		code.addInvokeStatic( boxIntMethodReference );
+		code.addInvokeStatic( MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) ) );
 		code.addAAStore();
 		code.addDup();
 		code.addLdc( 1 );
 		code.addALoad( 2 );
 		code.addAAStore();
-		code.addInvokeInterface( anyCallMethodReference, 3 );
+		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
 		code.addPop();
 		code.addReturn();
 	}
@@ -415,7 +400,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 
 		addUntwinerAnyCallMethod( byteCodeType, exitPointField );
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), ByteCodeWriter.write( byteCodeType ) );
+		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
 		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
 
 		return factory.byteCodeClassLoader.load( byteCodeType );
@@ -437,13 +422,12 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	*/
 	private static void addUntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
-			MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ), TypeDescriptor.of( FooInterface.class ) ) );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), MethodPrototype.of( "<init>", MethodDescriptor.of( void.class, FooInterface.class ) ) );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 2, 2 );
 		byteCodeMethod.attributeSet.addAttribute( code );
 		code.addALoad( 0 );
-		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ) ) ) );
+		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, Object.class, MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 		code.addALoad( 0 );
 		code.addALoad( 1 );
 		code.addPutField( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
@@ -457,8 +441,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	*/
 	private static void addUntwinerAnyCallMethod( ByteCodeType byteCodeType, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
-			MethodPrototype.of( "anyCall", TypeDescriptor.of( Object.class ), TypeDescriptor.of( MethodKey.class ), TypeDescriptor.of( Object[].class ) ) );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 4, 4 );
 		byteCodeMethod.attributeSet.addAttribute( code );
@@ -478,7 +461,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.addCheckCast( TypeDescriptor.of( HandWrittenCompiledKey.class ) );
 		code.addAStore( 3 );
 		code.addALoad( 3 );
-		code.addGetField( FieldReference.of( TypeDescriptor.of( HandWrittenCompiledKey.class ), FieldPrototype.of( "methodIndex", TypeDescriptor.of( int.class ) ) ) );
+		code.addGetField( FieldReference.of( HandWrittenCompiledKey.class, FieldPrototype.of( "methodIndex", int.class ) ) );
 		TableSwitchInstruction tableSwitchInstruction = code.addTableSwitch( 0 );
 
 		/*
@@ -490,8 +473,8 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		 */
 		Instruction l24 = code.addALoad( 0 );
 		tableSwitchInstruction.targetInstructions.add( l24 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", TypeDescriptor.of( FooInterface.class ) ) ) );
-		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, TypeDescriptor.of( FooInterface.class ), MethodPrototype.of( "voidMethod", TypeDescriptor.of( void.class ) ) ), 1 );
+		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", FooInterface.class ) ) );
+		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, FooInterface.class, MethodPrototype.of( "voidMethod", MethodDescriptor.of( void.class ) ) ), 1 );
 		code.addAConstNull();
 		code.addAReturn();
 
@@ -508,13 +491,13 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		*/
 		Instruction l28 = code.addALoad( 0 );
 		tableSwitchInstruction.targetInstructions.add( l28 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", TypeDescriptor.of( FooInterface.class ) ) ) );
+		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", FooInterface.class ) ) );
 		code.addALoad( 2 );
 		code.addLdc( 0 );
 		code.addAALoad();
 		code.addCheckCast( TypeDescriptor.of( Integer.class ) );
-		code.addInvokeVirtual( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Integer.class ), MethodPrototype.of( "intValue", TypeDescriptor.of( int.class ) ) ) );
-		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, TypeDescriptor.of( FooInterface.class ), MethodPrototype.of( "getAlpha", TypeDescriptor.of( Alpha.class ), TypeDescriptor.of( int.class ) ) ), 2 );
+		code.addInvokeVirtual( MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "intValue", TypeDescriptor.of( int.class ) ) ) );
+		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, FooInterface.class, MethodPrototype.of( "getAlpha", MethodDescriptor.of( Alpha.class, int.class ) ) ), 2 );
 		code.addAReturn();
 
 		/*
@@ -535,17 +518,17 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		 */
 		Instruction l31 = code.addALoad( 0 );
 		tableSwitchInstruction.targetInstructions.add( l31 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", TypeDescriptor.of( FooInterface.class ) ) ) );
+		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", FooInterface.class ) ) );
 		code.addALoad( 2 );
 		code.addLdc( 0 );
 		code.addAALoad();
 		code.addCheckCast( TypeDescriptor.of( Integer.class ) );
-		code.addInvokeVirtual( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Integer.class ), MethodPrototype.of( "intValue", TypeDescriptor.of( int.class ) ) ) );
+		code.addInvokeVirtual( MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "intValue", MethodDescriptor.of( int.class ) ) ) );
 		code.addALoad( 2 );
 		code.addLdc( 1 );
 		code.addAALoad();
 		code.addCheckCast( TypeDescriptor.of( Alpha.class ) );
-		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, TypeDescriptor.of( FooInterface.class ), MethodPrototype.of( "setAlpha", TypeDescriptor.of( void.class ), TypeDescriptor.of( int.class ), TypeDescriptor.of( Alpha.class ) ) ), 3 );
+		code.addInvokeInterface( MethodReference.of( MethodReferenceKind.Interface, FooInterface.class, MethodPrototype.of( "setAlpha", MethodDescriptor.of( void.class, int.class, Alpha.class ) ) ), 3 );
 		code.addAConstNull();
 		code.addAReturn();
 
@@ -560,7 +543,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		tableSwitchInstruction.setDefaultInstruction( l34 );
 		code.addDup();
 		code.addALoad( 3 );
-		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( AssertionError.class ), MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ), TypeDescriptor.of( Object.class ) ) ) );
+		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, AssertionError.class, MethodPrototype.of( "<init>", MethodDescriptor.of( void.class, Object.class ) ) ) );
 		code.addAThrow();
 
 		/*

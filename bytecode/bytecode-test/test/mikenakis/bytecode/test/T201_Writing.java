@@ -2,12 +2,10 @@ package mikenakis.bytecode.test;
 
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.test.model.Model;
-import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
@@ -55,15 +53,15 @@ public class T201_Writing
 	{
 		Log.debug( "Testing " + classFilePathName );
 		byte[] bytes1 = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
-		ByteCodeType type1 = ByteCodeReader.read( bytes1 );
+		ByteCodeType type1 = ByteCodeType.read( bytes1 );
 		String string1 = ByteCodePrinter.printByteCodeType( type1, Optional.empty() );
 		if( save )
 			savePrint( replaceExtension( classFilePathName.getParent().resolve( "p1" ).resolve( classFilePathName.getFileName() ), ".print" ), string1 );
 
-		byte[] bytes2 = ByteCodeWriter.write( type1 );
+		byte[] bytes2 = type1.write();
 		if( save )
 			saveBytes( classFilePathName.getParent().resolve( "b" ).resolve( classFilePathName.getFileName().toString() ), bytes2 );
-		ByteCodeType type2 = ByteCodeReader.read( bytes2 );
+		ByteCodeType type2 = ByteCodeType.read( bytes2 );
 		String string2 = ByteCodePrinter.printByteCodeType( type2, Optional.empty() );
 		if( save )
 			savePrint( replaceExtension( classFilePathName.getParent().resolve( "p2" ).resolve( classFilePathName.getFileName() ), ".print" ), string2 );

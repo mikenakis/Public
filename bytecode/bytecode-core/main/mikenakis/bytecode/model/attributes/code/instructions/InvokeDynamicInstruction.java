@@ -1,23 +1,24 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class InvokeDynamicInstruction extends Instruction
 {
-	public static InvokeDynamicInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static InvokeDynamicInstruction read( BufferReader bufferReader, ReadingConstantPool constantPool, boolean wide, int opCode )
 	{
 		assert !wide;
 		assert opCode == OpCode.INVOKEDYNAMIC;
-		InvokeDynamicConstant invokeDynamicConstant = codeAttributeReader.readIndexAndGetConstant().asInvokeDynamicConstant();
-		int operand2 = codeAttributeReader.readUnsignedShort(); //2 extra bytes, unused.
+		InvokeDynamicConstant invokeDynamicConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asInvokeDynamicConstant();
+		int operand2 = bufferReader.readUnsignedShort(); //2 extra bytes, unused.
 		assert operand2 == 0;
 		return of( invokeDynamicConstant );
 	}

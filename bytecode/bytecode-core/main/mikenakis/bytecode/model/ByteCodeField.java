@@ -1,15 +1,20 @@
 package mikenakis.bytecode.model;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents a field.
@@ -18,6 +23,15 @@ import java.util.Map;
  */
 public final class ByteCodeField extends ByteCodeMember
 {
+	public static ByteCodeField read( BufferReader bufferReader, ReadingConstantPool constantPool )
+	{
+		FlagSet<Modifier> fieldModifiers = ByteCodeField.modifierEnum.fromBits( bufferReader.readUnsignedShort() );
+		Mutf8ValueConstant nameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		Mutf8ValueConstant descriptorConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		AttributeSet attributes = AttributeSet.read( bufferReader, constantPool, Optional.empty() );
+		return of( fieldModifiers, nameConstant, descriptorConstant, attributes );
+	}
+
 	public static ByteCodeField of( FlagSet<Modifier> modifiers, FieldPrototype fieldPrototype )
 	{
 		String descriptorString = ByteCodeHelpers.descriptorStringFromTypeDescriptor( fieldPrototype.descriptor.typeDescriptor );
@@ -70,11 +84,11 @@ public final class ByteCodeField extends ByteCodeMember
 		fieldDescriptorStringConstant.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( modifiers.getBits() );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( fieldNameConstant ) );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( fieldDescriptorStringConstant ) );
-		attributeSet.write( constantWriter );
+		bufferWriter.writeUnsignedShort( modifiers.getBits() );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( fieldNameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( fieldDescriptorStringConstant ) );
+		attributeSet.write( bufferWriter, constantPool,  locationMap );
 	}
 }

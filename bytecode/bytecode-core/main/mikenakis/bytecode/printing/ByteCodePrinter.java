@@ -348,7 +348,7 @@ public final class ByteCodePrinter
 			.map( a -> a.asLineNumberTableAttribute() ) //
 			.ifPresent( lineNumberTableAttribute -> //
 			{
-				for( LineNumberTableEntry entry : lineNumberTableAttribute.entrys )
+				for( LineNumberTableEntry entry : lineNumberTableAttribute.lineNumberTableEntries )
 					Kit.map.add( lineNumberFromInstructionMap, entry.instruction, entry.lineNumber );
 			} );
 		return lineNumberFromInstructionMap;
@@ -520,7 +520,7 @@ public final class ByteCodePrinter
 				case KnownAttribute.tag_NestMembers -> twigFromNestMembersAttribute( knownAttribute.asNestMembersAttribute() );
 				case KnownAttribute.tag_RuntimeInvisibleAnnotations, KnownAttribute.tag_RuntimeVisibleAnnotations -> twigFromAnnotationsAttribute( knownAttribute.asAnnotationsAttribute() );
 				case KnownAttribute.tag_RuntimeVisibleParameterAnnotations, KnownAttribute.tag_RuntimeInvisibleParameterAnnotations -> twigFromParameterAnnotationsAttribute( knownAttribute.asParameterAnnotationsAttribute() );
-				case KnownAttribute.tag_RuntimeVisibleTypeAnnotations, KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> twigFromTypeAnnotationsAttribute( knownAttribute.asTypeAnnotationsAttribute() );
+				case KnownAttribute.tag_RuntimeVisibleTypeAnnotations, KnownAttribute.tag_RuntimeInvisibleTypeAnnotations -> twigFromTypeAnnotationsAttribute( knownAttribute.asTypeAnnotationsAttribute(), labeler );
 				case KnownAttribute.tag_Signature -> twigFromSignatureAttribute( knownAttribute.asSignatureAttribute() );
 				case KnownAttribute.tag_SourceFile -> twigFromSourceFileAttribute( knownAttribute.asSourceFileAttribute() );
 				case KnownAttribute.tag_StackMapTable -> twigFromStackMapTableAttribute( labeler.orElseThrow(), knownAttribute.asStackMapTableAttribute() );
@@ -529,10 +529,10 @@ public final class ByteCodePrinter
 			};
 	}
 
-	private static Twig twigFromTypeAnnotationsAttribute( TypeAnnotationsAttribute typeAnnotationsAttribute )
+	private static Twig twigFromTypeAnnotationsAttribute( TypeAnnotationsAttribute typeAnnotationsAttribute, Optional<Labeler> labeler )
 	{
 		return Twig.array( typeAnnotationsAttribute.getClass().getSimpleName(), //
-			typeAnnotationsAttribute.typeAnnotations.stream().map( a -> twigFromTypeAnnotation( a ) ).toList() );
+			typeAnnotationsAttribute.typeAnnotations.stream().map( a -> twigFromTypeAnnotation( a, labeler ) ).toList() );
 	}
 
 	private Twig twigFromCodeAttribute( CodeAttribute codeAttribute )
@@ -650,7 +650,7 @@ public final class ByteCodePrinter
 	private static Twig twigFromLineNumberTableAttribute( Labeler labeler, LineNumberTableAttribute lineNumberTableAttribute )
 	{
 		return Twig.array( lineNumberTableAttribute.getClass().getSimpleName(), //
-			lineNumberTableAttribute.entrys.stream().map( n -> twigFromLineNumberTableEntry( n, labeler ) ).toList() );
+			lineNumberTableAttribute.lineNumberTableEntries.stream().map( n -> twigFromLineNumberTableEntry( n, labeler ) ).toList() );
 	}
 
 	private static Twig twigFromStackMapTableAttribute( Labeler labeler, StackMapTableAttribute stackMapTableAttribute )
@@ -974,10 +974,10 @@ public final class ByteCodePrinter
 			arrayAnnotationValue.annotationValues.stream().map( a -> twigFromAnnotationValue( a ) ).toList(), "values" );
 	}
 
-	private static Twig twigFromTypeAnnotation( TypeAnnotation typeAnnotation )
+	private static Twig twigFromTypeAnnotation( TypeAnnotation typeAnnotation, Optional<Labeler> labeler )
 	{
 		return Twig.group( TypeAnnotation.class.getSimpleName(), //
-			Map.entry( "target", twigFromTarget( typeAnnotation.target ) ), //
+			Map.entry( "target", twigFromTarget( typeAnnotation.target, labeler ) ), //
 			Map.entry( "typePath", twigFromTypePath( typeAnnotation.targetPath ) ), //
 			Map.entry( "type", Twig.leaf( typeAnnotation.typeDescriptor().typeName() ) ), //
 			Map.entry( "parameters", Twig.array( typeAnnotation.parameters.stream().map( a -> twigFromAnnotationParameter( a ) ).toList() ) ) );
@@ -996,7 +996,7 @@ public final class ByteCodePrinter
 			", argumentIndex = " + entry.argumentIndex );
 	}
 
-	private static Twig twigFromTarget( Target target )
+	private static Twig twigFromTarget( Target target, Optional<Labeler> labeler )
 	{
 		return switch( target.tag )
 			{
@@ -1006,7 +1006,7 @@ public final class ByteCodePrinter
 				case Target.tag_FieldType, Target.tag_ReturnType, Target.tag_ReceiverType -> twigFromEmptyTarget( target.asEmptyTarget() );
 				case Target.tag_FormalParameter -> twigFromFormalParameterTarget( target.asFormalParameterTarget() );
 				case Target.tag_Throws -> twigFromThrowsTarget( target.asThrowsTarget() );
-				case Target.tag_LocalVariable, Target.tag_ResourceLocalVariable -> twigFromLocalVariableTarget( target.asLocalVariableTarget() );
+				case Target.tag_LocalVariable, Target.tag_ResourceLocalVariable -> twigFromLocalVariableTarget( target.asLocalVariableTarget(), labeler.orElseThrow() );
 				case Target.tag_Catch -> twigFromCatchTarget( target.asCatchTarget() );
 				case Target.tag_InstanceOfOffset, Target.tag_NewExpressionOffset, Target.tag_NewMethodOffset, Target.tag_IdentifierMethodOffset -> //
 					twigFromOffsetTarget( target.asOffsetTarget() );
@@ -1044,18 +1044,20 @@ public final class ByteCodePrinter
 		return Twig.leaf( header );
 	}
 
-	private static Twig twigFromLocalVariableTarget( LocalVariableTarget localVariableTarget )
+	private static Twig twigFromLocalVariableTarget( LocalVariableTarget localVariableTarget, Labeler labeler )
 	{
 		return Twig.array( localVariableTarget.getClass().getSimpleName() + " tag = " + Target.tagName( localVariableTarget.tag ), //
-			localVariableTarget.entries.stream().map( e -> twigFromLocalVariableTargetEntry( e ) ).toList() );
+			localVariableTarget.entries.stream().map( e -> twigFromLocalVariableTargetEntry( e, labeler ) ).toList() );
 	}
 
-	private static Twig twigFromLocalVariableTargetEntry( LocalVariableTargetEntry localVariableTargetEntry )
+	private static Twig twigFromLocalVariableTargetEntry( LocalVariableTargetEntry localVariableTargetEntry, Labeler labeler )
 	{
 		var builder = new StringBuilder();
 		builder.append( localVariableTargetEntry.getClass().getSimpleName() );
-		builder.append( " start = " ).append( localVariableTargetEntry.startPc );
-		builder.append( ", length = " ).append( localVariableTargetEntry.length );
+		builder.append( " start = " );
+		appendAbsoluteInstruction( localVariableTargetEntry.startInstruction, builder, labeler );
+		builder.append( ", end = " );
+		appendAbsoluteInstruction( localVariableTargetEntry.endInstruction, builder, labeler );
 		builder.append( ", index = " ).append( localVariableTargetEntry.index );
 		String header = builder.toString();
 		return Twig.leaf( header );
@@ -1195,9 +1197,7 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromLocalVariableInstruction( String prefix, LocalVariableInstruction localVariableInstruction )
 	{
-		Optional<Integer> parameter = localVariableInstruction.parameter();
-		String[] arguments = parameter.map( i -> new String[] { "" + i } ).orElse( Kit.ARRAY_OF_ZERO_STRINGS );
-		return Twig.leaf( buildInstructionHeader( prefix, localVariableInstruction.opCode, arguments ) );
+		return Twig.leaf( buildInstructionHeader( prefix, localVariableInstruction.genericOpCode, "" + localVariableInstruction.localVariableIndex ) );
 	}
 
 	private static Twig twigFromLookupSwitchInstruction( String prefix, LookupSwitchInstruction lookupSwitchInstruction, Labeler labeler )

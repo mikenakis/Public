@@ -1,5 +1,6 @@
 package mikenakis.bytecode.model.attributes.code.instructions;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.kit.Helpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.code.Instruction;
@@ -11,7 +12,7 @@ import mikenakis.bytecode.model.constants.value.FloatValueConstant;
 import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
 import mikenakis.bytecode.model.constants.value.LongValueConstant;
 import mikenakis.bytecode.model.constants.value.StringValueConstant;
-import mikenakis.bytecode.reading.CodeAttributeReader;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.TypeDescriptor;
@@ -20,7 +21,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 public class LoadConstantInstruction extends Instruction
 {
 
-	public static LoadConstantInstruction read( CodeAttributeReader codeAttributeReader, boolean wide, int opCode )
+	public static LoadConstantInstruction read( BufferReader bufferReader, ReadingConstantPool constantPool, boolean wide, int opCode )
 	{
 		assert !wide;
 		Constant constant = switch( opCode )
@@ -39,36 +40,33 @@ public class LoadConstantInstruction extends Instruction
 				case OpCode.LCONST_1 -> LongValueConstant.of( 1L );
 				case OpCode.DCONST_0 -> DoubleValueConstant.of( 0.0 );
 				case OpCode.DCONST_1 -> DoubleValueConstant.of( 1.0 );
-				case OpCode.BIPUSH -> IntegerValueConstant.of( codeAttributeReader.readUnsignedByte() );
-				case OpCode.SIPUSH -> IntegerValueConstant.of( codeAttributeReader.readUnsignedShort() );
-				case OpCode.LDC -> readLdcConstant( codeAttributeReader );
-				case OpCode.LDC_W -> readLdcWConstant( codeAttributeReader );
-				case OpCode.LDC2_W -> readLdc2WConstant( codeAttributeReader );
+				case OpCode.BIPUSH -> IntegerValueConstant.of( bufferReader.readUnsignedByte() );
+				case OpCode.SIPUSH -> IntegerValueConstant.of( bufferReader.readUnsignedShort() );
+				case OpCode.LDC -> readLdcConstant( bufferReader, constantPool );
+				case OpCode.LDC_W -> readLdcWConstant( bufferReader, constantPool );
+				case OpCode.LDC2_W -> readLdc2WConstant( bufferReader, constantPool );
 				default -> throw new AssertionError( opCode );
 			};
 		return of( constant );
 	}
 
-	private static Constant readLdcConstant( CodeAttributeReader codeAttributeReader )
+	private static Constant readLdcConstant( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int constantIndexValue = codeAttributeReader.readUnsignedByte();
-		Constant c = codeAttributeReader.getConstant( constantIndexValue );
+		Constant c = constantPool.getConstant( bufferReader.readUnsignedByte() );
 		assert c.tag == Constant.tag_Integer || c.tag == Constant.tag_Float || c.tag == Constant.tag_String || c.tag == Constant.tag_Class;
 		return c;
 	}
 
-	private static Constant readLdcWConstant( CodeAttributeReader codeAttributeReader )
+	private static Constant readLdcWConstant( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int constantIndexValue = codeAttributeReader.readUnsignedShort();
-		Constant c = codeAttributeReader.getConstant( constantIndexValue );
+		Constant c = constantPool.getConstant( bufferReader.readUnsignedShort() );
 		assert c.tag == Constant.tag_Integer || c.tag == Constant.tag_Float || c.tag == Constant.tag_String || c.tag == Constant.tag_Class;
 		return c;
 	}
 
-	private static Constant readLdc2WConstant( CodeAttributeReader codeAttributeReader )
+	private static Constant readLdc2WConstant( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int constantIndexValue = codeAttributeReader.readUnsignedShort();
-		Constant c = codeAttributeReader.getConstant( constantIndexValue );
+		Constant c = constantPool.getConstant( bufferReader.readUnsignedShort() );
 		assert c.tag == Constant.tag_Long || c.tag == Constant.tag_Double;
 		return c;
 	}

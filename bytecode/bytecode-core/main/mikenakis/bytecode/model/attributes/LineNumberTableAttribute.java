@@ -1,16 +1,17 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.attributes.code.Instruction;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "LineNumberTable" {@link Attribute} of a java class file.
@@ -23,20 +24,14 @@ import java.util.List;
  */
 public final class LineNumberTableAttribute extends KnownAttribute
 {
-	public static LineNumberTableAttribute read( AttributeReader attributeReader )
+	public static LineNumberTableAttribute read( BufferReader bufferReader, ReadingLocationMap readingLocationMap )
 	{
-		CodeAttributeReader codeAttributeReader = attributeReader.asCodeAttributeReader();
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
-		List<LineNumberTableEntry> entries = new ArrayList<>( count );
+		List<LineNumberTableEntry> lineNumberTableEntries = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
-		{
-			Instruction startInstruction = codeAttributeReader.readAbsoluteInstruction().orElseThrow();
-			int lineNumber = attributeReader.readUnsignedShort();
-			var lineNumberEntry = LineNumberTableEntry.of( startInstruction, lineNumber );
-			entries.add( lineNumberEntry );
-		}
-		return of( entries );
+			lineNumberTableEntries.add( LineNumberTableEntry.read( bufferReader, readingLocationMap ) );
+		return of( lineNumberTableEntries );
 	}
 
 	public static LineNumberTableAttribute of()
@@ -44,37 +39,32 @@ public final class LineNumberTableAttribute extends KnownAttribute
 		return of( new ArrayList<>() );
 	}
 
-	public static LineNumberTableAttribute of( List<LineNumberTableEntry> entrys )
+	public static LineNumberTableAttribute of( List<LineNumberTableEntry> lineNumberTableEntries )
 	{
-		return new LineNumberTableAttribute( entrys );
+		return new LineNumberTableAttribute( lineNumberTableEntries );
 	}
 
-	public final List<LineNumberTableEntry> entrys;
+	public final List<LineNumberTableEntry> lineNumberTableEntries;
 
-	private LineNumberTableAttribute( List<LineNumberTableEntry> entrys )
+	private LineNumberTableAttribute( List<LineNumberTableEntry> lineNumberTableEntries )
 	{
 		super( tag_LineNumberTable );
-		this.entrys = entrys;
+		this.lineNumberTableEntries = lineNumberTableEntries;
 	}
 
 	@Deprecated @Override public LineNumberTableAttribute asLineNumberTableAttribute() { return this; }
 	@Override public boolean isOptional() { return true; }
-	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return entrys.size() + " entries"; }
+	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return lineNumberTableEntries.size() + " entries"; }
 
 	@Override public void intern( Interner interner )
 	{
 		// nothing to do
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		CodeConstantWriter codeConstantWriter = constantWriter.asCodeConstantWriter();
-		constantWriter.writeUnsignedShort( entrys.size() );
-		for( LineNumberTableEntry lineNumber : entrys )
-		{
-			int location = codeConstantWriter.getLocation( lineNumber.instruction );
-			constantWriter.writeUnsignedShort( location );
-			constantWriter.writeUnsignedShort( lineNumber.lineNumber );
-		}
+		bufferWriter.writeUnsignedShort( lineNumberTableEntries.size() );
+		for( LineNumberTableEntry lineNumberTableEntry : lineNumberTableEntries )
+			lineNumberTableEntry.write( bufferWriter, locationMap.orElseThrow() );
 	}
 }

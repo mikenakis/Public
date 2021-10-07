@@ -1,10 +1,11 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.constant.DirectMethodHandleDesc;
@@ -55,11 +56,11 @@ public final class BootstrapMethod
 			constant.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( methodHandleConstant ) );
-		constantWriter.writeUnsignedShort( argumentConstants.size() );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( methodHandleConstant ) );
+		bufferWriter.writeUnsignedShort( argumentConstants.size() );
 		for( Constant argumentConstant : argumentConstants )
-			constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( argumentConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( argumentConstant ) );
 	}
 }

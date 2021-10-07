@@ -8,6 +8,7 @@ import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
+import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
@@ -32,23 +33,23 @@ public class Generator
 		{
 			ByteCodeMethod initMethod = byteCodeType.addMethod( ByteCodeMethod.of( //
 				ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
-				MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ) ) ) );
+				MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 			CodeAttribute codeAttribute = initMethod.attributeSet.addAttribute( CodeAttribute.of( 1, 1 ) );
 			codeAttribute.addALoad( 0 );
 			codeAttribute.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), //
-				MethodPrototype.of( "<init>", TypeDescriptor.of( void.class ) ) ) );
+				MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 			codeAttribute.addReturn();
 		}
 
 		{
 			ByteCodeMethod mainMethod = byteCodeType.addMethod( ByteCodeMethod.of( //
 				ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public, ByteCodeMethod.Modifier.Static ), //
-				MethodPrototype.of( "main", TypeDescriptor.of( void.class ), TypeDescriptor.of( String[].class ) ) ) );
+				MethodPrototype.of( "main", MethodDescriptor.of( void.class, String[].class ) ) ) );
 			CodeAttribute codeAttribute = mainMethod.attributeSet.addAttribute( CodeAttribute.of( 2, 1 ) );
 			codeAttribute.addGetStatic( FieldReference.of( TypeDescriptor.of( System.class ), FieldPrototype.of( "out", PrintStream.class ) ) );
 			codeAttribute.addLdc( "Hello, world!\n" );
 			codeAttribute.addInvokeVirtual( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( PrintStream.class ), //
-				MethodPrototype.of( "print", TypeDescriptor.of( void.class ), TypeDescriptor.of( String.class ) ) ) );
+				MethodPrototype.of( "print", MethodDescriptor.of( void.class, String.class ) ) ) );
 			codeAttribute.addReturn();
 		}
 

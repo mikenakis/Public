@@ -1,10 +1,10 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 
 /**
  * Represents the JVMS::CONSTANT_Methodref_info and JVMS::CONSTANT_InterfaceMethodref_info structures.
@@ -13,11 +13,11 @@ import mikenakis.bytecode.writing.ConstantWriter;
  */
 public final class MethodReferenceConstant extends ReferenceConstant
 {
-	public static MethodReferenceConstant read( ConstantReader constantReader, int tag )
+	public static MethodReferenceConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int tag )
 	{
 		MethodReferenceConstant interfaceMethodReferenceConstant = of( tag );
-		constantReader.readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
-		constantReader.readIndexAndSetConstant( c -> interfaceMethodReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> interfaceMethodReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> interfaceMethodReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
 		return interfaceMethodReferenceConstant;
 	}
 

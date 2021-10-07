@@ -1,10 +1,12 @@
 package mikenakis.bytecode.model.annotationvalues;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Annotation;
 import mikenakis.bytecode.model.AnnotationValue;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -14,9 +16,9 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class AnnotationAnnotationValue extends AnnotationValue
 {
-	public static AnnotationAnnotationValue read( AttributeReader attributeReader )
+	public static AnnotationAnnotationValue read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		Annotation annotation = Annotation.read( attributeReader );
+		Annotation annotation = Annotation.read( bufferReader, constantPool );
 		return of( annotation );
 	}
 
@@ -43,9 +45,9 @@ public final class AnnotationAnnotationValue extends AnnotationValue
 		annotation.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		annotation.write( constantWriter );
+		bufferWriter.writeUnsignedByte( tag );
+		annotation.write( bufferWriter, constantPool );
 	}
 }

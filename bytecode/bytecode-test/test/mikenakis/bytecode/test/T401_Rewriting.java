@@ -3,10 +3,8 @@ package mikenakis.bytecode.test;
 import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class0HelloWorld;
-import mikenakis.bytecode.writing.ByteCodeWriter;
 import mikenakis.kit.Kit;
 import org.junit.Test;
 
@@ -37,7 +35,7 @@ public class T401_Rewriting
 	{
 		Path classFilePathName = TestKit.getPathToClassFile( Class0HelloWorld.class );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
-		ByteCodeType byteCodeType = ByteCodeReader.read( bytes );
+		ByteCodeType byteCodeType = ByteCodeType.read( bytes );
 		Class<?> javaClass = byteCodeClassLoader.load( byteCodeType );
 		testHelloWorldJavaClass( javaClass );
 	}
@@ -46,9 +44,9 @@ public class T401_Rewriting
 	{
 		Path classFilePathName = TestKit.getPathToClassFile( Class0HelloWorld.class );
 
-		ByteCodeType byteCodeType1 = ByteCodeReader.read( Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) ) );
-		byte[] bytes = ByteCodeWriter.write( byteCodeType1 );
-		ByteCodeType byteCodeType2 = ByteCodeReader.read( bytes );
+		ByteCodeType byteCodeType1 = ByteCodeType.read( Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) ) );
+		byte[] bytes = byteCodeType1.write();
+		ByteCodeType byteCodeType2 = ByteCodeType.read( bytes );
 
 		String text1 = ByteCodePrinter.printByteCodeType( byteCodeType1, Optional.empty() );
 		String text2 = ByteCodePrinter.printByteCodeType( byteCodeType2, Optional.empty() );

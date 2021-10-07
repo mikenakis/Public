@@ -1,12 +1,15 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.Constant;
 import mikenakis.bytecode.model.attributes.BootstrapMethod;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;
@@ -18,12 +21,12 @@ import java.util.Objects;
  */
 public final class InvokeDynamicConstant extends Constant
 {
-	public static InvokeDynamicConstant read( ConstantReader constantReader, int constantTag )
+	public static InvokeDynamicConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_InvokeDynamic;
 		InvokeDynamicConstant invokeDynamicConstant = new InvokeDynamicConstant();
-		constantReader.readIndexAndSetBootstrap( b -> invokeDynamicConstant.setBootstrapMethod( b ) );
-		constantReader.readIndexAndSetConstant( c -> invokeDynamicConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
+		constantPool.setBootstrap( bufferReader.readUnsignedShort(), b -> invokeDynamicConstant.setBootstrapMethod( b ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> invokeDynamicConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
 		return invokeDynamicConstant;
 	}
 
@@ -82,11 +85,11 @@ public final class InvokeDynamicConstant extends Constant
 		getNameAndDescriptorConstant().intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool )
 	{
-		constantWriter.writeUnsignedByte( tag );
-		int bootstrapMethodIndex = constantWriter.getBootstrapIndex( getBootstrapMethod() );
-		constantWriter.writeUnsignedShort( bootstrapMethodIndex );
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( getNameAndDescriptorConstant() ) );
+		bufferWriter.writeUnsignedByte( tag );
+		int bootstrapMethodIndex = bootstrapPool.getBootstrapIndex( getBootstrapMethod() );
+		bufferWriter.writeUnsignedShort( bootstrapMethodIndex );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( getNameAndDescriptorConstant() ) );
 	}
 }

@@ -1,6 +1,7 @@
 package mikenakis.bytecode.writing;
 
 import mikenakis.bytecode.model.attributes.code.Instruction;
+import mikenakis.bytecode.model.attributes.stackmap.StackMapFrame;
 import mikenakis.kit.Kit;
 
 import java.util.ArrayList;
@@ -9,26 +10,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-class WritingLocationMap implements LocationMap
+public class WritingLocationMap
 {
 	private final List<Instruction> instructionsByLocation = new ArrayList<>();
 	private final Map<Instruction,Integer> locationsByInstruction = new HashMap<>();
 
-	WritingLocationMap()
+	public WritingLocationMap()
 	{
 	}
 
-	@Override public int getLocation( Optional<Instruction> instruction )
+	public int getLocation( Optional<Instruction> instruction )
 	{
 		return instruction.isEmpty() ? instructionsByLocation.size() : getLocation( instruction.get() );
 	}
 
-	@Override public int getLocation( Instruction instruction )
+	public int getLocation( Instruction instruction )
 	{
 		return Kit.map.get( locationsByInstruction, instruction );
 	}
 
-	int getLength( Instruction instruction )
+	public int getLength( Instruction instruction )
 	{
 		int location = getLocation( instruction );
 		int nextLocation;
@@ -38,21 +39,21 @@ class WritingLocationMap implements LocationMap
 		return nextLocation - location;
 	}
 
-	@Override public int getOffset( Instruction sourceInstruction, Instruction targetInstruction )
+	public int getOffset( Instruction sourceInstruction, Instruction targetInstruction )
 	{
 		int sourceLocation = getLocation( sourceInstruction );
 		int targetLocation = getLocation( targetInstruction );
 		return targetLocation - sourceLocation;
 	}
 
-	void add( Instruction instruction )
+	public void add( Instruction instruction )
 	{
 		int location = instructionsByLocation.size();
 		instructionsByLocation.add( instruction );
 		Kit.map.add( locationsByInstruction, instruction, location );
 	}
 
-	void setLength( Instruction instruction, int length )
+	public void setLength( Instruction instruction, int length )
 	{
 		assert length >= 1;
 		assert instruction == instructionsByLocation.get( instructionsByLocation.size() - 1 );
@@ -66,7 +67,7 @@ class WritingLocationMap implements LocationMap
 		return locationsByInstruction.containsKey( instruction );
 	}
 
-	void removeBytes( int location, int length )
+	public void removeBytes( int location, int length )
 	{
 		assert length > 0;
 		instructionsByLocation.subList( location, location + length ).clear();
@@ -80,5 +81,14 @@ class WritingLocationMap implements LocationMap
 				entry.setValue( location2 );
 			}
 		}
+	}
+
+	public int getOffsetDelta( StackMapFrame stackMapFrame, Optional<StackMapFrame> previousFrame )
+	{
+		int offset = getLocation( Optional.of( stackMapFrame.getTargetInstruction() ) );
+		if( previousFrame.isEmpty() )
+			return offset;
+		int previousLocation = getLocation( Optional.of( previousFrame.get().getTargetInstruction() ) );
+		return offset - previousLocation - 1;
 	}
 }

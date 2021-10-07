@@ -1,17 +1,20 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
-import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the "NestMembers" {@link Attribute} of a java class file.
@@ -26,16 +29,13 @@ import java.util.List;
  */
 public final class NestMembersAttribute extends KnownAttribute
 {
-	public static NestMembersAttribute read( AttributeReader attributeReader )
+	public static NestMembersAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<ClassConstant> memberClassConstants = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
-		{
-			ClassConstant memberClassConstant = attributeReader.readIndexAndGetConstant().asClassConstant();
-			memberClassConstants.add( memberClassConstant );
-		}
+			memberClassConstants.add( constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant() );
 		return of( memberClassConstants );
 	}
 
@@ -67,10 +67,10 @@ public final class NestMembersAttribute extends KnownAttribute
 			memberClassConstant.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( memberClassConstants.size() );
+		bufferWriter.writeUnsignedShort( memberClassConstants.size() );
 		for( ClassConstant memberClassConstant : memberClassConstants )
-			constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( memberClassConstant ) );
+			bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( memberClassConstant ) );
 	}
 }

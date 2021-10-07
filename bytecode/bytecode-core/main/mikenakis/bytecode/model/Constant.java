@@ -1,23 +1,25 @@
 package mikenakis.bytecode.model;
 
 import mikenakis.bytecode.exceptions.InvalidConstantTagException;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.value.DoubleValueConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
-import mikenakis.bytecode.model.constants.value.FloatValueConstant;
-import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
-import mikenakis.bytecode.model.constants.value.LongValueConstant;
 import mikenakis.bytecode.model.constants.MethodHandleConstant;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.constants.MethodTypeConstant;
-import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
 import mikenakis.bytecode.model.constants.ReferenceConstant;
-import mikenakis.bytecode.model.constants.value.StringValueConstant;
 import mikenakis.bytecode.model.constants.ValueConstant;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.model.constants.value.DoubleValueConstant;
+import mikenakis.bytecode.model.constants.value.FloatValueConstant;
+import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
+import mikenakis.bytecode.model.constants.value.LongValueConstant;
+import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import mikenakis.bytecode.model.constants.value.StringValueConstant;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingBootstrapPool;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -91,5 +93,5 @@ public abstract class Constant
 	@Override public abstract boolean equals( Object other );
 	@Override public abstract int hashCode();
 	public abstract void intern( Interner interner );
-	public abstract void write( ConstantWriter constantWriter );
+	public abstract void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingBootstrapPool bootstrapPool );
 }

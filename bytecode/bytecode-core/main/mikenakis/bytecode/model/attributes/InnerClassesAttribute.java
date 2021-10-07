@@ -1,12 +1,15 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.Attribute;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.constants.ClassConstant;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.AttributeReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagSet;
@@ -26,17 +29,17 @@ import java.util.Optional;
  */
 public final class InnerClassesAttribute extends KnownAttribute
 {
-	public static InnerClassesAttribute read( AttributeReader attributeReader )
+	public static InnerClassesAttribute read( BufferReader bufferReader, ReadingConstantPool constantPool )
 	{
-		int count = attributeReader.readUnsignedShort();
+		int count = bufferReader.readUnsignedShort();
 		assert count > 0;
 		List<InnerClass> innerClasses = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
 		{
-			ClassConstant innerClassConstant = attributeReader.readIndexAndGetConstant().asClassConstant();
-			Optional<ClassConstant> outerClassConstant = Kit.upCast( attributeReader.tryReadIndexAndGetConstant() );
-			Optional<Mutf8ValueConstant> innerNameConstant = Kit.upCast( attributeReader.tryReadIndexAndGetConstant() );
-			FlagSet<InnerClass.InnerClassModifier> modifiers = InnerClass.innerClassModifierFlagsEnum.fromBits( attributeReader.readUnsignedShort() );
+			ClassConstant innerClassConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant();
+			Optional<ClassConstant> outerClassConstant = Kit.upCast( constantPool.tryGetConstant( bufferReader.readUnsignedShort() ) );
+			Optional<Mutf8ValueConstant> innerNameConstant = Kit.upCast( constantPool.tryGetConstant( bufferReader.readUnsignedShort() ) );
+			FlagSet<InnerClass.InnerClassModifier> modifiers = InnerClass.innerClassModifierFlagsEnum.fromBits( bufferReader.readUnsignedShort() );
 			InnerClass innerClass = InnerClass.of( innerClassConstant, outerClassConstant, innerNameConstant, modifiers );
 			innerClasses.add( innerClass );
 		}
@@ -70,10 +73,10 @@ public final class InnerClassesAttribute extends KnownAttribute
 			innerClass.intern( interner );
 	}
 
-	@Override public void write( ConstantWriter constantWriter )
+	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
-		constantWriter.writeUnsignedShort( innerClasses.size() );
+		bufferWriter.writeUnsignedShort( innerClasses.size() );
 		for( InnerClass innerClass : innerClasses )
-			innerClass.write( constantWriter );
+			innerClass.write( bufferWriter, constantPool );
 	}
 }

@@ -1,11 +1,12 @@
 package mikenakis.bytecode.model.attributes;
 
-import mikenakis.bytecode.writing.ConstantWriter;
-import mikenakis.bytecode.writing.Interner;
-import mikenakis.kit.collections.FlagSet;
-import mikenakis.kit.collections.FlagEnum;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.collections.FlagEnum;
+import mikenakis.kit.collections.FlagSet;
 
 import java.util.Map;
 
@@ -48,9 +49,9 @@ public final class MethodParameter
 		nameConstant.intern( interner );
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool )
 	{
-		constantWriter.writeUnsignedShort( constantWriter.getConstantIndex( nameConstant ) );
-		constantWriter.writeUnsignedShort( modifiers.getBits() );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( nameConstant ) );
+		bufferWriter.writeUnsignedShort( modifiers.getBits() );
 	}
 }

@@ -1,10 +1,14 @@
 package mikenakis.bytecode.model.attributes;
 
+import mikenakis.bytecode.kit.BufferReader;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.reading.CodeAttributeReader;
-import mikenakis.bytecode.writing.CodeConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
+import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.bytecode.writing.WritingConstantPool;
+import mikenakis.bytecode.writing.WritingLocationMap;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -16,15 +20,15 @@ import java.util.Optional;
  */
 public final class LocalVariableTypeTableEntry
 {
-	public static LocalVariableTypeTableEntry read( CodeAttributeReader codeAttributeReader )
+	public static LocalVariableTypeTableEntry read( BufferReader bufferReader, ReadingConstantPool constantPool, ReadingLocationMap locationMap )
 	{
-		Instruction startInstruction = codeAttributeReader.readAbsoluteInstruction().orElseThrow();
-		int length = codeAttributeReader.readUnsignedShort();
-		int endLocation = codeAttributeReader.locationMap.getLocation( startInstruction ) + length;
-		Optional<Instruction> endInstruction = codeAttributeReader.locationMap.getInstruction( endLocation );
-		Mutf8ValueConstant nameConstant1 = codeAttributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-		Mutf8ValueConstant signatureConstant = codeAttributeReader.readIndexAndGetConstant().asMutf8ValueConstant();
-		int index = codeAttributeReader.readUnsignedShort();
+		Instruction startInstruction = locationMap.getInstruction( bufferReader.readUnsignedShort() ).orElseThrow();
+		int length = bufferReader.readUnsignedShort();
+		int endLocation = locationMap.getLocation( startInstruction ) + length;
+		Optional<Instruction> endInstruction = locationMap.getInstruction( endLocation );
+		Mutf8ValueConstant nameConstant1 = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		Mutf8ValueConstant signatureConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
+		int index = bufferReader.readUnsignedShort();
 		return of( startInstruction, endInstruction, nameConstant1, signatureConstant, index );
 	}
 
@@ -64,14 +68,14 @@ public final class LocalVariableTypeTableEntry
 		signatureConstant.intern( interner );
 	}
 
-	public void write( CodeConstantWriter codeConstantWriter )
+	public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, WritingLocationMap locationMap )
 	{
-		int startLocation = codeConstantWriter.getLocation( startInstruction );
-		int endLocation = codeConstantWriter.getLocation( endInstruction );
-		codeConstantWriter.writeUnsignedShort( startLocation );
-		codeConstantWriter.writeUnsignedShort( endLocation - startLocation );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( nameConstant ) );
-		codeConstantWriter.writeUnsignedShort( codeConstantWriter.getConstantIndex( signatureConstant ) );
-		codeConstantWriter.writeUnsignedShort( index );
+		int startLocation = locationMap.getLocation( startInstruction );
+		int endLocation = locationMap.getLocation( endInstruction );
+		bufferWriter.writeUnsignedShort( startLocation );
+		bufferWriter.writeUnsignedShort( endLocation - startLocation );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( nameConstant ) );
+		bufferWriter.writeUnsignedShort( constantPool.getConstantIndex( signatureConstant ) );
+		bufferWriter.writeUnsignedShort( index );
 	}
 }

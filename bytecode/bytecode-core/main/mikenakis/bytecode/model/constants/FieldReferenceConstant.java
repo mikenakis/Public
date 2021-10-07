@@ -1,9 +1,9 @@
 package mikenakis.bytecode.model.constants;
 
+import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.descriptors.FieldReference;
-import mikenakis.bytecode.reading.ConstantReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.java_type_model.FieldDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 
@@ -14,12 +14,12 @@ import mikenakis.java_type_model.TypeDescriptor;
  */
 public final class FieldReferenceConstant extends ReferenceConstant
 {
-	public static FieldReferenceConstant read( ConstantReader constantReader, int constantTag )
+	public static FieldReferenceConstant read( BufferReader bufferReader, ReadingConstantPool constantPool, int constantTag )
 	{
 		assert constantTag == tag_FieldReference;
 		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
-		constantReader.readIndexAndSetConstant( c -> fieldReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
-		constantReader.readIndexAndSetConstant( c -> fieldReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> fieldReferenceConstant.setDeclaringTypeConstant( c.asClassConstant() ) );
+		constantPool.setConstant( bufferReader.readUnsignedShort(), c -> fieldReferenceConstant.setNameAndDescriptorConstant( c.asNameAndDescriptorConstant() ) );
 		return fieldReferenceConstant;
 	}
 
@@ -31,15 +31,7 @@ public final class FieldReferenceConstant extends ReferenceConstant
 		return fieldReferenceConstant;
 	}
 
-	public static FieldReferenceConstant of( ClassConstant declaringTypeConstant, NameAndDescriptorConstant nameAndDescriptorConstant ) //TODO remove
-	{
-		FieldReferenceConstant fieldReferenceConstant = new FieldReferenceConstant();
-		fieldReferenceConstant.setDeclaringTypeConstant( declaringTypeConstant );
-		fieldReferenceConstant.setNameAndDescriptorConstant( nameAndDescriptorConstant );
-		return fieldReferenceConstant;
-	}
-
-	public FieldReferenceConstant()
+	private FieldReferenceConstant()
 	{
 		super( tag_FieldReference );
 	}

@@ -1,8 +1,9 @@
 package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.kit.BufferReader;
-import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.writing.Interner;
+import mikenakis.kit.Kit;
 
 public final class TypePathEntry
 {
@@ -24,14 +25,14 @@ public final class TypePathEntry
 
 	@Override public String toString() { return "pathKind = " + pathKind + ", argumentIndex = " + argumentIndex; }
 
-	public void intern( Interner interner )
+	@SuppressWarnings( "MethodMayBeStatic" ) public void intern( Interner interner )
 	{
-		/* nothing to do */
+		Kit.get( interner ); /* nothing to do */
 	}
 
-	public void write( ConstantWriter constantWriter )
+	public void write( BufferWriter bufferWriter )
 	{
-		constantWriter.writeUnsignedByte( pathKind );
-		constantWriter.writeUnsignedByte( argumentIndex );
+		bufferWriter.writeUnsignedByte( pathKind );
+		bufferWriter.writeUnsignedByte( argumentIndex );
 	}
 }
