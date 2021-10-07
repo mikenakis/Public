@@ -6,7 +6,6 @@ import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.reading.CodeAttributeReader;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
-import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class ConditionalBranchInstruction extends Instruction
@@ -69,7 +68,7 @@ public final class ConditionalBranchInstruction extends Instruction
 	@Override public void write( InstructionWriter instructionWriter )
 	{
 		int targetInstructionOffset = instructionWriter.getOffset( this, getTargetInstruction() );
-		if( Kit.get( true ) || Helpers.isSignedShort( targetInstructionOffset ) ) //TODO
+		if( Helpers.isSignedShort( targetInstructionOffset ) )
 		{
 			instructionWriter.writeUnsignedByte( opCode );
 			instructionWriter.writeSignedShort( targetInstructionOffset );

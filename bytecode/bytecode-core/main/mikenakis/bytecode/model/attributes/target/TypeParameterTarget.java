@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class TypeParameterTarget extends Target // "type_parameter_target" in jvms-4.7.20.1
@@ -23,6 +24,11 @@ public final class TypeParameterTarget extends Target // "type_parameter_target"
 
 	@Deprecated @Override public TypeParameterTarget asTypeParameterTarget() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "typeParameterIndex = " + typeParameterIndex; }
+
+	@Override public void intern( Interner interner )
+	{
+		/* nothing to do */
+	}
 
 	@Override public void write( ConstantWriter constantWriter )
 	{

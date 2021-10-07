@@ -272,12 +272,10 @@
 │         └─■ [1] LocalVariableTableAttribute; 2 items
 │           ├─■ [0] LocalVariableTableEntry index = 0, start = L61, end = @end, prototype = java.lang.String a
 │           └─■ [1] LocalVariableTableEntry index = 1, start = L61, end = @end, prototype = java.lang.String b
-└─■ attributeSet: 4 items
+└─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class2WithVariousInstructions.java"
   ├─■ [1] NestMembersAttribute; 1 items
   │ └─■ [0] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
-  ├─■ [2] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;Ljava/lang/String;)I" )
-  └─■ [3] InnerClassesAttribute; 2 items
+  └─■ [2] InnerClassesAttribute; 2 items
     ├─■ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

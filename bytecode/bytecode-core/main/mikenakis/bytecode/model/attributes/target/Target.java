@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.exceptions.InvalidTargetTagException;
 import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
@@ -78,5 +79,6 @@ public abstract class Target // "target_info" in jvms-4.7.20.1
 		this.tag = tag;
 	}
 
+	public abstract void intern( Interner interner );
 	public abstract void write( ConstantWriter constantWriter );
 }

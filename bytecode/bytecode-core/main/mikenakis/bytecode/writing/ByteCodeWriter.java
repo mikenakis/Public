@@ -13,8 +13,8 @@ public class ByteCodeWriter
 	public static byte[] write( ByteCodeType byteCodeType )
 	{
 		ByteCodeWriter byteCodeWriter = new ByteCodeWriter();
-		byteCodeType.intern( byteCodeWriter.constantPool );
 
+		/* first intern all bootstrap instructions to collect all bootstrap methods */
 		for( ByteCodeMethod method : byteCodeType.methods )
 		{
 			method.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_Code ) //
@@ -26,12 +26,17 @@ public class ByteCodeWriter
 							byteCodeWriter.bootstrapPool.intern( instruction.asInvokeDynamicInstruction().bootstrapMethod() );
 				} );
 		}
+
+		/* if any bootstrap methods were collected, add the bootstrap methods attribute */
 		if( !byteCodeWriter.bootstrapPool.bootstrapMethods().isEmpty() )
 		{
 			BootstrapMethodsAttribute bootstrapMethodsAttribute = BootstrapMethodsAttribute.of();
 			bootstrapMethodsAttribute.bootstrapMethods.addAll( byteCodeWriter.bootstrapPool.bootstrapMethods() ); // TODO perhaps replace the bootstrapPool with the bootstrapMethodsAttribute
 			byteCodeType.attributeSet.addOrReplaceAttribute( bootstrapMethodsAttribute );
 		}
+
+		/* now intern everything, including the attributes, including the newly added bootstrap methods attribute */
+		byteCodeType.intern( byteCodeWriter.constantPool );
 
 		//TODO: optimize the constant pool by moving the constants most frequently used by the IndirectLoadConstantInstruction to the first 256 entries!
 		byteCodeWriter.bufferWriter.writeInt( ByteCodeType.MAGIC );

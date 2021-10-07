@@ -9,7 +9,6 @@ import mikenakis.bytecode.reading.ByteCodeReader;
 import mikenakis.bytecode.writing.ConstantWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
-import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
@@ -89,8 +88,7 @@ public final class ByteCodeType
 			.ifPresent( bootstrapMethodsAttribute -> //
 			{
 				byteCodeReader.applyFixUps( bootstrapMethodsAttribute );
-				if( Kit.get( false ) ) //TODO: enable this once the troubleshooting is over.
-					attributes.removeAttribute( bootstrapMethodsAttribute );
+				attributes.removeAttribute( bootstrapMethodsAttribute );
 			} );
 		Collection<ClassConstant> extraClassReferences = byteCodeReader.getExtraClassReferences();
 		return of( version, modifiers, thisClassConstant, superClassConstant, interfaceClassConstants, fields, methods, //
@@ -138,7 +136,7 @@ public final class ByteCodeType
 	public final List<ByteCodeField> fields;
 	public final List<ByteCodeMethod> methods;
 	public final AttributeSet attributeSet;
-	public final Collection<ClassConstant> extraClassConstants;
+	private final Collection<ClassConstant> extraClassConstants;
 
 	private ByteCodeType( ByteCodeVersion version, FlagSet<Modifier> modifiers, ClassConstant classConstant, //
 		Optional<ClassConstant> superClassConstant, List<ClassConstant> interfaceConstants, List<ByteCodeField> fields, //

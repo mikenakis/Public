@@ -74,8 +74,8 @@ public final class TypeAnnotation // "type_annotation" in jvms-4.7.20
 
 	public void intern( Interner interner )
 	{
-		//internTarget( typeAnnotation.target() ); //TODO
-		//internTypePath( typeAnnotation.typePath() ); //TODO
+		target.intern( interner );
+		targetPath.intern( interner );
 		annotationTypeNameConstant.intern( interner );
 		for( AnnotationParameter annotationParameter : parameters )
 			annotationParameter.intern( interner );

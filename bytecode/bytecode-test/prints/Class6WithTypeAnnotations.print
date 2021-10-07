@@ -274,7 +274,7 @@
 │         └─■ parameters: 1 items
 │           └─■ [0] AnnotationParameter name = "value"
 │             └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 1 )
-└─■ attributeSet: 5 items
+└─■ attributeSet: 4 items
   ├─■ [0] SourceFileAttribute "Class6WithTypeAnnotations.java"
   ├─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
   │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1; 1 parameters
@@ -284,7 +284,5 @@
   │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1; 1 parameters
   │   └─■ [0] AnnotationParameter name = "value"
   │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 6 )
-  ├─■ [3] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "a=\x01, b=\x01, c=\x01" )
-  └─■ [4] InnerClassesAttribute; 1 items
+  └─■ [3] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -2,6 +2,7 @@ package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.kit.BufferReader;
 import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
@@ -14,14 +15,8 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 		int entryCount = bufferReader.readUnsignedShort();
 		assert entryCount > 0;
 		List<LocalVariableTargetEntry> entries = new ArrayList<>( entryCount );
-		for( int j = 0; j < entryCount; j++ )
-		{
-			int startPc = bufferReader.readUnsignedShort();
-			int length = bufferReader.readUnsignedShort();
-			int index = bufferReader.readUnsignedShort();
-			LocalVariableTargetEntry entry = new LocalVariableTargetEntry( startPc, length, index );
-			entries.add( entry );
-		}
+		for( int i = 0; i < entryCount; i++ )
+			entries.add( LocalVariableTargetEntry.read( bufferReader ) );
 		return new LocalVariableTarget( targetTag, entries );
 	}
 
@@ -36,6 +31,12 @@ public final class LocalVariableTarget extends Target // "localvar_target" in jv
 
 	@Deprecated @Override public LocalVariableTarget asLocalVariableTarget() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return entries.size() + " entries"; }
+
+	@Override public void intern( Interner interner )
+	{
+		for( LocalVariableTargetEntry entry : entries )
+			entry.intern( interner );
+	}
 
 	@Override public void write( ConstantWriter constantWriter )
 	{

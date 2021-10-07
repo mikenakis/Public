@@ -1,6 +1,7 @@
 package mikenakis.bytecode.model.attributes.target;
 
 import mikenakis.bytecode.writing.ConstantWriter;
+import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class EmptyTarget extends Target // "empty_target" in jvms-4.7.20.1
@@ -20,6 +21,11 @@ public final class EmptyTarget extends Target // "empty_target" in jvms-4.7.20.1
 
 	@Deprecated @Override public EmptyTarget asEmptyTarget() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "(empty)"; }
+
+	@Override public void intern( Interner interner )
+	{
+		/* nothing to do */
+	}
 
 	@Override public void write( ConstantWriter constantWriter )
 	{

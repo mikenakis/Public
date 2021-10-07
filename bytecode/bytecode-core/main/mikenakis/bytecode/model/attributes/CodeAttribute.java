@@ -67,10 +67,7 @@ public final class CodeAttribute extends KnownAttribute
 		int count = codeAttributeReader.readUnsignedShort();
 		List<ExceptionInfo> exceptionInfos = new ArrayList<>( count );
 		for( int i = 0; i < count; i++ )
-		{
-			ExceptionInfo exceptionInfo = ExceptionInfo.read( codeAttributeReader );
-			exceptionInfos.add( exceptionInfo );
-		}
+			exceptionInfos.add( ExceptionInfo.read( codeAttributeReader ) );
 		AttributeSet attributes = AttributeSet.read( codeAttributeReader );
 		return of( maxStack, maxLocals, instructions, exceptionInfos, attributes );
 	}

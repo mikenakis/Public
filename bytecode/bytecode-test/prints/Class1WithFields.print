@@ -176,9 +176,7 @@
 │         │ └─■ [0] LineNumberTableEntry lineNumber = 42, start = L42
 │         └─■ [1] LocalVariableTableAttribute; 1 items
 │           └─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = mikenakis.bytecode.test.model.Class1WithFields this
-└─■ attributeSet: 3 items
+└─■ attributeSet: 2 items
   ├─■ [0] SourceFileAttribute "Class1WithFields.java"
-  ├─■ [1] BootstrapMethodsAttribute; 1 items
-  │ └─■ [0] BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "\x01 \x01" )
-  └─■ [2] InnerClassesAttribute; 1 items
+  └─■ [1] InnerClassesAttribute; 1 items
     └─■ [0] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup
