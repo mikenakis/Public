@@ -12,6 +12,7 @@ import mikenakis.bytecode.writing.Interner;
 import mikenakis.bytecode.writing.WritingBootstrapPool;
 import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;

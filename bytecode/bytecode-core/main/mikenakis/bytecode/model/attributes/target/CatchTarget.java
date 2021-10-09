@@ -36,11 +36,6 @@ public final class CatchTarget extends Target // "catch_target" in jvms-4.7.20.1
 		/* nothing to do */
 	}
 
-	@Override public void intern( Interner interner )
-	{
-		/* nothing to do */
-	}
-
 	@Override public void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap )
 	{
 		bufferWriter.writeUnsignedShort( exceptionTableIndex );
