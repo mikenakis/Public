@@ -23,15 +23,17 @@ There are no benefits other than that the interface seems to me to be more simpl
 
 For example:
 
-- *mikenakis-bytecode* enables you to work with the contents of an individual class-file, but it is not concerned with relationships between class files. Referenced external types (e.g. the supertype, implemented interfaces, etc.) are simply identified by "descriptors" that encapsulate fully qualified type name strings. The framework does not offer any kind of abstraction for groups or hierarchies of classes, because that would have greatly increased not only the complexity of the implementation of the framework, but also the complexity of its interface: there would be a lot that you would have to learn before you could start using it.
+- *mikenakis-bytecode* enables you to work with the contents of an individual class-file, but it is not concerned with relationships between class files. Referenced external types (e.g. the supertype, implemented interfaces, etc.) are identified by descriptor objects that encapsulate fully qualified type name strings. The framework does not offer any kind of abstraction for groups or hierarchies of classes, because that would have greatly increased not only the complexity of the implementation of the framework, but also the complexity of its interface: there would be a lot that you would have to learn before you could start using it.
 
 - *mikenakis-bytecode* spares you from ever having to deal with utterly inelegant descriptor strings like `"()V"` and `"[Ljava.lang.String;"`. It does of course use them under the hood, but its interface does not even hint at them. (It does not allow you to use them if you wanted to; seriously, stop using that junk.) Instead, *mikenakis-bytecode* offers a hierarchy of `TypeDescriptor` classes that fully encapsulate these descriptor strings, so that as a programmer, you are manipulating objects, not strings. You can create a type descriptor like this: `TypeDescriptor typeDescriptor = TypeDescriptor.of( ArrayList.class );` or `TypeDescriptor typeDescriptor = TypeDescriptor.of( "java.lang.String[]" );` - note that even when you create a descriptor from a string, the string contains a normal fully-qualified java type name, not some lame JVM-internal descriptor string. There are similar descriptors for fields and methods. 
 
 - *mikenakis-bytecode* facilitates easy generation of valid class files by completely shielding the programmer from having to deal with bytecode instruction offsets. To achieve this, *mikenakis-bytecode* makes exclusive use of references to actual instructions instead. This means that you can simply code a jump to a certain instruction, and *mikenakis-bytecode* will determine whether a 'short' or a 'long' form of the jump instruction should be used. (It does several passes over the instruction sequence of a method to ensure maximum savings.)  If necessary, the framework will even replace a short conditional jump with an inverted conditional short jump around an unconditional long jump.
                                                                 
 - *mikenakis-bytecode* makes it easier to deal with bytecode by completely shielding the programmer from having to deal with the constant pool and with cumbersome indexes into the constant pool. 
-  - When parsing a byte array, the framework converts all constant pool indexes into actual references to constants, and discards the entire constant pool immediately after parsing is complete.  
+  - When parsing a byte array, the framework converts all constant pool indexes into references to objects representing the constants, and discards the entire constant pool immediately after parsing is complete.  
   - When generating a byte array, the framework re-creates the constant pool from scratch, making sure to merge duplicates as necessary.
+
+- *mikenakis-bytecode* makes it even easier to deal with bytecode by completely shielding the programmer from having to deal with what the Java Virtual Machine Specification calls "constants". You just work with descriptor objects and with normal Java types. For example, if you want to load the constant "Hello, World"! you just code `codeAttribute.LDC( "Hello, World!" );`. Internally, the framework will create a "CONSTANT_Utf8_info" constant to hold the string, then it will create a "CONSTANT_String_info" constant to hold the mutf8 constant, and then it will create an LDC instruction with a reference to the string constant.    
 
 - *mikenakis-bytecode* reduces cognitive overhead by offering a few slight simplifications of the JVM instruction set. For example:
   - The JVM offers a cornucopia of instructions for loading a constant: `ICONST_M1`, `ICONST_0`, `ICONST_1`, `ICONST_2`, `ICONST_3`, `ICONST_4`, `ICONST_5`, `FCONST_0`, `FCONST_1`, `FCONST_2`, `LCONST_0`, `LCONST_1`, `DCONST_0`, `DCONST_1`, `BIPUSH`, `SIPUSH`, `LDC`, `LDC_W`, and `LDC2_W`. All these instructions achieve the exact same thing: they push a single constant into the JVM stack. Their sole purpose of existence is to make bytecode more compact. So, *mikenakis-bytecode* simplifies things by replacing this entire rigmarole with just `LDC`.
@@ -45,17 +47,17 @@ For example:
 The project is still in an immature state of development, so the following must be noted:
 
 1. Since I don't want to be dealing with versioning just yet, the artifacts are all snapshots. This means that every time you get the artifacts, you get the latest version of whatever it is that I am working on.
-2. My style of development involves extensive refactoring all the time, so with each commit everything changes. And since the artifacts are snapshots, this means that if you start coding against my stuff, your code ***will*** stop compiling each time you re-obtain my artifacts.
-3. Signatures are not supported yet. Strictly speaking, signature support is not necessary for a bytecode framework due to type erasure, but it is still nice to have, and it should be noted that it is currently missing.    
+2. My style of development involves extensive refactoring all the time, so with each commit everything changes. And since the artifacts are snapshots, this means that if you start coding against my stuff, your code ***will*** fail to compile each time you re-obtain my artifacts.
+3. Signatures are not supported yet. Luckily, type erasure makes it (strictly speaking) unnecessary for a bytecode framework to support generic type information, but it is still nice to have, and it should be noted that it is currently missing.    
 4. The highest fully supported java version is 8. In order to support Java 16 I still have to add handling for the following:
    1. Records.
    2. Modules.
-5. Even within the subset of functionality of the JVM that I am in theory currently supporting, there are a few edge/fringe/rarely stumbled upon things that are missing. Since I am constantly working on them, their list is changing, so search for "TODO" in the code to find them.   
+5. Even within the subset of functionality of the JVM that I am in theory currently supporting, there are a few edge / minor / rarely-stumbled-upon things that are lacking. For example, `throws_target` still contains an index into the exception table instead of a reference to the actual exception type descriptor; this means that you have to be careful to code the right index; it is not a big deal, and you are unlikely to even encounter the scenario, but it is worth noting. Since I am constantly working on these minor issues, their list is changing, so search for "TODO" in the code to find them.   
 6. There will almost certainly be bugs. 
 
-## How does working with mikenakis-bytecode look like?
+## How does working with *mikenakis-bytecode* look like?
 
-If you want to get an idea of how it looks like to be working with mikenakis-bytecode, you can check out the tests, and also see how it is used in these projects:
+If you want to get an idea of how it looks like to be working with *mikenakis-bytecode*, you can check out the tests, and also see how it is used in these projects:
 
 For dumping the contents of class files in `mikenakis-classdump`
 (https://github.com/mikenakis/Public/tree/master/classdump)
