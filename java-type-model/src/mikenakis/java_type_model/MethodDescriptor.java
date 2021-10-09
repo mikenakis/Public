@@ -3,6 +3,7 @@ package mikenakis.java_type_model;
 import mikenakis.kit.Kit;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,9 +19,9 @@ public final class MethodDescriptor
 		return of( returnType, List.of( parameterTypes ) );
 	}
 
-	public static MethodDescriptor of( Class<?> returnType, Iterable<Class<?>> parameterTypes )
+	public static MethodDescriptor of( Class<?> returnType, Collection<Class<?>> parameterTypes )
 	{
-		return of( TypeDescriptor.of( returnType ), Kit.collection.stream.fromIterable( parameterTypes ).map( c -> TypeDescriptor.of( c ) ).toList() );
+		return of( TypeDescriptor.of( returnType ), parameterTypes.stream().map( c -> TypeDescriptor.of( c ) ).toList() );
 	}
 
 	public static MethodDescriptor of( TypeDescriptor returnTypeDescriptor, TypeDescriptor... parameterTypeDescriptors )
@@ -72,6 +73,7 @@ public final class MethodDescriptor
 		}
 	}
 
+	public int parameterCount() { return parameterTypeDescriptors.size(); }
 	@Deprecated @Override public boolean equals( Object other ) { return other instanceof MethodDescriptor kin && equals( kin ); }
 	public boolean equals( MethodDescriptor other ) { return returnTypeDescriptor.equals( other.returnTypeDescriptor ) && parameterTypeDescriptors.equals( other.parameterTypeDescriptors ); }
 	@Override public int hashCode() { return Objects.hash( returnTypeDescriptor, parameterTypeDescriptors ); }

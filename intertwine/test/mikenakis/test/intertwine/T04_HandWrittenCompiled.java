@@ -5,7 +5,7 @@ import mikenakis.test.intertwine.handwritten_compiled.HandWrittenCompiledIntertw
 
 public final class T04_HandWrittenCompiled extends Client
 {
-	private final IntertwineFactory intertwineFactory = HandWrittenCompiledIntertwineFactory.instance; //new CachingIntertwineFactory( CompWrittenIntertwineFactory.instance );
+	private final IntertwineFactory intertwineFactory = HandWrittenCompiledIntertwineFactory.instance;
 
 	public T04_HandWrittenCompiled()
 	{

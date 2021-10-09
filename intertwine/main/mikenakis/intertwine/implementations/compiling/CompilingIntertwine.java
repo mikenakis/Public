@@ -4,11 +4,16 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
+import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
+import mikenakis.bytecode.model.attributes.code.Instruction;
+import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
+import mikenakis.bytecode.model.attributes.stackmap.verification.ObjectVerificationType;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
+import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
@@ -17,9 +22,15 @@ import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
+import mikenakis.kit.functional.Function1;
+import mikenakis.kit.functional.Function2;
+import mikenakis.kit.logging.Log;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -35,50 +46,56 @@ import java.util.stream.Stream;
  */
 class CompilingIntertwine<T> implements Intertwine<T>
 {
-	private static final FieldReference arrayOfZeroObjectsFieldReference = FieldReference.of( TypeDescriptor.of( Kit.class ), FieldPrototype.of( "ARRAY_OF_ZERO_OBJECTS", Object[].class ) );
-
-	private static final MethodReference anyCallMethodReference = MethodReference.of( MethodReferenceKind.Interface, TypeDescriptor.of( AnyCall.class ), //
-		MethodPrototype.of( "anyCall", MethodDescriptor.of( MethodKey.class, Object[].class ) ) );
-
-	private static final MethodReference boxIntMethodReference = MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Integer.class ), //
-		MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) );
-
-	private final Class<? super T> interfaceType;
-	private final List<CompilingKey<T>> keys;
+	private final CompilingIntertwineFactory factory;
+	private final Class<? super T> interfaceType0;
+	private final ByteCodeType interfaceByteCodeType;
+	private final CompilingKey<T>[] keys;
 	private final Map<MethodPrototype,CompilingKey<T>> keysByPrototype;
-	private final Map<Method,CompilingKey<T>> keysByMethod;
 
-	CompilingIntertwine( Class<? super T> interfaceType )
+	CompilingIntertwine( CompilingIntertwineFactory factory, Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
 		if( !Modifier.isPublic( interfaceType.getModifiers() ) )
 			throw new RuntimeException( new IllegalAccessException() );
-		this.interfaceType = interfaceType;
+		this.factory = factory;
+		interfaceType0 = interfaceType;
+		interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		Method[] methods = interfaceType.getMethods();
-		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( methods[i], i ) ).collect( Collectors.toList() );
-		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
-		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
+		keys = buildArrayOfKey( methods );
+		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
+	}
+
+	private CompilingKey<T>[] buildArrayOfKey( Method[] methods )
+	{
+		// IntellijIdea blooper: IntellijIdea thinks that the following code only needs the "unchecked" suppression. Javac thinks differently.
+		// In order to keep Javac happy, the raw-types suppression must be added,
+		// but then IntellijIdea thinks that raw-types is redundant and complains about it,
+		// so we need to also suppress the "redundant suppression" inspection of IntellijIdea.
+		//noinspection RedundantSuppression
+		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingKey<T>[] result = IntStream.range( 0, methods.length ) //
+			.mapToObj( i -> createKey( methods[i], i ) ) //
+			.toArray( n -> new CompilingKey[n] );
+		return result;
 	}
 
 	private CompilingKey<T> createKey( Method method, int index )
 	{
-		MethodPrototype methodPrototype = MethodPrototype.of( method );
-		return new CompilingKey<>( this, method, methodPrototype, index );
+		return new CompilingKey<>( this, MethodPrototype.of( method ), index );
 	}
 
 	@Override public Class<? super T> interfaceType()
 	{
-		return interfaceType;
+		return interfaceType0;
 	}
 
 	@Override public Collection<MethodKey<T>> keys()
 	{
-		return Kit.collection.downCast( keys );
+		return List.of( keys );
 	}
 
 	@Override public MethodKey<T> keyByIndex( int index )
 	{
-		return keys.get( index );
+		return keys[index];
 	}
 
 	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )
@@ -86,303 +103,325 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
+	@Override public T newEntwiner( AnyCall<T> exitPoint )
+	{
+		Class<T> entwinerClass = createEntwinerClass();
+		Constructor<T> constructor = Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, AnyCall.class ) );
+		return Kit.unchecked( () -> constructor.newInstance( keys, exitPoint ) );
+	}
+
+	@Override public AnyCall<T> newUntwiner( T exitPoint )
+	{
+		Class<T> untwinerClass = createUntwinerClass();
+		Constructor<T> constructor = Kit.unchecked( () -> untwinerClass.getDeclaredConstructor( interfaceType0 ) );
+		@SuppressWarnings( "unchecked" ) AnyCall<T> result = (AnyCall<T>)Kit.unchecked( () -> constructor.newInstance( exitPoint ) );
+		return result;
+	}
+
+	private Class<T> createEntwinerClass()
+	{
+		ByteCodeType byteCodeType = ByteCodeType.of( //
+			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
+			TerminalTypeDescriptor.of( "Entwiner_" + identifierFromTypeName( interfaceType0 ) ), //
+			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
+			List.of( interfaceByteCodeType.typeDescriptor() ) );
+		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
+			FieldPrototype.of( "keys", FieldDescriptor.of( CompilingKey[].class ) ) );
+		byteCodeType.fields.add( keysField );
+		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
+			FieldPrototype.of( "exitPoint", FieldDescriptor.of( AnyCall.class ) ) );
+		byteCodeType.fields.add( exitPointField );
+		addEntwinerInitMethod( byteCodeType, keysField, exitPointField );
+
+		List<ByteCodeMethod> methods = interfaceByteCodeType.methods;
+		for( int methodIndex = 0; methodIndex < methods.size(); methodIndex++ )
+		{
+			ByteCodeMethod method = methods.get( methodIndex );
+			if( method.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
+				continue;
+			if( !method.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
+				continue;
+			assert method.modifiers.contains( ByteCodeMethod.Modifier.Public );
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Final );
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Native );
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
+			addEntwinerInterfaceMethod( byteCodeType, keysField, exitPointField, methodIndex, method.prototype() );
+		}
+
+		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
+		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
+
+		return factory.byteCodeClassLoader.load( byteCodeType );
+	}
+
+	private static void addEntwinerInterfaceMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField, int methodIndex, //
+		MethodPrototype methodPrototype )
+	{
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), methodPrototype );
+		byteCodeType.methods.add( byteCodeMethod );
+		CodeAttribute code = CodeAttribute.of( 6, 3 );
+		byteCodeMethod.attributeSet.addAttribute( code );
+
+		code.ALOAD( 0 ); //push this
+		code.GETFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) ); //pop this, push this->exitPoint
+
+		code.ALOAD( 0 ); //push this
+		code.GETFIELD( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) ); //pop this, push keys
+		code.LDC( methodIndex ); //push methodIndex
+		code.AALOAD(); //pop methodIndex, pop keys, push keys[methodIndex]
+
+		code.LDC( methodPrototype.parameterCount() ); //push method-parameter-count
+		code.ANEWARRAY( TerminalTypeDescriptor.of( Object.class ) ); //pop method-parameter-count, push new Object[]
+
+		for( int parameterIndex = 0; parameterIndex < methodPrototype.parameterCount(); parameterIndex++ )
+		{
+			TypeDescriptor parameterTypeDescriptor = methodPrototype.descriptor.parameterTypeDescriptors.get( parameterIndex );
+			code.DUP(); //pop Object[], push Object[], Object[]
+			code.LDC( parameterIndex ); //push parameterIndex
+			if( parameterTypeDescriptor.isPrimitive() )
+			{
+				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, parameterTypeDescriptor );
+				primitiveTypeInfo.loadInstructionFactory.invoke( code, 1 + parameterIndex );
+				code.INVOKESTATIC( primitiveTypeInfo.boxingMethod );
+			}
+			else
+				code.ALOAD( 1 + parameterIndex ); //push parameter (from parameters[parameterIndex])
+			code.AASTORE(); //pop parameter, pop parameterIndex, pop Object[], set Object[parameterIndex] = parameter
+		}
+
+		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, //
+			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
+
+		TypeDescriptor returnTypeDescriptor = methodPrototype.descriptor.returnTypeDescriptor;
+		if( returnTypeDescriptor.equals( TypeDescriptor.of( void.class ) ) )
+		{
+			code.POP();
+			code.RETURN();
+		}
+		else if( returnTypeDescriptor.isPrimitive() )
+		{
+			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, returnTypeDescriptor );
+			code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
+			primitiveTypeInfo.returnInstructionFactory.invoke( code );
+		}
+		else
+		{
+			code.CHECKCAST( methodPrototype.descriptor.returnTypeDescriptor );
+			code.ARETURN();
+		}
+	}
+
+	private static void addEntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField )
+	{
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
+			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
+			MethodPrototype.of( "<init>", //
+				MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, exitPointField.descriptor().typeDescriptor ) ) );
+		byteCodeType.methods.add( byteCodeMethod );
+		CodeAttribute code = CodeAttribute.of( 2, 3 );
+		byteCodeMethod.attributeSet.addAttribute( code );
+		code.ALOAD( 0 );
+		code.INVOKESPECIAL( MethodReference.of( MethodReferenceKind.Plain, Object.class, //
+			MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
+		code.ALOAD( 0 );
+		code.ALOAD( 1 );
+		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
+		code.ALOAD( 0 );
+		code.ALOAD( 2 );
+		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
+		code.RETURN();
+	}
+
+	private Class<T> createUntwinerClass()
+	{
+		ByteCodeType byteCodeType = ByteCodeType.of( //
+			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
+			TerminalTypeDescriptor.of( "Untwiner_" + identifierFromTypeName( interfaceType0 ) ), //
+			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
+			List.of( TerminalTypeDescriptor.of( AnyCall.class ) ) );
+		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
+			FieldPrototype.of( "exitPoint", FieldDescriptor.of( interfaceByteCodeType.typeDescriptor() ) ) );
+		byteCodeType.fields.add( exitPointField );
+		addUntwinerInitMethod( byteCodeType, interfaceByteCodeType, exitPointField );
+		addUntwinerAnyCallMethod( byteCodeType, interfaceByteCodeType, exitPointField );
+
+		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
+		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
+
+		return factory.byteCodeClassLoader.load( byteCodeType );
+	}
+
+	private static void addUntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )
+	{
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
+			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
+			MethodPrototype.of( "<init>", //
+				MethodDescriptor.of( TypeDescriptor.of( void.class ), interfaceByteCodeType.typeDescriptor() ) ) );
+		byteCodeType.methods.add( byteCodeMethod );
+		CodeAttribute code = CodeAttribute.of( 2, 2 );
+		byteCodeMethod.attributeSet.addAttribute( code );
+		code.ALOAD( 0 );
+		code.INVOKESPECIAL( MethodReference.of( MethodReferenceKind.Plain, Object.class, //
+			MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
+		code.ALOAD( 0 );
+		code.ALOAD( 1 );
+		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
+		code.RETURN();
+	}
+
+	private static void addUntwinerAnyCallMethod( ByteCodeType byteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )
+	{
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
+			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
+			MethodPrototype.of( "anyCall", //
+				MethodDescriptor.of( TypeDescriptor.of( Object.class ), TypeDescriptor.of( MethodKey.class ), TypeDescriptor.of( Object[].class ) ) ) );
+		byteCodeType.methods.add( byteCodeMethod );
+		CodeAttribute code = CodeAttribute.of( 4, 4 );
+		byteCodeMethod.attributeSet.addAttribute( code );
+
+		StackMapTableAttribute stackMapTableAttribute = StackMapTableAttribute.of();
+		code.attributeSet.addAttribute( stackMapTableAttribute );
+
+		code.ALOAD( 1 );
+		code.CHECKCAST( TypeDescriptor.of( CompilingKey.class ) );
+		code.ASTORE( 3 );
+		code.ALOAD( 3 );
+		code.GETFIELD( FieldReference.of( CompilingKey.class, FieldPrototype.of( "index", int.class ) ) );
+		TableSwitchInstruction tableSwitchInstruction = code.TABLESWITCH( 0 );
+
+		for( int methodIndex = 0; methodIndex < interfaceByteCodeType.methods.size(); methodIndex++ )
+		{
+			ByteCodeMethod method = interfaceByteCodeType.methods.get( methodIndex );
+			if( method.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
+				continue;
+			if( !method.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
+				continue;
+			assert method.modifiers.contains( ByteCodeMethod.Modifier.Public );
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Final );
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Native );
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
+			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
+			Instruction instruction = addUntwinerSwitchCase( byteCodeType, code, interfaceByteCodeType, method );
+			tableSwitchInstruction.targetInstructions.add( instruction );
+
+			if( methodIndex == 0 )
+				stackMapTableAttribute.addAppendFrame( instruction, ObjectVerificationType.of( TypeDescriptor.of( CompilingKey.class ) ) );
+			else
+				stackMapTableAttribute.addSameFrame( instruction );
+		}
+
+		Instruction defaultInstruction = code.NEW( TypeDescriptor.of( AssertionError.class ) );
+		tableSwitchInstruction.setDefaultInstruction( defaultInstruction );
+		stackMapTableAttribute.addSameFrame( defaultInstruction );
+		code.DUP();
+		code.ALOAD( 3 );
+		code.INVOKESPECIAL( MethodReference.of( MethodReferenceKind.Plain, AssertionError.class, MethodPrototype.of( "<init>", MethodDescriptor.of( void.class, Object.class ) ) ) );
+		code.ATHROW();
+	}
+
+	private static Instruction addUntwinerSwitchCase( ByteCodeType byteCodeType, CodeAttribute code, ByteCodeType interfaceByteCodeType, ByteCodeMethod method )
+	{
+		Instruction firstInstruction = code.ALOAD( 0 );
+		code.GETFIELD( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", FieldDescriptor.of( interfaceByteCodeType.typeDescriptor() ) ) ) );
+		List<TypeDescriptor> parameterTypes = method.prototype().descriptor.parameterTypeDescriptors;
+		for( int parameterIndex = 0; parameterIndex < parameterTypes.size(); parameterIndex++ )
+		{
+			TypeDescriptor parameterType = parameterTypes.get( parameterIndex );
+			code.ALOAD( 2 );
+			code.LDC( parameterIndex );
+			code.AALOAD();
+			if( parameterType.isPrimitive() )
+			{
+				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, parameterType );
+				code.CHECKCAST( TypeDescriptor.of( primitiveTypeInfo.wrapperType ) );
+				code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
+			}
+			else
+			{
+				code.CHECKCAST( parameterType );
+			}
+		}
+		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, interfaceByteCodeType.typeDescriptor(), method.prototype() ), 1 + parameterTypes.size() );
+		TypeDescriptor returnType = method.prototype().descriptor.returnTypeDescriptor;
+		if( returnType == TypeDescriptor.of( void.class ) )
+		{
+			code.ACONST_NULL();
+			code.ARETURN();
+		}
+		else if( returnType.isPrimitive() )
+		{
+			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, returnType );
+			code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
+			primitiveTypeInfo.returnInstructionFactory.invoke( code );
+		}
+		else
+		{
+			code.ARETURN();
+		}
+		return firstInstruction;
+	}
+
+	private static void saveBytes( Path path, byte[] bytes )
+	{
+		Kit.unchecked( () -> Files.createDirectories( path.getParent() ) );
+		Kit.unchecked( () -> Files.write( path, bytes ) );
+		Log.debug( "saved bytes: " + path );
+	}
+
 	private static String identifierFromTypeName( Class<?> type )
 	{
 		return type.getName().replace( ".", "_" ).replace( "$", "_" );
 	}
 
-	/*
-		mikenakis.classdump.ClassDumpMain.classDump(ClassDumpMain.java:151) | DEBUG | 1 | 14:37:49.330 | main | Dumping C:\Users\MBV\Out\mikenakis\intertwine\test-classes\mikenakis\test\intertwine\handwritten\HandwrittenEntwiner.class (Optional[C:\Users\MBV\Personal\IdeaProjects\mikenakis-personal3\Public\intertwine\test\mikenakis\test\intertwine\handwritten])
-		■ ByteCodeType version = 60.0, accessFlags = [final, super], this = mikenakis.test.intertwine.handwritten.HandwrittenEntwiner, super = java.lang.Object
-		├─■ interfaces: 1 items
-		│ └─■ [0] mikenakis.test.intertwine.rig.FooInterface
-		├─■ extraTypes: 0 items
-		├─■ fields: 2 items
-		│ ├─■ [0] ByteCodeField accessFlags = [private, final], prototype = mikenakis.test.intertwine.handwritten.HandwrittenKey[] keys
-		│ │ └─■ attributeSet: 0 items
-		│ └─■ [1] ByteCodeField accessFlags = [private, final], prototype = mikenakis.intertwine.AnyCall exitPoint
-		│   └─■ attributeSet: 1 items
-		│     └─■ [0] SignatureAttribute Lmikenakis/intertwine/AnyCall<Lmikenakis/test/intertwine/rig/FooInterface;>;
-		├─■ methods: 4 items
-		*/
-	@Override public T newEntwiner( AnyCall<T> exitPoint )
-	{
-		TypeDescriptor arrayOfCompilingKeyTypeDescriptor = TypeDescriptor.of( CompilingKey[].class );
-		TypeDescriptor anyCallTypeDescriptor = TypeDescriptor.of( AnyCall.class );
-		ByteCodeType byteCodeType = ByteCodeType.of( ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "Entwiner_" + identifierFromTypeName( interfaceType ) ), //
-			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
-			List.of( TerminalTypeDescriptor.of( interfaceType ) ) );
-		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "keys", FieldDescriptor.of( arrayOfCompilingKeyTypeDescriptor ) ) );
-		byteCodeType.fields.add( keysField );
-		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "exitPoint", FieldDescriptor.of( anyCallTypeDescriptor ) ) );
-		byteCodeType.fields.add( exitPointField );
-		addInitMethod( byteCodeType, keysField, exitPointField );
+	private static final MethodReference integerBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) );
+	private static final MethodReference integerUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "intValue", MethodDescriptor.of( int.class ) ) );
 
-		for( Method method : interfaceType.getMethods() )
+	private static final MethodReference floatBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Float.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Float.class, float.class ) ) );
+	private static final MethodReference floatUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Float.class, MethodPrototype.of( "floatValue", MethodDescriptor.of( float.class ) ) );
+
+	private static final MethodReference longBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Long.class, long.class ) ) );
+	private static final MethodReference longUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "longValue", MethodDescriptor.of( long.class ) ) );
+
+	private static final MethodReference doubleBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Double.class, double.class ) ) );
+	private static final MethodReference doubleUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "doubleValue", MethodDescriptor.of( double.class ) ) );
+
+	private static final class PrimitiveTypeInfo
+	{
+		final Class<?> primitiveType;
+		final Class<?> wrapperType;
+		final MethodReference boxingMethod;
+		final MethodReference unboxingMethod;
+		final Function2<Instruction,CodeAttribute,Integer> loadInstructionFactory;
+		final Function1<Instruction,CodeAttribute> returnInstructionFactory;
+
+		PrimitiveTypeInfo( Class<?> primitiveType, Class<?> wrapperType, MethodReference boxingMethod, MethodReference unboxingMethod, //
+			Function2<Instruction,CodeAttribute,Integer> loadInstructionFactory, //
+			Function1<Instruction,CodeAttribute> returnInstructionFactory )
 		{
-			int modifiers = method.getModifiers();
-			if( java.lang.reflect.Modifier.isStatic( modifiers ) )
-				continue;
-			if( !java.lang.reflect.Modifier.isAbstract( modifiers ) )
-				continue;
-			assert java.lang.reflect.Modifier.isPublic( modifiers );
-			assert !java.lang.reflect.Modifier.isFinal( modifiers );
-			assert !java.lang.reflect.Modifier.isNative( modifiers );
-			assert !java.lang.reflect.Modifier.isSynchronized( modifiers ); // ?
-			assert !method.isSynthetic(); // ?
-			assert !method.isDefault(); // ?
-			assert !method.isBridge(); // ?
-			if( Kit.get( false ) )
-			{
-				addInterfaceMethod0( byteCodeType, keysField, exitPointField, //
-					MethodPrototype.of( method.getName(), TypeDescriptor.of( method.getReturnType() ), //
-						Stream.of( method.getParameterTypes() ).map( c -> TypeDescriptor.of( c ) ).toList() ) );
-			}
+			this.primitiveType = primitiveType;
+			this.wrapperType = wrapperType;
+			this.boxingMethod = boxingMethod;
+			this.unboxingMethod = unboxingMethod;
+			this.loadInstructionFactory = loadInstructionFactory;
+			this.returnInstructionFactory = returnInstructionFactory;
 		}
-		addInterfaceMethod0( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "voidMethod", TypeDescriptor.of( void.class ), //
-				List.of() ) );
-		addInterfaceMethod1( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "getAlpha", MethodDescriptor.of( TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ), TypeDescriptor.of( int.class ) ) ) );
-		addInterfaceMethod2( byteCodeType, keysField, exitPointField, //
-			MethodPrototype.of( "setAlpha", MethodDescriptor.of( TypeDescriptor.of( void.class ), TypeDescriptor.of( int.class ), TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) ) ) );
-
-		return new CompilingEntwiner<>( this, exitPoint ).entryPoint;
 	}
 
-	/*
-		│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = void voidMethod()
-		│ │ └─■ attributes: 1 items
-		│ │   └─■ [0] CodeAttribute maxStack = 3, maxLocals = 1
-		│ │     ├─■ instructions: 10 entries
-		│ │     │ ├─■ L21: // exitPoint.anyCall( keys[0], Kit.ARRAY_OF_ZERO_OBJECTS );
-		│ │     │ ├─■         ALOAD 0
-		│ │     │ ├─■         GETFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
-		│ │     │ ├─■         ALOAD 0
-		│ │     │ ├─■         GETFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
-		│ │     │ ├─■         LDC 0
-		│ │     │ ├─■         AALOAD
-		│ │     │ ├─■         GETSTATIC java.lang.Object[] mikenakis.kit.Kit.ARRAY_OF_ZERO_OBJECTS
-		│ │     │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  java.lang.Object mikenakis.intertwine.AnyCall.anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
-		│ │     │ ├─■         POP
-		│ │     │ ├─■ L22: // }
-		│ │     │ └─■         RETURN
-		│ │     ├─■ exceptionInfos: 0 items
-		│ │     └─■ attributeSet: 2 items
-		│ │       ├─■ [0] LineNumberTableAttribute; 2 items
-		│ │       │ ├─■ [0] LineNumberTableEntry lineNumber = 21, start = L21
-		│ │       │ └─■ [1] LineNumberTableEntry lineNumber = 22, start = L22
-		│ │       └─■ [1] LocalVariableTableAttribute; 1 items
-		│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L21, end = @end, prototype = mikenakis.test.intertwine.handwritten.HandwrittenEntwiner this
-	*/
-	private static void addInterfaceMethod0( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField, MethodPrototype methodPrototype )
-	{
-		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), methodPrototype );
-		byteCodeType.methods.add( method );
-		CodeAttribute code = CodeAttribute.of( 2, 3 );
-		method.attributeSet.addAttribute( code );
-		code.addALoad( 0 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
-		code.addALoad( 0 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
-		code.addLdc( 0 );
-		code.addAALoad();
-		code.addGetStatic( arrayOfZeroObjectsFieldReference );
-		code.addInvokeInterface( anyCallMethodReference, 3 );
-		code.addPop();
-		code.addReturn();
-	}
+	private static final PrimitiveTypeInfo booleanPrimitiveTypeInfo = new PrimitiveTypeInfo( boolean.class, Boolean.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo bytePrimitiveTypeInfo = new PrimitiveTypeInfo( byte.class, Byte.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo charPrimitiveTypeInfo = new PrimitiveTypeInfo( char.class, Character.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo doublePrimitiveTypeInfo = new PrimitiveTypeInfo( double.class, Double.class, doubleBoxingMethod, doubleUnboxingMethod, CodeAttribute::DLOAD, CodeAttribute::DRETURN );
+	private static final PrimitiveTypeInfo floatPrimitiveTypeInfo = new PrimitiveTypeInfo( float.class, Float.class, floatBoxingMethod, floatUnboxingMethod, CodeAttribute::FLOAD, CodeAttribute::FRETURN );
+	private static final PrimitiveTypeInfo intPrimitiveTypeInfo = new PrimitiveTypeInfo( int.class, Integer.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo longPrimitiveTypeInfo = new PrimitiveTypeInfo( long.class, Long.class, longBoxingMethod, longUnboxingMethod, CodeAttribute::LLOAD, CodeAttribute::LRETURN );
+	private static final PrimitiveTypeInfo shortPrimitiveTypeInfo = new PrimitiveTypeInfo( short.class, Short.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
 
-	/*
-		│ ├─■ [2] ByteCodeMethod accessFlags = [public], prototype = mikenakis.test.intertwine.rig.Alpha getAlpha( int )
-		│ │ └─■ attributes: 2 items
-		│ │   ├─■ [0] CodeAttribute maxStack = 6, maxLocals = 2
-		│ │   │ ├─■ instructions: 16 entries
-		│ │   │ │ ├─■ L26: // return (Alpha)exitPoint.anyCall( keys[1], new Object[] { index } );
-		│ │   │ │ ├─■         ALOAD 0
-		│ │   │ │ ├─■         GETFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
-		│ │   │ │ ├─■         ALOAD 0
-		│ │   │ │ ├─■         GETFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
-		│ │   │ │ ├─■         LDC 1
-		│ │   │ │ ├─■         AALOAD
-		│ │   │ │ ├─■         LDC 1
-		│ │   │ │ ├─■         ANEWARRAY java.lang.Object
-		│ │   │ │ ├─■         DUP
-		│ │   │ │ ├─■         LDC 0
-		│ │   │ │ ├─■         ILOAD 1
-		│ │   │ │ ├─■         INVOKESTATIC kind = Plain, reference =  java.lang.Integer java.lang.Integer.valueOf( int )
-		│ │   │ │ ├─■         AASTORE
-		│ │   │ │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  java.lang.Object mikenakis.intertwine.AnyCall.anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
-		│ │   │ │ ├─■         CHECKCAST mikenakis.test.intertwine.rig.Alpha
-		│ │   │ │ └─■         ARETURN
-		│ │   │ ├─■ exceptionInfos: 0 items
-		│ │   │ └─■ attributeSet: 2 items
-		│ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
-		│ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 26, start = L26
-		│ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-		│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L26, end = @end, prototype = mikenakis.test.intertwine.handwritten.HandwrittenEntwiner this
-		│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L26, end = @end, prototype = int index
-		│ │   └─■ [1] MethodParametersAttribute; 1 items
-		│ │     └─■ [0] MethodParameter accessFlags = [], name = "index"
-	*/
-	private static void addInterfaceMethod1( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField, MethodPrototype methodPrototype )
-	{
-		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), methodPrototype );
-		byteCodeType.methods.add( method );
-		CodeAttribute code = CodeAttribute.of( 6, 2 );
-		method.attributeSet.addAttribute( code );
-		code.addALoad( 0 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
-		code.addALoad( 0 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
-		code.addLdc( 1 );
-		code.addAALoad();
-		code.addLdc( 1 );
-		code.addANewArray( TerminalTypeDescriptor.of( Object.class ) );
-		code.addDup();
-		code.addLdc( 0 );
-		code.addILoad( 1 );
-		code.addInvokeStatic( boxIntMethodReference );
-		code.addAAStore();
-		code.addInvokeInterface( anyCallMethodReference, 3 );
-		code.addCheckCast( TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) );
-		code.addReturn();
-	}
+	private static final List<PrimitiveTypeInfo> primitiveTypeInfos = List.of( booleanPrimitiveTypeInfo, bytePrimitiveTypeInfo, charPrimitiveTypeInfo, //
+		doublePrimitiveTypeInfo, floatPrimitiveTypeInfo, intPrimitiveTypeInfo, longPrimitiveTypeInfo, shortPrimitiveTypeInfo );
 
-	/*
-		│ └─■ [3] ByteCodeMethod accessFlags = [public], prototype = void setAlpha( int, mikenakis.test.intertwine.rig.Alpha )
-		│   └─■ attributes: 2 items
-		│     ├─■ [0] CodeAttribute maxStack = 6, maxLocals = 3
-		│     │ ├─■ instructions: 20 entries
-		│     │ │ ├─■ L31: // exitPoint.anyCall( keys[2], new Object[] { index, alpha } );
-		│     │ │ ├─■         ALOAD 0
-		│     │ │ ├─■         GETFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
-		│     │ │ ├─■         ALOAD 0
-		│     │ │ ├─■         GETFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
-		│     │ │ ├─■         LDC 2
-		│     │ │ ├─■         AALOAD
-		│     │ │ ├─■         LDC 2
-		│     │ │ ├─■         ANEWARRAY java.lang.Object
-		│     │ │ ├─■         DUP
-		│     │ │ ├─■         LDC 0
-		│     │ │ ├─■         ILOAD 1
-		│     │ │ ├─■         INVOKESTATIC kind = Plain, reference =  java.lang.Integer java.lang.Integer.valueOf( int )
-		│     │ │ ├─■         AASTORE
-		│     │ │ ├─■         DUP
-		│     │ │ ├─■         LDC 1
-		│     │ │ ├─■         ALOAD 2
-		│     │ │ ├─■         AASTORE
-		│     │ │ ├─■         INVOKEINTERFACE interfaceMethodReferenceConstant = kind = Interface, reference =  java.lang.Object mikenakis.intertwine.AnyCall.anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
-		│     │ │ ├─■         POP
-		│     │ │ ├─■ L32: // }
-		│     │ │ └─■         RETURN
-		│     │ ├─■ exceptionInfos: 0 items
-		│     │ └─■ attributeSet: 2 items
-		│     │   ├─■ [0] LineNumberTableAttribute; 2 items
-		│     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 31, start = L31
-		│     │   │ └─■ [1] LineNumberTableEntry lineNumber = 32, start = L32
-		│     │   └─■ [1] LocalVariableTableAttribute; 3 items
-		│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L31, end = @end, prototype = mikenakis.test.intertwine.handwritten.HandwrittenEntwiner this
-		│     │     ├─■ [1] LocalVariableTableEntry index = 1, start = L31, end = @end, prototype = int index
-		│     │     └─■ [2] LocalVariableTableEntry index = 2, start = L31, end = @end, prototype = mikenakis.test.intertwine.rig.Alpha alpha
-		│     └─■ [1] MethodParametersAttribute; 2 items
-		│       ├─■ [0] MethodParameter accessFlags = [], name = "index"
-		│       └─■ [1] MethodParameter accessFlags = [], name = "alpha"
-		└─■ attributeSet: 1 items
-		  └─■ [0] SourceFileAttribute "HandwrittenEntwiner.java"
-	*/
-	private static void addInterfaceMethod2( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField, MethodPrototype methodPrototype )
-	{
-		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), methodPrototype );
-		byteCodeType.methods.add( method );
-		CodeAttribute code = CodeAttribute.of( 6, 2 );
-		method.attributeSet.addAttribute( code );
-		code.addALoad( 0 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
-		code.addALoad( 0 );
-		code.addGetField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
-		code.addLdc( 2 );
-		code.addAALoad();
-		code.addLdc( 2 );
-		code.addANewArray( TerminalTypeDescriptor.of( Object.class ) );
-		code.addDup();
-		code.addLdc( 0 );
-		code.addILoad( 1 );
-		code.addInvokeStatic( boxIntMethodReference );
-		code.addAAStore();
-		code.addDup();
-		code.addLdc( 1 );
-		code.addALoad( 2 );
-		code.addAAStore();
-		code.addInvokeInterface( anyCallMethodReference, 3 );
-		code.addPop();
-		code.addReturn();
-	}
-
-	/*
-		│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( mikenakis.test.intertwine.handwritten.HandwrittenKey[], mikenakis.intertwine.AnyCall )
-		│ │ └─■ attributes: 3 items
-		│ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 3
-		│ │   │ ├─■ instructions: 9 entries
-		│ │   │ │ ├─■ L14: // {
-		│ │   │ │ ├─■         ALOAD 0
-		│ │   │ │ ├─■         INVOKESPECIAL kind = Plain, reference =  void java.lang.Object.<init>()
-		│ │   │ │ ├─■ L15: // this.keys = keys;
-		│ │   │ │ ├─■         ALOAD 0
-		│ │   │ │ ├─■         ALOAD 1
-		│ │   │ │ ├─■         PUTFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
-		│ │   │ │ ├─■ L16: // this.exitPoint = exitPoint;
-		│ │   │ │ ├─■         ALOAD 0
-		│ │   │ │ ├─■         ALOAD 2
-		│ │   │ │ ├─■         PUTFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
-		│ │   │ │ ├─■ L17: // }
-		│ │   │ │ └─■         RETURN
-		│ │   │ ├─■ exceptionInfos: 0 items
-		│ │   │ └─■ attributeSet: 3 items
-		│ │   │   ├─■ [0] LineNumberTableAttribute; 4 items
-		│ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 14, start = L14
-		│ │   │   │ ├─■ [1] LineNumberTableEntry lineNumber = 15, start = L15
-		│ │   │   │ ├─■ [2] LineNumberTableEntry lineNumber = 16, start = L16
-		│ │   │   │ └─■ [3] LineNumberTableEntry lineNumber = 17, start = L17
-		│ │   │   ├─■ [1] LocalVariableTableAttribute; 3 items
-		│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L14, end = @end, prototype = mikenakis.test.intertwine.handwritten.HandwrittenEntwiner this
-		│ │   │   │ ├─■ [1] LocalVariableTableEntry index = 1, start = L14, end = @end, prototype = mikenakis.test.intertwine.handwritten.HandwrittenKey[] keys
-		│ │   │   │ └─■ [2] LocalVariableTableEntry index = 2, start = L14, end = @end, prototype = mikenakis.intertwine.AnyCall exitPoint
-		│ │   │   └─■ [2] LocalVariableTypeTableAttribute; 1 items
-		│ │   │     └─■ [0] LocalVariableTypeTableEntry index = 2, start = L14, end = @end, name = "exitPoint", signature = "Lmikenakis/intertwine/AnyCall<Lmikenakis/test/intertwine/rig/FooInterface;>;" (exitPoint Lmikenakis/intertwine/AnyCall<Lmikenakis/test/intertwine/rig/FooInterface;>;)
-		│ │   ├─■ [1] MethodParametersAttribute; 2 items
-		│ │   │ ├─■ [0] MethodParameter accessFlags = [], name = "keys"
-		│ │   │ └─■ [1] MethodParameter accessFlags = [], name = "exitPoint"
-		│ │   └─■ [2] SignatureAttribute ([Lmikenakis/test/intertwine/handwritten/HandwrittenKey;Lmikenakis/intertwine/AnyCall<Lmikenakis/test/intertwine/rig/FooInterface;>;)V
-	*/
-	private static void addInitMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField )
-	{
-		ByteCodeMethod method = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of(), //
-			MethodPrototype.of( "<init>", MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, exitPointField.descriptor().typeDescriptor ) ) );
-		byteCodeType.methods.add( method );
-		CodeAttribute code = CodeAttribute.of( 2, 3 );
-		method.attributeSet.addAttribute( code );
-		code.addALoad( 0 );
-		code.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
-		code.addALoad( 0 );
-		code.addALoad( 1 );
-		code.addPutField( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
-		code.addALoad( 0 );
-		code.addALoad( 2 );
-		code.addPutField( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
-		code.addReturn();
-	}
-
-	@Override public AnyCall<T> newUntwiner( T exitPoint )
-	{
-		return new CompilingUntwiner<>( this, exitPoint ).anycall;
-	}
-
-	Optional<CompilingKey<T>> tryGetKeyByMethod( Method method )
-	{
-		return Kit.map.getOptional( keysByMethod, method );
-	}
+	private static final Map<TypeDescriptor,PrimitiveTypeInfo> primitiveTypeInfosByTypeDescriptor = primitiveTypeInfos.stream().collect( Collectors.toMap( //
+		p -> TypeDescriptor.of( p.primitiveType ), p -> p ) );
 }

@@ -35,10 +35,10 @@ public class Generator
 				ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
 				MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 			CodeAttribute codeAttribute = initMethod.attributeSet.addAttribute( CodeAttribute.of( 1, 1 ) );
-			codeAttribute.addALoad( 0 );
-			codeAttribute.addInvokeSpecial( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), //
+			codeAttribute.ALOAD( 0 );
+			codeAttribute.INVOKESPECIAL( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), //
 				MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
-			codeAttribute.addReturn();
+			codeAttribute.RETURN();
 		}
 
 		{
@@ -46,11 +46,11 @@ public class Generator
 				ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public, ByteCodeMethod.Modifier.Static ), //
 				MethodPrototype.of( "main", MethodDescriptor.of( void.class, String[].class ) ) ) );
 			CodeAttribute codeAttribute = mainMethod.attributeSet.addAttribute( CodeAttribute.of( 2, 1 ) );
-			codeAttribute.addGetStatic( FieldReference.of( TypeDescriptor.of( System.class ), FieldPrototype.of( "out", PrintStream.class ) ) );
-			codeAttribute.addLdc( "Hello, world!\n" );
-			codeAttribute.addInvokeVirtual( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( PrintStream.class ), //
+			codeAttribute.GETSTATIC( FieldReference.of( TypeDescriptor.of( System.class ), FieldPrototype.of( "out", PrintStream.class ) ) );
+			codeAttribute.LDC( "Hello, world!\n" );
+			codeAttribute.INVOKEVIRTUAL( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( PrintStream.class ), //
 				MethodPrototype.of( "print", MethodDescriptor.of( void.class, String.class ) ) ) );
-			codeAttribute.addReturn();
+			codeAttribute.RETURN();
 		}
 
 		return byteCodeType;
