@@ -3,6 +3,7 @@ package mikenakis.bytecode.test;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
+import mikenakis.bytecode.model.attributes.code.instructions.Type;
 import mikenakis.bytecode.model.descriptors.FieldPrototype;
 import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;

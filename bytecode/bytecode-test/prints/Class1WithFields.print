@@ -114,7 +114,7 @@
 │ │   │ │ ├─■ L27: // private final int[] arrayOfPrimitiveMember = { 0 };
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         NEWARRAY type = INT
+│ │   │ │ ├─■         NEWARRAY type = Int
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 0
 │ │   │ │ ├─■         LDC 0

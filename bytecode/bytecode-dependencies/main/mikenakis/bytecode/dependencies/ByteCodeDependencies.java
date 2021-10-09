@@ -197,8 +197,8 @@ public final class ByteCodeDependencies
 			switch( instruction.groupTag )
 			{
 				case Instruction.groupTag_Branch, Instruction.groupTag_ConditionalBranch, Instruction.groupTag_IInc, Instruction.groupTag_LocalVariable, //
-					Instruction.groupTag_LookupSwitch, Instruction.groupTag_NewPrimitiveArray, Instruction.groupTag_Operandless,
-					Instruction.groupTag_TableSwitch -> { /* nothing to do */ }
+					Instruction.groupTag_LookupSwitch, Instruction.groupTag_TableSwitch, Instruction.groupTag_NewPrimitiveArray, //
+					Instruction.groupTag_TypedOperandless, Instruction.groupTag_Operandless -> { /* nothing to do */ }
 				case Instruction.groupTag_ClassConstantReferencing -> visitClassReferencingInstruction( instruction.asClassReferencingInstruction() );
 				case Instruction.groupTag_FieldConstantReferencing -> visitFieldReferencingInstruction( instruction.asFieldReferencingInstruction() );
 				case Instruction.groupTag_MethodConstantReferencing -> visitMethodReferencingInstruction( instruction.asMethodReferencingInstruction() );

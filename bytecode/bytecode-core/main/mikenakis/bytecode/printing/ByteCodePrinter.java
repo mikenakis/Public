@@ -66,6 +66,7 @@ import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstr
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.TypedOperandlessInstruction;
 import mikenakis.bytecode.model.attributes.stackmap.AppendStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.ChopStackMapFrame;
 import mikenakis.bytecode.model.attributes.stackmap.FullStackMapFrame;
@@ -184,7 +185,7 @@ public final class ByteCodePrinter
 		default String getLabel( Optional<Instruction> instruction )
 		{
 			if( instruction.isEmpty() )
-				return CodeAttribute.END_LABEL;
+				return "@end";
 			LabelInfo labelInfo = tryGetLabelInfo( instruction.get() ).orElseThrow();
 			return labelInfo.label;
 		}
@@ -1197,7 +1198,7 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromLocalVariableInstruction( String prefix, LocalVariableInstruction localVariableInstruction )
 	{
-		return Twig.leaf( buildInstructionHeader( prefix, localVariableInstruction.genericOpCode, "" + localVariableInstruction.localVariableIndex ) );
+		return Twig.leaf( buildInstructionHeader( prefix, localVariableInstruction.opCode(), "" + localVariableInstruction.localVariableIndex ) );
 	}
 
 	private static Twig twigFromLookupSwitchInstruction( String prefix, LookupSwitchInstruction lookupSwitchInstruction, Labeler labeler )
@@ -1227,6 +1228,11 @@ public final class ByteCodePrinter
 	private static Twig twigFromOperandlessInstruction( String prefix, OperandlessInstruction operandlessInstruction )
 	{
 		return Twig.leaf( buildInstructionHeader( prefix, operandlessInstruction.opCode ) );
+	}
+
+	private static Twig twigFromTypedOperandlessInstruction( String prefix, TypedOperandlessInstruction typedOperandlessInstruction )
+	{
+		return Twig.leaf( buildInstructionHeader( prefix, typedOperandlessInstruction.opCode ) );
 	}
 
 	private static Twig twigFromRelativeInstructionReference( String prefix, Instruction instruction, Labeler labeler )
@@ -1294,6 +1300,7 @@ public final class ByteCodePrinter
 				case Instruction.groupTag_MultiANewArray -> twigFromMultiANewArrayInstruction( prefix, instruction.asMultiANewArrayInstruction() );
 				case Instruction.groupTag_NewPrimitiveArray -> twigFromNewPrimitiveArrayInstruction( prefix, instruction.asNewPrimitiveArrayInstruction() );
 				case Instruction.groupTag_Operandless -> twigFromOperandlessInstruction( prefix, instruction.asOperandlessInstruction() );
+				case Instruction.groupTag_TypedOperandless -> twigFromTypedOperandlessInstruction( prefix, instruction.asTypedOperandlessInstruction() );
 				case Instruction.groupTag_LoadConstant -> twigFromLoadConstantInstruction( prefix, instruction.asLoadConstantInstruction() );
 				case Instruction.groupTag_Branch -> twigFromBranchInstruction( prefix, instruction.asBranchInstruction(), labeler );
 				default -> throw new AssertionError( instruction );

@@ -27,7 +27,6 @@ import mikenakis.kit.functional.Function2;
 import mikenakis.kit.logging.Log;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,32 +54,30 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	CompilingIntertwine( CompilingIntertwineFactory factory, Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
-		if( !Modifier.isPublic( interfaceType.getModifiers() ) )
-			throw new RuntimeException( new IllegalAccessException() );
+		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		this.factory = factory;
 		interfaceType0 = interfaceType;
 		interfaceByteCodeType = ByteCodeType.read( interfaceType );
-		Method[] methods = interfaceType.getMethods();
-		keys = buildArrayOfKey( methods );
+		keys = buildArrayOfKey( interfaceByteCodeType.methods );
 		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 	}
 
-	private CompilingKey<T>[] buildArrayOfKey( Method[] methods )
+	private CompilingKey<T>[] buildArrayOfKey( List<ByteCodeMethod> methods )
 	{
 		// IntellijIdea blooper: IntellijIdea thinks that the following code only needs the "unchecked" suppression. Javac thinks differently.
 		// In order to keep Javac happy, the raw-types suppression must be added,
 		// but then IntellijIdea thinks that raw-types is redundant and complains about it,
 		// so we need to also suppress the "redundant suppression" inspection of IntellijIdea.
 		//noinspection RedundantSuppression
-		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingKey<T>[] result = IntStream.range( 0, methods.length ) //
-			.mapToObj( i -> createKey( methods[i], i ) ) //
+		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingKey<T>[] result = IntStream.range( 0, methods.size() ) //
+			.mapToObj( i -> createKey( methods.get( i ), i ) ) //
 			.toArray( n -> new CompilingKey[n] );
 		return result;
 	}
 
-	private CompilingKey<T> createKey( Method method, int index )
+	private CompilingKey<T> createKey( ByteCodeMethod method, int index )
 	{
-		return new CompilingKey<>( this, MethodPrototype.of( method ), index );
+		return new CompilingKey<>( this, method.prototype(), index );
 	}
 
 	@Override public Class<? super T> interfaceType()
@@ -120,81 +117,81 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private Class<T> createEntwinerClass()
 	{
-		ByteCodeType byteCodeType = ByteCodeType.of( //
+		ByteCodeType entwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( "Entwiner_" + identifierFromTypeName( interfaceType0 ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( interfaceByteCodeType.typeDescriptor() ) );
 		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			FieldPrototype.of( "keys", FieldDescriptor.of( CompilingKey[].class ) ) );
-		byteCodeType.fields.add( keysField );
+		entwinerByteCodeType.fields.add( keysField );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			FieldPrototype.of( "exitPoint", FieldDescriptor.of( AnyCall.class ) ) );
-		byteCodeType.fields.add( exitPointField );
-		addEntwinerInitMethod( byteCodeType, keysField, exitPointField );
+		entwinerByteCodeType.fields.add( exitPointField );
+		addEntwinerInitMethod( entwinerByteCodeType, keysField, exitPointField );
 
-		List<ByteCodeMethod> methods = interfaceByteCodeType.methods;
-		for( int methodIndex = 0; methodIndex < methods.size(); methodIndex++ )
+		List<ByteCodeMethod> interfaceMethods = interfaceByteCodeType.methods;
+		for( int interfaceMethodIndex = 0; interfaceMethodIndex < interfaceMethods.size(); interfaceMethodIndex++ )
 		{
-			ByteCodeMethod method = methods.get( methodIndex );
-			if( method.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
+			ByteCodeMethod interfaceMethod = interfaceMethods.get( interfaceMethodIndex );
+			if( interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
 				continue;
-			if( !method.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
+			if( !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
 				continue;
-			assert method.modifiers.contains( ByteCodeMethod.Modifier.Public );
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Final );
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Native );
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
-			addEntwinerInterfaceMethod( byteCodeType, keysField, exitPointField, methodIndex, method.prototype() );
+			assert interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Public );
+			assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Final );
+			assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Native );
+			assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
+			assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
+			assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
+			addEntwinerInterfaceMethod( entwinerByteCodeType, interfaceByteCodeType, keysField, exitPointField, interfaceMethodIndex, interfaceMethod.prototype() );
 		}
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
-		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
+		saveBytes( Path.of( "C:\\temp\\intertwine", entwinerByteCodeType.typeDescriptor().typeName + ".class" ), entwinerByteCodeType.write() );
+		System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
 
-		return factory.byteCodeClassLoader.load( byteCodeType );
+		return factory.byteCodeClassLoader.load( entwinerByteCodeType );
 	}
 
-	private static void addEntwinerInterfaceMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField, int methodIndex, //
-		MethodPrototype methodPrototype )
+	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField keysField, //
+		ByteCodeField exitPointField, int interfaceMethodIndex, MethodPrototype interfaceMethodPrototype )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), methodPrototype );
-		byteCodeType.methods.add( byteCodeMethod );
-		CodeAttribute code = CodeAttribute.of( 6, 3 );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), interfaceMethodPrototype );
+		entwinerByteCodeType.methods.add( byteCodeMethod );
+		CodeAttribute code = CodeAttribute.of( 6 + maxMethodArgumentCount( interfaceByteCodeType ), 3 + maxMethodArgumentCount( interfaceByteCodeType ) );
 		byteCodeMethod.attributeSet.addAttribute( code );
 
 		code.ALOAD( 0 ); //push this
-		code.GETFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) ); //pop this, push this->exitPoint
+		code.GETFIELD( FieldReference.of( entwinerByteCodeType.typeDescriptor(), exitPointField.prototype() ) ); //pop this, push this->exitPoint
 
 		code.ALOAD( 0 ); //push this
-		code.GETFIELD( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) ); //pop this, push keys
-		code.LDC( methodIndex ); //push methodIndex
+		code.GETFIELD( FieldReference.of( entwinerByteCodeType.typeDescriptor(), keysField.prototype() ) ); //pop this, push keys
+		code.LDC( interfaceMethodIndex ); //push methodIndex
 		code.AALOAD(); //pop methodIndex, pop keys, push keys[methodIndex]
 
-		code.LDC( methodPrototype.parameterCount() ); //push method-parameter-count
+		code.LDC( interfaceMethodPrototype.parameterCount() ); //push method-parameter-count
 		code.ANEWARRAY( TerminalTypeDescriptor.of( Object.class ) ); //pop method-parameter-count, push new Object[]
 
-		for( int parameterIndex = 0; parameterIndex < methodPrototype.parameterCount(); parameterIndex++ )
+		for( int parameterIndex = 0; parameterIndex < interfaceMethodPrototype.parameterCount(); parameterIndex++ )
 		{
-			TypeDescriptor parameterTypeDescriptor = methodPrototype.descriptor.parameterTypeDescriptors.get( parameterIndex );
+			TypeDescriptor parameterTypeDescriptor = interfaceMethodPrototype.descriptor.parameterTypeDescriptors.get( parameterIndex );
 			code.DUP(); //pop Object[], push Object[], Object[]
 			code.LDC( parameterIndex ); //push parameterIndex
 			if( parameterTypeDescriptor.isPrimitive() )
 			{
 				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, parameterTypeDescriptor );
-				primitiveTypeInfo.loadInstructionFactory.invoke( code, 1 + parameterIndex );
+				primitiveTypeInfo.loadInstructionFactory.invoke( code, 1 + getBogusJvmArgumentIndex( interfaceMethodPrototype, parameterIndex ) );
 				code.INVOKESTATIC( primitiveTypeInfo.boxingMethod );
 			}
 			else
-				code.ALOAD( 1 + parameterIndex ); //push parameter (from parameters[parameterIndex])
+				code.ALOAD( 1 + getBogusJvmArgumentIndex( interfaceMethodPrototype, parameterIndex ) ); //push parameter (from parameters[parameterIndex])
 			code.AASTORE(); //pop parameter, pop parameterIndex, pop Object[], set Object[parameterIndex] = parameter
 		}
 
 		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, //
 			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
 
-		TypeDescriptor returnTypeDescriptor = methodPrototype.descriptor.returnTypeDescriptor;
+		TypeDescriptor returnTypeDescriptor = interfaceMethodPrototype.descriptor.returnTypeDescriptor;
 		if( returnTypeDescriptor.equals( TypeDescriptor.of( void.class ) ) )
 		{
 			code.POP();
@@ -203,12 +200,13 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		else if( returnTypeDescriptor.isPrimitive() )
 		{
 			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, returnTypeDescriptor );
+			code.CHECKCAST( TypeDescriptor.of( primitiveTypeInfo.wrapperType ) );
 			code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
 			primitiveTypeInfo.returnInstructionFactory.invoke( code );
 		}
 		else
 		{
-			code.CHECKCAST( methodPrototype.descriptor.returnTypeDescriptor );
+			code.CHECKCAST( interfaceMethodPrototype.descriptor.returnTypeDescriptor );
 			code.ARETURN();
 		}
 	}
@@ -236,30 +234,30 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private Class<T> createUntwinerClass()
 	{
-		ByteCodeType byteCodeType = ByteCodeType.of( //
+		ByteCodeType untwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( "Untwiner_" + identifierFromTypeName( interfaceType0 ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( TerminalTypeDescriptor.of( AnyCall.class ) ) );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			FieldPrototype.of( "exitPoint", FieldDescriptor.of( interfaceByteCodeType.typeDescriptor() ) ) );
-		byteCodeType.fields.add( exitPointField );
-		addUntwinerInitMethod( byteCodeType, interfaceByteCodeType, exitPointField );
-		addUntwinerAnyCallMethod( byteCodeType, interfaceByteCodeType, exitPointField );
+		untwinerByteCodeType.fields.add( exitPointField );
+		addUntwinerInitMethod( untwinerByteCodeType, interfaceByteCodeType, exitPointField );
+		addUntwinerAnyCallMethod( untwinerByteCodeType, interfaceByteCodeType, exitPointField );
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
-		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
+		saveBytes( Path.of( "C:\\temp\\intertwine", untwinerByteCodeType.typeDescriptor().typeName + ".class" ), untwinerByteCodeType.write() );
+		System.out.println( ByteCodePrinter.printByteCodeType( untwinerByteCodeType, Optional.empty() ) );
 
-		return factory.byteCodeClassLoader.load( byteCodeType );
+		return factory.byteCodeClassLoader.load( untwinerByteCodeType );
 	}
 
-	private static void addUntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )
+	private static void addUntwinerInitMethod( ByteCodeType untwinerByteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )
 	{
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
 			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
 			MethodPrototype.of( "<init>", //
 				MethodDescriptor.of( TypeDescriptor.of( void.class ), interfaceByteCodeType.typeDescriptor() ) ) );
-		byteCodeType.methods.add( byteCodeMethod );
+		untwinerByteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 2, 2 );
 		byteCodeMethod.attributeSet.addAttribute( code );
 		code.ALOAD( 0 );
@@ -267,18 +265,18 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
 		code.ALOAD( 0 );
 		code.ALOAD( 1 );
-		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
+		code.PUTFIELD( FieldReference.of( untwinerByteCodeType.typeDescriptor(), exitPointField.prototype() ) );
 		code.RETURN();
 	}
 
-	private static void addUntwinerAnyCallMethod( ByteCodeType byteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )
+	private static void addUntwinerAnyCallMethod( ByteCodeType untwinerByteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )
 	{
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
 			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
 			MethodPrototype.of( "anyCall", //
 				MethodDescriptor.of( TypeDescriptor.of( Object.class ), TypeDescriptor.of( MethodKey.class ), TypeDescriptor.of( Object[].class ) ) ) );
-		byteCodeType.methods.add( byteCodeMethod );
-		CodeAttribute code = CodeAttribute.of( 4, 4 );
+		untwinerByteCodeType.methods.add( byteCodeMethod );
+		CodeAttribute code = CodeAttribute.of( 4 + maxMethodArgumentCount( interfaceByteCodeType ), 4 );
 		byteCodeMethod.attributeSet.addAttribute( code );
 
 		StackMapTableAttribute stackMapTableAttribute = StackMapTableAttribute.of();
@@ -291,23 +289,23 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.GETFIELD( FieldReference.of( CompilingKey.class, FieldPrototype.of( "index", int.class ) ) );
 		TableSwitchInstruction tableSwitchInstruction = code.TABLESWITCH( 0 );
 
-		for( int methodIndex = 0; methodIndex < interfaceByteCodeType.methods.size(); methodIndex++ )
+		for( int interfaceMethodIndex = 0; interfaceMethodIndex < interfaceByteCodeType.methods.size(); interfaceMethodIndex++ )
 		{
-			ByteCodeMethod method = interfaceByteCodeType.methods.get( methodIndex );
-			if( method.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
+			ByteCodeMethod interfaceByteCodeMethod = interfaceByteCodeType.methods.get( interfaceMethodIndex );
+			if( interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
 				continue;
-			if( !method.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
+			if( !interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
 				continue;
-			assert method.modifiers.contains( ByteCodeMethod.Modifier.Public );
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Final );
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Native );
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
-			assert !method.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
-			Instruction instruction = addUntwinerSwitchCase( byteCodeType, code, interfaceByteCodeType, method );
+			assert interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Public );
+			assert !interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Final );
+			assert !interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Native );
+			assert !interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
+			assert !interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
+			assert !interfaceByteCodeMethod.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
+			Instruction instruction = addUntwinerSwitchCase( untwinerByteCodeType, code, interfaceByteCodeType, interfaceByteCodeMethod );
 			tableSwitchInstruction.targetInstructions.add( instruction );
 
-			if( methodIndex == 0 )
+			if( interfaceMethodIndex == 0 )
 				stackMapTableAttribute.addAppendFrame( instruction, ObjectVerificationType.of( TypeDescriptor.of( CompilingKey.class ) ) );
 			else
 				stackMapTableAttribute.addSameFrame( instruction );
@@ -322,11 +320,20 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.ATHROW();
 	}
 
-	private static Instruction addUntwinerSwitchCase( ByteCodeType byteCodeType, CodeAttribute code, ByteCodeType interfaceByteCodeType, ByteCodeMethod method )
+	private static int maxMethodArgumentCount( ByteCodeType interfaceByteCodeType )
+	{
+		int max = 0;
+		for( var byteCodeMethod : interfaceByteCodeType.methods )
+			max = Math.max( max, getBogusJvmArgumentCount( byteCodeMethod.prototype() ) );
+		return max;
+	}
+
+	private static Instruction addUntwinerSwitchCase( ByteCodeType untwinerByteCodeType, CodeAttribute code, ByteCodeType interfaceByteCodeType, //
+		ByteCodeMethod interfaceByteCodeMethod )
 	{
 		Instruction firstInstruction = code.ALOAD( 0 );
-		code.GETFIELD( FieldReference.of( byteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", FieldDescriptor.of( interfaceByteCodeType.typeDescriptor() ) ) ) );
-		List<TypeDescriptor> parameterTypes = method.prototype().descriptor.parameterTypeDescriptors;
+		code.GETFIELD( FieldReference.of( untwinerByteCodeType.typeDescriptor(), FieldPrototype.of( "exitPoint", FieldDescriptor.of( interfaceByteCodeType.typeDescriptor() ) ) ) );
+		List<TypeDescriptor> parameterTypes = interfaceByteCodeMethod.prototype().descriptor.parameterTypeDescriptors;
 		for( int parameterIndex = 0; parameterIndex < parameterTypes.size(); parameterIndex++ )
 		{
 			TypeDescriptor parameterType = parameterTypes.get( parameterIndex );
@@ -344,24 +351,44 @@ class CompilingIntertwine<T> implements Intertwine<T>
 				code.CHECKCAST( parameterType );
 			}
 		}
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, interfaceByteCodeType.typeDescriptor(), method.prototype() ), 1 + parameterTypes.size() );
-		TypeDescriptor returnType = method.prototype().descriptor.returnTypeDescriptor;
+		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, interfaceByteCodeType.typeDescriptor(), interfaceByteCodeMethod.prototype() ), //
+			1 + getBogusJvmArgumentCount( interfaceByteCodeMethod.prototype() ) );
+		TypeDescriptor returnType = interfaceByteCodeMethod.prototype().descriptor.returnTypeDescriptor;
 		if( returnType == TypeDescriptor.of( void.class ) )
 		{
 			code.ACONST_NULL();
-			code.ARETURN();
 		}
 		else if( returnType.isPrimitive() )
 		{
 			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, returnType );
-			code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
-			primitiveTypeInfo.returnInstructionFactory.invoke( code );
+			code.INVOKESTATIC( primitiveTypeInfo.boxingMethod );
 		}
 		else
 		{
-			code.ARETURN();
+			//nothing to do; the result is ready on the stack.
 		}
+		code.ARETURN();
 		return firstInstruction;
+	}
+
+	private static int getBogusJvmArgumentCount( MethodPrototype methodPrototype )
+	{
+		return getBogusJvmArgumentIndex( methodPrototype, methodPrototype.parameterCount() );
+	}
+
+	private static int getBogusJvmArgumentIndex( MethodPrototype methodPrototype, int argumentIndex )
+	{
+		int count = 0;
+		for( int i = 0;  i < argumentIndex;  i++ )
+		{
+			TypeDescriptor parameterTypeDescriptor = methodPrototype.descriptor.parameterTypeDescriptors.get( i );
+			count++;
+			if( parameterTypeDescriptor.isPrimitive() &&
+				(parameterTypeDescriptor.asPrimitiveTypeDescriptor().jvmClass == double.class ||
+					parameterTypeDescriptor.asPrimitiveTypeDescriptor().jvmClass == long.class ) )
+					count++;
+		}
+		return count;
 	}
 
 	private static void saveBytes( Path path, byte[] bytes )
@@ -376,17 +403,29 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return type.getName().replace( ".", "_" ).replace( "$", "_" );
 	}
 
-	private static final MethodReference integerBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) );
-	private static final MethodReference integerUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "intValue", MethodDescriptor.of( int.class ) ) );
+	private static final MethodReference byteBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Byte.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Byte.class, byte.class ) ) );
+	private static final MethodReference byteUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Byte.class, MethodPrototype.of( "byteValue", MethodDescriptor.of( byte.class ) ) );
+
+	private static final MethodReference booleanBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Boolean.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Boolean.class, boolean.class ) ) );
+	private static final MethodReference booleanUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Boolean.class, MethodPrototype.of( "booleanValue", MethodDescriptor.of( boolean.class ) ) );
+
+	private static final MethodReference shortBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Short.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Short.class, short.class ) ) );
+	private static final MethodReference shortUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Short.class, MethodPrototype.of( "shortValue", MethodDescriptor.of( short.class ) ) );
+
+	private static final MethodReference charBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Character.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Character.class, char.class ) ) );
+	private static final MethodReference charUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Character.class, MethodPrototype.of( "charValue", MethodDescriptor.of( char.class ) ) );
+
+	private static final MethodReference intBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) );
+	private static final MethodReference intUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "intValue", MethodDescriptor.of( int.class ) ) );
 
 	private static final MethodReference floatBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Float.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Float.class, float.class ) ) );
 	private static final MethodReference floatUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Float.class, MethodPrototype.of( "floatValue", MethodDescriptor.of( float.class ) ) );
 
-	private static final MethodReference longBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Long.class, long.class ) ) );
-	private static final MethodReference longUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "longValue", MethodDescriptor.of( long.class ) ) );
+	private static final MethodReference longBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Long.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Long.class, long.class ) ) );
+	private static final MethodReference longUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Long.class, MethodPrototype.of( "longValue", MethodDescriptor.of( long.class ) ) );
 
-	private static final MethodReference doubleBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Double.class, double.class ) ) );
-	private static final MethodReference doubleUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "doubleValue", MethodDescriptor.of( double.class ) ) );
+	private static final MethodReference doubleBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Double.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Double.class, double.class ) ) );
+	private static final MethodReference doubleUnboxingMethod = MethodReference.of( MethodReferenceKind.Plain, Double.class, MethodPrototype.of( "doubleValue", MethodDescriptor.of( double.class ) ) );
 
 	private static final class PrimitiveTypeInfo
 	{
@@ -410,17 +449,17 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		}
 	}
 
-	private static final PrimitiveTypeInfo booleanPrimitiveTypeInfo = new PrimitiveTypeInfo( boolean.class, Boolean.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
-	private static final PrimitiveTypeInfo bytePrimitiveTypeInfo = new PrimitiveTypeInfo( byte.class, Byte.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
-	private static final PrimitiveTypeInfo charPrimitiveTypeInfo = new PrimitiveTypeInfo( char.class, Character.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo booleanPrimitiveTypeInfo = new PrimitiveTypeInfo( boolean.class, Boolean.class, booleanBoxingMethod, booleanUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo bytePrimitiveTypeInfo = new PrimitiveTypeInfo( byte.class, Byte.class, byteBoxingMethod, byteUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo shortPrimitiveTypeInfo = new PrimitiveTypeInfo( short.class, Short.class, shortBoxingMethod, shortUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo charPrimitiveTypeInfo = new PrimitiveTypeInfo( char.class, Character.class, charBoxingMethod, charUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
 	private static final PrimitiveTypeInfo doublePrimitiveTypeInfo = new PrimitiveTypeInfo( double.class, Double.class, doubleBoxingMethod, doubleUnboxingMethod, CodeAttribute::DLOAD, CodeAttribute::DRETURN );
 	private static final PrimitiveTypeInfo floatPrimitiveTypeInfo = new PrimitiveTypeInfo( float.class, Float.class, floatBoxingMethod, floatUnboxingMethod, CodeAttribute::FLOAD, CodeAttribute::FRETURN );
-	private static final PrimitiveTypeInfo intPrimitiveTypeInfo = new PrimitiveTypeInfo( int.class, Integer.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
+	private static final PrimitiveTypeInfo intPrimitiveTypeInfo = new PrimitiveTypeInfo( int.class, Integer.class, intBoxingMethod, intUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
 	private static final PrimitiveTypeInfo longPrimitiveTypeInfo = new PrimitiveTypeInfo( long.class, Long.class, longBoxingMethod, longUnboxingMethod, CodeAttribute::LLOAD, CodeAttribute::LRETURN );
-	private static final PrimitiveTypeInfo shortPrimitiveTypeInfo = new PrimitiveTypeInfo( short.class, Short.class, integerBoxingMethod, integerUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN );
 
 	private static final List<PrimitiveTypeInfo> primitiveTypeInfos = List.of( booleanPrimitiveTypeInfo, bytePrimitiveTypeInfo, charPrimitiveTypeInfo, //
-		doublePrimitiveTypeInfo, floatPrimitiveTypeInfo, intPrimitiveTypeInfo, longPrimitiveTypeInfo, shortPrimitiveTypeInfo );
+		shortPrimitiveTypeInfo, intPrimitiveTypeInfo, floatPrimitiveTypeInfo, longPrimitiveTypeInfo, doublePrimitiveTypeInfo );
 
 	private static final Map<TypeDescriptor,PrimitiveTypeInfo> primitiveTypeInfosByTypeDescriptor = primitiveTypeInfos.stream().collect( Collectors.toMap( //
 		p -> TypeDescriptor.of( p.primitiveType ), p -> p ) );

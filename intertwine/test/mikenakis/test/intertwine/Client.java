@@ -68,8 +68,7 @@ public abstract class Client
 	public void Use_of_Non_Public_Interface_Fails()
 	{
 		IntertwineFactory intertwineFactory = getIntertwineFactory();
-		RuntimeException runtimeException = Kit.testing.expectException( RuntimeException.class, () -> intertwineFactory.getIntertwine( MyNonPublicInterface.class ) );
-		assert runtimeException.getCause() instanceof IllegalAccessException;
+		Kit.testing.expectException( IllegalAccessException.class, () -> intertwineFactory.getIntertwine( MyNonPublicInterface.class ) );
 	}
 
 	private FooInterface createFooServer( AnyCallFromUntwiner<FooInterface> anyCallFromUntwiner )

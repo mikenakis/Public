@@ -32,8 +32,7 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 	MethodHandleIntertwine( Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
-		if( !Modifier.isPublic( interfaceType.getModifiers() ) )
-			throw new RuntimeException( new IllegalAccessException() );
+		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		this.interfaceType = interfaceType;
 		MethodHandles.Lookup lookup = MethodHandles.publicLookup().in( interfaceType );
 		Method[] methods = interfaceType.getMethods();

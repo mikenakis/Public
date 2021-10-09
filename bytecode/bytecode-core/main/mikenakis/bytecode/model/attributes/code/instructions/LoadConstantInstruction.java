@@ -123,7 +123,7 @@ public class LoadConstantInstruction extends Instruction
 	}
 
 	public boolean isValue() { return !isType(); }
-	public boolean isType() { return  constant.tag == Constant.tag_Class; }
+	public boolean isType() { return constant.tag == Constant.tag_Class; }
 	public ValueConstant getValue() { return constant.asValueConstant(); }
 	public TypeDescriptor getTypeDescriptor() { return constant.asClassConstant().typeDescriptor(); }
 	@Deprecated @Override public LoadConstantInstruction asLoadConstantInstruction() { return this; }

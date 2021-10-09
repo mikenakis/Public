@@ -40,8 +40,11 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 			@SuppressWarnings( "unchecked" ) Intertwine<T> existingIntertwine = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
 			if( existingIntertwine != null )
 				return existingIntertwine;
-			Intertwine<T> intertwine = delegee.getIntertwine( interfaceType );
-			Kit.map.add( cache, interfaceType, intertwine );
+		}
+		Intertwine<T> intertwine = delegee.getIntertwine( interfaceType );
+		synchronized( cache )
+		{
+			Kit.map.addOrReplace( cache, interfaceType, intertwine );
 			return intertwine;
 		}
 	}

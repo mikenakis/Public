@@ -2865,6 +2865,10 @@ public final class Kit
 
 	/**
 	 * For information about this method, google "Sneaky throw".
+	 *
+	 * Note: even though the method throws an exception, it is declared to also return an exception.
+	 * This allows the caller to use one more `throw` statement, which, although unreachable,
+	 * lets the compiler know that that execution will never proceed past that point.
 	 */
 	@SuppressWarnings( "unchecked" ) public static <T extends Throwable> RuntimeException sneakyException( Throwable t ) throws T
 	{

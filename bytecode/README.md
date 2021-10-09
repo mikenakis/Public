@@ -41,7 +41,7 @@ For example:
 - *mikenakis-bytecode* saves the programmer from having to deal with what the Java Virtual Machine Specification calls "constants". You just work with descriptor objects and with normal Java types. For example, if you want to load the constant "Hello, World!" you just code `codeAttribute.LDC( "Hello, World!" )`. Internally, the framework will create a "CONSTANT_Utf8_info" constant to hold the string, then it will create a "CONSTANT_String_info" constant to hold the mutf8 constant, and then it will create an LDC instruction with a reference to the string constant. You just don't have to worry about all this nonsense. If, further down, you want to use the same constant again, you can code `codeAttribute.LDC( "Hello, World!" )` again. The framework will take care of merging the constants into one.  
 
 - *mikenakis-bytecode* helps reduce cognitive overhead by applying a few slight simplifications to the JVM instruction set. For example:
-  - There are no short and long forms of the `JSR` and `GOTO` instructions; the framework uses only the short form.
+  - There are no short and long forms of the `JSR` and `GOTO` instructions; the framework uses only one form.
     - When parsing bytecode from a byte array, framework will merge `JSR` and `JSR_W` opcodes into a `JSR` instruction, and it will merge `GOTO` and `GOTO_W` opcodes into a `GOTO` instruction. These instructions have no notion of width.  
     - When assembling bytecode, the framework allows you to specify `JSR` or `GOTO` instructions without having to worry about width. 
     - When generating an array of bytes from bytecode, the framework will pick the right opcode depending on how far the target of the instruction is. If necessary, the framework will do multiple passes over the instructions of a method to ensure maximum savings, and it will even replace a conditional short jump with an inverted conditional short jump around an unconditional long jump if it has to. 
@@ -49,6 +49,7 @@ For example:
     - When parsing bytecode from a byte array, the framework will merge all these opcodes into `LDC` instructions. 
     - When assembling bytecode, the framework only allows you to specify `LDC`.
     - When generating an array of bytes from bytecode, the framework will emit the most compact opcode from the zoo, based on the type of the constant, the value of the constant, and where in the constant pool it is located.
+    - Note that even the `ACONST_NULL` opcode falls under the same category of instructions that just push a single constant into the stack, but due to the nature of `null` this opcode was not easy to treat like the others, so the framework offers it as a separate instruction.  
 
 - When it comes to coding stack frames, *mikenakis-bytecode* will not automatically generate stack frame entries for you, (because that's quite difficult,) but it will allow you to specify stack frames that simply reference target instructions, and it will pick the right subtype based on how long the actual offset to the target instruction turns out to be.
 

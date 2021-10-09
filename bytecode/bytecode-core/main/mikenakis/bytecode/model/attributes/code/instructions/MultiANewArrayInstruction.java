@@ -8,6 +8,7 @@ import mikenakis.bytecode.reading.ReadingConstantPool;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.java_type_model.ArrayTypeDescriptor;
+import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class MultiANewArrayInstruction extends Instruction
@@ -16,13 +17,14 @@ public final class MultiANewArrayInstruction extends Instruction
 	{
 		assert !wide;
 		assert opCode == OpCode.MULTIANEWARRAY;
-		ClassConstant constant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant();
+		ClassConstant targetClassConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asClassConstant();
 		int dimensionCount = bufferReader.readUnsignedByte();
-		return of( constant, dimensionCount );
+		return new MultiANewArrayInstruction( targetClassConstant, dimensionCount );
 	}
 
-	public static MultiANewArrayInstruction of( ClassConstant targetClassConstant, int dimensionCount )
+	public static MultiANewArrayInstruction of( TerminalTypeDescriptor primitiveTypeDescriptor, int dimensionCount )
 	{
+		ClassConstant targetClassConstant = ClassConstant.of( primitiveTypeDescriptor );
 		return new MultiANewArrayInstruction( targetClassConstant, dimensionCount );
 	}
 

@@ -30,8 +30,7 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 	ReflectingIntertwine( Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
-		if( !Modifier.isPublic( interfaceType.getModifiers() ) )
-			throw new RuntimeException( new IllegalAccessException() );
+		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		this.interfaceType = interfaceType;
 		Method[] methods = interfaceType.getMethods();
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( methods[i], i ) ).collect( Collectors.toList());

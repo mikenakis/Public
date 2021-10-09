@@ -21,8 +21,7 @@ public class HandwrittenIntertwineFactory implements IntertwineFactory
 
 	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
 	{
-		if( !Modifier.isPublic( interfaceType.getModifiers() ) )
-			throw new RuntimeException( new IllegalAccessException() );
+		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		assert interfaceType == FooInterface.class;
 		@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)new HandwrittenIntertwine();
 		return result;
