@@ -61,16 +61,19 @@ The project is still in an immature state of development, so the following must 
 
 ## How does working with *mikenakis-bytecode* look like?
 
-If you want to get an idea of how it looks like to be working with *mikenakis-bytecode*, you can check out the tests, and also see how it is used in these projects:
+If you want to get an idea of how it looks like to be working with *mikenakis-bytecode*, you can check out the following:
 
-For dumping the contents of class files in `mikenakis-classdump`
-(https://github.com/mikenakis/Public/tree/master/classdump)
+The tests:
+https://github.com/mikenakis/Public/tree/master/bytecode/bytecode-test
 
-For dependency analysis in `mikenakis-testana`
-(https://github.com/mikenakis/Public/tree/master/testana)
+Dumping the contents of class files in `mikenakis-classdump`:
+https://github.com/mikenakis/Public/tree/master/classdump
 
-For bytecode generation in `mikenakis-intertwine`
-(https://github.com/mikenakis/Public/tree/master/intertwine/main/mikenakis/intertwine/implementations/compiling)
+Dependency analysis in `mikenakis-testana`:
+https://github.com/mikenakis/Public/tree/master/testana
+
+Bytecode generation in `mikenakis-intertwine`:
+https://github.com/mikenakis/Public/tree/master/intertwine/main/mikenakis/intertwine/implementations/compiling
 
 ## Repositories 
 
