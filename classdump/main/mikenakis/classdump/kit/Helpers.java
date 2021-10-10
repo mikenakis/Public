@@ -59,7 +59,7 @@ public final class Helpers
 				switch( nextChar )
 				{
 					case '\\':
-						ch = '\\';
+						//ch = '\\';
 						break;
 					case 'b':
 						ch = '\b';

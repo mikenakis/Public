@@ -28,12 +28,12 @@ public final class CachingLambdatwineFactory implements LambdatwineFactory
 	 *
 	 * @param lambdatwine the {@link Lambdatwine} to add.
 	 */
-	public final void add( Lambdatwine<?> lambdatwine )
+	public void add( Lambdatwine<?> lambdatwine )
 	{
 		Kit.map.add( cache, lambdatwine.interfaceType(), lambdatwine );
 	}
 
-	@Override public final <T> Lambdatwine<T> getLambdatwine( Class<T> interfaceType )
+	@Override public <T> Lambdatwine<T> getLambdatwine( Class<T> interfaceType )
 	{
 		assert interfaceType.isInterface();
 		synchronized( cache )
