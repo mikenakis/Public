@@ -23,7 +23,7 @@ The entwiner is a lot like the built-in Dynamic Proxy of Java, (see `java.lang.r
 
 The built-in java dynamic proxy has the extremely annoying habit of catching and rethrowing exceptions, which is a practice devoid of any usefulness whatsoever, but it does severely hamper debugging. That's because debugging relies on having the debugger always stop on any unhandled exception, but a catch-and-rethrow construct in the call tree causes exceptions thrown underneath it to appear as caught exceptions to the debugger, so the debugger does not stop at the location where they are thrown; instead, it stops at the location where they are rethrown, which is useless. So, *mikenakis-intertwine* can serve as a debugger-friendly replacement for Java's ill-behaving built-in dynamic proxy facility.     
 
-The untwiner is opposite and complement of the entwiner. For some reason, even though Java out of the box contains a dynamic proxy facility, it does not contain its other half. *mikenakis-bytecode* fixes this omission. 
+The untwiner is the opposite and complement of the entwiner. For some reason, even though Java out of the box contains a dynamic proxy facility, it does not contain its other half. *mikenakis-intertwine* fixes this omission. 
 
 ## License
 
