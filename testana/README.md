@@ -29,8 +29,7 @@ Note: in this document the term project refers to the topmost (most-encompassing
     - Discover which ones are test classes. 
     - Determine the dependencies of each test class. (Recursively, so that transitive dependencies are included, too.)
   - Checking the timestamp of each class file to see if it has been modified since last run time of any tests that depend on it.
-  - Remembering the last successful run time of each test. 
-- Testana then only runs the tests that need to run.
+- Testana then only runs the tests that need to run and remembers their last run times.
 - Testana selects which tests to run from among all tests of all modules in your entire project, thus guaranteeing that any and all tests that need to run will run. 
 - Testana runs your test classes in order of dependency, meaning that classes that are most dependent upon will be tested first, and classes that depend upon those will be tested next, and so on until everything has been tested.
 - Testana runs the methods of a test class in their natural order, which is the order in which the methods appear in the source file. (Duh!) 
@@ -68,11 +67,11 @@ Under JUnit, the order of execution of packages and classes within a package app
 
 Alphabetic order of execution is not particularly useful. For example, in an alphabetic list of packages, `util` comes near the end, so it is usually tested last, and yet `util` tends to be a package that depends on no other packages, while most other packages depend on it, so if tests of other packages succeed, and yet tests of `util` fail, it can only be due to pure accident. It would be very nice to see `util` being tested first, so that if there is something wrong with it, then we know that we can stop testing: there is no point in testing packages that depend on a failing package.
 
-Testana addresses this problem by executing test classes in order of dependency, which means that classes that do not depend on other classes will be tested first, and classes that depend upon them will be tested afterwards. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located. 
+Testana addresses this problem by executing test classes in order of dependency, which means that classes with no dependencies will be tested first, classes that depend upon them will be tested next, and so on until everyting has been tested. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located. 
 
 ## Why should I care about running test methods in natural order? 
 
-By default, JUnit will run your test methods in random order, which is at best useless, and in my opinion actually outright treacherous. 
+By default, JUnit will run your test methods in random order, which is at best useless, and arguably treacherous. 
 
 One reason for wanting the test methods to run in the order in which they appear in the source file is because we usually test fundamental features of our software before we test features that depend upon them. (Note: it is the features under test that depend upon each other, not the tests themselves that depend upon each other.) So if a fundamental feature fails, we want that to be the very first error that will be reported. Tests of features that rely upon a feature whose test has failed might as well be skipped, because they can be expected to all fail, and as a matter of fact, reporting these failures before the failure of the more fundamental feature (due to a messed up order of test method execution) is an act of sabotage against the developer: it is sending us looking for problems in places where there are no problems to be found, and it is making it more difficult to locate the real problem, which usually lies in the test that failed first **_in the source file_**.
 
@@ -98,9 +97,9 @@ Testana corrects it by executing ancestor methods first, descendant methods last
 
 - Testana only works with Java. Support for more languages may be added in the future. 
 - Testana only understands Maven modules. Support for other module formats may be added in the future. 
-- Testana only understands the following JUnit annotations: `@Test`, `@Before`, `@After`, and `@Ignore`. Support for more JUnit annotations may be added in the future. 
-- Testana's dependency detection relies on absolutely strong static typing. Dependencies that have been disavowed by being encoded in configuration files, (e.g. swagger files, spring configuration files, etc) denatured by being encoded as strings, (stringly-typed,) obscured through hackery such as duck typing, or squandered by weak typing (euphemistically called dynamic typing) are not supported.  
-- Testana only has a command-line interface. A GUI may be added in the future. 
+- Testana only understands the following JUnit annotations: `@Test`, `@Before`, `@After`, and `@Ignore`. Support for more JUnit annotations might be added in the future. (But don't hold your breath for it.) 
+- Testana's dependency detection relies on absolutely strong static typing. Dependencies that have been disavowed by being encoded in configuration files, (e.g. swagger files, spring configuration files, etc) denatured by being encoded as strings, (stringly-typed,) obscured through hackery such as duck typing, or squandered by weak typing (euphemistically called dynamic typing) are not supported, and there is no plan to ever support them. Seriously, stop all this fuckery and use strong static typing **_only_**. 
+- Testana only has a command-line interface. A GUI may be added in the future. (But don't hold your breath for it.)  
 - Testana assumes that your local maven repository is under `~/.m2/repository`. It does not check `~/.m2/settings.xml` to see whether you have configured your local repository to reside elsewhere. There are plans to fix this.
 - Testana currently does not consider resources when checking dependencies: a test may depend on a class which depends on a resource, and if the resource is modified, then the test should be re-run, but this does not currently happen. There are plans to fix this. 
 - Testana does not currently have a well defined strategy for handling dependency cycles. Nothing bad happens, but the order of test execution in those cases is kind of vague. There are plans to do something about this. 
@@ -111,7 +110,7 @@ Testana corrects it by executing ancestor methods first, descendant methods last
 Without going into too much detail in this document, (because I want to have only one place to maintain, and that's the code,) here is roughly what you need to do:
 
 - Check out the repository.
-- Import the root pom.xml into your project in your IDE.
+- Import the root pom.xml of testana into your project in your IDE.
 - Setup your IDE so that it builds your entire project before running Testana on it. 
   - That's necessary because normally, prior to running Testana, your IDE will only build the modules that Testana depends on; however, Testana does not depend on any of the modules of your project, and yet Testana will discover them at runtime, so they all need to be up to date when Testana runs. 
   - The way to achieve this with IntelliJ IDEA is to edit the run/debug configuration of Testana and under `Before launch:` specify `Build Project` instead of the default, which is `Build`. 
@@ -133,7 +132,7 @@ The Artifact Repository is on Repsy: https://repo.repsy.io/mvn/mikenakis/mikenak
 
 ## License
 
-This creative work is explicitly published under **_No License_**. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: michael.gr - Open Source but No License.
+This creative work is explicitly published under **_No License_**. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](http://blog.michael.gr/2018/04/open-source-but-no-license.html)
 
 If you would like to do anything more with this creative work, contact me.
 
@@ -149,31 +148,6 @@ More information: [michael.gr - On Coding Style](http://blog.michael.gr/2018/04/
 The home page of the project is:
 [michael.gr - GitHub project: mikenakis-testana](https://blog.michael.gr/2018/04/github-project-mikenakis-testana.html) 
 (Though it just points back to this README.md file)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ## Poor man's issue tracking
@@ -194,53 +168,38 @@ The home page of the project is:
     - Move to the folder above and repeat the search, unless we are in the root output folder of the module, in which case we have an error: the resource locator could not be
       found.
 
-- TODO: expand the syntax of settings so that we can exclude folders in the source tree, like `.idea` and `.git`, which are now handled by hard-coded exlusion. Alternatively,
-  parse `.gitignore`. (Uhm, probably not.)
+- TODO: expand the syntax of settings so that we can exclude folders in the source tree, like `.idea` and `.git`, which are now handled by hard-coded exlusion. Alternatively, parse `.gitignore`. (Uhm, probably not.)
 
-- TODO: introduce a `TestanaTestEngine`, and make it have all the new functionality enabled by default. Then, make all of Testana's functionality optional in `JUnitTestEngine`, so
-  that by default Testana's functionality is not applied to JUnit tests.
+- TODO: introduce a `TestanaTestEngine`, and make it have all the new functionality enabled by default. Then, make all of Testana's functionality optional in `JUnitTestEngine`, so that by default Testana's functionality is not applied to JUnit tests.
 
 - TODO: further enhancements to the Testana test engine, that deviate from the JUnit standard:
 
     - Avoid invoking the constructor of the test class for each test method.
 
-    - Get rid of `@Before` and `@After`, initialization should be done in the constructor and cleanup should be done in `close()` if the test class `implements AutoCloseable`.
-
-    - Optionally supply the `Umbilical` interface to the test class constructor, so that the test class can invoke it without having to rely on the `GlobalUmbilicalHolder` hack.
-      Then, remove that hack from the foundation package, and either completely abolish it, or make it something that only `JUnitTestEngine` needs to worry about.
+    - Get rid of `@Before` and `@After`: initialization should be done in the constructor and cleanup should be done in `close()` if the test class `implements AutoCloseable`.
 
 - TODO: try determining the order of testing based on packages instead of individual classes, see if it makes any interesting difference.
 
-- TODO: do something to reduce the verbosity of the project structure dump. For example, refrain from showing the full dependency subtree of each external library every single time
-  the library is mentioned in the dump, and instead provide a separate dump of the dependency subtree of each external library, either in the beginning or the end of the project
-  structure dump.
+- TODO: possibly research how we could optimize transitive dependency expansion by means of a dependency matrix. See whether transitive dependency expansion can be made fast enough to actually save more time than it wastes; otherwise, get rid of it.
 
-- TODO: possibly research how we could optimize dependency expansion by means of a dependency matrix. See whether dependency expansion can be made fast enough to actually save more
-  time than it wastes; otherwise, get rid of it.
-
-- TODO: add the option to skip all remaining tests once a test fails. Ideally, we would want to skip only tests of classes that depend on the class whose test failed, but this may
-  be a bit hard to determine.
+- TODO: add the option to skip all remaining tests once a test fails. Ideally, we would want to skip only tests of classes that depend on the class whose test failed, but this may be a bit hard to determine.
 
 - TODO: research whether it is possible to detect, with reasonable accuracy, which class or classes are explicitly being tested by a given test class.
 
-- TODO: keep track of not only the last successful run timestamp of each test, but also of the duration it took for the test to complete, so that as soon as the test plan is built,
-  we can give an estimation as to how long it will take to complete the tests. Plus, with each log message we can display a new estimate.
+- TODO: keep track of not only the last successful run timestamp of each test, but also of the duration it took for the test to complete, so that as soon as the test plan is built, we can give an estimation as to how long it will take to complete the tests. Plus, with each log message we can display a new estimate.
 
-- TODO: (optionally) analyze the dependencies of not only the `ConstantPool` of each test class, but also the bytecode of each test method, so as to determine whether to perform or
+- TODO: (optionally) analyze dependencies on a test-method basis instead of a test-class basis, to determine whether to perform or
   omit a test at the individual test method level instead of at the test class level. See if it makes any useful difference.
 
 - TODO: see if there is any way to optimize the process of determining what is a test class and what isn't.
 
-- TODO: optimize the saving of each test's "last successful run" time after it runs. As it stands right now, the entire timestamps file is written after each test class is run,
-  which is quite wasteful.
+- TODO: optimize the saving of each test's "last successful run" time after it runs. As it stands right now, the entire timestamps file is written after each test class is run, which is somewhat wasteful.
 
 - TODO: add better handling of dependency cycles. Measures to consider:
 
-    - Display warnings about cyclic dependencies so that the programmer may consider fixing them. Also introduce an annotation for suppressing those warnings, because circular
-      dependencies are inevitable, there will always be some.
+    - Display warnings about cyclic dependencies so that the programmer may consider fixing them. Also introduce an annotation for suppressing those warnings, because circular dependencies are inevitable, there will always be some.
 
-    - When a cycle is detected, try to artificially give priority to one of the classes in the cycle by applying more rules. For example, given two classes A and B that have been
-      found to circularly depend on each other, there could be rules like the following:
+    - When a cycle is detected, try to artificially give priority to one of the classes in the cycle by applying more rules. For example, given two classes A and B that have been found to circularly depend on each other, there could be rules like the following:
         - If A is abstract and B is concrete, then the concrete class wins, so consider B as depending on A.
         - If A depends on B indirectly through class X, but B depends on A directly, then the shortest number of hops wins, so consider B as depending on A.
         - If A is public and B is package-private, then public wins, so consider A as depending on B.
