@@ -16,9 +16,6 @@
 	</build>
 
 	<dependencies>
-
-		<!-- Yay! No dependencies! -->
-
 		<dependency>
 			<groupId>mikenakis</groupId>
 			<artifactId>kit</artifactId>

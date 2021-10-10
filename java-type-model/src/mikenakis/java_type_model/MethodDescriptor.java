@@ -7,6 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a method.
+ *
+ * @author michael.gr
+ */
 public final class MethodDescriptor
 {
 	public static MethodDescriptor of( Method method )
@@ -38,6 +43,8 @@ public final class MethodDescriptor
 	{
 		return new MethodDescriptor( returnTypeDescriptor, parameterTypeDescriptors );
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public final TypeDescriptor returnTypeDescriptor;
 	public final List<TypeDescriptor> parameterTypeDescriptors;

@@ -3,6 +3,11 @@ package mikenakis.java_type_model;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
+/**
+ * Represents a field.
+ *
+ * @author michael.gr
+ */
 public final class FieldDescriptor
 {
 	public static FieldDescriptor of( Field field )
@@ -20,6 +25,8 @@ public final class FieldDescriptor
 		return new FieldDescriptor( fieldTypeDescriptor );
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public final TypeDescriptor typeDescriptor;
 
 	private FieldDescriptor( TypeDescriptor typeDescriptor )
@@ -28,21 +35,7 @@ public final class FieldDescriptor
 	}
 
 	public String asString() { return typeDescriptor.typeName(); }
-
-	@Deprecated @Override public boolean equals( Object other )
-	{
-		if( other instanceof FieldDescriptor kin )
-			return equals( kin );
-		return false;
-	}
-
-	public boolean equals( FieldDescriptor other )
-	{
-		return typeDescriptor.equals( other.typeDescriptor );
-	}
-
-	@Override public int hashCode()
-	{
-		return Objects.hash( FieldDescriptor.class, typeDescriptor );
-	}
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof FieldDescriptor kin && equals( kin ); }
+	public boolean equals( FieldDescriptor other ) { return typeDescriptor.equals( other.typeDescriptor ); }
+	@Override public int hashCode() { return Objects.hash( FieldDescriptor.class, typeDescriptor ); }
 }

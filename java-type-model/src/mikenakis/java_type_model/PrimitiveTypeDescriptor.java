@@ -8,6 +8,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a primitive type.
+ *
+ * @author michael.gr
+ */
 public final class PrimitiveTypeDescriptor extends TypeDescriptor
 {
 	private static final PrimitiveTypeDescriptor Boolean /**/ = new PrimitiveTypeDescriptor( boolean.class );
@@ -32,6 +37,8 @@ public final class PrimitiveTypeDescriptor extends TypeDescriptor
 	{
 		return Kit.map.get( byTypeName, typeName );
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public final Class<?> jvmClass;
 

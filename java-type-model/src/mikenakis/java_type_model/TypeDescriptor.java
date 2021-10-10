@@ -2,6 +2,11 @@ package mikenakis.java_type_model;
 
 import mikenakis.kit.Kit;
 
+/**
+ * Represents a type.
+ *
+ * @author michael.gr
+ */
 public abstract class TypeDescriptor
 {
 	public static TypeDescriptor of( Class<?> javaClass )
@@ -12,6 +17,8 @@ public abstract class TypeDescriptor
 			return ArrayTypeDescriptor.ofArray( javaClass );
 		return TerminalTypeDescriptor.of( javaClass );
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static TypeDescriptor of( String typeName )
 	{
@@ -25,7 +32,6 @@ public abstract class TypeDescriptor
 	public ArrayTypeDescriptor asArrayTypeDescriptor() { return Kit.fail(); }
 	public PrimitiveTypeDescriptor asPrimitiveTypeDescriptor() { return Kit.fail(); }
 	public TerminalTypeDescriptor asTerminalTypeDescriptor() { return Kit.fail(); }
-
 	@Override public abstract boolean equals( Object other );
 	@Override public abstract int hashCode();
 }

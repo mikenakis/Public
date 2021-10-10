@@ -15,7 +15,7 @@ public final class ProductionLifeGuardFactory implements LifeGuardFactory.Defaul
 	{
 		@Override public boolean lifeStateAssertion( boolean value )
 		{
-			throw new RuntimeException(); //we do not expect this to ever be invoked on syntax.
+			throw new RuntimeException(); //we do not expect this to ever be invoked on production.
 		}
 
 		@Override public void close()
