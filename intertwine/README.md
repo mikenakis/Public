@@ -3,7 +3,7 @@
 
 <p align="center">
 <img title="mikenakis-intertwine logo" src="mikenakis-intertwine.svg" width="256"/><br/>
-The mikenakis-intertwine logo, by Mike Nakis<br/>
+The mikenakis-intertwine logo<br/>
 </p>
 
 ## Description
@@ -33,7 +33,7 @@ For any interface `T` it is possible to write an **_Entwiner of T_** which is an
   - Invokes `AnyCall` using a key that uniquely identifies the method.
   - Returns, possibly after unboxing, whatever was returned by the invocation of `AnyCall`.
 
-It is also possible to write an **_Untwiner of T_** which is an object that does the reverse, namely the following:
+It is also possible to write an **_Untwiner of T_** which is an object that does the reverse, namely:
 - Accepts an instance of `T` as a constructor parameter.
 - Implements `AnyCall`.
 - In the `anyCall` method, uses the supplied `MethodKey` to determine which method of `T` is being invoked, and for each method:
