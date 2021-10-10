@@ -1,5 +1,5 @@
 # mikenakis-intertwine
-#### A framework for converting back and forth between interface method invocations and the _normal form_ `Object anyCall( MethodKey key, Object[] arguments )`.
+#### A framework for converting back and forth between any interface and the _Normal Form of Interfaces_, which is a single-method interface of the form `Object anyCall( MethodKey key, Object[] arguments )`.
 
 <p align="center">
 <img title="mikenakis-intertwine logo" src="mikenakis-intertwine.svg" width="256"/><br/>
@@ -8,22 +8,54 @@ The mikenakis-intertwine logo, by Mike Nakis<br/>
 
 ## Description
                                                                                                                    
-Any conceivable interface can be described using a _normal form_, which is a single-method interface defined as follows:
+Any conceivable interface can be described using the following single-method interface:
 
     interface AnyCall
     {
         Object anyCall( MethodKey key, Object[] arguments );
     }
 
-*mikenakis-intertwine* is a framework that uses bytecode generation to create an _entwiner_ and an _untwiner_ for any interface.
-- The entwiner is an object that implements the interface in question, converts incoming invocations into invocations of the _normal form_, and delegates to an instance of `AnyCall` which has been given to it as a constructor parameter.
-- The untwiner is an object that implements the `AnyCall` interface, converts incoming invocations into invocations of the original interface in question, and delegates to an instance of the interface in question which has been given to it as a constructor parameter.
+We call this the _Normal Form_ of interfaces.
+- The particular interface method that is being invoked is uniquely identified using a `MethodKey`. (More on this later.)
+- The arguments of the invocation are represented as an array of `Object`.
+- The return value of the invocation is represented as an `Object`. If the method is of `void` return type then by convention, the value returned by `anyCall` will be `null`.   
 
-The entwiner is a lot like the built-in Dynamic Proxy of Java, (see `java.lang.reflect.Proxy.newProxyInstance()`,) with one very important difference: it does not mess with exceptions.
+The 'method key' is an abstraction of the actual mechanism used to uniquely identify interface methods, which can be any of the following: 
+- The reflection `Method` object of the method.
+- A string representation of the prototype of the method.
+- A zero-based method index. 
 
-The built-in java dynamic proxy has the extremely annoying habit of catching and rethrowing exceptions, which is a practice devoid of any usefulness whatsoever, but it does severely hamper debugging. That's because debugging relies on having the debugger always stop on any unhandled exception, but a catch-and-rethrow construct in the call tree causes exceptions thrown underneath it to appear as caught exceptions to the debugger, so the debugger does not stop at the location where they are thrown; instead, it stops at the location where they are rethrown, which is useless. So, *mikenakis-intertwine* can serve as a debugger-friendly replacement for Java's ill-behaving built-in dynamic proxy facility.     
+For any interface `T` it is possible to write an **_Entwiner of T_** which is an object that does the following:
+- Accepts an instance of `AnyCall` as a constructor parameter.
+- Implements `T`.
+- For each method of `T`:
+  - Packs the parameters into an array of `Object`, doing any necessary boxing.
+  - Invokes `AnyCall` using a key that uniquely identifies the method.
+  - Returns, possibly after unboxing, whatever was returned by the invocation of `AnyCall`.
 
-The untwiner is the opposite and complement of the entwiner. For some reason, even though Java out of the box contains a dynamic proxy facility, it does not contain its other half. *mikenakis-intertwine* fixes this omission. 
+It is also possible to write an **_Untwiner of T_** which is an object that does the reverse, namely the following:
+- Accepts an instance of `T` as a constructor parameter.
+- Implements `AnyCall`.
+- In the `anyCall` method, uses the supplied `MethodKey` to determine which method of `T` is being invoked, and for each method:
+  - Unpacks the parameters from the array of `Object`, doing any necessary unboxing.
+  - Invokes the method of `T`.
+  - Returns, possibly after boxing, whatever was returned by the method of `T`, or `null` if the method was of `void` return type.
+
+To summarize the above:
+- The entwiner of interface `T` is an object that implements `T` by delegating to an instance of `AnyCall`.
+- The untwiner of interface `T` is an object that implements `AnyCall` by delegating to an instance of `T`.
+
+In other words, the untwiner is the opposite and complement of the entwiner.  
+
+Writing entwiners and untwiners by hand is a tedious and error-prone task; the purpose of **_Intertwine_** is to fully automate it.
+
+*mikenakis-intertwine* is a framework that uses bytecode generation to create _Entwiners_ and _Untwiners_ for any interface.
+
+Entwiners generated by *mikenakis-intertwine* are a lot like the objects created by the built-in Dynamic Proxy facility of Java, (see method `newProxyInstance()` in class `Proxy` of package `java.lang.reflect`) with one very important difference: **they do not mess with exceptions.**
+
+The built-in java dynamic proxy has the extremely annoying habit of catching and rethrowing exceptions, which is a practice devoid of any usefulness whatsoever, but it does severely hamper debugging. That's because debugging relies on having the debugger always stop on any unhandled exception, but a catch-and-rethrow construct in the call tree causes exceptions thrown underneath it to appear as caught exceptions to the debugger, so the debugger does not stop at the location where they are thrown; instead, it stops at the location where they are rethrown, which is useless. So, the entwiners created by *mikenakis-intertwine* can serve as debugger-friendly replacements for the ill-behaving objects generated by Java's built-in dynamic proxy facility.     
+
+Untwiners generated by *mikenakis-intertwine* are unlike anything in Java out of the box. (For some reason, even though Java contains a dynamic proxy facility, it does not contain its other half; *mikenakis-intertwine* fixes this omission.)  An untwiner can be implemented using reflection, but it is slow, and it can also be implemented using method handles, which are indeed considerably faster than reflection, but still not as fast as possible. The entwiners and untwiners generated by mikenakis-intertwine are about as fast as their hand-written counterparts, which is as fast as it can get.    
 
 ## License
 
