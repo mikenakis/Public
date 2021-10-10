@@ -51,7 +51,10 @@ public final class ByteCodeType
 
 	public static ByteCodeType read( Class<?> jvmClass )
 	{
-		String resourceName = jvmClass.getSimpleName() + ".class";
+		String className = jvmClass.getName();
+		String prefix = jvmClass.getPackageName();
+		assert className.startsWith( prefix + "." );
+		String resourceName = className.substring( prefix.length() + 1 ) + ".class";
 		byte[] bytes = Kit.uncheckedTryGetWithResources( //
 			() -> jvmClass.getResourceAsStream( resourceName ), //
 			i -> i.readAllBytes() );

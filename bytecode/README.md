@@ -92,7 +92,7 @@ The Artifact Repository is on Repsy: https://repo.repsy.io/mvn/mikenakis/mikenak
 
 ## License
 
-This creative work is explicitly published under No License. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
+This creative work is explicitly published under ***No License***. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
 
 If you would like to do anything more with this creative work, contact me.
 
