@@ -13,7 +13,6 @@ import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
-import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
@@ -147,8 +146,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			addEntwinerInterfaceMethod( entwinerByteCodeType, interfaceByteCodeType, keysField, exitPointField, interfaceMethodIndex, interfaceMethod.prototype() );
 		}
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", entwinerByteCodeType.typeDescriptor().typeName + ".class" ), entwinerByteCodeType.write() );
-		System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
+//		saveBytes( Path.of( "C:\\temp\\intertwine", entwinerByteCodeType.typeDescriptor().typeName + ".class" ), entwinerByteCodeType.write() );
+//		System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
 
 		return factory.byteCodeClassLoader.load( entwinerByteCodeType );
 	}
@@ -245,8 +244,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		addUntwinerInitMethod( untwinerByteCodeType, interfaceByteCodeType, exitPointField );
 		addUntwinerAnyCallMethod( untwinerByteCodeType, interfaceByteCodeType, exitPointField );
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", untwinerByteCodeType.typeDescriptor().typeName + ".class" ), untwinerByteCodeType.write() );
-		System.out.println( ByteCodePrinter.printByteCodeType( untwinerByteCodeType, Optional.empty() ) );
+//		saveBytes( Path.of( "C:\\temp\\intertwine", untwinerByteCodeType.typeDescriptor().typeName + ".class" ), untwinerByteCodeType.write() );
+//		System.out.println( ByteCodePrinter.printByteCodeType( untwinerByteCodeType, Optional.empty() ) );
 
 		return factory.byteCodeClassLoader.load( untwinerByteCodeType );
 	}

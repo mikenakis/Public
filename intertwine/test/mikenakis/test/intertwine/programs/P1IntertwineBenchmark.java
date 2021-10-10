@@ -3,6 +3,7 @@ package mikenakis.test.intertwine.programs;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
+import mikenakis.intertwine.implementations.compiling.CompilingIntertwineFactory;
 import mikenakis.intertwine.implementations.methodhandle.MethodHandleIntertwineFactory;
 import mikenakis.intertwine.implementations.reflecting.ReflectingIntertwineFactory;
 import mikenakis.kit.functional.Function1;
@@ -55,6 +56,7 @@ public final class P1IntertwineBenchmark
 			runBenchmark( out, "Direct                   ", new DirectBenchmarkable()::run );
 			runBenchmark( out, "Reflecting Intertwine    ", new ReflectingIntertwineBenchmarkable()::run );
 			runBenchmark( out, "MethodHandle Intertwine  ", new MethodHandleIntertwineBenchmarkable()::run );
+			runBenchmark( out, "Compiling Intertwine     ", new CompilingIntertwineBenchmarkable()::run );
 			runBenchmark( out, "Reflecting Lambdatwine   ", new ReflectingLambdatwineBenchmarkable()::run );
 			runBenchmark( out, "MethodHandle Lambdatwine ", new MethodHandleLambdatwineBenchmarkable()::run );
 			out.println();
@@ -119,6 +121,14 @@ public final class P1IntertwineBenchmark
 		ReflectingIntertwineBenchmarkable()
 		{
 			super( ReflectingIntertwineFactory.instance );
+		}
+	}
+
+	static class CompilingIntertwineBenchmarkable extends IntertwineBenchmarkable
+	{
+		CompilingIntertwineBenchmarkable()
+		{
+			super( CompilingIntertwineFactory.instance );
 		}
 	}
 
