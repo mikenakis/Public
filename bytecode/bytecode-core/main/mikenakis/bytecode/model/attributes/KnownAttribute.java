@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 /**
  * Represents a known {@link Attribute}.
  * <p>
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class KnownAttribute extends Attribute
 {

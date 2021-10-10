@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Represents a list of instructions.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class InstructionList
 {

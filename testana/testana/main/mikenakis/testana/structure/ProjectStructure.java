@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Contains all {@link ProjectType}s.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ProjectStructure
 {

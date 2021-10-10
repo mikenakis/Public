@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * ByteCode helpers.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ByteCodeHelpers
 {

@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * A {@link DevelopmentLifeGuardFactory} that works via finalization, which has been deprecated as of Java 9.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class FinalizingDevelopmentLifeGuardFactory extends DevelopmentLifeGuardFactory
 {

@@ -15,7 +15,7 @@ import java.util.List;
  * <p>
  * {@link ByteCodeMethod}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class RuntimeVisibleParameterAnnotationsAttribute extends ParameterAnnotationsAttribute
 {

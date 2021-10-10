@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * JUnit {@link TestMethod}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class JunitTestMethod extends TestMethod
 {

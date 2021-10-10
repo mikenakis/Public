@@ -5,7 +5,7 @@ import mikenakis.bytecode.model.Constant;
 /**
  * Common base class for value constants.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class ValueConstant extends Constant
 {

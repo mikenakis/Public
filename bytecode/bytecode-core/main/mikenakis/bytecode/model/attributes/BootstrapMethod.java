@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * An entry of the {@link BootstrapMethodsAttribute}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class BootstrapMethod
 {

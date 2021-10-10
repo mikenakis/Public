@@ -3,7 +3,7 @@ package mikenakis.bytecode.test.model;
 /**
  * test interface.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Interface2 extends Interface1
 {

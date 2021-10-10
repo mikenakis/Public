@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Represents an entry of the {@link LocalVariableTableAttribute}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class LocalVariableTableEntry
 {

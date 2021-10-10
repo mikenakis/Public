@@ -10,7 +10,7 @@ import org.junit.Test;
 /**
  * test.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class T001_Mutf8
 {

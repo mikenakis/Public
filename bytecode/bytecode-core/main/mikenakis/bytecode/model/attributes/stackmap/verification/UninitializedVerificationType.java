@@ -11,7 +11,7 @@ import mikenakis.bytecode.writing.WritingLocationMap;
 /**
  * 'Uninitialized' {@link VerificationType}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class UninitializedVerificationType extends VerificationType
 {

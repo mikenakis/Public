@@ -3,7 +3,7 @@ package mikenakis.lambdatwine;
 /**
  * Obtains {@link Lambdatwine}s for functional interfaces.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface LambdatwineFactory
 {

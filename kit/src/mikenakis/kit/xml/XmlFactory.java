@@ -3,7 +3,7 @@ package mikenakis.kit.xml;
 /**
  * XML Factory.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface XmlFactory
 {

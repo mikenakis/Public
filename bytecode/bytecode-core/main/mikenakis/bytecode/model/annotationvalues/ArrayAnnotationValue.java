@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Represents an array {@link AnnotationValue}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ArrayAnnotationValue extends AnnotationValue
 {

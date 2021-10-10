@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Represents an annotation.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class Annotation
 {

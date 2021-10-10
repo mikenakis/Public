@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * XML {@link GroupDespoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class XmlGroupDespoolStream implements GroupDespoolStream.Defaults, Closeable.Defaults
 {

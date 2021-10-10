@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 /**
  * A command line argument.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Argument<T> extends Supplier<T>
 {

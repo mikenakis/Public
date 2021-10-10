@@ -25,7 +25,7 @@ import java.util.Optional;
  *
  * See JVMS Table 4.7-C, "Predefined class file attributes (by location)" https://docs.oracle.com/javase/specs/jvms/se11/html/jvms-4.html#jvms-4.7-320
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class NestHostAttribute extends KnownAttribute
 {

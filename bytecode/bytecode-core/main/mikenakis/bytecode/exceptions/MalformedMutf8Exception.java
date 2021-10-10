@@ -5,7 +5,7 @@ import mikenakis.kit.UncheckedException;
 /**
  * "Malformed MUTF8" exception.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class MalformedMutf8Exception extends UncheckedException
 {

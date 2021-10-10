@@ -17,7 +17,7 @@ import java.util.Objects;
 /**
  * Represents the JVMS::CONSTANT_InvokeDynamic_info structure.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class InvokeDynamicConstant extends Constant
 {

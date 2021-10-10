@@ -5,7 +5,7 @@ import mikenakis.bytecode.model.descriptors.MethodPrototype;
 /**
  * Identifies a method of an interface.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface MethodKey<T>
 {

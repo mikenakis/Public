@@ -3,7 +3,7 @@ package mikenakis.testana.testplan.intent;
 /**
  * "Test Class will run" {@link Intent}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class RunIntent extends Intent
 {

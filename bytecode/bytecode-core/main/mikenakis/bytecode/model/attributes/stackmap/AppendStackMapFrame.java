@@ -21,7 +21,7 @@ import java.util.Optional;
  * <p>
  * the operand stack is empty and the current locals are the same as the locals in the previous frame, except that k additional locals are defined.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class AppendStackMapFrame extends StackMapFrame
 {

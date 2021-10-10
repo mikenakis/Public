@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * Presents the data-set of SWAPI as a list of named tables, where each table is a list of rows addressable by id, where each row is a map of values addressable by field name.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( "SpellCheckingInspection" )
 public final class SwapiFixer

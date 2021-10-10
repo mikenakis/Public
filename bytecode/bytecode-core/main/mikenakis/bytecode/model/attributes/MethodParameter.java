@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Represents an entry of {@link MethodParametersAttribute}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class MethodParameter
 {

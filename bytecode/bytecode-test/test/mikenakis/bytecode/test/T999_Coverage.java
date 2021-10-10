@@ -73,7 +73,7 @@ import java.util.function.Function;
  * <p>
  * Ideally, this test class would be removed when the module reaches maturity.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class T999_Coverage
 {

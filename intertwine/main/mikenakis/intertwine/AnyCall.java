@@ -5,7 +5,7 @@ package mikenakis.intertwine;
  *
  * @param <T> the type of the interface being represented.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface AnyCall<T>
 {

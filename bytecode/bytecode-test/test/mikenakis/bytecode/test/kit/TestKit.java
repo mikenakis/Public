@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Indispensable utility methods.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class TestKit
 {

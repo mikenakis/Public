@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 /**
  * {@link ProjectStructure} builder.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ProjectStructureBuilder
 {

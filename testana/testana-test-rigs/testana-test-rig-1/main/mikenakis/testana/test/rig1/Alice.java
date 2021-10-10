@@ -3,7 +3,7 @@ package mikenakis.testana.test.rig1;
 /**
  * Represents a dependency of a class which is to be tested.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class Alice
 {

@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  *
  * See JSR 305: Annotations for Software Defect Detection (https://jcp.org/en/jsr/detail?id=305)
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @Retention( RetentionPolicy.CLASS )
 @Target( ElementType.METHOD )

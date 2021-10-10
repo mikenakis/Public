@@ -9,7 +9,7 @@ import mikenakis.intertwine.MethodKey;
  *
  * NOTE: the class and field 'index' must both be public in order to be accessible by compiled untwiner
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class CompilingKey<T> implements MethodKey<T>
 {

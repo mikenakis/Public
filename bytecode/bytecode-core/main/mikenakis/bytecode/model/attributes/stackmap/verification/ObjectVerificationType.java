@@ -13,7 +13,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * 'Object' {@link VerificationType}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ObjectVerificationType extends VerificationType
 {

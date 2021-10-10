@@ -20,7 +20,7 @@ import java.util.Objects;
  *
  * Note: "MUTF8" stands for "Modified UTF8"
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class Mutf8ValueConstant extends ValueConstant
 {

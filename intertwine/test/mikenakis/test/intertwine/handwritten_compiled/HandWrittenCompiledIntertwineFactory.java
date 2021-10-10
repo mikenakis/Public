@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 /**
  * A {@link IntertwineFactory} for {@link HandWrittenCompiledIntertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class HandWrittenCompiledIntertwineFactory implements IntertwineFactory
 {

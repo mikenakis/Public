@@ -23,7 +23,7 @@ import java.util.Optional;
  * <p>
  * {@link ByteCodeMethod}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class MethodParametersAttribute extends KnownAttribute
 {

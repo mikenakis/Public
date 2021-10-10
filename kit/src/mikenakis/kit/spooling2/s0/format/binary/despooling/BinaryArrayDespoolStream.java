@@ -8,7 +8,7 @@ import mikenakis.kit.spooling2.s0.despooling.EntryDespoolStream;
 /**
  * Binary {@link ArrayDespoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class BinaryArrayDespoolStream implements ArrayDespoolStream
 {

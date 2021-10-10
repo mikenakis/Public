@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 /**
  * test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( { "FieldCanBeLocal", "FieldMayBeStatic", "unused", "MethodMayBeStatic", "WeakerAccess" } )
 public abstract class Class3ImplementingInterface implements Interface1

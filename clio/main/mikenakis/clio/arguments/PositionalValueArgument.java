@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * A positional {@link BaseArgument}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class PositionalValueArgument<T> extends ValueArgument<T>
 {

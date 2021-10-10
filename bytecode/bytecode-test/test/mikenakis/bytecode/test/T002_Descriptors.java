@@ -17,7 +17,7 @@ import java.util.Comparator;
 /**
  * test.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( "MethodMayBeStatic" )
 public class T002_Descriptors

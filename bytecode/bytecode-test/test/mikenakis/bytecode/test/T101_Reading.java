@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * test.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class T101_Reading
 {

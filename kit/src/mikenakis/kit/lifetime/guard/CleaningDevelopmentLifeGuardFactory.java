@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * A {@link DevelopmentLifeGuardFactory} which makes use of the 'Cleaner' class of Java 9
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class CleaningDevelopmentLifeGuardFactory extends DevelopmentLifeGuardFactory
 {

@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * Non-leaf (class or root) {@link TestResult}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class NonLeafTestResult extends TestResult
 {

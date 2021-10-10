@@ -22,7 +22,7 @@ import java.util.Optional;
 /**
  * JUnit {@link TestEngine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class JunitTestEngine extends TestEngine
 {

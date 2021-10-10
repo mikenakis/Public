@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * XML Root {@link EntryEnspoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class XmlEntryEnspoolStream implements EntryEnspoolStream.Defaults, Closeable.Defaults
 {

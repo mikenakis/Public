@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * Maven {@link Discoverer}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class MavenDiscoverer implements Discoverer
 {

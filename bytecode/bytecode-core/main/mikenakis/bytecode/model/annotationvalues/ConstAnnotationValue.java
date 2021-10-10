@@ -15,7 +15,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents a constant {@link AnnotationValue}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ConstAnnotationValue extends AnnotationValue
 {

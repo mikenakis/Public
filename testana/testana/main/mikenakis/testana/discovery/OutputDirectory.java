@@ -6,7 +6,7 @@ import java.util.Collection;
 /**
  * Represents an output directory of a module.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class OutputDirectory
 {

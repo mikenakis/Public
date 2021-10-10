@@ -4,7 +4,7 @@ package mikenakis.testana.testplan.intent;
  * Signifies that a test class does not need to run because it is up-to-date.
  * (Neither the test class, nor any of its dependencies, has changed since the last test run.)
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class UpToDateIntent extends Intent
 {

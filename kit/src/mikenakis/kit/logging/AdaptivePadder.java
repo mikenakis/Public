@@ -7,7 +7,7 @@ package mikenakis.kit.logging;
  * NOTE: this class is not exactly thread safe, but that is okay because in the event of a race condition the worst thing that can happen
  * is that an output line might (rarely) be misaligned with respect to the previous line.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class AdaptivePadder
 {

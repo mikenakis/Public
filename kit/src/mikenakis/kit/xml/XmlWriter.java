@@ -5,7 +5,7 @@ import mikenakis.kit.lifetime.Closeable;
 /**
  * An XML Writer that actually makes sense.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface XmlWriter extends Closeable
 {

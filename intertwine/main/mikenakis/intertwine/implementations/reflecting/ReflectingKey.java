@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * A {@link MethodKey} for the {@link ReflectingIntertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class ReflectingKey<T> implements MethodKey<T>
 {

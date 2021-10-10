@@ -22,7 +22,7 @@ import java.io.PrintStream;
 /**
  * Test Program.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class P1IntertwineBenchmark
 {

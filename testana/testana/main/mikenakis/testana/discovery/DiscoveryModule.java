@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Represents a module of the project.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class DiscoveryModule
 {

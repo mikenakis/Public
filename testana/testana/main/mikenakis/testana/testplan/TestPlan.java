@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Contains {@link TestModule}s, {@link TestClass}s, {@link TestMethod}s and {@link Intent}s.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class TestPlan
 {

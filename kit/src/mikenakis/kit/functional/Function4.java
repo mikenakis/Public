@@ -9,7 +9,7 @@ package mikenakis.kit.functional;
  * @param <P3> the type of the 3rd parameter.
  * @param <P4> the type of the 4th parameter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Function4<R, P1, P2, P3, P4>
 {

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Reflecting {@link Lambdatwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class ReflectingLambdatwine<T> implements Lambdatwine<T>
 {

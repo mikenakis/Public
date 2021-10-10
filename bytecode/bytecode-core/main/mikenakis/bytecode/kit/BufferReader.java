@@ -3,7 +3,7 @@ package mikenakis.bytecode.kit;
 /**
  * A reader of {@link Buffer}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class BufferReader
 {

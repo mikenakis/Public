@@ -3,7 +3,7 @@ package mikenakis.testana.testplan.intent;
 /**
  * Signifies that a test class should run because it never ran before.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class FirstRunIntent extends RunIntent
 {

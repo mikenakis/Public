@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Runner.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class TestRunner
 {

@@ -26,7 +26,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents a java class file constant.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class Constant
 {

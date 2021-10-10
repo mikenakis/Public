@@ -11,7 +11,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents the "element_value_pair" of JVMS 4.7.16.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class AnnotationParameter
 {

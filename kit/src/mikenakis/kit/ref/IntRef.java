@@ -3,7 +3,7 @@ package mikenakis.kit.ref;
 /**
  * A mutable reference to an {@code int}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class IntRef
 {

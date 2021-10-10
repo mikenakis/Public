@@ -5,7 +5,7 @@ import mikenakis.clio.arguments.Argument;
 /**
  * "Required argument missing" {@link ClioException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class RequiredArgumentMissingException extends ClioException
 {

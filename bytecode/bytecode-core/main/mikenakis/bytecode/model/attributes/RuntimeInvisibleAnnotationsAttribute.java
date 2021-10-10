@@ -13,7 +13,7 @@ import java.util.List;
  * <p>
  * See JVMS 4.7.16 "The RuntimeVisibleAnnotations attribute", https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.7.16
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class RuntimeInvisibleAnnotationsAttribute extends AnnotationsAttribute
 {

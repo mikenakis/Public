@@ -3,7 +3,7 @@ package mikenakis.testana.runtime.result;
 /**
  * Method {@link TestResult}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class TestMethodResult extends TestResult
 {

@@ -6,7 +6,7 @@ import java.io.StringWriter;
 /**
  * Failure {@link TestMethodResult}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class FailedMethodTestResult extends TestMethodResult
 {

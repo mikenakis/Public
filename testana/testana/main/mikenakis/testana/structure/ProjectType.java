@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * Contains a {@link ByteCodeType} and additional information about it.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class ProjectType
 {

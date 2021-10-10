@@ -7,7 +7,7 @@ package mikenakis.kit.functional;
  * @param <R>  the type of the return value.
  * @param <P> the type of the parameter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Function1<R, P>
 {

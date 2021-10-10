@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Logger.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class DebugLogger implements Logger
 {

@@ -8,7 +8,7 @@ import java.io.Writer;
 /**
  * JSON Emitter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class JsonEmitter implements Closeable
 {

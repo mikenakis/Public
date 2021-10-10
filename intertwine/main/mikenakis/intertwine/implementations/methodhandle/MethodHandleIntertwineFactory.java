@@ -6,7 +6,7 @@ import mikenakis.intertwine.IntertwineFactory;
 /**
  * A {@link IntertwineFactory} for {@link MethodHandleIntertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class MethodHandleIntertwineFactory implements IntertwineFactory
 {

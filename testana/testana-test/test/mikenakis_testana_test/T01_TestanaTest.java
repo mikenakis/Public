@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 /**
  * Testana Test.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class T01_TestanaTest
 {

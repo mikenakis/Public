@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * A writer of {@link Buffer}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class BufferWriter
 {

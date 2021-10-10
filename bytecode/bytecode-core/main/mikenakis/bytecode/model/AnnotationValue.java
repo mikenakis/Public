@@ -17,7 +17,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents the element_value structure of JVMS 4.7.16.1.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class AnnotationValue
 {

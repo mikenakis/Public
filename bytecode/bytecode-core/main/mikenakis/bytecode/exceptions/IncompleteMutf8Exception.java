@@ -5,7 +5,7 @@ import mikenakis.kit.UncheckedException;
 /**
  * "Incomplete MUTF8" exception.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class IncompleteMutf8Exception extends UncheckedException
 {

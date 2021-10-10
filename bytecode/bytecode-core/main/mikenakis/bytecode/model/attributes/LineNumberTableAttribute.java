@@ -20,7 +20,7 @@ import java.util.Optional;
  * <p>
  * {@link CodeAttribute}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class LineNumberTableAttribute extends KnownAttribute
 {

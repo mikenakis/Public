@@ -3,7 +3,7 @@ package mikenakis.kit.ref;
 /**
  * A volatile reference to an {@code int}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class VolatileIntRef
 {

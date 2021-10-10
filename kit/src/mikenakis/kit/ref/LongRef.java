@@ -3,7 +3,7 @@ package mikenakis.kit.ref;
 /**
  * A mutable reference to a {@code long}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class LongRef
 {

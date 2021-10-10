@@ -8,7 +8,7 @@ package mikenakis.kit.lifetime;
  * Normally this should be called 'LifetimeAware', but I have (at least for the time being) opted to call it "Closeable" since Java already has
  * the 'AutoCloseable' interface, which essentially serves the same purpose.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Closeable extends AutoCloseable
 {

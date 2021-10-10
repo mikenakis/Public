@@ -8,7 +8,7 @@ package mikenakis.kit.functional;
  * @param <P1> the type of the 1st parameter.
  * @param <P2> the type of the 2nd parameter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Function2<R, P1, P2>
 {

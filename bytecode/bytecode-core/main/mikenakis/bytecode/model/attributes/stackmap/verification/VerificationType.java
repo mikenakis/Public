@@ -16,7 +16,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 /**
  * Base class for verification types.  See JVMS §4.10.1.2. "Verification Type System"
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class VerificationType
 {

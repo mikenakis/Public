@@ -7,7 +7,7 @@ import mikenakis.kit.UncheckedException;
 /**
  * 'Method Not Found' {@link UncheckedException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class MethodNotFoundException extends UncheckedException
 {

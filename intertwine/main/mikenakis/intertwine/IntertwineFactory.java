@@ -3,7 +3,7 @@ package mikenakis.intertwine;
 /**
  * Obtains {@link Intertwine}s for interfaces.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface IntertwineFactory
 {

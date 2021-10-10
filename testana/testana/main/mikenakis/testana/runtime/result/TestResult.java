@@ -5,7 +5,7 @@ import java.time.Duration;
 /**
  * Test Result.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class TestResult
 {

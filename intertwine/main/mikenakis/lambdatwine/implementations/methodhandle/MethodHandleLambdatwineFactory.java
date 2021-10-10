@@ -6,7 +6,7 @@ import mikenakis.lambdatwine.LambdatwineFactory;
 /**
  * A {@link LambdatwineFactory} for {@link MethodHandleLambdatwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class MethodHandleLambdatwineFactory implements LambdatwineFactory
 {

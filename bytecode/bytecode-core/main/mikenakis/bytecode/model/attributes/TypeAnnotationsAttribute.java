@@ -25,7 +25,7 @@ import java.util.Optional;
  * <p>
  * {@link ByteCodeType} {@link ByteCodeMethod} {@link ByteCodeField} {@link CodeAttribute}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class TypeAnnotationsAttribute extends KnownAttribute
 {

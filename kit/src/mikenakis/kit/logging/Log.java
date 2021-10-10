@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * A simple logging facility.
  * <p>
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class Log
 {

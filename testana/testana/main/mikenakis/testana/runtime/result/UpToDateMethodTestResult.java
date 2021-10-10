@@ -3,7 +3,7 @@ package mikenakis.testana.runtime.result;
 /**
  * A {@link TestMethodResult} indicating that a method is up-to-date, in other words it should be skipped.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class UpToDateMethodTestResult extends TestMethodResult
 {

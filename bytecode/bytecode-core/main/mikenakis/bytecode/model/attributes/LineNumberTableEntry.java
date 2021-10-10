@@ -10,7 +10,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents an entry of the {@link LineNumberTableAttribute}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class LineNumberTableEntry
 {

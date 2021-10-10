@@ -16,7 +16,7 @@ import java.util.Optional;
  * <p>
  * the frame has exactly the same locals as the previous stack map frame and the number of stack items is zero.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class SameStackMapFrame extends StackMapFrame
 {

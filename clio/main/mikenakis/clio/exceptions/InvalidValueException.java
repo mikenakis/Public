@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * "Invalid value" {@link ClioException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class InvalidValueException extends ClioException
 {

@@ -8,7 +8,7 @@ import mikenakis.bytecode.writing.WritingLocationMap;
 /**
  * 'Simple' {@link VerificationType}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class SimpleVerificationType extends VerificationType
 {

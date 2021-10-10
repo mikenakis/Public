@@ -10,7 +10,7 @@ import mikenakis.java_type_model.TypeDescriptor;
 /**
  * Represents the JVMS::CONSTANT_Fieldref_info structure.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class FieldReferenceConstant extends ReferenceConstant
 {

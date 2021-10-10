@@ -51,7 +51,7 @@ import java.util.Optional;
  * <p>
  * {@link ByteCodeMethod}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( { "NewMethodNamingConvention", "SpellCheckingInspection" } )
 public final class CodeAttribute extends KnownAttribute

@@ -28,7 +28,7 @@ import java.util.Optional;
 /**
  * Loads data from the swapi service
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class SwapiLoader
 {

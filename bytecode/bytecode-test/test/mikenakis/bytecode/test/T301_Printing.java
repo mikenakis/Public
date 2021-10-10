@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * test.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class T301_Printing
 {

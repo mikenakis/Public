@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( { "MethodMayBeStatic", "SpellCheckingInspection", "unused" } )
 public abstract class Class2WithVariousInstructions

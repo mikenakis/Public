@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * A {@link MethodKey} for the {@link MethodHandleIntertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class MethodHandleKey<T> implements MethodKey<T>
 {

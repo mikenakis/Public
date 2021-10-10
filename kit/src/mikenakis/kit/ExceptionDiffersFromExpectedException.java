@@ -5,7 +5,7 @@ import java.util.Optional;
 /**
  * "Exception Differs from Expected" {@link UncheckedException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class ExceptionDiffersFromExpectedException extends UncheckedException
 {

@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * Represents the JVMS::CONSTANT_String_info structure.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class StringValueConstant extends ValueConstant
 {

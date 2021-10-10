@@ -14,7 +14,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents an enum {@link AnnotationValue}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class EnumAnnotationValue extends AnnotationValue
 {

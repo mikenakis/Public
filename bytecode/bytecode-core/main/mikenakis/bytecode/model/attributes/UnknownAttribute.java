@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Represents an unknown {@link Attribute} of a java class file.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class UnknownAttribute extends Attribute
 {

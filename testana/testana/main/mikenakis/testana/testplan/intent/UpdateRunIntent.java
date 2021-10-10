@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Signifies that a test class should run because one or more of its dependencies were modified since its last test run.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class UpdateRunIntent extends RunIntent
 {

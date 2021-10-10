@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * A collection of {@link Attribute}s.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class AttributeSet
 {

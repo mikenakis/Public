@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 /**
  * Parses command-line arguments.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class Clio
 {

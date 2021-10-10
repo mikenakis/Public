@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * XML {@link GroupEnspoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class XmlGroupEnspoolStream implements GroupEnspoolStream.Defaults, Closeable.Defaults
 {

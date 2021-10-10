@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * An XML Reader that actually makes sense.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface XmlReader extends Closeable
 {

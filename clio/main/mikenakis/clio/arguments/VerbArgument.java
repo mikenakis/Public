@@ -14,7 +14,7 @@ import java.util.List;
  *
  * NOTE: this is not really working yet, it just exists as a reminder that it should be implemented at some point.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class VerbArgument extends BaseArgument<Boolean>
 {

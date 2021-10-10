@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Method Handle {@link Lambdatwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class MethodHandleLambdatwine<T> implements Lambdatwine<T>
 {

@@ -6,7 +6,7 @@ import mikenakis.testana.testplan.TestClass;
 /**
  * Test Engine.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class TestEngine
 {

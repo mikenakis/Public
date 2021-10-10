@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Discovers {@link DiscoveryModule}s.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Discoverer
 {

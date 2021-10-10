@@ -11,7 +11,7 @@ import mikenakis.kit.xml.XmlWriter;
 /**
  * XML {@link ArrayEnspoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class XmlArrayEnspoolStream implements ArrayEnspoolStream.Defaults, Closeable.Defaults
 {

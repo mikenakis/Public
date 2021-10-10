@@ -3,7 +3,7 @@ package mikenakis.kit.spooling2.s0.format.json.despooling;
 /**
  * JSON Parsing Exception.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class JsonParsingException extends RuntimeException
 {

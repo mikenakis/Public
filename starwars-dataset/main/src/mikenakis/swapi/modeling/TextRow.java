@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * Contains an id, a map of field values addressable by name, and a map of lists of integer addressable by name.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class TextRow
 {

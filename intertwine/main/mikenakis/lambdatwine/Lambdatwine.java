@@ -5,7 +5,7 @@ package mikenakis.lambdatwine;
  *
  * @param <T> the type of the interface.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Lambdatwine<T>
 {

@@ -5,7 +5,7 @@ import mikenakis.kit.UncheckedException;
 /**
  * "String too long" exception.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class StringTooLongException extends UncheckedException
 {

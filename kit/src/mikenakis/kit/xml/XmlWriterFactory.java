@@ -5,7 +5,7 @@ import mikenakis.kit.io.stream.text.TextStreamWriter;
 /**
  * {@link XmlWriter} factory.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface XmlWriterFactory
 {

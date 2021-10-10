@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 /**
  * A {@link IntertwineFactory} for {@link HandwrittenIntertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class HandwrittenIntertwineFactory implements IntertwineFactory
 {

@@ -9,7 +9,7 @@ import java.nio.file.Path;
 /**
  * ByteCode loader.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class ByteCodeLoader
 {

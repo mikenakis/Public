@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  *
  * Note: this class must be public because it needs to be accessible by the generated untwiner which is loaded by a different classloader.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class HandWrittenCompiledKey implements MethodKey<FooInterface>
 {

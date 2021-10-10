@@ -7,7 +7,7 @@ import java.util.Collection;
 /**
  * Represents a test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class TestClass
 {

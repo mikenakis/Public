@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * A Kit of Indispensable Utility Methods.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( "CharacterComparison" )
 public final class Helpers

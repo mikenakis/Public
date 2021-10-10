@@ -22,7 +22,7 @@ import java.util.Optional;
  * <p>
  * {@link ByteCodeMethod}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class ParameterAnnotationsAttribute extends KnownAttribute
 {

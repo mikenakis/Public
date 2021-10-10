@@ -3,7 +3,7 @@ package mikenakis.testana.runtime.result;
 /**
  * 'Ignored' {@link TestMethodResult}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class IgnoredMethodTestResult extends TestMethodResult
 {

@@ -7,7 +7,7 @@ import java.time.Instant;
 /**
  * Logger.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Logger
 {

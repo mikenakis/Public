@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Contains a map of {@link TextTable} addressable by name.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class TextDomain
 {

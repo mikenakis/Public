@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * Represents the JVMS::CONSTANT_Class_info structure. See JVMS §4.4.1.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ClassConstant extends Constant
 {

@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  * 'Full' {@link StackMapFrame}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class FullStackMapFrame extends StackMapFrame
 {

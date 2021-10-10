@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Contains a name and a map of {@link TextRow} addressable by id.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class TextTable
 {

@@ -125,7 +125,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ByteCodePrinter
 {

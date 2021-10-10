@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 /**
  * Testana Launcher.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class ClassDumpMain
 {

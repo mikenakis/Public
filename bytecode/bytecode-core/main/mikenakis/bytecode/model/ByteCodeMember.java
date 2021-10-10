@@ -3,7 +3,7 @@ package mikenakis.bytecode.model;
 /**
  * Represents a Member. (Field or Method.)
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class ByteCodeMember
 {

@@ -11,7 +11,7 @@ import mikenakis.kit.xml.XmlReader;
 /**
  * XML {@link ArrayDespoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class XmlArrayDespoolStream implements ArrayDespoolStream, Closeable.Defaults
 {

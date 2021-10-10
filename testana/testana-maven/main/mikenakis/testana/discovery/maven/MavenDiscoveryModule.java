@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Represents a Maven {@link DiscoveryModule}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 final class MavenDiscoveryModule extends DiscoveryModule
 {

@@ -11,7 +11,7 @@ import java.util.Optional;
  *
  * TODO: make it possible to specify "-name=value" instead of only "-name value"
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class NamedValueArgument<T> extends ValueArgument<T>
 {

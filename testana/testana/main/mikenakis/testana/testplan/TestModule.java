@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Represents a test module.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class TestModule
 {

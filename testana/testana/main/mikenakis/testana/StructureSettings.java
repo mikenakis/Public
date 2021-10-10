@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * Configuration.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class StructureSettings
 {

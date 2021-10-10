@@ -5,7 +5,7 @@ import mikenakis.testana.runtime.result.TestMethodResult;
 /**
  * Represents a test method.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class TestMethod
 {

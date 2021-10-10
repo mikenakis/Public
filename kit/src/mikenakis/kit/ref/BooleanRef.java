@@ -3,7 +3,7 @@ package mikenakis.kit.ref;
 /**
  * A mutable reference to a {@code boolean}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class BooleanRef
 {

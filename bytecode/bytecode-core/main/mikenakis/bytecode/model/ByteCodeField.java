@@ -19,7 +19,7 @@ import java.util.Optional;
 /**
  * Represents a field.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ByteCodeField extends ByteCodeMember
 {

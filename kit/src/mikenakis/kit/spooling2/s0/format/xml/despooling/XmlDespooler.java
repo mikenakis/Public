@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * XML Root {@link EntryDespoolStream}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class XmlDespooler
 {

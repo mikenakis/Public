@@ -3,7 +3,7 @@ package mikenakis.clio.exceptions;
 /**
  * "Value expected" {@link ClioException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class ValueExpectedException extends ClioException
 {

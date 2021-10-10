@@ -3,7 +3,7 @@ package mikenakis.kit;
 /**
  * "Exception Expected" {@link UncheckedException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class ExceptionExpectedException extends UncheckedException
 {

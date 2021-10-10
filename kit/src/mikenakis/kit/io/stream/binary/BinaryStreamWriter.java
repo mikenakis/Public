@@ -3,7 +3,7 @@ package mikenakis.kit.io.stream.binary;
 /**
  * Synchronous Binary Stream Writer.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface BinaryStreamWriter
 {

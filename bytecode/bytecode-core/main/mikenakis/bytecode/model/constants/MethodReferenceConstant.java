@@ -9,7 +9,7 @@ import mikenakis.bytecode.reading.ReadingConstantPool;
 /**
  * Represents the JVMS::CONSTANT_Methodref_info and JVMS::CONSTANT_InterfaceMethodref_info structures.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class MethodReferenceConstant extends ReferenceConstant
 {

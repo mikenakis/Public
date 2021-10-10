@@ -20,7 +20,7 @@ import java.util.Optional;
  * <p>
  * {@link ByteCodeField}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ConstantValueAttribute extends KnownAttribute
 {

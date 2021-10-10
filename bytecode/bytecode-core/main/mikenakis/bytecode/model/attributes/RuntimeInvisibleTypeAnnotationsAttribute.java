@@ -25,7 +25,7 @@ import java.util.Optional;
  * {@link ByteCodeMethod}
  * {@link CodeAttribute}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class RuntimeInvisibleTypeAnnotationsAttribute extends TypeAnnotationsAttribute
 {

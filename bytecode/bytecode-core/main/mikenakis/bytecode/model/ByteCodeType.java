@@ -43,7 +43,7 @@ import java.util.function.Function;
  * <p>
  * http://elliotth.blogspot.nl/2008/04/generating-jvm-bytecode-3.html
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ByteCodeType
 {

@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 /**
  * Method Handle {@link Intertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class MethodHandleIntertwine<T> implements Intertwine<T>
 {

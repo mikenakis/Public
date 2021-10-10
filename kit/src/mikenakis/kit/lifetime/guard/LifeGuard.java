@@ -7,7 +7,7 @@ import mikenakis.kit.lifetime.Closeable;
  * Object lifetime guard (for classes implementing {@link Closeable}).
  * See https://blog.michael.gr/2021/01/object-lifetime-awareness.html
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface LifeGuard extends Closeable
 {

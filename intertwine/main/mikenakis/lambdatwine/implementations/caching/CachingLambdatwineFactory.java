@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Creates {@link Intertwine}s for interfaces.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class CachingLambdatwineFactory implements LambdatwineFactory
 {

@@ -3,7 +3,7 @@ package mikenakis.bytecode.test.model;
 /**
  * test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( "ClassMayBeInterface" )
 public abstract class Class7WithInnerClass

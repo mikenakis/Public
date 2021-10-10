@@ -15,7 +15,7 @@ import java.util.Collection;
 /**
  * test.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( "SpellCheckingInspection" )
 public class T010_Swapi

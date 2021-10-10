@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * JSON Parser.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class JsonParser implements Closeable.Defaults
 {

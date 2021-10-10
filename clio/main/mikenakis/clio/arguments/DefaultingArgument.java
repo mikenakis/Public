@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * An {@link Argument} which adds a default to an {@link OptionalArgument}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class DefaultingArgument<T> implements Argument<T>
 {

@@ -9,7 +9,7 @@ package mikenakis.kit;
  * Each time an instance of this class is created, the programmer is making an implicit promise to come back one day and replace it with the creation of
  * an instance of an exception class which is specific to the kind of error that is being reported.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class GenericException extends UncheckedException
 {

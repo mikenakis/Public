@@ -10,7 +10,7 @@ import java.util.Optional;
 /**
  * Development {@link LifeGuardFactory}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.Defaults
 {

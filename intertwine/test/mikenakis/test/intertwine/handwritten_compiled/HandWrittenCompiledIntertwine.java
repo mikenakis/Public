@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 /**
  * Compiling {@link Intertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 {

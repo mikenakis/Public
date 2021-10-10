@@ -23,7 +23,7 @@ import java.util.Optional;
 /**
  * Persistence.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class Persistence
 {

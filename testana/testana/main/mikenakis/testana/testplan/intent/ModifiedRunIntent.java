@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Signifies that a test Class should run because it was modified since its last test run.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ModifiedRunIntent extends RunIntent
 {

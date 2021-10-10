@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * An {@link BaseArgument} which accepts no parameters. (Its significance lies in its presence or absence.) It is by definition optional.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class SwitchArgument extends BaseArgument<Boolean>
 {

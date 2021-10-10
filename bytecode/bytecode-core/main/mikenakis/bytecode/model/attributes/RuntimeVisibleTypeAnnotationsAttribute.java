@@ -24,7 +24,7 @@ import java.util.Optional;
  * {@link ByteCodeField}
  * {@link ByteCodeMethod}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class RuntimeVisibleTypeAnnotationsAttribute extends TypeAnnotationsAttribute
 {

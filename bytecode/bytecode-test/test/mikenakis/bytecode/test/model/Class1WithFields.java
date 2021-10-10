@@ -3,7 +3,7 @@ package mikenakis.bytecode.test.model;
 /**
  * test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( { "FieldMayBeStatic", "unused" } )
 public abstract class Class1WithFields

@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 /**
  * Reflecting {@link Intertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class ReflectingIntertwine<T> implements Intertwine<T>
 {

@@ -12,7 +12,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 /**
  * Represents an annotation {@link AnnotationValue}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class AnnotationAnnotationValue extends AnnotationValue
 {

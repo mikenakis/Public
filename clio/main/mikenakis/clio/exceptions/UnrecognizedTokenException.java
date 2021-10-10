@@ -3,7 +3,7 @@ package mikenakis.clio.exceptions;
 /**
  * "Unrecognized token" {@link ClioException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class UnrecognizedTokenException extends ClioException
 {

@@ -3,7 +3,7 @@ package mikenakis.testana.testplan.intent;
 /**
  * Represents an intention of what to do with a test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class Intent
 {

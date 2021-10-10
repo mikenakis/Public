@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 /**
  * JSR 305 Check-Return-Value annotation.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  * @see CanIgnoreReturnValue
  */
 @Documented

@@ -8,7 +8,7 @@ import mikenakis.test.intertwine.rig.FooInterface;
 /**
  * A {@link MethodKey} for the {@link HandwrittenIntertwine}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class HandwrittenKey implements MethodKey<FooInterface>
 {

@@ -3,7 +3,7 @@ package mikenakis.bytecode.test.model;
 /**
  * test enum.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @SuppressWarnings( "unused" )
 public enum Enum1

@@ -6,7 +6,7 @@ import mikenakis.kit.UncheckedException;
 /**
  * "Invalid {@link ValueConstant} Tag" exception.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class InvalidValueConstantTagException extends UncheckedException
 {

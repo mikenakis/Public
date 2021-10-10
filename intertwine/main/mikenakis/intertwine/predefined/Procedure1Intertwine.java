@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Predefined {@link Intertwine} for interface {@link Procedure0}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 {

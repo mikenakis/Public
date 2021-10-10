@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * An optional {@link Argument}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class OptionalArgument<T> implements Argument<Optional<T>>
 {

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * JUnit {@link TestClass}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class JunitTestClass extends TestClass
 {

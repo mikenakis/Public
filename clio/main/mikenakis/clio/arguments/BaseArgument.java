@@ -3,7 +3,7 @@ package mikenakis.clio.arguments;
 /**
  * A command line argument.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class BaseArgument<T> implements Argument<T>
 {

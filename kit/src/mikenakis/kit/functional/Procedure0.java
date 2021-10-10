@@ -4,7 +4,7 @@ package mikenakis.kit.functional;
  * A method which accepts no arguments and does not return a value.
  * (Corresponds to Java's {@link Runnable}.)
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Procedure0
 {

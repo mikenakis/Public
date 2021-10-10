@@ -6,7 +6,7 @@ package mikenakis.kit.functional;
  *
  * @param <P> the type of the parameter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Procedure1<P>
 {

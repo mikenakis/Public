@@ -23,7 +23,7 @@ import java.util.Optional;
  * <p>
  * {@link ByteCodeType}
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class BootstrapMethodsAttribute extends KnownAttribute
 {

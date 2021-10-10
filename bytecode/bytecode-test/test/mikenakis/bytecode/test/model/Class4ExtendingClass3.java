@@ -3,7 +3,7 @@ package mikenakis.bytecode.test.model;
 /**
  * test class.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class Class4ExtendingClass3 extends Class3ImplementingInterface implements Interface2
 {

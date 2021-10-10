@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * An unmodifiable wrapper for an array of bytes.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class Buffer
 {

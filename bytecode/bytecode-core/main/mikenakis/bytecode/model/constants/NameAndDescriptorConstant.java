@@ -18,7 +18,7 @@ import java.util.Objects;
 /**
  * Represents the JVMS::CONSTANT_NameAndType_info structure.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class NameAndDescriptorConstant extends Constant
 {

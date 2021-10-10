@@ -36,7 +36,7 @@ import java.util.Optional;
  * <p>
  * If it cannot be made to work, there is always the option of launching java with {@code -noverify}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class StackMapTableAttribute extends KnownAttribute
 {

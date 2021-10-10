@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * A Stack Map Frame.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class StackMapFrame
 {

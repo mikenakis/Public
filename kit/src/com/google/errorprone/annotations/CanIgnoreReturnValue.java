@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  *
  * WARNING: according to "errorprone", this annotation is only applicable if the annotated method is in a class annotated with {@link CheckReturnValue}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 @Documented
 @Retention( RetentionPolicy.CLASS )

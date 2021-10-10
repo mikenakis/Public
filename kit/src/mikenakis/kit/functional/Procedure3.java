@@ -7,7 +7,7 @@ package mikenakis.kit.functional;
  * @param <P2> the type of the 2nd parameter.
  * @param <P3> the type of the 3rd parameter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface Procedure3<P1, P2, P3>
 {

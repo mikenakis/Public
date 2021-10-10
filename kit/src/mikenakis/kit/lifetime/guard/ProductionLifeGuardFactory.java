@@ -5,7 +5,7 @@ import mikenakis.kit.lifetime.Closeable;
 /**
  * Production {@link LifeGuardFactory}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ProductionLifeGuardFactory implements LifeGuardFactory.Defaults
 {

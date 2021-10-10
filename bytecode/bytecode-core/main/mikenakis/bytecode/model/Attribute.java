@@ -69,7 +69,7 @@ import java.util.Optional;
  * + BootstrapMethods
  * </pre>
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class Attribute
 {

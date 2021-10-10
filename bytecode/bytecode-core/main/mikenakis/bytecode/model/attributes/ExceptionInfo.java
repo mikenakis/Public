@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  * Represents an entry of the "exception table" of the "code" attribute of a java class file.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class ExceptionInfo
 {

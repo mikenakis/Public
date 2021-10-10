@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * JSON Parser.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class JsonParser implements Closeable
 {

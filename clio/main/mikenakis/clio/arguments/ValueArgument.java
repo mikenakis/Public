@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * An {@link BaseArgument} that has a value.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public abstract class ValueArgument<T> extends BaseArgument<T>
 {

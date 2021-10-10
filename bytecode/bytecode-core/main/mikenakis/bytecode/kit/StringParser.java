@@ -3,7 +3,7 @@ package mikenakis.bytecode.kit;
 /**
  * A simple string parser.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class StringParser
 {

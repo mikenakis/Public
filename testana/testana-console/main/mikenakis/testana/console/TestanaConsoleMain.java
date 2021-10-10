@@ -38,7 +38,7 @@ import java.util.function.Supplier;
  * Make sure to run with `Working Directory = $PROJECT_DIR$` and `Before launch: Build Project`
  * (not just `Before launch: Build` because that would only build dependent modules, and testana does not dependent on your modules.)
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class TestanaConsoleMain
 {

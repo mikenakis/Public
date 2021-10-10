@@ -16,7 +16,7 @@ import java.util.Optional;
 /**
  * Represents an entry of {@link InnerClassesAttribute}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class InnerClass
 {

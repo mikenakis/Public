@@ -5,7 +5,7 @@ package mikenakis.lambdatwine;
  *
  * @param <T> the type of the lambda being represented.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface AnyLambda<T>
 {

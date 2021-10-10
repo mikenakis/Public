@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * <p>
  * TODO: make more use of!
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class UncheckedException extends RuntimeException
 {

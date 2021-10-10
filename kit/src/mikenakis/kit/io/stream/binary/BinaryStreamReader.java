@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Synchronous Binary Stream Reader.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public interface BinaryStreamReader
 {

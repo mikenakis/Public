@@ -5,7 +5,7 @@ package mikenakis.kit.ref;
  *
  * @param <T> the type of the object
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class VolatileRef<T>
 {

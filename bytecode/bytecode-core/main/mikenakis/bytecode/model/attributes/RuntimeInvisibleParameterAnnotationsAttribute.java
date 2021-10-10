@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Represents the "RuntimeInvisibleParameterAnnotations" {@link Attribute} of a java class file.
  * <p>
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public final class RuntimeInvisibleParameterAnnotationsAttribute extends ParameterAnnotationsAttribute
 {

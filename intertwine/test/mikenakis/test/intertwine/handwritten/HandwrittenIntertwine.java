@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 /**
  * Hand-written {@link Intertwine} for a specific interface: {@link FooInterface}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class HandwrittenIntertwine implements Intertwine<FooInterface>
 {

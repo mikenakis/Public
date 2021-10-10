@@ -8,7 +8,7 @@ import mikenakis.kit.lifetime.guard.LifeGuard;
 /**
  * JSON Emitter.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 class JsonEmitter implements Closeable.Defaults
 {

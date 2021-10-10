@@ -6,7 +6,7 @@ import mikenakis.clio.arguments.BaseArgument;
 /**
  * "Unparsable value" {@link ClioException}.
  *
- * @author Michael Belivanakis (michael.gr)
+ * @author michael.gr
  */
 public class UnparsableValueException extends ClioException
 {
