@@ -10,8 +10,8 @@ public interface IntertwineFactory
 	/**
 	 * Gets an {@link Intertwine} for a given interface.
 	 *
-	 * @param interfaceType the {@link Class} of the interface.
-	 * @param <T>           the type of the class of the interface.
+	 * @param interfaceType     the {@link Class} of the interface.
+	 * @param <T>               the type of the class of the interface.
 	 *
 	 * @return an {@link Intertwine} for the given interface.
 	 */

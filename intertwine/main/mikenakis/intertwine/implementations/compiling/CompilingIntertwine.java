@@ -1,5 +1,6 @@
 package mikenakis.intertwine.implementations.compiling;
 
+import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
@@ -118,7 +119,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	{
 		ByteCodeType entwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "Entwiner_" + identifierFromTypeName( interfaceType0 ) ), //
+			TerminalTypeDescriptor.of( "CompiledEntwiner_" + identifierFromTypeName( interfaceType0 ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( interfaceByteCodeType.typeDescriptor() ) );
 		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
@@ -149,7 +150,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 //		saveBytes( Path.of( "C:\\temp\\intertwine", entwinerByteCodeType.typeDescriptor().typeName + ".class" ), entwinerByteCodeType.write() );
 //		System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
 
-		return factory.byteCodeClassLoader.load( entwinerByteCodeType );
+		return ByteCodeClassLoader.load( getClass().getClassLoader(), entwinerByteCodeType );
 	}
 
 	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField keysField, //
@@ -235,7 +236,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	{
 		ByteCodeType untwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "Untwiner_" + identifierFromTypeName( interfaceType0 ) ), //
+			TerminalTypeDescriptor.of( "CompiledUntwiner_" + identifierFromTypeName( interfaceType0 ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( TerminalTypeDescriptor.of( AnyCall.class ) ) );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
@@ -247,7 +248,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 //		saveBytes( Path.of( "C:\\temp\\intertwine", untwinerByteCodeType.typeDescriptor().typeName + ".class" ), untwinerByteCodeType.write() );
 //		System.out.println( ByteCodePrinter.printByteCodeType( untwinerByteCodeType, Optional.empty() ) );
 
-		return factory.byteCodeClassLoader.load( untwinerByteCodeType );
+		return ByteCodeClassLoader.load( getClass().getClassLoader(), untwinerByteCodeType );
 	}
 
 	private static void addUntwinerInitMethod( ByteCodeType untwinerByteCodeType, ByteCodeType interfaceByteCodeType, ByteCodeField exitPointField )

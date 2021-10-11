@@ -20,15 +20,10 @@ import java.util.Optional;
  */
 public class T401_Rewriting
 {
-	private final ByteCodeClassLoader byteCodeClassLoader;
-
 	public T401_Rewriting()
 	{
 		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
-		ClassLoader classLoader = getClass().getClassLoader();
-		//Kit.classLoading.troubleshoot( classLoader ).forEach( s -> Log.debug( s.toString() ) );
-		byteCodeClassLoader = new ByteCodeClassLoader( classLoader );
 	}
 
 	@Test public void Reading_And_Loading_Compiler_Generated_Class_Works()
@@ -36,7 +31,7 @@ public class T401_Rewriting
 		Path classFilePathName = TestKit.getPathToClassFile( Class0HelloWorld.class );
 		byte[] bytes = Kit.unchecked( () -> Files.readAllBytes( classFilePathName ) );
 		ByteCodeType byteCodeType = ByteCodeType.read( bytes );
-		Class<?> javaClass = byteCodeClassLoader.load( byteCodeType );
+		Class<?> javaClass = ByteCodeClassLoader.load( getClass().getClassLoader(), byteCodeType );
 		testHelloWorldJavaClass( javaClass );
 	}
 
@@ -52,16 +47,15 @@ public class T401_Rewriting
 		String text2 = ByteCodePrinter.printByteCodeType( byteCodeType2, Optional.empty() );
 		assert text1.equals( text2 );
 
-		Class<?> javaClass = byteCodeClassLoader.load( byteCodeType2 );
+		Class<?> javaClass = ByteCodeClassLoader.load( getClass().getClassLoader(), byteCodeType2 );
 		testHelloWorldJavaClass( javaClass );
 	}
 
 	private static void testHelloWorldJavaClass( Class<?> javaClass )
 	{
 		Method mainMethod = Kit.unchecked( () -> javaClass.getDeclaredMethod( "main", String[].class ) );
-		//Object instance = Kit.newInstance( javaClass );
 		String output = Kit.testing.withCapturedOutputStream( //
-			() -> Kit.unchecked( () -> mainMethod.invoke( null/*instance*/, (Object)(new String[0]) ) ) );
+			() -> Kit.unchecked( () -> mainMethod.invoke( null, (Object)(new String[0]) ) ) );
 		assert output.equals( "Hello, world!\n" );
 	}
 }

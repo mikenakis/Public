@@ -41,7 +41,7 @@ public final class T05_Compiling extends Client
 				return a + " " + Arrays.toString( aa ) + " " + b + " " + c + " " + d + " " + e + " " + f + " " + g + " " + h + " " + i + " " + Arrays.toString( ii ) + " " + j;
 			}
 		};
-		Intertwine<FooInterface2> intertwine = intertwineFactory.getIntertwine( FooInterface2.class );
+		Intertwine<FooInterface2> intertwine = intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ FooInterface2.class );
 		AnyCall<FooInterface2> anyCall = intertwine.newUntwiner( fooServer );
 		FooInterface2 serverProxy = intertwine.newEntwiner( anyCall );
 		assert serverProxy.intReturningMethod() == 0;

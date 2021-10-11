@@ -19,6 +19,7 @@ import mikenakis.kit.collections.FlagSet;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,7 +50,17 @@ public final class ByteCodeType
 {
 	private static final int MAGIC = 0xCAFEBABE;
 
+	private static final Map<Class<?>,ByteCodeType> byteCodeTypesByClass = new HashMap<>();
+
 	public static ByteCodeType read( Class<?> jvmClass )
+	{
+		synchronized( byteCodeTypesByClass )
+		{
+			return byteCodeTypesByClass.computeIfAbsent( jvmClass, c -> read0( c ) );
+		}
+	}
+
+	private static ByteCodeType read0( Class<?> jvmClass )
 	{
 		String className = jvmClass.getName();
 		String prefix = jvmClass.getPackageName();

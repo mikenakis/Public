@@ -1,5 +1,6 @@
 package mikenakis.test.intertwine.handwritten_compiled;
 
+import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
@@ -13,7 +14,6 @@ import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
-import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
@@ -135,7 +135,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		TypeDescriptor anyCallTypeDescriptor = TypeDescriptor.of( AnyCall.class );
 		ByteCodeType byteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "Entwiner_" + identifierFromTypeName( FooInterface.class ) ), //
+			TerminalTypeDescriptor.of( "HandwrittenCompiledEntwiner_" + identifierFromTypeName( FooInterface.class ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( TerminalTypeDescriptor.of( FooInterface.class ) ) );
 		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
@@ -167,10 +167,10 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		addEntwinerInterfaceMethod1( byteCodeType, keysField, exitPointField, 1, MethodPrototype.of( "getAlpha", MethodDescriptor.of( TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ), TypeDescriptor.of( int.class ) ) ) );
 		addEntwinerInterfaceMethod2( byteCodeType, keysField, exitPointField, 2, MethodPrototype.of( "setAlpha", MethodDescriptor.of( TypeDescriptor.of( void.class ), TypeDescriptor.of( int.class ), TypeDescriptor.of( "mikenakis.test.intertwine.rig.Alpha" ) ) ) );
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
-		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
+//		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
+//		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
 
-		return factory.byteCodeClassLoader.load( byteCodeType );
+		return ByteCodeClassLoader.load( getClass().getClassLoader(), byteCodeType );
 	}
 
 	/*
@@ -428,7 +428,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		TypeDescriptor fooInterfaceTypeDescriptor = TypeDescriptor.of( FooInterface.class );
 		ByteCodeType byteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "Untwiner_" + identifierFromTypeName( FooInterface.class ) ), //
+			TerminalTypeDescriptor.of( "HandwrittenCompiledUntwiner_" + identifierFromTypeName( FooInterface.class ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( TerminalTypeDescriptor.of( AnyCall.class ) ) );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
@@ -438,10 +438,10 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 
 		addUntwinerAnyCallMethod( byteCodeType, exitPointField );
 
-		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
-		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
+//		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
+//		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
 
-		return factory.byteCodeClassLoader.load( byteCodeType );
+		return ByteCodeClassLoader.load( getClass().getClassLoader(), byteCodeType );
 	}
 
 	/*
