@@ -21,7 +21,7 @@ import java.lang.annotation.Target;
  * Original idea from here: https://stackoverflow.com/a/66918619/773113
  */
 @Retention( RetentionPolicy.RUNTIME )
-@Target( ElementType.METHOD )
+@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.CONSTRUCTOR } )
 public @interface ExcludeFromJacocoGeneratedReport
 {
 }
