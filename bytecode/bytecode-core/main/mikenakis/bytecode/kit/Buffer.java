@@ -3,6 +3,7 @@ package mikenakis.bytecode.kit;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -15,6 +16,11 @@ public class Buffer
 {
 	private static final Buffer EMPTY = new Buffer( Kit.ARRAY_OF_ZERO_BYTES, 0, 0 );
 
+	public static Buffer of()
+	{
+		return EMPTY;
+	}
+
 	public static Buffer of( byte[] bytes )
 	{
 		return of( bytes, 0, bytes.length );
@@ -23,6 +29,12 @@ public class Buffer
 	public static Buffer of( byte[] bytes, int start, int length )
 	{
 		return length == 0 ? EMPTY : new Buffer( bytes, start, length );
+	}
+
+	public static Buffer of( String string, Charset charset )
+	{
+		byte[] bytes = string.getBytes( charset );
+		return of( bytes, 0, bytes.length );
 	}
 
 	@SuppressWarnings( { "unused", "FieldNamingConvention" } ) public final Object _debugView = new Object()

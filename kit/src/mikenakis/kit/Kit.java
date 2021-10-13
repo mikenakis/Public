@@ -49,6 +49,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,6 +62,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -150,6 +152,12 @@ public final class Kit
 	public static <T extends S, S> Optional<T> upCast( Optional<S> source )
 	{
 		@SuppressWarnings( "unchecked" ) Optional<T> result = (Optional<T>)source;
+		return result;
+	}
+
+	public static <S, T extends S> Optional<S> downCast( Optional<T> optional )
+	{
+		@SuppressWarnings( "unchecked" ) Optional<S> result = (Optional<S>)optional;
 		return result;
 	}
 
@@ -1204,6 +1212,11 @@ public final class Kit
 
 	public static final class iterable
 	{
+		public static <T> Iterable<T> of( T element )
+		{
+			return List.of( element );
+		}
+
 		public static <T, D extends T> Iterable<T> downCast( Iterable<D> iterable )
 		{
 			@SuppressWarnings( "unchecked" ) Iterable<T> result = (Iterable<T>)iterable;
@@ -1218,6 +1231,19 @@ public final class Kit
 		@SafeVarargs @SuppressWarnings( "varargs" ) public static <T> Iterable<T> concat( Iterable<T> iterable, T... elements )
 		{
 			return concat( iterable, List.of( elements ) );
+		}
+
+		@SuppressWarnings( "varargs" ) @SafeVarargs public static <T> Iterable<T> concat( Iterable<T>... iterables )
+		{
+			return concat( List.of( iterables ) );
+		}
+
+		public static <T> Iterable<T> concat( List<Iterable<T>> iterables )
+		{
+			Iterable<T> iterable = iterables.get( 0 );
+			for( int i = 1; i < iterables.size(); i++ )
+				iterable = concat( iterable, iterables.get( i ) );
+			return iterable;
 		}
 
 		public static <T> Iterable<T> concat( Iterable<T> iterable, Iterable<T> other )
@@ -1444,7 +1470,7 @@ public final class Kit
 		 * @return {@code true} if the item was removed; {@code false} if the item was not removed because it did not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
-		public static <T> boolean tryRemove( Collection<? extends T> collection, T item )
+		public static <T> boolean tryRemove( Collection<T> collection, T item )
 		{
 			return collection.remove( item );
 		}
@@ -1510,6 +1536,51 @@ public final class Kit
 		public static <T> boolean equal( Collection<T> a, Collection<T> b )
 		{
 			return a.size() == b.size() && a.containsAll( b ) && b.containsAll( a );
+		}
+
+		@SuppressWarnings( "varargs" ) @SafeVarargs public static <T> Collection<T> chain( Collection<T>... collections )
+		{
+			return chain( List.of( collections ) );
+		}
+
+		public static <T> Collection<T> chain( Collection<Collection<T>> collections )
+		{
+			return new AbstractCollection<>()
+			{
+				@Override public Iterator<T> iterator()
+				{
+					return new Iterator<>()
+					{
+						private final Iterator<Collection<T>> ii = collections.iterator();
+						private Iterator<T> i = prime( ii.hasNext() ? ii.next().iterator() : null );
+
+						@Override public boolean hasNext()
+						{
+							return i != null && i.hasNext();
+						}
+
+						@Override public T next()
+						{
+							if( !hasNext() )
+								throw new NoSuchElementException( "Chain exhausted." );
+							T next = i.next();
+							i = prime( i );
+							return next;
+						}
+
+						private Iterator<T> prime( Iterator<T> j )
+						{
+							while( j != null && !j.hasNext() )
+								j = ii.hasNext() ? ii.next().iterator() : null;
+							return j;
+						}
+					};
+				}
+				@Override public int size()
+				{
+					return collections.stream().mapToInt( collection -> collection.size() ).sum();
+				}
+			};
 		}
 	}
 
@@ -2865,7 +2936,7 @@ public final class Kit
 
 	/**
 	 * For information about this method, google "Sneaky throw".
-	 *
+	 * <p>
 	 * Note: even though the method throws an exception, it is declared to also return an exception.
 	 * This allows the caller to use one more `throw` statement, which, although unreachable,
 	 * lets the compiler know that that execution will never proceed past that point.
