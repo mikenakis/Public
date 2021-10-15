@@ -2,7 +2,7 @@ package mikenakis.test.intertwine;
 
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.implementations.caching.CachingIntertwineFactory;
-import mikenakis.intertwine.implementations.reflecting.ReflectingIntertwineFactory;
+import mikenakis.test.intertwine.implementations.alternative.reflecting.ReflectingIntertwineFactory;
 
 public final class T01_Reflecting extends Client
 {

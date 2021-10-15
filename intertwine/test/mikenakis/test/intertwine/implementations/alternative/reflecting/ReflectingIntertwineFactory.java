@@ -1,4 +1,4 @@
-package mikenakis.intertwine.implementations.reflecting;
+package mikenakis.test.intertwine.implementations.alternative.reflecting;
 
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;

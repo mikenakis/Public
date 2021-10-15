@@ -1,4 +1,4 @@
-package mikenakis.test.intertwine.handwritten_compiled;
+package mikenakis.test.intertwine.implementations.testing.handwritten_compiled;
 
 import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeField;

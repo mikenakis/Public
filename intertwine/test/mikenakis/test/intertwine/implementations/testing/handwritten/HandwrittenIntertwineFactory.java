@@ -1,4 +1,4 @@
-package mikenakis.test.intertwine.handwritten;
+package mikenakis.test.intertwine.implementations.testing.handwritten;
 
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;

@@ -1,4 +1,4 @@
-package mikenakis.intertwine.implementations.methodhandle;
+package mikenakis.test.intertwine.implementations.alternative.methodhandle;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;

@@ -1,7 +1,7 @@
 package mikenakis.test.intertwine;
 
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.test.intertwine.handwritten_compiled.HandWrittenCompiledIntertwineFactory;
+import mikenakis.test.intertwine.implementations.testing.handwritten_compiled.HandWrittenCompiledIntertwineFactory;
 
 public final class T04_HandWrittenCompiled extends Client
 {

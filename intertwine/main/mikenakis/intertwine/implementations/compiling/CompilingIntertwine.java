@@ -158,7 +158,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	{
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), interfaceMethodPrototype );
 		entwinerByteCodeType.methods.add( byteCodeMethod );
-		CodeAttribute code = CodeAttribute.of( 4 + maxMethodArgumentCount( interfaceByteCodeType ), 1 + maxMethodArgumentCount( interfaceByteCodeType ) );
+		CodeAttribute code = CodeAttribute.of( 5 + maxMethodArgumentCount( interfaceByteCodeType ), 1 + maxMethodArgumentCount( interfaceByteCodeType ) );
 		byteCodeMethod.attributeSet.addAttribute( code );
 
 		code.ALOAD( 0 ); //push this
@@ -276,7 +276,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			MethodPrototype.of( "anyCall", //
 				MethodDescriptor.of( TypeDescriptor.of( Object.class ), TypeDescriptor.of( MethodKey.class ), TypeDescriptor.of( Object[].class ) ) ) );
 		untwinerByteCodeType.methods.add( byteCodeMethod );
-		CodeAttribute code = CodeAttribute.of( 2 + maxMethodArgumentCount( interfaceByteCodeType ), 4 );
+		CodeAttribute code = CodeAttribute.of( 3 + maxMethodArgumentCount( interfaceByteCodeType ), 4 );
 		byteCodeMethod.attributeSet.addAttribute( code );
 
 		StackMapTableAttribute stackMapTableAttribute = StackMapTableAttribute.of();

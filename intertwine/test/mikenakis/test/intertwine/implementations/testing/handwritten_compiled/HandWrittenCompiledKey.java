@@ -1,4 +1,4 @@
-package mikenakis.test.intertwine.handwritten_compiled;
+package mikenakis.test.intertwine.implementations.testing.handwritten_compiled;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;

@@ -1,4 +1,4 @@
-package mikenakis.intertwine.implementations.methodhandle;
+package mikenakis.test.intertwine.implementations.alternative.methodhandle;
 
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;

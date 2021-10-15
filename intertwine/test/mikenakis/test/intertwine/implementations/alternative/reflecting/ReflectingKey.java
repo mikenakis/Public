@@ -1,4 +1,4 @@
-package mikenakis.intertwine.implementations.reflecting;
+package mikenakis.test.intertwine.implementations.alternative.reflecting;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.intertwine.Intertwine;
