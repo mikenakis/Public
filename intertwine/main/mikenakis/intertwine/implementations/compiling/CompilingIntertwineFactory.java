@@ -18,6 +18,6 @@ public class CompilingIntertwineFactory implements IntertwineFactory
 
 	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
 	{
-		return new CompilingIntertwine<>( this, interfaceType );
+		return new CompilingIntertwine<>( interfaceType );
 	}
 }

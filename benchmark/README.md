@@ -60,8 +60,7 @@ very difficult, due to a number of factors:
 
 - Virtually all Personal Computers today are running multitasking Operating Systems 
   that keep preempting processes all the time, 
-  in a fashion which is for all practical purposes entirely random, 
-  in order to do other stuff.
+  in a fashion which is for all practical purposes entirely random.
 - The amount of other software that is installed and running on the computer
   and constantly wants to do other stuff
   tends to be large, 
@@ -128,9 +127,8 @@ In order to somewhat mitigate the above factors, the approach we take is as foll
 
 2. We never take the average of measurements.
    Instead, we always select the shortest measurement as the one true measurement and throw away the rest.
-   The reasoning behind this choice is that of all the factors listed above which may throw measurements off, 
-   there is virtually none that may cause our code to appear faster than it really is: 
-   almost all of these factors tend to make code appear slower than it really is. 
+   The reasoning behind this choice is that almost all the factors listed above which may throw a measurement off 
+   tend to make code appear slower than it really is. 
    Therefore, each time we observe the code running faster than observed thus far,
    we assume that this observation is less skewed than all previous observations.
    Of course, there is an exception: 
