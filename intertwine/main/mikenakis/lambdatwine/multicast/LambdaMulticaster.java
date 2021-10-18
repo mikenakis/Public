@@ -1,7 +1,8 @@
 package mikenakis.lambdatwine.multicast;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.ExecutionContext;
+import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.lambdatwine.AnyLambda;
 import mikenakis.lambdatwine.Lambdatwine;
 import mikenakis.lambdatwine.LambdatwineFactory;
@@ -10,9 +11,8 @@ import mikenakis.multicast.Multicast;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class LambdaMulticaster<T>
+public class LambdaMulticaster<T> extends Mutable
 {
-	private final ExecutionContext executionContext;
 	private final Map<T,AnyLambda<T>> observers = new LinkedHashMap<>();
 	private final Lambdatwine<T> lambdatwine;
 	private final T entryPoint;
@@ -47,17 +47,16 @@ public class LambdaMulticaster<T>
 		}
 	};
 
-	public LambdaMulticaster( ExecutionContext executionContext, LambdatwineFactory lambdatwineFactory, Class<T> lambdaType )
+	public LambdaMulticaster( MutationContext mutationContext, LambdatwineFactory lambdatwineFactory, Class<T> lambdaType )
 	{
-		assert executionContext.inContextAssertion();
-		this.executionContext = executionContext;
+		super( mutationContext );
 		lambdatwine = lambdatwineFactory.getLambdatwine( lambdaType );
 		entryPoint = lambdatwine.newEntwiner( anyLambda );
 	}
 
 	public T entryPoint()
 	{
-		assert executionContext.inContextAssertion();
+		assert inContextAssertion();
 		return entryPoint;
 	}
 }

@@ -22,14 +22,14 @@ abstract class AbstractMutableEnumerable<E> extends MutableCollectionsSubject im
 	@SuppressWarnings( "SameReturnValue" )
 	final boolean canReadAssertion()
 	{
-		assert isFrozen() || getMutableCollections().assertCoherence();
+		assert isFrozen() || getMutableCollections().inContextAssertion();
 		return true;
 	}
 
 	@SuppressWarnings( "SameReturnValue" )
 	@Override public final boolean canWriteAssertion()
 	{
-		assert !isFrozen() && getMutableCollections().assertCoherence();
+		assert !isFrozen() && getMutableCollections().inContextAssertion();
 		return true;
 	}
 

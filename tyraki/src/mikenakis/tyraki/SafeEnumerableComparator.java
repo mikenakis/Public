@@ -3,7 +3,7 @@ package mikenakis.tyraki;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.BooleanFunction2;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 
 import java.util.Objects;
 

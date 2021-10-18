@@ -43,6 +43,11 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		}
 
 		private final Function1<Binding<K,V>,Item> converter = item -> MapEntry.of( item.key, item.value );
+
+		@Override public boolean isFrozen()
+		{
+			return FreezableMutableLinkedHashMap.this.isFrozen();
+		}
 	}
 
 	private boolean frozen = false;

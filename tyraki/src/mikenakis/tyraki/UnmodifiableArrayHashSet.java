@@ -1,9 +1,9 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.LocalMutableCollections;
 
 /**
  * Unmodifiable Array Hash Set.
@@ -23,9 +23,12 @@ public interface UnmodifiableArrayHashSet<E> extends UnmodifiableArraySet<E>, Un
 	{
 		if( items.isEmpty() )
 			return of();
-		FreezableArrayHashSet<E> mutableSet = SingleThreadedMutableCollections.instance().newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
-		mutableSet.addAll( items );
-		return mutableSet.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableArrayHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
+			mutableSet.addAll( items );
+			return mutableSet.frozen();
+		} );
 	}
 
 	/**
@@ -84,8 +87,7 @@ public interface UnmodifiableArrayHashSet<E> extends UnmodifiableArraySet<E>, Un
 	{
 		@Override default <TT> UnmodifiableArrayHashSet<TT> castArrayHashSet()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableArrayHashSet<TT> result = (UnmodifiableArrayHashSet<TT>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableArrayHashSet<TT> result = (UnmodifiableArrayHashSet<TT>)this;
 			return result;
 		}
 	}

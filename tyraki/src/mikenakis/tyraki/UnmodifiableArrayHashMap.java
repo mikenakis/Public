@@ -1,12 +1,12 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.LocalMutableCollections;
 
 /**
  * Unmodifiable Hash Map.
@@ -56,8 +56,7 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 		return ImmutableCollections.emptyArrayHashMap();
 	}
 
-	@SafeVarargs
-	@SuppressWarnings( "varargs" ) //for -Xlint
+	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <K, V> UnmodifiableArrayHashMap<K,V> ofBindings( Binding<K,V>... arrayOfBindings )
 	{
 		UnmodifiableCollection<Binding<K,V>> bindings = UnmodifiableList.onArray( arrayOfBindings );
@@ -82,14 +81,18 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	 *
 	 * @return a new {@link UnmodifiableArrayHashMap}.
 	 */
-	static <K, V> UnmodifiableArrayHashMap<K,V> from( UnmodifiableCollection<Binding<K,V>> bindings, float fillFactor, Hasher<? super K> keyHasher,
+	static <K, V> UnmodifiableArrayHashMap<K,V> from( UnmodifiableCollection<Binding<K,V>> bindings, float fillFactor, Hasher<? super K> keyHasher, //
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		if( bindings.isEmpty() )
 			return ImmutableCollections.emptyArrayHashMap();
-		FreezableArrayHashMap<K,V> mutableMap = SingleThreadedMutableCollections.instance().newArrayHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
-		mutableMap.addAll( bindings );
-		return mutableMap.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, //
+				valueEqualityComparator );
+			mutableMap.addAll( bindings );
+			return mutableMap.frozen();
+		} );
 	}
 
 	/**
@@ -102,7 +105,8 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	static <K, V> UnmodifiableArrayHashMap<K,V> from( UnmodifiableEnumerable<Binding<K,V>> bindingsEnumerable )
 	{
 		UnmodifiableCollection<Binding<K,V>> bindings = bindingsEnumerable.toList();
-		return from( bindings, ImmutableCollections.DEFAULT_FILL_FACTOR, ObjectHasher.INSTANCE, DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
+		return from( bindings, ImmutableCollections.DEFAULT_FILL_FACTOR, ObjectHasher.INSTANCE, DefaultEqualityComparator.getInstance(), //
+			DefaultEqualityComparator.getInstance() );
 	}
 
 	/**
@@ -116,7 +120,7 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	 *
 	 * @return a new {@link UnmodifiableArrayHashMap}.
 	 */
-	static <K, V> UnmodifiableArrayHashMap<K,V> from( UnmodifiableEnumerable<Binding<K,V>> bindingsEnumerable, float fillFactor, Hasher<? super K> keyHasher,
+	static <K, V> UnmodifiableArrayHashMap<K,V> from( UnmodifiableEnumerable<Binding<K,V>> bindingsEnumerable, float fillFactor, Hasher<? super K> keyHasher, //
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		UnmodifiableCollection<Binding<K,V>> bindings = bindingsEnumerable.toList();
@@ -133,8 +137,8 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	 *
 	 * @return a new {@link UnmodifiableArrayHashMap}.
 	 */
-	static <K, V> UnmodifiableArrayHashMap<K,V> from( Hasher<K> keyHasher, EqualityComparator<K> keyEqualityComparator, EqualityComparator<V> valueEqualityComparator,
-		UnmodifiableCollection<Binding<K,V>> bindings )
+	static <K, V> UnmodifiableArrayHashMap<K,V> from( Hasher<K> keyHasher, EqualityComparator<K> keyEqualityComparator, //
+		EqualityComparator<V> valueEqualityComparator, UnmodifiableCollection<Binding<K,V>> bindings )
 	{
 		return from( bindings, ImmutableCollections.DEFAULT_FILL_FACTOR, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
@@ -230,7 +234,7 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 		return from( entries/*temporaryMap.getEntries()*/, ImmutableCollections.DEFAULT_FILL_FACTOR, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	<KK, VV> UnmodifiableArrayHashMap<KK,VV> castArrayHashMap();
 
@@ -238,8 +242,7 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	{
 		@Override default <KK, VV> UnmodifiableArrayHashMap<KK,VV> castArrayHashMap()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableArrayHashMap<KK,VV> result = (UnmodifiableArrayHashMap<KK,VV>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableArrayHashMap<KK,VV> result = (UnmodifiableArrayHashMap<KK,VV>)this;
 			return result;
 		}
 	}

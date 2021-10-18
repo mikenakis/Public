@@ -1,7 +1,7 @@
 package mikenakis.tyraki.test.t02_mutable.map;
 
 import mikenakis.tyraki.MutableMap;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import mikenakis.tyraki.test.t02_mutable.ObjectSemanticsClass;
 
 /**

@@ -47,9 +47,21 @@ public final class ProjectStructureBuilder
 		ProjectStructure projectStructure = new ProjectStructure( rootDiscoveryModules, projectModuleMap );
 		TimeMeasurement.run( "Parsing types", "%d types (cache: %d hits, %d misses)", timeMeasurement -> //
 		{
+			// First create a parent ClassLoader with all dependencies.
+			// If we do not do this, then each module will load all of its dependent classes anew via its own classloader, and then
+			// we get errors due to classes attempting to do their static initialization twice.
+			// (A class may, during static initialization, add its full name to a globally visible map, so the 2nd addition will fail.)
+			// Unfortunately, doing this has another disadvantage: two different modules cannot contain two classes with the exact same full name.
+			// I do not know the solution to this yet.
+			Collection<Path> dependencyMutablePaths = new LinkedHashSet<>();
+			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
+				dependencyMutablePaths.addAll( discoveryModule.allDependencyAndExternalPaths() );
+			ClassLoader classLoaderForDependencies = createClassLoader( dependencyMutablePaths, ProjectStructureBuilder.class.getClassLoader() );
+
 			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
 			{
-				ClassLoader classLoader = createClassLoader( discoveryModule.allOutputPaths() );
+				ClassLoader classLoader = createClassLoader( discoveryModule.outputPaths(), classLoaderForDependencies );
+				//ClassLoader classLoader = createClassLoader( discoveryModule.allOutputPaths(), null ); // ProjectStructureBuilder.class.getClassLoader() );
 				ByteCodeLoader classAndByteCodeLoader = new ByteCodeLoader( classLoader );
 				Map<String,ProjectType> projectTypeFromNameMap = new LinkedHashMap<>();
 				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classLoader, classAndByteCodeLoader, projectTypeFromNameMap );
@@ -64,9 +76,9 @@ public final class ProjectStructureBuilder
 							Log.warning( "TODO: handle resources! (resource file: " + outputFile.relativePath + ")" );
 							continue;
 						}
-						fromCache( cache, projectModule, outputDirectory, outputFile, testEngineMap ) //
-							.or( () -> fromClass( classLoader, outputFile, testEngineMap, projectModule ) ) //
-							.ifPresent( projectType -> Kit.map.add( projectTypeFromNameMap, projectType.className(), projectType ) );
+						Optional<ProjectType> optionalProjectType = fromCache( cache, projectModule, outputDirectory, outputFile, testEngineMap ) //
+							.or( () -> fromClass( classLoader, outputFile, testEngineMap, projectModule ) );
+						optionalProjectType.ifPresent( projectType -> Kit.map.add( projectTypeFromNameMap, projectType.className(), projectType ) );
 					}
 				}
 			}
@@ -98,10 +110,10 @@ public final class ProjectStructureBuilder
 		}
 	}
 
-	private static ClassLoader createClassLoader( Collection<Path> classPath )
+	private static ClassLoader createClassLoader( Collection<Path> classPath, ClassLoader parentClassLoader )
 	{
 		URL[] urls = classPath.stream().map( path -> Kit.unchecked( () -> path.toUri().toURL() ) ).toArray( URL[]::new );
-		return new URLClassLoader( urls, ProjectStructureBuilder.class.getClassLoader() );
+		return new URLClassLoader( urls, parentClassLoader );
 	}
 
 	private static Collection<DiscoveryModule> allDiscoveryModules( Iterable<DiscoveryModule> rootDiscoveryModules )

@@ -22,7 +22,11 @@ public final class ProjectStructure
 {
 	public enum ShowOption
 	{
-		None, Terse, Medium, Verbose
+		None,    // Does not show the project structure.
+		Terse,   // Shows the hierarchy of modules and submodules.
+		Normal,  // For each module also shows its project dependencies.
+		Verbose, // For each module also shows output directories and external dependencies.
+		Spammy   // For each output directory also shows all classes in it.
 	}
 
 	private final Collection<DiscoveryModule> rootDiscoveryModules;
@@ -45,8 +49,8 @@ public final class ProjectStructure
 		{
 			class ProjectDependency
 			{
-				final DiscoveryModule discoveryModule;
-				ProjectDependency( DiscoveryModule discoveryModule ) { this.discoveryModule = discoveryModule; }
+				private final DiscoveryModule discoveryModule;
+				private ProjectDependency( DiscoveryModule discoveryModule ) { this.discoveryModule = discoveryModule; }
 			}
 
 			Function1<Iterable<Object>,Object> breeder = object -> //
@@ -56,12 +60,12 @@ public final class ProjectStructure
 				if( object instanceof DiscoveryModule discoveryModule )
 				{
 					Collection<Object> children = new ArrayList<>();
-					if( showOption.ordinal() > ShowOption.Terse.ordinal() )
+					if( showOption.ordinal() >= ShowOption.Normal.ordinal() )
 					{
 						if( !discoveryModule.projectDependencies().isEmpty() )
 							for( var dependency : discoveryModule.projectDependencies() )
 								children.add( new ProjectDependency( dependency ) );
-						if( showOption.ordinal() > ShowOption.Medium.ordinal() )
+						if( showOption.ordinal() >= ShowOption.Verbose.ordinal() )
 						{
 							if( !discoveryModule.externalDependencyPaths().isEmpty() )
 								children.addAll( discoveryModule.externalDependencyPaths() );
@@ -69,8 +73,8 @@ public final class ProjectStructure
 								children.addAll( discoveryModule.outputDirectories() );
 						}
 					}
-					if( !discoveryModule.nestedModules().isEmpty() )
-						children.addAll( discoveryModule.nestedModules() );
+					assert showOption.ordinal() >= ShowOption.Terse.ordinal();
+					children.addAll( discoveryModule.nestedModules() );
 					return children;
 				}
 				if( object instanceof ProjectDependency )
@@ -78,7 +82,12 @@ public final class ProjectStructure
 				if( object instanceof Path )
 					return List.of();
 				if( object instanceof OutputDirectory outputDirectory )
-					return Kit.iterable.downCast( outputDirectory.files() );
+				{
+					if( showOption.ordinal() >= ShowOption.Spammy.ordinal() )
+						return Kit.iterable.downCast( outputDirectory.files() );
+					else
+						return List.of();
+				}
 				if( object instanceof OutputFile )
 					return List.of();
 				assert false;

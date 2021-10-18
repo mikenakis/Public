@@ -5,15 +5,15 @@ import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
-import mikenakis.kit.ExecutionContext;
+import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.multicast.Multicast;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class InterfaceMulticaster<T>
+public class InterfaceMulticaster<T> extends Mutable
 {
-	private final ExecutionContext executionContext;
 	private final Map<T,AnyCall<T>> observers = new LinkedHashMap<>();
 	private final Intertwine<T> intertwine;
 	private final T entryPoint;
@@ -48,17 +48,16 @@ public class InterfaceMulticaster<T>
 		}
 	};
 
-	public InterfaceMulticaster( ExecutionContext executionContext, IntertwineFactory intertwineFactory, Class<T> interfaceType )
+	public InterfaceMulticaster( MutationContext mutationContext, IntertwineFactory intertwineFactory, Class<T> interfaceType )
 	{
-		assert executionContext.inContextAssertion();
-		this.executionContext = executionContext;
+		super( mutationContext );
 		intertwine = intertwineFactory.getIntertwine( interfaceType );
 		entryPoint = intertwine.newEntwiner( anyCall );
 	}
 
 	public T entryPoint()
 	{
-		assert executionContext.inContextAssertion();
+		assert inContextAssertion();
 		return entryPoint;
 	}
 

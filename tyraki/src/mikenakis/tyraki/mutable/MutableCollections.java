@@ -7,6 +7,8 @@ import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffer.CaseInsensitiveBufferEqualityComparator;
 import mikenakis.kit.buffer.CaseInsensitiveBufferHasher;
+import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.CaseInsensitiveStringEqualityComparator;
 import mikenakis.tyraki.CaseInsensitiveStringHasher;
 import mikenakis.tyraki.FreezableArrayHashMap;
@@ -37,17 +39,20 @@ import java.util.Comparator;
  *
  * @author michael.gr
  */
-public abstract class MutableCollections
+public final class MutableCollections extends Mutable
 {
-
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_FILL_FACTOR = 0.75f;
 
-	protected MutableCollections()
+	public MutableCollections( MutationContext mutationContext  )
 	{
+		super( mutationContext );
 	}
 
-	public abstract boolean assertCoherence();
+	public boolean assertCoherence() //FIXME XXX TODO inline this!
+	{
+		return inContextAssertion();
+	}
 
 	/**
 	 * Creates a new {@link FreezableHashSet}.

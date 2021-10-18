@@ -4,7 +4,7 @@ import mikenakis.kit.Kit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableCollection;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import org.junit.Test;
 
 /**

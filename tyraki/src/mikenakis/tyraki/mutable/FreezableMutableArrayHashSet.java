@@ -1,13 +1,13 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.tyraki.FreezableArrayHashSet;
-import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.MutableHashSet;
-import mikenakis.tyraki.MutableList;
-import mikenakis.tyraki.UnmodifiableArrayHashSet;
-import mikenakis.tyraki.exceptions.DuplicateElementException;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.tyraki.FreezableArrayHashSet;
+import mikenakis.tyraki.FreezableHashSet;
+import mikenakis.tyraki.FreezableList;
+import mikenakis.tyraki.MutableEnumerator;
+import mikenakis.tyraki.UnmodifiableArrayHashSet;
+import mikenakis.tyraki.exceptions.DuplicateElementException;
 
 import java.util.Optional;
 
@@ -16,11 +16,12 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
+//IntellijIdea blooper: good code red: "Class must either be declared abstract or implement abstract method m in I"
 final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E> implements FreezableArrayHashSet.Defaults<E>
 {
 	private boolean frozen = false;
-	private final MutableList<E> list;
-	private final MutableHashSet<E> hashSet;
+	private final FreezableList<E> list;
+	private final FreezableHashSet<E> hashSet;
 
 	FreezableMutableArrayHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher,
 		EqualityComparator<? super E> equalityComparator )
@@ -38,6 +39,8 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 	@Override public void freeze()
 	{
 		assert !frozen;
+		list.freeze();
+		hashSet.freeze();
 		frozen = true;
 	}
 

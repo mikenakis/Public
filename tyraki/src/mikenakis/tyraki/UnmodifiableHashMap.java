@@ -6,7 +6,7 @@ import mikenakis.kit.ObjectHasher;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.LocalMutableCollections;
 
 /**
  * Unmodifiable Hash Map.
@@ -25,14 +25,18 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	 *
 	 * @return a new {@link UnmodifiableHashMap}.
 	 */
-	static <K, V> UnmodifiableHashMap<K,V> from( UnmodifiableCollection<Binding<K,V>> bindings, float fillFactor, Hasher<? super K> keyHasher,
+	static <K, V> UnmodifiableHashMap<K,V> from( UnmodifiableCollection<Binding<K,V>> bindings, float fillFactor, Hasher<? super K> keyHasher, //
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		if( bindings.isEmpty() )
 			return of();
-		FreezableHashMap<K,V> mutableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
-		mutableMap.addAll( bindings );
-		return mutableMap.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, //
+				valueEqualityComparator );
+			mutableMap.addAll( bindings );
+			return mutableMap.frozen();
+		} );
 	}
 
 	/**
@@ -45,14 +49,18 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	 *
 	 * @return a new {@link UnmodifiableHashMap}.
 	 */
-	static <K, V> UnmodifiableHashMap<K,V> from( UnmodifiableEnumerable<Binding<K,V>> bindings, float fillFactor, Hasher<? super K> keyHasher,
+	static <K, V> UnmodifiableHashMap<K,V> from( UnmodifiableEnumerable<Binding<K,V>> bindings, float fillFactor, Hasher<? super K> keyHasher, //
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		if( bindings.isEmpty() )
 			return of();
-		FreezableHashMap<K,V> mutableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap( 1, fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
-		mutableMap.addAll( bindings );
-		return mutableMap.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( 1, fillFactor, keyHasher, keyEqualityComparator, //
+				valueEqualityComparator );
+			mutableMap.addAll( bindings );
+			return mutableMap.frozen();
+		} );
 	}
 
 	/**
@@ -204,8 +212,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 		return UnmodifiableArrayHashMap.of();
 	}
 
-	@SafeVarargs
-	@SuppressWarnings( "varargs" ) //for -Xlint
+	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <K, V> UnmodifiableHashMap<K,V> of( Binding<K,V>... arrayOfBindings )
 	{
 		UnmodifiableCollection<Binding<K,V>> bindings = UnmodifiableList.onArray( arrayOfBindings );
@@ -224,8 +231,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		@Override default <KK, VV> UnmodifiableHashMap<KK,VV> castHashMap()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableHashMap<KK,VV> result = (UnmodifiableHashMap<KK,VV>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableHashMap<KK,VV> result = (UnmodifiableHashMap<KK,VV>)this;
 			return result;
 		}
 	}

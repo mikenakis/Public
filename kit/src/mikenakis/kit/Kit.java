@@ -250,17 +250,30 @@ public final class Kit
 		assert numberOfFramesToSkip > 0;
 		return stackWalker.walk( s -> s.skip( numberOfFramesToSkip + 1 ).limit( 1 ).reduce( null, ( a, b ) -> b ) ); //TODO: simplify
 	}
+
 	public static StackWalker.StackFrame[] getStackTrace( int numberOfFramesToSkip )
 	{
 		assert numberOfFramesToSkip > 0;
 		return stackWalker.walk( s -> s.skip( numberOfFramesToSkip + 1 ).toArray( value -> new StackWalker.StackFrame[value] ) ); //TODO: simplify
 	}
+
 	public static SourceLocation getSourceLocation( int numberOfFramesToSkip )
 	{
 		StackWalker.StackFrame stackFrame = getStackFrame( numberOfFramesToSkip + 1 );
 		SourceLocation sourceLocation = SourceLocation.fromStackFrame( stackFrame );
 		assert sourceLocation.stringRepresentation().equals( stackFrame.toString() );
 		return sourceLocation;
+	}
+
+	public static String getMethodName()
+	{
+		return getMethodName( 1 );
+	}
+
+	public static String getMethodName( int framesToSkip )
+	{
+		StackWalker.StackFrame stackFrame = getStackFrame( framesToSkip + 1 );
+		return stackFrame.getMethodName();
 	}
 
 	public static String stringFromThrowable( Throwable throwable )
@@ -752,10 +765,9 @@ public final class Kit
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
 		 *
-		 * @return A {@link List} of {@link String}s. If the delimiter is not found, the list will contain a single element, which will be the entire source
-		 * 	string.
+		 * @return An array of {@link String}. If the delimiter is not found, the array will contain a single element, which will be the entire source string.
 		 */
-		public static List<String> splitAtCharacter( String stringToSplit, char delimiter )
+		public static String[] splitAtCharacter( String stringToSplit, char delimiter )
 		{
 			return splitAtCharacter( stringToSplit, delimiter, false );
 		}
@@ -768,12 +780,11 @@ public final class Kit
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
 		 *
-		 * @return A {@link List} of {@link String}s. If the delimiter is not found, the list will contain a single element, which will be the entire source
-		 * 	string.
+		 * @return An array of {@link String}. If the delimiter is not found, the list will contain a single element, which will be the entire source string.
 		 */
-		public static List<String> splitAtCharacter( String stringToSplit, char delimiter, boolean includeDelimiter )
+		public static String[] splitAtCharacter( String stringToSplit, char delimiter, boolean includeDelimiter )
 		{
-			List<String> result = new ArrayList<>();
+			Collection<String> result = new ArrayList<>();
 			for( int position = 0; position < stringToSplit.length(); )
 			{
 				int i = position;
@@ -788,7 +799,7 @@ public final class Kit
 				if( !includeDelimiter )
 					position++;
 			}
-			return result;
+			return result.toArray( String[]::new );
 		}
 
 		/**
@@ -2015,9 +2026,9 @@ public final class Kit
 	 *                      <li><p>It invokes the finally-procedure.</p></li>
 	 *                  </ul></p></li>
 	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-finally} to use curly braces
-	 *     even when the code blocks consist of single statements. (You supply the {@code try} code and the {@code finally} code in lambdas,
-	 *     so you get to decide whether to use curly braces or not.)</p></li>
+	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you to use curly braces even when the code blocks consist of single
+	 *     statements. (You supply lambdas for the {@code try} block and the {@code finally} block, so you get to decide whether your lambdas will use curly
+	 *     braces or not.)</p></li>
 	 *
 	 * @param tryFunction    the function to be invoked in the 'try' block.
 	 * @param finallyHandler the handler to be invoked after the try-function.
@@ -2064,9 +2075,9 @@ public final class Kit
 	 *                      <li><p>It invokes the finally-procedure.</p></li>
 	 *                  </ul></p></li>
 	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-finally} to use curly braces
-	 *     even when the code blocks consist of single statements. (You supply the {@code try} code and the {@code finally} code in lambdas,
-	 *     so you get to decide whether to use curly braces or not.)</p></li>
+	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you to use curly braces even when the code blocks consist of single
+	 *     statements. (You supply lambdas for the {@code try} block and the {@code finally} block, so you get to decide whether your lambdas will use curly
+	 *     braces or not.)</p></li>
 	 * </ul>
 	 *
 	 * @param tryProcedure   the procedure to be invoked in the 'try' part.
@@ -2147,7 +2158,8 @@ public final class Kit
 
 	/**
 	 * Same as {@link #tryGetWithResources(C, Function1)} but with a {@link Function0}.
-	 * Avoids Java's deplorable dumbfuckery of forcing you to declare a variable for the closeable, even when you have no use for it.
+	 *
+	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
 	 *
 	 * @param closeable   the {@link Closeable} to close when done.
 	 * @param tryFunction a function which produces a result.
@@ -2223,7 +2235,8 @@ public final class Kit
 
 	/**
 	 * Same as {@link #tryWithResources(C, Procedure1)} but with a {@link Procedure0}.
-	 * Avoids Java's deplorable dumbfuckery of forcing you to declare a variable for the closeable, even when you have no use for it.
+	 *
+	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
 	 *
 	 * @param closeable    the {@link Closeable} to close when done.
 	 * @param tryProcedure the {@link Procedure0} to execute.
@@ -3167,5 +3180,89 @@ public final class Kit
 	{
 		assert a == null || b == null || isAssignable( getClass( a ), getClass( b ) ) : getClass( a ) + " [" + a + "] " + getClass( b ) + " [" + b + "]";
 		return a == b;
+	}
+
+	private static class PrimitiveInfo<T>
+	{
+		final Class<T> primitiveClass;
+		final Class<T> wrapperClass;
+		private PrimitiveInfo( Class<T> primitiveClass, Class<T> wrapperClass )
+		{
+			this.primitiveClass = primitiveClass;
+			this.wrapperClass = wrapperClass;
+		}
+	}
+
+	private static final List<PrimitiveInfo<?>> primitiveTypeInfo = List.of(
+		new PrimitiveInfo<>( boolean.class /**/, Boolean.class   /**/ ),
+		new PrimitiveInfo<>( char.class    /**/, Character.class /**/ ),
+		new PrimitiveInfo<>( byte.class    /**/, Byte.class      /**/ ),
+		new PrimitiveInfo<>( short.class   /**/, Short.class     /**/ ),
+		new PrimitiveInfo<>( int.class     /**/, Integer.class   /**/ ),
+		new PrimitiveInfo<>( long.class    /**/, Long.class      /**/ ),
+		new PrimitiveInfo<>( float.class   /**/, Float.class     /**/ ),
+		new PrimitiveInfo<>( double.class  /**/, Double.class    /**/ ),
+		new PrimitiveInfo<>( void.class    /**/, Void.class      /**/ )
+	);
+
+	private static int indexOfPrimitiveType( Class<?> clazz )
+	{
+		int n = primitiveTypeInfo.size();
+		for( int i = 0;  i < n;  i++ )
+			if( clazz == primitiveTypeInfo.get( i ).primitiveClass )
+				return i;
+		return -1;
+	}
+
+	private static int indexOfPrimitiveWrapperType( Class<?> clazz )
+	{
+		int n = primitiveTypeInfo.size();
+		for( int i = 0;  i < n;  i++ )
+			if( clazz == primitiveTypeInfo.get( i ).wrapperClass )
+				return i;
+		return -1;
+	}
+
+	/**
+	 * Checks whether a class is a primitive wrapper type.
+	 *
+	 * @param clazz the class to check.
+	 *
+	 * @return {@code true} if the class is a primitive wrapper type. (One of Boolean, Character, Byte, Short, Integer, Long, Float, Double and Void.)
+	 */
+	public static boolean isPrimitiveWrapperType( Class<?> clazz )
+	{
+		return indexOfPrimitiveWrapperType( clazz ) != -1;
+	}
+
+	/**
+	 * Gets all java primitive types.
+	 */
+	public static Collection<Class<?>> getAllPrimitives()
+	{
+		return primitiveTypeInfo.stream().<Class<?>>map( i -> i.primitiveClass ).toList();
+	}
+
+	/**
+	 * Gets all java primitive wrappers.
+	 */
+	public static Collection<Class<?>> getAllPrimitiveWrappers()
+	{
+		return primitiveTypeInfo.stream().<Class<?>>map( i -> i.wrapperClass ).toList();
+	}
+
+	/**
+	 * Gets the wrapper type of the given primitive type.
+	 *
+	 * @param clazz the primitive class whose wrapper is requested.
+	 *
+	 * @return the class of the wrapper type for the given type, or null if the given type was not a primitive type.
+	 */
+	public static <T> Class<T> getPrimitiveWrapperType( Class<T> clazz )
+	{
+		assert clazz.isPrimitive();
+		int i = indexOfPrimitiveType( clazz );
+		assert i != -1;
+		return uncheckedClassCast( primitiveTypeInfo.get( i ).wrapperClass );
 	}
 }

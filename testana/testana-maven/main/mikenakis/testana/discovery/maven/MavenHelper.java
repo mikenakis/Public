@@ -87,7 +87,15 @@ final class MavenHelper
 			modelBuildingResult = e.getResult();
 		}
 		reportMavenModelProblems( modelBuildingResult.getProblems() );
-		return modelBuildingResult.getEffectiveModel();
+		Model model = modelBuildingResult.getEffectiveModel();
+		/**
+		 * PEARL: the documentation of ModelBuildingResult.getEffectiveModel() says "Returns: The assembled model, never null."
+		 * It is kind of strange that they mention "never null", right?
+		 * The documentation of Object.getClass() or Thread.currentThread() does not bother stating that it never returns null; it is taken for granted.
+		 * So, this one sounds kind of suspicious, right? Well, indeed, IT HAS BEEN OBSERVED TO RETURN NULL. So we have to assert against that.
+		 */
+		assert model != null;
+		return model;
 	}
 
 	private static Properties getUserProperties()

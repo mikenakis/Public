@@ -1,7 +1,7 @@
 package mikenakis.tyraki;
 
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.LocalMutableCollections;
 
 /**
  * Unmodifiable Array Map.
@@ -13,7 +13,7 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	/**
 	 * Creates a new immutable {@link UnmodifiableArrayMap}.
 	 *
-	 * @param bindings                the {@link Binding}s.
+	 * @param bindings the {@link Binding}s.
 	 *
 	 * @return a new {@link UnmodifiableArrayMap}.
 	 */
@@ -21,9 +21,12 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		FreezableArrayMap<K,V> mutableMap = SingleThreadedMutableCollections.instance().newArrayMap();
-		mutableMap.addAll( bindings );
-		return mutableMap.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
+			mutableMap.addAll( bindings );
+			return mutableMap.frozen();
+		} );
 	}
 
 	/**
@@ -161,22 +164,19 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		@Override default <TK> UnmodifiableArrayMap<TK,V> castArrayKeys()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableArrayMap<TK,V> result = (UnmodifiableArrayMap<TK,V>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableArrayMap<TK,V> result = (UnmodifiableArrayMap<TK,V>)this;
 			return result;
 		}
 
 		@Override default <TV> UnmodifiableArrayMap<K,TV> castArrayValues()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableArrayMap<K,TV> result = (UnmodifiableArrayMap<K,TV>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableArrayMap<K,TV> result = (UnmodifiableArrayMap<K,TV>)this;
 			return result;
 		}
 
 		@Override default <TK, TV> UnmodifiableArrayMap<TK,TV> castArrayMap()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableArrayMap<TK,TV> result = (UnmodifiableArrayMap<TK,TV>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableArrayMap<TK,TV> result = (UnmodifiableArrayMap<TK,TV>)this;
 			return result;
 		}
 

@@ -1,10 +1,10 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.LocalMutableCollections;
 
 /**
  * Unmodifiable Hash Set.
@@ -26,9 +26,12 @@ public interface UnmodifiableHashSet<E> extends UnmodifiableCollection<E>
 	{
 		if( items.isEmpty() )
 			return of();
-		FreezableHashSet<E> mutableSet = SingleThreadedMutableCollections.instance().newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
-		mutableSet.addAll( items );
-		return mutableSet.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
+			mutableSet.addAll( items );
+			return mutableSet.frozen();
+		} );
 	}
 
 	/**
@@ -107,8 +110,7 @@ public interface UnmodifiableHashSet<E> extends UnmodifiableCollection<E>
 	 *
 	 * @return a new {@link UnmodifiableHashSet}.
 	 */
-	@SafeVarargs
-	@SuppressWarnings( "varargs" ) //for -Xlint
+	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <E> UnmodifiableHashSet<E> of( E... arrayOfElements )
 	{
 		UnmodifiableCollection<E> elements = UnmodifiableList.onArray( arrayOfElements );
@@ -133,8 +135,7 @@ public interface UnmodifiableHashSet<E> extends UnmodifiableCollection<E>
 	{
 		@Override default <TT> UnmodifiableHashSet<TT> castHashSet()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableHashSet<TT> result = (UnmodifiableHashSet<TT>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableHashSet<TT> result = (UnmodifiableHashSet<TT>)this;
 			return result;
 		}
 	}

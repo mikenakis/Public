@@ -1,7 +1,5 @@
 package mikenakis.testana.discovery;
 
-import mikenakis.kit.Kit;
-
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -43,10 +41,31 @@ public abstract class DiscoveryModule
 
 	private static void allOutputPathsRecursive( DiscoveryModule discoveryModule, Collection<Path> mutableOutputPaths )
 	{
-		for( OutputDirectory outputDirectory : discoveryModule.outputDirectories() )
-			Kit.collection.tryAdd( mutableOutputPaths, outputDirectory.path );
+		mutableOutputPaths.addAll( discoveryModule.outputPaths() );
 		mutableOutputPaths.addAll( discoveryModule.externalDependencyPaths() );
 		for( DiscoveryModule dependency : discoveryModule.projectDependencies() )
 			allOutputPathsRecursive( dependency, mutableOutputPaths );
+	}
+
+	public Collection<Path> outputPaths()
+	{
+		return outputDirectories().stream().map( o -> o.path ).toList();
+	}
+
+	public Collection<Path> allDependencyAndExternalPaths()
+	{
+		Collection<Path> mutablePaths = new LinkedHashSet<>();
+		mutablePaths.addAll( externalDependencyPaths() );
+		for( DiscoveryModule dependency : projectDependencies() )
+			dependencyAndExternalPathsRecursive( dependency, mutablePaths );
+		return mutablePaths;
+	}
+
+	private static void dependencyAndExternalPathsRecursive( DiscoveryModule discoveryModule, Collection<Path> mutableDependencyPaths )
+	{
+		mutableDependencyPaths.addAll( discoveryModule.outputPaths() );
+		mutableDependencyPaths.addAll( discoveryModule.externalDependencyPaths() );
+		for( DiscoveryModule dependency : discoveryModule.projectDependencies() )
+			dependencyAndExternalPathsRecursive( dependency, mutableDependencyPaths );
 	}
 }

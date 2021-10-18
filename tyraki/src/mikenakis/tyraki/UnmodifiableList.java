@@ -1,13 +1,13 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.conversion.ProhibitedConverter;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.singlethreaded.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.LocalMutableCollections;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -31,8 +31,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 */
 	static <T, U extends T> UnmodifiableList<T> downCast( UnmodifiableList<U> list )
 	{
-		@SuppressWarnings( "unchecked" )
-		UnmodifiableList<T> result = (UnmodifiableList<T>)list;
+		@SuppressWarnings( "unchecked" ) UnmodifiableList<T> result = (UnmodifiableList<T>)list;
 		return result;
 	}
 
@@ -72,9 +71,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements instanceof UnmodifiableList && elements.isFrozen() ) //TODO perhaps introduce UnmodifiableCollection.tryAsList()
 			return (UnmodifiableList<E>)elements;
-		FreezableList<E> mutableList = SingleThreadedMutableCollections.instance().newArrayList( elements.size(), equalityComparator );
-		mutableList.addAll( elements );
-		return mutableList.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			mutableList.addAll( elements );
+			return mutableList.frozen();
+		} );
 	}
 
 	static <E> UnmodifiableList<E> from( UnmodifiableList<E> elements, EqualityComparator<? super E> equalityComparator )
@@ -83,9 +85,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements.isFrozen() )
 			return elements;
-		FreezableList<E> mutableList = SingleThreadedMutableCollections.instance().newArrayList( elements.size(), equalityComparator );
-		mutableList.addAll( elements );
-		return mutableList.frozen();
+		return LocalMutableCollections.get( mutableCollections -> //
+		{
+			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			mutableList.addAll( elements );
+			return mutableList.frozen();
+		} );
 	}
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
@@ -503,7 +508,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 
 		@Override default <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 		{
-			TotalConverterWithIndex<? extends T,? super E> totalConverter = (i,e) -> converter.invoke( e );
+			TotalConverterWithIndex<? extends T,? super E> totalConverter = ( i, e ) -> converter.invoke( e );
 			return ConversionCollections.newConvertingList( this, totalConverter, reverter, equalityComparator );
 		}
 
@@ -526,8 +531,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 
 		@Override default <T extends E> UnmodifiableList<T> upCast()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableList<T> result = (UnmodifiableList<T>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableList<T> result = (UnmodifiableList<T>)this;
 			return result;
 		}
 
@@ -611,7 +615,8 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
 	 * earliest point possible, and not when compiling some derived class.
 	 */
-	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
 		@Override public UnmodifiableList<E> getDecoratedUnmodifiableList()
