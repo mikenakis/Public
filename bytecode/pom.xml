@@ -15,6 +15,7 @@
 	<modules>
 		<module>bytecode-core</module>
 		<module>bytecode-dependencies</module>
+		<module>bytecode-printing</module>
 		<module>bytecode-test</module>
 	</modules>
 

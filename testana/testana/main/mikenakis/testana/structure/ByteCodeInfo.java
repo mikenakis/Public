@@ -7,7 +7,6 @@ import mikenakis.bytecode.model.attributes.CodeAttribute;
 import mikenakis.bytecode.model.attributes.KnownAttribute;
 import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
 
@@ -29,7 +28,6 @@ final class ByteCodeInfo
 
 	Collection<String> getDependencyNames()
 	{
-		ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ); //TODO this is only here for testing, must be removed!
 		Collection<TerminalTypeDescriptor> dependencies = ByteCodeDependencies.getDependencies( byteCodeType, includeDescriptorOnlyDependencies, includeSignatureDependencies );
 		return dependencies.stream().map( d -> d.typeName ).toList();
 	}

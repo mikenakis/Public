@@ -3,7 +3,7 @@ package mikenakis.bytecode.test;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.printing.ByteCodePrinter;
+//import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
 
@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 public class BytecodeBenchmark
 {
@@ -49,7 +48,7 @@ public class BytecodeBenchmark
 			for( var bytes : bytesList )
 			{
 				ByteCodeType byteCodeType = ByteCodeType.read( bytes );
-				ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() );
+			//	ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() );
 				sum += byteCodeType.hashCode();
 			}
 			return sum;
