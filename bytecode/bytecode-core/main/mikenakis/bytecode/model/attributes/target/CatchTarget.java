@@ -5,7 +5,6 @@ import mikenakis.bytecode.kit.BufferWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.bytecode.writing.WritingConstantPool;
 import mikenakis.bytecode.writing.WritingLocationMap;
-import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;

@@ -39,8 +39,8 @@
 		<module>clio</module>
 		<module>intertwine</module>
 		<module>java-type-model</module>
-		<module>kit</module>
-		<module>kit-test</module>
+		<module>kit/kit</module>
+		<module>kit/kit-test</module>
 		<module>slf4j-to-kit</module>
 		<module>starwars-dataset</module>
 		<module>testana</module>

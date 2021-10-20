@@ -69,6 +69,6 @@ based on original work by <a href="https://thenounproject.com/term/cheese/402993
 
 It is in fact possible to keep track of the execution context and to always know whether a mutable collection can be safely accessed. 
 - In simple scenarios where we are using only discrete threads, a mutable collection can assert that the thread accessing the collection is the same as the thread in which the collection was allocated.
-- In more complex scenarios where thread pools are involved, things are a bit more complicated, but still manageable with a bit of discipline and infrastructure. 
+- In more involved scenarios that make use of thread pools and/or locking, ("synchronization",) things are a bit more complicated, but still manageable with a bit of discipline and infrastructure. 
 
 Java collections do not help with any of that. 

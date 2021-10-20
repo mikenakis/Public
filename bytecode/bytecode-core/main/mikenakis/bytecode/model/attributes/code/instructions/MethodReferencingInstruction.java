@@ -7,7 +7,6 @@ import mikenakis.bytecode.model.attributes.code.OpCode;
 import mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.reading.ReadingConstantPool;
-import mikenakis.bytecode.reading.ReadingLocationMap;
 import mikenakis.bytecode.writing.InstructionWriter;
 import mikenakis.bytecode.writing.Interner;
 import mikenakis.kit.Kit;

@@ -6,8 +6,6 @@ import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Function2;
 import mikenakis.kit.GenericException;
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.tyraki.Freezile;
-import mikenakis.tyraki.IteratorOnUnmodifiableEnumerator;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

@@ -1,7 +1,5 @@
 package mikenakis.kit.functional;
 
-import java.util.function.Function;
-
 /**
  * A method which accepts no arguments and returns a value.
  * (Corresponds to Java's {@link java.util.function.Supplier}.)
