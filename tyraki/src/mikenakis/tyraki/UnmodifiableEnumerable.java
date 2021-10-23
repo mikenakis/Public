@@ -1,5 +1,7 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
@@ -391,6 +393,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 	boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other );
 
+	boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator );
+
 	@Deprecated @Override boolean equals( Object other ); //Java blooper: Java prevents us from declaring a default method overriding equals().
 
 	<T> T reduce( T start, Function2<T,T,E> combiner );
@@ -666,6 +670,11 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 		@Override default boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other )
 		{
+			return equalsUnmodifiableEnumerable( other, DefaultEqualityComparator.getInstance() );
+		}
+
+		@Override default boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator )
+		{
 			if( other == this )
 				return true;
 			UnmodifiableEnumerator<E> enumerator = newUnmodifiableEnumerator();
@@ -678,7 +687,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 					return false;
 				E value = enumerator.getCurrent();
 				E otherValue = otherEnumerator.getCurrent();
-				if( !Objects.equals( value, otherValue ) )
+				if( !equalityComparator.equals( value, otherValue ) )
 					return false;
 				enumerator.moveNext();
 				otherEnumerator.moveNext();

@@ -201,6 +201,8 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	UnmodifiableMap<V,K> transposedMap();
 
+	@SuppressWarnings( "MethodOverloadsMethodOfSuperclass" ) boolean equals( UnmodifiableMap<?,?> other );
+
 	/**
 	 * Default methods for {@link UnmodifiableMap}.
 	 *
@@ -276,12 +278,13 @@ public interface UnmodifiableMap<K, V> extends Freezile
 		{
 			if( size() != other.size() )
 				return false;
+			EqualityComparator<? super V> equalityComparator = values().getEqualityComparator();
 			for( Binding<K,V> binding : entries() )
 			{
 				Optional<V> otherValue = other.tryGet( binding.getKey() );
 				if( otherValue.isEmpty() )
 					return false;
-				if( !values().getEqualityComparator().equals( binding.getValue(), otherValue.get() ) )
+				if( !equalityComparator.equals( binding.getValue(), otherValue.get() ) )
 					return false;
 			}
 			return true;
@@ -310,6 +313,12 @@ public interface UnmodifiableMap<K, V> extends Freezile
 		@Override default UnmodifiableMap<V,K> transposedMap()
 		{
 			return UnmodifiableHashMap.from( k -> get( k ), keys() );
+		}
+
+		@Override default boolean equals( UnmodifiableMap<?,?> other )
+		{
+			@SuppressWarnings( "unchecked" ) UnmodifiableMap<K,V> kin = (UnmodifiableMap<K, V>)other;
+			return equalsMap( kin );
 		}
 	}
 

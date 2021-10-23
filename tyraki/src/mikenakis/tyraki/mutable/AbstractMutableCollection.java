@@ -26,16 +26,12 @@ abstract class AbstractMutableCollection<E> extends AbstractMutableEnumerable<E>
 
 	@Override public final boolean equals( Object other )
 	{
-		if( other == this )
-			return true;
-		if( other == null )
-			return false;
-		if( other instanceof UnmodifiableCollection )
-		{
-			@SuppressWarnings( "unchecked" ) UnmodifiableCollection<E> otherAsUnmodifiableCollection = (UnmodifiableCollection<E>)other;
-			return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
-		}
-		assert false;
-		return false;
+		return other instanceof UnmodifiableCollection<?> kin && equals( kin );
+	}
+
+	public final boolean equals( UnmodifiableCollection<?> other )
+	{
+		@SuppressWarnings( "unchecked" ) UnmodifiableCollection<E> otherAsUnmodifiableCollection = (UnmodifiableCollection<E>)other;
+		return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
 	}
 }

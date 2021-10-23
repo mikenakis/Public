@@ -24,11 +24,11 @@ Configuration necessary after a fresh clone:
           - ensure "Uncaught exception" is checked.
   - Configure the "Grep Console" plugin:
 ``` 
-    Expression              Bold      Background  Foreground
-    checked ".* FATAL .*"   checked   unchecked   checked DC7075
-    checked ".* ERROR .*"   unchecked unchecked   checked F59B9D
-    checked ".* WARN .*"    unchecked unchecked   checked DD9203
-    checked ".* INFO .*"    unchecked unchecked   checked A6A6A6
-    checked ".* DEBUG .*"   unchecked unchecked   checked 053137
-    checked ".* TRACE .*"   unchecked unchecked   checked 7D87BA 
+    Expression                Bold        Background    Foreground
+    [checked] ".* FATAL .*"   [checked  ] [unchecked]   [checked] DC7075
+    [checked] ".* ERROR .*"   [unchecked] [unchecked]   [checked] F59B9D
+    [checked] ".* WARN .*"    [unchecked] [unchecked]   [checked] DD9203
+    [checked] ".* INFO .*"    [unchecked] [unchecked]   [checked] A6A6A6
+    [checked] ".* DEBUG .*"   [unchecked] [unchecked]   [checked] 0DCCDD
+    [checked] ".* TRACE .*"   [unchecked] [unchecked]   [checked] 7D87BA 
 ```

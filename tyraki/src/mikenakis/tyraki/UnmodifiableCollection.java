@@ -308,11 +308,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		 */
 		@Override default boolean equalsUnmodifiableCollection( UnmodifiableCollection<? extends E> other )
 		{
-			if( this == other )
-				return true;
-			if( size() != other.size() )
-				return false;
-			return containsAll( other );
+			return size() == other.size() && containsAll( other );
 		}
 
 		@Override default Optional<E> findFirstElement( Predicate<? super E> predicate )

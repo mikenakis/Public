@@ -100,20 +100,7 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 
 	@Override public boolean equals( Object other )
 	{
-		if( other == this )
-			return true;
-		if( other instanceof UnmodifiableMap )
-		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableMap<K,V> otherMap = (UnmodifiableMap<K,V>)other;
-			return equals( otherMap );
-		}
-		return false;
-	}
-
-	public boolean equals( UnmodifiableMap<K,V> other )
-	{
-		return entries().equalsUnmodifiableCollection( other.entries() ); //TODO perhaps use some more optimal method of comparison for map?
+		return other instanceof UnmodifiableMap<?,?> kin && equals( kin );
 	}
 
 	@Override public int hashCode()

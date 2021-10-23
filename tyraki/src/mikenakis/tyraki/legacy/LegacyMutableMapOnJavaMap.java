@@ -397,23 +397,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 
 	@Override public boolean equals( Object other )
 	{
-		if( other == this )
-			return true;
-		if( other == null )
-			return false;
-		if( other instanceof UnmodifiableMap )
-		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableMap<K,V> otherMap = (UnmodifiableMap<K,V>)other;
-			return equals( otherMap );
-		}
-		assert false;
-		return false;
-	}
-
-	public boolean equals( UnmodifiableMap<K,V> other )
-	{
-		return entries().equalsUnmodifiableCollection( other.entries() ); //TODO perhaps use some more optimal method of comparison for map?
+		return other instanceof UnmodifiableMap<?,?> kin && equals( kin );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

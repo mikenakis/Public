@@ -7,6 +7,11 @@ import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 
 import java.util.Objects;
 
+/**
+ * A comparator for {@link UnmodifiableEnumerable} which avoids cycles.
+ *
+ * @param <R>
+ */
 public class SafeEnumerableComparator<R>
 {
 	private final BooleanFunction2<R,R> valueComparator;
