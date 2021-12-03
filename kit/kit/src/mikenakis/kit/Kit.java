@@ -2138,7 +2138,7 @@ public final class Kit
 	 *
 	 * @return the result of the try-function.
 	 */
-	public static <C extends Closeable, R> R tryGetWithResources( C closeable, Function1<R,? super C> tryFunction )
+	public static <C extends Closeable, R> R tryGetWith( C closeable, Function1<R,? super C> tryFunction )
 	{
 		assert closeable != null;
 		if( areAssertionsEnabled() )
@@ -2157,7 +2157,8 @@ public final class Kit
 	}
 
 	/**
-	 * Same as {@link #tryGetWithResources(C, Function1)} but with a {@link Function0}.
+	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Closeable}, execute some code,
+	 * and then destroy the {@link Closeable} but the code does not actually need to use the {@link Closeable}.
 	 *
 	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
 	 *
@@ -2168,7 +2169,7 @@ public final class Kit
 	 *
 	 * @return the result of the try-function.
 	 */
-	public static <C extends Closeable, R> R tryGetWithResources( C closeable, Function0<R> tryFunction )
+	public static <C extends Closeable, R> R tryGetWith( C closeable, Function0<R> tryFunction )
 	{
 		assert closeable != null;
 		if( areAssertionsEnabled() )
@@ -2217,7 +2218,7 @@ public final class Kit
 	 * @param tryProcedure a {@link Procedure1} which receives the closeable object and does something with it.
 	 * @param <C>          the type of the {@link Closeable}. (Must extend {@link Closeable}.)
 	 */
-	public static <C extends Closeable> void tryWithResources( C closeable, Procedure1<? super C> tryProcedure )
+	public static <C extends Closeable> void tryWith( C closeable, Procedure1<? super C> tryProcedure )
 	{
 		if( areAssertionsEnabled() )
 		{
@@ -2234,7 +2235,8 @@ public final class Kit
 	}
 
 	/**
-	 * Same as {@link #tryWithResources(C, Procedure1)} but with a {@link Procedure0}.
+	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Closeable}, execute some code,
+	 * and then destroy the {@link Closeable} but the code does not actually need to use the {@link Closeable}.
 	 *
 	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
 	 *
@@ -2242,7 +2244,7 @@ public final class Kit
 	 * @param tryProcedure the {@link Procedure0} to execute.
 	 * @param <C>          the type of the {@link Closeable}. (Must extend {@link Closeable}.)
 	 */
-	public static <C extends Closeable> void tryWithResources( C closeable, Procedure0 tryProcedure )
+	public static <C extends Closeable> void tryWith( C closeable, Procedure0 tryProcedure )
 	{
 		if( areAssertionsEnabled() )
 		{

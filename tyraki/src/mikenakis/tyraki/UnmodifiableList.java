@@ -71,7 +71,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements instanceof UnmodifiableList && elements.isFrozen() ) //TODO perhaps introduce UnmodifiableCollection.tryAsList()
 			return (UnmodifiableList<E>)elements;
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
@@ -85,7 +85,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements.isFrozen() )
 			return elements;
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );

@@ -14,25 +14,25 @@ import mikenakis.kit.mutation.MutationContext;
  */
 public final class LocalMutableCollections
 {
-	public static void run( Procedure1<MutableCollections> procedure )
+	public static void tryWith( Procedure1<MutableCollections> procedure )
 	{
-		Kit.tryWithResources( new LocalMutationContext(), mutationContext -> //
+		Kit.tryWith( new LocalMutationContext(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = new MutableCollections( mutationContext );
 			procedure.invoke( mutableCollections );
 		} );
 	}
 
-	public static <T> T get( Function1<T,MutableCollections> function )
+	public static <T> T tryGetWith( Function1<T,MutableCollections> function )
 	{
-		return Kit.tryGetWithResources( new LocalMutationContext(), mutationContext -> //
+		return Kit.tryGetWith( new LocalMutationContext(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = new MutableCollections( mutationContext );
 			return function.invoke( mutableCollections );
 		} );
 	}
 
-	private static class LocalMutationContext extends MutationContext implements Closeable.Defaults
+	private static class LocalMutationContext implements MutationContext, Closeable.Defaults
 	{
 		private final LifeGuard lifeGuard = LifeGuard.create( this );
 

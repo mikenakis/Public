@@ -21,7 +21,7 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
 			mutableMap.addAll( bindings );

@@ -5,7 +5,7 @@ package mikenakis.kit.mutation;
  *
  * @author michael.gr
  */
-final class DebugSingleThreadedMutationContext extends MutationContext
+final class DebugSingleThreadedMutationContext implements MutationContext
 {
 	private static final ThreadLocal<MutationContext> instance = ThreadLocal.withInitial( () -> new DebugSingleThreadedMutationContext() );
 

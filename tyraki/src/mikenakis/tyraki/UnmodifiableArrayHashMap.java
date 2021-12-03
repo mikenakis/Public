@@ -86,7 +86,7 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return ImmutableCollections.emptyArrayHashMap();
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, //
 				valueEqualityComparator );

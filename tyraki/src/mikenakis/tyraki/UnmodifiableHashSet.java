@@ -26,7 +26,7 @@ public interface UnmodifiableHashSet<E> extends UnmodifiableCollection<E>
 	{
 		if( items.isEmpty() )
 			return of();
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
 			mutableSet.addAll( items );

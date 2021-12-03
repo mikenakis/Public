@@ -30,7 +30,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, //
 				valueEqualityComparator );
@@ -54,7 +54,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return LocalMutableCollections.get( mutableCollections -> //
+		return LocalMutableCollections.tryGetWith( mutableCollections -> //
 		{
 			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( 1, fillFactor, keyHasher, keyEqualityComparator, //
 				valueEqualityComparator );

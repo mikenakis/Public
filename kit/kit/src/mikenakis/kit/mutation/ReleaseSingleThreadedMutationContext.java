@@ -5,7 +5,7 @@ package mikenakis.kit.mutation;
  *
  * @author michael.gr
  */
-final class ReleaseSingleThreadedMutationContext extends MutationContext
+final class ReleaseSingleThreadedMutationContext implements MutationContext
 {
 	static final MutationContext instance = new ReleaseSingleThreadedMutationContext();
 
