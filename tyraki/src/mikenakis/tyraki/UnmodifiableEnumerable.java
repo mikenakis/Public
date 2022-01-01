@@ -43,6 +43,12 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		return of( 0, i -> ++i >= count ? Optional.empty() : Optional.of( i ) );
 	}
 
+	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
+	static <T> UnmodifiableEnumerable<T> of( T e0, T... arrayOfElements )
+	{
+		return of( e0 ).chained( ConversionCollections.newArrayWrapper( arrayOfElements ) );
+	}
+
 	static <T> UnmodifiableEnumerable<T> of( T firstElement, Function1<Optional<T>,T> nextElementProducer )
 	{
 		return ConversionCollections.newEnumerable( firstElement, nextElementProducer );
