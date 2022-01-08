@@ -7,11 +7,11 @@ import java.io.Closeable;
 import java.util.Arrays;
 
 /**
- * JSON Parser.
+ * JSON Reader.
  *
  * @author michael.gr
  */
-public class JsonParser implements Closeable
+public class JsonReader implements Closeable
 {
 	public enum TokenType
 	{
@@ -38,7 +38,7 @@ public class JsonParser implements Closeable
 	private String currentTokenContent;
 	private int depth;
 
-	public JsonParser( BufferedReader reader, boolean unquotedIdentifiers )
+	public JsonReader( BufferedReader reader, boolean unquotedIdentifiers )
 	{
 		this.reader = reader;
 		this.unquotedIdentifiers = unquotedIdentifiers;

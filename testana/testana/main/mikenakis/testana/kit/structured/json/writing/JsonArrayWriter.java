@@ -1,6 +1,6 @@
 package mikenakis.testana.kit.structured.json.writing;
 
-import mikenakis.testana.kit.structured.json.JsonEmitter;
+import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.writing.ArrayWriter;
 import mikenakis.testana.kit.structured.writing.StructuredWriter;
 
@@ -9,11 +9,11 @@ import java.util.function.Consumer;
 public class JsonArrayWriter implements ArrayWriter
 {
 	private boolean first = true;
-	private final JsonEmitter jsonEmitter;
+	private final JsonWriter jsonWriter;
 
-	JsonArrayWriter( JsonEmitter jsonEmitter )
+	JsonArrayWriter( JsonWriter jsonWriter )
 	{
-		this.jsonEmitter = jsonEmitter;
+		this.jsonWriter = jsonWriter;
 	}
 
 	@Override public void writeElement( Consumer<StructuredWriter> structuredWriterConsumer )
@@ -21,8 +21,8 @@ public class JsonArrayWriter implements ArrayWriter
 		if( first )
 			first = false;
 		else
-			jsonEmitter.emitComma();
-		JsonStructuredWriter arrayElementWriter = new JsonStructuredWriter( jsonEmitter, JsonEmitter.Mode.Array );
+			jsonWriter.emitComma();
+		StructuredWriter arrayElementWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Array );
 		structuredWriterConsumer.accept( arrayElementWriter );
 	}
 }

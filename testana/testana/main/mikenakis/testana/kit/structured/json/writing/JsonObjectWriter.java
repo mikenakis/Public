@@ -1,6 +1,6 @@
 package mikenakis.testana.kit.structured.json.writing;
 
-import mikenakis.testana.kit.structured.json.JsonEmitter;
+import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.writing.ObjectWriter;
 import mikenakis.testana.kit.structured.writing.StructuredWriter;
 
@@ -9,11 +9,11 @@ import java.util.function.Consumer;
 public class JsonObjectWriter implements ObjectWriter
 {
 	private boolean atLeastOneMemberEmitted;
-	private final JsonEmitter jsonEmitter;
+	private final JsonWriter jsonWriter;
 
-	JsonObjectWriter( JsonEmitter jsonEmitter )
+	JsonObjectWriter( JsonWriter jsonWriter )
 	{
-		this.jsonEmitter = jsonEmitter;
+		this.jsonWriter = jsonWriter;
 	}
 
 	@Override public void writeMember( String memberName, Consumer<StructuredWriter> structuredWriterConsumer )
@@ -21,10 +21,10 @@ public class JsonObjectWriter implements ObjectWriter
 		if( !atLeastOneMemberEmitted )
 			atLeastOneMemberEmitted = true;
 		else
-			jsonEmitter.emitComma();
-		jsonEmitter.emitIdentifier( memberName );
-		jsonEmitter.emitColon();
-		JsonStructuredWriter objectMemberWriter = new JsonStructuredWriter( jsonEmitter, JsonEmitter.Mode.Object );
+			jsonWriter.emitComma();
+		jsonWriter.emitIdentifier( memberName );
+		jsonWriter.emitColon();
+		StructuredWriter objectMemberWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
 		structuredWriterConsumer.accept( objectMemberWriter );
 	}
 }

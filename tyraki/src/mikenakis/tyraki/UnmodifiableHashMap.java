@@ -1,12 +1,13 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.LocalMutableCollections;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 /**
  * Unmodifiable Hash Map.
@@ -30,8 +31,9 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return LocalMutableCollections.tryGetWith( mutableCollections -> //
+		return MutationContext.tryGetWithLocal( mutationContext -> //
 		{
+			MutableCollections mutableCollections = new MutableCollections( mutationContext );
 			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( bindings.size(), fillFactor, keyHasher, keyEqualityComparator, //
 				valueEqualityComparator );
 			mutableMap.addAll( bindings );
@@ -54,8 +56,9 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return LocalMutableCollections.tryGetWith( mutableCollections -> //
+		return MutationContext.tryGetWithLocal( mutationContext -> //
 		{
+			MutableCollections mutableCollections = new MutableCollections( mutationContext );
 			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( 1, fillFactor, keyHasher, keyEqualityComparator, //
 				valueEqualityComparator );
 			mutableMap.addAll( bindings );

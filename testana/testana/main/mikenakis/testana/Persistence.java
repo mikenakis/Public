@@ -2,8 +2,8 @@ package mikenakis.testana;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
-import mikenakis.testana.kit.structured.json.JsonEmitter;
-import mikenakis.testana.kit.structured.json.JsonParser;
+import mikenakis.testana.kit.structured.json.JsonWriter;
+import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.json.reading.JsonStructuredReader;
 import mikenakis.testana.kit.structured.json.writing.JsonStructuredWriter;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -63,8 +63,8 @@ public final class Persistence
 			return;
 		Map<String,TestClassInfo> map = Kit.uncheckedTryGetWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
 		{
-			JsonParser jsonParser = new JsonParser( bufferedReader, true );
-			StructuredReader rootReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Object );
+			JsonReader jsonReader = new JsonReader( bufferedReader, true );
+			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
 			return rootReader.readArray( "elementName", arrayReader -> //
 			{
 				Map<String,TestClassInfo> mutableMap = new LinkedHashMap<>();
@@ -93,8 +93,8 @@ public final class Persistence
 	{
 		Kit.uncheckedTryWithResources( () -> Files.newBufferedWriter( persistencePathName ), ( Writer writer ) -> //
 		{
-			JsonEmitter jsonEmitter = new JsonEmitter( writer, true, true );
-			StructuredWriter rootWriter = new JsonStructuredWriter( jsonEmitter, JsonEmitter.Mode.Object );
+			JsonWriter jsonWriter = new JsonWriter( writer, true, true );
+			StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
 			rootWriter.writeArray( "elementName", arrayWriter -> //
 			{
 				List<String> names = new ArrayList<>( entryFromNameMap.keySet() );

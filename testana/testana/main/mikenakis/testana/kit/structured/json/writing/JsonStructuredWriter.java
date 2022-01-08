@@ -1,6 +1,6 @@
 package mikenakis.testana.kit.structured.json.writing;
 
-import mikenakis.testana.kit.structured.json.JsonEmitter;
+import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.writing.ArrayWriter;
 import mikenakis.testana.kit.structured.writing.ObjectWriter;
 import mikenakis.testana.kit.structured.writing.StructuredWriter;
@@ -10,20 +10,20 @@ import java.util.function.Consumer;
 
 public class JsonStructuredWriter implements StructuredWriter
 {
-	private final JsonEmitter jsonEmitter;
-	private final JsonEmitter.Mode mode;
+	private final JsonWriter jsonWriter;
+	private final JsonWriter.Mode mode;
 	private boolean done;
 
-	public JsonStructuredWriter( JsonEmitter jsonEmitter, JsonEmitter.Mode mode )
+	public JsonStructuredWriter( JsonWriter jsonWriter, JsonWriter.Mode mode )
 	{
-		this.jsonEmitter = jsonEmitter;
+		this.jsonWriter = jsonWriter;
 		this.mode = mode;
 	}
 
 	@Override public void writeValue( String value )
 	{
 		assert !done;
-		jsonEmitter.emitString( value, mode );
+		jsonWriter.emitString( value, mode );
 		done = true;
 	}
 
@@ -31,33 +31,33 @@ public class JsonStructuredWriter implements StructuredWriter
 	{
 		assert !done;
 		if( value.isEmpty() )
-			jsonEmitter.emitNull( mode );
+			jsonWriter.emitNull( mode );
 		else
-			jsonEmitter.emitString( value.get(), mode );
+			jsonWriter.emitString( value.get(), mode );
 		done = true;
 	}
 
 	@Override public void writeObject( Consumer<ObjectWriter> objectWriterConsumer )
 	{
 		assert !done;
-		jsonEmitter.emitObjectBegin();
-		int depth = jsonEmitter.depth();
-		JsonObjectWriter objectWriter = new JsonObjectWriter( jsonEmitter );
+		jsonWriter.emitObjectBegin();
+		int depth = jsonWriter.depth();
+		JsonObjectWriter objectWriter = new JsonObjectWriter( jsonWriter );
 		objectWriterConsumer.accept( objectWriter );
-		assert jsonEmitter.depth() == depth;
-		jsonEmitter.emitObjectEnd();
+		assert jsonWriter.depth() == depth;
+		jsonWriter.emitObjectEnd();
 		done = true;
 	}
 
 	@Override public void writeArray( String elementName, Consumer<ArrayWriter> arrayWriterConsumer )
 	{
 		assert !done;
-		jsonEmitter.emitArrayBegin();
-		int depth = jsonEmitter.depth();
-		JsonArrayWriter arrayWriter = new JsonArrayWriter( jsonEmitter );
+		jsonWriter.emitArrayBegin();
+		int depth = jsonWriter.depth();
+		JsonArrayWriter arrayWriter = new JsonArrayWriter( jsonWriter );
 		arrayWriterConsumer.accept( arrayWriter );
-		assert jsonEmitter.depth() == depth;
-		jsonEmitter.emitArrayEnd();
+		assert jsonWriter.depth() == depth;
+		jsonWriter.emitArrayEnd();
 		done = true;
 	}
 }

@@ -1,7 +1,8 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.tyraki.mutable.LocalMutableCollections;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 /**
  * Unmodifiable Array Map.
@@ -21,8 +22,9 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return LocalMutableCollections.tryGetWith( mutableCollections -> //
+		return MutationContext.tryGetWithLocal( mutationContext -> //
 		{
+			MutableCollections mutableCollections = new MutableCollections( mutationContext );
 			FreezableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
 			mutableMap.addAll( bindings );
 			return mutableMap.frozen();

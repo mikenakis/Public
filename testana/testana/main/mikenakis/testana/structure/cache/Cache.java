@@ -3,8 +3,8 @@ package mikenakis.testana.structure.cache;
 import mikenakis.kit.Kit;
 import mikenakis.testana.discovery.OutputDirectory;
 import mikenakis.testana.discovery.OutputFile;
-import mikenakis.testana.kit.structured.json.JsonEmitter;
-import mikenakis.testana.kit.structured.json.JsonParser;
+import mikenakis.testana.kit.structured.json.JsonWriter;
+import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.json.reading.JsonStructuredReader;
 import mikenakis.testana.kit.structured.json.writing.JsonStructuredWriter;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -37,8 +37,8 @@ public class Cache
 	{
 		Map<String,CacheModule> modules = Kit.uncheckedTryGetWithResources( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
 		{
-			JsonParser jsonParser = new JsonParser( bufferedReader, true );
-			StructuredReader rootReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Object );
+			JsonReader jsonReader = new JsonReader( bufferedReader, true );
+			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
 			return rootReader.readArray( "modules", moduleArrayReader -> //
 			{
 				Map<String,CacheModule> modules1 = new LinkedHashMap<>();
@@ -162,8 +162,8 @@ public class Cache
 	{
 		Kit.uncheckedTryWithResources( () -> Files.newBufferedWriter( path ), ( Writer writer ) -> //
 		{
-			JsonEmitter jsonEmitter = new JsonEmitter( writer, true, true );
-			StructuredWriter rootWriter = new JsonStructuredWriter( jsonEmitter, JsonEmitter.Mode.Object );
+			JsonWriter jsonWriter = new JsonWriter( writer, true, true );
+			StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
 			rootWriter.writeArray( "modules", moduleArrayWriter -> //
 			{
 				for( CacheModule module : modules.values() )

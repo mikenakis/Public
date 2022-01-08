@@ -6,11 +6,11 @@ import java.io.Closeable;
 import java.io.Writer;
 
 /**
- * JSON Emitter.
+ * JSON Writer.
  *
  * @author michael.gr
  */
-public class JsonEmitter implements Closeable
+public class JsonWriter implements Closeable
 {
 	public enum Mode
 	{
@@ -32,7 +32,7 @@ public class JsonEmitter implements Closeable
 	private int depth;
 	private boolean started;
 
-	public JsonEmitter( Writer writer, boolean prettyPrint, boolean unquotedIdentifiers )
+	public JsonWriter( Writer writer, boolean prettyPrint, boolean unquotedIdentifiers )
 	{
 		this.writer = writer;
 		this.prettyPrint = prettyPrint;

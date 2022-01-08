@@ -26,6 +26,7 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 	{
 		//addInvestigatedCloseableClassName( "mikenakis.sound.framework.ConcreteSequencer" );
 		//addInvestigatedCloseableClassName( "mikenakis.sound.framework.AdsrEnvelopePlayer$1" );
+		addInvestigatedCloseableClassName( "mikenakis.modelyn.rows.RowSetOnEnumerable" );
 	}
 
 	private void addInvestigatedCloseableClassName( String closeableClassName )

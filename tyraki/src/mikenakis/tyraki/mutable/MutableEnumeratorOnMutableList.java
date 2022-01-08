@@ -15,7 +15,6 @@ final class MutableEnumeratorOnMutableList<E> extends AbstractMutableEnumerator<
 	MutableEnumeratorOnMutableList( MutableCollections mutableCollections, MutableList<E> list )
 	{
 		super( mutableCollections );
-		assert list != null;
 		this.list = list;
 		expectedModCount = list.getModificationCount(); //NOTE: checking whether assertions are enabled to skip this is more expensive than just doing this.
 		index = 0;

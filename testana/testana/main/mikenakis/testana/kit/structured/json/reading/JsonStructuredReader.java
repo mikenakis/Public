@@ -1,8 +1,8 @@
 package mikenakis.testana.kit.structured.json.reading;
 
 import mikenakis.kit.functional.Function1;
-import mikenakis.testana.kit.structured.json.JsonEmitter;
-import mikenakis.testana.kit.structured.json.JsonParser;
+import mikenakis.testana.kit.structured.json.JsonWriter;
+import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.reading.ArrayReader;
 import mikenakis.testana.kit.structured.reading.ObjectReader;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -11,43 +11,43 @@ import java.util.Optional;
 
 public class JsonStructuredReader implements StructuredReader
 {
-	private final JsonParser jsonParser;
-	private final JsonEmitter.Mode mode;
+	private final JsonReader jsonReader;
+	private final JsonWriter.Mode mode;
 	private boolean done;
 
-	public JsonStructuredReader( JsonParser jsonParser, JsonEmitter.Mode mode )
+	public JsonStructuredReader( JsonReader jsonReader, JsonWriter.Mode mode )
 	{
-		this.jsonParser = jsonParser;
+		this.jsonReader = jsonReader;
 		this.mode = mode;
 	}
 
 	@Override public String readValue()
 	{
 		assert !done;
-		return jsonParser.skip( JsonParser.TokenType.String );
+		return jsonReader.skip( JsonReader.TokenType.String );
 	}
 
 	@Override public Optional<String> readOptionalValue()
 	{
 		assert !done;
-		if( jsonParser.isNull() )
+		if( jsonReader.isNull() )
 		{
-			String content = jsonParser.skip( JsonParser.TokenType.Null );
+			String content = jsonReader.skip( JsonReader.TokenType.Null );
 			assert content.equals( "null" );
 			return Optional.empty();
 		}
-		return Optional.of( jsonParser.skip( JsonParser.TokenType.String ) );
+		return Optional.of( jsonReader.skip( JsonReader.TokenType.String ) );
 	}
 
 	@Override public <T> T readObject( Function1<T,ObjectReader> objectReaderConsumer )
 	{
 		assert !done;
-		jsonParser.skip( JsonParser.TokenType.ObjectBegin );
-		int depth = jsonParser.depth();
-		ObjectReader objectReader = new JsonObjectReader( jsonParser );
+		jsonReader.skip( JsonReader.TokenType.ObjectBegin );
+		int depth = jsonReader.depth();
+		ObjectReader objectReader = new JsonObjectReader( jsonReader );
 		T result = objectReaderConsumer.invoke( objectReader );
-		assert jsonParser.depth() == depth;
-		jsonParser.skip( JsonParser.TokenType.ObjectEnd );
+		assert jsonReader.depth() == depth;
+		jsonReader.skip( JsonReader.TokenType.ObjectEnd );
 		done = true;
 		return result;
 	}
@@ -55,12 +55,12 @@ public class JsonStructuredReader implements StructuredReader
 	@Override public <T> T readArray( String elementName, Function1<T,ArrayReader> arrayReaderConsumer )
 	{
 		assert !done;
-		jsonParser.skip( JsonParser.TokenType.ArrayBegin );
-		int depth = jsonParser.depth();
-		ArrayReader arrayReader = new JsonArrayReader( jsonParser );
+		jsonReader.skip( JsonReader.TokenType.ArrayBegin );
+		int depth = jsonReader.depth();
+		ArrayReader arrayReader = new JsonArrayReader( jsonReader );
 		T result = arrayReaderConsumer.invoke( arrayReader );
-		assert jsonParser.depth() == depth;
-		jsonParser.skip( JsonParser.TokenType.ArrayEnd );
+		assert jsonReader.depth() == depth;
+		jsonReader.skip( JsonReader.TokenType.ArrayEnd );
 		done = true;
 		return result;
 	}

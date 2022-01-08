@@ -1,7 +1,7 @@
 package mikenakis.testana.kit.structured.json.reading;
 
-import mikenakis.testana.kit.structured.json.JsonEmitter;
-import mikenakis.testana.kit.structured.json.JsonParser;
+import mikenakis.testana.kit.structured.json.JsonWriter;
+import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.reading.ArrayReader;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
 
@@ -9,24 +9,24 @@ import java.util.function.Consumer;
 
 public class JsonArrayReader implements ArrayReader
 {
-	private final JsonParser jsonParser;
+	private final JsonReader jsonReader;
 	private boolean done;
 
-	JsonArrayReader( JsonParser jsonParser )
+	JsonArrayReader( JsonReader jsonReader )
 	{
-		this.jsonParser = jsonParser;
+		this.jsonReader = jsonReader;
 	}
 
 	@Override public void readElements( Consumer<StructuredReader> structuredReaderConsumer )
 	{
 		assert !done;
-		for( boolean first = true; !jsonParser.isArrayEnd(); )
+		for( boolean first = true; !jsonReader.isArrayEnd(); )
 		{
 			if( first )
 				first = false;
 			else
-				jsonParser.skip( JsonParser.TokenType.Comma );
-			JsonStructuredReader arrayElementReader = new JsonStructuredReader( jsonParser, JsonEmitter.Mode.Array );
+				jsonReader.skip( JsonReader.TokenType.Comma );
+			StructuredReader arrayElementReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Array );
 			structuredReaderConsumer.accept( arrayElementReader );
 		}
 		done = true;
