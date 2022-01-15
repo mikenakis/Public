@@ -79,7 +79,7 @@ To give an example, it is completely pointless to be told that my `search-for-it
 
 Finally, another very simple, very straightforward, and very important reason for wanting the test methods to be executed in natural order is because seeing the test method names listed in any other order is **_brainfuck._**
 
-A related rant can be found here: [michael.gr - On JUnit's random order of test method execution](http://blog.michael.gr/2018/04/random-order-of-tests.html)
+A related rant can be found here: [michael.gr - On JUnit's random order of test method execution](https://blog.michael.gr/2018/04/random-order-of-tests.html)
 
 ## Why should I care for running test methods of ancestors first? 
 
@@ -132,7 +132,7 @@ The Artifact Repository is on Repsy: https://repo.repsy.io/mvn/mikenakis/mikenak
 
 ## License
 
-This creative work is explicitly published under **_No License_**. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](http://blog.michael.gr/2018/04/open-source-but-no-license.html)
+This creative work is explicitly published under **_No License_**. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
 
 If you would like to do anything more with this creative work, contact me.
 
@@ -141,7 +141,7 @@ If you would like to do anything more with this creative work, contact me.
 When I write code as part of a team of developers, I use the teams' coding style.  
 But when I write code for myself, I use _**my very own™**_ coding style.
 
-More information: [michael.gr - On Coding Style](http://blog.michael.gr/2018/04/on-coding-style.html)
+More information: [michael.gr - On Coding Style](https://blog.michael.gr/2018/04/on-coding-style.html)
 
 ## Home page
 

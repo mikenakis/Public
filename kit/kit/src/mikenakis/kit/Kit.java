@@ -2843,7 +2843,7 @@ public final class Kit
 		/**
 		 * Runs a full garbage collection.
 		 * <p>
-		 * Adapted from <a href="http://stackoverflow.com/q/1481178/773113">Stack Overflow: Forcing Garbage Collection in Java?</a>
+		 * Adapted from <a href="https://stackoverflow.com/q/1481178/773113">Stack Overflow: Forcing Garbage Collection in Java?</a>
 		 */
 		public static void runGarbageCollection()
 		{
