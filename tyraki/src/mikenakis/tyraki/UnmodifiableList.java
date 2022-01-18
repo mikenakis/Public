@@ -114,24 +114,25 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 *
 	 * @return the empty {@link UnmodifiableList}.
 	 */
-	static <E> UnmodifiableList<E> of()
-	{
-		return ImmutableCollections.emptyArrayList();
-	}
+	static <E> UnmodifiableList<E> of()	{ return ImmutableCollections.emptyArrayList(); }
 
-	static <E> UnmodifiableList<E> of( E e0 )
+	static <E> UnmodifiableList<E> of( E e0 ) { return of0( e0 ); }
+	static <E> UnmodifiableList<E> of( E e0, E e1 ) { return of0( e0, e1 ); }
+	static <E> UnmodifiableList<E> of( E e0, E e1, E e2 ) { return of0( e0, e1, e2 ); }
+
+	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
+	static <E> UnmodifiableList<E> of( E... arrayOfElements )
 	{
-		return onArray( e0 );
+		return onArray( arrayOfElements );
 	}
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
-	static <E> UnmodifiableList<E> of( E e0, E... arrayOfElements )
+	private static <E> UnmodifiableList<E> of0( E... arrayOfElements )
 	{
-		return of( e0 ).chained( ConversionCollections.newArrayWrapper( arrayOfElements ) ).toList();
+		return onArray( arrayOfElements ); //ConversionCollections.newArrayWrapper( arrayOfElements );
 	}
 
-	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
-	static <E> UnmodifiableList<E> onArray( E... arrayOfElements )
+	static <E> UnmodifiableList<E> onArray( E[] arrayOfElements )
 	{
 		return ConversionCollections.newArrayWrapper( arrayOfElements );
 	}

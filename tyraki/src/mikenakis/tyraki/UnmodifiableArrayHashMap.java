@@ -52,23 +52,18 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	 *
 	 * @return the empty immutable {@link UnmodifiableArrayHashMap}.
 	 */
-	static <K, V> UnmodifiableArrayHashMap<K,V> of()
-	{
-		return ImmutableCollections.emptyArrayHashMap();
-	}
+	static <K, V> UnmodifiableArrayHashMap<K,V> of() { return ImmutableCollections.emptyArrayHashMap(); }
+	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0 ) { return ofBindings( MapEntry.of( k0, v0 ) ); }
+	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ) ); }
+	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1, K k2, V v2 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ), MapEntry.of( k2, v2 ) ); }
+	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1, K k2, V v2, K k3, V v3 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ), MapEntry.of( k2, v2 ), MapEntry.of( k3, v3 ) ); }
+	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ), MapEntry.of( k2, v2 ), MapEntry.of( k3, v3 ), MapEntry.of( k4, v4 ) ); }
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <K, V> UnmodifiableArrayHashMap<K,V> ofBindings( Binding<K,V>... arrayOfBindings )
 	{
 		UnmodifiableCollection<Binding<K,V>> bindings = UnmodifiableList.onArray( arrayOfBindings );
 		return from( bindings );
-	}
-
-	static <K, V> UnmodifiableArrayHashMap<K,V> of( UnmodifiableArrayHashMap<K,V> map )
-	{
-		if( map.isFrozen() )
-			return map;
-		return from( map );
 	}
 
 	/**
