@@ -1139,13 +1139,13 @@ public final class Kit
 			return pathNames;
 		}
 
-		// NOTE: Windows very stupidly has a notion of a "current directory", which is a mutable global variable of process-wide scope.
-		//       This means that any thread can modify it, and all other threads will be affected by the modification.
-		//       (And if you are in a DotNet process, any AppDomain can modify it, and all other AppDomain's will be affected! So much for isolation!)
-		//       Java very rightfully does not have such a notion, but it does have something similar to it: the "user.dir" system property.
-		//       When maven is running tests, it sets that variable to the root directory of the current module being tested.
-		//       When testana is running tests, it does the same.
-		//       Thus, when running tests we can obtain the path to the root directory of the current module.
+		// NOTE:  When maven is running tests, the "user.dir" system property contains the root directory of the current module being tested.
+		//        When testana is running tests, it sets the "user.dir" property accordingly.
+		//        Thus, when running tests either via maven or via testana, we can obtain the path to the root directory of the current module.
+		// PEARL: Windows very stupidly has a notion of a "current directory", which is a mutable global variable of process-wide scope.
+		//        This means that any thread can modify it, and all other threads will be affected by the modification.
+		//        (And if you are in a DotNet process, any AppDomain can modify it, and all other AppDomains will be affected! So much for isolation!)
+		//        Java does not exactly have such a notion, but the "user.dir" system property (which you can get and set) is effectively the same.
 		public static Path getWorkingDirectory()
 		{
 			return Paths.get( System.getProperty( "user.dir" ) ).toAbsolutePath().normalize();
@@ -1774,9 +1774,10 @@ public final class Kit
 
 		public static <K, V> K tryGetKey( Map<K,V> map, V value )
 		{
-			List<K> keys = getKeys( map, value ).collect( Collectors.toList() );
+			List<K> keys = getKeys( map, value ).toList();
 			if( keys.isEmpty() )
 				return null;
+			assert keys.size() == 1;
 			return keys.get( 0 );
 		}
 
