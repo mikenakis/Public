@@ -53,10 +53,30 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	 * @return the empty immutable {@link UnmodifiableArrayHashMap}.
 	 */
 	static <K, V> UnmodifiableArrayHashMap<K,V> of() { return ImmutableCollections.emptyArrayHashMap(); }
+
+	/**
+	 * Creates a new immutable {@link UnmodifiableArrayHashMap}.
+	 */
 	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0 ) { return ofBindings( MapEntry.of( k0, v0 ) ); }
+
+	/**
+	 * Creates a new immutable {@link UnmodifiableArrayHashMap}.
+	 */
 	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ) ); }
+
+	/**
+	 * Creates a new immutable {@link UnmodifiableArrayHashMap}.
+	 */
 	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1, K k2, V v2 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ), MapEntry.of( k2, v2 ) ); }
+
+	/**
+	 * Creates a new immutable {@link UnmodifiableArrayHashMap}.
+	 */
 	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1, K k2, V v2, K k3, V v3 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ), MapEntry.of( k2, v2 ), MapEntry.of( k3, v3 ) ); }
+
+	/**
+	 * Creates a new immutable {@link UnmodifiableArrayHashMap}.
+	 */
 	static <K, V> UnmodifiableArrayHashMap<K,V> of( K k0, V v0, K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4 ) { return ofBindings( MapEntry.of( k0, v0 ), MapEntry.of( k1, v1 ), MapEntry.of( k2, v2 ), MapEntry.of( k3, v3 ), MapEntry.of( k4, v4 ) ); }
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint

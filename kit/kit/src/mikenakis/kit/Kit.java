@@ -2160,7 +2160,7 @@ public final class Kit
 	/**
 	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Closeable}, execute some code,
 	 * and then destroy the {@link Closeable} but the code does not actually need to use the {@link Closeable}.
-	 *
+	 * <p>
 	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
 	 *
 	 * @param closeable   the {@link Closeable} to close when done.
@@ -2238,7 +2238,7 @@ public final class Kit
 	/**
 	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Closeable}, execute some code,
 	 * and then destroy the {@link Closeable} but the code does not actually need to use the {@link Closeable}.
-	 *
+	 * <p>
 	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
 	 *
 	 * @param closeable    the {@link Closeable} to close when done.
@@ -3149,15 +3149,23 @@ public final class Kit
 		return class1.isAssignableFrom( class2 );
 	}
 
+	public static <S> Optional<Class<S>> as( Class<S> jvmClass1, Class<?> jvmClass2 )
+	{
+		if( !jvmClass1.isAssignableFrom( jvmClass2 ) )
+			return Optional.empty();
+		@SuppressWarnings( "unchecked" ) Class<S> result = (Class<S>)jvmClass2;
+		return Optional.of( result );
+	}
+
 	/**
 	 * Checks whether two objects are equal by value.
-	 *
+	 * <p>
 	 * Unlike the {@link Objects#equals(Object, Object)} method, this method uses generics to make sure at compile time that the objects being compared are indeed of compatible
 	 * types.  Also, at runtime, it asserts the same thing.
-	 *
+	 * <p>
 	 * An example of a case where this is useful is when comparing a java.util.Date and a {@link java.sql.Timestamp}: Objects.equals( utilDate, sqlTimestamp ) will work,
 	 * but Objects.equals( sqlTimestamp, utilDate ) will silently yield false negatives. (A nasty bug to track down.)
-	 *
+	 * <p>
 	 * With this method, equalByValue( utilDate, sqlTimestamp ) will work, equalByValue( sqlTimestamp, utilDate ) will not compile, and equalByValue( (java.util.Date)sqlTimestamp,
 	 * utilDate ) will result in an assertion failure instead of silently yielding false negatives.
 	 *
@@ -3176,7 +3184,7 @@ public final class Kit
 
 	/**
 	 * Checks whether two objects are equal by reference.
-	 *
+	 * <p>
 	 * Useful to avoid, for example, the "Array objects are compared using '==', not 'Arrays.equals()'" warning when trying to compare arrays by reference.
 	 */
 	public static <T, U extends T> boolean equalByReference( T a, U b )
@@ -3196,22 +3204,12 @@ public final class Kit
 		}
 	}
 
-	private static final List<PrimitiveInfo<?>> primitiveTypeInfo = List.of(
-		new PrimitiveInfo<>( boolean.class /**/, Boolean.class   /**/ ),
-		new PrimitiveInfo<>( char.class    /**/, Character.class /**/ ),
-		new PrimitiveInfo<>( byte.class    /**/, Byte.class      /**/ ),
-		new PrimitiveInfo<>( short.class   /**/, Short.class     /**/ ),
-		new PrimitiveInfo<>( int.class     /**/, Integer.class   /**/ ),
-		new PrimitiveInfo<>( long.class    /**/, Long.class      /**/ ),
-		new PrimitiveInfo<>( float.class   /**/, Float.class     /**/ ),
-		new PrimitiveInfo<>( double.class  /**/, Double.class    /**/ ),
-		new PrimitiveInfo<>( void.class    /**/, Void.class      /**/ )
-	);
+	private static final List<PrimitiveInfo<?>> primitiveTypeInfo = List.of( new PrimitiveInfo<>( boolean.class /**/, Boolean.class   /**/ ), new PrimitiveInfo<>( char.class    /**/, Character.class /**/ ), new PrimitiveInfo<>( byte.class    /**/, Byte.class      /**/ ), new PrimitiveInfo<>( short.class   /**/, Short.class     /**/ ), new PrimitiveInfo<>( int.class     /**/, Integer.class   /**/ ), new PrimitiveInfo<>( long.class    /**/, Long.class      /**/ ), new PrimitiveInfo<>( float.class   /**/, Float.class     /**/ ), new PrimitiveInfo<>( double.class  /**/, Double.class    /**/ ), new PrimitiveInfo<>( void.class    /**/, Void.class      /**/ ) );
 
 	private static int indexOfPrimitiveType( Class<?> clazz )
 	{
 		int n = primitiveTypeInfo.size();
-		for( int i = 0;  i < n;  i++ )
+		for( int i = 0; i < n; i++ )
 			if( clazz == primitiveTypeInfo.get( i ).primitiveClass )
 				return i;
 		return -1;
@@ -3220,7 +3218,7 @@ public final class Kit
 	private static int indexOfPrimitiveWrapperType( Class<?> clazz )
 	{
 		int n = primitiveTypeInfo.size();
-		for( int i = 0;  i < n;  i++ )
+		for( int i = 0; i < n; i++ )
 			if( clazz == primitiveTypeInfo.get( i ).wrapperClass )
 				return i;
 		return -1;
