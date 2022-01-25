@@ -23,7 +23,7 @@ public class HandWrittenCompiledIntertwineFactory implements IntertwineFactory
 	{
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		assert interfaceType == FooInterface.class;
-		@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)new HandWrittenCompiledIntertwine( this );
+		@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)new HandWrittenCompiledIntertwine();
 		return result;
 	}
 }

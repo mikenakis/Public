@@ -46,16 +46,14 @@ import java.util.stream.Stream;
  */
 class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 {
-	private final HandWrittenCompiledIntertwineFactory factory;
 	private final HandWrittenCompiledKey[] keys;
 	private final Map<MethodPrototype,HandWrittenCompiledKey> keysByPrototype;
 	private final Map<Method,HandWrittenCompiledKey> keysByMethod;
 	private static Optional<Class<FooInterface>> cachedEntwinerClass = Optional.empty(); //we have to cache the entwiner class because we create it, and a class cannot be redefined.
 	private static Optional<Class<AnyCall<FooInterface>>> cachedUntwinerClass = Optional.empty(); //we have to cache the untwiner class because we create it, and a class cannot be redefined.
 
-	HandWrittenCompiledIntertwine( HandWrittenCompiledIntertwineFactory factory )
+	HandWrittenCompiledIntertwine()
 	{
-		this.factory = factory;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( FooInterface.class );
 		List<ByteCodeMethod> byteCodeMethods = interfaceByteCodeType.methods;
 		keys = IntStream.range( 0, byteCodeMethods.size() ).mapToObj( i -> createKey( i, byteCodeMethods.get( i ), FooInterface.class ) ).toArray( HandWrittenCompiledKey[]::new );
@@ -380,22 +378,30 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.LDC( methodPrototype.parameterCount() ); //push method-argument-count
 		code.ANEWARRAY( TerminalTypeDescriptor.of( Object.class ) ); //pop method-argument-count, push new Object[method-argument-count]
 
-		int argumentIndex = 0;
+		emitValueOf( code, 0 );
+
+		emitStore( code, 1 );
+
+		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
+		code.POP();
+		code.RETURN();
+	}
+
+	private static void emitValueOf( CodeAttribute code, int argumentIndex )
+	{
 		code.DUP();
 		code.LDC( argumentIndex );
 		code.ILOAD( 1 + argumentIndex );
 		code.INVOKESTATIC( MethodReference.of( MethodReferenceKind.Plain, Integer.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Integer.class, int.class ) ) ) );
 		code.AASTORE();
+	}
 
-		argumentIndex = 1;
+	private static void emitStore( CodeAttribute code, int argumentIndex )
+	{
 		code.DUP();
 		code.LDC( argumentIndex );
 		code.ALOAD( 1 + argumentIndex );
 		code.AASTORE();
-
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
-		code.POP();
-		code.RETURN();
 	}
 
 	@Override public AnyCall<FooInterface> newUntwiner( FooInterface exitPoint )
@@ -460,7 +466,8 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	*/
 	private static void addUntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), MethodPrototype.of( "<init>", MethodDescriptor.of( void.class, FooInterface.class ) ) );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
+			MethodPrototype.of( "<init>", MethodDescriptor.of( void.class, FooInterface.class ) ) );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 2, 2 );
 		byteCodeMethod.attributeSet.addAttribute( code );
@@ -479,7 +486,8 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	*/
 	private static void addUntwinerAnyCallMethod( ByteCodeType byteCodeType, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
+			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 4, 4 );
 		byteCodeMethod.attributeSet.addAttribute( code );

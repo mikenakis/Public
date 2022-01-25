@@ -10,14 +10,15 @@ import mikenakis.intertwine.IntertwineFactory;
  */
 public class CompilingIntertwineFactory implements IntertwineFactory
 {
-	public static CompilingIntertwineFactory instance = new CompilingIntertwineFactory();
+	private final ClassLoader classLoader;
 
-	private CompilingIntertwineFactory()
+	public CompilingIntertwineFactory( ClassLoader classLoader )
 	{
+		this.classLoader = classLoader;
 	}
 
 	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
 	{
-		return new CompilingIntertwine<>( interfaceType );
+		return new CompilingIntertwine<>( classLoader, interfaceType );
 	}
 }

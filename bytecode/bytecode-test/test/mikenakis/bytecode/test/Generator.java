@@ -31,13 +31,14 @@ public class Generator
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Super, ByteCodeType.Modifier.Abstract ), //
 			TerminalTypeDescriptor.of( "test.HelloWorld" ), Optional.of( TerminalTypeDescriptor.of( Object.class ) ), List.of() );
 		{
+			MethodPrototype parameterlessConstructorPrototype = MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) );
 			ByteCodeMethod initMethod = byteCodeType.addMethod( ByteCodeMethod.of( //
 				ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
-				MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
+				parameterlessConstructorPrototype ) );
 			CodeAttribute codeAttribute = initMethod.attributeSet.addAttribute( CodeAttribute.of( 1, 1 ) );
 			codeAttribute.ALOAD( 0 );
 			codeAttribute.INVOKESPECIAL( MethodReference.of( MethodReferenceKind.Plain, TypeDescriptor.of( Object.class ), //
-				MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) ) );
+				parameterlessConstructorPrototype ) );
 			codeAttribute.RETURN();
 		}
 

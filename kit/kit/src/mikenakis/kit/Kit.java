@@ -1619,7 +1619,7 @@ public final class Kit
 		 * allowing the key to potentially not exist and that {@code null} may be returned.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
-		public static <K, V> V tryGet( Map<? extends K,V> map, K key )
+		public static <K, V> V tryGet( Map<K,V> map, K key )
 		{
 			assert key != null;
 			return map.get( key ); //delegation

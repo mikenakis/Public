@@ -128,7 +128,7 @@ public final class P1IntertwineBenchmark
 	{
 		CompilingIntertwineBenchmarkable()
 		{
-			super( CompilingIntertwineFactory.instance );
+			super( new CompilingIntertwineFactory( CompilingIntertwineBenchmarkable.class.getClassLoader() ) );
 		}
 	}
 

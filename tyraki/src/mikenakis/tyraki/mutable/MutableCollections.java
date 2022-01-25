@@ -135,8 +135,7 @@ public final class MutableCollections extends Mutable
 	}
 
 	/**
-	 * Creates a new array map.  An array map stores bindings in an array.  For large numbers of items it is not as fast as a hash map, but it retains items in the order in which
-	 * they were added.
+	 * Creates a new array map. An array map stores bindings in an array, so they can also be accessed by index.
 	 */
 	public <K, V> FreezableArrayMap<K,V> newArrayMap()
 	{

@@ -13,6 +13,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,6 +51,11 @@ public final class ByteCodeMethod extends ByteCodeMember
 		Mutf8ValueConstant descriptorConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
 		AttributeSet attributes = AttributeSet.read( bufferReader, constantPool, Optional.empty() );
 		return of( methodModifiers, nameConstant, descriptorConstant, attributes );
+	}
+
+	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, Method method )
+	{
+		return of( modifiers, MethodPrototype.of( method ) );
 	}
 
 	public static ByteCodeMethod of( FlagSet<Modifier> modifiers, MethodPrototype methodPrototype )

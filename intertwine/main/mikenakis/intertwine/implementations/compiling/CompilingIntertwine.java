@@ -47,6 +47,7 @@ import java.util.stream.Stream;
  */
 class CompilingIntertwine<T> implements Intertwine<T>
 {
+	private final ClassLoader classLoader;
 	private final Class<? super T> interfaceType;
 	private final TerminalTypeDescriptor interfaceTypeDescriptor;
 	private final List<MethodPrototype> interfaceMethodPrototypes;
@@ -55,10 +56,11 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private Optional<Constructor<T>> entwinerConstructor = Optional.empty();
 	private Optional<Constructor<AnyCall<T>>> untwinerConstructor = Optional.empty();
 
-	CompilingIntertwine( Class<? super T> interfaceType )
+	CompilingIntertwine( ClassLoader classLoader, Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
+		this.classLoader = classLoader;
 		this.interfaceType = interfaceType;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		interfaceTypeDescriptor = interfaceByteCodeType.typeDescriptor();
@@ -153,7 +155,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
 		}
 
-		Class<T> entwinerClass = ByteCodeClassLoader.load( getClass().getClassLoader(), entwinerByteCodeType );
+		Class<T> entwinerClass = ByteCodeClassLoader.load( classLoader, entwinerByteCodeType );
 		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, AnyCall.class ) );
 	}
 
@@ -261,7 +263,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private static void addUntwinerInitMethod( ByteCodeType untwinerByteCodeType, TerminalTypeDescriptor interfaceTypeDescriptor, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), untwinerInitMethodPrototype( interfaceTypeDescriptor ) );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
+			untwinerInitMethodPrototype( interfaceTypeDescriptor ) );
 		untwinerByteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 2, 2 );
 		byteCodeMethod.attributeSet.addAttribute( code );

@@ -6,6 +6,7 @@ import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -55,6 +56,29 @@ public interface UnmodifiableMap<K, V> extends Freezile
 		@SuppressWarnings( "unchecked" )
 		UnmodifiableMap<K,TV> result = (UnmodifiableMap<K,TV>)map;
 		return result;
+	}
+
+	static <T, K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
+	{
+		FreezableHashMap<K,V> freezableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap();
+		for( T item : items )
+		{
+			K key = keyFromItemConverter.invoke( item );
+			V value = valueFromItemConverter.invoke( item );
+			freezableMap.add( key, value );
+		}
+		return freezableMap.frozen();
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
+	{
+		FreezableHashMap<K,V> freezableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap();
+		for( K key : keys )
+		{
+			V value = valueFromKeyConverter.invoke( key );
+			freezableMap.add( key, value );
+		}
+		return freezableMap.frozen();
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
