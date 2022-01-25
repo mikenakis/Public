@@ -134,6 +134,11 @@ public final class MutableCollections extends Mutable
 		return newLinkedHashMap( DEFAULT_INITIAL_CAPACITY, DEFAULT_FILL_FACTOR );
 	}
 
+	public <K, V> FreezableHashMap<K,V> newIdentityLinkedHashMap()
+	{
+		return newLinkedHashMap( DEFAULT_INITIAL_CAPACITY, DEFAULT_FILL_FACTOR, IdentityHasher.getInstance(), IdentityEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
+	}
+
 	/**
 	 * Creates a new array map. An array map stores bindings in an array, so they can also be accessed by index.
 	 */
