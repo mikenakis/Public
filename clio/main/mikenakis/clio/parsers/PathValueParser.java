@@ -1,6 +1,7 @@
 package mikenakis.clio.parsers;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.logging.Log;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,8 +21,9 @@ public class PathValueParser extends ValueParser<Path>
 			Kit.get( Paths.get( s ).toAbsolutePath().normalize() );
 			return true;
 		}
-		catch( Exception ignore )
+		catch( Exception exception )
 		{
+			Log.debug( exception.getMessage() );
 			return false;
 		}
 	}

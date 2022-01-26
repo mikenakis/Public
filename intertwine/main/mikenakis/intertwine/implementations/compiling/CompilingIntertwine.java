@@ -33,9 +33,11 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -64,17 +66,35 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		this.interfaceType = interfaceType;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		interfaceTypeDescriptor = interfaceByteCodeType.typeDescriptor();
-		interfaceMethodPrototypes = interfaceByteCodeType.methods.stream().filter( CompilingIntertwine::isInterfaceMethod ).map( ByteCodeMethod::prototype ).toList();
+		interfaceMethodPrototypes = getInterfaceMethodPrototypes( classLoader, interfaceByteCodeType );
 		keys = buildArrayOfKey( interfaceMethodPrototypes );
 		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
+	}
+
+	private static List<MethodPrototype> getInterfaceMethodPrototypes( ClassLoader classLoader, ByteCodeType interfaceByteCodeType )
+	{
+		Set<MethodPrototype> methodPrototypes = new LinkedHashSet<>();
+		getInterfaceMethodPrototypes( classLoader, interfaceByteCodeType, methodPrototypes );
+		return methodPrototypes.stream().toList();
+	}
+
+	private static void getInterfaceMethodPrototypes( ClassLoader classLoader, ByteCodeType interfaceByteCodeType, Set<MethodPrototype> methodPrototypes )
+	{
+		interfaceByteCodeType.interfaces().forEach( superInterfaceTypeDescriptor ->
+		{
+			Class<?> superInterfaceType = Kit.unchecked( () -> classLoader.loadClass( superInterfaceTypeDescriptor.typeName ) );
+			ByteCodeType superInterfaceByteCodeType = ByteCodeType.read( superInterfaceType );
+			getInterfaceMethodPrototypes( classLoader, superInterfaceByteCodeType, methodPrototypes );
+		} );
+		interfaceByteCodeType.methods.stream().filter( CompilingIntertwine::isInterfaceMethod ).map( ByteCodeMethod::prototype ).forEach( p -> Kit.collection.addOrReplace( methodPrototypes, p ) );
 	}
 
 	private static boolean isInterfaceMethod( ByteCodeMethod interfaceMethod )
 	{
 		if( interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
-			return false;
+			return false; //skip static methods
 		if( !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
-			return false;
+			return false; //skip default methods
 		assert interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Public );
 		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Final );
 		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Native );
