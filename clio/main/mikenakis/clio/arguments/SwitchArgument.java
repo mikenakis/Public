@@ -1,5 +1,7 @@
 package mikenakis.clio.arguments;
 
+import mikenakis.kit.Try;
+
 import java.util.List;
 
 /**
@@ -18,14 +20,14 @@ public final class SwitchArgument extends BaseArgument<Boolean>
 		this.switchNames = switchNames;
 	}
 
-	@Override public boolean tryParse( List<String> tokens )
+	@Override public Try<Boolean> tryParse( List<String> tokens )
 	{
 		String token = tokens.get( 0 );
 		if( !switchNames.contains( token ) )
-			return false;
+			return Try.success( false );
 		tokens.remove( 0 );
 		given = true;
-		return true;
+		return Try.success( true );
 	}
 
 	@Override public String getShortUsage()

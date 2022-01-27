@@ -1,6 +1,9 @@
 package mikenakis.clio.parsers;
 
+import mikenakis.kit.GenericException;
 import mikenakis.kit.Kit;
+
+import java.util.Optional;
 
 public final class IntegerValueParser extends ValueParser<Integer>
 {
@@ -10,16 +13,16 @@ public final class IntegerValueParser extends ValueParser<Integer>
 	{
 	}
 
-	@Override public boolean isValid( String s )
+	@Override public Optional<RuntimeException> validate( String s )
 	{
 		try
 		{
 			Kit.get( Integer.valueOf( s ) );
-			return true;
+			return Optional.empty();
 		}
 		catch( NumberFormatException ignore )
 		{
-			return false;
+			return Optional.of( new GenericException( "Expected an integer, found '" + s + "'" ) );
 		}
 	}
 

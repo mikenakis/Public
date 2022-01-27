@@ -1,7 +1,6 @@
 package mikenakis.clio.exceptions;
 
 import mikenakis.clio.arguments.Argument;
-import mikenakis.clio.arguments.BaseArgument;
 
 /**
  * "Unparsable value" {@link ClioException}.
@@ -15,6 +14,13 @@ public class UnparsableValueException extends ClioException
 
 	public UnparsableValueException( Argument<?> argument, String valueToken )
 	{
+		this.argument = argument;
+		this.valueToken = valueToken;
+	}
+
+	public UnparsableValueException( Argument<?> argument, String valueToken, Throwable cause )
+	{
+		super( cause );
 		this.argument = argument;
 		this.valueToken = valueToken;
 	}

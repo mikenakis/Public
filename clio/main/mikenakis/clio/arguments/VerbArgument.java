@@ -1,6 +1,7 @@
 package mikenakis.clio.arguments;
 
 import mikenakis.clio.Clio;
+import mikenakis.kit.Try;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +26,15 @@ public final class VerbArgument extends BaseArgument<Boolean>
 		super( name, description );
 	}
 
-	@Override public boolean tryParse( List<String> tokens )
+	@Override public Try<Boolean> tryParse( List<String> tokens )
 	{
 		if( tokens.get( 0 ).equals( name() ) )
 		{
 			parameters = new ArrayList<>( tokens );
 			tokens.clear();
-			return true;
+			return Try.success( true );
 		}
-		return false;
+		return Try.success( false );
 	}
 
 	@Override public String getShortUsage()

@@ -1,5 +1,7 @@
 package mikenakis.clio.arguments;
 
+import mikenakis.kit.Try;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -29,11 +31,13 @@ public final class OptionalArgument<T> implements Argument<Optional<T>>
 		return delegee.description();
 	}
 
-	@Override public boolean tryParse( List<String> tokens )
+	@Override public Try<Boolean> tryParse( List<String> tokens )
 	{
 		assert !parsed;
-		parsed = delegee.tryParse( tokens );
-		return parsed;
+		Try<Boolean> result = delegee.tryParse( tokens );
+		if( result.isSuccess() && result.get() )
+			parsed = true;
+		return result;
 	}
 
 	@Override public String getShortUsage()

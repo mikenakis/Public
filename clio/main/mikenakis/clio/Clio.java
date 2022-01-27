@@ -13,6 +13,7 @@ import mikenakis.clio.parsers.PathValueParser;
 import mikenakis.clio.parsers.StringValueParser;
 import mikenakis.clio.parsers.ValueParser;
 import mikenakis.kit.Kit;
+import mikenakis.kit.Try;
 
 import java.io.PrintStream;
 import java.nio.file.Path;
@@ -304,15 +305,23 @@ public final class Clio
 		Collection<Argument<?>> remainingArguments = new ArrayList<>( arguments );
 		while( !remainingTokens.isEmpty() )
 		{
-			Argument<?> foundArgument = tryFindArgument( remainingTokens, remainingArguments );
-			if( foundArgument == null )
+			Try<Argument<?>> foundArgument = tryFindArgument( remainingTokens, remainingArguments );
+			if( foundArgument.isFailure() )
+			{
+				Throwable throwable = foundArgument.throwable();
+				System.out.println( throwable.getMessage() );
+				for( throwable = throwable.getCause();  throwable != null;  throwable = throwable.getCause() )
+					System.out.println( "Because: " + throwable.getMessage() );
+				return false;
+			}
+			if( foundArgument.get() == null )
 				throw new UnrecognizedTokenException( remainingTokens.get( 0 ) );
-			if( foundArgument == helpSwitch )
+			if( foundArgument.get() == helpSwitch )
 			{
 				help( System.out );
 				return false;
 			}
-			Kit.collection.remove( remainingArguments, foundArgument );
+			Kit.collection.remove( remainingArguments, foundArgument.get() );
 		}
 		for( Argument<?> remainingArgument : remainingArguments )
 			if( !remainingArgument.isOptional() )
@@ -320,25 +329,28 @@ public final class Clio
 		return true;
 	}
 
-	private static Argument<?> tryFindArgument( List<String> remainingTokens, Iterable<? extends Argument<?>> remainingArguments )
+	private static Try<Argument<?>> tryFindArgument( List<String> remainingTokens, Iterable<? extends Argument<?>> remainingArguments )
 	{
 		boolean lookForPositional = !remainingTokens.get( 0 ).startsWith( "-" );
 		for( Argument<?> argument : remainingArguments )
 		{
 			if( argument.isPositional() != lookForPositional )
 				continue;
-			if( tryParseArgument( argument, remainingTokens ) )
-				return argument;
+			Try<Boolean> result = tryParseArgument( argument, remainingTokens );
+			if( result.isFailure() )
+				return Try.failure( result.throwable() );
+			if( result.get() )
+				return Try.success( argument );
 		}
-		return null;
+		return Try.success( null );
 	}
 
-	private static boolean tryParseArgument( Argument<?> argument, List<String> remainingTokens )
+	private static Try<Boolean> tryParseArgument( Argument<?> argument, List<String> remainingTokens )
 	{
 		int length = remainingTokens.size();
-		boolean ok = argument.tryParse( remainingTokens );
-		assert ok == remainingTokens.size() < length;
-		return ok;
+		Try<Boolean> result = argument.tryParse( remainingTokens );
+		assert result.isFailure() || result.get() == remainingTokens.size() < length;
+		return result;
 	}
 
 	private void help( PrintStream printStream )

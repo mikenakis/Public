@@ -1,6 +1,9 @@
 package mikenakis.clio.parsers;
 
+import mikenakis.kit.GenericException;
+
 import java.util.Collection;
+import java.util.Optional;
 
 public abstract class ChoiceValueParser<T> extends ValueParser<T>
 {
@@ -11,8 +14,10 @@ public abstract class ChoiceValueParser<T> extends ValueParser<T>
 		this.acceptedStrings = acceptedStrings;
 	}
 
-	@Override public boolean isValid( String s )
+	@Override public Optional<RuntimeException> validate( String s )
 	{
-		return acceptedStrings.contains( s );
+		if( !acceptedStrings.contains( s ) )
+			return Optional.of( new GenericException( "Expected one of (" + String.join( ", ", acceptedStrings ) + "), found '" + s + "'" ) );
+		return Optional.empty();
 	}
 }

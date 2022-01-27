@@ -1,10 +1,10 @@
 package mikenakis.clio.parsers;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.logging.Log;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class PathValueParser extends ValueParser<Path>
 {
@@ -14,17 +14,16 @@ public class PathValueParser extends ValueParser<Path>
 	{
 	}
 
-	@Override public boolean isValid( String s )
+	@Override public Optional<RuntimeException> validate( String s )
 	{
 		try
 		{
 			Kit.get( Paths.get( s ).toAbsolutePath().normalize() );
-			return true;
+			return Optional.empty();
 		}
-		catch( Exception exception )
+		catch( RuntimeException exception )
 		{
-			Log.debug( exception.getMessage() );
-			return false;
+			return Optional.of( exception );
 		}
 	}
 

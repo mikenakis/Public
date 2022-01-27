@@ -2,6 +2,7 @@ package mikenakis.clio.arguments;
 
 import mikenakis.clio.exceptions.UnparsableValueException;
 import mikenakis.clio.parsers.ValueParser;
+import mikenakis.kit.Try;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,15 +25,15 @@ public abstract class ValueArgument<T> extends BaseArgument<T>
 
 	protected abstract Optional<String> getValueToken( List<String> tokens );
 
-	@Override public final boolean tryParse( List<String> tokens )
+	@Override public final Try<Boolean> tryParse( List<String> tokens )
 	{
 		assert valueToken.isEmpty();
 		valueToken = getValueToken( tokens );
 		if( valueToken.isEmpty() )
-			return false;
-		if( !valueParser.isValid( valueToken.get() ) )
-			throw new UnparsableValueException( this, valueToken.get() );
-		return true;
+			return Try.success( false );
+		return valueParser.validate( valueToken.get() ) //
+			.map( exception -> Try.<Boolean>failure( new UnparsableValueException( this, valueToken.get(), exception ) ) ) //
+			.orElse( Try.success( true ) );
 	}
 
 	@Override public final T get()

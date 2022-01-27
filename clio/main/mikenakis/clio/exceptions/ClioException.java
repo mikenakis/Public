@@ -12,4 +12,9 @@ public abstract class ClioException extends RuntimeException
 	protected ClioException()
 	{
 	}
+
+	protected ClioException( Throwable cause )
+	{
+		super( cause );
+	}
 }

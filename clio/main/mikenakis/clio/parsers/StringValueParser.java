@@ -1,5 +1,7 @@
 package mikenakis.clio.parsers;
 
+import java.util.Optional;
+
 public final class StringValueParser extends ValueParser<String>
 {
 	public static ValueParser<String> instance = new StringValueParser();
@@ -8,9 +10,9 @@ public final class StringValueParser extends ValueParser<String>
 	{
 	}
 
-	@Override public boolean isValid( String s )
+	@Override public Optional<RuntimeException> validate( String s )
 	{
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public String valueFromString( String s )
