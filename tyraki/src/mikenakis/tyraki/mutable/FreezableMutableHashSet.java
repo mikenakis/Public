@@ -110,7 +110,7 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		return hashTable.newMutableEnumerator().converted( item -> item.element );
+		return hashTable.newMutableEnumerator().map( item -> item.element );
 	}
 
 	@Override public int getModificationCount()

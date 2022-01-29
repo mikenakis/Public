@@ -1,5 +1,6 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.functional.Function1;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -47,22 +48,22 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	/**
 	 * Creates a new immutable {@link UnmodifiableArrayMap}.
 	 */
-	static <K, V> UnmodifiableArrayMap<K,V> from( UnmodifiableList<K> keys, TotalConverter<V,K> valueFromKeyConverter )
+	static <K, V> UnmodifiableArrayMap<K,V> from( UnmodifiableList<K> keys, Function1<V,K> valueFromKeyConverter )
 	{
 		if( keys.isEmpty() )
 			return of();
-		UnmodifiableList<Binding<K,V>> entries = keys.converted( key -> MapEntry.of( key, valueFromKeyConverter.invoke( key ) ) );
+		UnmodifiableList<Binding<K,V>> entries = keys.map( key -> MapEntry.of( key, valueFromKeyConverter.invoke( key ) ) );
 		return from( entries );
 	}
 
 	/**
 	 * Creates a new immutable {@link UnmodifiableArrayMap}.
 	 */
-	static <K, V> UnmodifiableArrayMap<K,V> from( TotalConverter<K,V> keyFromValueConverter, UnmodifiableCollection<V> values )
+	static <K, V> UnmodifiableArrayMap<K,V> from( Function1<K,V> keyFromValueConverter, UnmodifiableCollection<V> values )
 	{
 		if( values.isEmpty() )
 			return of();
-		UnmodifiableCollection<Binding<K,V>> entries = values.converted( value -> MapEntry.of( keyFromValueConverter.invoke( value ), value ) );
+		UnmodifiableCollection<Binding<K,V>> entries = values.map( value -> MapEntry.of( keyFromValueConverter.invoke( value ), value ) );
 		return from( entries );
 	}
 

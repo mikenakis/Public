@@ -48,8 +48,8 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 		this.mapToFilter = mapToFilter;
 		this.predicate = predicate;
 		entries = new MyEntriesCollection( mapToFilter.keys().getEqualityComparator(), mapToFilter.values().getEqualityComparator() );
-		keys = entries.converted( kvBinding1 -> kvBinding1.getKey(), mapToFilter.keys().getEqualityComparator() );
-		values = entries.converted( kvBinding -> kvBinding.getValue() );
+		keys = entries.map( kvBinding1 -> kvBinding1.getKey(), mapToFilter.keys().getEqualityComparator() );
+		values = entries.map( kvBinding -> kvBinding.getValue() );
 	}
 
 	@Override public boolean isFrozen()

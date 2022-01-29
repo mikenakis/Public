@@ -4,7 +4,6 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.tyraki.conversion.ProhibitedConverter;
 import mikenakis.kit.DefaultComparator;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
@@ -19,11 +18,11 @@ import java.util.function.Predicate;
 /**
  * Unmodifiable Collection.
  * <p>
- * The collection is not necessarily immutable: it may be modified by mechanisms outside of the beholder's scope and beyond the beholder's control.  (Thus, the fact that this
- * interface is extended by the interface which represents a modifiable collection does not violate Liskov's "History Constraint".
+ * The collection is not necessarily immutable: it may be modified by mechanisms outside the beholder's scope and beyond the beholder's control.  (Thus, the
+ * fact that this interface is extended by the interface which represents a modifiable collection does not violate Liskov's "History Constraint".)
  * <p>
- * I wish it was possible to simply call this interface 'Collection' and call the mutable version 'MutableCollection', but I can't, due to the lack of namespaces in java which
- * essentially prohibits us from giving a type the same name as an existing, widely used type.
+ * I wish it was possible to simply call this interface 'Collection' and call the mutable version 'MutableCollection', but I can't, due to the lack of
+ * namespaces in java which essentially prohibits us from giving a type the same name as an existing, widely used type.
  *
  * @author michael.gr
  */
@@ -82,7 +81,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 *
 	 * @param element the item to find.
 	 *
-	 * @return a matching element from the {@link UnmodifiableCollection} or {@code null} if no such item exists.
+	 * @return a matching element from the {@link UnmodifiableCollection} or {@link Optional#empty()} if no such item exists.
 	 *
 	 * Note: if items have reference semantics, then any returned item will be identical to the one passed as a parameter.
 	 * However, if items have object semantics, the returned item may be a different instance from the parameter, though comparing equally to it.
@@ -180,7 +179,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 *
 	 * @param predicate a predicate to evaluate for each element until it returns {@code true}.
 	 *
-	 * @return the found element, or {@code null} if no element is found.
+	 * @return the found element, or {@link Optional#empty()} if no element is found.
 	 */
 	Optional<E> findFirstElement( Predicate<? super E> predicate );
 
@@ -191,13 +190,13 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 *
 	 * @return a new {@link UnmodifiableCollection} representing each element of this {@link UnmodifiableCollection} converted by the given {@link Function1}.
 	 */
-	@Override <T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter );
+	@Override <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter );
 
-	<T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator );
+	<T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator );
 
-	<T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter );
+	<T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter );
 
-	<T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter, EqualityComparator<? super T> equalityComparator );
+	<T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator );
 
 	/**
 	 * Checks whether this {@link UnmodifiableCollection} contains any duplicate elements.
@@ -357,28 +356,25 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		 *
 		 * @return a new {@link UnmodifiableCollection} representing each element of this {@link UnmodifiableCollection} converted by the given {@link Function1}.
 		 */
-		@Override default <T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter )
+		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter )
 		{
-			PartialConverter<? extends E,? super T> reverter = ProhibitedConverter.getInstance();
-			EqualityComparator<? super T> equalityComparator = DefaultEqualityComparator.getInstance();
-			return converted( converter, reverter, equalityComparator );
+			return map( converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
 		}
 
-		@Override default <T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator )
+		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator )
 		{
-			PartialConverter<? extends E,? super T> reverter = ProhibitedConverter.getInstance();
-			return converted( converter, reverter, equalityComparator );
+			return map( converter, t -> Kit.fail(), equalityComparator );
 		}
 
-		@Override default <T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter,
-			PartialConverter<? extends E,? super T> reverter )
+		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter,
+			Function1<Optional<? extends E>,? super T> reverter )
 		{
 			EqualityComparator<T> equalityComparator = new PartiallyConvertingEqualityComparator<>( reverter );
-			return converted( converter, reverter, equalityComparator );
+			return map( converter, reverter, equalityComparator );
 		}
 
-		@Override default <T> UnmodifiableCollection<T> converted( TotalConverter<? extends T,? super E> converter,
-			PartialConverter<? extends E,? super T> reverter, EqualityComparator<? super T> equalityComparator )
+		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter,
+			Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 		{
 			return ConversionCollections.newConvertingCollection( this, converter, reverter, equalityComparator );
 		}

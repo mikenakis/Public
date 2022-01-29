@@ -2,8 +2,8 @@ package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.collections.ConvertingAndFilteringIterable;
-import mikenakis.kit.collections.ConvertingIterable;
+import mikenakis.kit.collections.OptionalsFlatMappingIterable;
+import mikenakis.kit.collections.MappingIterable;
 import mikenakis.kit.collections.FilteringIterable;
 import mikenakis.kit.collections.UnmodifiableIterable;
 import mikenakis.kit.collections.UnmodifiableIterator;
@@ -1298,7 +1298,7 @@ public final class Kit
 			return false;
 		}
 
-		public static <T> Iterable<T> reversed( Iterable<T> iterable )
+		public static <T> Iterable<T> reverse( Iterable<T> iterable )
 		{
 			//TODO: optimize
 			return collection.stream.fromIterable( iterable ) //
@@ -1309,19 +1309,19 @@ public final class Kit
 				} ) );
 		}
 
-		public static <T> Iterable<T> filtered( Iterable<T> iterable, BooleanFunction1<T> filter )
+		public static <T> Iterable<T> filter( Iterable<T> iterable, BooleanFunction1<T> filter )
 		{
 			return new FilteringIterable<>( iterable, filter );
 		}
 
-		public static <T, F> Iterable<T> converted( Iterable<F> iterable, Function1<T,F> converter )
+		public static <T, F> Iterable<T> map( Iterable<F> iterable, Function1<T,F> converter )
 		{
-			return new ConvertingIterable<>( iterable, converter );
+			return new MappingIterable<>( iterable, converter );
 		}
 
-		public static <T, F> Iterable<T> convertedAndFiltered( Iterable<F> iterable, Function1<Optional<T>,F> converterAndFilterer )
+		public static <T, F> Iterable<T> flatMapOptionals( Iterable<F> iterable, Function1<Optional<T>,F> converterAndFilterer )
 		{
-			return new ConvertingAndFilteringIterable<>( iterable, converterAndFilterer );
+			return new OptionalsFlatMappingIterable<>( iterable, converterAndFilterer );
 		}
 
 		public static <T> List<T> toList( Iterable<T> iterable )
@@ -1333,10 +1333,10 @@ public final class Kit
 			//return collection.stream.fromIterable( iterable ).collect( Collectors.toList() );
 		}
 
-		public static <T, F> Iterable<T> filteredAndCast( Iterable<F> iterable, Class<T> elementClass )
+		public static <T, F> Iterable<T> filterAndCast( Iterable<F> iterable, Class<T> elementClass )
 		{
-			Iterable<F> filtered = filtered( iterable, e -> elementClass.isInstance( e ) );
-			return converted( filtered, e -> elementClass.cast( e ) );
+			Iterable<F> filtered = filter( iterable, e -> elementClass.isInstance( e ) );
+			return map( filtered, e -> elementClass.cast( e ) );
 		}
 
 		public static <T> Iterable<T> unmodifiable( Iterable<T> delegee )

@@ -95,7 +95,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	 *
 	 * @param key the key to look up
 	 *
-	 * @return the {@link Binding} of the given key, or {@code null} if the key was not found.
+	 * @return the {@link Binding} of the given key, or {@link Optional#empty()} if the key was not found.
 	 */
 	Optional<Binding<K,V>> tryGetBindingByKey( K key );
 
@@ -146,7 +146,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	 *
 	 * @param key the key to look up
 	 *
-	 * @return the value bound to the given key, or {@code null} if the key was not found.
+	 * @return the value bound to the given key, or {@link Optional#empty()} if the key was not found.
 	 */
 	Optional<V> tryGet( K key );
 
@@ -185,16 +185,16 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	/**
 	 * Creates a new {@link UnmodifiableMap} with keys converted using given converter.
 	 */
-	<T> UnmodifiableMap<T,V> convertedKeys( TotalConverter<T,K> converter );
+	<T> UnmodifiableMap<T,V> convertedKeys( Function1<T,K> converter );
 
 	/**
 	 * Creates a new {@link UnmodifiableMap} with values converted using given converter.
 	 */
-	<T> UnmodifiableMap<K,T> convertedValues( TotalConverter<T,V> converter );
+	<T> UnmodifiableMap<K,T> convertedValues( Function1<T,V> converter );
 
 	boolean equalsMap( UnmodifiableMap<K,V> other );
 
-	UnmodifiableMap<K,V> chained( UnmodifiableMap<K,V> other );
+	UnmodifiableMap<K,V> chain( UnmodifiableMap<K,V> other );
 
 	/**
 	 * Creates a new {@link UnmodifiableMap} which represents this map filtered using a given predicate.
@@ -203,25 +203,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	 *
 	 * @return a new {@link UnmodifiableMap}.
 	 */
-	UnmodifiableMap<K,V> filtered( Predicate<Binding<K,V>> predicate );
-
-	/**
-	 * Creates a new {@link UnmodifiableMap} which represents this map with keys converted and filtered using a given converter.
-	 *
-	 * @param converter the {@link Function1} to apply on each key to convert it; should return {@code null} if the key is to be filtered out.
-	 *
-	 * @return a new {@link UnmodifiableMap}.
-	 */
-	<K2> UnmodifiableMap<K2,V> convertedAndFilteredKeys( TotalConverter<? extends K2,? super K> converter );
-
-	/**
-	 * Creates a new {@link UnmodifiableMap} which represents this map with values converted and filtered using a given converter.
-	 *
-	 * @param converter the {@link Function1} to apply on each value to convert it; should return {@code null} if the value is to be filtered out.
-	 *
-	 * @return a new {@link UnmodifiableMap}.
-	 */
-	<V2> UnmodifiableMap<K,V2> convertedAndFilteredValues( TotalConverter<? extends V2,? super V> converter );
+	UnmodifiableMap<K,V> filter( Predicate<Binding<K,V>> predicate );
 
 	UnmodifiableMap<V,K> transposedMap();
 
@@ -247,7 +229,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 		@Override default UnmodifiableEnumerable<Binding<K,V>> tryGetBindingsByValue( V value )
 		{
 			EqualityComparator<? super V> valueEqualityComparator = values().getEqualityComparator();
-			return entries().filtered( binding -> valueEqualityComparator.equals( value, binding.getValue() ) );
+			return entries().filter( binding -> valueEqualityComparator.equals( value, binding.getValue() ) );
 		}
 
 		@Override default V get( K key )
@@ -288,12 +270,12 @@ public interface UnmodifiableMap<K, V> extends Freezile
 			return UnmodifiableHashMap.fromValues( keys(), key -> get( key ) );
 		}
 
-		@Override default <T> UnmodifiableMap<T,V> convertedKeys( TotalConverter<T,K> converter )
+		@Override default <T> UnmodifiableMap<T,V> convertedKeys( Function1<T,K> converter )
 		{
 			return ConversionCollections.newKeyConvertingAndFilteringMap( this, converter );
 		}
 
-		@Override default <T> UnmodifiableMap<K,T> convertedValues( TotalConverter<T,V> converter )
+		@Override default <T> UnmodifiableMap<K,T> convertedValues( Function1<T,V> converter )
 		{
 			return ConversionCollections.newValueConvertingAndFilteringMap( this, converter );
 		}
@@ -314,24 +296,14 @@ public interface UnmodifiableMap<K, V> extends Freezile
 			return true;
 		}
 
-		@Override default UnmodifiableMap<K,V> chained( UnmodifiableMap<K,V> other )
+		@Override default UnmodifiableMap<K,V> chain( UnmodifiableMap<K,V> other )
 		{
 			return ConversionCollections.newChainingMapOf( this, other );
 		}
 
-		@Override default UnmodifiableMap<K,V> filtered( Predicate<Binding<K,V>> predicate )
+		@Override default UnmodifiableMap<K,V> filter( Predicate<Binding<K,V>> predicate )
 		{
 			return ConversionCollections.newFilteringMap( this, predicate );
-		}
-
-		@Override default <K2> UnmodifiableMap<K2,V> convertedAndFilteredKeys( TotalConverter<? extends K2,? super K> converter )
-		{
-			return ConversionCollections.newKeyConvertingAndFilteringMap( this, converter );
-		}
-
-		@Override default <V2> UnmodifiableMap<K,V2> convertedAndFilteredValues( TotalConverter<? extends V2,? super V> converter )
-		{
-			return ConversionCollections.newValueConvertingAndFilteringMap( this, converter );
 		}
 
 		@Override default UnmodifiableMap<V,K> transposedMap()

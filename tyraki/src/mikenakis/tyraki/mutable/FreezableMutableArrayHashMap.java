@@ -69,7 +69,7 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			MutableEnumerator<K> keyEnumerator = new MyEnumerator();
-			return keyEnumerator.converted( k -> MapEntry.of( k, map.get( k ) ) );
+			return keyEnumerator.map( k -> MapEntry.of( k, map.get( k ) ) );
 		}
 
 		private final class MyEnumerator extends AbstractMutableEnumerator<K> implements MutableEnumerator.Decorator<K>

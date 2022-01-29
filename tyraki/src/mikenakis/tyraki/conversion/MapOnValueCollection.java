@@ -2,9 +2,9 @@ package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
@@ -58,7 +58,7 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			return collection.newUnmodifiableEnumerator().converted( value -> new MyBinding( value ) );
+			return collection.newUnmodifiableEnumerator().map( value -> new MyBinding( value ) );
 		}
 
 		@Override public boolean isFrozen()
@@ -68,10 +68,10 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 	}
 
 	private final UnmodifiableCollection<V> collection;
-	private final TotalConverter<? extends K,? super V> converter;
+	private final Function1<? extends K,? super V> converter;
 	private final MyEntriesCollection entries;
 
-	MapOnValueCollection( UnmodifiableCollection<V> collection, TotalConverter<? extends K,? super V> converter )
+	MapOnValueCollection( UnmodifiableCollection<V> collection, Function1<? extends K,? super V> converter )
 	{
 		assert !collection.containsDuplicates();
 		EqualityComparator<? super K> keyEqualityComparator = DefaultEqualityComparator.getInstance();
@@ -110,7 +110,7 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 
 	@Override public UnmodifiableCollection<K> keys()
 	{
-		return collection.converted( converter );
+		return collection.map( converter );
 	}
 
 	@Override public UnmodifiableCollection<V> values()

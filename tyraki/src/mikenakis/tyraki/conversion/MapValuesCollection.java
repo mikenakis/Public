@@ -38,6 +38,6 @@ final class MapValuesCollection<K, V> extends AbstractUnmodifiableCollection<V>
 
 	@Override public UnmodifiableEnumerator<V> newUnmodifiableEnumerator()
 	{
-		return map.entries().newUnmodifiableEnumerator().converted( kvBinding -> kvBinding.getValue() );
+		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getValue() );
 	}
 }

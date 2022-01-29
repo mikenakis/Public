@@ -22,9 +22,9 @@ class ChainingMap<K, V> extends AbstractMap<K,V>
 	ChainingMap( UnmodifiableCollection<UnmodifiableMap<K,V>> mapsToChain )
 	{
 		this.mapsToChain = mapsToChain.toList();
-		entries = ConversionCollections.newChainingCollection( this.mapsToChain.converted( kvUnmodifiableMap2 -> kvUnmodifiableMap2.entries() ) );
-		keys = ConversionCollections.newChainingCollection( this.mapsToChain.converted( kvUnmodifiableMap1 -> kvUnmodifiableMap1.keys() ) );
-		values = ConversionCollections.newChainingCollection( this.mapsToChain.converted( kvUnmodifiableMap -> kvUnmodifiableMap.values() ) );
+		entries = ConversionCollections.newChainingCollection( this.mapsToChain.map( kvUnmodifiableMap2 -> kvUnmodifiableMap2.entries() ) );
+		keys = ConversionCollections.newChainingCollection( this.mapsToChain.map( kvUnmodifiableMap1 -> kvUnmodifiableMap1.keys() ) );
+		values = ConversionCollections.newChainingCollection( this.mapsToChain.map( kvUnmodifiableMap -> kvUnmodifiableMap.values() ) );
 	}
 
 	@Override public boolean isFrozen()

@@ -40,7 +40,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			assert canReadAssertion();
-			return hashTable.newMutableEnumerator().converted( converter ).mutableFiltered( obj -> Objects.nonNull( obj ) );
+			return hashTable.newMutableEnumerator().map( converter ).mutableFiltered( obj -> Objects.nonNull( obj ) );
 		}
 
 		private final Function1<Binding<K,V>,Item> converter = item ->

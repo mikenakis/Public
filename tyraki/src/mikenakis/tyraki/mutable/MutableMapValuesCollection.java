@@ -42,7 +42,7 @@ class MutableMapValuesCollection<K, V> extends AbstractMutableCollection<V>
 
 	@Override public MutableEnumerator<V> newMutableEnumerator()
 	{
-		return map.mutableEntries().newMutableEnumerator().converted( kvBinding -> kvBinding.getValue() );
+		return map.mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getValue() );
 	}
 
 	@Override public boolean tryReplace( V oldElement, V newElement )

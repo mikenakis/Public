@@ -57,7 +57,7 @@ final class FreezableMutableLinkedHashSet<E> extends AbstractMutableCollection<E
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
 		assert canReadAssertion();
-		return new MyEnumerator().converted( item -> item.element );
+		return new MyEnumerator().map( item -> item.element );
 	}
 
 	@Override public int getModificationCount()

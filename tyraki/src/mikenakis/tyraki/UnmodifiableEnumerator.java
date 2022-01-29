@@ -80,8 +80,6 @@ public interface UnmodifiableEnumerator<E>
 
 	/**
 	 * Fetches the current element and moves to the next.
-	 *
-	 * NOTE: The name of this method does not begin with 'invoke' because we do not want it to be confused for a getter.
 	 */
 	E fetchCurrentAndMoveNext();
 
@@ -92,11 +90,11 @@ public interface UnmodifiableEnumerator<E>
 	 *
 	 * @return a new {@link UnmodifiableEnumerator} representing the elements of this {@link UnmodifiableEnumerator} converted by the given {@link Function1}.
 	 */
-	<T> UnmodifiableEnumerator<T> converted( Function1<T,E> converter );
+	<T> UnmodifiableEnumerator<T> map( Function1<T,E> converter );
 
 	<U extends E> UnmodifiableEnumerator<U> upCast();
 
-	UnmodifiableEnumerator<E> filtered( Predicate<? super E> predicate );
+	UnmodifiableEnumerator<E> filter( Predicate<? super E> predicate );
 
 	/**
 	 * Default Methods for {@link UnmodifiableEnumerator}.
@@ -112,7 +110,7 @@ public interface UnmodifiableEnumerator<E>
 			return element;
 		}
 
-		@Override default <T> UnmodifiableEnumerator<T> converted( Function1<T,E> converter )
+		@Override default <T> UnmodifiableEnumerator<T> map( Function1<T,E> converter )
 		{
 			return ConversionCollections.newConvertingEnumerator( this, ( i, e ) -> converter.invoke( e ) );
 		}
@@ -132,7 +130,7 @@ public interface UnmodifiableEnumerator<E>
 			return result;
 		}
 
-		@Override default UnmodifiableEnumerator<E> filtered( Predicate<? super E> predicate )
+		@Override default UnmodifiableEnumerator<E> filter( Predicate<? super E> predicate )
 		{
 			return ConversionCollections.newFilteringEnumerator( this, predicate );
 		}

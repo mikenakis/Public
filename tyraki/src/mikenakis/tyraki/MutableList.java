@@ -292,10 +292,10 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 			return decoree.tryReplace( oldElement, newElement );
 		}
 
-		@Override default UnmodifiableList<E> chained( UnmodifiableList<E> list )
+		@Override default UnmodifiableList<E> chain( UnmodifiableList<E> list )
 		{
 			MutableList<E> decoree = getDecoratedMutableList();
-			return decoree.chained( list );
+			return decoree.chain( list );
 		}
 	}
 

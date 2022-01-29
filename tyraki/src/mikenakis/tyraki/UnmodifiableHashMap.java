@@ -4,6 +4,7 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
+import mikenakis.kit.functional.Function1;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -151,11 +152,11 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	/**
 	 * Creates a new immutable {@link UnmodifiableMap}.
 	 */
-	static <K, V> UnmodifiableHashMap<K,V> from( TotalConverter<K,V> keyFromValueConverter, UnmodifiableCollection<V> values )
+	static <K, V> UnmodifiableHashMap<K,V> from( Function1<K,V> keyFromValueConverter, UnmodifiableCollection<V> values )
 	{
 		if( values.isEmpty() )
 			return of();
-		UnmodifiableCollection<Binding<K,V>> entries = values.converted( value -> MapEntry.of( keyFromValueConverter.invoke( value ), value ) );
+		UnmodifiableCollection<Binding<K,V>> entries = values.map( value -> MapEntry.of( keyFromValueConverter.invoke( value ), value ) );
 		return from( entries );
 	}
 
@@ -169,11 +170,11 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	/**
 	 * Creates a new immutable {@link UnmodifiableHashMap}.
 	 */
-	static <K, V> UnmodifiableHashMap<K,V> fromKeys( UnmodifiableEnumerable<K> keys, TotalConverter<V,K> valueFromKeyConverter )
+	static <K, V> UnmodifiableHashMap<K,V> fromKeys( UnmodifiableEnumerable<K> keys, Function1<V,K> valueFromKeyConverter )
 	{
 		if( keys.isEmpty() )
 			return of();
-		UnmodifiableEnumerable<Binding<K,V>> bindings = keys.converted( key -> MapEntry.of( key, valueFromKeyConverter.invoke( key ) ) );
+		UnmodifiableEnumerable<Binding<K,V>> bindings = keys.map( key -> MapEntry.of( key, valueFromKeyConverter.invoke( key ) ) );
 		Hasher<? super K> keyHasher = ObjectHasher.INSTANCE;
 		EqualityComparator<? super K> keyEqualityComparator = DefaultEqualityComparator.getInstance();
 		EqualityComparator<? super V> valueEqualityComparator = DefaultEqualityComparator.getInstance();
@@ -183,7 +184,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	/**
 	 * Creates a new immutable {@link UnmodifiableHashMap}.
 	 */
-	static <K, V> UnmodifiableHashMap<K,V> fromValues( UnmodifiableCollection<V> values, TotalConverter<K,V> keyFromValueConverter )
+	static <K, V> UnmodifiableHashMap<K,V> fromValues( UnmodifiableCollection<V> values, Function1<K,V> keyFromValueConverter )
 	{
 		Hasher<? super K> keyHasher = ObjectHasher.INSTANCE;
 		EqualityComparator<? super K> keyEqualityComparator = DefaultEqualityComparator.getInstance();
@@ -193,7 +194,8 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	/**
 	 * Creates a new immutable {@link UnmodifiableHashMap}.
 	 */
-	static <K, V> UnmodifiableHashMap<K,V> fromValues( UnmodifiableCollection<V> values, TotalConverter<K,V> keyFromValueConverter, Hasher<? super K> keyHasher, EqualityComparator<? super K> keyEqualityComparator )
+	static <K, V> UnmodifiableHashMap<K,V> fromValues( UnmodifiableCollection<V> values, Function1<K,V> keyFromValueConverter, Hasher<? super K> keyHasher, //
+		EqualityComparator<? super K> keyEqualityComparator )
 	{
 		if( values.isEmpty() )
 			return of();

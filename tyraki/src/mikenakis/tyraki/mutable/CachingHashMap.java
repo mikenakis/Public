@@ -85,7 +85,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			return keysToItems.mutableEntries().newMutableEnumerator().converted( binding -> MapEntry.of( binding.getKey(), binding.getValue().value ) );
+			return keysToItems.mutableEntries().newMutableEnumerator().map( binding -> MapEntry.of( binding.getKey(), binding.getValue().value ) );
 		}
 	}
 

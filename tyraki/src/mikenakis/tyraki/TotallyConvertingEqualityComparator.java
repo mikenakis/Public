@@ -2,6 +2,7 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.functional.Function1;
 
 /**
  * A converting {@link EqualityComparator}.
@@ -10,9 +11,9 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  */
 public final class TotallyConvertingEqualityComparator<T, F> implements EqualityComparator<T>
 {
-	private final TotalConverter<F,? super T> converter;
+	private final Function1<F,? super T> converter;
 
-	public TotallyConvertingEqualityComparator( TotalConverter<F,? super T> converter )
+	public TotallyConvertingEqualityComparator( Function1<F,? super T> converter )
 	{
 		assert converter != null;
 		this.converter = converter;

@@ -8,7 +8,7 @@ import mikenakis.tyraki.UnmodifiableEnumerator;
 import java.util.Optional;
 
 /**
- * An {@link UnmodifiableEnumerable} which invokes a {@link Function0} to obtain elements until it returns {@code null}.
+ * An {@link UnmodifiableEnumerable} which invokes a {@link Function0} to obtain elements until it returns {@link Optional#empty()}.
  *
  * @param <E> the type of the elements.
  *

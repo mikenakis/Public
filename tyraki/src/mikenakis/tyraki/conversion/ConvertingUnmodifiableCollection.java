@@ -1,11 +1,9 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.functional.Function1;
-import mikenakis.tyraki.PartialConverter;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 
@@ -20,11 +18,11 @@ import java.util.Optional;
 class ConvertingUnmodifiableCollection<T, F> extends AbstractUnmodifiableCollection<T>
 {
 	private final UnmodifiableCollection<F> collectionToConvert;
-	private final TotalConverter<? extends T,? super F> converter;
-	private final PartialConverter<? extends F,? super T> reverter;
+	private final Function1<? extends T,? super F> converter;
+	private final Function1<Optional<? extends F>,? super T> reverter;
 
-	ConvertingUnmodifiableCollection( UnmodifiableCollection<F> collectionToConvert, TotalConverter<? extends T,? super F> converter, PartialConverter<? extends F,? super T> reverter,
-		EqualityComparator<? super T> equalityComparator )
+	ConvertingUnmodifiableCollection( UnmodifiableCollection<F> collectionToConvert, Function1<? extends T,? super F> converter,
+		Function1<Optional<? extends F>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 	{
 		super( equalityComparator );
 		this.collectionToConvert = collectionToConvert;
@@ -56,7 +54,7 @@ class ConvertingUnmodifiableCollection<T, F> extends AbstractUnmodifiableCollect
 	@Override public final Optional<T> tryGet( T element )
 	{
 		assert element != null;
-		Optional<? extends F> from = reverter.convert( element );
+		Optional<? extends F> from = reverter.invoke( element );
 		Optional<F> foundItem = from.flatMap( f -> collectionToConvert.tryGet( f ) );
 		return foundItem.map( i -> converter.invoke( i ) );
 	}

@@ -127,7 +127,7 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 	{
 		Iterator<Item> iterator = javaSet.iterator();
 		MutableEnumerator<Item> modifiableEnumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
-		return modifiableEnumerator.converted( converter );
+		return modifiableEnumerator.map( converter );
 	}
 
 	@Override public boolean containsDuplicates()

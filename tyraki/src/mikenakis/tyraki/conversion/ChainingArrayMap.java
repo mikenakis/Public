@@ -25,9 +25,9 @@ class ChainingArrayMap<K, V> extends AbstractMap<K,V> implements UnmodifiableArr
 	ChainingArrayMap( UnmodifiableCollection<UnmodifiableArrayMap<K,V>> mapsToChain )
 	{
 		this.mapsToChain = mapsToChain.toList();
-		entries = ConversionCollections.newChainingList( this.mapsToChain.converted( UnmodifiableArrayMap::entries ) );
-		keys = ConversionCollections.newChainingArraySet( this.mapsToChain.converted( UnmodifiableArrayMap::keys ) );
-		values = ConversionCollections.newChainingList( this.mapsToChain.converted( UnmodifiableArrayMap::values ) );
+		entries = ConversionCollections.newChainingList( this.mapsToChain.map( UnmodifiableArrayMap::entries ) );
+		keys = ConversionCollections.newChainingArraySet( this.mapsToChain.map( UnmodifiableArrayMap::keys ) );
+		values = ConversionCollections.newChainingList( this.mapsToChain.map( UnmodifiableArrayMap::values ) );
 	}
 
 	@Override public boolean isFrozen()

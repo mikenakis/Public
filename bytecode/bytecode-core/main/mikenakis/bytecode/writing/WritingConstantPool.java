@@ -63,7 +63,7 @@ public final class WritingConstantPool implements Interner
 
 	public Iterable<Constant> constants()
 	{
-		return Kit.iterable.filtered( entries, c -> c != null );
+		return Kit.iterable.filter( entries, c -> c != null );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

@@ -2,11 +2,11 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.tyraki.conversion.ProhibitedConverter;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 
@@ -184,10 +184,10 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return decoree.get( index );
 		}
 
-		@Override default UnmodifiableList<E> chained( UnmodifiableList<E> list )
+		@Override default UnmodifiableList<E> chain( UnmodifiableList<E> list )
 		{
 			UnmodifiableList<E> decoree = getDecoratedUnmodifiableList();
-			return decoree.chained( list );
+			return decoree.chain( list );
 		}
 	}
 
@@ -292,7 +292,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	E fetchLastElement();
 
 	/**
-	 * Fetches the last element in the {@link UnmodifiableList} or {@code null} if there are no elements.
+	 * Fetches the last element in the {@link UnmodifiableList} or {@link Optional#empty()} if there are no elements.
 	 *
 	 * @return the last element in the {@link UnmodifiableList}.
 	 */
@@ -306,22 +306,22 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 *
 	 * @return a view of the list converted using the given {@link Function1}.
 	 */
-	@Override <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter );
+	@Override <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter );
 
-	@Override <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator );
+	@Override <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator );
 
-	@Override <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter );
+	@Override <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter );
 
-	@Override <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter, EqualityComparator<? super T> equalityComparator );
+	@Override <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator );
 
-	@Override <T> UnmodifiableList<T> convertedWithIndex( TotalConverterWithIndex<? extends T,? super E> converter );
+	@Override <T> UnmodifiableList<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter );
 
 	/**
 	 * Provides a view of this {@link UnmodifiableList} reversed.
 	 *
 	 * @return a view of this {@link UnmodifiableList}  reversed.
 	 */
-	UnmodifiableList<E> reversed();
+	UnmodifiableList<E> reverse();
 
 	/**
 	 * Returns a new {@link UnmodifiableList} representing all elements of this {@link UnmodifiableList} followed by all elements of a given {@link UnmodifiableList}.
@@ -330,7 +330,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 *
 	 * @return a new {@link UnmodifiableList} representing all elements of this {@link UnmodifiableList} followed by all elements of the given {@link UnmodifiableList}.
 	 */
-	UnmodifiableList<E> chained( UnmodifiableList<E> list );
+	UnmodifiableList<E> chain( UnmodifiableList<E> list );
 
 	@Override <T extends E> UnmodifiableList<T> upCast();
 
@@ -491,44 +491,37 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return Optional.of( fetchLastElement() );
 		}
 
-		@Override default <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter )
+		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter )
 		{
-			PartialConverter<? extends E,? super T> reverter = ProhibitedConverter.getInstance();
-			EqualityComparator<? super T> equalityComparator = DefaultEqualityComparator.getInstance();
-			return converted( converter, reverter, equalityComparator );
+			return map( converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
 		}
 
-		@Override default <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator )
+		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator )
 		{
-			PartialConverter<? extends E,? super T> reverter = ProhibitedConverter.getInstance();
-			return converted( converter, reverter, equalityComparator );
+			return map( converter, t -> Kit.fail(), equalityComparator );
 		}
 
-		@Override default <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter )
+		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter )
 		{
-			EqualityComparator<T> equalityComparator = new PartiallyConvertingEqualityComparator<>( reverter );
-			return converted( converter, reverter, equalityComparator );
+			return map( converter, reverter, new PartiallyConvertingEqualityComparator<>( reverter ) );
 		}
 
-		@Override default <T> UnmodifiableList<T> converted( TotalConverter<? extends T,? super E> converter, PartialConverter<? extends E,? super T> reverter, EqualityComparator<? super T> equalityComparator )
+		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 		{
-			TotalConverterWithIndex<? extends T,? super E> totalConverter = ( i, e ) -> converter.invoke( e );
-			return ConversionCollections.newConvertingList( this, totalConverter, reverter, equalityComparator );
+			return ConversionCollections.newConvertingList( this, ( i, e ) -> converter.invoke( e ), reverter, equalityComparator );
 		}
 
-		@Override default <T> UnmodifiableList<T> convertedWithIndex( TotalConverterWithIndex<? extends T,? super E> converter )
+		@Override default <T> UnmodifiableList<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter )
 		{
-			PartialConverter<E,T> reverter = ProhibitedConverter.getInstance();
-			EqualityComparator<T> equalityComparator = DefaultEqualityComparator.getInstance();
-			return ConversionCollections.newConvertingList( this, converter, reverter, equalityComparator );
+			return ConversionCollections.newConvertingList( this, converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
 		}
 
-		@Override default UnmodifiableList<E> reversed()
+		@Override default UnmodifiableList<E> reverse()
 		{
 			return ConversionCollections.newReversingList( this );
 		}
 
-		@Override default UnmodifiableList<E> chained( UnmodifiableList<E> list )
+		@Override default UnmodifiableList<E> chain( UnmodifiableList<E> list )
 		{
 			return ConversionCollections.newChainingListOf( this, list );
 		}
@@ -606,11 +599,6 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			}
 			return true;
 		}
-//
-//		@Override default <T> UnmodifiableList<T> convertedWithIndex( Function2<? extends T,? super E,Integer> converter )
-//		{
-//
-//		}
 	}
 
 	/**

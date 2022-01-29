@@ -133,7 +133,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 
 		@Override public MutableEnumerator<K> newMutableEnumerator()
 		{
-			return mutableEntries().newMutableEnumerator().converted( kvBinding -> kvBinding.getKey() );
+			return mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getKey() );
 		}
 
 		@Override public boolean tryReplace( K oldElement, K newElement )
@@ -225,7 +225,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 
 		@Override public MutableEnumerator<V> newMutableEnumerator()
 		{
-			return mutableEntries().newMutableEnumerator().converted( kvBinding -> kvBinding.getValue() );
+			return mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getValue() );
 		}
 
 		@Override public boolean tryReplace( V oldElement, V newElement )

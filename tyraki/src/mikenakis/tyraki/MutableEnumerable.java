@@ -1,6 +1,7 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 
 	<T extends E> Optional<T> tryExtractOneInstanceOf( Class<T> javaClass );
 
-	<T> MutableEnumerable<T> mutableConverted( TotalConverter<? extends T,? super E> converter );
+	<T> MutableEnumerable<T> mutableConverted( Function1<? extends T,? super E> converter );
 
 	boolean clear();
 
@@ -175,7 +176,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			return Optional.empty();
 		}
 
-		@Override default <T> MutableEnumerable<T> mutableConverted( TotalConverter<? extends T,? super E> converter )
+		@Override default <T> MutableEnumerable<T> mutableConverted( Function1<? extends T,? super E> converter )
 		{
 			return ConversionCollections.newConvertingMutableEnumerable( this, converter );
 		}

@@ -1,6 +1,7 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.DuplicateElementException;
 import mikenakis.kit.EqualityComparator;
@@ -162,7 +163,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 	 */
 	E intern( E element );
 
-	<T> MutableCollection<T> mutableConverted( TotalConverter<? extends T,? super E> converter, TotalConverter<E,? super T> reverter );
+	<T> MutableCollection<T> mutableConverted( Function1<? extends T,? super E> converter, Function1<E,? super T> reverter );
 
 	/**
 	 * Default methods for {@link MutableCollection}.
@@ -278,7 +279,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 			return element;
 		}
 
-		@Override default <T> MutableCollection<T> mutableConverted( TotalConverter<? extends T,? super E> converter, TotalConverter<E,? super T> reverter )
+		@Override default <T> MutableCollection<T> mutableConverted( Function1<? extends T,? super E> converter, Function1<E,? super T> reverter )
 		{
 			EqualityComparator<T> equalityComparator = new TotallyConvertingEqualityComparator<>( reverter );
 			return ConversionCollections.newConvertingMutableCollection( this, converter, reverter, equalityComparator );

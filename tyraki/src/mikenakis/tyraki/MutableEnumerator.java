@@ -52,7 +52,7 @@ public interface MutableEnumerator<T> extends UnmodifiableEnumerator<T>
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	@Override <C> MutableEnumerator<C> converted( Function1<C,T> converter );
+	@Override <C> MutableEnumerator<C> map( Function1<C,T> converter );
 
 	MutableEnumerator<T> mutableFiltered( Predicate<T> predicate );
 
@@ -65,7 +65,7 @@ public interface MutableEnumerator<T> extends UnmodifiableEnumerator<T>
 	 */
 	interface Defaults<T> extends MutableEnumerator<T>, UnmodifiableEnumerator.Defaults<T>
 	{
-		@Override default <C> MutableEnumerator<C> converted( Function1<C,T> converter )
+		@Override default <C> MutableEnumerator<C> map( Function1<C,T> converter )
 		{
 			return ConversionCollections.newConvertingMutableEnumerator( this, converter );
 		}

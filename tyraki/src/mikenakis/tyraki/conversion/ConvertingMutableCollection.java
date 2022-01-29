@@ -3,7 +3,6 @@ package mikenakis.tyraki.conversion;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.kit.EqualityComparator;
 
@@ -20,10 +19,10 @@ import java.util.Optional;
 class ConvertingMutableCollection<T, F> extends AbstractUnmodifiableCollection<T> implements MutableCollection.Defaults<T>
 {
 	private final MutableCollection<F> collectionToConvert;
-	private final TotalConverter<? extends T,? super F> converter;
-	private final TotalConverter<F,? super T> reverter;
+	private final Function1<? extends T,? super F> converter;
+	private final Function1<F,? super T> reverter;
 
-	ConvertingMutableCollection( MutableCollection<F> collectionToConvert, TotalConverter<? extends T,? super F> converter, TotalConverter<F,? super T> reverter,
+	ConvertingMutableCollection( MutableCollection<F> collectionToConvert, Function1<? extends T,? super F> converter, Function1<F,? super T> reverter,
 		EqualityComparator<? super T> equalityComparator )
 	{
 		super( equalityComparator );

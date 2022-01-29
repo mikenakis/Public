@@ -42,7 +42,7 @@ class MapKeysCollection<K, V> implements UnmodifiableCollection.Defaults<K>
 
 	@Override public UnmodifiableEnumerator<K> newUnmodifiableEnumerator()
 	{
-		return map.entries().newUnmodifiableEnumerator().converted( kvBinding -> kvBinding.getKey() );
+		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getKey() );
 	}
 
 	@Override public final EqualityComparator<? super K> getEqualityComparator()

@@ -59,7 +59,7 @@ final class MutableListOnMutableMap<T> extends AbstractMutableList<T>
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
 		MutableEnumerator<Binding<Integer,T>> enumerator = map.mutableEntries().newMutableEnumerator();
-		return enumerator.converted( integerTBinding -> integerTBinding.getValue() );
+		return enumerator.map( integerTBinding -> integerTBinding.getValue() );
 	}
 
 	@Override public int getModificationCount()

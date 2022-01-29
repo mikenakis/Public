@@ -24,7 +24,7 @@ public class T0401_Converting_And_Filtering_Iterable
 
 	private static void check( List<Integer> source, List<String> expectedResult )
 	{
-		Iterable<String> convertingAndFilteringIterable = Kit.iterable.convertedAndFiltered( source, converterAndFilterer );
+		Iterable<String> convertingAndFilteringIterable = Kit.iterable.flatMapOptionals( source, converterAndFilterer );
 		List<String> actualResult = Kit.iterable.toList( convertingAndFilteringIterable );
 		assert actualResult.equals( expectedResult );
 	}

@@ -1,7 +1,7 @@
 package mikenakis.tyraki;
 
 /**
- * A total converter. (The conversion is defined for all input values, so {@code null} will never be returned.)
+ * A total converter. (The conversion is defined for all input values.)
  *
  * @author michael.gr
  */

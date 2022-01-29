@@ -3,9 +3,7 @@ package mikenakis.tyraki.conversion;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
-import mikenakis.tyraki.PartialConverter;
 import mikenakis.tyraki.PartiallyConvertingEqualityComparator;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
@@ -61,7 +59,7 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 
 		@Override public UnmodifiableEnumerator<Binding<K,TV>> newUnmodifiableEnumerator()
 		{
-			return mapToConvert.entries().newUnmodifiableEnumerator().converted( sourceBinding -> new MyBinding( sourceBinding ) );
+			return mapToConvert.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
 		}
 
 		@Override public boolean isFrozen()
@@ -71,11 +69,11 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 	}
 
 	private final UnmodifiableMap<K,SV> mapToConvert;
-	private final TotalConverter<? extends TV,? super SV> converter;
-	private final PartialConverter<? extends SV,? super TV> reverter;
+	private final Function1<? extends TV,? super SV> converter;
+	private final Function1<Optional<? extends SV>,? super TV> reverter;
 	private final MyEntriesCollection entries;
 
-	ValueConvertingMap( UnmodifiableMap<K,SV> mapToConvert, TotalConverter<? extends TV,? super SV> converter, PartialConverter<? extends SV,? super TV> reverter )
+	ValueConvertingMap( UnmodifiableMap<K,SV> mapToConvert, Function1<? extends TV,? super SV> converter, Function1<Optional<? extends SV>,? super TV> reverter )
 	{
 		assert mapToConvert != null;
 		assert converter != null;
@@ -125,6 +123,6 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 
 	@Override public final UnmodifiableCollection<TV> values()
 	{
-		return mapToConvert.values().converted( converter, reverter );
+		return mapToConvert.values().map( converter, reverter );
 	}
 }

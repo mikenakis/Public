@@ -5,12 +5,12 @@ import mikenakis.kit.functional.Function1;
 import java.util.Iterator;
 import java.util.Optional;
 
-public class ConvertingAndFilteringIterable<T,F> implements Iterable<T>
+public class OptionalsFlatMappingIterable<T,F> implements Iterable<T>
 {
 	private final Iterable<F> delegee;
 	private final Function1<Optional<T>,F> converterAndFilterer;
 
-	public ConvertingAndFilteringIterable( Iterable<F> delegee, Function1<Optional<T>,F> converterAndFilterer )
+	public OptionalsFlatMappingIterable( Iterable<F> delegee, Function1<Optional<T>,F> converterAndFilterer )
 	{
 		this.delegee = delegee;
 		this.converterAndFilterer = converterAndFilterer;

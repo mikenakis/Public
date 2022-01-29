@@ -41,7 +41,7 @@ final class MutableArrayMapValuesList<K, V> extends AbstractMutableList<V>
 
 	@Override public MutableEnumerator<V> newMutableEnumerator()
 	{
-		return map.mutableEntries().newMutableEnumerator().converted( kvBinding -> kvBinding.getValue() );
+		return map.mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getValue() );
 	}
 
 	@Override public boolean tryReplace( V oldElement, V newElement )

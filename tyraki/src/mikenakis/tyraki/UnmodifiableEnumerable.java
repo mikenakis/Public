@@ -33,8 +33,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 */
 	static <T, U extends T> UnmodifiableEnumerable<T> downCast( UnmodifiableEnumerable<U> enumerable )
 	{
-		@SuppressWarnings( "unchecked" )
-		UnmodifiableEnumerable<T> result = (UnmodifiableEnumerable<T>)enumerable;
+		@SuppressWarnings( "unchecked" ) UnmodifiableEnumerable<T> result = (UnmodifiableEnumerable<T>)enumerable;
 		return result;
 	}
 
@@ -112,8 +111,6 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 	/**
 	 * Gets the one and only element of this {@link UnmodifiableEnumerable}.
-	 * <p>
-	 * NOTE: The name of this method does not begin with 'invoke' because we do not want it to be confused for a getter.
 	 *
 	 * @return the first element of the {@link UnmodifiableEnumerable}.
 	 *
@@ -122,11 +119,9 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	E fetchSingleElement();
 
 	/**
-	 * Gets the one and only element, or {@code null} if the {@link UnmodifiableEnumerable} is empty.
-	 * <p>
-	 * NOTE: The name of this method does not begin with 'invoke' because we do not want it to be confused for a getter.
+	 * Gets the one and only element, or {@link Optional#empty()} if the {@link UnmodifiableEnumerable} is empty.
 	 *
-	 * @return the first and only element, or {@code null} if the {@link UnmodifiableEnumerable} is empty.
+	 * @return the first and only element, or {@link Optional#empty()}} if the {@link UnmodifiableEnumerable} is empty.
 	 *
 	 * @throws Error if the {@link UnmodifiableEnumerable} yields more than one element.
 	 */
@@ -134,8 +129,6 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 	/**
 	 * Fetches the first element of an {@link UnmodifiableEnumerable}.
-	 * <p>
-	 * NOTE: The name of this method does not begin with 'invoke' because we do not want it to be confused for a getter.
 	 *
 	 * @return the first element of the {@link UnmodifiableEnumerable}.
 	 *
@@ -144,20 +137,18 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	E fetchFirstElement();
 
 	/**
-	 * Fetches the first element of an {@link UnmodifiableEnumerable}, or {@code null} if the {@link UnmodifiableEnumerable} is empty.
-	 * <p>
-	 * NOTE: The name of this method does not begin with 'invoke' because we do not want it to be confused for a getter.
+	 * Fetches the first element of an {@link UnmodifiableEnumerable}, or {@link Optional#empty()}} if the {@link UnmodifiableEnumerable} is empty.
 	 *
 	 * @return the first element of the {@link UnmodifiableEnumerable}.
 	 */
 	Optional<E> tryFetchFirstElement();
 
 	/**
-	 * Fetches the Nth element, or {@code null} if the {@link UnmodifiableEnumerable} is empty.
+	 * Fetches the Nth element, or {@link Optional#empty()} if the {@link UnmodifiableEnumerable} is empty.
 	 *
 	 * @param n the number of the element to fetch.
 	 *
-	 * @return the n-th element, or {@code null} if the {@link UnmodifiableEnumerable} is empty.
+	 * @return the n-th element, or {@link Optional#empty()} if the {@link UnmodifiableEnumerable} is empty.
 	 */
 	Optional<E> tryFetchNthElement( int n );
 
@@ -191,7 +182,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 *
 	 * @return a new {@link UnmodifiableEnumerable} representing the elements filtered by the given {@link Predicate}.
 	 */
-	UnmodifiableEnumerable<E> filtered( Predicate<? super E> predicate );
+	UnmodifiableEnumerable<E> filter( Predicate<? super E> predicate );
 
 	/**
 	 * Gets a new {@link UnmodifiableEnumerable} representing the elements converted by a given {@link Function1}.
@@ -200,7 +191,21 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 *
 	 * @return a new {@link UnmodifiableEnumerable} representing the elements converted by the given {@link Function1}.
 	 */
-	<T> UnmodifiableEnumerable<T> converted( TotalConverter<? extends T,? super E> converter );
+	<T> UnmodifiableEnumerable<T> map( Function1<? extends T,? super E> converter );
+
+	<T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> converter );
+
+	/**
+	 * Creates a new {@link UnmodifiableEnumerable} representing the elements of this {@link UnmodifiableEnumerable} converted and filtered using the given {@link Function1}.
+	 * <p>
+	 * The converter must return {@link Optional#empty()} if the item is to be filtered out; non-empty otherwise.
+	 *
+	 * @param converter the {@link Function1} to use.
+	 * @param <T>       the type of items to convert to.
+	 *
+	 * @return a new {@link UnmodifiableEnumerable} representing the elements of this {@link UnmodifiableEnumerable} converted and filtered using the given {@link Function1}.
+	 */
+	<T> UnmodifiableEnumerable<T> flatMapOptionals( Function1<Optional<T>,E> converter );
 
 	/**
 	 * Gets a new {@link UnmodifiableEnumerable} representing the elements converted by a given {@link Function1}.
@@ -209,31 +214,14 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 *
 	 * @return a new {@link UnmodifiableEnumerable} representing the elements converted by the given {@link Function1}.
 	 */
-	<T> UnmodifiableEnumerable<T> convertedWithIndex( TotalConverterWithIndex<? extends T,? super E> converter );
-
-	interface ConverterAndFilterer<T, E>
-	{
-		Optional<T> convert( E e );
-	}
+	<T> UnmodifiableEnumerable<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter );
 
 	/**
-	 * Creates a new {@link UnmodifiableEnumerable} representing the elements of this {@link UnmodifiableEnumerable} converted and filtered using the given {@link Function1}.
-	 * <p>
-	 * The converter must return {@code null} if the item is to be filtered out; non-{@code null} otherwise.
-	 *
-	 * @param converter the {@link Function1} to use.
-	 * @param <T>       the type of items to convert to.
-	 *
-	 * @return a new {@link UnmodifiableEnumerable} representing the elements of this {@link UnmodifiableEnumerable} converted and filtered using the given {@link Function1}.
-	 */
-	<T> UnmodifiableEnumerable<T> convertedAndFiltered( ConverterAndFilterer<T,E> converter );
-
-	/**
-	 * Walks the {@link UnmodifiableEnumerable} for as long as the supplied function returns {@code null}.
+	 * Walks the {@link UnmodifiableEnumerable} for as long as the supplied function returns {@link Optional#empty()}.
 	 *
 	 * @param function the {@link Function0} invoked for each element.
 	 *
-	 * @return the non-{@code null} value returned by the supplied {@link Function0} if the walk was stopped;  {@code null} if the enumerable was walked to the end.
+	 * @return An {@link Optional} containing the value returned by the supplied {@link Function0} if the walk was stopped;  {@link Optional#empty()} if the enumerable was walked to the end.
 	 */
 	<T> Optional<T> walk( Function0<T> function );
 
@@ -395,8 +383,6 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 */
 	String makeString( String prefix, String delimiter, String suffix, StringBuilderAppender<E> stringBuilderAppender );
 
-	<T> UnmodifiableEnumerable<T> flatMap( TotalConverter<UnmodifiableEnumerable<T>,E> converter );
-
 	boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other );
 
 	boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator );
@@ -502,24 +488,24 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			return new IteratorOnUnmodifiableEnumerator<>( enumerator );
 		}
 
-		@Override default UnmodifiableEnumerable<E> filtered( Predicate<? super E> predicate )
+		@Override default UnmodifiableEnumerable<E> filter( Predicate<? super E> predicate )
 		{
 			return ConversionCollections.newFilteringEnumerable( this, predicate );
 		}
 
-		@Override default <T> UnmodifiableEnumerable<T> converted( TotalConverter<? extends T,? super E> converter )
+		@Override default <T> UnmodifiableEnumerable<T> map( Function1<? extends T,? super E> converter )
 		{
 			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, ( i, e ) -> converter.invoke( e ) );
 		}
 
-		@Override default <T> UnmodifiableEnumerable<T> convertedWithIndex( TotalConverterWithIndex<? extends T,? super E> converter )
+		@Override default <T> UnmodifiableEnumerable<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter )
 		{
 			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, converter );
 		}
 
-		@Override default <T> UnmodifiableEnumerable<T> convertedAndFiltered( ConverterAndFilterer<T,E> converter )
+		@Override default <T> UnmodifiableEnumerable<T> flatMapOptionals( Function1<Optional<T>,E> converter )
 		{
-			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, ( i, e ) -> converter.convert( e ) ).filtered( t -> t.isPresent() ).converted( t -> t.orElseThrow() );
+			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, ( i, e ) -> converter.invoke( e ) ).filter( t -> t.isPresent() ).map( t -> t.orElseThrow() );
 		}
 
 		@Override default <T> Optional<T> walk( Function0<T> function )
@@ -569,15 +555,13 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 		@Override default <T extends E> UnmodifiableEnumerable<T> upCast()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableEnumerable<T> result = (UnmodifiableEnumerable<T>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableEnumerable<T> result = (UnmodifiableEnumerable<T>)this;
 			return result;
 		}
 
 		@Override default <T> UnmodifiableEnumerable<T> uncheckedCast()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableEnumerable<T> result = (UnmodifiableEnumerable<T>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableEnumerable<T> result = (UnmodifiableEnumerable<T>)this;
 			return result;
 		}
 
@@ -609,8 +593,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			}
 		}
 
-		@SuppressWarnings( "unchecked" )
-		private static <E, C extends Comparable<C>> int compare( E a, E b )
+		@SuppressWarnings( "unchecked" ) private static <E, C extends Comparable<C>> int compare( E a, E b )
 		{
 			if( a == null )
 				return b == null ? 0 : -1;
@@ -700,83 +683,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			}
 		}
 
-		class FlatteningEnumerable<T,E> implements UnmodifiableEnumerable.Defaults<T>
-		{
-			private final UnmodifiableEnumerable<E> primaryEnumerable;
-			private final TotalConverter<UnmodifiableEnumerable<T>,E> converter;
-
-			public FlatteningEnumerable( UnmodifiableEnumerable<E> primaryEnumerable, TotalConverter<UnmodifiableEnumerable<T>,E> converter )
-			{
-				this.primaryEnumerable = primaryEnumerable;
-				this.converter = converter;
-			}
-
-			@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
-			{
-				return new MyEnumerator<>( primaryEnumerable.newUnmodifiableEnumerator(), converter );
-			}
-
-			@Override public int getModificationCount()
-			{
-				return primaryEnumerable.getModificationCount();
-			}
-
-			@Override public boolean isFrozen()
-			{
-				return primaryEnumerable.isFrozen();
-			}
-
-			private static class MyEnumerator<T,E> implements UnmodifiableEnumerator.Defaults<T>
-			{
-				private final TotalConverter<UnmodifiableEnumerable<T>,E> converter;
-				private final UnmodifiableEnumerator<E> primaryEnumerator;
-				private UnmodifiableEnumerator<T> secondaryEnumerator;
-
-				MyEnumerator( UnmodifiableEnumerator<E> primaryEnumerator, TotalConverter<UnmodifiableEnumerable<T>,E> converter )
-				{
-					this.converter = converter;
-					this.primaryEnumerator = primaryEnumerator;
-					secondaryEnumerator = reload( primaryEnumerator, converter );
-				}
-
-				@Override public boolean isFinished()
-				{
-					return secondaryEnumerator == null;
-				}
-
-				@Override public T getCurrent()
-				{
-					assert secondaryEnumerator != null;
-					return secondaryEnumerator.getCurrent();
-				}
-
-				@Override public UnmodifiableEnumerator<T> moveNext()
-				{
-					assert secondaryEnumerator != null;
-					secondaryEnumerator.moveNext();
-					if( secondaryEnumerator.isFinished() )
-						secondaryEnumerator = reload( primaryEnumerator, converter );
-					return this;
-				}
-
-				private static <T,E> UnmodifiableEnumerator<T> reload( UnmodifiableEnumerator<E> primaryEnumerator, TotalConverter<UnmodifiableEnumerable<T>,E> converter )
-				{
-					for( ;; )
-					{
-						if( primaryEnumerator.isFinished() )
-							return null;
-						E primaryElement = primaryEnumerator.getCurrent();
-						primaryEnumerator.moveNext();
-						UnmodifiableEnumerable<T> secondaryEnumerable = converter.invoke( primaryElement );
-						UnmodifiableEnumerator<T> secondaryEnumerator = secondaryEnumerable.newUnmodifiableEnumerator();
-						if( !secondaryEnumerator.isFinished() )
-							return secondaryEnumerator;
-					}
-				}
-			}
-		}
-
-		@Override default <T> UnmodifiableEnumerable<T> flatMap( TotalConverter<UnmodifiableEnumerable<T>,E> converter )
+		@Override default <T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> converter )
 		{
 			return new FlatteningEnumerable<>( this, converter );
 		}
@@ -784,7 +691,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		@Override default <T> T reduce( T start, Function2<T,T,E> combiner )
 		{
 			for( E element : this )
-				 start = combiner.invoke( start, element );
+				start = combiner.invoke( start, element );
 			return start;
 		}
 	}
@@ -826,7 +733,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
 	 * earliest point possible, and not when compiling some derived class.
 	 */
-	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
 		@Override public UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable()

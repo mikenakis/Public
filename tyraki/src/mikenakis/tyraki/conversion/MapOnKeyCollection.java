@@ -4,7 +4,6 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
@@ -54,7 +53,7 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			return collection.newUnmodifiableEnumerator().converted( key -> new MyBinding( key ) );
+			return collection.newUnmodifiableEnumerator().map( key -> new MyBinding( key ) );
 		}
 
 		@Override public boolean isFrozen()
@@ -64,10 +63,10 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 	}
 
 	private final UnmodifiableCollection<K> collection;
-	private final TotalConverter<? extends V,? super K> converter;
+	private final Function1<? extends V,? super K> converter;
 	private final MyEntriesCollection entries;
 
-	MapOnKeyCollection( UnmodifiableCollection<K> collection, TotalConverter<? extends V,? super K> converter )
+	MapOnKeyCollection( UnmodifiableCollection<K> collection, Function1<? extends V,? super K> converter )
 	{
 		assert collection != null;
 		assert converter != null;
@@ -111,6 +110,6 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 
 	@Override public UnmodifiableCollection<V> values()
 	{
-		return collection.converted( converter );
+		return collection.map( converter );
 	}
 }

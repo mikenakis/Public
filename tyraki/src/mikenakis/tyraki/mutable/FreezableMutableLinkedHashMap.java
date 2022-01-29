@@ -39,7 +39,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			assert canReadAssertion();
-			return new MyEnumerator().converted( converter );
+			return new MyEnumerator().map( converter );
 		}
 
 		private final Function1<Binding<K,V>,Item> converter = item -> MapEntry.of( item.key, item.value );
@@ -129,30 +129,30 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	{
 		assert key != null;
 		assert isWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item != null )
+		Item item1 = hashTable.tryFindByKey( key );
+		if( item1 != null )
 		{
-			assert isValidAssertion( item );
+			assert isValidAssertion( item1 );
 			return false; //key already exists.
 		}
-		item = new Item( key, value );
-		boolean ok = hashTable.tryAdd( item );
+		Item item2 = new Item( key, value );
+		boolean ok = hashTable.tryAdd( item2 );
 		assert ok;
 		if( tail == null )
 		{
 			assert head == null;
-			head = tail = item;
-			item.prevInMap = item.nextInMap = null;
+			head = tail = item2;
+			item2.prevInMap = item2.nextInMap = null;
 		}
 		else
 		{
 			assert tail.nextInMap == null;
-			tail.nextInMap = item;
-			item.nextInMap = null;
-			item.prevInMap = tail;
-			tail = item;
+			tail.nextInMap = item2;
+			item2.nextInMap = null;
+			item2.prevInMap = tail;
+			tail = item2;
 		}
-		assert isValidAssertion( item );
+		assert isValidAssertion( item2 );
 		return true;
 	}
 

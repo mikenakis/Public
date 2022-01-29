@@ -39,7 +39,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			assert canReadAssertion();
-			return hashTable.newMutableEnumerator().converted( converter ).mutableFiltered( k -> k != null );
+			return hashTable.newMutableEnumerator().map( converter ).mutableFiltered( k -> k != null );
 		}
 
 		private final Function1<Binding<K,V>,Item> converter = item ->
@@ -120,18 +120,18 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	{
 		assert key != null;
 		assert isWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item != null )
+		Item item1 = hashTable.tryFindByKey( key );
+		if( item1 != null )
 		{
-			if( item.valueReference.get() != null )
+			if( item1.valueReference.get() != null )
 				return false; //key already exists and has a value.
-			item.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
+			item1.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
 			modificationCount++;
 		}
 		else
 		{
-			item = new Item( key, value );
-			boolean ok = hashTable.tryAdd( item );
+			Item item2 = new Item( key, value );
+			boolean ok = hashTable.tryAdd( item2 );
 			assert ok;
 		}
 		return true;

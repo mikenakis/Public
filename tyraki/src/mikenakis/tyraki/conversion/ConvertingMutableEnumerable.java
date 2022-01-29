@@ -1,16 +1,16 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumerable<T> implements MutableEnumerable.Defaults<T>
 {
 	private final MutableEnumerable<F> enumerableToConvert;
-	private final TotalConverter<? extends T,? super F> converter;
+	private final Function1<? extends T,? super F> converter;
 
-	ConvertingMutableEnumerable( MutableEnumerable<F> enumerableToConvert, TotalConverter<? extends T,? super F> converter )
+	ConvertingMutableEnumerable( MutableEnumerable<F> enumerableToConvert, Function1<? extends T,? super F> converter )
 	{
 		this.enumerableToConvert = enumerableToConvert;
 		this.converter = converter;

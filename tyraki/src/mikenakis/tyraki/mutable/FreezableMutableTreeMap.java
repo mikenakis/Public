@@ -47,7 +47,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 			assert canReadAssertion();
 			Iterator<Entry<Item,V>> iterator = javaMap.entrySet().iterator();
 			MutableEnumerator<Entry<Item,V>> modifiableEnumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
-			return modifiableEnumerator.converted( converter );
+			return modifiableEnumerator.map( converter );
 		}
 
 		@Override public boolean isFrozen()

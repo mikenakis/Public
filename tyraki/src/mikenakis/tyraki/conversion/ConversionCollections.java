@@ -1,14 +1,14 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.PartialConverter;
 import mikenakis.tyraki.PartiallyConvertingEqualityComparator;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.TotalConverterWithIndex;
 import mikenakis.tyraki.UnmodifiableArrayMap;
 import mikenakis.tyraki.UnmodifiableArraySet;
@@ -17,7 +17,6 @@ import mikenakis.tyraki.UnmodifiableEnumerable;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableList;
 import mikenakis.tyraki.UnmodifiableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -156,7 +155,7 @@ public final class ConversionCollections
 	 *
 	 * @return a new converting {@link UnmodifiableEnumerator}.
 	 */
-	public static <T, F> MutableEnumerable<T> newConvertingMutableEnumerable( MutableEnumerable<F> enumerable, TotalConverter<? extends T,? super F> converter )
+	public static <T, F> MutableEnumerable<T> newConvertingMutableEnumerable( MutableEnumerable<F> enumerable, Function1<? extends T,? super F> converter )
 	{
 		return new ConvertingMutableEnumerable<>( enumerable, converter );
 	}
@@ -202,7 +201,8 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableCollection} converting elements of the given {@link UnmodifiableCollection} from F to T.
 	 */
-	public static <T, F> UnmodifiableCollection<T> newConvertingCollection( UnmodifiableCollection<F> collection, TotalConverter<? extends T,? super F> converter, PartialConverter<? extends F,? super T> reverter )
+	public static <T, F> UnmodifiableCollection<T> newConvertingCollection( UnmodifiableCollection<F> collection, Function1<? extends T,? super F> converter, //
+		Function1<Optional<? extends F>,? super T> reverter )
 	{
 		EqualityComparator<T> equalityComparator = new PartiallyConvertingEqualityComparator<>( reverter );
 		return newConvertingCollection( collection, converter, reverter, equalityComparator );
@@ -220,8 +220,8 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableCollection} converting elements of the given {@link UnmodifiableCollection} from F to T.
 	 */
-	public static <T, F> UnmodifiableCollection<T> newConvertingCollection( UnmodifiableCollection<F> collection, TotalConverter<? extends T,? super F> converter, PartialConverter<? extends F,? super T> reverter,
-		EqualityComparator<? super T> equalityComparator )
+	public static <T, F> UnmodifiableCollection<T> newConvertingCollection( UnmodifiableCollection<F> collection, Function1<? extends T,? super F> converter, //
+		Function1<Optional<? extends F>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 	{
 		return new ConvertingUnmodifiableCollection<>( collection, converter, reverter, equalityComparator );
 	}
@@ -236,9 +236,9 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableCollection} converting elements of the given {@link UnmodifiableCollection} from F to T.
 	 */
-	public static <T, F> UnmodifiableCollection<T> newConvertingCollection( UnmodifiableCollection<F> collection, TotalConverter<? extends T,? super F> converter )
+	public static <T, F> UnmodifiableCollection<T> newConvertingCollection( UnmodifiableCollection<F> collection, Function1<? extends T,? super F> converter )
 	{
-		PartialConverter<? extends F,? super T> reverter = newReversingConverter( collection, converter );
+		Function1<Optional<? extends F>,? super T> reverter = newReversingConverter( collection, converter );
 		return newConvertingCollection( collection, converter, reverter );
 	}
 
@@ -254,8 +254,8 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableCollection} converting elements of the given {@link UnmodifiableCollection} from F to T.
 	 */
-	public static <T, F> MutableCollection<T> newConvertingMutableCollection( MutableCollection<F> collection, TotalConverter<? extends T,? super F> converter, TotalConverter<F,? super T> reverter,
-		EqualityComparator<? super T> equalityComparator )
+	public static <T, F> MutableCollection<T> newConvertingMutableCollection( MutableCollection<F> collection, Function1<? extends T,? super F> converter, //
+		Function1<F,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 	{
 		return new ConvertingMutableCollection<>( collection, converter, reverter, equalityComparator );
 	}
@@ -346,7 +346,7 @@ public final class ConversionCollections
 	 * @return a new {@link UnmodifiableList} converting elements of the given {@link UnmodifiableList} from F to T.
 	 */
 	public static <T, F> UnmodifiableList<T> newConvertingList( UnmodifiableList<F> list, TotalConverterWithIndex<? extends T,? super F> converter,
-		PartialConverter<? extends F,? super T> reverter, EqualityComparator<? super T> equalityComparator )
+		Function1<Optional<? extends F>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 	{
 		return new ConvertingList<>( list, converter, reverter, equalityComparator );
 	}
@@ -406,7 +406,8 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableMap} representing all pairs of the given {@link UnmodifiableMap} where keys have been converted from FV to TV.
 	 */
-	public static <TK, V, SK> UnmodifiableMap<TK,V> newKeyConvertingMap( UnmodifiableMap<SK,V> map, TotalConverter<? extends TK,? super SK> converter, PartialConverter<? extends SK,? super TK> reverter )
+	public static <TK, V, SK> UnmodifiableMap<TK,V> newKeyConvertingMap( UnmodifiableMap<SK,V> map, Function1<? extends TK,? super SK> converter, //
+		Function1<Optional<? extends SK>,? super TK> reverter )
 	{
 		return new KeyConvertingMap<>( map, converter, reverter );
 	}
@@ -422,10 +423,9 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableMap} representing all pairs of the given {@link UnmodifiableMap} where keys have been converted from FV to TV.
 	 */
-	public static <TK, V, SK> UnmodifiableMap<TK,V> newKeyConvertingAndFilteringMap( UnmodifiableMap<SK,V> map, TotalConverter<? extends TK,? super SK> converter )
+	public static <TK, V, SK> UnmodifiableMap<TK,V> newKeyConvertingAndFilteringMap( UnmodifiableMap<SK,V> map, Function1<? extends TK,? super SK> converter )
 	{
-		PartialConverter<SK,TK> skFromTkConverter = ProhibitedConverter.getInstance();
-		return newKeyConvertingMap( map, converter, skFromTkConverter );
+		return newKeyConvertingMap( map, converter, t -> Kit.fail() );
 	}
 
 	/**
@@ -440,8 +440,8 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableMap} representing all pairs of the given {@link UnmodifiableMap} where values have been converted from FV to TV.
 	 */
-	public static <K, TV, SV> UnmodifiableMap<K,TV> newValueConvertingAndFilteringMap( UnmodifiableMap<K,SV> map, TotalConverter<? extends TV,? super SV> tvFromSvConverter,
-		PartialConverter<? extends SV,? super TV> svFromTvConverter )
+	public static <K, TV, SV> UnmodifiableMap<K,TV> newValueConvertingAndFilteringMap( UnmodifiableMap<K,SV> map, //
+		Function1<? extends TV,? super SV> tvFromSvConverter, Function1<Optional<? extends SV>,? super TV> svFromTvConverter )
 	{
 		return new ValueConvertingMap<>( map, tvFromSvConverter, svFromTvConverter );
 	}
@@ -457,10 +457,9 @@ public final class ConversionCollections
 	 *
 	 * @return a new {@link UnmodifiableMap} representing all pairs of the given {@link UnmodifiableMap} where values have been converted from FV to TV.
 	 */
-	public static <K, TV, SV> UnmodifiableMap<K,TV> newValueConvertingAndFilteringMap( UnmodifiableMap<K,SV> map, TotalConverter<? extends TV,? super SV> tvFromSvConverter )
+	public static <K, TV, SV> UnmodifiableMap<K,TV> newValueConvertingAndFilteringMap( UnmodifiableMap<K,SV> map, Function1<? extends TV,? super SV> tvFromSvConverter )
 	{
-		PartialConverter<? extends SV,? super TV> svFromTvConverter = ProhibitedConverter.getInstance();
-		return newValueConvertingAndFilteringMap( map, tvFromSvConverter, svFromTvConverter );
+		return newValueConvertingAndFilteringMap( map, tvFromSvConverter, t -> Kit.fail() );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -490,7 +489,7 @@ public final class ConversionCollections
 	 *
 	 * @return an {@link UnmodifiableMap} on the given {@link UnmodifiableCollection} using the given {@link Function1}.
 	 */
-	public static <K, V> UnmodifiableMap<K,V> newMapOnValueCollection( UnmodifiableCollection<V> collection, TotalConverter<? extends K,? super V> converter )
+	public static <K, V> UnmodifiableMap<K,V> newMapOnValueCollection( UnmodifiableCollection<V> collection, Function1<? extends K,? super V> converter )
 	{
 		return new MapOnValueCollection<>( collection, converter );
 	}
@@ -505,7 +504,7 @@ public final class ConversionCollections
 	 *
 	 * @return an {@link UnmodifiableMap} on the given {@link UnmodifiableCollection} using the given {@link Function1}.
 	 */
-	public static <K, V> UnmodifiableMap<K,V> newMapOnKeyCollection( UnmodifiableCollection<K> collection, TotalConverter<? extends V,? super K> converter )
+	public static <K, V> UnmodifiableMap<K,V> newMapOnKeyCollection( UnmodifiableCollection<K> collection, Function1<? extends V,? super K> converter )
 	{
 		return new MapOnKeyCollection<>( collection, converter );
 	}
@@ -583,7 +582,7 @@ public final class ConversionCollections
 		return new EnumeratorOnList<>( list );
 	}
 
-	public static <F, T> PartialConverter<F,T> newReversingConverter( UnmodifiableCollection<F> collection, TotalConverter<? extends T,? super F> forwardConverter )
+	public static <F, T> Function1<Optional<? extends F>,T> newReversingConverter( UnmodifiableCollection<F> collection, Function1<? extends T,? super F> forwardConverter )
 	{
 		return new ReversingConverter<>( collection, forwardConverter );
 	}

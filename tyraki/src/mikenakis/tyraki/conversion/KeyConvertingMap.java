@@ -1,10 +1,9 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
-import mikenakis.tyraki.PartialConverter;
 import mikenakis.tyraki.PartiallyConvertingEqualityComparator;
-import mikenakis.tyraki.TotalConverter;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
@@ -49,7 +48,7 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 
 		@Override public UnmodifiableEnumerator<Binding<TK,V>> newUnmodifiableEnumerator()
 		{
-			return mapToConvert.entries().newUnmodifiableEnumerator().converted( sourceBinding -> new MyBinding( sourceBinding ) );
+			return mapToConvert.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
 		}
 
 		@Override public boolean isFrozen()
@@ -59,11 +58,11 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 	}
 
 	private final UnmodifiableMap<SK,V> mapToConvert;
-	private final TotalConverter<? extends TK,? super SK> converter;
-	private final PartialConverter<? extends SK,? super TK> reverter;
+	private final Function1<? extends TK,? super SK> converter;
+	private final Function1<Optional<? extends SK>,? super TK> reverter;
 	private final MyEntriesCollection entries;
 
-	KeyConvertingMap( UnmodifiableMap<SK,V> mapToConvert, TotalConverter<? extends TK,? super SK> converter, PartialConverter<? extends SK,? super TK> reverter )
+	KeyConvertingMap( UnmodifiableMap<SK,V> mapToConvert, Function1<? extends TK,? super SK> converter, Function1<Optional<? extends SK>,? super TK> reverter )
 	{
 		assert mapToConvert != null;
 		assert converter != null;
@@ -94,7 +93,7 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 	@Override public final Optional<Binding<TK,V>> tryGetBindingByKey( TK tk )
 	{
 		assert tk != null;
-		Optional<? extends SK> sk = reverter.convert( tk );
+		Optional<? extends SK> sk = reverter.invoke( tk );
 		if( sk.isEmpty() )
 			return Optional.empty();
 		Optional<Binding<SK,V>> binding = mapToConvert.tryGetBindingByKey( sk.get() );
@@ -106,7 +105,7 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 
 	@Override public final UnmodifiableCollection<TK> keys()
 	{
-		return mapToConvert.keys().converted( converter, reverter );
+		return mapToConvert.keys().map( converter, reverter );
 	}
 
 	@Override public final UnmodifiableCollection<V> values()
