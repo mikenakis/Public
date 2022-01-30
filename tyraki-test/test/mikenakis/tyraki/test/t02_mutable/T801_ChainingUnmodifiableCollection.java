@@ -29,6 +29,6 @@ public class T801_ChainingUnmodifiableCollection
 		UnmodifiableCollection<String> y = UnmodifiableList.of( "b", "c" );
 		UnmodifiableCollection<String> z = UnmodifiableList.of();
 		UnmodifiableCollection<String> chain = ConversionCollections.newChainingCollectionOf( u, v, w, x, y, z );
-		assert chain.equalsUnmodifiableCollection( UnmodifiableCollection.of( "a", "b", "b", "c" ) );
+		assert chain.equalsCollection( UnmodifiableCollection.of( "a", "b", "b", "c" ) );
 	}
 }

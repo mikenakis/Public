@@ -15,7 +15,7 @@ abstract class AbstractUnmodifiableEnumerable<E> implements UnmodifiableEnumerab
 	@Deprecated @Override public boolean equals( Object other )
 	{
 		if( other instanceof UnmodifiableEnumerable )
-			return equalsUnmodifiableEnumerable( Kit.upCast( other ) );
+			return equalsEnumerable( Kit.upCast( other ) );
 		throw new AssertionError(); //does this ever happen?
 	}
 

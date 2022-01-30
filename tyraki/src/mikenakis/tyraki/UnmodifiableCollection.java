@@ -172,7 +172,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 *
 	 * @return {@code true} if the two {@link UnmodifiableCollection}s have the same contents.
 	 */
-	boolean equalsUnmodifiableCollection( UnmodifiableCollection<? extends E> other );
+	boolean equalsCollection( UnmodifiableCollection<? extends E> other );
 
 	/**
 	 * Finds an element using a predicate.
@@ -305,7 +305,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		 *
 		 * @return {@code true} if the two {@link UnmodifiableCollection}s have the same contents.
 		 */
-		@Override default boolean equalsUnmodifiableCollection( UnmodifiableCollection<? extends E> other )
+		@Override default boolean equalsCollection( UnmodifiableCollection<? extends E> other )
 		{
 			return size() == other.size() && containsAll( other );
 		}

@@ -34,9 +34,9 @@ abstract class AbstractUnmodifiableCollection<E> extends AbstractUnmodifiableEnu
 	@SuppressWarnings( "deprecation" ) @Deprecated @Override public final boolean equals( Object other )
 	{
 		if( other instanceof UnmodifiableCollection )
-			return equalsUnmodifiableCollection( Kit.upCast( other ) );
+			return equalsCollection( Kit.upCast( other ) );
 		if( other instanceof UnmodifiableEnumerable )
-			return equalsUnmodifiableEnumerable( Kit.upCast( other ) );
+			return equalsEnumerable( Kit.upCast( other ) );
 		assert false;
 		return false;
 	}

@@ -71,11 +71,11 @@ public abstract class MutableCollectionTest<T>
 		T c = newElement();
 		assert collection.isEmpty();
 		collection.add( a );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a ) );
 		collection.add( b );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b ) );
 		collection.add( c );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b, c ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 		collection.clear();
 		collection.isEmpty();
 	}
@@ -121,11 +121,11 @@ public abstract class MutableCollectionTest<T>
 		T c = newElement();
 		assert collection.isEmpty();
 		assert collection.tryAdd( a );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a ) );
 		assert collection.tryAdd( b );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b ) );
 		assert collection.tryAdd( c );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b, c ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 	}
 
 	@Test
@@ -144,11 +144,11 @@ public abstract class MutableCollectionTest<T>
 		collection.add( c );
 		assert collection.tryRemove( c );
 		assert !collection.tryRemove( c );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b ) );
 		assert collection.tryRemove( a );
 		assert !collection.tryRemove( a );
 		assert !collection.tryRemove( c );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( b ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( b ) );
 		assert collection.tryRemove( b );
 		assert !collection.tryRemove( a );
 		assert !collection.tryRemove( b );
@@ -169,10 +169,10 @@ public abstract class MutableCollectionTest<T>
 		collection.add( b );
 		collection.add( c );
 		collection.remove( c );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b ) );
 		Kit.testing.expectException( NoSuchElementException.class, () -> collection.remove( c ) );
 		collection.remove( a );
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( b ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( b ) );
 		collection.remove( b );
 		collection.isEmpty();
 	}
@@ -211,23 +211,23 @@ public abstract class MutableCollectionTest<T>
 		T a = newElement();
 		T b = newElement();
 		T c = newElement();
-		assert collection1.equalsUnmodifiableCollection( collection2 );
+		assert collection1.equalsCollection( collection2 );
 		collection1.add( a );
-		assert !collection1.equalsUnmodifiableCollection( collection2 );
+		assert !collection1.equalsCollection( collection2 );
 		collection2.add( a );
-		assert collection1.equalsUnmodifiableCollection( collection2 );
+		assert collection1.equalsCollection( collection2 );
 		collection1.add( b );
-		assert !collection1.equalsUnmodifiableCollection( collection2 );
+		assert !collection1.equalsCollection( collection2 );
 		collection2.add( b );
-		assert collection1.equalsUnmodifiableCollection( collection2 );
+		assert collection1.equalsCollection( collection2 );
 		collection1.add( c );
-		assert !collection1.equalsUnmodifiableCollection( collection2 );
+		assert !collection1.equalsCollection( collection2 );
 		collection2.add( c );
-		assert collection1.equalsUnmodifiableCollection( collection2 );
+		assert collection1.equalsCollection( collection2 );
 		collection1.clear();
-		assert !collection1.equalsUnmodifiableCollection( collection2 );
+		assert !collection1.equalsCollection( collection2 );
 		collection2.clear();
-		assert collection1.equalsUnmodifiableCollection( collection2 );
+		assert collection1.equalsCollection( collection2 );
 	}
 
 	@Test
@@ -276,7 +276,7 @@ public abstract class MutableCollectionTest<T>
 		collection2.add( enumerator.getCurrent() );
 		enumerator.moveNext();
 		assert enumerator.isFinished();
-		assert collection2.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b, c ) );
+		assert collection2.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
 		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.moveNext() );
 	}
@@ -292,7 +292,7 @@ public abstract class MutableCollectionTest<T>
 		collection.add( b );
 		collection.add( c );
 		MutableEnumerator<T> enumerator = collection.newMutableEnumerator();
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b, c ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 		enumerator.deleteCurrent();
 		assert collection.size() == 2;
 		enumerator.moveNext();
@@ -349,7 +349,7 @@ public abstract class MutableCollectionTest<T>
 		collection.add( b );
 		collection.add( c );
 		MutableEnumerator<T> enumerator = collection.newMutableEnumerator();
-		assert collection.equalsUnmodifiableCollection( UnmodifiableCollection.of( a, b, c ) );
+		assert collection.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 		enumerator.deleteCurrent();
 		assert collection.size() == 2;
 		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.isFinished() );

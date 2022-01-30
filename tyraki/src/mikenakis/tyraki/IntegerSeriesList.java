@@ -109,9 +109,9 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 	@Deprecated @Override public boolean equals( Object other )
 	{
 		if( other instanceof UnmodifiableList )
-			return equalsUnmodifiableList( Kit.upCast( other ) );
+			return equalsList( Kit.upCast( other ) );
 		if( other instanceof UnmodifiableEnumerable )
-			return equalsUnmodifiableEnumerable( Kit.upCast( other ) );
+			return equalsEnumerable( Kit.upCast( other ) );
 		assert false; //does this ever happen?
 		return false;
 	}

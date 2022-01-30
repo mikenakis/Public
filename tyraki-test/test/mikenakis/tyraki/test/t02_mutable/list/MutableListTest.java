@@ -105,11 +105,11 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		T c = newElement();
 		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.insertAt( -1, a ) );
 		list.insertAt( 0, b );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( b ) );
+		assert list.equalsList( UnmodifiableList.of( b ) );
 		list.insertAt( 0, a );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( a, b ) );
+		assert list.equalsList( UnmodifiableList.of( a, b ) );
 		list.insertAt( 2, c );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( a, b, c ) );
+		assert list.equalsList( UnmodifiableList.of( a, b, c ) );
 	}
 
 	@Test
@@ -126,9 +126,9 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
 		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 2, a ) );
 		list.replaceAt( 1, c );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( a, c ) );
+		assert list.equalsList( UnmodifiableList.of( a, c ) );
 		list.replaceAt( 0, b );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( b, c ) );
+		assert list.equalsList( UnmodifiableList.of( b, c ) );
 	}
 
 	@Test
@@ -147,10 +147,10 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( 3 ) );
 		assert list.get( 1 ) == b;
 		list.removeAt( 1 );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( a, c ) );
+		assert list.equalsList( UnmodifiableList.of( a, c ) );
 		assert list.get( 1 ) == c;
 		list.removeAt( 1 );
-		assert list.equalsUnmodifiableList( UnmodifiableList.of( a ) );
+		assert list.equalsList( UnmodifiableList.of( a ) );
 		assert list.get( 0 ) == a;
 		list.removeAt( 0 );
 		assert list.isEmpty();

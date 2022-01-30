@@ -29,6 +29,6 @@ public class T802_ChainingUnmodifiableSet
 		UnmodifiableCollection<String> y = UnmodifiableList.of( "b", "c" );
 		UnmodifiableCollection<String> z = UnmodifiableList.of();
 		UnmodifiableCollection<String> chain = ConversionCollections.newChainingSetOf( u, v, w, x, y, z );
-		assert chain.equalsUnmodifiableCollection( UnmodifiableCollection.of( "a", "b", "c" ) );
+		assert chain.equalsCollection( UnmodifiableCollection.of( "a", "b", "c" ) );
 	}
 }

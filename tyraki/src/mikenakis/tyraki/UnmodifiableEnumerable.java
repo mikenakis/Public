@@ -193,6 +193,10 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 */
 	<T> UnmodifiableEnumerable<T> map( Function1<? extends T,? super E> converter );
 
+	/**
+	 * Uses a given converter to convert each element to an {@link UnmodifiableEnumerable} of T and returns a single enumerable of T chaining together all
+	 * the resulting enumerables.
+	 */
 	<T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> converter );
 
 	/**
@@ -383,9 +387,9 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 */
 	String makeString( String prefix, String delimiter, String suffix, StringBuilderAppender<E> stringBuilderAppender );
 
-	boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other );
+	boolean equalsEnumerable( UnmodifiableEnumerable<E> other );
 
-	boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator );
+	boolean equalsEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator );
 
 	@Deprecated @Override boolean equals( Object other ); //Java blooper: Java prevents us from declaring a default method overriding equals().
 
@@ -657,12 +661,12 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			return stringBuilder.toString();
 		}
 
-		@Override default boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other )
+		@Override default boolean equalsEnumerable( UnmodifiableEnumerable<E> other )
 		{
-			return equalsUnmodifiableEnumerable( other, DefaultEqualityComparator.getInstance() );
+			return equalsEnumerable( other, DefaultEqualityComparator.getInstance() );
 		}
 
-		@Override default boolean equalsUnmodifiableEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator )
+		@Override default boolean equalsEnumerable( UnmodifiableEnumerable<E> other, EqualityComparator<E> equalityComparator )
 		{
 			if( other == this )
 				return true;

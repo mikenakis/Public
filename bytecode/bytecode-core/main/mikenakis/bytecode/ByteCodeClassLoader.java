@@ -35,15 +35,9 @@ public class ByteCodeClassLoader extends ClassLoader
 	{
 		String name = byteCodeType.typeDescriptor().typeName;
 		byte[] bytes = Kit.map.tryGet( byteArraysByTypeName, name );
+		assert bytes == null || Arrays.equals( bytes, byteCodeType.write() );
 		if( bytes == null )
-		{
-			bytes = byteCodeType.write();
-			Kit.map.add( byteArraysByTypeName, name, bytes ); //TODO: try exercising replacing, see if defineClass() can redefine a class
-		}
-		else
-		{
-			assert Arrays.equals( bytes, byteCodeType.write() );
-		}
+			Kit.map.add( byteArraysByTypeName, name, byteCodeType.write() ); //TODO: try exercising replacing, see if defineClass() can redefine a class
 		Class<?> javaClass = Kit.unchecked( () -> loadClass( name ) );
 		@SuppressWarnings( "unchecked" ) Class<T> result = (Class<T>)javaClass;
 		return result;

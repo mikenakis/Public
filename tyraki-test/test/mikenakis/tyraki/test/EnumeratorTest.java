@@ -100,13 +100,13 @@ public abstract class EnumeratorTest
 		enumerator.deleteCurrent();
 		checkForDeleted( enumerator );
 		enumerator.moveNext();
-		assert collect( factory ).equalsUnmodifiableCollection( UnmodifiableCollection.of( "a", "c" ) );
+		assert collect( factory ).equalsCollection( UnmodifiableCollection.of( "a", "c" ) );
 		assert !enumerator.isFinished();
 		assert enumerator.getCurrent().equals( "c" );
 		enumerator.deleteCurrent();
 		checkForDeleted( enumerator );
 		enumerator.moveNext();
-		assert collect( factory ).equalsUnmodifiableCollection( UnmodifiableCollection.of( "a" ) );
+		assert collect( factory ).equalsCollection( UnmodifiableCollection.of( "a" ) );
 		checkForFinished( enumerator );
 		assert enumerator.isFinished();
 		checkForFinished( enumerator );

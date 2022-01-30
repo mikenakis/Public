@@ -55,7 +55,7 @@ class MapKeysCollection<K, V> implements UnmodifiableCollection.Defaults<K>
 		if( other instanceof UnmodifiableCollection )
 		{
 			@SuppressWarnings( "unchecked" ) UnmodifiableCollection<K> otherAsUnmodifiableCollection = (UnmodifiableCollection<K>)other;
-			return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
+			return equalsCollection( otherAsUnmodifiableCollection );
 		}
 		assert false; //does this ever happen?
 		return false;

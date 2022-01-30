@@ -32,6 +32,6 @@ abstract class AbstractMutableCollection<E> extends AbstractMutableEnumerable<E>
 	public final boolean equals( UnmodifiableCollection<?> other )
 	{
 		@SuppressWarnings( "unchecked" ) UnmodifiableCollection<E> otherAsUnmodifiableCollection = (UnmodifiableCollection<E>)other;
-		return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
+		return equalsCollection( otherAsUnmodifiableCollection );
 	}
 }

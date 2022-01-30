@@ -64,21 +64,21 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		MutableMap<K,String> map = newMap();
 		assert map.isEmpty();
 		map.add( b11.getKey(), b11.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11 ) );
 		map.add( b22.getKey(), b22.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22 ) );
 		map.add( b33.getKey(), b33.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b33.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22, b33 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b33.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22, b33 ) );
 		map.add( b44.getKey(), b44.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey(), b44.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b33.getValue(), b44.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22, b33, b44 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey(), b44.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b33.getValue(), b44.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22, b33, b44 ) );
 	}
 
 	@Test
@@ -231,13 +231,13 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		MutableMap<K,String> map = newMap();
 		assert map.isEmpty();
 		map.add( b11.getKey(), b11.getValue() );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11 ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11 ) );
 		map.add( b22.getKey(), b22.getValue() );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22 ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22 ) );
 		map.add( b33.getKey(), b33.getValue() );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22, b33 ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22, b33 ) );
 		map.removeKey( b11.getKey() );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b22, b33 ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b22, b33 ) );
 		map.clear();
 		assert map.isEmpty();
 	}
@@ -252,13 +252,13 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		assert map.isEmpty();
 		assert map.keys().isEmpty();
 		map.add( b11.getKey(), b11.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey() ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey() ) );
 		map.add( b22.getKey(), b22.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey() ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey() ) );
 		map.add( b33.getKey(), b33.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
 		map.removeKey( b11.getKey() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b22.getKey(), b33.getKey() ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b22.getKey(), b33.getKey() ) );
 		map.clear();
 		assert map.keys().isEmpty();
 	}
@@ -273,13 +273,13 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		assert map.isEmpty();
 		assert map.values().isEmpty();
 		map.add( b11.getKey(), b11.getValue() );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue() ) );
 		map.add( b22.getKey(), b22.getValue() );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue() ) );
 		map.add( b33.getKey(), b33.getValue() );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b33.getValue() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b33.getValue() ) );
 		map.removeKey( b11.getKey() );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b22.getValue(), b33.getValue() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b22.getValue(), b33.getValue() ) );
 		map.clear();
 		assert map.values().isEmpty();
 	}
@@ -301,12 +301,12 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		map.mutableEntries().add( b33 );
 		assert map.size() == 3;
 		assert Objects.equals( map.get( b33.getKey() ), b33.getValue() );
-		assert map.mutableEntries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22, b33 ) );
+		assert map.mutableEntries().equalsCollection( UnmodifiableCollection.of( b11, b22, b33 ) );
 		map.mutableEntries().remove( b33 );
 		assert map.size() == 2;
 		assert !map.containsKey( b33.getKey() );
 		assert !map.containsValue( b33.getValue() );
-		assert map.mutableEntries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22 ) );
+		assert map.mutableEntries().equalsCollection( UnmodifiableCollection.of( b11, b22 ) );
 		map.clear();
 		assert map.isEmpty();
 	}
@@ -323,17 +323,17 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		MutableMap<K,String> map = newMap();
 		assert map.isEmpty();
 		map.add( b11.getKey(), b11.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11 ) );
 		map.add( b22.getKey(), b22.getValue() );
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22 ) );
 		map.add( b33.getKey(), b22.getValue() ); //adding V2 again
-		assert map.keys().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
-		assert map.values().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b22.getValue() ) );
-		assert map.entries().equalsUnmodifiableCollection( UnmodifiableCollection.of( b11, b22, b32 ) );
+		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
+		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b22.getValue() ) );
+		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22, b32 ) );
 		DuplicateKeyException exception = Kit.testing.expectException( DuplicateKeyException.class, () -> map.add( b33.getKey(), b33.getValue() ) );
 		assert exception.key == b33.getKey();
 		assert exception.oldValue.equals( b22.getValue() );

@@ -122,12 +122,12 @@ public abstract class IteratorTest
 		assert iterator.hasNext();
 		assert iterator.next().equals( "b" );
 		iterator.remove();
-		assert collect( iterable ).equalsUnmodifiableCollection( UnmodifiableCollection.of( "a", "c" ) );
+		assert collect( iterable ).equalsCollection( UnmodifiableCollection.of( "a", "c" ) );
 		checkForIllegalStateException( iterator );
 		assert iterator.hasNext();
 		assert iterator.next().equals( "c" );
 		iterator.remove();
-		assert collect( iterable ).equalsUnmodifiableCollection( UnmodifiableCollection.of( "a" ) );
+		assert collect( iterable ).equalsCollection( UnmodifiableCollection.of( "a" ) );
 		checkForIllegalStateException( iterator );
 		assert !iterator.hasNext();
 		checkForIllegalStateException( iterator );
@@ -144,12 +144,12 @@ public abstract class IteratorTest
 		//assert iterator.hasNext(); do not invoke hasNext(), since this is a blind traversal!
 		assert iterator.next().equals( "b" );
 		iterator.remove();
-		assert collect( iterable ).equalsUnmodifiableCollection( UnmodifiableCollection.of( "a", "c" ) );
+		assert collect( iterable ).equalsCollection( UnmodifiableCollection.of( "a", "c" ) );
 		checkForIllegalStateException( iterator );
 		//assert iterator.hasNext(); do not invoke hasNext(), since this is a blind traversal!
 		assert iterator.next().equals( "c" );
 		iterator.remove();
-		assert collect( iterable ).equalsUnmodifiableCollection( UnmodifiableCollection.of( "a" ) );
+		assert collect( iterable ).equalsCollection( UnmodifiableCollection.of( "a" ) );
 		checkForIllegalStateException( iterator );
 		//assert !iterator.hasNext(); do not invoke hasNext(), since this is a blind traversal!
 		checkForIllegalStateException( iterator );

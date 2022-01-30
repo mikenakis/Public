@@ -32,7 +32,7 @@ abstract class LegacyAbstractMutableCollection<E> implements MutableCollection.D
 		if( other instanceof UnmodifiableCollection )
 		{
 			@SuppressWarnings( "unchecked" ) UnmodifiableCollection<E> otherAsUnmodifiableCollection = (UnmodifiableCollection<E>)other;
-			return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
+			return equalsCollection( otherAsUnmodifiableCollection );
 		}
 		assert false;
 		return false;

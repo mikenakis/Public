@@ -280,7 +280,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 *
 	 * @return {@code true} if the two {@link UnmodifiableList}s have the same contents.
 	 */
-	boolean equalsUnmodifiableList( UnmodifiableList<? extends E> other );
+	boolean equalsList( UnmodifiableList<? extends E> other );
 
 	/**
 	 * Fetches the last element in the {@link UnmodifiableList}.
@@ -582,7 +582,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 		 *
 		 * @return {@code true} if the two {@link UnmodifiableList}s have the same contents.
 		 */
-		@Override default boolean equalsUnmodifiableList( UnmodifiableList<? extends E> other )
+		@Override default boolean equalsList( UnmodifiableList<? extends E> other )
 		{
 			if( this == other )
 				return true;

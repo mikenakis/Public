@@ -178,7 +178,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			if( other instanceof UnmodifiableCollection )
 			{
 				@SuppressWarnings( "unchecked" ) UnmodifiableCollection<K> otherAsUnmodifiableCollection = (UnmodifiableCollection<K>)other;
-				return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
+				return equalsCollection( otherAsUnmodifiableCollection );
 			}
 			assert false;
 			return false;
@@ -281,7 +281,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			if( other instanceof UnmodifiableCollection )
 			{
 				@SuppressWarnings( "unchecked" ) UnmodifiableCollection<V> otherAsUnmodifiableCollection = (UnmodifiableCollection<V>)other;
-				return equalsUnmodifiableCollection( otherAsUnmodifiableCollection );
+				return equalsCollection( otherAsUnmodifiableCollection );
 			}
 			assert false;
 			return false;
