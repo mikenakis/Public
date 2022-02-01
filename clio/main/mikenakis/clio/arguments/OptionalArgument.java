@@ -10,7 +10,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public final class OptionalArgument<T> implements Argument<Optional<T>>
+public final class OptionalArgument<T> extends Argument<Optional<T>>
 {
 	private final Argument<T> delegee;
 	private boolean parsed;
@@ -21,15 +21,13 @@ public final class OptionalArgument<T> implements Argument<Optional<T>>
 		this.delegee = delegee;
 	}
 
-	@Override public String name()
-	{
-		return delegee.name();
-	}
-
-	@Override public String description()
-	{
-		return delegee.description();
-	}
+	@Override public String name() { return delegee.name(); }
+	@Override public String description() { return delegee.description(); }
+	@Override public String getShortUsage() { return "[" + delegee.getShortUsage() + "]"; }
+	@Override public String getLongUsage() { return delegee.getLongUsage() + " (optional)"; }
+	@Override public boolean isPositional() { return delegee.isPositional(); }
+	@Override public boolean isOptional() { return true; }
+	@Override public String debugString() { return getClass().getSimpleName() + "(" + delegee.debugString() + ")"; }
 
 	@Override public Try<Boolean> tryParse( List<String> tokens )
 	{
@@ -40,34 +38,9 @@ public final class OptionalArgument<T> implements Argument<Optional<T>>
 		return result;
 	}
 
-	@Override public String getShortUsage()
-	{
-		return "[" + delegee.getShortUsage() + "]";
-	}
-
-	@Override public String getLongUsage()
-	{
-		return delegee.getLongUsage() + " (optional)";
-	}
-
-	@Override public boolean isPositional()
-	{
-		return delegee.isPositional();
-	}
-
-	@Override public boolean isOptional()
-	{
-		return true;
-	}
-
-	@Override public String toString()
-	{
-		return "Optional(" + delegee.toString() + ")";
-	}
-
 	@Override public Optional<T> get()
 	{
-		if( !parsed)
+		if( !parsed )
 			return Optional.empty();
 		return Optional.of( delegee.get() );
 	}

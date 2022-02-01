@@ -10,13 +10,19 @@ import java.util.function.Supplier;
  *
  * @author michael.gr
  */
-public interface Argument<T> extends Supplier<T>
+public abstract class Argument<T> implements Supplier<T>
 {
-	String name();
-	String description();
-	Try<Boolean> tryParse( List<String> tokens );
-	String getShortUsage();
-	String getLongUsage();
-	boolean isPositional();
-	boolean isOptional();
+	public abstract String name();
+	public abstract String description();
+	public abstract Try<Boolean> tryParse( List<String> tokens );
+	public abstract String getShortUsage();
+	public abstract String getLongUsage();
+	public abstract boolean isPositional();
+	public abstract boolean isOptional();
+	public abstract String debugString();
+
+	@Override public final String toString()
+	{
+		return debugString() + " = " + get();
+	}
 }

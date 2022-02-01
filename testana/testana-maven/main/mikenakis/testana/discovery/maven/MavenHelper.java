@@ -1,6 +1,5 @@
 package mikenakis.testana.discovery.maven;
 
-import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.building.DefaultModelBuilderFactory;
@@ -100,9 +99,7 @@ final class MavenHelper
 
 	private static Properties getUserProperties()
 	{
-		Properties properties = new Properties();
-		Kit.map.add( properties, "env.OUT", System.getenv( "OUT" ) );
-		return properties;
+		return new Properties();
 	}
 
 	private static void reportMavenModelProblems( Iterable<ModelProblem> mavenModelProblems )

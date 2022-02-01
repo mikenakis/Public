@@ -5,7 +5,7 @@ package mikenakis.clio.arguments;
  *
  * @author michael.gr
  */
-public abstract class BaseArgument<T> implements Argument<T>
+public abstract class BaseArgument<T> extends Argument<T>
 {
 	private final String name; //the argument-name, for displaying usage information. For example, "help-switch" or "output-option".
 	private final String description;
@@ -16,18 +16,7 @@ public abstract class BaseArgument<T> implements Argument<T>
 		this.description = description;
 	}
 
-	@Override public final String name()
-	{
-		return name;
-	}
-
-	@Override public final String description()
-	{
-		return description;
-	}
-
-	@Override public final String toString()
-	{
-		return getClass().getSimpleName() + " \"" + name + "\"";
-	}
+	@Override public final String name() { return name; }
+	@Override public final String description() { return description; }
+	@Override public final String debugString() { return getClass().getSimpleName() + " \"" + name + "\""; }
 }

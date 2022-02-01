@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>mikenakis</groupId>
@@ -49,7 +49,8 @@
 	</modules>
 
 	<build>
-		<directory>${env.OUT}/${project.groupId}/${project.artifactId}</directory>
+		<directory>OUT</directory>
+		<sourceDirectory>src</sourceDirectory>
 		<resources>
 			<resource>
 				<directory>resources</directory>
@@ -77,64 +78,43 @@
 						<arg>-Xlint</arg>
 
 						<!-- The "try" sub-option of the "Xlint" option is mind-bogglingly stupid.
-						     It lives in a simplistic world in which resources are always created, used, and disposed within the a single function,
-						     so it aims to warn you that you forgot to dispose a resource within the function that created it.
-						     The following possibilities never occurred to the mastermind who invented this option:
-						      - that you might invoke a function which creates a resource and returns it to the function that will use the
-						        the resource and then of course dispose it.
-						      - that you might create a resource and store it as a member variable of a containing object, which will of course
-						        dispose the resource when it gets disposed.
-						     So, the only reasonable thing to do with this warning is to always keep it disabled. -->
+							It lives in a simplistic world in which resources are always created, used, and disposed
+							within a single function, so it aims to warn you that you forgot to dispose a resource
+							within the function that created it.
+							The following possibilities never occurred to the mastermind who invented this option:
+							- You might invoke a function which creates a resource and returns it, to be used and of
+							course disposed by the caller.
+							- You might create a resource and store it as a member variable of an object, which will
+							of course dispose the resource when it gets disposed.
+							So, the only reasonable thing to do with this warning is to always keep it disabled. -->
 						<arg>-Xlint:-try</arg>
 
-						<!-- The "serial" sub-option of the "Xlint" option "Warns about missing serialVersionUID definitions on serializable
-						     classes".
-						     In other words, every single time you extend some predefined class, you will be hit with an annoying warning
-						     just because the class you are extending happens to be serializable, a feature which you usually have no use for,
-						     don't care about, and don't want to know anything about. -->
+						<!-- The "serial" sub-option of the "Xlint" option "Warns about missing serialVersionUID
+							definitions on serializable classes". In other words, every single time you extend some
+							predefined class, you will be hit with an annoying warning just because the class you are
+							extending happens to be serializable, a feature which you usually have no use for, don't
+							care about, and don't want to be bothered about. -->
 						<arg>-Xlint:-serial</arg>
+
+						<!-- The "cast" sub-option of the "Xlint" option "Warns about the use of unnecessary casts." -->
+						<!-- <arg>-Xlint:-cast</arg>-->
 
 						<!-- If there are any warnings, we want compilation to fail. We don't want any half-measures. -->
 						<arg>-Werror</arg>
 
-						<!-- When the packaging is 'jar', IntellijIdea insists on creating a 'target/generated-sources/annotations' directory
-						     in our source tree each time we build,
-						     and it does this even if we have specified that we do not want annotation processing.
-						     Furthermore, it does this even if we have specified that classes should be written elsewhere, precisely because
-						     we do not want our source code tree being littered with 'target' directories.
-						     The only way I have found to prevent this is by explicitly disabling annotation processing with -proc:none -->
+						<!-- When the packaging is 'jar', IntellijIdea creates an "annotations" directory in our source
+							tree each time we build. ("target/generated-sources/annotations".)
+							IntellijIdea insists on doing this, despite the fact that:
+							- We have specified that we do not want any annotation processing to take place.
+							- We have specified our output folder to be in some place well outside our source tree,
+							precisely because we do not want our source code tree being littered with all kinds of
+							annoying directories that have absolutely no reason being in our source code tree.
+							The only way I have found to prevent this is by explicitly disabling annotation processing
+							with -proc:none -->
 						<arg>-proc:none</arg>
 
 					</compilerArgs>
 				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
-				<executions>
-					<execution>
-						<id>enforce-property</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireProperty>
-									<property>env.OUT</property>
-									<message>
-										Environment variable 'OUT' is missing.
-										The 'OUT' environment variable must be specified
-										and it must point to the directory where output files will be stored.
-										(for example, ~/temp/out)
-									</message>
-								</requireProperty>
-							</rules>
-							<fail>true</fail>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 
 			<plugin>
@@ -144,7 +124,7 @@
 				<configuration>
 					<includes>
 						<!-- PEARL: the maven-surefire-plugin:
-						    1. unnecessarily complicates things with a useless concept of inclusions and exclusions
+							1. unnecessarily complicates things with a useless concept of inclusions and exclusions
 							2. sabotages the developer with default inclusions that pretty much require test class names to contain the word "Test".
 							(That's what you always achieve when you unnecessarily complicate things: you sabotage people.)
 							We correct this problem here by annihilating the plugin's concept of inclusions. -->

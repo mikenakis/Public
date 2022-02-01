@@ -10,7 +10,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public final class DefaultingArgument<T> implements Argument<T>
+public final class DefaultingArgument<T> extends Argument<T>
 {
 	private final Argument<Optional<T>> delegee;
 	private boolean parsed;
@@ -42,33 +42,10 @@ public final class DefaultingArgument<T> implements Argument<T>
 		return result;
 	}
 
-	@Override public String getShortUsage()
-	{
-		return "[" + delegee.getShortUsage() + "]";
-	}
-
-	@Override public String getLongUsage()
-	{
-		return delegee.getLongUsage() + " (optional; default = " + defaultValue + ")";
-	}
-
-	@Override public boolean isPositional()
-	{
-		return delegee.isPositional();
-	}
-
-	@Override public boolean isOptional()
-	{
-		return true;
-	}
-
-	@Override public String toString()
-	{
-		return "OptionalWithDefault(" + delegee.toString() + ")";
-	}
-
-	@Override public T get()
-	{
-		return delegee.get().orElse( defaultValue );
-	}
+	@Override public String getShortUsage() { return "[" + delegee.getShortUsage() + "]"; }
+	@Override public String getLongUsage() { return delegee.getLongUsage() + " (optional; default = " + defaultValue + ")"; }
+	@Override public boolean isPositional() { return delegee.isPositional(); }
+	@Override public boolean isOptional() { return true; }
+	@Override public String debugString() { return getClass().getSimpleName() + "(" + delegee.debugString() + ")"; }
+	@Override public T get() { return delegee.get().orElse( defaultValue ); }
 }
