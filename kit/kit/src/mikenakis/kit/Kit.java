@@ -29,6 +29,11 @@ import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -2868,11 +2873,11 @@ public final class Kit
 		{
 			assert expectedThrowableClass != null;
 			assert procedure != null;
-			Throwable throwable = invokeAndCatch( procedure );
-			assert throwable != null : new ExceptionExpectedException( expectedThrowableClass );
-			throwable = unwrap( throwable );
-			assert throwable.getClass() == expectedThrowableClass : new ExceptionDiffersFromExpectedException( expectedThrowableClass, throwable );
-			return expectedThrowableClass.cast( throwable );
+			Throwable caughtThrowable = invokeAndCatch( procedure );
+			assert caughtThrowable != null : new ExceptionExpectedException( expectedThrowableClass );
+			caughtThrowable = unwrap( caughtThrowable );
+			assert caughtThrowable.getClass() == expectedThrowableClass : new ExceptionDiffersFromExpectedException( expectedThrowableClass, caughtThrowable );
+			return expectedThrowableClass.cast( caughtThrowable );
 		}
 
 		private static Throwable unwrap( Throwable throwable )
@@ -2959,6 +2964,96 @@ public final class Kit
 	@SuppressWarnings( "unchecked" ) public static <T extends Throwable> RuntimeException sneakyException( Throwable t ) throws T
 	{
 		throw (T)t;
+	}
+
+	public static boolean isStatic( Member member )
+	{
+		int modifiers = member.getModifiers();
+		return Modifier.isStatic( modifiers );
+	}
+
+	private static boolean isValidMemberAssertion( Optional<Object> optionalTarget, Member member )
+	{
+		assert isStatic( member ) == optionalTarget.isEmpty();
+		optionalTarget.ifPresent( target ->
+		{
+			Class<?> declaringClass = member.getDeclaringClass();
+			Class<?> targetClass = target.getClass();
+			assert declaringClass.isAssignableFrom( targetClass );
+		} );
+		return true;
+	}
+
+	private static boolean isValidMethodCallAssertion( Optional<Object> optionalTarget, Method method, Object[] arguments )
+	{
+		assert isValidMemberAssertion( optionalTarget, method );
+		assert method.getParameterCount() == arguments.length;
+		return true;
+	}
+
+	private static <T> boolean isValidConstructorAssertion( Class<T> targetClass, Constructor<T> constructor )
+	{
+		assert constructor.getDeclaringClass() == targetClass;
+		return true;
+	}
+
+	private static <T> boolean isValidConstructorCallAssertion( Class<T> targetClass, Constructor<T> constructor, Object[] arguments )
+	{
+		assert isValidConstructorAssertion( targetClass, constructor );
+		assert constructor.getParameterCount() == arguments.length;
+		return true;
+	}
+
+	public static <T> T invokeInstanceMethod( Object target, Method method, Object... arguments )
+	{
+		return invokeMethod( Optional.of( target ), method, arguments );
+	}
+
+	public static <T> T invokeMethod( Optional<Object> target, Method method, Object... arguments )
+	{
+		assert isValidMemberAssertion( target, method );
+		//method.setAccessible( true );
+		try
+		{
+			@SuppressWarnings( "unchecked" ) T result = (T)method.invoke( target.orElse( null ), arguments );
+			return result;
+		}
+		catch( InvocationTargetException exception )
+		{
+			Throwable throwable = exception.getCause();
+			if( throwable instanceof RuntimeException runtimeException )
+				throw runtimeException;
+			throw sneakyException( throwable );
+		}
+		catch( IllegalAccessException | IllegalArgumentException exception )
+		{
+			throw new RuntimeException( exception );
+		}
+	}
+
+	public static <T> T newInstance( Class<T> targetClass, Constructor<T> constructor, Object... arguments )
+	{
+		assert isValidConstructorCallAssertion( targetClass, constructor, arguments );
+		//method.setAccessible( true );
+		try
+		{
+			return constructor.newInstance( arguments );
+		}
+		catch( InvocationTargetException exception )
+		{
+			Throwable throwable = exception.getCause();
+			if( throwable instanceof RuntimeException runtimeException )
+				throw runtimeException;
+			throw sneakyException( throwable );
+		}
+		catch( IllegalAccessException | IllegalArgumentException exception )
+		{
+			throw new RuntimeException( exception );
+		}
+		catch( InstantiationException exception )
+		{
+			throw new UncheckedException( exception );
+		}
 	}
 
 	////////////////////////////
@@ -3149,12 +3244,11 @@ public final class Kit
 		return class1.isAssignableFrom( class2 );
 	}
 
-	public static <S> Optional<Class<S>> as( Class<S> jvmClass1, Class<?> jvmClass2 )
+	public static <R,S> Optional<R> tryAs( Class<R> jvmClass, S instance )
 	{
-		if( !jvmClass1.isAssignableFrom( jvmClass2 ) )
-			return Optional.empty();
-		@SuppressWarnings( "unchecked" ) Class<S> result = (Class<S>)jvmClass2;
-		return Optional.of( result );
+		if( jvmClass.isInstance( instance ) )
+			return Optional.of( jvmClass.cast( instance ) );
+		return Optional.empty();
 	}
 
 	/**

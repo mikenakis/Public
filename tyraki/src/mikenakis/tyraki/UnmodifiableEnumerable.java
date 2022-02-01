@@ -2,6 +2,7 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
@@ -184,6 +185,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 */
 	UnmodifiableEnumerable<E> filter( Predicate<? super E> predicate );
 
+	<T extends E> UnmodifiableEnumerable<T> filter( Class<T> elementClass );
+
 	/**
 	 * Gets a new {@link UnmodifiableEnumerable} representing the elements converted by a given {@link Function1}.
 	 *
@@ -197,7 +200,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 * Uses a given converter to convert each element to an {@link UnmodifiableEnumerable} of T and returns a single enumerable of T chaining together all
 	 * the resulting enumerables.
 	 */
-	<T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> converter );
+	<T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> multiplier );
 
 	/**
 	 * Creates a new {@link UnmodifiableEnumerable} representing the elements of this {@link UnmodifiableEnumerable} converted and filtered using the given {@link Function1}.
@@ -497,6 +500,11 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			return ConversionCollections.newFilteringEnumerable( this, predicate );
 		}
 
+		@Override default <T extends E> UnmodifiableEnumerable<T> filter( Class<T> elementClass )
+		{
+			return flatMapOptionals( element -> Kit.tryAs( elementClass, element ) );
+		}
+
 		@Override default <T> UnmodifiableEnumerable<T> map( Function1<? extends T,? super E> converter )
 		{
 			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, ( i, e ) -> converter.invoke( e ) );
@@ -687,9 +695,9 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			}
 		}
 
-		@Override default <T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> converter )
+		@Override default <T> UnmodifiableEnumerable<T> flatMap( Function1<UnmodifiableEnumerable<T>,E> multiplier )
 		{
-			return new FlatteningEnumerable<>( this, converter );
+			return new FlatteningEnumerable<>( this, multiplier );
 		}
 
 		@Override default <T> T reduce( T start, Function2<T,T,E> combiner )

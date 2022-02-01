@@ -198,6 +198,8 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 
 	<T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator );
 
+	<T> UnmodifiableCollection<T> flatMapCollection( Function1<UnmodifiableCollection<T>,E> multiplier );
+
 	/**
 	 * Checks whether this {@link UnmodifiableCollection} contains any duplicate elements.
 	 *
@@ -377,6 +379,11 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 			Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 		{
 			return ConversionCollections.newConvertingCollection( this, converter, reverter, equalityComparator );
+		}
+
+		@Override default <T> UnmodifiableCollection<T> flatMapCollection( Function1<UnmodifiableCollection<T>,E> multiplier )
+		{
+			return new FlatteningCollection<>( this, multiplier );
 		}
 
 		@Override default <T extends E> UnmodifiableCollection<T> upCast()

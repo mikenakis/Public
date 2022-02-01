@@ -57,15 +57,29 @@ public final class Persistence
 		if( skipLoad )
 		{
 			dirty = true;
-			return;
 		}
-		if( !Files.exists( persistencePathName ) )
-			return;
-		Map<String,TestClassInfo> map = Kit.uncheckedTryGetWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
+		else
+		{
+			if( !Files.exists( persistencePathName ) )
+				return;
+			try
+			{
+				load( persistencePathName );
+			}
+			catch( Throwable exception )
+			{
+				Log.warning( "Failed to load persistence due to " + exception.getClass() + (exception.getMessage() == null ? "" : ": " + exception.getMessage()) );
+			}
+		}
+	}
+
+	private void load( Path persistencePathName )
+	{
+		Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
-			return rootReader.readArray( "elementName", arrayReader -> //
+			rootReader.readArray( "elementName", arrayReader -> //
 			{
 				Map<String,TestClassInfo> mutableMap = new LinkedHashMap<>();
 				arrayReader.readElements( elementReader -> //
@@ -78,10 +92,9 @@ public final class Persistence
 					} );
 					Kit.map.add( mutableMap, entry.testClassName, entry );
 				} );
-				return mutableMap;
+				entryFromNameMap.putAll( mutableMap );
 			} );
 		} );
-		entryFromNameMap.putAll( map );
 	}
 
 	public boolean isDirty()

@@ -5,17 +5,17 @@ import mikenakis.kit.functional.Function1;
 class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 {
 	private final UnmodifiableEnumerable<E> primaryEnumerable;
-	private final Function1<UnmodifiableEnumerable<T>,E> converter;
+	private final Function1<UnmodifiableEnumerable<T>,E> multiplier;
 
-	FlatteningEnumerable( UnmodifiableEnumerable<E> primaryEnumerable, Function1<UnmodifiableEnumerable<T>,E> converter )
+	FlatteningEnumerable( UnmodifiableEnumerable<E> primaryEnumerable, Function1<UnmodifiableEnumerable<T>,E> multiplier )
 	{
 		this.primaryEnumerable = primaryEnumerable;
-		this.converter = converter;
+		this.multiplier = multiplier;
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
-		return new MyEnumerator<>( primaryEnumerable.newUnmodifiableEnumerator(), converter );
+		return new MyEnumerator<>( primaryEnumerable.newUnmodifiableEnumerator(), multiplier );
 	}
 
 	@Override public int getModificationCount()
@@ -30,15 +30,15 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 
 	private static class MyEnumerator<T, E> implements UnmodifiableEnumerator.Defaults<T>
 	{
-		private final Function1<UnmodifiableEnumerable<T>,E> converter;
 		private final UnmodifiableEnumerator<E> primaryEnumerator;
+		private final Function1<UnmodifiableEnumerable<T>,E> multiplier;
 		private UnmodifiableEnumerator<T> secondaryEnumerator;
 
-		MyEnumerator( UnmodifiableEnumerator<E> primaryEnumerator, Function1<UnmodifiableEnumerable<T>,E> converter )
+		MyEnumerator( UnmodifiableEnumerator<E> primaryEnumerator, Function1<UnmodifiableEnumerable<T>,E> multiplier )
 		{
-			this.converter = converter;
 			this.primaryEnumerator = primaryEnumerator;
-			secondaryEnumerator = reload( primaryEnumerator, converter );
+			this.multiplier = multiplier;
+			secondaryEnumerator = reload( primaryEnumerator, multiplier );
 		}
 
 		@Override public boolean isFinished()
@@ -57,11 +57,12 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 			assert secondaryEnumerator != null;
 			secondaryEnumerator.moveNext();
 			if( secondaryEnumerator.isFinished() )
-				secondaryEnumerator = reload( primaryEnumerator, converter );
+				secondaryEnumerator = reload( primaryEnumerator, multiplier );
 			return this;
 		}
 
-		private static <T, E> UnmodifiableEnumerator<T> reload( UnmodifiableEnumerator<E> primaryEnumerator, Function1<UnmodifiableEnumerable<T>,E> converter )
+		//TODO convert to instance method
+		private static <T, E> UnmodifiableEnumerator<T> reload( UnmodifiableEnumerator<E> primaryEnumerator, Function1<UnmodifiableEnumerable<T>,E> multiplier )
 		{
 			for( ; ; )
 			{
@@ -69,7 +70,7 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 					return null;
 				E primaryElement = primaryEnumerator.getCurrent();
 				primaryEnumerator.moveNext();
-				UnmodifiableEnumerable<T> secondaryEnumerable = converter.invoke( primaryElement );
+				UnmodifiableEnumerable<T> secondaryEnumerable = multiplier.invoke( primaryElement );
 				UnmodifiableEnumerator<T> secondaryEnumerator = secondaryEnumerable.newUnmodifiableEnumerator();
 				if( !secondaryEnumerator.isFinished() )
 					return secondaryEnumerator;
