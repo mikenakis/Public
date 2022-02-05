@@ -41,10 +41,15 @@ import java.util.Comparator;
  */
 public final class MutableCollections extends Mutable
 {
+	public static MutableCollections of( MutationContext mutationContext )
+	{
+		return new MutableCollections( mutationContext );
+	}
+
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_FILL_FACTOR = 0.75f;
 
-	public MutableCollections( MutationContext mutationContext  )
+	private MutableCollections( MutationContext mutationContext  )
 	{
 		super( mutationContext );
 	}

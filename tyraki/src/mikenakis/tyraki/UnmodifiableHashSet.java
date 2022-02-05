@@ -3,9 +3,8 @@ package mikenakis.tyraki;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
-import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.tyraki.mutable.MutableCollections;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 
 /**
  * Unmodifiable Hash Set.
@@ -27,13 +26,9 @@ public interface UnmodifiableHashSet<E> extends UnmodifiableCollection<E>
 	{
 		if( items.isEmpty() )
 			return of();
-		return MutationContext.tryGetWithLocal( mutationContext -> //
-		{
-			MutableCollections mutableCollections = new MutableCollections( mutationContext );
-			FreezableHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
-			mutableSet.addAll( items );
-			return mutableSet.frozen();
-		} );
+		FreezableHashSet<E> mutableSet = SingleThreadedMutableCollections.instance().newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
+		mutableSet.addAll( items );
+		return mutableSet.frozen();
 	}
 
 	/**

@@ -5,10 +5,9 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.tyraki.mutable.MutableCollections;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -72,13 +71,9 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements instanceof UnmodifiableList && elements.isFrozen() ) //TODO perhaps introduce UnmodifiableCollection.tryAsList()
 			return (UnmodifiableList<E>)elements;
-		return MutationContext.tryGetWithLocal( mutationContext -> //
-		{
-			MutableCollections mutableCollections = new MutableCollections( mutationContext );
-			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
-			mutableList.addAll( elements );
-			return mutableList.frozen();
-		} );
+		FreezableList<E> mutableList = SingleThreadedMutableCollections.instance().newArrayList( elements.size(), equalityComparator );
+		mutableList.addAll( elements );
+		return mutableList.frozen();
 	}
 
 	static <E> UnmodifiableList<E> from( UnmodifiableList<E> elements, EqualityComparator<? super E> equalityComparator )
@@ -87,13 +82,9 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements.isFrozen() )
 			return elements;
-		return MutationContext.tryGetWithLocal( mutationContext -> //
-		{
-			MutableCollections mutableCollections = new MutableCollections( mutationContext );
-			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
-			mutableList.addAll( elements );
-			return mutableList.frozen();
-		} );
+		FreezableList<E> mutableList = SingleThreadedMutableCollections.instance().newArrayList( elements.size(), equalityComparator );
+		mutableList.addAll( elements );
+		return mutableList.frozen();
 	}
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint

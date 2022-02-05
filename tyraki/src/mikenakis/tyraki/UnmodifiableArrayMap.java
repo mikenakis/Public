@@ -1,9 +1,8 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.tyraki.mutable.MutableCollections;
+import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 
 /**
  * Unmodifiable Array Map.
@@ -23,13 +22,9 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return MutationContext.tryGetWithLocal( mutationContext -> //
-		{
-			MutableCollections mutableCollections = new MutableCollections( mutationContext );
-			FreezableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
-			mutableMap.addAll( bindings );
-			return mutableMap.frozen();
-		} );
+		FreezableArrayMap<K,V> mutableMap = SingleThreadedMutableCollections.instance().newArrayMap();
+		mutableMap.addAll( bindings );
+		return mutableMap.frozen();
 	}
 
 	/**

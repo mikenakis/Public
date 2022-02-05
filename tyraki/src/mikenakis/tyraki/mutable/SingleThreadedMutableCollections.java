@@ -10,7 +10,7 @@ import mikenakis.kit.mutation.SingleThreadedMutationContext;
 public final class SingleThreadedMutableCollections
 {
 	private static final ThreadLocal<MutableCollections> instance = ThreadLocal.withInitial( () -> //
-		new MutableCollections( SingleThreadedMutationContext.instance() ) );
+		MutableCollections.of( SingleThreadedMutationContext.instance() ) );
 
 	public static MutableCollections instance()
 	{
