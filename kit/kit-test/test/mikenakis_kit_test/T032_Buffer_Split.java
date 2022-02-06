@@ -2,6 +2,7 @@ package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class T032_Buffer_Split
 	{
 		Buffer buffer = Buffer.of( "a" );
 		Buffer nullBuffer = Kit.get( null );
-		Kit.testing.expectException( NullPointerException.class, () -> buffer.split( nullBuffer, false ) );
+		TestKit.expect( NullPointerException.class, () -> buffer.split( nullBuffer, false ) );
 	}
 
 	@Test
@@ -66,7 +67,7 @@ public class T032_Buffer_Split
 	{
 		Buffer buffer = Buffer.of( " a = b " );
 		Buffer delimiter = Buffer.EMPTY;
-		Kit.testing.expectException( IllegalArgumentException.class, () -> buffer.split( delimiter, false ) );
+		TestKit.expect( IllegalArgumentException.class, () -> buffer.split( delimiter, false ) );
 	}
 
 	@Test

@@ -4,10 +4,10 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeHelpers;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
-import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.nio.file.Files;

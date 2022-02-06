@@ -5,6 +5,7 @@ import mikenakis.bytecode.exceptions.IncompleteMutf8Exception;
 import mikenakis.bytecode.exceptions.MalformedMutf8Exception;
 import mikenakis.bytecode.kit.Buffer;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 /**
@@ -63,7 +64,7 @@ public class T001_Mutf8
 		for( int i = 0; i < 4; i++ )
 		{
 			Buffer buffer = bufferOf( 65, 0b1000_0000 | (i << 4) );
-			MalformedMutf8Exception exception = Kit.testing.expectException( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+			MalformedMutf8Exception exception = TestKit.expect( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 			assert exception.position == 1 : exception.position;
 		}
 	}
@@ -71,42 +72,42 @@ public class T001_Mutf8
 	@Test public void Malformed_Mutf8_Is_Caught_2()
 	{
 		Buffer buffer = bufferOf( 65, 0b1100_0000, 0b0111_1111 );
-		MalformedMutf8Exception exception = Kit.testing.expectException( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+		MalformedMutf8Exception exception = TestKit.expect( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 		assert exception.position == 2 : exception.position;
 	}
 
 	@Test public void Malformed_Mutf8_Is_Caught_3()
 	{
 		Buffer buffer = bufferOf( 65, 0b1111_0000 );
-		MalformedMutf8Exception exception = Kit.testing.expectException( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+		MalformedMutf8Exception exception = TestKit.expect( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 		assert exception.position == 1 : exception.position;
 	}
 
 	@Test public void Malformed_Mutf8_Is_Caught_4()
 	{
 		Buffer buffer = bufferOf( 65, 0b1110_0000, 0b1000_0000, 0b0111_1111 );
-		MalformedMutf8Exception exception = Kit.testing.expectException( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+		MalformedMutf8Exception exception = TestKit.expect( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 		assert exception.position == 3 : exception.position;
 	}
 
 	@Test public void Malformed_Mutf8_Is_Caught_5()
 	{
 		Buffer buffer = bufferOf( 65, 0b1110_0000, 0b1100_0000 );
-		MalformedMutf8Exception exception = Kit.testing.expectException( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+		MalformedMutf8Exception exception = TestKit.expect( MalformedMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 		assert exception.position == 2 : exception.position;
 	}
 
 	@Test public void Incomplete_Mutf8_Is_Caught_1()
 	{
 		Buffer buffer = bufferOf( 65, 0b1100_0000 );
-		IncompleteMutf8Exception exception = Kit.testing.expectException( IncompleteMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+		IncompleteMutf8Exception exception = TestKit.expect( IncompleteMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 		assert exception.position == 1;
 	}
 
 	@Test public void Incomplete_Mutf8_Is_Caught_2()
 	{
 		Buffer buffer = bufferOf( 65, 0b1110_0000, 0b1000_0000 );
-		IncompleteMutf8Exception exception = Kit.testing.expectException( IncompleteMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
+		IncompleteMutf8Exception exception = TestKit.expect( IncompleteMutf8Exception.class, () -> Mutf8ValueConstant.of( buffer ).stringValue() );
 		assert exception.position == 2;
 	}
 }

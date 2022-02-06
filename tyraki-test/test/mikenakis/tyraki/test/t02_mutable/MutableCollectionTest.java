@@ -1,6 +1,7 @@
 package mikenakis.tyraki.test.t02_mutable;
 
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableCollection;
@@ -164,13 +165,13 @@ public abstract class MutableCollectionTest<T>
 		T b = newElement();
 		T c = newElement();
 		assert collection.isEmpty();
-		Kit.testing.expectException( NoSuchElementException.class, () -> collection.remove( a ) );
+		TestKit.expect( NoSuchElementException.class, () -> collection.remove( a ) );
 		collection.add( a );
 		collection.add( b );
 		collection.add( c );
 		collection.remove( c );
 		assert collection.equalsCollection( UnmodifiableCollection.of( a, b ) );
-		Kit.testing.expectException( NoSuchElementException.class, () -> collection.remove( c ) );
+		TestKit.expect( NoSuchElementException.class, () -> collection.remove( c ) );
 		collection.remove( a );
 		assert collection.equalsCollection( UnmodifiableCollection.of( b ) );
 		collection.remove( b );
@@ -236,8 +237,8 @@ public abstract class MutableCollectionTest<T>
 		MutableCollection<T> collection = newCollection();
 		UnmodifiableEnumerator<T> enumerator = collection.newUnmodifiableEnumerator();
 		assert enumerator.isFinished();
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.moveNext() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.moveNext() );
 	}
 
 	@Test
@@ -250,8 +251,8 @@ public abstract class MutableCollectionTest<T>
 		assert !enumerator.isFinished();
 		assert enumerator.getCurrent().equals( a );
 		enumerator.moveNext();
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.moveNext() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.moveNext() );
 	}
 
 	@Test
@@ -277,8 +278,8 @@ public abstract class MutableCollectionTest<T>
 		enumerator.moveNext();
 		assert enumerator.isFinished();
 		assert collection2.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.moveNext() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.moveNext() );
 	}
 
 	@Test
@@ -312,7 +313,7 @@ public abstract class MutableCollectionTest<T>
 	{
 		MutableCollection<T> collection = newCollection();
 		MutableEnumerator<T> enumerator = collection.newMutableEnumerator();
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.deleteCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 	}
 
 	@Test
@@ -352,21 +353,21 @@ public abstract class MutableCollectionTest<T>
 		assert collection.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 		enumerator.deleteCurrent();
 		assert collection.size() == 2;
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.isFinished() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.deleteCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.isFinished() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 		enumerator.moveNext();
 		enumerator.getCurrent();
 		enumerator.deleteCurrent();
 		assert collection.size() == 1;
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.isFinished() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.deleteCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.isFinished() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 		enumerator.moveNext();
 		enumerator.deleteCurrent();
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.isFinished() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.deleteCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.isFinished() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 		enumerator.moveNext();
 		assert enumerator.isFinished();
 		assert collection.isEmpty();
@@ -389,8 +390,8 @@ public abstract class MutableCollectionTest<T>
 		enumerator.getCurrent();
 		collection.add( c );
 		enumerator.isFinished(); /** this is supposed to work irrespective of {@link ConcurrentModificationException} */
-		Kit.testing.expectException( ConcurrentModificationException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( ConcurrentModificationException.class, () -> enumerator.moveNext() );
+		TestKit.expect( ConcurrentModificationException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( ConcurrentModificationException.class, () -> enumerator.moveNext() );
 	}
 
 	@Test
@@ -409,8 +410,8 @@ public abstract class MutableCollectionTest<T>
 		enumerator.getCurrent();
 		collection.remove( a );
 		enumerator.isFinished(); /** this is supposed to work irrespective of {@link ConcurrentModificationException} */
-		Kit.testing.expectException( ConcurrentModificationException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( ConcurrentModificationException.class, () -> enumerator.moveNext() );
+		TestKit.expect( ConcurrentModificationException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( ConcurrentModificationException.class, () -> enumerator.moveNext() );
 	}
 
 	@Test
@@ -432,7 +433,7 @@ public abstract class MutableCollectionTest<T>
 		assert !isOrdered() || javaList.equals( Arrays.asList( a, b ) );
 		collection.clear();
 		enumerator.isFinished(); /** this is supposed to work irrespective of {@link ConcurrentModificationException} */
-		Kit.testing.expectException( ConcurrentModificationException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( ConcurrentModificationException.class, () -> enumerator.moveNext() );
+		TestKit.expect( ConcurrentModificationException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( ConcurrentModificationException.class, () -> enumerator.moveNext() );
 	}
 }

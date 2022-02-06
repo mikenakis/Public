@@ -3,6 +3,7 @@ package mikenakis_kit_test;
 import mikenakis.kit.Kit;
 import mikenakis.kit.Dyad;
 import mikenakis.kit.buffer.Buffer;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -50,13 +51,13 @@ public class T031_Buffer_SplitInTwo
 	public void Null_Delimiter_Fails()
 	{
 		Buffer nullBuffer = Kit.get( null );
-		Kit.testing.expectException( NullPointerException.class, () -> Buffer.of( "a" ).splitInTwo( nullBuffer, false ) );
+		TestKit.expect( NullPointerException.class, () -> Buffer.of( "a" ).splitInTwo( nullBuffer, false ) );
 	}
 
 	@Test
 	public void Empty_Delimiter_Fails()
 	{
-		Kit.testing.expectException( AssertionError.class, () -> Buffer.of( " a = b " ).splitInTwo( Buffer.EMPTY, false ) );
+		TestKit.expect( AssertionError.class, () -> Buffer.of( " a = b " ).splitInTwo( Buffer.EMPTY, false ) );
 	}
 
 	@Test
@@ -69,7 +70,7 @@ public class T031_Buffer_SplitInTwo
 	@Test
 	public void Whitespace_Delimiter_With_Trim_Fails()
 	{
-		Kit.testing.expectException( AssertionError.class, () -> Buffer.of( " " ).splitInTwo( Buffer.of( ' ' ), true ) );
+		TestKit.expect( AssertionError.class, () -> Buffer.of( " " ).splitInTwo( Buffer.of( ' ' ), true ) );
 	}
 
 	@Test

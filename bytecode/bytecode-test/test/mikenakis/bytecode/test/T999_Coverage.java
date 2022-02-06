@@ -56,6 +56,7 @@ import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -292,7 +293,7 @@ public class T999_Coverage
 
 		ByteCodeField.of( ByteCodeField.modifierEnum.of(), fieldReference.fieldPrototype );
 
-		//		InvalidAnnotationValueTagException invalidAnnotationValueTagException = Kit.testing.expectException( //
+		//		InvalidAnnotationValueTagException invalidAnnotationValueTagException = TestKit.expectException( //
 		//			InvalidAnnotationValueTagException.class, () -> AnnotationValue.doSwitch( '_', new AnnotationValue.Switcher<>()
 		//		{
 		//			@Override public Object caseAnnotation() { return null; }
@@ -315,18 +316,18 @@ public class T999_Coverage
 			Constant.tag_Class, Constant.tag_String, Constant.tag_FieldReference, Constant.tag_PlainMethodReference, Constant.tag_InterfaceMethodReference, //
 			Constant.tag_NameAndDescriptor, Constant.tag_MethodHandle, Constant.tag_MethodType, Constant.tag_InvokeDynamic ) )
 			Kit.get( Constant.tagName( constantTag ) );
-		InvalidConstantTagException invalidConstantTagException = Kit.testing.expectException( //
+		InvalidConstantTagException invalidConstantTagException = TestKit.expect( //
 			InvalidConstantTagException.class, () -> Kit.get( Constant.tagName( 999 ) ) );
 		assert invalidConstantTagException.constantTag == 999;
 
-		InvalidAnnotationValueTagException invalidAnnotationValueTagException = Kit.testing.expectException( //
+		InvalidAnnotationValueTagException invalidAnnotationValueTagException = TestKit.expect( //
 			InvalidAnnotationValueTagException.class, () -> Kit.get( AnnotationValue.tagName( '_' ) ) );
 		assert invalidAnnotationValueTagException.annotationValueTag == '_';
 
 		ArrayAnnotationValue.of();
 		ConstAnnotationValue.of( true );
 
-		InvalidConstAnnotationValueTagException invalidConstElementValueTagException = Kit.testing.expectException( //
+		InvalidConstAnnotationValueTagException invalidConstElementValueTagException = TestKit.expect( //
 			InvalidConstAnnotationValueTagException.class, () -> ConstAnnotationValue.of( 'e', LongValueConstant.of( 1L ) ) );
 		assert invalidConstElementValueTagException.annotationValueTag == 'e';
 

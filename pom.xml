@@ -44,6 +44,8 @@
 		<module>slf4j-to-kit</module>
 		<module>starwars-dataset</module>
 		<module>testana</module>
+		<module>testkit</module>
+		<module>testkit-test</module>
 		<module>tyraki</module>
 		<module>tyraki-test</module>
 	</modules>

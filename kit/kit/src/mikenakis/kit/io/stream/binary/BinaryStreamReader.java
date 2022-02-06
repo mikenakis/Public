@@ -76,7 +76,8 @@ public interface BinaryStreamReader
 			for( ; ; )
 			{
 				int bytesRead = readBuffer( buffer, offset, buffer.length - offset );
-				if( bytesRead <= 0 )
+				assert bytesRead >= 0;
+				if( bytesRead == 0 )
 					break;
 				offset += bytesRead;
 				if( offset >= buffer.length )
@@ -90,7 +91,7 @@ public interface BinaryStreamReader
 			for( int offset = 0; offset < bytes.length; )
 			{
 				int count = readBuffer( bytes, offset, bytes.length - offset );
-				if( count == 0 )
+				if( count <= 0 )
 					throw new RuntimeException(); //premature EOF
 				offset += count;
 			}

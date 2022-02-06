@@ -2,12 +2,12 @@ package mikenakis.bytecode.test;
 
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;

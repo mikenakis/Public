@@ -3,9 +3,9 @@ package mikenakis.bytecode.test;
 import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.bytecode.test.kit.TestKit;
 import mikenakis.bytecode.test.model.Class0HelloWorld;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -54,7 +54,7 @@ public class T401_Rewriting
 	private static void testHelloWorldJavaClass( Class<?> javaClass )
 	{
 		Method mainMethod = Kit.unchecked( () -> javaClass.getDeclaredMethod( "main", String[].class ) );
-		String output = Kit.testing.withCapturedOutputStream( //
+		String output = TestKit.withCapturedOutputStream( //
 			() -> Kit.unchecked( () -> mainMethod.invoke( null, (Object)(new String[0]) ) ) );
 		assert output.equals( "Hello, world!\n" );
 	}

@@ -12,6 +12,7 @@ import mikenakis.lambdatwine.AnyLambda;
 import mikenakis.lambdatwine.Lambdatwine;
 import mikenakis.lambdatwine.LambdatwineFactory;
 import mikenakis.lambdatwine.implementations.reflecting.ReflectingLambdatwineFactory;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -41,7 +42,7 @@ public abstract class Client
 	public void Non_Functional_Interface_Fails()
 	{
 		LambdatwineFactory lambdatwineFactory = getLambdatwineFactory();
-		Kit.testing.expectException( AssertionError.class, () -> lambdatwineFactory.getLambdatwine( NonFunctionalInterface.class ) );
+		TestKit.expect( AssertionError.class, () -> lambdatwineFactory.getLambdatwine( NonFunctionalInterface.class ) );
 	}
 
 	@Test
@@ -55,7 +56,7 @@ public abstract class Client
 	public void Regular_Failure_via_Lambdatwine_Works()
 	{
 		FooInterface fooServer = createFooServer( anyLambdaFromUntwinerDirect );
-		Kit.testing.expectException( NoSuchElementException.class, () -> fooServer.theMethod( -1, null ) );
+		TestKit.expect( NoSuchElementException.class, () -> fooServer.theMethod( -1, null ) );
 	}
 
 	@Test
@@ -69,7 +70,7 @@ public abstract class Client
 	public void Regular_Failure_via_ObjectExchange_Works()
 	{
 		FooInterface fooServer = createFooServer( anyLambdaFromUntwinerViaObjectExchange );
-		Kit.testing.expectException( NoSuchElementException.class, () -> fooServer.theMethod( -1, null ) );
+		TestKit.expect( NoSuchElementException.class, () -> fooServer.theMethod( -1, null ) );
 	}
 
 	interface MyNonPublicInterface
@@ -82,7 +83,7 @@ public abstract class Client
 	public void Use_of_Non_Public_Interface_Fails()
 	{
 		LambdatwineFactory lambdatwineFactory = new ReflectingLambdatwineFactory();
-		Kit.testing.expectException( IllegalAccessException.class, () -> lambdatwineFactory.getLambdatwine( MyNonPublicInterface.class ) );
+		TestKit.expect( IllegalAccessException.class, () -> lambdatwineFactory.getLambdatwine( MyNonPublicInterface.class ) );
 	}
 
 	private FooInterface createFooServer( AnyLambdaFromUntwiner<FooInterface> anyLambdaFromUntwiner )

@@ -1,6 +1,6 @@
 package mikenakis.tyraki.test.t02_mutable.list;
 
-import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.UnmodifiableList;
@@ -34,18 +34,18 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		T a = newElement();
 		T b = newElement();
 		T c = newElement();
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.get( -1 ) );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.get( 0 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.get( -1 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.get( 0 ) );
 		list.add( a );
 		assert list.get( 0 ) == a;
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.get( -1 ) );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.get( 1 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.get( -1 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.get( 1 ) );
 		list.add( b );
 		list.add( c );
 		assert list.get( 0 ) == a;
 		assert list.get( 1 ) == b;
 		assert list.get( 2 ) == c;
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.get( 3 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.get( 3 ) );
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		T a = newElement();
 		T b = newElement();
 		T c = newElement();
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.insertAt( -1, a ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.insertAt( -1, a ) );
 		list.insertAt( 0, b );
 		assert list.equalsList( UnmodifiableList.of( b ) );
 		list.insertAt( 0, a );
@@ -119,12 +119,12 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		T a = newElement();
 		T b = newElement();
 		T c = newElement();
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 0, a ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 0, a ) );
 		list.add( a );
 		list.add( b );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 2, a ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 2, a ) );
 		list.replaceAt( 1, c );
 		assert list.equalsList( UnmodifiableList.of( a, c ) );
 		list.replaceAt( 0, b );
@@ -138,13 +138,13 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		T a = newElement();
 		T b = newElement();
 		T c = newElement();
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( -1 ) );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( 0 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( -1 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( 0 ) );
 		list.add( a );
 		list.add( b );
 		list.add( c );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( -1 ) );
-		Kit.testing.expectException( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( 3 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( -1 ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.removeAt( 3 ) );
 		assert list.get( 1 ) == b;
 		list.removeAt( 1 );
 		assert list.equalsList( UnmodifiableList.of( a, c ) );

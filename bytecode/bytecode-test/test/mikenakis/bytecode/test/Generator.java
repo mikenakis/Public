@@ -12,6 +12,7 @@ import mikenakis.java_type_model.MethodDescriptor;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.java_type_model.TypeDescriptor;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 
 import java.io.PrintStream;
 import java.lang.reflect.Method;
@@ -61,7 +62,7 @@ public class Generator
 	{
 		Method mainMethod = Kit.unchecked( () -> javaClass.getDeclaredMethod( "main", String[].class ) );
 		//Object instance = Kit.newInstance( javaClass );
-		String output = Kit.testing.withCapturedOutputStream( //
+		String output = TestKit.withCapturedOutputStream( //
 			() -> Kit.unchecked( () -> mainMethod.invoke( null/*instance*/, (Object)(new String[0]) ) ) );
 		assert output.equals( "Hello, world!\n" );
 	}

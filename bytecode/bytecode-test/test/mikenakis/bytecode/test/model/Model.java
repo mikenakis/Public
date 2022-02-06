@@ -1,6 +1,6 @@
 package mikenakis.bytecode.test.model;
 
-import mikenakis.bytecode.test.kit.TestKit;
+import mikenakis.testkit.TestKit;
 
 import java.nio.file.Path;
 import java.util.List;

@@ -11,6 +11,7 @@ import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -41,7 +42,7 @@ public abstract class Client
 	public void Failure_via_Intertwine_Works()
 	{
 		FooInterface fooServer = createFooServer( anyCallFromUntwinerDirect );
-		Kit.testing.expectException( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
+		TestKit.expect( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
 	}
 
 	@Test
@@ -55,7 +56,7 @@ public abstract class Client
 	public void Failure_via_ObjectExchange_Works()
 	{
 		FooInterface fooServer = createFooServer( anyCallFromUntwinerViaObjectExchange );
-		Kit.testing.expectException( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
+		TestKit.expect( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
 	}
 
 	interface MyNonPublicInterface
@@ -68,7 +69,7 @@ public abstract class Client
 	public void Use_of_Non_Public_Interface_Fails()
 	{
 		IntertwineFactory intertwineFactory = getIntertwineFactory();
-		Kit.testing.expectException( IllegalAccessException.class, () -> intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ MyNonPublicInterface.class ) );
+		TestKit.expect( IllegalAccessException.class, () -> intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ MyNonPublicInterface.class ) );
 	}
 
 	private FooInterface createFooServer( AnyCallFromUntwiner<FooInterface> anyCallFromUntwiner )

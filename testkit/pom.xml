@@ -8,35 +8,26 @@
 		<artifactId>public-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>tyraki-test</artifactId>
+	<artifactId>testkit</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
 	<build>
-		<sourceDirectory>main</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
+		<sourceDirectory>src</sourceDirectory>
 	</build>
 
 	<dependencies>
 
 		<dependency>
 			<groupId>mikenakis</groupId>
-			<artifactId>testkit</artifactId>
+			<artifactId>kit</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>mikenakis</groupId>
-			<artifactId>tyraki</artifactId>
+			<artifactId>mikenakis-io-core</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>

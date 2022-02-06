@@ -1,6 +1,7 @@
 package mikenakis.tyraki.test;
 
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
@@ -157,12 +158,12 @@ public abstract class IteratorTest
 
 	private static void checkForIllegalStateException( Iterator<?> iterator )
 	{
-		Kit.testing.expectException( IllegalStateException.class, () -> iterator.remove() );
+		TestKit.expect( IllegalStateException.class, () -> iterator.remove() );
 	}
 
 	private static void checkForNoSuchElementException( Iterator<?> iterator )
 	{
-		Kit.testing.expectException( NoSuchElementException.class, () -> iterator.next() );
+		TestKit.expect( NoSuchElementException.class, () -> iterator.next() );
 	}
 
 	private <T> UnmodifiableCollection<T> collect( Iterable<T> iterable )

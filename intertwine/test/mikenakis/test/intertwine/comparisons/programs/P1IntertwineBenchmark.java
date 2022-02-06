@@ -14,6 +14,7 @@ import mikenakis.lambdatwine.Lambdatwine;
 import mikenakis.lambdatwine.LambdatwineFactory;
 import mikenakis.lambdatwine.implementations.methodhandle.MethodHandleLambdatwineFactory;
 import mikenakis.lambdatwine.implementations.reflecting.ReflectingLambdatwineFactory;
+import mikenakis.testkit.TestKit;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -65,7 +66,7 @@ public final class P1IntertwineBenchmark
 
 	private void runBenchmark( PrintStream out, String prefix, Procedure0 runnable )
 	{
-		Kit.testing.runGarbageCollection();
+		TestKit.runGarbageCollection();
 		double t0 = timeSeconds();
 		for( int i = 0; i < iterations; i++ )
 			runnable.invoke();

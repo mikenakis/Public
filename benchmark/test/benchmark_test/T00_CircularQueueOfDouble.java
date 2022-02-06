@@ -3,6 +3,7 @@ package benchmark_test;
 import mikenakis.benchmark.util.CircularQueueOfDouble;
 import mikenakis.kit.Kit;
 import mikenakis.kit.ref.IntRef;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -17,7 +18,7 @@ public class T00_CircularQueueOfDouble
 
 	@Test public void T0_Capacity_0_Fails()
 	{
-		Kit.testing.expectException( AssertionError.class, () -> new CircularQueueOfDouble( 0 ) );
+		TestKit.expect( AssertionError.class, () -> new CircularQueueOfDouble( 0 ) );
 	}
 
 	@Test public void T1_Capacity_1_Works()
@@ -88,14 +89,14 @@ public class T00_CircularQueueOfDouble
 	private static void assertEnqueueFails( CircularQueueOfDouble queue )
 	{
 		double[] elements = queue.toArray();
-		Kit.testing.expectException( AssertionError.class, () -> queue.enqueue( 99.0 ) );
+		TestKit.expect( AssertionError.class, () -> queue.enqueue( 99.0 ) );
 		assertEquals( queue, elements );
 	}
 
 	private static void assertDequeueFails( CircularQueueOfDouble queue )
 	{
 		double[] elements = queue.toArray();
-		Kit.testing.expectException( AssertionError.class, () -> queue.dequeue() );
+		TestKit.expect( AssertionError.class, () -> queue.dequeue() );
 		assertEquals( queue, elements );
 	}
 }

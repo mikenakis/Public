@@ -1,6 +1,6 @@
 package mikenakis.tyraki.test.t02_mutable.map;
 
-import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableCollection;
@@ -218,7 +218,7 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 
 	private void testGetFailure( UnmodifiableMap<K,String> aMap, K key )
 	{
-		KeyNotFoundException exception = Kit.testing.expectException( KeyNotFoundException.class, () -> aMap.get( key ) );
+		KeyNotFoundException exception = TestKit.expect( KeyNotFoundException.class, () -> aMap.get( key ) );
 		assert exception.key == key;
 	}
 
@@ -334,7 +334,7 @@ public abstract class MutableMapTest<K> extends MutableCollectionTest<Binding<K,
 		assert map.keys().equalsCollection( UnmodifiableCollection.of( b11.getKey(), b22.getKey(), b33.getKey() ) );
 		assert map.values().equalsCollection( UnmodifiableCollection.of( b11.getValue(), b22.getValue(), b22.getValue() ) );
 		assert map.entries().equalsCollection( UnmodifiableCollection.of( b11, b22, b32 ) );
-		DuplicateKeyException exception = Kit.testing.expectException( DuplicateKeyException.class, () -> map.add( b33.getKey(), b33.getValue() ) );
+		DuplicateKeyException exception = TestKit.expect( DuplicateKeyException.class, () -> map.add( b33.getKey(), b33.getValue() ) );
 		assert exception.key == b33.getKey();
 		assert exception.oldValue.equals( b22.getValue() );
 		assert exception.newValue.equals( b33.getValue() );

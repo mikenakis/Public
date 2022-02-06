@@ -1,6 +1,7 @@
 package mikenakis.tyraki.test;
 
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableCollection;
@@ -114,15 +115,15 @@ public abstract class EnumeratorTest
 
 	private static void checkForFinished( MutableEnumerator<?> enumerator )
 	{
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.deleteCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.moveNext() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.moveNext() );
 	}
 
 	private static void checkForDeleted( MutableEnumerator<?> enumerator )
 	{
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.getCurrent() );
-		Kit.testing.expectException( IllegalStateException.class, () -> enumerator.deleteCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 	}
 
 	private <T> UnmodifiableCollection<T> collect( Factory<T> factory )

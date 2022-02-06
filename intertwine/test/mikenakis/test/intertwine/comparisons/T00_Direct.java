@@ -3,6 +3,7 @@ package mikenakis.test.intertwine.comparisons;
 import mikenakis.test.intertwine.comparisons.rig.FooInterface;
 import mikenakis.test.intertwine.comparisons.rig.FooServer;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -26,6 +27,6 @@ public final class T00_Direct
 	public void Failure_via_Direct_Call_Works()
 	{
 		FooInterface fooServer = new FooServer();
-		Kit.testing.expectException( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
+		TestKit.expect( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
 	}
 }

@@ -2,9 +2,9 @@ package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.collections.OptionalsFlatMappingIterable;
-import mikenakis.kit.collections.MappingIterable;
 import mikenakis.kit.collections.FilteringIterable;
+import mikenakis.kit.collections.MappingIterable;
+import mikenakis.kit.collections.OptionalsFlatMappingIterable;
 import mikenakis.kit.collections.UnmodifiableIterable;
 import mikenakis.kit.collections.UnmodifiableIterator;
 import mikenakis.kit.functional.BooleanFunction1;
@@ -20,13 +20,9 @@ import mikenakis.kit.functional.ThrowingProcedure1;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.logging.Log;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -38,7 +34,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
@@ -60,7 +55,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -248,7 +242,7 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Stacks, Stack Traces, Source code locations
 
-	private static final StackWalker stackWalker = StackWalker.getInstance( EnumSet.noneOf( StackWalker.Option.class ) );
+	private static final StackWalker stackWalker = StackWalker.getInstance( StackWalker.Option.RETAIN_CLASS_REFERENCE );
 
 	public static StackWalker.StackFrame getStackFrame( int numberOfFramesToSkip )
 	{
@@ -268,17 +262,6 @@ public final class Kit
 		SourceLocation sourceLocation = SourceLocation.fromStackFrame( stackFrame );
 		assert sourceLocation.stringRepresentation().equals( stackFrame.toString() );
 		return sourceLocation;
-	}
-
-	public static String getMethodName()
-	{
-		return getMethodName( 1 );
-	}
-
-	public static String getMethodName( int framesToSkip )
-	{
-		StackWalker.StackFrame stackFrame = getStackFrame( framesToSkip + 1 );
-		return stackFrame.getMethodName();
 	}
 
 	public static String stringFromThrowable( Throwable throwable )
@@ -453,13 +436,36 @@ public final class Kit
 			if( bytes == null )
 				return null;
 			char[] hexChars = new char[bytes.length * 2];
-			for( int j = 0; j < bytes.length; j++ )
-			{
-				int v = bytes[j] & 0xFF;
-				hexChars[j * 2] = HEX_DIGITS[v >>> 4];
-				hexChars[j * 2 + 1] = HEX_DIGITS[v & 0x0F];
-			}
+			for( int j = 0; j < bytes.length; )
+				j += toHex( bytes[j], hexChars, j );
 			return new String( hexChars );
+		}
+
+		public static int toHex( byte value, char[] chars, int offset )
+		{
+			int v = value & 0xFF;
+			chars[offset] = HEX_DIGITS[v >>> 4];
+			chars[offset + 1] = HEX_DIGITS[v & 0x0F];
+			return 2;
+		}
+
+		public static int nybble( char c )
+		{
+			if( c >= '0' && c <= '9' )
+				return c - '0';
+			if( c >= 'a' && c <= 'f' )
+				return 10 + c - 'a';
+			if( c >= 'A' && c <= 'F' )
+				return 10 + c - 'A';
+			assert false;
+			return 0;
+		}
+
+		public static byte fromHex( String s, int offset )
+		{
+			int hi = nybble( s.charAt( offset ) );
+			int lo = nybble( s.charAt( offset + 1 ) );
+			return (byte) ((hi << 4) | lo);
 		}
 
 		public static boolean isFirstIdentifier( byte b )
@@ -1898,7 +1904,7 @@ public final class Kit
 	 *         <ul>
 	 *             <li><p>It opens a {@code try-catch} block.</p></li>
 	 *             <li><p>In the {@code try} part, it invokes the try-function and returns its result.</p></li>
-	 *             <li><p>In the {@code catch} part, it passes any caught exception to the catch-procedure.</p></li>
+	 *             <li><p>In the {@code catch} part, it passes any caught exception to the catch-function and returns its result.</p></li>
 	 *         </ul></p></li>
 	 *     <li><p>If assertions <b>are</b> enabled:
 	 *         <ul>
@@ -1909,13 +1915,13 @@ public final class Kit
 	 *     even when the code blocks consist of single statements. (You supply the {@code try} code in a lambda, so you get to decide whether to
 	 *     use curly braces or not.)</p></li>
 	 *
-	 * @param tryFunction    the function to be invoked in the 'try' block.
-	 * @param catchProcedure the procedure to handle any throwable thrown.
-	 * @param <R>            the type of result returned.
+	 * @param tryFunction   the function to be invoked in the 'try' block.
+	 * @param catchFunction the function to handle any throwable thrown.
+	 * @param <R>           the type of result returned.
 	 *
-	 * @return the result of the try-function if successful; {@code null} otherwise.
+	 * @return the result of the try-function or catch-function.
 	 */
-	public static <R> R tryCatch( Function0<R> tryFunction, Procedure1<Throwable> catchProcedure )
+	public static <R> R tryGetCatch( Function0<R> tryFunction, Function1<R,Throwable> catchFunction )
 	{
 		if( areAssertionsEnabled() )
 			return tryFunction.invoke();
@@ -1927,7 +1933,7 @@ public final class Kit
 			}
 			catch( Throwable throwable )
 			{
-				catchProcedure.invoke( throwable );
+				catchFunction.invoke( throwable );
 				return null;
 			}
 		}
@@ -2838,102 +2844,6 @@ public final class Kit
 				if( predicate.invoke( element ) )
 					return true;
 			return false;
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Testing
-
-	public static final class testing
-	{
-		/**
-		 * Runs a full garbage collection.
-		 * <p>
-		 * Adapted from <a href="https://stackoverflow.com/q/1481178/773113">Stack Overflow: Forcing Garbage Collection in Java?</a>
-		 */
-		public static void runGarbageCollection()
-		{
-			runGarbageCollection0();
-			runGarbageCollection0();
-		}
-
-		private static void runGarbageCollection0()
-		{
-			for( WeakReference<Object> ref = new WeakReference<>( new Object() ); ; )
-			{
-				System.gc();
-				Runtime.getRuntime().runFinalization();
-				if( ref.get() == null )
-					break;
-				Thread.yield();
-			}
-		}
-
-		public static <T extends Throwable> T expectException( Class<T> expectedThrowableClass, Procedure0 procedure )
-		{
-			assert expectedThrowableClass != null;
-			assert procedure != null;
-			Throwable caughtThrowable = invokeAndCatch( procedure );
-			assert caughtThrowable != null : new ExceptionExpectedException( expectedThrowableClass );
-			caughtThrowable = unwrap( caughtThrowable );
-			assert caughtThrowable.getClass() == expectedThrowableClass : new ExceptionDiffersFromExpectedException( expectedThrowableClass, caughtThrowable );
-			return expectedThrowableClass.cast( caughtThrowable );
-		}
-
-		private static Throwable unwrap( Throwable throwable )
-		{
-			for( ; ; )
-			{
-				if( throwable instanceof AssertionError && throwable.getCause() != null )
-				{
-					throwable = throwable.getCause();
-					continue;
-				}
-				//				if( throwable instanceof UndeclaredThrowableException )
-				//				{
-				//					assert throwable.getCause() != null;
-				//					assert throwable.getCause() == ((UndeclaredThrowableException)throwable).getUndeclaredThrowable();
-				//					throwable = throwable.getCause();
-				//					continue;
-				//				}
-				//				if( throwable instanceof InvocationTargetException )
-				//				{
-				//					assert throwable.getCause() != null;
-				//					assert throwable.getCause() == ((InvocationTargetException)throwable).getTargetException();
-				//					throwable = throwable.getCause();
-				//					continue;
-				//				}
-				break;
-			}
-			return throwable;
-		}
-
-		private static Throwable invokeAndCatch( Procedure0 procedure )
-		{
-			try
-			{
-				procedure.invoke();
-				return null;
-			}
-			catch( Throwable throwable )
-			{
-				return throwable;
-			}
-		}
-
-		public static PrintStream nullPrintStream()
-		{
-			return new PrintStream( OutputStream.nullOutputStream() );
-		}
-
-		public static String withCapturedOutputStream( Procedure0 procedure )
-		{
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			PrintStream printStream = new PrintStream( byteArrayOutputStream );
-			PrintStream oldSystemOut = System.out;
-			System.setOut( printStream );
-			tryFinally( procedure, () -> System.setOut( oldSystemOut ) );
-			return byteArrayOutputStream.toString( StandardCharsets.UTF_8 );
 		}
 	}
 

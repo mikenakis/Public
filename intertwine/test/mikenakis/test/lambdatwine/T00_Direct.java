@@ -3,6 +3,7 @@ package mikenakis.test.lambdatwine;
 import mikenakis.test.lambdatwine.rig.FooInterface;
 import mikenakis.test.lambdatwine.rig.FooServer;
 import mikenakis.kit.Kit;
+import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -30,6 +31,6 @@ public final class T00_Direct
 	public void Failure_via_Direct_Call_Works()
 	{
 		FooInterface fooServer = new FooServer();
-		Kit.testing.expectException( NoSuchElementException.class, () -> fooServer.theMethod( -1, null ) );
+		TestKit.expect( NoSuchElementException.class, () -> fooServer.theMethod( -1, null ) );
 	}
 }
