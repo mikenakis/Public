@@ -60,8 +60,8 @@ final class FillableBuffer extends Mutable
 	public Optional<Buffer> readUntilDelimiter( Buffer delimiter, boolean endHasBeenReached )
 	{
 		assert inContextAssertion();
-		assert delimiter.getLength() > 0;
-		int skipCount = delimiter.getLength();
+		assert delimiter.size() > 0;
+		int skipCount = delimiter.size();
 		int n = Buffer.indexOf( bytes, position, length, delimiter );
 		if( n == -1 )
 		{

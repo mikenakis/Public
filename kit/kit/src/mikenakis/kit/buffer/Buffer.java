@@ -108,23 +108,23 @@ public final class Buffer implements Comparable<Buffer>
 		return bytes[index];
 	}
 
-	public int getLength()
+	public int size()
 	{
 		return bytes.length;
 	}
 
 	public boolean startsWith( Buffer buffer )
 	{
-		if( buffer.getLength() > bytes.length )
+		if( buffer.size() > bytes.length )
 			return false;
-		return Kit.bytes.compare( bytes, 0, buffer.bytes, 0, buffer.getLength() ) == 0;
+		return Kit.bytes.compare( bytes, 0, buffer.bytes, 0, buffer.size() ) == 0;
 	}
 
 	public boolean endsWith( Buffer buffer )
 	{
-		if( buffer.getLength() > bytes.length )
+		if( buffer.size() > bytes.length )
 			return false;
-		return Kit.bytes.compare( bytes, bytes.length - buffer.getLength(), buffer.bytes, 0, buffer.getLength() ) == 0;
+		return Kit.bytes.compare( bytes, bytes.length - buffer.size(), buffer.bytes, 0, buffer.size() ) == 0;
 	}
 
 	@Override public int compareTo( Buffer o )
@@ -212,37 +212,37 @@ public final class Buffer implements Comparable<Buffer>
 
 	public int indexOf( byte value )
 	{
-		return Kit.bytes.indexOf( bytes, 0, getLength(), value );
+		return Kit.bytes.indexOf( bytes, 0, size(), value );
 	}
 
 	public int indexOf( byte value, int fromIndex )
 	{
-		return Kit.bytes.indexOf( bytes, fromIndex, getLength(), value );
+		return Kit.bytes.indexOf( bytes, fromIndex, size(), value );
 	}
 
 	public int lastIndexOf( byte value )
 	{
-		return Kit.bytes.lastIndexOf( bytes, 0, getLength(), value );
+		return Kit.bytes.lastIndexOf( bytes, 0, size(), value );
 	}
 
 	public int lastIndexOf( byte value, int fromIndex )
 	{
-		return Kit.bytes.lastIndexOf( bytes, fromIndex, getLength(), value );
+		return Kit.bytes.lastIndexOf( bytes, fromIndex, size(), value );
 	}
 
 	public int indexOf( Buffer pattern )
 	{
-		return Kit.bytes.indexOf( bytes, 0, getLength(), pattern.bytes );
+		return Kit.bytes.indexOf( bytes, 0, size(), pattern.bytes );
 	}
 
 	public int indexOf( Buffer pattern, int fromIndex )
 	{
-		return Kit.bytes.indexOf( bytes, fromIndex, getLength() - fromIndex, pattern.bytes );
+		return Kit.bytes.indexOf( bytes, fromIndex, size() - fromIndex, pattern.bytes );
 	}
 
 	public int lastIndexOf( Buffer pattern )
 	{
-		return Kit.bytes.lastIndexOf( bytes, getLength(), getLength(), pattern.bytes );
+		return Kit.bytes.lastIndexOf( bytes, size(), size(), pattern.bytes );
 	}
 
 	public int lastIndexOf( Buffer pattern, int fromIndex )
@@ -295,19 +295,19 @@ public final class Buffer implements Comparable<Buffer>
 
 	public boolean isEmpty()
 	{
-		return getLength() == 0;
+		return size() == 0;
 	}
 
 	public Buffer subBuffer( int beginIndex )
 	{
-		return subBuffer( beginIndex, getLength() );
+		return subBuffer( beginIndex, size() );
 	}
 
 	public Buffer subBuffer( int beginIndex, int endIndex )
 	{
 		assert beginIndex >= 0;
-		assert endIndex <= getLength();
-		if( beginIndex == 0 && endIndex == getLength() )
+		assert endIndex <= size();
+		if( beginIndex == 0 && endIndex == size() )
 			return this;
 		return of( bytes, beginIndex, endIndex - beginIndex );
 	}
@@ -326,21 +326,21 @@ public final class Buffer implements Comparable<Buffer>
 		assert !delimiter.isEmpty() : new IllegalArgumentException();
 		Collection<Buffer> list = new ArrayList<>();
 		boolean first = true;
-		for( int position = 0; position < getLength(); )
+		for( int position = 0; position < size(); )
 		{
 			if( first )
 				first = false;
 			else
 			{
-				assert subBuffer( position, position + delimiter.getLength() ).equals( delimiter );
-				position += delimiter.getLength();
+				assert subBuffer( position, position + delimiter.size() ).equals( delimiter );
+				position += delimiter.size();
 			}
 			if( trim )
-				position = skipWhitespaceForward( position, getLength() );
+				position = skipWhitespaceForward( position, size() );
 			int i = position;
 			position = indexOf( delimiter, i );
 			if( position == -1 )
-				position = getLength();
+				position = size();
 			int k = position;
 			if( trim )
 				k = skipWhitespaceBackward( i, k );

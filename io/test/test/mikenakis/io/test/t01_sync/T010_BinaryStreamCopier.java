@@ -35,7 +35,7 @@ public class T010_BinaryStreamCopier
 	@Test
 	public void Small_Test()
 	{
-		TestInfo testInfo = TestInfo.of( TestSourceRootMarker.getTestSourceRoot() );
+		TestInfo testInfo = TestInfo.of( getClass(), TestSourceRootMarker.getTestSourceRoot() );
 		bufferAllocator.setBufferSize( JdkBinaryStreamReadingDomain.binaryComparatorBufferKey, 10 );
 		test( testInfo, "small", 10 );
 	}
@@ -44,7 +44,7 @@ public class T010_BinaryStreamCopier
 	@Test
 	public void Long_Test()
 	{
-		TestInfo testInfo = TestInfo.of( TestSourceRootMarker.getTestSourceRoot() );
+		TestInfo testInfo = TestInfo.of( getClass(), TestSourceRootMarker.getTestSourceRoot() );
 		bufferAllocator.setBufferSize( JdkBinaryStreamReadingDomain.binaryComparatorBufferKey, 65536 );
 		test( testInfo, "large", 100_000_000 );
 	}

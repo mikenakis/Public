@@ -8,7 +8,7 @@ import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 
 /**
- * A {@link CloseableBinaryStreamWriter} which accumulates text in a supplied {@link BufferBuilder}.
+ * A {@link CloseableBinaryStreamWriter} which accumulates bytes in a supplied {@link BufferBuilder}.
  *
  * @author michael.gr
  */

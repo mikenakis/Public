@@ -22,7 +22,7 @@ public final class BinaryStreamReaderOnBuffer extends Mutable implements Closeab
 
 	public BinaryStreamReaderOnBuffer( MutationContext mutationContext, Buffer buffer )
 	{
-		this( mutationContext, buffer, 0, buffer.getLength() );
+		this( mutationContext, buffer, 0, buffer.size() );
 	}
 
 	public BinaryStreamReaderOnBuffer( MutationContext mutationContext, Buffer buffer, int arrayOffset, int arrayLength )

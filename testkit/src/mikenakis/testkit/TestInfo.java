@@ -9,15 +9,14 @@ import java.util.List;
 
 public class TestInfo
 {
-	public static TestInfo of( String testSourceRoot )
+	public static TestInfo of( Class<?> testClass, String testSourceRoot )
 	{
-		return of( testSourceRoot, 1 );
+		return of( testClass, testSourceRoot, 1 );
 	}
 
-	public static TestInfo of( String testSourceRoot, int framesToSkip )
+	public static TestInfo of( Class<?> testClass, String testSourceRoot, int framesToSkip )
 	{
 		StackWalker.StackFrame stackFrame = Kit.getStackFrame( framesToSkip + 1 );
-		Class<?> testClass = stackFrame.getDeclaringClass();
 		String testMethodName = stackFrame.getMethodName();
 		return new TestInfo( testSourceRoot, testClass, testMethodName );
 	}

@@ -55,6 +55,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -236,13 +237,13 @@ public final class Kit
 	 */
 	@SuppressWarnings( "deprecation" ) public static Object newInstance( Class<?> javaClass )
 	{
-		return unchecked( () -> javaClass.newInstance() );
+		return unchecked( javaClass::newInstance );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Stacks, Stack Traces, Source code locations
 
-	private static final StackWalker stackWalker = StackWalker.getInstance( StackWalker.Option.RETAIN_CLASS_REFERENCE );
+	private static final StackWalker stackWalker = StackWalker.getInstance( EnumSet.noneOf( StackWalker.Option.class ) ); // StackWalker.Option.RETAIN_CLASS_REFERENCE );
 
 	public static StackWalker.StackFrame getStackFrame( int numberOfFramesToSkip )
 	{
@@ -253,7 +254,7 @@ public final class Kit
 	public static StackWalker.StackFrame[] getStackTrace( int numberOfFramesToSkip )
 	{
 		assert numberOfFramesToSkip > 0;
-		return stackWalker.walk( s -> s.skip( numberOfFramesToSkip + 1 ).toArray( value -> new StackWalker.StackFrame[value] ) ); //TODO: simplify
+		return stackWalker.walk( s -> s.skip( numberOfFramesToSkip + 1 ).toArray( StackWalker.StackFrame[]::new ) ); //TODO: simplify
 	}
 
 	public static SourceLocation getSourceLocation( int numberOfFramesToSkip )
@@ -283,7 +284,7 @@ public final class Kit
 		return true;
 	}
 
-	public static boolean assertWeakly( boolean value )
+	@SuppressWarnings( "UnusedReturnValue" ) public static boolean assertWeakly( boolean value )
 	{
 		return assertWeakly( value, () -> "" );
 	}
@@ -1274,7 +1275,7 @@ public final class Kit
 
 		public static <T> Iterable<T> fromStream( Stream<T> stream )
 		{
-			return () -> stream.iterator();
+			return stream::iterator;
 		}
 
 		public static <T> boolean trueForAll( Iterable<T> iterable, Predicate<T> predicate )
@@ -1346,8 +1347,8 @@ public final class Kit
 
 		public static <T, F> Iterable<T> filterAndCast( Iterable<F> iterable, Class<T> elementClass )
 		{
-			Iterable<F> filtered = filter( iterable, e -> elementClass.isInstance( e ) );
-			return map( filtered, e -> elementClass.cast( e ) );
+			Iterable<F> filtered = filter( iterable, elementClass::isInstance );
+			return map( filtered, elementClass::cast );
 		}
 
 		public static <T> Iterable<T> unmodifiable( Iterable<T> delegee )
@@ -1357,7 +1358,7 @@ public final class Kit
 
 		public static <K, V, T> Map<K,V> toMap( Iterable<T> iterable, Function1<K,T> keyExtractor, Function1<V,T> valueExtractor )
 		{
-			return collection.stream.fromIterable( iterable ).collect( Collectors.toMap( t -> keyExtractor.invoke( t ), t -> valueExtractor.invoke( t ), Kit::dummyMergeFunction, LinkedHashMap::new ) );
+			return collection.stream.fromIterable( iterable ).collect( Collectors.toMap( keyExtractor::invoke, valueExtractor::invoke, Kit::dummyMergeFunction, LinkedHashMap::new ) );
 		}
 
 		public static <K, V> Map<K,V> keysToMap( Iterable<K> iterable, Function1<V,K> valueExtractor )
@@ -1372,7 +1373,7 @@ public final class Kit
 
 		public static <T> String makeString( Iterable<T> iterable, String delimiter )
 		{
-			return collection.stream.fromIterable( iterable ).map( e -> e.toString() ).collect( Collectors.joining( delimiter ) );
+			return collection.stream.fromIterable( iterable ).map( Object::toString ).collect( Collectors.joining( delimiter ) );
 		}
 	}
 
@@ -1599,7 +1600,7 @@ public final class Kit
 				}
 				@Override public int size()
 				{
-					return collections.stream().mapToInt( collection -> collection.size() ).sum();
+					return collections.stream().mapToInt( Collection::size ).sum();
 				}
 			};
 		}

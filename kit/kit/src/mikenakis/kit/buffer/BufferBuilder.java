@@ -33,7 +33,7 @@ public final class BufferBuilder
 
 	public BufferBuilder( Buffer buffer )
 	{
-		this( buffer.getLength() );
+		this( buffer.size() );
 		append( buffer );
 	}
 
@@ -123,7 +123,7 @@ public final class BufferBuilder
 
 	public BufferBuilder append( Buffer buffer )
 	{
-		return append( buffer, 0, buffer.getLength() );
+		return append( buffer, 0, buffer.size() );
 	}
 
 	public BufferBuilder append( byte[] str )
@@ -271,7 +271,7 @@ public final class BufferBuilder
 
 		if( end > count )
 			end = count;
-		int len = buffer.getLength();
+		int len = buffer.size();
 		int newCount = count + len - (end - start);
 		ensureCapacityInternal( newCount );
 
@@ -328,7 +328,7 @@ public final class BufferBuilder
 	{
 		if( buffer == null )
 			buffer = NULL;
-		return insert( dstOffset, buffer, 0, buffer.getLength() );
+		return insert( dstOffset, buffer, 0, buffer.size() );
 	}
 
 	public BufferBuilder insert( int dstOffset, Buffer buffer, int start, int end )
@@ -340,7 +340,7 @@ public final class BufferBuilder
 		assert start >= 0;
 		assert end >= 0;
 		assert start <= end;
-		assert end <= buffer.getLength();
+		assert end <= buffer.size();
 		int len = end - start;
 		ensureCapacityInternal( count + len );
 		System.arraycopy( value, dstOffset, value, dstOffset + len, count - dstOffset );

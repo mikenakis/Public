@@ -12,8 +12,8 @@ public final class CaseInsensitiveBufferComparator implements Comparator<Buffer>
 
 	@Override public int compare( Buffer a, Buffer b )
 	{
-		int aLength = a.getLength();
-		int bLength = b.getLength();
+		int aLength = a.size();
+		int bLength = b.size();
 		int commonLength = Math.min( aLength, bLength );
 		for( int i = 0; i < commonLength; i++ )
 		{
