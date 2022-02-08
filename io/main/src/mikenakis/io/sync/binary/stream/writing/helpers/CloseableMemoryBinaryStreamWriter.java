@@ -1,5 +1,6 @@
-package mikenakis.io.sync.binary.stream.writing;
+package mikenakis.io.sync.binary.stream.writing.helpers;
 
+import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.BufferBuilder;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.io.stream.binary.CloseableBinaryStreamWriter;
@@ -40,12 +41,17 @@ public class CloseableMemoryBinaryStreamWriter extends Mutable implements Closea
 
 	@Override public void close()
 	{
+		assert isAliveAssertion();
+		assert inContextAssertion();
 		lifeGuard.close();
 		onClose.invoke();
 	}
 
 	@Override public void writeBytes( byte[] bytes, int index, int count )
 	{
+		assert isAliveAssertion();
+		assert inContextAssertion();
+		assert Kit.bytes.validArgumentsAssertion( bytes, index, count );
 		bufferBuilder.append( bytes, index, count );
 	}
 

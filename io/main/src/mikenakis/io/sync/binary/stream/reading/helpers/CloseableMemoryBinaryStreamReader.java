@@ -1,5 +1,6 @@
-package mikenakis.io.sync.binary.stream.writing;
+package mikenakis.io.sync.binary.stream.reading.helpers;
 
+import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
@@ -41,6 +42,8 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 
 	@Override public void close()
 	{
+		assert isAliveAssertion();
+		assert inContextAssertion();
 		lifeGuard.close();
 		onClose.invoke();
 	}
@@ -52,7 +55,13 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 
 	@Override public int readBuffer( byte[] bytes, int index, int count )
 	{
-		int length = Math.min( buffer.size() - position, count );
+		assert isAliveAssertion();
+		assert inContextAssertion();
+		assert Kit.bytes.validArgumentsAssertion( bytes, index, count );
+		int availableLength = buffer.size() - position;
+		if( availableLength == 0 )
+			return -1; //XXX MINUS ONE
+		int length = Math.min( availableLength, count );
 		buffer.copyBytes( position, bytes, index, length );
 		position += length;
 		return length;
@@ -60,6 +69,8 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 
 	@Override public boolean isFinished()
 	{
+		assert isAliveAssertion();
+		assert inContextAssertion();
 		return position >= buffer.size();
 	}
 }

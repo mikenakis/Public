@@ -136,19 +136,21 @@ public final class Buffer implements Comparable<Buffer>
 		return Integer.compare( bytes.length, o.bytes.length );
 	}
 
-	@Override public boolean equals( Object o )
+	@Deprecated @Override public boolean equals( Object other )
 	{
-		if( this == o )
-			return true;
-		if( o == null || getClass() != o.getClass() )
+		return other instanceof Buffer kin && equals( kin );
+	}
+
+	public boolean equals( Buffer other )
+	{
+		if( hashCode() != other.hashCode() )
 			return false;
+		return Arrays.equals( bytes, other.bytes );
+	}
 
-		Buffer buffer = (Buffer)o;
-
-		if( !Arrays.equals( bytes, buffer.bytes ) )
-			return false;
-
-		return true;
+	public boolean equals( byte... bytes )
+	{
+		return equals( Buffer.of( bytes ) );
 	}
 
 	@SuppressWarnings( "NonFinalFieldReferencedInHashCode" ) @Override public int hashCode()
@@ -492,5 +494,10 @@ public final class Buffer implements Comparable<Buffer>
 	public void copyTo( int arrayOffset, byte[] destinationBytes, int offset, int length )
 	{
 		System.arraycopy( bytes, arrayOffset, destinationBytes, offset, length );
+	}
+
+	public String toHexString()
+	{
+		return Kit.bytes.hexString( bytes, " " );
 	}
 }

@@ -434,20 +434,36 @@ public final class Kit
 
 		public static String hexString( byte[] bytes )
 		{
-			if( bytes == null )
-				return null;
-			char[] hexChars = new char[bytes.length * 2];
-			for( int j = 0; j < bytes.length; )
-				j += toHex( bytes[j], hexChars, j );
-			return new String( hexChars );
+			return hexString( bytes, "" );
 		}
 
-		public static int toHex( byte value, char[] chars, int offset )
+		public static String hexString( byte[] bytes, String delimiter )
+		{
+			StringBuilder stringBuilder = new StringBuilder();
+			boolean first = true;
+			for( byte b : bytes )
+			{
+				if( first )
+					first = false;
+				else
+					stringBuilder.append( delimiter );
+				stringBuilder.append( hex( b ) );
+			}
+			return stringBuilder.toString();
+		}
+
+		public static void toHex( byte value, char[] chars, int offset )
 		{
 			int v = value & 0xFF;
 			chars[offset] = HEX_DIGITS[v >>> 4];
 			chars[offset + 1] = HEX_DIGITS[v & 0x0F];
-			return 2;
+		}
+
+		public static String hex( byte value )
+		{
+			char[]  chars = new char[2];
+			toHex( value, chars, 0 );
+			return new String( chars );
 		}
 
 		public static int nybble( char c )

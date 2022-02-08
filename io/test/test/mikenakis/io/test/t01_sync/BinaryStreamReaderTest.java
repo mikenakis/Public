@@ -30,10 +30,7 @@ public abstract class BinaryStreamReaderTest
 
 	private void withReader( String content, Procedure1<BinaryStreamReader> procedure )
 	{
-		try( CloseableBinaryStreamReader reader = newReader( content ) )
-		{
-			procedure.invoke( reader );
-		}
+		Kit.tryWith( newReader( content ), procedure );
 	}
 
 	@Test
