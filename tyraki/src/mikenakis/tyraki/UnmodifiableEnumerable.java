@@ -38,9 +38,14 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		return result;
 	}
 
-	static UnmodifiableEnumerable<Integer> enumerate( int count )
+	static UnmodifiableEnumerable<Integer> ofInt( int count )
 	{
-		return of( 0, i -> ++i >= count ? Optional.empty() : Optional.of( i ) );
+		return ofInt( 0, count, 1 );
+	}
+
+	static UnmodifiableEnumerable<Integer> ofInt( int startInclusive, int endExclusive, int step )
+	{
+		return of( startInclusive, i -> (i += step) < endExclusive ? Optional.of( i ) : Optional.empty() );
 	}
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
@@ -517,7 +522,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 		@Override default <T> UnmodifiableEnumerable<T> flatMapOptionals( Function1<Optional<T>,E> converter )
 		{
-			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, ( i, e ) -> converter.invoke( e ) ).filter( t -> t.isPresent() ).map( t -> t.orElseThrow() );
+			return ConversionCollections.newConvertingUnmodifiableEnumerable( this, ( i, e ) -> converter.invoke( e ) ).filter( Optional::isPresent ).map( Optional::orElseThrow );
 		}
 
 		@Override default <T> Optional<T> walk( Function0<T> function )
@@ -616,7 +621,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 		@Override default void appendToStringBuilder( StringBuilder stringBuilder, String delimiter )
 		{
-			appendToStringBuilder( stringBuilder, "", delimiter, "", ( element, stringBuilder1 ) -> defaultStringBuilderAppender( element, stringBuilder1 ) );
+			appendToStringBuilder( stringBuilder, "", delimiter, "", UnmodifiableEnumerable::defaultStringBuilderAppender );
 		}
 
 		@Override default void appendToStringBuilder( StringBuilder stringBuilder, String delimiter, StringBuilderAppender<E> stringBuilderAppender )
@@ -626,7 +631,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 		@Override default void appendToStringBuilder( StringBuilder stringBuilder, String prefix, String delimiter, String suffix )
 		{
-			appendToStringBuilder( stringBuilder, prefix, delimiter, suffix, ( element, stringBuilder1 ) -> defaultStringBuilderAppender( element, stringBuilder1 ) );
+			appendToStringBuilder( stringBuilder, prefix, delimiter, suffix, UnmodifiableEnumerable::defaultStringBuilderAppender );
 		}
 
 		@Override default void appendToStringBuilder( StringBuilder stringBuilder, String prefix, String delimiter, String suffix, StringBuilderAppender<E> stringBuilderAppender )
