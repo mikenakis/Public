@@ -289,6 +289,16 @@ public final class Kit
 		return assertWeakly( value, () -> "" );
 	}
 
+	private static <T> Optional<T> optionalIf( boolean expression, Function0<T> provider )
+	{
+		return expression ? Optional.of( provider.invoke() ) : Optional.empty();
+	}
+
+	public static <T> Optional<T> flatOptionalIf( boolean expression, Function0<Optional<T>> provider )
+	{
+		return expression ? provider.invoke() : Optional.empty();
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Bytes stuff
 

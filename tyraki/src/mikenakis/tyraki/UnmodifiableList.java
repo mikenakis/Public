@@ -308,6 +308,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	@Override <T> UnmodifiableList<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter );
 
 	/**
+	 * Uses a given converter to convert each element to an {@link UnmodifiableList} of T and returns a single {@link UnmodifiableList} of T chaining together
+	 * all the resulting lists.
+	 */
+	<T> UnmodifiableList<T> flatMapList( Function1<UnmodifiableList<T>,E> multiplier );
+
+	/**
 	 * Provides a view of this {@link UnmodifiableList} reversed.
 	 *
 	 * @return a view of this {@link UnmodifiableList}  reversed.
@@ -505,6 +511,11 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 		@Override default <T> UnmodifiableList<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter )
 		{
 			return ConversionCollections.newConvertingList( this, converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
+		}
+
+		@Override default <T> UnmodifiableList<T> flatMapList( Function1<UnmodifiableList<T>,E> multiplier )
+		{
+			return new FlatteningList<>( this, multiplier );
 		}
 
 		@Override default UnmodifiableList<E> reverse()

@@ -11,5 +11,10 @@ package mikenakis.kit.functional;
  */
 public interface Function1<R, P>
 {
+	static <X> Function1<X,X> identity()
+	{
+		return x -> x;
+	}
+
 	R invoke( P parameter );
 }
