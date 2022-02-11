@@ -35,7 +35,7 @@ final class BinaryStreamWriterOnOutputStream extends Mutable implements Closeabl
 
 	@Override public void close()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert isAliveAssertion();
 		lifeGuard.close();
 		onClose.invoke();
@@ -43,7 +43,7 @@ final class BinaryStreamWriterOnOutputStream extends Mutable implements Closeabl
 
 	@Override public void writeBytes( byte[] bytes, int offset, int count )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert isAliveAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, offset, count );
 		Kit.unchecked( () -> outputStream.write( bytes, offset, count ) );
@@ -51,7 +51,7 @@ final class BinaryStreamWriterOnOutputStream extends Mutable implements Closeabl
 
 	public void flush()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert isAliveAssertion();
 		Kit.unchecked( outputStream::flush );
 	}

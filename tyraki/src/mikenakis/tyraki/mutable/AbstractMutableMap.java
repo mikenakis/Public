@@ -79,7 +79,7 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 	}
 
 	@SuppressWarnings( { "unused", "FieldNamingConvention" } )
-	private final DebugView _debugView = DebugView.create( () -> entries() );
+	private final DebugView _debugView = DebugView.create( this::entries );
 
 	protected AbstractMutableMap( MutableCollections mutableCollections )
 	{
@@ -88,13 +88,13 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 
 	@SuppressWarnings( "SameReturnValue" ) boolean isReadableAssertion()
 	{
-		assert isFrozen() || getMutableCollections().inContextAssertion();
+		assert isFrozen() || getMutableCollections().inMutationContextAssertion();
 		return true;
 	}
 
 	@SuppressWarnings( "SameReturnValue" ) boolean isWritableAssertion()
 	{
-		assert !isFrozen() && getMutableCollections().inContextAssertion();
+		assert !isFrozen() && getMutableCollections().inMutationContextAssertion();
 		return true;
 	}
 

@@ -25,31 +25,31 @@ final class FillableBuffer extends Mutable
 
 	public byte[] getBytes()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return bytes;
 	}
 
 	public int getLength()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return length;
 	}
 
 	public int getFreeOffset()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return position + length;
 	}
 
 	public int getFreeLength()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return bytes.length - (position + length);
 	}
 
 	public Buffer readBuffer( int count )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert count > 0;
 		assert count <= length;
 		Buffer result = Buffer.of( bytes, position, count );
@@ -59,7 +59,7 @@ final class FillableBuffer extends Mutable
 
 	public Optional<Buffer> readUntilDelimiter( Buffer delimiter, boolean endHasBeenReached )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert delimiter.size() > 0;
 		int skipCount = delimiter.size();
 		int n = Buffer.indexOf( bytes, position, length, delimiter );
@@ -82,7 +82,7 @@ final class FillableBuffer extends Mutable
 
 	public void fill( int count )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert count > 0;
 		assert count <= getFreeLength();
 		length += count;
@@ -90,7 +90,7 @@ final class FillableBuffer extends Mutable
 
 	public boolean pack()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		if( position == 0 )
 			return false;
 		System.arraycopy( bytes, position, bytes, 0, length );
@@ -100,7 +100,7 @@ final class FillableBuffer extends Mutable
 
 	public int read( byte[] buffer, int index, int count )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert index >= 0;
 		assert index < buffer.length;
 		assert count > 0;

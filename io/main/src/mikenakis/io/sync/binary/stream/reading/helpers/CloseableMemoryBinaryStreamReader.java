@@ -43,7 +43,7 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 	@Override public void close()
 	{
 		assert isAliveAssertion();
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		lifeGuard.close();
 		onClose.invoke();
 	}
@@ -56,7 +56,7 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 	@Override public int readBuffer( byte[] bytes, int index, int count )
 	{
 		assert isAliveAssertion();
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, index, count );
 		int availableLength = buffer.size() - position;
 		if( availableLength == 0 )
@@ -70,7 +70,7 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 	@Override public boolean isFinished()
 	{
 		assert isAliveAssertion();
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return position >= buffer.size();
 	}
 }

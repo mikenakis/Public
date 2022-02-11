@@ -37,7 +37,7 @@ final class BinaryStreamReaderOnInputStream extends Mutable implements Closeable
 
 	@Override public void close()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert isAliveAssertion();
 		lifeGuard.close();
 		onClose.invoke();
@@ -45,7 +45,7 @@ final class BinaryStreamReaderOnInputStream extends Mutable implements Closeable
 
 	@Override public int readBuffer( byte[] bytes, int offset, int count )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert isAliveAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, offset, count );
 		if( preview != null && preview.length > 0 )

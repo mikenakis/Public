@@ -7,6 +7,7 @@ import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffer.CaseInsensitiveBufferEqualityComparator;
 import mikenakis.kit.buffer.CaseInsensitiveBufferHasher;
+import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.CaseInsensitiveStringEqualityComparator;
@@ -21,6 +22,8 @@ import mikenakis.tyraki.FreezableList;
 import mikenakis.tyraki.IdentityHasher;
 import mikenakis.tyraki.MutableArrayMap;
 import mikenakis.tyraki.MutableCollection;
+import mikenakis.tyraki.MutableEnumerable;
+import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.MutableHashSet;
 import mikenakis.tyraki.MutableList;
@@ -29,6 +32,7 @@ import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerable;
 import mikenakis.kit.DefaultComparator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Comparator;
 
@@ -56,7 +60,7 @@ public final class MutableCollections extends Mutable
 
 	public boolean assertCoherence() //FIXME XXX TODO inline this!
 	{
-		return inContextAssertion();
+		return inMutationContextAssertion();
 	}
 
 	/**
@@ -509,5 +513,15 @@ public final class MutableCollections extends Mutable
 	public <K, V> MutableMap<K,V> newWeakKeyIdentityHashMap()
 	{
 		return newKeyReferencingHashMap( ReferencingMethod.WEAK, IdentityHasher.getInstance(), IdentityEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
+	}
+
+	public <T> MutableEnumerable<T> newMutableEnumerableOnUnmodifiableEnumerable( UnmodifiableEnumerable<T> unmodifiableEnumerable, Procedure1<T> deleter )
+	{
+		return new MutableEnumerableOnUnmodifiableEnumerable<>( this, unmodifiableEnumerable, deleter );
+	}
+
+	public <T> MutableEnumerator<T> newMutableEnumeratorOnUnmodifiableEnumerator( UnmodifiableEnumerator<T> unmodifiableEnumerator, Procedure1<T> deleter )
+	{
+		return new MutableEnumeratorOnUnmodifiableEnumerator<>( this, unmodifiableEnumerator, deleter );
 	}
 }

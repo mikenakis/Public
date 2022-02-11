@@ -42,7 +42,7 @@ public class CloseableMemoryBinaryStreamWriter extends Mutable implements Closea
 	@Override public void close()
 	{
 		assert isAliveAssertion();
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		lifeGuard.close();
 		onClose.invoke();
 	}
@@ -50,7 +50,7 @@ public class CloseableMemoryBinaryStreamWriter extends Mutable implements Closea
 	@Override public void writeBytes( byte[] bytes, int index, int count )
 	{
 		assert isAliveAssertion();
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, index, count );
 		bufferBuilder.append( bytes, index, count );
 	}

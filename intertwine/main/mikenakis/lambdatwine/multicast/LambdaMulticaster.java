@@ -34,17 +34,15 @@ public class LambdaMulticaster<T> extends Mutable
 			return observers.containsKey( observer );
 		}
 	};
-	@SuppressWarnings( "FieldCanBeLocal" ) private final AnyLambda<T> anyLambda = new AnyLambda<>()
+
+	@SuppressWarnings( "FieldCanBeLocal" ) private final AnyLambda<T> anyLambda = arguments -> //
 	{
-		@Override public Object anyLambda( Object[] arguments )
+		for( AnyLambda<T> anyLambda : observers.values().stream().toList() )
 		{
-			for( AnyLambda<T> anyLambda : observers.values().stream().toList() )
-			{
-				Object result = anyLambda.anyLambda( arguments );
-				assert result == null;
-			}
-			return null;
+			Object result = anyLambda.anyLambda( arguments );
+			assert result == null;
 		}
+		return null;
 	};
 
 	public LambdaMulticaster( MutationContext mutationContext, LambdatwineFactory lambdatwineFactory, Class<T> lambdaType )
@@ -56,7 +54,7 @@ public class LambdaMulticaster<T> extends Mutable
 
 	public T entryPoint()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return entryPoint;
 	}
 }

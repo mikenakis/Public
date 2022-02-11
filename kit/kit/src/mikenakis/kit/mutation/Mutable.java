@@ -15,7 +15,7 @@ public abstract class Mutable
 		return mutationContext;
 	}
 
-	public boolean inContextAssertion()
+	public boolean inMutationContextAssertion()
 	{
 		assert mutationContext.inContextAssertion();
 		return true;

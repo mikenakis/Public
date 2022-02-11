@@ -24,13 +24,13 @@ public final class RandomNumberGenerator extends Mutable
 
 	public void setSeed( int seed )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		this.seed = (seed ^ MULTIPLIER) & MASK;
 	}
 
 	public int nextBits( int bits )
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		assert bits > 0;
 		assert bits < BITS;
 		seed *= MULTIPLIER;

@@ -3,7 +3,6 @@ package mikenakis.intertwine.multicast;
 import mikenakis.intertwine.AnyCall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -35,17 +34,15 @@ public class InterfaceMulticaster<T> extends Mutable
 			return observers.containsKey( observer );
 		}
 	};
-	@SuppressWarnings( "FieldCanBeLocal" ) private final AnyCall<T> anyCall = new AnyCall<>()
+
+	@SuppressWarnings( "FieldCanBeLocal" ) private final AnyCall<T> anyCall = ( key, arguments ) -> //
 	{
-		@Override public Object anyCall( MethodKey<T> key, Object[] arguments )
+		for( AnyCall<T> anyCall : observers.values().stream().toList() )
 		{
-			for( AnyCall<T> anyCall : observers.values().stream().toList() )
-			{
-				Object result = anyCall.anyCall( key, arguments );
-				assert result == null;
-			}
-			return null;
+			Object result = anyCall.anyCall( key, arguments );
+			assert result == null;
 		}
+		return null;
 	};
 
 	public InterfaceMulticaster( MutationContext mutationContext, IntertwineFactory intertwineFactory, Class<T> interfaceType )
@@ -57,7 +54,7 @@ public class InterfaceMulticaster<T> extends Mutable
 
 	public T entryPoint()
 	{
-		assert inContextAssertion();
+		assert inMutationContextAssertion();
 		return entryPoint;
 	}
 
