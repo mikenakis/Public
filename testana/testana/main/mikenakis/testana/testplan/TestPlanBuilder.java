@@ -10,11 +10,11 @@ import mikenakis.testana.structure.ProjectModule;
 import mikenakis.testana.structure.ProjectStructure;
 import mikenakis.testana.structure.ProjectType;
 import mikenakis.testana.testplan.dependency.DependencyMatrix;
-import mikenakis.testana.testplan.intent.FirstRunIntent;
+import mikenakis.testana.testplan.intent.RunBecauseNeverRunBeforeIntent;
 import mikenakis.testana.testplan.intent.Intent;
-import mikenakis.testana.testplan.intent.ModifiedRunIntent;
-import mikenakis.testana.testplan.intent.UpToDateIntent;
-import mikenakis.testana.testplan.intent.UpdateRunIntent;
+import mikenakis.testana.testplan.intent.RunBecauseModifiedSinceLastRunIntent;
+import mikenakis.testana.testplan.intent.NoRunBecauseUpToDateIntent;
+import mikenakis.testana.testplan.intent.RunBecauseDependenciesModifiedIntent;
 
 import java.time.Instant;
 import java.util.ArrayDeque;
@@ -68,7 +68,7 @@ public final class TestPlanBuilder
 			//List<TestModule> testModules = new ArrayList<>( testModules1 );
 			List<TestModule> testModules = new ArrayList<>( unorderedTestModules );
 			Collection<ProjectModule> projectModules = getProjectModules( testModules );
-			DependencyMatrix<ProjectModule> dependencyMatrix = new DependencyMatrix<>( projectModules, m -> m.allProjectDependencies() );
+			DependencyMatrix<ProjectModule> dependencyMatrix = new DependencyMatrix<>( projectModules, ProjectModule::allProjectDependencies );
 			Kit.sort.quickSort( testModules, ( a, b ) -> compare( a, b, dependencyMatrix ) );
 			return testModules;
 		} );
@@ -76,7 +76,7 @@ public final class TestPlanBuilder
 
 	private static Collection<ProjectModule> getProjectModules( Collection<TestModule> testModules )
 	{
-		return testModules.stream().map( m -> m.projectModule() ).collect( Collectors.toList() );
+		return testModules.stream().map( TestModule::projectModule ).collect( Collectors.toList() );
 	}
 
 	private static <X> void randomize( List<X> list )
@@ -237,7 +237,7 @@ public final class TestPlanBuilder
 				TestModule testModule = new TestModule( projectModule, testClasses );
 				Kit.collection.add( testModules, testModule );
 			}
-			timeMeasurement.setArguments( testModules.size(), testModules.stream().map( m -> m.testClasses().size() ).reduce( 0, ( a, b ) -> a + b ) );
+			timeMeasurement.setArguments( testModules.size(), testModules.stream().map( m -> m.testClasses().size() ).reduce( 0, Integer::sum ) );
 			return testModules;
 		} );
 	}
@@ -261,22 +261,22 @@ public final class TestPlanBuilder
 	{
 		Optional<Instant> timeOfLastRun = persistence.tryGetTimeOfLastRun( projectType.className() );
 		if( timeOfLastRun.isEmpty() )
-			return FirstRunIntent.INSTANCE;
+			return RunBecauseNeverRunBeforeIntent.INSTANCE;
 		if( projectType.getLastModifiedTime().isAfter( timeOfLastRun.get() ) )
-			return new ModifiedRunIntent( timeOfLastRun.get(), projectType.getLastModifiedTime() );
-		Collection<UpdateRunIntent.Entry> entries = collectOutOfDateEntries( projectType, timeOfLastRun.get() );
+			return new RunBecauseModifiedSinceLastRunIntent( timeOfLastRun.get(), projectType.getLastModifiedTime() );
+		Collection<RunBecauseDependenciesModifiedIntent.Entry> entries = collectOutOfDateEntries( projectType, timeOfLastRun.get() );
 		if( !entries.isEmpty() )
-			return new UpdateRunIntent( timeOfLastRun.get(), entries );
-		return UpToDateIntent.INSTANCE;
+			return new RunBecauseDependenciesModifiedIntent( timeOfLastRun.get(), entries );
+		return NoRunBecauseUpToDateIntent.INSTANCE;
 	}
 
-	private static Collection<UpdateRunIntent.Entry> collectOutOfDateEntries( ProjectType projectType, Instant timeOfLastRun )
+	private static Collection<RunBecauseDependenciesModifiedIntent.Entry> collectOutOfDateEntries( ProjectType projectType, Instant timeOfLastRun )
 	{
 		Collection<ProjectType> dependencies = getExpandedDependencies( projectType );
-		List<UpdateRunIntent.Entry> entries = new ArrayList<>();
+		List<RunBecauseDependenciesModifiedIntent.Entry> entries = new ArrayList<>();
 		for( ProjectType dependency : dependencies )
 			if( dependency.getLastModifiedTime().isAfter( timeOfLastRun ) )
-				entries.add( new UpdateRunIntent.Entry( dependency.className(), dependency.getLastModifiedTime() ) );
+				entries.add( new RunBecauseDependenciesModifiedIntent.Entry( dependency.className(), dependency.getLastModifiedTime() ) );
 		return entries;
 	}
 

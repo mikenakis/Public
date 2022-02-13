@@ -10,12 +10,12 @@ import java.util.Objects;
  *
  * @author michael.gr
  */
-public final class ModifiedRunIntent extends RunIntent
+public final class RunBecauseModifiedSinceLastRunIntent extends RunIntent
 {
 	public final Instant lastTestRunTime;
 	public final Instant modifiedTime;
 
-	public ModifiedRunIntent( Instant lastTestRunTime, Instant modifiedTime )
+	public RunBecauseModifiedSinceLastRunIntent( Instant lastTestRunTime, Instant modifiedTime )
 	{
 		assert modifiedTime.isAfter( lastTestRunTime );
 		this.lastTestRunTime = lastTestRunTime;
@@ -29,12 +29,12 @@ public final class ModifiedRunIntent extends RunIntent
 
 	@Override public boolean equals( Intent other )
 	{
-		if( other instanceof ModifiedRunIntent )
-			return equalsIntention( (ModifiedRunIntent)other );
+		if( other instanceof RunBecauseModifiedSinceLastRunIntent )
+			return equalsIntention( (RunBecauseModifiedSinceLastRunIntent)other );
 		return false;
 	}
 
-	public boolean equalsIntention( ModifiedRunIntent other )
+	public boolean equalsIntention( RunBecauseModifiedSinceLastRunIntent other )
 	{
 		if( !Objects.equals( lastTestRunTime, other.lastTestRunTime ) )
 			return false;

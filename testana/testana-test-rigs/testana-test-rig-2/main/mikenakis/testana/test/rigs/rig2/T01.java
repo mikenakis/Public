@@ -1,6 +1,6 @@
-package mikenakis.testana.test.rig2;
+package mikenakis.testana.test.rigs.rig2;
 
-import mikenakis.testana.test.rig1.Claire;
+import mikenakis.testana.test.rigs.classes_under_test.Claire;
 import org.junit.Test;
 
 /**
@@ -8,10 +8,11 @@ import org.junit.Test;
  *
  * @author michael.gr
  */
-public class T01_ClaireTest extends T02_AliceTest
+public class T01 extends T02
 {
-	@Test
-	public void ClaireTest()
+	public static String testMethodName = T01.class.getSimpleName() + ".ClaireTest()";
+
+	@Test public void ClaireTest()
 	{
 		Claire claire = new Claire( " World!" );
 		String s = claire.doThatThing( "Hello," );

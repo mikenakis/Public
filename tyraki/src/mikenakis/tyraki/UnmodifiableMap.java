@@ -81,6 +81,39 @@ public interface UnmodifiableMap<K, V> extends Freezile
 		return freezableMap.frozen();
 	}
 
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1 )
+	{
+		return newLinkedHashMap( MapEntry.of( key1, value1 ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2 )
+	{
+		return UnmodifiableMap.<K,V>newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2, K key3, V value3 )
+	{
+		return UnmodifiableMap.newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4 )
+	{
+		return UnmodifiableMap.<K,V>newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ), MapEntry.of( key4, value4 ) );
+	}
+
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Binding<K,V> ... bindings )
+	{
+		return newLinkedHashMap( UnmodifiableList.of( bindings ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<Binding<K,V>> bindings )
+	{
+		FreezableHashMap<K,V> freezableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap();
+		for( var binding : bindings )
+			freezableMap.add( binding.getKey(), binding.getValue() );
+		return freezableMap.frozen();
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -267,7 +300,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 		@Override default UnmodifiableMap<V,K> transposed()
 		{
-			return UnmodifiableHashMap.fromValues( keys(), key -> get( key ) );
+			return UnmodifiableHashMap.fromValues( keys(), this::get );
 		}
 
 		@Override default <T> UnmodifiableMap<T,V> convertedKeys( Function1<T,K> converter )
@@ -308,7 +341,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 		@Override default UnmodifiableMap<V,K> transposedMap()
 		{
-			return UnmodifiableHashMap.from( k -> get( k ), keys() );
+			return UnmodifiableHashMap.from( this::get, keys() );
 		}
 
 		@Override default boolean equals( UnmodifiableMap<?,?> other )

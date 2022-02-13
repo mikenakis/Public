@@ -8,10 +8,9 @@ import mikenakis.testana.ModuleOrdering;
 import mikenakis.testana.Persistence;
 import mikenakis.testana.StructureSettings;
 import mikenakis.testana.TestEngine;
-import mikenakis.testana.console.textfont.BitmapFontRenderer;
-import mikenakis.testana.console.textfont.QuadrantTextFontRenderer;
-import mikenakis.testana.console.textfont.TextFontRenderer;
-import mikenakis.testana.console.textfont.Tiny2Font;
+import mikenakis.testana.console.textfont.Bitmap;
+import mikenakis.testana.console.textfont.Font;
+import mikenakis.testana.console.textfont.TinyFont;
 import mikenakis.testana.discovery.Discoverer;
 import mikenakis.testana.discovery.maven.MavenDiscoverer;
 import mikenakis.testana.kit.TestanaLog;
@@ -156,13 +155,20 @@ public class TestanaConsoleMain
 
 	private static void renderText( String message )
 	{
-		renderText( message, new QuadrantTextFontRenderer( new BitmapFontRenderer( Tiny2Font.Instance, 2, 1 ) ) );
+		for( String line : linesFromText( message ) )
+			TestanaLog.report( line );
 	}
 
-	private static void renderText( String message, TextFontRenderer textFontRenderer )
+	private static List<String> linesFromText( String message )
 	{
-		for( String s : textFontRenderer.render( message ) )
-			TestanaLog.report( s );
+		Bitmap bitmap = bitmapFromText( message );
+		return bitmap.toStrings();
+	}
+
+	private static Bitmap bitmapFromText( String message )
+	{
+		Font font = TinyFont.create();
+		return font.render( message );
 	}
 
 	private static Cache loadCache( Path cachePathName )

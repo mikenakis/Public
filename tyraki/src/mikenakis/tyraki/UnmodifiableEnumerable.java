@@ -362,6 +362,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 */
 	String makeString( String delimiter );
 
+	String makeString( char delimiter );
+
 	/**
 	 * Converts this enumerable to a string using the given prefix, delimiter and suffix.
 	 *
@@ -655,6 +657,11 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		@Override default String makeString( String delimiter )
 		{
 			return makeString( "", delimiter, "" );
+		}
+
+		@Override default String makeString( char delimiter )
+		{
+			return makeString( String.valueOf( delimiter ) );
 		}
 
 		@Override default String makeString( String prefix, String delimiter, String suffix )

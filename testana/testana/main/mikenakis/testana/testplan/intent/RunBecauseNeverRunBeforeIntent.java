@@ -5,11 +5,11 @@ package mikenakis.testana.testplan.intent;
  *
  * @author michael.gr
  */
-public final class FirstRunIntent extends RunIntent
+public final class RunBecauseNeverRunBeforeIntent extends RunIntent
 {
-	public static final FirstRunIntent INSTANCE = new FirstRunIntent();
+	public static final RunBecauseNeverRunBeforeIntent INSTANCE = new RunBecauseNeverRunBeforeIntent();
 
-	private FirstRunIntent()
+	private RunBecauseNeverRunBeforeIntent()
 	{
 	}
 
@@ -20,7 +20,7 @@ public final class FirstRunIntent extends RunIntent
 
 	@Override public boolean equals( Intent other )
 	{
-		if( other instanceof FirstRunIntent )
+		if( other instanceof RunBecauseNeverRunBeforeIntent )
 		{
 			assert other == this;
 			return true;

@@ -1,4 +1,4 @@
-package mikenakis_testana_test;
+package mikenakis.testana.test;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
@@ -16,18 +16,19 @@ import mikenakis.testana.structure.ProjectStructure;
 import mikenakis.testana.structure.ProjectStructureBuilder;
 import mikenakis.testana.structure.ProjectType;
 import mikenakis.testana.structure.cache.Cache;
-import mikenakis.testana.test.rig1.Alice;
-import mikenakis.testana.test.rig1.Claire;
-import mikenakis.testana.test.rig2.T01_ClaireTest;
-import mikenakis.testana.test.rig2.T02_AliceTest;
+import mikenakis.testana.test.rigs.classes_under_test.Alice;
+import mikenakis.testana.test.rigs.classes_under_test.Claire;
+import mikenakis.testana.test.rigs.rig3.T03;
+import mikenakis.testana.test.rigs.rig2.T01;
+import mikenakis.testana.test.rigs.rig2.T02;
 import mikenakis.testana.test_engines.junit.JunitTestEngine;
 import mikenakis.testana.testplan.TestPlan;
 import mikenakis.testana.testplan.TestPlanBuilder;
-import mikenakis.testana.testplan.intent.FirstRunIntent;
+import mikenakis.testana.testplan.intent.RunBecauseNeverRunBeforeIntent;
 import mikenakis.testana.testplan.intent.Intent;
-import mikenakis.testana.testplan.intent.ModifiedRunIntent;
-import mikenakis.testana.testplan.intent.UpToDateIntent;
-import mikenakis.testana.testplan.intent.UpdateRunIntent;
+import mikenakis.testana.testplan.intent.RunBecauseModifiedSinceLastRunIntent;
+import mikenakis.testana.testplan.intent.NoRunBecauseUpToDateIntent;
+import mikenakis.testana.testplan.intent.RunBecauseDependenciesModifiedIntent;
 import org.junit.Test;
 
 import java.nio.file.Path;
@@ -96,14 +97,16 @@ public class T01_TestanaTest
 	@Test public void Normal_Scenario_Runs_Nothing()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		persistence.setTimeOfLastRun( T01_ClaireTest.class.getName(), T1 );
-		persistence.setTimeOfLastRun( T02_AliceTest.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T01.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T02.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T03.class.getName(), T1 );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
-		assert nodes.equals( List.of( new Node( T01_ClaireTest.class.getName(), UpToDateIntent.INSTANCE ), //
-			new Node( T02_AliceTest.class.getName(), UpToDateIntent.INSTANCE ) ) );
+		assert nodes.equals( List.of( new Node( T01.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ), //
+			new Node( T02.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ), //
+			new Node( T03.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ) ) );
 	}
 
 	@Test public void Empty_Persistence_Runs_Everything()
@@ -113,84 +116,97 @@ public class T01_TestanaTest
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
-		assert nodes.equals( List.of( new Node( T01_ClaireTest.class.getName(), FirstRunIntent.INSTANCE ), //
-			new Node( T02_AliceTest.class.getName(), FirstRunIntent.INSTANCE ) ) );
+		assert nodes.equals( List.of( new Node( T01.class.getName(), RunBecauseNeverRunBeforeIntent.INSTANCE ), //
+			new Node( T02.class.getName(), RunBecauseNeverRunBeforeIntent.INSTANCE ), //
+			new Node( T03.class.getName(), RunBecauseNeverRunBeforeIntent.INSTANCE ) ) );
 	}
 
 	@Test public void Modified_Test_Class_is_Detected()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		persistence.setTimeOfLastRun( T01_ClaireTest.class.getName(), T1 );
-		persistence.setTimeOfLastRun( T02_AliceTest.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T01.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T02.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T03.class.getName(), T1 );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
-		setLastModifiedTime( structure, T01_ClaireTest.class, T2 );
+		setLastModifiedTime( structure, T01.class, T2 );
+		setLastModifiedTime( structure, T03.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
-		assert nodes.equals( List.of( new Node( T01_ClaireTest.class.getName(), new ModifiedRunIntent( T1, T2 ) ), //
-			new Node( T02_AliceTest.class.getName(), UpToDateIntent.INSTANCE ) ) );
+		assert nodes.equals( List.of( new Node( T01.class.getName(), new RunBecauseModifiedSinceLastRunIntent( T1, T2 ) ), //
+			new Node( T02.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ), //
+			new Node( T03.class.getName(), new RunBecauseModifiedSinceLastRunIntent( T1, T2 ) ) ) );
 	}
 
 	@Test public void Modified_Immediate_Dependency_is_Detected()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		persistence.setTimeOfLastRun( T01_ClaireTest.class.getName(), T1 );
-		persistence.setTimeOfLastRun( T02_AliceTest.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T01.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T02.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T03.class.getName(), T1 );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
-		setLastModifiedTime( structure, T01_ClaireTest.class, T1 );
-		setLastModifiedTime( structure, T02_AliceTest.class, T1 );
+		setLastModifiedTime( structure, T01.class, T1 );
+		setLastModifiedTime( structure, T02.class, T1 );
+		setLastModifiedTime( structure, T03.class, T1 );
 		setLastModifiedTime( structure, Claire.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
-		assert nodes.equals( List.of( new Node( T01_ClaireTest.class.getName(), //
-				new UpdateRunIntent( T1, List.of( new UpdateRunIntent.Entry( Claire.class.getName(), T2 ) ) ) ), //
-			new Node( T02_AliceTest.class.getName(), UpToDateIntent.INSTANCE ) ) );
+		assert nodes.equals( List.of( new Node( T01.class.getName(), //
+				new RunBecauseDependenciesModifiedIntent( T1, List.of( new RunBecauseDependenciesModifiedIntent.Entry( Claire.class.getName(), T2 ) ) ) ), //
+			new Node( T02.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ), //
+			new Node( T03.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ) ) );
 	}
 
 	@Test public void Modified_Transitive_Dependency_is_Detected()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		persistence.setTimeOfLastRun( T01_ClaireTest.class.getName(), T1 );
-		persistence.setTimeOfLastRun( T02_AliceTest.class.getName(), T2 );
+		persistence.setTimeOfLastRun( T01.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T02.class.getName(), T2 );
+		persistence.setTimeOfLastRun( T03.class.getName(), T2 );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
 		setLastModifiedTime( structure, Alice.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
-		assert nodes.equals( List.of( new Node( T01_ClaireTest.class.getName(), //
-				new UpdateRunIntent( T1, List.of( new UpdateRunIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
-			new Node( T02_AliceTest.class.getName(), UpToDateIntent.INSTANCE ) ) );
+		assert nodes.equals( List.of( new Node( T01.class.getName(), //
+				new RunBecauseDependenciesModifiedIntent( T1, List.of( new RunBecauseDependenciesModifiedIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
+			new Node( T02.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ), //
+			new Node( T03.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ) ) );
 	}
 
 	@Test public void Order_of_Test_Class_Execution_is_Alphabetic_When_Sorting_Disabled()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		persistence.setTimeOfLastRun( T01_ClaireTest.class.getName(), T1 );
-		persistence.setTimeOfLastRun( T02_AliceTest.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T01.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T02.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T03.class.getName(), T1 );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
 		setLastModifiedTime( structure, Alice.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
-		assert nodes.equals( List.of( new Node( T01_ClaireTest.class.getName(), //
-				new UpdateRunIntent( T1, List.of( new UpdateRunIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
-			new Node( T02_AliceTest.class.getName(), new UpdateRunIntent( T1, List.of( new UpdateRunIntent.Entry( Alice.class.getName(), T2 ) ) ) ) ) );
+		assert nodes.equals( List.of( new Node( T01.class.getName(), //
+				new RunBecauseDependenciesModifiedIntent( T1, List.of( new RunBecauseDependenciesModifiedIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
+			new Node( T02.class.getName(), new RunBecauseDependenciesModifiedIntent( T1, List.of( new RunBecauseDependenciesModifiedIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
+			new Node( T03.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ) ) );
 	}
 
 	@Test public void Order_of_Test_Class_Execution_is_by_Dependency_When_Sorting_Enabled()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		persistence.setTimeOfLastRun( T01_ClaireTest.class.getName(), T1 );
-		persistence.setTimeOfLastRun( T02_AliceTest.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T01.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T02.class.getName(), T1 );
+		persistence.setTimeOfLastRun( T03.class.getName(), T1 );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
 		setLastModifiedTime( structure, Alice.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.ByDependency );
 
 		List<Node> nodes = collectNodes( testPlan );
 		assert nodes.equals( List.of( //
-			new Node( T02_AliceTest.class.getName(), new UpdateRunIntent( T1, List.of( new UpdateRunIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
-			new Node( T01_ClaireTest.class.getName(), new UpdateRunIntent( T1, List.of( new UpdateRunIntent.Entry( Alice.class.getName(), T2 ) ) ) ) ) );
+			new Node( T02.class.getName(), new RunBecauseDependenciesModifiedIntent( T1, List.of( new RunBecauseDependenciesModifiedIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
+			new Node( T01.class.getName(), new RunBecauseDependenciesModifiedIntent( T1, List.of( new RunBecauseDependenciesModifiedIntent.Entry( Alice.class.getName(), T2 ) ) ) ), //
+			new Node( T03.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ) ) );
 	}
 
 	@Test public void Order_of_Test_Method_Execution_is_Alphabetic_By_Default()
@@ -200,7 +216,7 @@ public class T01_TestanaTest
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<String> names = collectMethodNames( testPlan );
-		assert names.equals( List.of( "T01_ClaireTest.ClaireTest()", "T01_ClaireTest.ZAliceTest()", "T02_AliceTest.ZAliceTest()" ) );
+		assert names.equals( List.of( "T01.ClaireTest()", "T01.ZAliceTest()", "T02.ZAliceTest()", "T03.test()" ) );
 	}
 
 	@Test public void Order_of_Test_Method_Execution_is_by_Inheritance_When_Run_Ancestors_First_Is_Enabled()
@@ -210,7 +226,7 @@ public class T01_TestanaTest
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<String> names = collectMethodNames( testPlan );
-		assert names.equals( List.of( "T01_ClaireTest.ZAliceTest()", "T01_ClaireTest.ClaireTest()", "T02_AliceTest.ZAliceTest()" ) );
+		assert names.equals( List.of( "T01.ZAliceTest()", "T01.ClaireTest()", "T02.ZAliceTest()", "T03.test()" ) );
 	}
 
 	private static void setLastModifiedTime( ProjectStructure projectStructure, Class<?> javaClass, Instant lastModifiedTime )
@@ -263,7 +279,7 @@ public class T01_TestanaTest
 	{
 		Path path = Kit.path.getWorkingDirectory();
 		Log.debug( "Working directory: " + path );
-		assert path.resolve( "test/mikenakis_testana_test/T01_TestanaTest.java" ).toFile().exists(); //Current directory is not ${project.basedir}
+		assert path.resolve( "test/mikenakis/testana/test/T01_TestanaTest.java" ).toFile().exists(); //Current directory is not ${project.basedir}
 		return path;
 	}
 }

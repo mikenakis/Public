@@ -15,6 +15,7 @@
 	<modules>
 		<module>testana-test-rig-1</module>
 		<module>testana-test-rig-2</module>
+		<module>testana-test-rig-3</module>
 	</modules>
 
 </project>

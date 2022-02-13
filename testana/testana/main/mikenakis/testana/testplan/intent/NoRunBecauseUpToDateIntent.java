@@ -6,11 +6,11 @@ package mikenakis.testana.testplan.intent;
  *
  * @author michael.gr
  */
-public final class UpToDateIntent extends Intent
+public final class NoRunBecauseUpToDateIntent extends Intent
 {
-	public static final UpToDateIntent INSTANCE = new UpToDateIntent();
+	public static final NoRunBecauseUpToDateIntent INSTANCE = new NoRunBecauseUpToDateIntent();
 
-	private UpToDateIntent()
+	private NoRunBecauseUpToDateIntent()
 	{
 	}
 
@@ -21,12 +21,12 @@ public final class UpToDateIntent extends Intent
 
 	@Override public String getMessage()
 	{
-		return "does not need to run because none of its dependencies have changed.";
+		return "does not need to run because neither it, nor any of its dependencies, have changed.";
 	}
 
 	@Override public boolean equals( Intent other )
 	{
-		if( other instanceof UpToDateIntent )
+		if( other instanceof NoRunBecauseUpToDateIntent )
 		{
 			assert other == this;
 			return true;

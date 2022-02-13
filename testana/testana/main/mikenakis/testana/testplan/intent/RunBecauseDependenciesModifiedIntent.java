@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author michael.gr
  */
-public final class UpdateRunIntent extends RunIntent
+public final class RunBecauseDependenciesModifiedIntent extends RunIntent
 {
 	public static class Entry
 	{
@@ -55,7 +55,7 @@ public final class UpdateRunIntent extends RunIntent
 	public final Instant lastTestRunTime;
 	public final Collection<Entry> entries;
 
-	public UpdateRunIntent( Instant lastTestRunTime, Collection<Entry> entries )
+	public RunBecauseDependenciesModifiedIntent( Instant lastTestRunTime, Collection<Entry> entries )
 	{
 		this.lastTestRunTime = lastTestRunTime;
 		assert entries.stream().allMatch( e -> e.modifiedTime.isAfter( lastTestRunTime ) );
@@ -69,12 +69,12 @@ public final class UpdateRunIntent extends RunIntent
 
 	@Override public boolean equals( Intent other )
 	{
-		if( other instanceof UpdateRunIntent )
-			return equalsIntention( (UpdateRunIntent)other );
+		if( other instanceof RunBecauseDependenciesModifiedIntent )
+			return equalsIntention( (RunBecauseDependenciesModifiedIntent)other );
 		return false;
 	}
 
-	public boolean equalsIntention( UpdateRunIntent other )
+	public boolean equalsIntention( RunBecauseDependenciesModifiedIntent other )
 	{
 		if( !Objects.equals( lastTestRunTime, other.lastTestRunTime ) )
 			return false;

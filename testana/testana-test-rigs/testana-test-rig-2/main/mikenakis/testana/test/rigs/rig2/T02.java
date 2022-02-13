@@ -1,6 +1,6 @@
-package mikenakis.testana.test.rig2;
+package mikenakis.testana.test.rigs.rig2;
 
-import mikenakis.testana.test.rig1.Alice;
+import mikenakis.testana.test.rigs.classes_under_test.Alice;
 import org.junit.Test;
 
 /**
@@ -8,10 +8,11 @@ import org.junit.Test;
  *
  * @author michael.gr
  */
-public class T02_AliceTest
+public class T02
 {
-	@Test
-	public void ZAliceTest()
+	public static String testMethodName = T02.class.getSimpleName() + ".ZAliceTest()";
+
+	@Test public void ZAliceTest()
 	{
 		Alice claire = new Alice( " World!" );
 		String s = claire.doYourThing( "Hello," );

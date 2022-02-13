@@ -1,4 +1,4 @@
-package mikenakis.testana.test.rig1;
+package mikenakis.testana.test.rigs.classes_under_test;
 
 /**
  * Represents a class which is to be tested.

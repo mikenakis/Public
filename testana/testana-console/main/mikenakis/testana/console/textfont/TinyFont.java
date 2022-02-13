@@ -4,9 +4,11 @@ package mikenakis.testana.console.textfont;
  * A proportional, 6 by ~5 font.
  * Source for tiny fonts: https://graphicdesign.stackexchange.com/q/91478/160843
  */
-public final class Tiny2Font
+public final class TinyFont
 {
-	private static final Glyph[] glyphs = //
+	public static Font create()
+	{
+		return new Font( 6, 1, new Glyph[] //
 		{ //
 			new Glyph( ' ', 3, new byte[] { //
 				0b000, //
@@ -767,7 +769,6 @@ public final class Tiny2Font
 				0b00000, //
 				0b00000, //
 				0b00000, //
-			} ) };
-
-	public static final Font Instance = new Font( glyphs );
+			} ) } );
+	}
 }
