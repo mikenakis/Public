@@ -1,4 +1,4 @@
-package mikenakis.io.java.sync.serial;
+package mikenakis.io.sync.binary.stream.jdk;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;

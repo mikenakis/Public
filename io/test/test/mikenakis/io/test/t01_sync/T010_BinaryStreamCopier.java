@@ -1,7 +1,7 @@
 package mikenakis.io.test.t01_sync;
 
-import mikenakis.io.java.sync.serial.JdkBinaryStreamReadingDomain;
-import mikenakis.io.java.sync.serial.JdkBinaryStreamWritingDomain;
+import mikenakis.io.sync.binary.stream.jdk.JdkBinaryStreamReadingDomain;
+import mikenakis.io.sync.binary.stream.jdk.JdkBinaryStreamWritingDomain;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReadingDomain;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWritingDomain;
 import mikenakis.kit.buffers.BufferAllocator;
