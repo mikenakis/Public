@@ -1,6 +1,7 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.debug.Debug;
 import mikenakis.kit.lifetime.Closeable;
 
 import java.util.Collection;
@@ -19,7 +20,7 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 		void invoke( Class<? extends Closeable> closeableClass, boolean x, Optional<StackWalker.StackFrame[]> stackTrace );
 	}
 
-	private FinalizationHandler finalizationHandler = ( closeableClass, closed, stackTrace ) -> defaultFinalizationHandler( closeableClass, closed, stackTrace );
+	private FinalizationHandler finalizationHandler = DevelopmentLifeGuardFactory::defaultFinalizationHandler;
 	public final Collection<String> investigatedCloseableClassNames = new HashSet<>();
 
 	DevelopmentLifeGuardFactory()
@@ -60,7 +61,7 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 			return;
 		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuardFactory::stackFramesToString ).orElse( "Allocation stack trace not available. (This is not an investigated Closeable.)" );
 		System.out.println( "Closeable class not closed: " + closeableClass + "\n" + stackTraceText ); //TODO: use logging.
-		Kit.debugging.breakPoint();
+		Debug.breakPoint();
 	}
 
 	protected abstract LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, boolean initiallyAlive, Optional<StackWalker.StackFrame[]> stackTrace );

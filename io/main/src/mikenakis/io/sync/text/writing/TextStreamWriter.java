@@ -1,4 +1,4 @@
-package mikenakis.kit.io.stream.text;
+package mikenakis.io.sync.text.writing;
 
 public interface TextStreamWriter
 {

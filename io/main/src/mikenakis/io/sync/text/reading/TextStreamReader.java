@@ -1,4 +1,4 @@
-package mikenakis.kit.io.stream.text;
+package mikenakis.io.sync.text.reading;
 
 import java.util.Optional;
 

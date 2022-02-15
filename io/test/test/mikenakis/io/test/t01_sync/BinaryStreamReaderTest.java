@@ -2,8 +2,8 @@ package mikenakis.io.test.t01_sync;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure1;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
-import mikenakis.kit.io.stream.binary.BinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 

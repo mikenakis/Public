@@ -2,7 +2,7 @@ package mikenakis.io.test.t01_sync;
 
 import mikenakis.io.sync.binary.stream.reading.helpers.CloseableMemoryBinaryStreamReader;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;

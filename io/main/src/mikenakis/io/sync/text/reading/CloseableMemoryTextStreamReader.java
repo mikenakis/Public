@@ -3,10 +3,9 @@ package mikenakis.io.sync.text.reading;
 import mikenakis.io.sync.binary.stream.reading.helpers.CloseableMemoryBinaryStreamReader;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
-import mikenakis.kit.io.stream.text.CloseableTextStreamReader;
+import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.io.stream.text.TextStreamWriter;
+import mikenakis.io.sync.text.writing.TextStreamWriter;
 import mikenakis.kit.buffer.Buffer;
 
 /**

@@ -2,7 +2,7 @@ package mikenakis.kit.mutation;
 
 public abstract class Mutable
 {
-	public final MutationContext mutationContext;
+	protected final MutationContext mutationContext;
 
 	protected Mutable( MutationContext mutationContext )
 	{
@@ -10,7 +10,7 @@ public abstract class Mutable
 		this.mutationContext = mutationContext;
 	}
 
-	public MutationContext getMutationContext()
+	public MutationContext mutationContext()
 	{
 		return mutationContext;
 	}

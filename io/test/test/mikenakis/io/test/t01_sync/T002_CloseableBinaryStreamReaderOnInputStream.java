@@ -4,7 +4,7 @@ import mikenakis.io.sync.binary.stream.jdk.JdkBinaryStreamReadingDomain;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReadingDomain;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
 

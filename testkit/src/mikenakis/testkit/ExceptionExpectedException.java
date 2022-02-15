@@ -1,4 +1,6 @@
-package mikenakis.kit;
+package mikenakis.testkit;
+
+import mikenakis.kit.UncheckedException;
 
 /**
  * "Exception Expected" {@link UncheckedException}.

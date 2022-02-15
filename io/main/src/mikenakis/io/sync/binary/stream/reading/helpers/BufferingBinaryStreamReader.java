@@ -5,8 +5,8 @@ import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
-import mikenakis.kit.io.stream.binary.BinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.buffer.Buffer;
 
 import java.util.Optional;

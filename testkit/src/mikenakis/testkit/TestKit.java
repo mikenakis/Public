@@ -1,7 +1,5 @@
 package mikenakis.testkit;
 
-import mikenakis.kit.ExceptionDiffersFromExpectedException;
-import mikenakis.kit.ExceptionExpectedException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 

@@ -1,4 +1,4 @@
-package mikenakis.kit.io.stream.binary;
+package mikenakis.io.sync.binary.stream.writing;
 
 import mikenakis.kit.lifetime.Closeable;
 

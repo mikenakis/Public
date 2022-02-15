@@ -93,7 +93,7 @@ class JunitTestClass extends TestClass
 
 	private static <T> Optional<Comparator<T>> addComparator( Optional<Comparator<T>> comparator, Comparator<T> additionalComparator )
 	{
-		return Optional.of( comparator.map( c -> additionalComparator.thenComparing( c ) ).orElse( additionalComparator ) );
+		return Optional.of( comparator.map( additionalComparator::thenComparing ).orElse( additionalComparator ) );
 	}
 
 	private void collectTestMethodsRecursive( Class<?> javaClass, int derivationDepth, Collection<JunitTestMethod> mutableJunitTestMethods, //
@@ -160,7 +160,7 @@ class JunitTestClass extends TestClass
 
 	String getMethodSourceLocation( Method javaMethod )
 	{
-		return projectType.getMethodSourceLocation( javaMethod.getName() );
+		return projectType.getMethodSourceLocation( javaMethod.getDeclaringClass().getName(), javaMethod.getName() );
 	}
 
 	@Override public Collection<TestMethod> testMethods()

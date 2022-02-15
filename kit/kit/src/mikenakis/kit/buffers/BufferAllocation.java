@@ -17,7 +17,7 @@ public final class BufferAllocation extends Mutable implements Closeable.Default
 
 	BufferAllocation( BufferAllocator bufferAllocator, byte[] bytes )
 	{
-		super( bufferAllocator.mutationContext );
+		super( bufferAllocator.mutationContext() );
 		this.bufferAllocator = bufferAllocator;
 		this.bytes = bytes;
 	}

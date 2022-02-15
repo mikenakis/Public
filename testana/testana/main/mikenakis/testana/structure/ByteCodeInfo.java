@@ -38,18 +38,19 @@ final class ByteCodeInfo
 		return byteCodeType.typeDescriptor().typeName + "(" + (sourceFileName.orElse( "?" )) + ":" + 1 + ")";
 	}
 
-	String getMethodSourceLocation( MethodPrototype methodPrototype, Function<String,ByteCodeType> byteCodeTypeByName )
+	static String getMethodSourceLocation( String className, MethodPrototype methodPrototype, Function<String,ByteCodeType> byteCodeTypeByName )
 	{
+		ByteCodeType byteCodeType = byteCodeTypeByName.apply( className );
 		ByteCodeMethod byteCodeMethod = byteCodeType.getMethod( methodPrototype, byteCodeTypeByName ).orElseThrow();
 		Optional<CodeAttribute> codeAttribute = byteCodeMethod.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_Code ) //
-			.map( a -> a.asCodeAttribute() );
+			.map( KnownAttribute::asCodeAttribute );
 		Optional<LineNumberTableAttribute> lineNumberTableAttribute = codeAttribute //
 			.flatMap( a -> a.attributeSet.tryGetKnownAttributeByTag( KnownAttribute.tag_LineNumberTable ) ) //
-			.map( a -> a.asLineNumberTableAttribute() );
+			.map( KnownAttribute::asLineNumberTableAttribute );
 		int lineNumber = lineNumberTableAttribute.map( a -> a.lineNumberTableEntries.get( 0 ).lineNumber ).orElse( 0 );
 		String methodName = byteCodeMethod.name();
 		Optional<String> sourceFileName = byteCodeType.tryGetSourceFileName();
-		return byteCodeType.typeDescriptor().typeName + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";
+		return className + '.' + methodName + "(" + (sourceFileName.orElse( "?" )) + ":" + lineNumber + ")";
 	}
 
 	int getDeclaredMethodIndex( MethodPrototype methodPrototype )

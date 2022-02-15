@@ -2875,21 +2875,6 @@ public final class Kit
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Debugging
-
-	public static final class debugging
-	{
-		public static void breakPoint()
-		{
-			try
-			{
-				throw new BreakpointException();
-			}
-			catch( BreakpointException ignored )
-			{
-			}
-		}
-	}
 
 	/**
 	 * For information about this method, google "Sneaky throw".

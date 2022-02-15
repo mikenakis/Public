@@ -7,23 +7,28 @@ package mikenakis.kit.mutation;
  */
 final class DebugSingleThreadedMutationContext implements MutationContext
 {
-	private static final ThreadLocal<MutationContext> instance = ThreadLocal.withInitial( () -> new DebugSingleThreadedMutationContext() );
+	private static final ThreadLocal<DebugSingleThreadedMutationContext> instance = ThreadLocal.withInitial( DebugSingleThreadedMutationContext::new );
 
-	public static MutationContext instance()
+	static DebugSingleThreadedMutationContext instance()
 	{
 		return instance.get();
 	}
 
-	private final Thread currentThread;
+	private final Thread constructionThread;
 
 	private DebugSingleThreadedMutationContext()
 	{
-		currentThread = Thread.currentThread();
+		constructionThread = Thread.currentThread();
 	}
 
 	@Override public boolean inContextAssertion()
 	{
-		assert Thread.currentThread() == currentThread;
+		assert Thread.currentThread() == constructionThread;
 		return true;
+	}
+
+	@Override public String toString()
+	{
+		return Thread.currentThread() == constructionThread ? "entered" : "not entered";
 	}
 }

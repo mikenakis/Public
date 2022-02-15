@@ -3,9 +3,7 @@ package mikenakis.io.sync.binary.stream.writing;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.io.stream.binary.BinaryStreamReader;
-import mikenakis.kit.io.stream.binary.BinaryStreamWriter;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamWriter;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.buffers.BufferKey;
 
 import java.io.OutputStream;

@@ -1,4 +1,4 @@
-package mikenakis.kit.io.stream.binary;
+package mikenakis.io.sync.binary.stream.reading;
 
 import java.util.Arrays;
 

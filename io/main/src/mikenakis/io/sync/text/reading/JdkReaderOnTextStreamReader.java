@@ -1,7 +1,6 @@
 package mikenakis.io.sync.text.reading;
 
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.io.stream.text.TextStreamReader;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 

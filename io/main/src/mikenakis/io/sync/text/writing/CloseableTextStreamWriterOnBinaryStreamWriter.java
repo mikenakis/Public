@@ -1,9 +1,8 @@
 package mikenakis.io.sync.text.writing;
 
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.io.stream.text.CloseableTextStreamWriter;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.io.stream.binary.BinaryStreamWriter;
+import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 

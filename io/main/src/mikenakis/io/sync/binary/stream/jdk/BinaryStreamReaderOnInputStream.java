@@ -2,8 +2,8 @@ package mikenakis.io.sync.binary.stream.jdk;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.io.stream.binary.BinaryStreamReader;
-import mikenakis.kit.io.stream.binary.CloseableBinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;

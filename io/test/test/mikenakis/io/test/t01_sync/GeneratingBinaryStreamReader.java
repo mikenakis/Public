@@ -1,6 +1,6 @@
 package mikenakis.io.test.t01_sync;
 
-import mikenakis.kit.io.stream.binary.BinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 

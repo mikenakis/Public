@@ -3,8 +3,8 @@ package mikenakis.kit.io;
 import java.io.Writer;
 
 /**
- * A non-brain-damaged {@link java.io.StringWriter} which uses a {@link StringBuilder} instead of a {@link StringBuffer} and accepts the {@link StringBuilder} as a parameter
- * instead of creating it internally.
+ * A non-brain-damaged {@link java.io.StringWriter} which uses a {@link StringBuilder} instead of a {@link StringBuffer} and accepts the {@link StringBuilder}
+ * as a parameter instead of creating it internally.
  *
  * @author michael.gr
  */

@@ -67,9 +67,9 @@ public class ProjectType
 		{
 			Collection<String> allDependencyNames = byteCodeInfo().getDependencyNames();
 			LinkedHashSet<String> dependencyNames = allDependencyNames.stream() //
-				.filter( t -> projectModule.isProjectTypeTransitively( t ) ) //
+				.filter( projectModule::isProjectTypeTransitively ) //
 				.sorted() //
-				.collect( Collectors.toCollection( () -> new LinkedHashSet<>() ) );
+				.collect( Collectors.toCollection( LinkedHashSet::new ) );
 			lazyDependencyNames = Optional.of( dependencyNames );
 		}
 		return lazyDependencyNames.orElseThrow();
@@ -129,9 +129,9 @@ public class ProjectType
 		return MethodDescriptor.of( void.class );
 	}
 
-	public String getMethodSourceLocation( String methodName )
+	public String getMethodSourceLocation( String className, String methodName )
 	{
-		return byteCodeInfo().getMethodSourceLocation( MethodPrototype.of( methodName, testMethodDescriptor() ), projectModule::getProjectByteCodeTypeByNameTransitively );
+		return ByteCodeInfo.getMethodSourceLocation( className, MethodPrototype.of( methodName, testMethodDescriptor() ), projectModule::getProjectByteCodeTypeByNameTransitively );
 	}
 
 	public int getMethodIndex( String methodName )
