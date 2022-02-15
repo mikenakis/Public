@@ -14,13 +14,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class SynchronizedCoherence implements Coherence.Defaults
 {
-	private final MutationContext mutationContext = new MutationContext()
-	{
-		@Override public boolean inContextAssertion()
-		{
-			return assertCoherence();
-		}
-	};
+	private final MutationContext mutationContext = this::assertCoherence;
+
 	private final ReentrantLock lock = new ReentrantLock();
 	private volatile boolean entered;
 
