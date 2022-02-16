@@ -1,0 +1,89 @@
+package mikenakis.io.async.binary.stream.writing.helpers;
+
+import mikenakis.codec.Codecs;
+import mikenakis.io.sync.binary.stream.writing.helpers.BufferStreamWriter;
+import mikenakis.io.sync.binary.stream.writing.helpers.CloseableMemoryBinaryStreamWriter;
+import mikenakis.kit.Kit;
+import mikenakis.kit.buffer.Buffer;
+import mikenakis.kit.buffer.BufferBuilder;
+import mikenakis.kit.functional.Procedure0;
+import mikenakis.kit.functional.Procedure1;
+import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.guard.LifeGuard;
+import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.tyraki.Queue;
+import mikenakis.tyraki.mutable.MutableCollections;
+
+public class BufferStreamWriterOnAsyncBufferStreamWriter extends Mutable implements BufferStreamWriter, Closeable.Defaults
+{
+	public static BufferStreamWriterOnAsyncBufferStreamWriter of( MutationContext mutationContext, AsyncBufferStreamWriter asyncBufferStreamWriter, //
+		Procedure1<Throwable> errorHandler )
+	{
+		return new BufferStreamWriterOnAsyncBufferStreamWriter( mutationContext, asyncBufferStreamWriter, errorHandler );
+	}
+
+	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final AsyncBufferStreamWriter asyncBufferStreamWriter;
+	private final Procedure1<Throwable> errorHandler;
+	private final Queue<Buffer> queue = MutableCollections.of( mutationContext ).newLinkedQueue();
+
+	private BufferStreamWriterOnAsyncBufferStreamWriter( MutationContext mutationContext, AsyncBufferStreamWriter asyncBufferStreamWriter, //
+		Procedure1<Throwable> errorHandler )
+	{
+		super( mutationContext );
+		this.asyncBufferStreamWriter = asyncBufferStreamWriter;
+		this.errorHandler = errorHandler;
+	}
+
+	@Override public boolean lifeStateAssertion( boolean value )
+	{
+		return lifeGuard.lifeStateAssertion( value );
+	}
+
+	@Override public void close()
+	{
+		assert isAliveAssertion();
+		lifeGuard.close();
+	}
+
+	@Override public void writeBuffer( Buffer buffer )
+	{
+		Buffer lengthBuffer = bufferFromInt( buffer.size() );
+		write0( lengthBuffer );
+		write0( buffer );
+	}
+
+	private static Buffer bufferFromInt( int value )
+	{
+		BufferBuilder bufferBuilder = BufferBuilder.of();
+		Kit.tryWith( CloseableMemoryBinaryStreamWriter.create( SingleThreadedMutationContext.instance(), bufferBuilder, Procedure0.noOp ), binaryStreamWriter -> //
+			Codecs.integerCodec.instanceIntoBinary( value, binaryStreamWriter ) );
+		return bufferBuilder.toBuffer();
+	}
+
+	private void write0( Buffer buffer )
+	{
+		boolean wasEmpty = queue.isEmpty();
+		queue.enqueue( buffer );
+		if( wasEmpty )
+			sendNext();
+	}
+
+	private void sendNext()
+	{
+		Buffer buffer = queue.dequeue();
+		send0( buffer );
+	}
+
+	private void send0( Buffer buffer )
+	{
+		asyncBufferStreamWriter.writeBuffer( buffer, this::trySendNext, errorHandler );
+	}
+
+	private void trySendNext()
+	{
+		queue.tryDequeue().ifPresent( buffer -> send0( buffer ) );
+	}
+}

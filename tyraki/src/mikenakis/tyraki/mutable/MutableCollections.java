@@ -28,6 +28,7 @@ import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.MutableHashSet;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.MutableMap;
+import mikenakis.tyraki.Queue;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerable;
 import mikenakis.kit.DefaultComparator;
@@ -523,5 +524,10 @@ public final class MutableCollections extends Mutable
 	public <T> MutableEnumerator<T> newMutableEnumeratorOnUnmodifiableEnumerator( UnmodifiableEnumerator<T> unmodifiableEnumerator, Procedure1<T> deleter )
 	{
 		return new MutableEnumeratorOnUnmodifiableEnumerator<>( this, unmodifiableEnumerator, deleter );
+	}
+
+	public <E> Queue<E> newLinkedQueue()
+	{
+		return new LinkedQueue<>( this );
 	}
 }

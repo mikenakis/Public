@@ -143,6 +143,7 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 		assert isAliveAssertion();
 		assert coherenceAssertion();
 		assert isBusy();
+		//noinspection WhileLoopSpinsOnField
 		while( !endHasBeenReached )
 		{
 			int chunkLength = fillableBuffer.read( buffer, offset + countRef.value, length - countRef.value );

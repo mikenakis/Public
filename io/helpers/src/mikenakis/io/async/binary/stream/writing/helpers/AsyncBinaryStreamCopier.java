@@ -13,6 +13,14 @@ import mikenakis.kit.mutation.MutationContext;
 public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defaults
 {
 	public static final BufferKey bufferKey = new BufferKey( AsyncBinaryStreamCopier.class.getName() );
+
+	public static Async copy( MutationContext mutationContext, BufferAllocator bufferAllocator, AsyncBinaryStreamReader reader, AsyncBinaryStreamWriter writer, Procedure1<Long> completionHandler, Procedure1<Throwable> errorHandler )
+	{
+		AsyncBinaryStreamCopier copier = new AsyncBinaryStreamCopier( mutationContext, bufferAllocator, reader, writer, completionHandler, errorHandler );
+		assert !copier.isBusy();
+		return copier.start();
+	}
+
 	private final AsyncBinaryStreamReader reader;
 	private final AsyncBinaryStreamWriter writer;
 	private final BufferAllocation[] bufferAllocations = new BufferAllocation[2];
@@ -24,7 +32,7 @@ public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defa
 	private boolean eof = false;
 	private int busyCount = 0;
 
-	public AsyncBinaryStreamCopier( MutationContext mutationContext, BufferAllocator bufferAllocator, AsyncBinaryStreamReader reader, AsyncBinaryStreamWriter writer, Procedure1<Long> completionHandler, Procedure1<Throwable> errorHandler )
+	private AsyncBinaryStreamCopier( MutationContext mutationContext, BufferAllocator bufferAllocator, AsyncBinaryStreamReader reader, AsyncBinaryStreamWriter writer, Procedure1<Long> completionHandler, Procedure1<Throwable> errorHandler )
 	{
 		super( mutationContext );
 		assert inMutationContextAssertion();

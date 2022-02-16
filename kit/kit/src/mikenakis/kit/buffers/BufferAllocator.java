@@ -15,10 +15,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class BufferAllocator extends Mutable
 {
+	public static BufferAllocator of( MutationContext mutationContext, int defaultBufferSize )
+	{
+		return new BufferAllocator( mutationContext, defaultBufferSize );
+	}
+
 	private final int defaultBufferSize;
 	private final Map<BufferKey,Integer> bufferSizes = new ConcurrentHashMap<>();
 
-	public BufferAllocator( MutationContext mutationContext, int defaultBufferSize )
+	private BufferAllocator( MutationContext mutationContext, int defaultBufferSize )
 	{
 		super( mutationContext );
 		this.defaultBufferSize = defaultBufferSize;

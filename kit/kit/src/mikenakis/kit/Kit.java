@@ -1914,14 +1914,7 @@ public final class Kit
 
 	public static void trySwallow( Procedure0 procedure0 )
 	{
-		try
-		{
-			procedure0.invoke();
-		}
-		catch( Throwable throwable )
-		{
-			Log.error( throwable );
-		}
+		tryCatch( procedure0, throwable -> Log.error( throwable ) );
 	}
 
 	/**

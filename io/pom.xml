@@ -12,6 +12,7 @@
 
 	<modules>
 		<module>main</module>
+		<module>helpers</module>
 		<module>test</module>
 	</modules>
 

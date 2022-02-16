@@ -21,7 +21,7 @@ import org.junit.Test;
 public final class T01_Test
 {
 	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
-	private final BufferAllocator bufferAllocator = new BufferAllocator( mutationContext, 65536 );
+	private final BufferAllocator bufferAllocator = BufferAllocator.of( mutationContext, 65536 );
 
 	public T01_Test()
 	{

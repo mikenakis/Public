@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 public class T002_CloseableBinaryStreamReaderOnInputStream extends BinaryStreamReaderTest
 {
 	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
-	private final BufferAllocator bufferAllocator = new BufferAllocator( mutationContext, 65536 );
+	private final BufferAllocator bufferAllocator = BufferAllocator.of( mutationContext, 65536 );
 	private final BinaryStreamReadingDomain streamReadingDomain = new JdkBinaryStreamReadingDomain( mutationContext, bufferAllocator );
 
 	public T002_CloseableBinaryStreamReaderOnInputStream()

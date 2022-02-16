@@ -24,7 +24,7 @@ import java.nio.file.Path;
 public class T010_BinaryStreamCopier
 {
 	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
-	private final BufferAllocator bufferAllocator = new BufferAllocator( mutationContext, 65536 );
+	private final BufferAllocator bufferAllocator = BufferAllocator.of( mutationContext, 65536 );
 	private final BinaryStreamReadingDomain binaryStreamReadingDomain = new JdkBinaryStreamReadingDomain( mutationContext, bufferAllocator );
 	private final BinaryStreamWritingDomain binaryStreamWritingDomain = new JdkBinaryStreamWritingDomain( mutationContext, bufferAllocator );
 
