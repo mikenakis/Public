@@ -10,10 +10,15 @@ import mikenakis.kit.functional.Procedure1;
  */
 public final class Lazy<T>
 {
+	public static <T> Lazy<T> of( Function0<T> factory )
+	{
+		return new Lazy<>( factory );
+	}
+
 	private Function0<T> factory; //nullable
 	private T instance = null; //nullable
 
-	public Lazy( Function0<T> factory )
+	private Lazy( Function0<T> factory )
 	{
 		assert factory != null;
 		this.factory = factory;
