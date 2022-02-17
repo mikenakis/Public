@@ -65,7 +65,7 @@ public class FinalizingDevelopmentLifeGuardFactory extends DevelopmentLifeGuardF
 
 		@Override public String toString()
 		{
-			return closed ? "closed" : "open";
+			return (closed ? "not " : "") + "alive";
 		}
 	}
 
