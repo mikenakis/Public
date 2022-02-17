@@ -1,15 +1,11 @@
 package mikenakis.io.async.binary.stream.reading.helpers;
 
-import mikenakis.codec.Codecs;
 import mikenakis.io.async.binary.stream.reading.AsyncBinaryStreamReader;
-import mikenakis.io.sync.binary.stream.reading.helpers.CloseableMemoryBinaryStreamReader;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
-import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 import java.util.Optional;
 
@@ -64,11 +60,6 @@ public class AsyncBufferStreamReaderOnAsyncBinaryStreamReader implements AsyncBu
 
 	private static int intFromBuffer( Buffer buffer )
 	{
-		return Kit.tryGetWith( CloseableMemoryBinaryStreamReader.create( SingleThreadedMutationContext.instance(), buffer, Procedure0.noOp ), binaryStreamReader -> //
-		{
-			int result = Codecs.integerCodec.instanceFromBinary( binaryStreamReader );
-			assert binaryStreamReader.isFinished();
-			return result;
-		} );
+		return Kit.bytes.intFromBytes( buffer.getBytes() );
 	}
 }

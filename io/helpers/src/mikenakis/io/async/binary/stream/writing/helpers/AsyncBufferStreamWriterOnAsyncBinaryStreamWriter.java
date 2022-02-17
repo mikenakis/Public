@@ -1,18 +1,14 @@
 package mikenakis.io.async.binary.stream.writing.helpers;
 
-import mikenakis.codec.Codecs;
 import mikenakis.io.async.binary.stream.writing.AsyncBinaryStreamWriter;
-import mikenakis.io.sync.binary.stream.writing.helpers.CloseableMemoryBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
-import mikenakis.kit.buffer.BufferBuilder;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 public class AsyncBufferStreamWriterOnAsyncBinaryStreamWriter extends Mutable implements AsyncBufferStreamWriter, Closeable.Defaults
 {
@@ -56,9 +52,6 @@ public class AsyncBufferStreamWriterOnAsyncBinaryStreamWriter extends Mutable im
 
 	private static Buffer bufferFromInt( int value )
 	{
-		BufferBuilder bufferBuilder = BufferBuilder.of();
-		Kit.tryWith( CloseableMemoryBinaryStreamWriter.create( SingleThreadedMutationContext.instance(), bufferBuilder, Procedure0.noOp ), binaryStreamWriter -> //
-			Codecs.integerCodec.instanceIntoBinary( value, binaryStreamWriter ) );
-		return bufferBuilder.toBuffer();
+		return Buffer.of( Kit.bytes.bytesFromInt( value ) );
 	}
 }
