@@ -77,6 +77,7 @@ public final class Kit
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
 	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
+	public static boolean inTry;
 
 	private Kit() { }
 
@@ -1912,6 +1913,13 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debugging helpers (try-catch, try-finally, etc.)
 
+	private static boolean bypassTryCatch()
+	{
+		if( inTry )
+			return false;
+		return areAssertionsEnabled();
+	}
+
 	public static void trySwallow( Procedure0 procedure0 )
 	{
 		tryCatch( procedure0, throwable -> Log.error( throwable ) );
@@ -1943,7 +1951,7 @@ public final class Kit
 	 */
 	public static <R> R tryGetCatch( Function0<R> tryFunction, Function1<R,Throwable> catchFunction )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 			return tryFunction.invoke();
 		else
 		{
@@ -1982,7 +1990,7 @@ public final class Kit
 	 */
 	public static void tryCatch( Procedure0 tryProcedure, Procedure1<Throwable> catchProcedure )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			tryProcedure.invoke();
 		}
@@ -2021,7 +2029,7 @@ public final class Kit
 	 */
 	public static Optional<Throwable> tryCatch( Procedure0 tryProcedure )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			tryProcedure.invoke();
 			return Optional.empty();
@@ -2070,7 +2078,7 @@ public final class Kit
 	 */
 	public static <R> R tryFinally( Function0<R> tryFunction, Procedure0 finallyHandler )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			R result = tryFunction.invoke();
 			finallyHandler.invoke();
@@ -2117,7 +2125,7 @@ public final class Kit
 	 */
 	public static void tryFinally( Procedure0 tryProcedure, Procedure0 finallyHandler )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			tryProcedure.invoke();
 			finallyHandler.invoke();
@@ -2173,7 +2181,7 @@ public final class Kit
 	public static <C extends Closeable, R> R tryGetWith( C closeable, Function1<R,? super C> tryFunction )
 	{
 		assert closeable != null;
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			R result = tryFunction.invoke( closeable );
 			closeable.close();
@@ -2204,7 +2212,7 @@ public final class Kit
 	public static <C extends Closeable, R> R tryGetWith( C closeable, Function0<R> tryFunction )
 	{
 		assert closeable != null;
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			R result = tryFunction.invoke();
 			closeable.close();
@@ -2252,7 +2260,7 @@ public final class Kit
 	 */
 	public static <C extends Closeable> void tryWith( C closeable, Procedure1<? super C> tryProcedure )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			tryProcedure.invoke( closeable );
 			closeable.close();
@@ -2278,7 +2286,7 @@ public final class Kit
 	 */
 	public static <C extends Closeable> void tryWith( C closeable, Procedure0 tryProcedure )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			tryProcedure.invoke();
 			closeable.close();
@@ -2365,7 +2373,7 @@ public final class Kit
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
 		C closeable = f.invoke();
 		assert closeable != null;
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			R result = unchecked( () -> tryFunction.invoke( closeable ) );
 			unchecked( closeable::close );
@@ -2391,7 +2399,7 @@ public final class Kit
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
 		C closeable = f.invoke();
 		assert closeable != null;
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			unchecked( () -> tryProcedure.invoke( closeable ) );
 			unchecked( closeable::close );
@@ -3104,7 +3112,7 @@ public final class Kit
 
 	public static void synchronize( Lock lock, Procedure0 procedure )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			lock.lock();
 			procedure.invoke();
@@ -3126,7 +3134,7 @@ public final class Kit
 
 	public static <T> T synchronize( Lock lock, Function0<T> function )
 	{
-		if( areAssertionsEnabled() )
+		if( bypassTryCatch() )
 		{
 			lock.lock();
 			T result = function.invoke();

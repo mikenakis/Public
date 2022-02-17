@@ -9,15 +9,24 @@ import mikenakis.kit.lifetime.Closeable;
  */
 public interface LifeGuardFactory
 {
-	LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean initiallyAlive );
+	LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace, boolean initiallyAlive );
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	LifeGuard newLifeGuard( Closeable closeable, boolean collectStackTrace );
 
 	LifeGuard newLifeGuard( Closeable closeable );
 
 	interface Defaults extends LifeGuardFactory
 	{
+		@Override default LifeGuard newLifeGuard( Closeable closeable, boolean collectStackTrace )
+		{
+			return newLifeGuard( 1, closeable, collectStackTrace, true );
+		}
+
 		@Override default LifeGuard newLifeGuard( Closeable closeable )
 		{
-			return newLifeGuard( 1, closeable, true );
+			return newLifeGuard( 1, closeable, false, true );
 		}
 	}
 }

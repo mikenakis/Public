@@ -33,7 +33,7 @@ public final class ProductionLifeGuardFactory implements LifeGuardFactory.Defaul
 	{
 	}
 
-	@Override public LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean initiallyAlive )
+	@Override public LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace, boolean initiallyAlive )
 	{
 		return lifeGuard;
 	}

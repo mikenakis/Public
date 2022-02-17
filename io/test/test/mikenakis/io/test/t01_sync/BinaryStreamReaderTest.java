@@ -34,7 +34,7 @@ public abstract class BinaryStreamReaderTest
 	}
 
 	@Test
-	public void Reading_Zero_Bytes_From_Empty_Stream_Throws_And_Leaves_Buffer_Unchanged()
+	public void Reading_Zero_Bytes_From_Empty_Stream_Throws() //And_Leaves_Buffer_Unchanged()
 	{
 		withReader( "", reader ->
 		{
@@ -44,7 +44,7 @@ public abstract class BinaryStreamReaderTest
 	}
 
 	@Test
-	public void Reading_Zero_Bytes_From_Non_Empty_Stream_Throws_And_Leaves_Buffer_Unchanged()
+	public void Reading_Zero_Bytes_From_Non_Empty_Stream_Throws() //And_Leaves_Buffer_Unchanged()
 	{
 		withReader( "a", reader ->
 		{
@@ -54,7 +54,7 @@ public abstract class BinaryStreamReaderTest
 	}
 
 	@Test
-	public void Reading_From_Empty_Stream_Yields_Minus_One_And_Leaves_Buffer_Unchanged()
+	public void Reading_From_Empty_Stream_Yields_Minus_One() //And_Leaves_Buffer_Unchanged()
 	{
 		withReader( "", reader ->
 		{

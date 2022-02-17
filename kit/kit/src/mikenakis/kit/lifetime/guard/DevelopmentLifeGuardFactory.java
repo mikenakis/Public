@@ -3,9 +3,8 @@ package mikenakis.kit.lifetime.guard;
 import mikenakis.kit.Kit;
 import mikenakis.kit.debug.Debug;
 import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.logging.Log;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
 
 /**
@@ -21,24 +20,9 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 	}
 
 	private FinalizationHandler finalizationHandler = DevelopmentLifeGuardFactory::defaultFinalizationHandler;
-	public final Collection<String> investigatedCloseableClassNames = new HashSet<>();
 
 	DevelopmentLifeGuardFactory()
 	{
-		//addInvestigatedCloseableClassName( "mikenakis.sound.framework.ConcreteSequencer" );
-		//addInvestigatedCloseableClassName( "mikenakis.sound.framework.AdsrEnvelopePlayer$1" );
-		addInvestigatedCloseableClassName( "mikenakis.modelyn.rows.RowSetOnEnumerable" );
-	}
-
-	private void addInvestigatedCloseableClassName( String closeableClassName )
-	{
-		Kit.collection.add( investigatedCloseableClassNames, closeableClassName );
-	}
-
-	private boolean isInvestigatedCloseable( Class<? extends Closeable> closeableClass )
-	{
-		assert !closeableClass.isInterface();
-		return Kit.collection.contains( investigatedCloseableClassNames, closeableClass.getName() );
 	}
 
 	FinalizationHandler getFinalizationHandler()
@@ -59,17 +43,16 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 	{
 		if( closed )
 			return;
-		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuardFactory::stackFramesToString ).orElse( "Allocation stack trace not available. (This is not an investigated Closeable.)" );
-		System.out.println( "Closeable class not closed: " + closeableClass + "\n" + stackTraceText ); //TODO: use logging.
+		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuardFactory::stackFramesToString ).orElse( "Collection of allocation stack trace is not enabled for this class." );
+		Log.error( "Closeable class not closed: " + closeableClass + "\n" + stackTraceText ); //TODO: use logging.
 		Debug.breakPoint();
 	}
 
 	protected abstract LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, boolean initiallyAlive, Optional<StackWalker.StackFrame[]> stackTrace );
 
-	@Override public final LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean initiallyAlive )
+	@Override public final LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace, boolean initiallyAlive )
 	{
-		boolean investigate = isInvestigatedCloseable( closeable.getClass() );
-		Optional<StackWalker.StackFrame[]> stackTrace = investigate ? Optional.of( Kit.getStackTrace( framesToSkip + 2 ) ) : Optional.empty();
+		Optional<StackWalker.StackFrame[]> stackTrace = collectStackTrace ? Optional.of( Kit.getStackTrace( framesToSkip + 2 ) ) : Optional.empty();
 		return onNewDevelopmentLifeGuard( closeable, initiallyAlive, stackTrace );
 	}
 
@@ -85,5 +68,4 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 		}
 		return builder.toString();
 	}
-
 }

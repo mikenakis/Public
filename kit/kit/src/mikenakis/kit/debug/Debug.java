@@ -1,6 +1,5 @@
 package mikenakis.kit.debug;
 
-import mikenakis.kit.BreakpointException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
@@ -8,6 +7,10 @@ import mikenakis.kit.logging.Log;
 
 public class Debug
 {
+	public static class BreakpointException extends RuntimeException
+	{
+	}
+
 	public static void breakPoint()
 	{
 		try

@@ -13,7 +13,12 @@ public interface LifeGuard extends Closeable
 {
 	static LifeGuard create( Closeable closeable )
 	{
-		return factory().newLifeGuard( closeable );
+		return factory().newLifeGuard( closeable, false );
+	}
+
+	static LifeGuard create( Closeable closeable, boolean collectStackTrace )
+	{
+		return factory().newLifeGuard( closeable, collectStackTrace );
 	}
 
 	static LifeGuardFactory factory()

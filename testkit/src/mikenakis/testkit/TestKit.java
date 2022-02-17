@@ -71,6 +71,7 @@ public final class TestKit
 
 	private static Throwable invokeAndCatch( Procedure0 procedure )
 	{
+		Kit.inTry = true;
 		try
 		{
 			procedure.invoke();
@@ -79,6 +80,10 @@ public final class TestKit
 		catch( Throwable throwable )
 		{
 			return throwable;
+		}
+		finally
+		{
+			Kit.inTry = false;
 		}
 	}
 
