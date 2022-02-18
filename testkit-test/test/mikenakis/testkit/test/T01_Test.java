@@ -2,8 +2,8 @@ package mikenakis.testkit.test;
 
 import mikenakis.io.sync.text.reading.CloseableTextStreamReaderOnBinaryStreamReader;
 import mikenakis.io.sync.text.reading.CloseableMemoryTextStreamReader;
-import mikenakis.io.sync.text.writing.CloseableTextStreamWriterOnBinaryStreamWriter;
 import mikenakis.io.sync.text.writing.CloseableMemoryTextStreamWriter;
+import mikenakis.io.sync.text.writing.CloseableTextStreamWriterOnBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Procedure0;
@@ -42,7 +42,7 @@ public final class T01_Test
 		StringBuilder stringBuilder = new StringBuilder();
 		Kit.tryWith( CloseableMemoryTextStreamWriter.create( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
 			Kit.tryWith( new CloseableBinaryStreamWriterIntoHex( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
-				Kit.tryWith( new CloseableTextStreamWriterOnBinaryStreamWriter( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
+				Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
 					textStreamWriter.write( text ) ) ) );
 		return stringBuilder.toString();
 	}

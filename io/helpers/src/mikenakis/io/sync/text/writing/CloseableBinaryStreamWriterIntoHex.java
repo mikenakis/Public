@@ -16,7 +16,7 @@ public class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStream
 	public static void tryWith( BinaryStreamWriter binaryStreamWriter, int width, Procedure1<BinaryStreamWriter> delegee )
 	{
 		MutationContext mutationContext = SingleThreadedMutationContext.instance();
-		Kit.tryWith( new CloseableTextStreamWriterOnBinaryStreamWriter( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
+		Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
 			Kit.tryWith( new CloseableBinaryStreamWriterIntoHex( textStreamWriter, width, Procedure0.noOp ), delegee ) );
 	}
 
