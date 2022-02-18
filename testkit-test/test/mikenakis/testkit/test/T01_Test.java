@@ -40,8 +40,8 @@ public final class T01_Test
 	private String hexFromText( String text )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		Kit.tryWith( CloseableMemoryTextStreamWriter.create( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
-			Kit.tryWith( new CloseableBinaryStreamWriterIntoHex( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
+		Kit.tryWith( CloseableMemoryTextStreamWriter.of( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
+			Kit.tryWith( CloseableBinaryStreamWriterIntoHex.of( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
 				Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
 					textStreamWriter.write( text ) ) ) );
 		return stringBuilder.toString();
@@ -49,9 +49,9 @@ public final class T01_Test
 
 	private String textFromHex( String hexString )
 	{
-		return Kit.tryGetWith( CloseableMemoryTextStreamReader.create( mutationContext, bufferAllocator, hexString, Procedure0.noOp ), memoryTextStreamReader ->
-			Kit.tryGetWith( new CloseableBinaryStreamReaderFromHex( memoryTextStreamReader, Procedure0.noOp ), binaryStreamReader ->
-				Kit.tryGetWith( new CloseableTextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
+		return Kit.tryGetWith( CloseableMemoryTextStreamReader.of( mutationContext, bufferAllocator, hexString, Procedure0.noOp ), memoryTextStreamReader ->
+			Kit.tryGetWith( CloseableBinaryStreamReaderFromHex.of( memoryTextStreamReader, Procedure0.noOp ), binaryStreamReader ->
+				Kit.tryGetWith( CloseableTextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
 				{
 					String text = textStreamReader.tryReadLine().orElseThrow();
 					assert textStreamReader.tryReadLine().isEmpty();

@@ -14,8 +14,13 @@ import mikenakis.kit.mutation.MutationContext;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable implements CloseableTextStreamReader.Defaults
+public final class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable implements CloseableTextStreamReader.Defaults
 {
+	public static CloseableTextStreamReaderOnBinaryStreamReader of( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	{
+		return new CloseableTextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, onClose );
+	}
+
 	public static final BufferKey bufferKey = new BufferKey( CloseableTextStreamReaderOnBinaryStreamReader.class.getName() );
 	private static final Buffer EndOfLine = Buffer.of( "\n" );
 
@@ -24,7 +29,7 @@ public class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable imple
 	private final BufferingBinaryStreamReader bufferingReader;
 	private final BufferAllocation readBufferAllocation;
 
-	public CloseableTextStreamReaderOnBinaryStreamReader( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	private CloseableTextStreamReaderOnBinaryStreamReader( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert binaryStreamReader != null;

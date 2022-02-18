@@ -13,13 +13,13 @@ import mikenakis.kit.buffer.Buffer;
  *
  * @author michael.gr
  */
-public class CloseableMemoryTextStreamReader
+public final class CloseableMemoryTextStreamReader
 {
-	public static CloseableTextStreamReader create( MutationContext mutationContext, BufferAllocator bufferAllocator, String string, Procedure0 onClose )
+	public static CloseableTextStreamReader of( MutationContext mutationContext, BufferAllocator bufferAllocator, String string, Procedure0 onClose )
 	{
 		assert onClose != null;
 		Buffer buffer = Buffer.of( string );
-		CloseableBinaryStreamReader binaryStreamReader = CloseableMemoryBinaryStreamReader.create( mutationContext, buffer, Procedure0.noOp );
-		return new CloseableTextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, () -> { binaryStreamReader.close(); onClose.invoke(); } );
+		CloseableBinaryStreamReader binaryStreamReader = CloseableMemoryBinaryStreamReader.of( mutationContext, buffer, Procedure0.noOp );
+		return CloseableTextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, () -> { binaryStreamReader.close(); onClose.invoke(); } );
 	}
 }

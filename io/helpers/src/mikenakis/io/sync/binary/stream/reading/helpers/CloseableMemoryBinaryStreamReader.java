@@ -13,9 +13,9 @@ import mikenakis.kit.mutation.MutationContext;
  *
  * @author michael.gr
  */
-public class CloseableMemoryBinaryStreamReader extends Mutable implements CloseableBinaryStreamReader.Defaults
+public final class CloseableMemoryBinaryStreamReader extends Mutable implements CloseableBinaryStreamReader.Defaults
 {
-	public static CloseableBinaryStreamReader create( MutationContext mutationContext, Buffer buffer, Procedure0 onClose )
+	public static CloseableBinaryStreamReader of( MutationContext mutationContext, Buffer buffer, Procedure0 onClose )
 	{
 		return new CloseableMemoryBinaryStreamReader( mutationContext, buffer, onClose );
 	}

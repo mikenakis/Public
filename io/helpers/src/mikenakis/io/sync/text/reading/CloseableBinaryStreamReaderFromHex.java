@@ -13,7 +13,7 @@ import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 import java.util.Optional;
 
-public class CloseableBinaryStreamReaderFromHex implements CloseableBinaryStreamReader.Defaults
+public final class CloseableBinaryStreamReaderFromHex implements CloseableBinaryStreamReader.Defaults
 {
 	public static void tryWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Procedure1<BinaryStreamReader> delegee )
 	{
@@ -28,8 +28,13 @@ public class CloseableBinaryStreamReaderFromHex implements CloseableBinaryStream
 	public static <T> T tryGetWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Function1<T,BinaryStreamReader> delegee )
 	{
 		MutationContext mutationContext = SingleThreadedMutationContext.instance();
-		return Kit.tryGetWith( new CloseableTextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
-			Kit.tryGetWith( new CloseableBinaryStreamReaderFromHex( textStreamReader, Procedure0.noOp ), delegee ) );
+		return Kit.tryGetWith( CloseableTextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
+			Kit.tryGetWith( of( textStreamReader, Procedure0.noOp ), delegee ) );
+	}
+
+	public static CloseableBinaryStreamReaderFromHex of( TextStreamReader textStreamReader, Procedure0 onClose )
+	{
+		return new CloseableBinaryStreamReaderFromHex( textStreamReader, onClose );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
@@ -38,7 +43,7 @@ public class CloseableBinaryStreamReaderFromHex implements CloseableBinaryStream
 	private byte[] buffer;
 	private int position;
 
-	public CloseableBinaryStreamReaderFromHex( TextStreamReader textStreamReader, Procedure0 onClose )
+	private CloseableBinaryStreamReaderFromHex( TextStreamReader textStreamReader, Procedure0 onClose )
 	{
 		this.textStreamReader = textStreamReader;
 		this.onClose = onClose;

@@ -8,7 +8,7 @@ import mikenakis.kit.mutation.MutationContext;
 
 import java.nio.charset.StandardCharsets;
 
-public class CloseableTextStreamWriterOnBinaryStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
+public final class CloseableTextStreamWriterOnBinaryStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
 {
 	public static CloseableTextStreamWriterOnBinaryStreamWriter of( MutationContext mutationContext, BinaryStreamWriter binaryStreamWriter, Procedure0 onClose )
 	{

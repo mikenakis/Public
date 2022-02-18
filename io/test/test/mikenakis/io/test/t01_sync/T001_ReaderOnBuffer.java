@@ -25,6 +25,6 @@ public class T001_ReaderOnBuffer extends BinaryStreamReaderTest
 	@Override protected CloseableBinaryStreamReader newReader( String content )
 	{
 		Buffer bytes = Buffer.of( content, StandardCharsets.UTF_8 );
-		return CloseableMemoryBinaryStreamReader.create( mutationContext, bytes, Procedure0.noOp );
+		return CloseableMemoryBinaryStreamReader.of( mutationContext, bytes, Procedure0.noOp );
 	}
 }

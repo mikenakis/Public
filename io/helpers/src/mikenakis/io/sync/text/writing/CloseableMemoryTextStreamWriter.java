@@ -10,9 +10,9 @@ import mikenakis.kit.mutation.MutationContext;
  *
  * @author michael.gr
  */
-public class CloseableMemoryTextStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
+public final class CloseableMemoryTextStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
 {
-	public static CloseableTextStreamWriter create( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
+	public static CloseableTextStreamWriter of( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
 	{
 		return new CloseableMemoryTextStreamWriter( mutationContext, stringBuilder, onClose );
 	}

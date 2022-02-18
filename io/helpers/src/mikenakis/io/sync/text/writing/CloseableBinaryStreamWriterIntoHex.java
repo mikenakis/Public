@@ -11,13 +11,18 @@ import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 import java.util.Arrays;
 
-public class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStreamWriter.Defaults
+public final class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStreamWriter.Defaults
 {
+	public static CloseableBinaryStreamWriterIntoHex of( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
+	{
+		return new CloseableBinaryStreamWriterIntoHex( textStreamWriter, width, onClose );
+	}
+
 	public static void tryWith( BinaryStreamWriter binaryStreamWriter, int width, Procedure1<BinaryStreamWriter> delegee )
 	{
 		MutationContext mutationContext = SingleThreadedMutationContext.instance();
 		Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
-			Kit.tryWith( new CloseableBinaryStreamWriterIntoHex( textStreamWriter, width, Procedure0.noOp ), delegee ) );
+			Kit.tryWith( of( textStreamWriter, width, Procedure0.noOp ), delegee ) );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
@@ -27,7 +32,7 @@ public class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStream
 	private final Procedure0 onClose;
 	private int position;
 
-	public CloseableBinaryStreamWriterIntoHex( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
+	private CloseableBinaryStreamWriterIntoHex( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
 	{
 		this.textStreamWriter = textStreamWriter;
 		hexField = new char[ width * 3 ];

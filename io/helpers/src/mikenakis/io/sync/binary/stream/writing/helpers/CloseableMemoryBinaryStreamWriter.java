@@ -13,9 +13,9 @@ import mikenakis.kit.mutation.MutationContext;
  *
  * @author michael.gr
  */
-public class CloseableMemoryBinaryStreamWriter extends Mutable implements CloseableBinaryStreamWriter.Defaults
+public final class CloseableMemoryBinaryStreamWriter extends Mutable implements CloseableBinaryStreamWriter.Defaults
 {
-	public static CloseableBinaryStreamWriter create( MutationContext mutationContext, BufferBuilder bufferBuilder, Procedure0 onClose )
+	public static CloseableBinaryStreamWriter of( MutationContext mutationContext, BufferBuilder bufferBuilder, Procedure0 onClose )
 	{
 		return new CloseableMemoryBinaryStreamWriter( mutationContext, bufferBuilder, onClose );
 	}

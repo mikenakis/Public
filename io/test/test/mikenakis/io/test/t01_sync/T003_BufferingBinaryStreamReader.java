@@ -31,7 +31,7 @@ public class T003_BufferingBinaryStreamReader
 	private BufferingBinaryStreamReader newBufferedReader( String content )
 	{
 		Buffer buffer = Buffer.of( content, StandardCharsets.UTF_8 );
-		CloseableBinaryStreamReader unbufferedReader = CloseableMemoryBinaryStreamReader.create( mutationContext, buffer, Procedure0.noOp );
+		CloseableBinaryStreamReader unbufferedReader = CloseableMemoryBinaryStreamReader.of( mutationContext, buffer, Procedure0.noOp );
 		return new BufferingBinaryStreamReader( mutationContext, bytes, unbufferedReader, unbufferedReader::close );
 	}
 
