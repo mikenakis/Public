@@ -1,7 +1,7 @@
 package mikenakis.intertwine.predefined;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.MethodDescriptor;
@@ -21,16 +21,16 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 {
 	private final class Entwiner
 	{
-		final AnyCall<Procedure2<Object,Object>> exitPoint;
+		final Anycall<Procedure2<Object,Object>> exitPoint;
 		final Procedure2<Object,Object> entryPoint = new Procedure2<>()
 		{
 			@Override public void invoke( Object parameter1, Object parameter2 )
 			{
-				exitPoint.anyCall( key, new Object[] { parameter1, parameter2 } );
+				exitPoint.anycall( key, new Object[] { parameter1, parameter2 } );
 			}
 		};
 
-		Entwiner( AnyCall<Procedure2<Object,Object>> exitPoint )
+		Entwiner( Anycall<Procedure2<Object,Object>> exitPoint )
 		{
 			this.exitPoint = exitPoint;
 		}
@@ -45,9 +45,9 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 			this.exitPoint = exitPoint;
 		}
 
-		private final AnyCall<Procedure2<Object,Object>> anyCall = new AnyCall<>()
+		private final Anycall<Procedure2<Object,Object>> anycall = new Anycall<>()
 		{
-			@Override public Object anyCall( MethodKey<Procedure2<Object,Object>> key0, Object[] arguments )
+			@Override public Object anycall( MethodKey<Procedure2<Object,Object>> key0, Object[] arguments )
 			{
 				assert key0 == key;
 				assert arguments.length == 2;
@@ -103,13 +103,13 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		return key;
 	}
 
-	@Override public Procedure2<Object,Object> newEntwiner( AnyCall<Procedure2<Object,Object>> exitPoint )
+	@Override public Procedure2<Object,Object> newEntwiner( Anycall<Procedure2<Object,Object>> exitPoint )
 	{
 		return new Entwiner( exitPoint ).entryPoint;
 	}
 
-	@Override public AnyCall<Procedure2<Object,Object>> newUntwiner( Procedure2<Object,Object> exitPoint )
+	@Override public Anycall<Procedure2<Object,Object>> newUntwiner( Procedure2<Object,Object> exitPoint )
 	{
-		return new Untwiner( exitPoint ).anyCall;
+		return new Untwiner( exitPoint ).anycall;
 	}
 }

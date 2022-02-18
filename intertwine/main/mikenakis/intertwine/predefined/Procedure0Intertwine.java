@@ -1,7 +1,7 @@
 package mikenakis.intertwine.predefined;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.MethodDescriptor;
@@ -20,16 +20,16 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 {
 	private final class Entwiner
 	{
-		final AnyCall<Procedure0> exitPoint;
+		final Anycall<Procedure0> exitPoint;
 		final Procedure0 entryPoint = new Procedure0()
 		{
 			@Override public void invoke()
 			{
-				exitPoint.anyCall( key, Kit.ARRAY_OF_ZERO_OBJECTS );
+				exitPoint.anycall( key, Kit.ARRAY_OF_ZERO_OBJECTS );
 			}
 		};
 
-		Entwiner( AnyCall<Procedure0> exitPoint )
+		Entwiner( Anycall<Procedure0> exitPoint )
 		{
 			this.exitPoint = exitPoint;
 		}
@@ -44,9 +44,9 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 			this.exitPoint = exitPoint;
 		}
 
-		private final AnyCall<Procedure0> anyCall = new AnyCall<>()
+		private final Anycall<Procedure0> anycall = new Anycall<>()
 		{
-			@Override public Object anyCall( MethodKey<Procedure0> key0, Object[] arguments )
+			@Override public Object anycall( MethodKey<Procedure0> key0, Object[] arguments )
 			{
 				assert key0 == key;
 				assert arguments.length == 0;
@@ -102,13 +102,13 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return key;
 	}
 
-	@Override public Procedure0 newEntwiner( AnyCall<Procedure0> exitPoint )
+	@Override public Procedure0 newEntwiner( Anycall<Procedure0> exitPoint )
 	{
 		return new Entwiner( exitPoint ).entryPoint;
 	}
 
-	@Override public AnyCall<Procedure0> newUntwiner( Procedure0 exitPoint )
+	@Override public Anycall<Procedure0> newUntwiner( Procedure0 exitPoint )
 	{
-		return new Untwiner( exitPoint ).anyCall;
+		return new Untwiner( exitPoint ).anycall;
 	}
 }

@@ -34,12 +34,12 @@ public interface Intertwine<T>
 	MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype );
 
 	/**
-	 * Creates a new implementation of the target interface which delegates to the given instance of {@link AnyCall}.
+	 * Creates a new implementation of the target interface which delegates to the given instance of {@link Anycall}.
 	 */
-	T newEntwiner( AnyCall<T> exitPoint );
+	T newEntwiner( Anycall<T> exitPoint );
 
 	/**
-	 * Creates a new implementation of {@link AnyCall} which delegates to the given instance of the target interface.
+	 * Creates a new implementation of {@link Anycall} which delegates to the given instance of the target interface.
 	 */
-	AnyCall<T> newUntwiner( T exitPoint );
+	Anycall<T> newUntwiner( T exitPoint );
 }

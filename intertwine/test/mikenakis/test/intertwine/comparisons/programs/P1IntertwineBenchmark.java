@@ -1,6 +1,6 @@
 package mikenakis.test.intertwine.comparisons.programs;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.implementations.compiling.CompilingIntertwineFactory;
@@ -111,7 +111,7 @@ public final class P1IntertwineBenchmark
 			super( foo ->
 			{
 				Intertwine<Foo> intertwine = intertwineFactory.getIntertwine( Foo.class );
-				AnyCall<Foo> untwiner = intertwine.newUntwiner( foo );
+				Anycall<Foo> untwiner = intertwine.newUntwiner( foo );
 				return intertwine.newEntwiner( untwiner );
 			} );
 		}

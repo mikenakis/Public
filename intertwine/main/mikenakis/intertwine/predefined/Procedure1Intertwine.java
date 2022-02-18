@@ -1,7 +1,7 @@
 package mikenakis.intertwine.predefined;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.MethodDescriptor;
@@ -21,17 +21,17 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 {
 	private final class Entwiner
 	{
-		final AnyCall<Procedure1<Object>> exitPoint;
+		final Anycall<Procedure1<Object>> exitPoint;
 
 		final Procedure1<Object> entryPoint = new Procedure1<>()
 		{
 			@Override public void invoke( Object parameter )
 			{
-				exitPoint.anyCall( key, new Object[] { parameter } );
+				exitPoint.anycall( key, new Object[] { parameter } );
 			}
 		};
 
-		Entwiner( AnyCall<Procedure1<Object>> exitPoint )
+		Entwiner( Anycall<Procedure1<Object>> exitPoint )
 		{
 			this.exitPoint = exitPoint;
 		}
@@ -41,9 +41,9 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 	{
 		final Procedure1<Object> exitPoint;
 
-		final AnyCall<Procedure1<Object>> anyCall = new AnyCall<>()
+		final Anycall<Procedure1<Object>> anycall = new Anycall<>()
 		{
-			@Override public Object anyCall( MethodKey<Procedure1<Object>> key0, Object[] arguments )
+			@Override public Object anycall( MethodKey<Procedure1<Object>> key0, Object[] arguments )
 			{
 				assert key0 == key;
 				assert arguments.length == 1;
@@ -104,13 +104,13 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 		return key;
 	}
 
-	@Override public Procedure1<Object> newEntwiner( AnyCall<Procedure1<Object>> exitPoint )
+	@Override public Procedure1<Object> newEntwiner( Anycall<Procedure1<Object>> exitPoint )
 	{
 		return new Entwiner( exitPoint ).entryPoint;
 	}
 
-	@Override public AnyCall<Procedure1<Object>> newUntwiner( Procedure1<Object> exitPoint )
+	@Override public Anycall<Procedure1<Object>> newUntwiner( Procedure1<Object> exitPoint )
 	{
-		return new Untwiner( exitPoint ).anyCall;
+		return new Untwiner( exitPoint ).anycall;
 	}
 }

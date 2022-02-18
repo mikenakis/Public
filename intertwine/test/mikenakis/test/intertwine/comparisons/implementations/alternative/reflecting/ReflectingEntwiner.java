@@ -1,6 +1,6 @@
 package mikenakis.test.intertwine.comparisons.implementations.alternative.reflecting;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
 
 import java.lang.reflect.Method;
@@ -10,10 +10,10 @@ import java.util.Optional;
 final class ReflectingEntwiner<T>
 {
 	private final ReflectingIntertwine<T> intertwine;
-	private final AnyCall<T> exitPoint;
+	private final Anycall<T> exitPoint;
 	final T entryPoint;
 
-	ReflectingEntwiner( ReflectingIntertwine<T> intertwine, AnyCall<T> exitPoint )
+	ReflectingEntwiner( ReflectingIntertwine<T> intertwine, Anycall<T> exitPoint )
 	{
 		this.intertwine = intertwine;
 		assert exitPoint != null;
@@ -30,7 +30,7 @@ final class ReflectingEntwiner<T>
 		assert proxy == entryPoint;
 		Optional<ReflectingKey<T>> key = intertwine.tryGetKeyByMethod( method );
 		if( key.isPresent() )
-			return exitPoint.anyCall( key.get(), arguments );
+			return exitPoint.anycall( key.get(), arguments );
 		if( method.equals( IntertwineHelpers.hashCodeMethod ) )
 			return System.identityHashCode( proxy );
 		if( method.equals( IntertwineHelpers.equalsMethod ) )

@@ -1,6 +1,6 @@
 package mikenakis.test.intertwine.comparisons.implementations.alternative.reflecting;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
@@ -11,9 +11,9 @@ class ReflectingUntwiner<T>
 {
 	private final T exitPoint;
 
-	final AnyCall<T> anycall = new AnyCall<>()
+	final Anycall<T> anycall = new Anycall<>()
 	{
-		@Override public Object anyCall( MethodKey<T> key, Object[] arguments )
+		@Override public Object anycall( MethodKey<T> key, Object[] arguments )
 		{
 			ReflectingKey<T> reflectingKey = (ReflectingKey<T>)key;
 			try

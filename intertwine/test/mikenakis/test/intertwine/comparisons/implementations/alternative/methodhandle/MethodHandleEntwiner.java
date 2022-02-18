@@ -1,6 +1,6 @@
 package mikenakis.test.intertwine.comparisons.implementations.alternative.methodhandle;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.implementations.IntertwineHelpers;
 
 import java.lang.reflect.Method;
@@ -10,10 +10,10 @@ import java.util.Optional;
 final class MethodHandleEntwiner<T>
 {
 	private final MethodHandleIntertwine<T> intertwine;
-	private final AnyCall<T> exitPoint;
+	private final Anycall<T> exitPoint;
 	final T entryPoint;
 
-	MethodHandleEntwiner( MethodHandleIntertwine<T> intertwine, AnyCall<T> exitPoint )
+	MethodHandleEntwiner( MethodHandleIntertwine<T> intertwine, Anycall<T> exitPoint )
 	{
 		this.intertwine = intertwine;
 		this.exitPoint = exitPoint;
@@ -28,7 +28,7 @@ final class MethodHandleEntwiner<T>
 	{
 		Optional<MethodHandleKey<T>> key = intertwine.tryGetKeyByMethod( method );
 		if( key.isPresent() )
-			return exitPoint.anyCall( key.get(), arguments );
+			return exitPoint.anycall( key.get(), arguments );
 		if( method.equals( IntertwineHelpers.hashCodeMethod ) )
 			return System.identityHashCode( proxy );
 		if( method.equals( IntertwineHelpers.equalsMethod ) )

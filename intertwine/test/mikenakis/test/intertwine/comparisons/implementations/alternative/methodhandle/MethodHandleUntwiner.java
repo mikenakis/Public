@@ -1,6 +1,6 @@
 package mikenakis.test.intertwine.comparisons.implementations.alternative.methodhandle;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
@@ -30,9 +30,9 @@ class MethodHandleUntwiner<T>
 		return methodHandle;
 	}
 
-	final AnyCall<T> anycall = new AnyCall<>()
+	final Anycall<T> anycall = new Anycall<>()
 	{
-		@Override public Object anyCall( MethodKey<T> key0, Object[] arguments )
+		@Override public Object anycall( MethodKey<T> key0, Object[] arguments )
 		{
 			MethodHandleKey<T> key = (MethodHandleKey<T>)key0;
 			MethodHandle boundMethodHandle = Kit.map.get( boundMethodHandles, key );

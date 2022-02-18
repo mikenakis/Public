@@ -1,6 +1,6 @@
 package mikenakis.test.intertwine;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.implementations.caching.CachingIntertwineFactory;
@@ -36,8 +36,8 @@ public final class T01_CompilingIntertwine
 			}
 		};
 		Intertwine<Alpha> intertwine = intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ Alpha.class );
-		AnyCall<Alpha> anyCall = intertwine.newUntwiner( implementation );
-		Alpha entwiner = intertwine.newEntwiner( anyCall );
+		Anycall<Alpha> untwiner = intertwine.newUntwiner( implementation );
+		Alpha entwiner = intertwine.newEntwiner( untwiner );
 		assert entwiner.intReturningMethod() == 0;
 		String result = entwiner.theKitchenSink( (byte)1, new byte[] { 11 }, true, (short)2, 'A', 3, 4.0f, 5, 6.0, "B", new String[] { "BB" }, List.of( "C", "D" ) );
 		assert result.equals( "1 [11] true 2 A 3 4.0 5 6.0 B [BB] [C, D]" );
@@ -62,8 +62,8 @@ public final class T01_CompilingIntertwine
 			}
 		};
 		Intertwine<Bravo> intertwine = intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ Bravo.class );
-		AnyCall<Bravo> anyCall = intertwine.newUntwiner( implementation );
-		Bravo entwiner = intertwine.newEntwiner( anyCall );
+		Anycall<Bravo> untwiner = intertwine.newUntwiner( implementation );
+		Bravo entwiner = intertwine.newEntwiner( untwiner );
 		assert entwiner.intReturningMethod() == 0;
 		assert entwiner.stringReturningMethod( 5 ).equals( "5" );
 		String result = entwiner.theKitchenSink( (byte)1, new byte[] { 11 }, true, (short)2, 'A', 3, 4.0f, 5, 6.0, "B", new String[] { "BB" }, List.of( "C", "D" ) );

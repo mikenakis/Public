@@ -1,11 +1,11 @@
 package mikenakis.test.intertwine.comparisons.implementations.testing.handwritten;
 
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.test.intertwine.comparisons.rig.Alpha;
 import mikenakis.test.intertwine.comparisons.rig.FooInterface;
 
-class HandwrittenUntwiner implements AnyCall<FooInterface>
+class HandwrittenUntwiner implements Anycall<FooInterface>
 {
 	private final FooInterface exitPoint;
 
@@ -14,7 +14,7 @@ class HandwrittenUntwiner implements AnyCall<FooInterface>
 		this.exitPoint = exitPoint;
 	}
 
-	@Override public Object anyCall( MethodKey<FooInterface> key, Object[] arguments )
+	@Override public Object anycall( MethodKey<FooInterface> key, Object[] arguments )
 	{
 		HandwrittenKey handwrittenKey = (HandwrittenKey)key;
 		switch( handwrittenKey.index )

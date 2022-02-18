@@ -7,7 +7,7 @@ import mikenakis.test.intertwine.comparisons.rig.exchange.object.AnycallRequest;
 import mikenakis.test.intertwine.comparisons.rig.exchange.object.AnycallResponse;
 import mikenakis.test.intertwine.comparisons.rig.exchange.object.AnycallToObjectExchange;
 import mikenakis.test.intertwine.comparisons.rig.exchange.object.ObjectExchangeToAnycall;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.kit.Kit;
@@ -26,36 +26,36 @@ public abstract class Client
 
 	protected abstract IntertwineFactory getIntertwineFactory();
 
-	private interface AnyCallFromUntwiner<T>
+	private interface AnycallFromUntwiner<T>
 	{
-		AnyCall<T> invoke( AnyCall<T> untwiner );
+		Anycall<T> invoke( Anycall<T> untwiner );
 	}
 
 	@Test
 	public void Happy_Path_via_Intertwine_Works()
 	{
-		FooInterface fooServer = createFooServer( anyCallFromUntwinerDirect );
+		FooInterface fooServer = createFooServer( anycallFromUntwinerDirect );
 		ClientHelpers.runHappyPath( fooServer );
 	}
 
 	@Test
 	public void Failure_via_Intertwine_Works()
 	{
-		FooInterface fooServer = createFooServer( anyCallFromUntwinerDirect );
+		FooInterface fooServer = createFooServer( anycallFromUntwinerDirect );
 		TestKit.expect( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
 	}
 
 	@Test
 	public void Happy_Path_via_ObjectExchange_Works()
 	{
-		FooInterface fooServer = createFooServer( anyCallFromUntwinerViaObjectExchange );
+		FooInterface fooServer = createFooServer( anycallFromUntwinerViaObjectExchange );
 		ClientHelpers.runHappyPath( fooServer );
 	}
 
 	@Test
 	public void Failure_via_ObjectExchange_Works()
 	{
-		FooInterface fooServer = createFooServer( anyCallFromUntwinerViaObjectExchange );
+		FooInterface fooServer = createFooServer( anycallFromUntwinerViaObjectExchange );
 		TestKit.expect( NoSuchElementException.class, () -> fooServer.getAlpha( -1 ) );
 	}
 
@@ -72,31 +72,31 @@ public abstract class Client
 		TestKit.expect( IllegalAccessException.class, () -> intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ MyNonPublicInterface.class ) );
 	}
 
-	private FooInterface createFooServer( AnyCallFromUntwiner<FooInterface> anyCallFromUntwiner )
+	private FooInterface createFooServer( AnycallFromUntwiner<FooInterface> anycallFromUntwiner )
 	{
 		FooInterface fooServer = new FooServer();
-		AnyCall<FooInterface> untwiner = newUntwiner( fooServer );
-		AnyCall<FooInterface> anyCall = anyCallFromUntwiner.invoke( untwiner );
-		return newEntwiner( anyCall );
+		Anycall<FooInterface> untwiner = newUntwiner( fooServer );
+		Anycall<FooInterface> anycall = anycallFromUntwiner.invoke( untwiner );
+		return newEntwiner( anycall );
 	}
 
-	private AnyCall<FooInterface> newUntwiner( FooInterface interfaceServer )
+	private Anycall<FooInterface> newUntwiner( FooInterface interfaceServer )
 	{
 		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( /*getClass().getClassLoader(),*/ FooInterface.class );
 		return intertwine.newUntwiner( interfaceServer );
 	}
 
-	private FooInterface newEntwiner( AnyCall<FooInterface> anyCall )
+	private FooInterface newEntwiner( Anycall<FooInterface> anycall )
 	{
 		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( /*getClass().getClassLoader(),*/ FooInterface.class );
-		return intertwine.newEntwiner( anyCall );
+		return intertwine.newEntwiner( anycall );
 	}
 
-	private final AnyCallFromUntwiner<FooInterface> anyCallFromUntwinerDirect = //
-		( AnyCall<FooInterface> untwiner ) -> untwiner;
+	private final AnycallFromUntwiner<FooInterface> anycallFromUntwinerDirect = //
+		( Anycall<FooInterface> untwiner ) -> untwiner;
 
-	private final AnyCallFromUntwiner<FooInterface> anyCallFromUntwinerViaObjectExchange = //
-		( AnyCall<FooInterface> untwiner ) ->
+	private final AnycallFromUntwiner<FooInterface> anycallFromUntwinerViaObjectExchange = //
+		( Anycall<FooInterface> untwiner ) ->
 	{
 		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( /*getClass().getClassLoader(),*/ FooInterface.class );
 		ObjectExchange<AnycallResponse,AnycallRequest> objectExchange = new ObjectExchangeToAnycall<>( intertwine, untwiner );

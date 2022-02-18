@@ -1,12 +1,10 @@
-package mikenakis.testkit;
+package mikenakis.io.sync.text.writing;
 
-import mikenakis.io.sync.text.writing.CloseableTextStreamWriterOnBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
 import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
-import mikenakis.io.sync.text.writing.TextStreamWriter;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;

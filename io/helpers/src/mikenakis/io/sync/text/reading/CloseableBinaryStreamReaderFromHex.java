@@ -1,6 +1,5 @@
-package mikenakis.testkit;
+package mikenakis.io.sync.text.reading;
 
-import mikenakis.io.sync.text.reading.CloseableTextStreamReaderOnBinaryStreamReader;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Function1;
@@ -8,7 +7,6 @@ import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
-import mikenakis.io.sync.text.reading.TextStreamReader;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;

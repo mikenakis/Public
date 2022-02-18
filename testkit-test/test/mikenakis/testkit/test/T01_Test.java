@@ -9,8 +9,8 @@ import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
-import mikenakis.testkit.CloseableBinaryStreamReaderFromHex;
-import mikenakis.testkit.CloseableBinaryStreamWriterIntoHex;
+import mikenakis.io.sync.text.reading.CloseableBinaryStreamReaderFromHex;
+import mikenakis.io.sync.text.writing.CloseableBinaryStreamWriterIntoHex;
 import org.junit.Test;
 
 /**

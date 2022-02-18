@@ -1,7 +1,7 @@
 package mikenakis.test.intertwine.comparisons.implementations.alternative.reflecting;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
@@ -64,12 +64,12 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
-	@Override public T newEntwiner( AnyCall<T> exitPoint )
+	@Override public T newEntwiner( Anycall<T> exitPoint )
 	{
 		return new ReflectingEntwiner<>( this, exitPoint ).entryPoint;
 	}
 
-	@Override public AnyCall<T> newUntwiner( T exitPoint )
+	@Override public Anycall<T> newUntwiner( T exitPoint )
 	{
 		return new ReflectingUntwiner<>( this, exitPoint ).anycall;
 	}

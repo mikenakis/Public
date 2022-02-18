@@ -15,7 +15,7 @@ import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import mikenakis.bytecode.printing.ByteCodePrinter;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.FieldDescriptor;
@@ -56,7 +56,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private final CompilingKey<T>[] keys;
 	private final Map<MethodPrototype,CompilingKey<T>> keysByPrototype;
 	private Optional<Constructor<T>> entwinerConstructor = Optional.empty();
-	private Optional<Constructor<AnyCall<T>>> untwinerConstructor = Optional.empty();
+	private Optional<Constructor<Anycall<T>>> untwinerConstructor = Optional.empty();
 
 	CompilingIntertwine( ClassLoader classLoader, Class<? super T> interfaceType )
 	{
@@ -137,13 +137,13 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
-	@Override public T newEntwiner( AnyCall<T> exitPoint )
+	@Override public T newEntwiner( Anycall<T> exitPoint )
 	{
 		entwinerConstructor = entwinerConstructor.or( () -> Optional.of( createEntwinerClassAndGetConstructor() ) );
 		return Kit.unchecked( () -> entwinerConstructor.orElseThrow().newInstance( keys, exitPoint ) );
 	}
 
-	@Override public AnyCall<T> newUntwiner( T exitPoint )
+	@Override public Anycall<T> newUntwiner( T exitPoint )
 	{
 		untwinerConstructor = untwinerConstructor.or( () -> Optional.of( createUntwinerClassAndGetConstructor() ) );
 		return Kit.unchecked( () -> untwinerConstructor.orElseThrow().newInstance( exitPoint ) );
@@ -160,7 +160,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			FieldPrototype.of( "keys", FieldDescriptor.of( CompilingKey[].class ) ) );
 		entwinerByteCodeType.fields.add( keysField );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "exitPoint", FieldDescriptor.of( AnyCall.class ) ) );
+			FieldPrototype.of( "exitPoint", FieldDescriptor.of( Anycall.class ) ) );
 		entwinerByteCodeType.fields.add( exitPointField );
 		addEntwinerInitMethod( entwinerByteCodeType, keysField, exitPointField );
 
@@ -176,7 +176,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		}
 
 		Class<T> entwinerClass = ByteCodeClassLoader.load( classLoader, entwinerByteCodeType );
-		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, AnyCall.class ) );
+		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, Anycall.class ) );
 	}
 
 	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, int maxMethodArgumentCount, ByteCodeField keysField, //
@@ -214,8 +214,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			code.AASTORE(); //pop parameter, pop parameterIndex, pop Object[], set Object[parameterIndex] = parameter
 		}
 
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, //
-			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
+		code.INVOKEINTERFACE( Anycall.methodReference(), 3 );
 
 		TypeDescriptor returnTypeDescriptor = interfaceMethodPrototype.descriptor.returnTypeDescriptor;
 		if( returnTypeDescriptor.equals( TypeDescriptor.of( void.class ) ) )
@@ -242,7 +241,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
 			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
 			MethodPrototype.of( "<init>", //
-				MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, TypeDescriptor.of( AnyCall.class ) ) ) );
+				MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, TypeDescriptor.of( Anycall.class ) ) ) );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 2, 3 );
 		byteCodeMethod.attributeSet.addAttribute( code );
@@ -257,7 +256,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.RETURN();
 	}
 
-	private Constructor<AnyCall<T>> createUntwinerClassAndGetConstructor()
+	private Constructor<Anycall<T>> createUntwinerClassAndGetConstructor()
 	{
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			untwinerExitPointFieldPrototype( interfaceTypeDescriptor ) );
@@ -265,10 +264,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( "CompiledUntwiner_" + identifierFromTypeName( interfaceType ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
-			List.of( TerminalTypeDescriptor.of( AnyCall.class ) ) );
+			List.of( TerminalTypeDescriptor.of( Anycall.class ) ) );
 		untwinerByteCodeType.fields.add( exitPointField );
 		addUntwinerInitMethod( untwinerByteCodeType, interfaceTypeDescriptor, exitPointField );
-		addUntwinerAnyCallMethod( untwinerByteCodeType, interfaceTypeDescriptor, interfaceMethodPrototypes, maxArgumentCount( interfaceMethodPrototypes ) );
+		addUntwinerAnycallMethod( untwinerByteCodeType, interfaceTypeDescriptor, interfaceMethodPrototypes, maxArgumentCount( interfaceMethodPrototypes ) );
 
 		if( Kit.get( false ) )
 		{
@@ -277,7 +276,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		}
 
 		Class<T> untwinerClass = ByteCodeClassLoader.load( getClass().getClassLoader(), untwinerByteCodeType );
-		@SuppressWarnings( "unchecked" ) Constructor<AnyCall<T>> result = (Constructor<AnyCall<T>>)Kit.unchecked( () -> untwinerClass.getDeclaredConstructor( interfaceType ) );
+		@SuppressWarnings( "unchecked" ) Constructor<Anycall<T>> result = (Constructor<Anycall<T>>)Kit.unchecked( () -> untwinerClass.getDeclaredConstructor( interfaceType ) );
 		return result;
 	}
 
@@ -296,10 +295,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.RETURN();
 	}
 
-	private static void addUntwinerAnyCallMethod( ByteCodeType untwinerByteCodeType, TerminalTypeDescriptor interfaceTypeDescriptor, //
+	private static void addUntwinerAnycallMethod( ByteCodeType untwinerByteCodeType, TerminalTypeDescriptor interfaceTypeDescriptor, //
 		List<MethodPrototype> methodPrototypes, int maxArgumentCount )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), anyCallMethodPrototype() );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), Anycall.methodPrototype() );
 		untwinerByteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 3 + maxArgumentCount, 4 );
 		byteCodeMethod.attributeSet.addAttribute( code );
@@ -476,12 +475,6 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private static MethodPrototype untwinerInitMethodPrototype( TerminalTypeDescriptor interfaceTypeDescriptor )
 	{
 		return MethodPrototype.of( "<init>", MethodDescriptor.of( TypeDescriptor.of( void.class ), interfaceTypeDescriptor ) );
-	}
-
-	private static MethodPrototype anyCallMethodPrototype()
-	{
-		return MethodPrototype.of( "anyCall", MethodDescriptor.of( TypeDescriptor.of( Object.class ), TypeDescriptor.of( MethodKey.class ), //
-			TypeDescriptor.of( Object[].class ) ) );
 	}
 
 	private static int maxArgumentCount( Iterable<MethodPrototype> methodPrototypes )

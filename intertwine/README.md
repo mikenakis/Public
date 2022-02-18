@@ -1,6 +1,6 @@
 # mikenakis-intertwine
 
-A framework for converting back and forth between any interface and the _Normal Form of Interfaces_, which is a single-method interface of the form `Object anyCall( MethodKey key, Object[] arguments )`.
+A framework for converting back and forth between any interface and the _Normal Form of Interfaces_, which is a single-method interface of the form `Object anycall( MethodKey key, Object[] arguments )`.
 
 <p align="center">
 <img title="mikenakis-intertwine logo" src="mikenakis-intertwine.svg" width="256"/><br/>
@@ -11,15 +11,15 @@ The mikenakis-intertwine logo<br/>
                                                                                                                    
 Any conceivable interface can be described using the following single-method interface:
 
-    interface AnyCall
+    interface Anycall
     {
-        Object anyCall( MethodKey key, Object[] arguments );
+        Object anycall( MethodKey key, Object[] arguments );
     }
 
 We call this the _Normal Form_ of interfaces.
 - The particular interface method that is being invoked is uniquely identified using a `MethodKey`. (More on this later.)
 - The arguments of the method being invoked are represented as an array of `Object`.
-- The return value of the method is represented as an `Object`. If the method is of `void` return type then the value returned by `anyCall` is unspecified. (It will in all likelihood be `null`, but nobody should rely on this.)   
+- The return value of the method is represented as an `Object`. If the method is of `void` return type then the value returned by `anycall` is unspecified. (It will in all likelihood be `null`, but nobody should rely on this.)   
 
 The 'method key' is an abstraction of the actual mechanism used to uniquely identify interface methods, which can be any of the following: 
 - The identity of the `java.lang.reflect.Method` object that corresponds to the method.
@@ -27,11 +27,11 @@ The 'method key' is an abstraction of the actual mechanism used to uniquely iden
 - A zero-based method index. <sup>(*1)</sup>
 
 For any interface `T` it is possible to have an **_Entwiner_** and an **_Untwiner_**.
-- The entwiner of interface `T` is an object that implements `T` by delegating to an instance of `AnyCall`.
-- The untwiner of interface `T` is an object that implements `AnyCall` by delegating to an instance of `T`.
+- The entwiner of interface `T` is an object that implements `T` by delegating to an instance of `Anycall`.
+- The untwiner of interface `T` is an object that implements `Anycall` by delegating to an instance of `T`.
 
 More specifically, the entwiner of `T` does the following:
-- Accepts an instance of `AnyCall` as a constructor parameter and stores it in `final` field `exitPoint`.
+- Accepts an instance of `Anycall` as a constructor parameter and stores it in `final` field `exitPoint`.
 - Implements each method of `T` as follows:
   - Packs the parameters that were passed to the method into an array of `Object`, performing any boxing necessary.
   - Invokes `exitPoint` passing it a key that uniquely identifies the method, and the array of parameters.
@@ -39,7 +39,7 @@ More specifically, the entwiner of `T` does the following:
 
 The untwiner of `T` performs the opposite and complementary operation of the entwiner, namely:
 - Accepts an instance of `T` as a constructor parameter and stores it in `final` field `exitPoint`.
-- Implements the `anyCall` method of the `AnyCall` interface as follows:
+- Implements the `anycall` method of the `Anycall` interface as follows:
   - It uses the supplied `MethodKey` to determine which method of `T` is being invoked, and for each method it does the following:
     - Unpacks the parameters from the array of `Object`, performing any unboxing necessary.
     - Invokes the corresponding method of `exitPoint`, passing it the unpacked parameters.

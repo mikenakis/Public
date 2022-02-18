@@ -14,7 +14,7 @@ import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.java_type_model.FieldDescriptor;
@@ -50,7 +50,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	private final Map<MethodPrototype,HandWrittenCompiledKey> keysByPrototype;
 	private final Map<Method,HandWrittenCompiledKey> keysByMethod;
 	private static Optional<Class<FooInterface>> cachedEntwinerClass = Optional.empty(); //we have to cache the entwiner class because we create it, and a class cannot be redefined.
-	private static Optional<Class<AnyCall<FooInterface>>> cachedUntwinerClass = Optional.empty(); //we have to cache the untwiner class because we create it, and a class cannot be redefined.
+	private static Optional<Class<Anycall<FooInterface>>> cachedUntwinerClass = Optional.empty(); //we have to cache the untwiner class because we create it, and a class cannot be redefined.
 	private static final TypeDescriptor alphaTypeDescriptor = TypeDescriptor.of( Alpha.class.getName() );
 
 	HandWrittenCompiledIntertwine()
@@ -113,25 +113,25 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		├─■ fields: 2 items
 		│ ├─■ [0] ByteCodeField accessFlags = [private, final], prototype = mikenakis.test.intertwine.handwritten.HandwrittenKey[] keys
 		│ │ └─■ attributeSet: 0 items
-		│ └─■ [1] ByteCodeField accessFlags = [private, final], prototype = mikenakis.intertwine.AnyCall exitPoint
+		│ └─■ [1] ByteCodeField accessFlags = [private, final], prototype = mikenakis.intertwine.Anycall exitPoint
 		│   └─■ attributeSet: 0 items
 		├─■ methods: 4 items
 	*/
-	@Override public FooInterface newEntwiner( AnyCall<FooInterface> exitPoint )
+	@Override public FooInterface newEntwiner( Anycall<FooInterface> exitPoint )
 	{
 		Class<FooInterface> entwinerClass = cachedEntwinerClass.orElseGet( () -> {
 			Class<FooInterface> c = createEntwinerClass();
 			cachedEntwinerClass = Optional.of( c );
 			return c;
 		} );
-		Constructor<FooInterface> constructor = Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( HandWrittenCompiledKey[].class, AnyCall.class ) );
+		Constructor<FooInterface> constructor = Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( HandWrittenCompiledKey[].class, Anycall.class ) );
 		return Kit.unchecked( () -> constructor.newInstance( keys, exitPoint ) );
 	}
 
 	private Class<FooInterface> createEntwinerClass()
 	{
 		TypeDescriptor arrayOfKeyTypeDescriptor = TypeDescriptor.of( HandWrittenCompiledKey[].class );
-		TypeDescriptor anyCallTypeDescriptor = TypeDescriptor.of( AnyCall.class );
+		TypeDescriptor anycallTypeDescriptor = TypeDescriptor.of( Anycall.class );
 		ByteCodeType byteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( "HandwrittenCompiledEntwiner_" + identifierFromTypeName( FooInterface.class ) ), //
@@ -141,7 +141,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 			FieldPrototype.of( "keys", FieldDescriptor.of( arrayOfKeyTypeDescriptor ) ) );
 		byteCodeType.fields.add( keysField );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "exitPoint", FieldDescriptor.of( anyCallTypeDescriptor ) ) );
+			FieldPrototype.of( "exitPoint", FieldDescriptor.of( anycallTypeDescriptor ) ) );
 		byteCodeType.fields.add( exitPointField );
 		addEntwinerInitMethod( byteCodeType, keysField, exitPointField );
 
@@ -173,7 +173,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	}
 
 	/*
-		│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( mikenakis.test.intertwine.handwritten.HandwrittenKey[], mikenakis.intertwine.AnyCall )
+		│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( mikenakis.test.intertwine.handwritten.HandwrittenKey[], mikenakis.intertwine.Anycall )
 		│ │ └─■ attributes: 1 items
 		│ │   └─■ [0] CodeAttribute maxStack = 2, maxLocals = 3
 		│ │     ├─■ instructions: 9 entries
@@ -187,7 +187,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		│ │     │ ├─■ L16: // this.exitPoint = exitPoint;
 		│ │     │ ├─■         ALOAD 0
 		│ │     │ ├─■         ALOAD 2
-		│ │     │ ├─■         PUTFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
+		│ │     │ ├─■         PUTFIELD mikenakis.intertwine.Anycall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
 		│ │     │ ├─■ L17: // }
 		│ │     │ └─■         RETURN
 		│ │     ├─■ exceptionInfos: 0 items
@@ -219,15 +219,15 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		│ │ └─■ attributes: 1 items
 		│ │   └─■ [0] CodeAttribute maxStack = 3, maxLocals = 1
 		│ │     ├─■ instructions: 10 entries
-		│ │     │ ├─■ L21: // exitPoint.anyCall( keys[0], Kit.ARRAY_OF_ZERO_OBJECTS );
+		│ │     │ ├─■ L21: // exitPoint.anycall( keys[0], Kit.ARRAY_OF_ZERO_OBJECTS );
 		│ │     │ ├─■         ALOAD 0
-		│ │     │ ├─■         GETFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
+		│ │     │ ├─■         GETFIELD mikenakis.intertwine.Anycall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
 		│ │     │ ├─■         ALOAD 0
 		│ │     │ ├─■         GETFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
 		│ │     │ ├─■         LDC 0
 		│ │     │ ├─■         AALOAD
 		│ │     │ ├─■         GETSTATIC java.lang.Object[] mikenakis.kit.Kit.ARRAY_OF_ZERO_OBJECTS
-		│ │     │ ├─■         INVOKEINTERFACE reference = Interface java.lang.Object mikenakis.intertwine.AnyCall.anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
+		│ │     │ ├─■         INVOKEINTERFACE reference = Interface java.lang.Object mikenakis.intertwine.Anycall.anycall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
 		│ │     │ ├─■         POP
 		│ │     │ ├─■ L22: // }
 		│ │     │ └─■         RETURN
@@ -252,8 +252,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.LDC( methodPrototype.parameterCount() ); //push method-argument-count
 		code.ANEWARRAY( TerminalTypeDescriptor.of( Object.class ) ); //pop method-argument-count, push new Object[method-argument-count]
 
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, //pop Object[], pop keys[methodIndex], pop this->exitPoint, invoke exitPoint( keys[methidIndex], Object[]), push result
-			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
+		code.INVOKEINTERFACE( Anycall.methodReference(), 3 );
 		code.POP(); //discard result
 		code.RETURN(); //just return.
 	}
@@ -263,9 +262,9 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		│ │ └─■ attributes: 1 items
 		│ │   └─■ [0] CodeAttribute maxStack = 6, maxLocals = 2
 		│ │     ├─■ instructions: 16 entries
-		│ │     │ ├─■ L26: // return (Alpha)exitPoint.anyCall( keys[1], new Object[] { index } );
+		│ │     │ ├─■ L26: // return (Alpha)exitPoint.anycall( keys[1], new Object[] { index } );
 		│ │     │ ├─■         ALOAD 0
-		│ │     │ ├─■         GETFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
+		│ │     │ ├─■         GETFIELD mikenakis.intertwine.Anycall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
 		│ │     │ ├─■         ALOAD 0
 		│ │     │ ├─■         GETFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
 		│ │     │ ├─■         LDC 1
@@ -277,7 +276,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		│ │     │ ├─■         ILOAD 1
 		│ │     │ ├─■         INVOKESTATIC reference = Plain java.lang.Integer java.lang.Integer.valueOf( int )
 		│ │     │ ├─■         AASTORE
-		│ │     │ ├─■         INVOKEINTERFACE reference = Interface java.lang.Object mikenakis.intertwine.AnyCall.anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
+		│ │     │ ├─■         INVOKEINTERFACE reference = Interface java.lang.Object mikenakis.intertwine.Anycall.anycall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
 		│ │     │ ├─■         CHECKCAST mikenakis.test.intertwine.comparisons.rig.Alpha
 		│ │     │ └─■         ARETURN
 		│ │     ├─■ exceptionInfos: 0 items
@@ -322,8 +321,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 			code.AASTORE(); //pop boxed(arguments[1]), pop argumentIndex, pop Object[], set Object[argumentIndex] = boxed(arguments[1])
 		}
 
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, //pop Object[], pop this->keys[methodIndex], pop this->exitPoint, invoke exitPoint( keys[methodIndex], Object[] ), push result
-			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
+		code.INVOKEINTERFACE( Anycall.methodReference(), 3 );
 		code.CHECKCAST( alphaTypeDescriptor ); //check type of result
 		code.ARETURN(); //pop result, return it.
 	}
@@ -333,9 +331,9 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		│   └─■ attributes: 1 items
 		│     └─■ [0] CodeAttribute maxStack = 6, maxLocals = 3
 		│       ├─■ instructions: 20 entries
-		│       │ ├─■ L31: // exitPoint.anyCall( keys[2], new Object[] { index, alpha } );
+		│       │ ├─■ L31: // exitPoint.anycall( keys[2], new Object[] { index, alpha } );
 		│       │ ├─■         ALOAD 0
-		│       │ ├─■         GETFIELD mikenakis.intertwine.AnyCall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
+		│       │ ├─■         GETFIELD mikenakis.intertwine.Anycall mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.exitPoint
 		│       │ ├─■         ALOAD 0
 		│       │ ├─■         GETFIELD mikenakis.test.intertwine.handwritten.HandwrittenKey[] mikenakis.test.intertwine.handwritten.HandwrittenEntwiner.keys
 		│       │ ├─■         LDC 2
@@ -351,7 +349,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		│       │ ├─■         LDC 1
 		│       │ ├─■         ALOAD 2
 		│       │ ├─■         AASTORE
-		│       │ ├─■         INVOKEINTERFACE reference = Interface java.lang.Object mikenakis.intertwine.AnyCall.anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
+		│       │ ├─■         INVOKEINTERFACE reference = Interface java.lang.Object mikenakis.intertwine.Anycall.anycall( mikenakis.intertwine.MethodKey, java.lang.Object[] ), 3 arguments
 		│       │ ├─■         POP
 		│       │ ├─■ L32: // }
 		│       │ └─■         RETURN
@@ -383,7 +381,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 
 		emitStore( code, 1 );
 
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, AnyCall.class, MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) ), 3 );
+		code.INVOKEINTERFACE( Anycall.methodReference(), 3 );
 		code.POP();
 		code.RETURN();
 	}
@@ -405,16 +403,16 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.AASTORE();
 	}
 
-	@Override public AnyCall<FooInterface> newUntwiner( FooInterface exitPoint )
+	@Override public Anycall<FooInterface> newUntwiner( FooInterface exitPoint )
 	{
-		Class<AnyCall<FooInterface>> untwinerClass = cachedUntwinerClass.orElseGet( () -> {
-			Class<AnyCall<FooInterface>> c = createUntwinerClass();
+		Class<Anycall<FooInterface>> untwinerClass = cachedUntwinerClass.orElseGet( () -> {
+			Class<Anycall<FooInterface>> c = createUntwinerClass();
 			cachedUntwinerClass = Optional.of( c );
 			return c;
 		} );
 		return Kit.unchecked( () -> //
 		{
-			Constructor<AnyCall<FooInterface>> constructor = untwinerClass.getDeclaredConstructor( FooInterface.class );
+			Constructor<Anycall<FooInterface>> constructor = untwinerClass.getDeclaredConstructor( FooInterface.class );
 			return constructor.newInstance( exitPoint );
 		} );
 	}
@@ -423,27 +421,27 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		mikenakis.classdump.ClassDumpMain.classDump(ClassDumpMain.java:150) | DEBUG | 1 | 16:25:44.815 | main | Dumping C:\Users\MBV\Out\mikenakis\intertwine\test-classes\mikenakis\test\intertwine\handwritten\HandwrittenUntwiner.class
 		■ ByteCodeType version = 60.0, accessFlags = [super], this = mikenakis.test.intertwine.handwritten.HandwrittenUntwiner, super = java.lang.Object
 		├─■ interfaces: 1 items
-		│ └─■ [0] mikenakis.intertwine.AnyCall
+		│ └─■ [0] mikenakis.intertwine.Anycall
 		├─■ extraTypes: 0 items
 		├─■ fields: 1 items
 		│ └─■ [0] ByteCodeField accessFlags = [private, final], prototype = mikenakis.test.intertwine.comparisons.rig.FooInterface exitPoint
 		│   └─■ attributeSet: 0 items
 		├─■ methods: 2 items
 	*/
-	private Class<AnyCall<FooInterface>> createUntwinerClass()
+	private Class<Anycall<FooInterface>> createUntwinerClass()
 	{
 		TypeDescriptor fooInterfaceTypeDescriptor = TypeDescriptor.of( FooInterface.class );
 		ByteCodeType byteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( "HandwrittenCompiledUntwiner_" + identifierFromTypeName( FooInterface.class ) ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
-			List.of( TerminalTypeDescriptor.of( AnyCall.class ) ) );
+			List.of( TerminalTypeDescriptor.of( Anycall.class ) ) );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			FieldPrototype.of( "exitPoint", FieldDescriptor.of( fooInterfaceTypeDescriptor ) ) );
 		byteCodeType.fields.add( exitPointField );
 		addUntwinerInitMethod( byteCodeType, exitPointField );
 
-		addUntwinerAnyCallMethod( byteCodeType, exitPointField );
+		addUntwinerAnycallMethod( byteCodeType, exitPointField );
 
 //		saveBytes( Path.of( "C:\\temp\\intertwine", byteCodeType.typeDescriptor().typeName + ".class" ), byteCodeType.write() );
 //		System.out.println( ByteCodePrinter.printByteCodeType( byteCodeType, Optional.empty() ) );
@@ -481,14 +479,13 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 	}
 
 	/*
-		│ └─■ [1] ByteCodeMethod accessFlags = [public], prototype = java.lang.Object anyCall( mikenakis.intertwine.MethodKey, java.lang.Object[] )
+		│ └─■ [1] ByteCodeMethod accessFlags = [public], prototype = java.lang.Object anycall( mikenakis.intertwine.MethodKey, java.lang.Object[] )
 		│   └─■ attributes: 1 items
 		│     └─■ [0] CodeAttribute maxStack = 4, maxLocals = 4
 	*/
-	private static void addUntwinerAnyCallMethod( ByteCodeType byteCodeType, ByteCodeField exitPointField )
+	private static void addUntwinerAnycallMethod( ByteCodeType byteCodeType, ByteCodeField exitPointField )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
-			MethodPrototype.of( "anyCall", MethodDescriptor.of( Object.class, MethodKey.class, Object[].class ) ) );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), Anycall.methodPrototype() );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 4, 4 );
 		byteCodeMethod.attributeSet.addAttribute( code );

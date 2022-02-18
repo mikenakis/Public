@@ -1,7 +1,7 @@
 package mikenakis.test.intertwine.comparisons.implementations.testing.handwritten;
 
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
-import mikenakis.intertwine.AnyCall;
+import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
@@ -58,12 +58,12 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 		return Kit.map.get( keysByPrototype, methodPrototype );
 	}
 
-	@Override public FooInterface newEntwiner( AnyCall<FooInterface> exitPoint )
+	@Override public FooInterface newEntwiner( Anycall<FooInterface> exitPoint )
 	{
 		return new HandwrittenEntwiner( keys, exitPoint );
 	}
 
-	@Override public AnyCall<FooInterface> newUntwiner( FooInterface exitPoint )
+	@Override public Anycall<FooInterface> newUntwiner( FooInterface exitPoint )
 	{
 		return new HandwrittenUntwiner( exitPoint );
 	}
