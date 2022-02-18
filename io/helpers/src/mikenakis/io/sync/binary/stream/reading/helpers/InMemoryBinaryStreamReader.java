@@ -1,23 +1,24 @@
 package mikenakis.io.sync.binary.stream.reading.helpers;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 
 /**
- * A {@link CloseableBinaryStreamReader} which reads bytes from a supplied {@link Buffer}.
+ * A {@link BinaryStreamReader} which reads bytes from a supplied {@link Buffer}.
  *
  * @author michael.gr
  */
-public final class CloseableMemoryBinaryStreamReader extends Mutable implements CloseableBinaryStreamReader.Defaults
+public final class InMemoryBinaryStreamReader extends Mutable implements CloseableWrapper<BinaryStreamReader>, BinaryStreamReader.Defaults
 {
-	public static CloseableBinaryStreamReader of( MutationContext mutationContext, Buffer buffer, Procedure0 onClose )
+	public static CloseableWrapper<BinaryStreamReader> of( MutationContext mutationContext, Buffer buffer, Procedure0 onClose )
 	{
-		return new CloseableMemoryBinaryStreamReader( mutationContext, buffer, onClose );
+		return new InMemoryBinaryStreamReader( mutationContext, buffer, onClose );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
@@ -25,7 +26,7 @@ public final class CloseableMemoryBinaryStreamReader extends Mutable implements 
 	private final Buffer buffer;
 	private int position;
 
-	private CloseableMemoryBinaryStreamReader( MutationContext mutationContext, Buffer buffer, Procedure0 onClose )
+	private InMemoryBinaryStreamReader( MutationContext mutationContext, Buffer buffer, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert buffer != null;
@@ -72,5 +73,10 @@ public final class CloseableMemoryBinaryStreamReader extends Mutable implements 
 		assert isAliveAssertion();
 		assert inMutationContextAssertion();
 		return position >= buffer.size();
+	}
+
+	@Override public BinaryStreamReader getTarget()
+	{
+		return this;
 	}
 }

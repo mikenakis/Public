@@ -4,10 +4,9 @@ import mikenakis.io.sync.binary.stream.jdk.JdkBinaryStreamReadingDomain;
 import mikenakis.io.sync.binary.stream.jdk.JdkBinaryStreamWritingDomain;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReadingDomain;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWritingDomain;
+import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
-import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
 import mikenakis.testkit.TestInfo;
@@ -54,11 +53,9 @@ public class T010_BinaryStreamCopier
 		Path inPath = testInfo.getTestOutputDataPath().resolve( suffix + "_1.txt" );
 		Path outPath = testInfo.getTestTempPath().resolve( suffix + "_2.txt" );
 		createRandomBinaryFile( inPath, wordCount );
-		try( CloseableBinaryStreamReader reader = binaryStreamReadingDomain.newReaderOnPath( inPath );
-		     CloseableBinaryStreamWriter writer = binaryStreamWritingDomain.newWriterOnPath( outPath ) )
-		{
-			binaryStreamWritingDomain.copy( reader, writer );
-		}
+		Kit.tryWithWrapper( binaryStreamReadingDomain.newReaderOnPath( inPath ), reader ->
+		     Kit.tryWithWrapper( binaryStreamWritingDomain.newWriterOnPath( outPath ), writer ->
+			     binaryStreamWritingDomain.copy( reader, writer ) ) );
 		boolean ok = verifyRandomBinaryPath( outPath, wordCount );
 		assert ok;
 	}

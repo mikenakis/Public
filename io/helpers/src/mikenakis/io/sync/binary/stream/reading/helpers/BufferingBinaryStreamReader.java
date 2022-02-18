@@ -1,13 +1,13 @@
 package mikenakis.io.sync.binary.stream.reading.helpers;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.Kit;
+import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
+import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
-import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
-import mikenakis.kit.buffer.Buffer;
 
 import java.util.Optional;
 
@@ -16,7 +16,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public final class BufferingBinaryStreamReader extends Mutable implements CloseableBinaryStreamReader.Defaults
+public final class BufferingBinaryStreamReader extends Mutable implements Closeable.Defaults, BinaryStreamReader.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final BinaryStreamReader reader;

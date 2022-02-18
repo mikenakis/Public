@@ -1,13 +1,13 @@
 package mikenakis.io.async.binary.stream.jdk;
 
 import mikenakis.io.async.binary.stream.writing.AsyncBinaryStreamWriter;
-import mikenakis.io.async.binary.stream.writing.CloseableAsyncBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.Coherent;
 import mikenakis.kit.debug.Debug;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 
 import java.nio.ByteBuffer;
@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class AsyncBinaryStreamWriterOnAsynchronousByteChannel extends Coherent implements CloseableAsyncBinaryStreamWriter.Defaults
+final class AsyncBinaryStreamWriterOnAsynchronousByteChannel extends Coherent implements CloseableWrapper<AsyncBinaryStreamWriter>, AsyncBinaryStreamWriter.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsynchronousByteChannel asynchronousByteChannel;
@@ -105,4 +105,9 @@ final class AsyncBinaryStreamWriterOnAsynchronousByteChannel extends Coherent im
 				} ) );
 		}
 	};
+
+	@Override public AsyncBinaryStreamWriter getTarget()
+	{
+		return this;
+	}
 }

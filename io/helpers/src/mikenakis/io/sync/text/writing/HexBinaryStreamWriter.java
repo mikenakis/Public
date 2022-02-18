@@ -4,25 +4,25 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
-import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 import java.util.Arrays;
 
-public final class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStreamWriter.Defaults
+public final class HexBinaryStreamWriter implements CloseableWrapper<BinaryStreamWriter>, BinaryStreamWriter.Defaults
 {
-	public static CloseableBinaryStreamWriter of( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
+	public static CloseableWrapper<BinaryStreamWriter> of( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
 	{
-		return new CloseableBinaryStreamWriterIntoHex( textStreamWriter, width, onClose );
+		return new HexBinaryStreamWriter( textStreamWriter, width, onClose );
 	}
 
 	public static void tryWith( BinaryStreamWriter binaryStreamWriter, int width, Procedure1<BinaryStreamWriter> delegee )
 	{
 		MutationContext mutationContext = SingleThreadedMutationContext.instance();
-		Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
-			Kit.tryWith( of( textStreamWriter, width, Procedure0.noOp ), delegee ) );
+		Kit.tryWithWrapper( TextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
+			Kit.tryWithWrapper( of( textStreamWriter, width, Procedure0.noOp ), delegee ) );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
@@ -32,7 +32,7 @@ public final class CloseableBinaryStreamWriterIntoHex implements CloseableBinary
 	private final Procedure0 onClose;
 	private int position;
 
-	private CloseableBinaryStreamWriterIntoHex( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
+	private HexBinaryStreamWriter( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
 	{
 		this.textStreamWriter = textStreamWriter;
 		hexField = new char[ width * 3 ];
@@ -88,5 +88,10 @@ public final class CloseableBinaryStreamWriterIntoHex implements CloseableBinary
 		flush();
 		onClose.invoke();
 		lifeGuard.close();
+	}
+
+	@Override public BinaryStreamWriter getTarget()
+	{
+		return this;
 	}
 }

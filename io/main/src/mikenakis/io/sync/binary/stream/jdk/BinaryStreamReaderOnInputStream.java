@@ -1,9 +1,9 @@
 package mikenakis.io.sync.binary.stream.jdk;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -15,7 +15,7 @@ import java.io.InputStream;
  *
  * @author michael.gr
  */
-final class BinaryStreamReaderOnInputStream extends Mutable implements CloseableBinaryStreamReader.Defaults
+final class BinaryStreamReaderOnInputStream extends Mutable implements CloseableWrapper<BinaryStreamReader>, BinaryStreamReader.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final InputStream inputStream;
@@ -72,5 +72,10 @@ final class BinaryStreamReaderOnInputStream extends Mutable implements Closeable
 			return true;
 		}
 		return false;
+	}
+
+	@Override public BinaryStreamReader getTarget()
+	{
+		return this;
 	}
 }

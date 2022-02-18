@@ -5,21 +5,26 @@ import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.Coherent;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.ref.Ref;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.io.async.binary.stream.reading.AsyncBinaryStreamReader;
-import mikenakis.io.async.binary.stream.reading.CloseableAsyncBinaryStreamReader;
 import mikenakis.kit.buffer.Buffer;
 
 import java.util.Optional;
 
 /**
- * Buffering {@link CloseableAsyncBinaryStreamReader}.
+ * Buffering {@link AsyncBinaryStreamReader}.
  *
  * @author michael.gr
  */
-public final class BufferingAsyncBinaryStreamReader extends Coherent implements CloseableAsyncBinaryStreamReader.Defaults
+public final class BufferingAsyncBinaryStreamReader extends Coherent implements CloseableWrapper<AsyncBinaryStreamReader>, AsyncBinaryStreamReader.Defaults
 {
+	public static BufferingAsyncBinaryStreamReader of( Coherence coherence, byte[] cacheBuffer, AsyncBinaryStreamReader unbufferedReader, Procedure0 onClose )
+	{
+		return new BufferingAsyncBinaryStreamReader( coherence, cacheBuffer, unbufferedReader, onClose );
+	}
+
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsyncBinaryStreamReader unbufferedReader;
 	private final Procedure0 onClose;
@@ -27,7 +32,7 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 	private boolean endHasBeenReached;
 	private int busyCount = 0;
 
-	public BufferingAsyncBinaryStreamReader( Coherence coherence, byte[] cacheBuffer, AsyncBinaryStreamReader unbufferedReader, Procedure0 onClose )
+	private BufferingAsyncBinaryStreamReader( Coherence coherence, byte[] cacheBuffer, AsyncBinaryStreamReader unbufferedReader, Procedure0 onClose )
 	{
 		super( coherence );
 		assert coherenceAssertion();
@@ -179,5 +184,10 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 			completionHandler.invoke();
 		}, errorHandler );
 		return true;
+	}
+
+	@Override public AsyncBinaryStreamReader getTarget()
+	{
+		return this;
 	}
 }

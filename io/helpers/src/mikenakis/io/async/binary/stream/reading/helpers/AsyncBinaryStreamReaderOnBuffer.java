@@ -1,31 +1,37 @@
 package mikenakis.io.async.binary.stream.reading.helpers;
 
+import mikenakis.io.async.binary.stream.reading.AsyncBinaryStreamReader;
 import mikenakis.kit.functional.Procedure1;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.io.async.binary.stream.reading.CloseableAsyncBinaryStreamReader;
 import mikenakis.kit.buffer.Buffer;
 
 /**
- * {@link CloseableAsyncBinaryStreamReader} on {@link Buffer}.
+ * {@link AsyncBinaryStreamReader} on {@link Buffer}.
  *
  * @author michael.gr
  */
-public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements CloseableAsyncBinaryStreamReader.Defaults
+public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements CloseableWrapper<AsyncBinaryStreamReader>, AsyncBinaryStreamReader.Defaults
 {
+	public static AsyncBinaryStreamReaderOnBuffer of( MutationContext mutationContext, Buffer buffer, int arrayOffset, int arrayLength )
+	{
+		return new AsyncBinaryStreamReaderOnBuffer( mutationContext, buffer, arrayOffset, arrayLength );
+	}
+
+	public static AsyncBinaryStreamReaderOnBuffer of( MutationContext mutationContext, Buffer buffer )
+	{
+		return of( mutationContext, buffer, 0, buffer.size() );
+	}
+
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Buffer buffer;
 	private int arrayOffset;
 	private int arrayLength;
 	private int busyCount = 0;
 
-	public AsyncBinaryStreamReaderOnBuffer( MutationContext mutationContext, Buffer buffer )
-	{
-		this( mutationContext, buffer, 0, buffer.size() );
-	}
-
-	public AsyncBinaryStreamReaderOnBuffer( MutationContext mutationContext, Buffer buffer, int arrayOffset, int arrayLength )
+	private AsyncBinaryStreamReaderOnBuffer( MutationContext mutationContext, Buffer buffer, int arrayOffset, int arrayLength )
 	{
 		super( mutationContext );
 		assert inMutationContextAssertion();
@@ -78,5 +84,10 @@ public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements Cl
 			completionHandler.invoke( length );
 		}
 		//busyCount--;
+	}
+
+	@Override public AsyncBinaryStreamReader getTarget()
+	{
+		return this;
 	}
 }

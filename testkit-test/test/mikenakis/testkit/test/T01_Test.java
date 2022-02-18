@@ -1,16 +1,16 @@
 package mikenakis.testkit.test;
 
-import mikenakis.io.sync.text.reading.CloseableTextStreamReaderOnBinaryStreamReader;
-import mikenakis.io.sync.text.reading.CloseableMemoryTextStreamReader;
-import mikenakis.io.sync.text.writing.CloseableInMemoryTextStreamWriter;
-import mikenakis.io.sync.text.writing.CloseableTextStreamWriterOnBinaryStreamWriter;
+import mikenakis.io.sync.text.reading.TextStreamReaderOnBinaryStreamReader;
+import mikenakis.io.sync.text.reading.InMemoryTextStreamReader;
+import mikenakis.io.sync.text.writing.InMemoryTextStreamWriter;
+import mikenakis.io.sync.text.writing.TextStreamWriterOnBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
-import mikenakis.io.sync.text.reading.CloseableBinaryStreamReaderFromHex;
-import mikenakis.io.sync.text.writing.CloseableBinaryStreamWriterIntoHex;
+import mikenakis.io.sync.text.reading.HexBinaryStreamReader;
+import mikenakis.io.sync.text.writing.HexBinaryStreamWriter;
 import org.junit.Test;
 
 /**
@@ -40,18 +40,18 @@ public final class T01_Test
 	private String hexFromText( String text )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		Kit.tryWith( CloseableInMemoryTextStreamWriter.of( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
-			Kit.tryWith( CloseableBinaryStreamWriterIntoHex.of( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
-				Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
+		Kit.tryWithWrapper( InMemoryTextStreamWriter.of( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
+			Kit.tryWithWrapper( HexBinaryStreamWriter.of( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
+				Kit.tryWithWrapper( TextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
 					textStreamWriter.write( text ) ) ) );
 		return stringBuilder.toString();
 	}
 
 	private String textFromHex( String hexString )
 	{
-		return Kit.tryGetWith( CloseableMemoryTextStreamReader.of( mutationContext, bufferAllocator, hexString, Procedure0.noOp ), memoryTextStreamReader ->
-			Kit.tryGetWith( CloseableBinaryStreamReaderFromHex.of( memoryTextStreamReader, Procedure0.noOp ), binaryStreamReader ->
-				Kit.tryGetWith( CloseableTextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
+		return Kit.tryGetWithWrapper( InMemoryTextStreamReader.of( mutationContext, bufferAllocator, hexString, Procedure0.noOp ), memoryTextStreamReader ->
+			Kit.tryGetWithWrapper( HexBinaryStreamReader.of( memoryTextStreamReader, Procedure0.noOp ), binaryStreamReader ->
+				Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
 				{
 					String text = textStreamReader.tryReadLine().orElseThrow();
 					assert textStreamReader.tryReadLine().isEmpty();

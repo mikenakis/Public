@@ -3,7 +3,7 @@ package mikenakis.io.sync.binary.stream.jdk;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
-import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -15,7 +15,7 @@ import java.io.OutputStream;
  *
  * @author michael.gr
  */
-final class BinaryStreamWriterOnOutputStream extends Mutable implements CloseableBinaryStreamWriter.Defaults
+final class BinaryStreamWriterOnOutputStream extends Mutable implements CloseableWrapper<BinaryStreamWriter>, BinaryStreamWriter.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final OutputStream outputStream;
@@ -54,5 +54,10 @@ final class BinaryStreamWriterOnOutputStream extends Mutable implements Closeabl
 		assert inMutationContextAssertion();
 		assert isAliveAssertion();
 		Kit.unchecked( outputStream::flush );
+	}
+
+	@Override public BinaryStreamWriter getTarget()
+	{
+		return this;
 	}
 }

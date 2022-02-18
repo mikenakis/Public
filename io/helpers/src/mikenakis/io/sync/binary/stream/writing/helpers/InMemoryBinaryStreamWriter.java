@@ -1,30 +1,31 @@
 package mikenakis.io.sync.binary.stream.writing.helpers;
 
+import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.BufferBuilder;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 
 /**
- * A {@link CloseableBinaryStreamWriter} which accumulates bytes in a supplied {@link BufferBuilder}.
+ * A {@link BinaryStreamWriter} which accumulates bytes in a supplied {@link BufferBuilder}.
  *
  * @author michael.gr
  */
-public final class CloseableMemoryBinaryStreamWriter extends Mutable implements CloseableBinaryStreamWriter.Defaults
+public final class InMemoryBinaryStreamWriter extends Mutable implements CloseableWrapper<BinaryStreamWriter>, BinaryStreamWriter.Defaults
 {
-	public static CloseableBinaryStreamWriter of( MutationContext mutationContext, BufferBuilder bufferBuilder, Procedure0 onClose )
+	public static CloseableWrapper<BinaryStreamWriter> of( MutationContext mutationContext, BufferBuilder bufferBuilder, Procedure0 onClose )
 	{
-		return new CloseableMemoryBinaryStreamWriter( mutationContext, bufferBuilder, onClose );
+		return new InMemoryBinaryStreamWriter( mutationContext, bufferBuilder, onClose );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final BufferBuilder bufferBuilder;
 
-	private CloseableMemoryBinaryStreamWriter( MutationContext mutationContext, BufferBuilder bufferBuilder, Procedure0 onClose )
+	private InMemoryBinaryStreamWriter( MutationContext mutationContext, BufferBuilder bufferBuilder, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert bufferBuilder != null;
@@ -58,5 +59,10 @@ public final class CloseableMemoryBinaryStreamWriter extends Mutable implements 
 	@Override public String toString()
 	{
 		return bufferBuilder.toString();
+	}
+
+	@Override public BinaryStreamWriter getTarget()
+	{
+		return this;
 	}
 }

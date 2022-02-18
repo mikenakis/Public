@@ -7,6 +7,7 @@ import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.buffers.BufferKey;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -14,14 +15,14 @@ import mikenakis.kit.mutation.MutationContext;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public final class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable implements CloseableTextStreamReader.Defaults
+public final class TextStreamReaderOnBinaryStreamReader extends Mutable implements CloseableWrapper<TextStreamReader>, TextStreamReader.Defaults
 {
-	public static CloseableTextStreamReader of( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	public static CloseableWrapper<TextStreamReader> of( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
 	{
-		return new CloseableTextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, onClose );
+		return new TextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, onClose );
 	}
 
-	public static final BufferKey bufferKey = new BufferKey( CloseableTextStreamReaderOnBinaryStreamReader.class.getName() );
+	public static final BufferKey bufferKey = new BufferKey( TextStreamReaderOnBinaryStreamReader.class.getName() );
 	private static final Buffer EndOfLine = Buffer.of( "\n" );
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
@@ -29,7 +30,7 @@ public final class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable
 	private final BufferingBinaryStreamReader bufferingReader;
 	private final BufferAllocation readBufferAllocation;
 
-	private CloseableTextStreamReaderOnBinaryStreamReader( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	private TextStreamReaderOnBinaryStreamReader( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert binaryStreamReader != null;
@@ -66,5 +67,10 @@ public final class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable
 	{
 		Optional<Buffer> buffer = bufferingReader.tryReadUntilDelimiter( EndOfLine );
 		return buffer.map( Buffer::toString );
+	}
+
+	@Override public TextStreamReader getTarget()
+	{
+		return this;
 	}
 }

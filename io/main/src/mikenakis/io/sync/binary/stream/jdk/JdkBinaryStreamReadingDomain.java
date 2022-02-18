@@ -1,16 +1,16 @@
 package mikenakis.io.sync.binary.stream.jdk;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReadingDomain;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
-import mikenakis.kit.functional.Procedure0;
-import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
-import mikenakis.io.sync.binary.stream.reading.BinaryStreamReadingDomain;
 import mikenakis.kit.buffers.BufferAllocation;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.buffers.BufferKey;
+import mikenakis.kit.functional.Procedure0;
+import mikenakis.kit.lifetime.CloseableWrapper;
+import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -35,12 +35,12 @@ public final class JdkBinaryStreamReadingDomain extends Mutable implements Binar
 		this.bufferAllocator = bufferAllocator;
 	}
 
-	@Override public CloseableBinaryStreamReader newReaderOnInputStream( InputStream inputStream, Procedure0 onClose )
+	@Override public CloseableWrapper<BinaryStreamReader> newReaderOnInputStream( InputStream inputStream, Procedure0 onClose )
 	{
 		return new BinaryStreamReaderOnInputStream( mutationContext, inputStream, onClose );
 	}
 
-	@Override public CloseableBinaryStreamReader newReaderOnPath( Path path )
+	@Override public CloseableWrapper<BinaryStreamReader> newReaderOnPath( Path path )
 	{
 		assert Kit.path.isAbsoluteNormalized( path );
 		InputStream inputStream = Kit.unchecked( () -> Files.newInputStream( path, StandardOpenOption.READ ) );
@@ -69,12 +69,12 @@ public final class JdkBinaryStreamReadingDomain extends Mutable implements Binar
 
 	@Override public Buffer readAllFromPath( Path path )
 	{
-		try( CloseableBinaryStreamReader reader = newReaderOnPath( path ) )
+		return Kit.tryGetWithWrapper( newReaderOnPath( path ), reader ->
 		{
 			int bufferSize = bufferAllocator.getBufferSize( readUntilEndBufferKey );
 			byte[] buffer = new byte[bufferSize];
 			byte[] bytes = reader.readUntilEnd( buffer );
 			return Buffer.of( bytes );
-		}
+		} );
 	}
 }

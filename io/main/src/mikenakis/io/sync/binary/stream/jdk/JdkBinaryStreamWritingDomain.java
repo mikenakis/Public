@@ -4,7 +4,7 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
-import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWritingDomain;
@@ -30,12 +30,12 @@ public final class JdkBinaryStreamWritingDomain extends Mutable implements Binar
 		this.bufferAllocator = bufferAllocator;
 	}
 
-	@Override public CloseableBinaryStreamWriter newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose )
+	@Override public CloseableWrapper<BinaryStreamWriter> newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose )
 	{
 		return new BinaryStreamWriterOnOutputStream( mutationContext, outputStream, onClose );
 	}
 
-	@Override public CloseableBinaryStreamWriter newWriterOnPath( Path path )
+	@Override public CloseableWrapper<BinaryStreamWriter> newWriterOnPath( Path path )
 	{
 		assert Kit.path.isAbsoluteNormalized( path );
 		Kit.unchecked( () -> Files.createDirectories( path.getParent() ) );

@@ -2,8 +2,8 @@ package mikenakis.io.test.t01_sync;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure1;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
@@ -26,11 +26,11 @@ public abstract class BinaryStreamReaderTest
 			throw new AssertionError();
 	}
 
-	protected abstract CloseableBinaryStreamReader newReader( String content );
+	protected abstract CloseableWrapper<BinaryStreamReader> newReader( String content );
 
 	private void withReader( String content, Procedure1<BinaryStreamReader> procedure )
 	{
-		Kit.tryWith( newReader( content ), procedure );
+		Kit.tryWithWrapper( newReader( content ), procedure );
 	}
 
 	@Test

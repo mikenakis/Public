@@ -1,6 +1,7 @@
 package mikenakis.io.sync.text.writing;
 
 import mikenakis.kit.functional.Procedure0;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -10,18 +11,18 @@ import mikenakis.kit.mutation.MutationContext;
  *
  * @author michael.gr
  */
-public final class CloseableInMemoryTextStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
+public final class InMemoryTextStreamWriter extends Mutable implements CloseableWrapper<TextStreamWriter>, TextStreamWriter.Defaults
 {
-	public static CloseableTextStreamWriter of( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
+	public static CloseableWrapper<TextStreamWriter> of( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
 	{
-		return new CloseableInMemoryTextStreamWriter( mutationContext, stringBuilder, onClose );
+		return new InMemoryTextStreamWriter( mutationContext, stringBuilder, onClose );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final StringBuilder stringBuilder;
 
-	private CloseableInMemoryTextStreamWriter( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
+	private InMemoryTextStreamWriter( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert stringBuilder != null;
@@ -50,5 +51,10 @@ public final class CloseableInMemoryTextStreamWriter extends Mutable implements 
 	@Override public String toString()
 	{
 		return stringBuilder.toString();
+	}
+
+	@Override public TextStreamWriter getTarget()
+	{
+		return this;
 	}
 }

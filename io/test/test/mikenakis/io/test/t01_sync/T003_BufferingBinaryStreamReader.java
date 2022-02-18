@@ -1,10 +1,11 @@
 package mikenakis.io.test.t01_sync;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.io.sync.binary.stream.reading.helpers.BufferingBinaryStreamReader;
-import mikenakis.io.sync.binary.stream.reading.helpers.CloseableMemoryBinaryStreamReader;
+import mikenakis.io.sync.binary.stream.reading.helpers.InMemoryBinaryStreamReader;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
 import org.junit.Test;
@@ -31,8 +32,8 @@ public class T003_BufferingBinaryStreamReader
 	private BufferingBinaryStreamReader newBufferedReader( String content )
 	{
 		Buffer buffer = Buffer.of( content, StandardCharsets.UTF_8 );
-		CloseableBinaryStreamReader unbufferedReader = CloseableMemoryBinaryStreamReader.of( mutationContext, buffer, Procedure0.noOp );
-		return new BufferingBinaryStreamReader( mutationContext, bytes, unbufferedReader, unbufferedReader::close );
+		CloseableWrapper<BinaryStreamReader> unbufferedReaderCloseableWrapper = InMemoryBinaryStreamReader.of( mutationContext, buffer, Procedure0.noOp );
+		return new BufferingBinaryStreamReader( mutationContext, bytes, unbufferedReaderCloseableWrapper.getTarget(), unbufferedReaderCloseableWrapper::close );
 	}
 
 	@Test

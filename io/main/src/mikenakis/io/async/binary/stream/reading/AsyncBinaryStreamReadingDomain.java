@@ -1,5 +1,7 @@
 package mikenakis.io.async.binary.stream.reading;
 
+import mikenakis.kit.lifetime.CloseableWrapper;
+
 import java.nio.channels.AsynchronousByteChannel;
 import java.nio.file.Path;
 
@@ -10,9 +12,9 @@ import java.nio.file.Path;
  */
 public interface AsyncBinaryStreamReadingDomain
 {
-	CloseableAsyncBinaryStreamReader newReaderOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousByteChannel, boolean handOff );
+	CloseableWrapper<AsyncBinaryStreamReader> newReaderOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousByteChannel, boolean handOff );
 
-	CloseableAsyncBinaryStreamReader newReaderOnPath( Path path );
+	CloseableWrapper<AsyncBinaryStreamReader> newReaderOnPath( Path path );
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

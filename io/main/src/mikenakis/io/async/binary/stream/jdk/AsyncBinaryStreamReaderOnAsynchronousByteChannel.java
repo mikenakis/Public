@@ -6,9 +6,9 @@ import mikenakis.kit.coherence.Coherent;
 import mikenakis.kit.debug.Debug;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.io.async.binary.stream.reading.AsyncBinaryStreamReader;
-import mikenakis.io.async.binary.stream.reading.CloseableAsyncBinaryStreamReader;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousByteChannel;
@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class AsyncBinaryStreamReaderOnAsynchronousByteChannel extends Coherent implements CloseableAsyncBinaryStreamReader.Defaults
+final class AsyncBinaryStreamReaderOnAsynchronousByteChannel extends Coherent implements CloseableWrapper<AsyncBinaryStreamReader>, AsyncBinaryStreamReader.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsynchronousByteChannel asynchronousByteChannel;
@@ -105,4 +105,9 @@ final class AsyncBinaryStreamReaderOnAsynchronousByteChannel extends Coherent im
 				} ) );
 		}
 	};
+
+	@Override public AsyncBinaryStreamReader getTarget()
+	{
+		return this;
+	}
 }

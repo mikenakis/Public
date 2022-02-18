@@ -1,10 +1,11 @@
 package mikenakis.io.test.t01_sync;
 
 import mikenakis.io.sync.binary.stream.jdk.JdkBinaryStreamReadingDomain;
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReadingDomain;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
-import mikenakis.io.sync.binary.stream.reading.CloseableBinaryStreamReader;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
@@ -26,7 +27,7 @@ public class T002_CloseableBinaryStreamReaderOnInputStream extends BinaryStreamR
 	{
 	}
 
-	@Override protected CloseableBinaryStreamReader newReader( String content )
+	@Override protected CloseableWrapper<BinaryStreamReader> newReader( String content )
 	{
 		byte[] bytes = content.getBytes( StandardCharsets.UTF_8 );
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream( bytes );

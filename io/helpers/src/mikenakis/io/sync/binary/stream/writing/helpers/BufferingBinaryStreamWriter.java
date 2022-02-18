@@ -3,7 +3,7 @@ package mikenakis.io.sync.binary.stream.writing.helpers;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
-import mikenakis.io.sync.binary.stream.writing.CloseableBinaryStreamWriter;
+import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -13,15 +13,15 @@ import mikenakis.kit.mutation.MutationContext;
  *
  * @author michael.gr
  */
-public final class BufferingBinaryStreamWriter extends Mutable implements CloseableBinaryStreamWriter.Defaults
+public final class BufferingBinaryStreamWriter extends Mutable implements Closeable.Defaults, BinaryStreamWriter.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final CloseableBinaryStreamWriter unbufferedWriter;
+	private final BinaryStreamWriter unbufferedWriter;
 	private final Procedure0 onClose;
 	private final byte[] cachingBuffer;
 	private int cacheLength = 0;
 
-	public BufferingBinaryStreamWriter( MutationContext mutationContext, byte[] cachingBuffer, CloseableBinaryStreamWriter unbufferedWriter, Procedure0 onClose )
+	public BufferingBinaryStreamWriter( MutationContext mutationContext, byte[] cachingBuffer, BinaryStreamWriter unbufferedWriter, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert unbufferedWriter != null;

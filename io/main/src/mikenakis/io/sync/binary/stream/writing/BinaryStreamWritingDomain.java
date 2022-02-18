@@ -5,6 +5,7 @@ import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.buffers.BufferKey;
+import mikenakis.kit.lifetime.CloseableWrapper;
 
 import java.io.OutputStream;
 import java.nio.file.Path;
@@ -18,9 +19,9 @@ public interface BinaryStreamWritingDomain
 {
 	BufferKey binaryCopierBufferKey = new BufferKey( BinaryStreamWritingDomain.class.getName() + ".binaryCopy" );
 
-	CloseableBinaryStreamWriter newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose );
+	CloseableWrapper<BinaryStreamWriter> newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose );
 
-	CloseableBinaryStreamWriter newWriterOnPath( Path path );
+	CloseableWrapper<BinaryStreamWriter> newWriterOnPath( Path path );
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,12 +35,12 @@ public interface BinaryStreamWritingDomain
 	{
 		@Override default long copyToPath( BinaryStreamReader reader, Path path )
 		{
-			return Kit.tryGetWith( newWriterOnPath( path ), writer -> copy( reader, writer ) );
+			return Kit.tryGetWithWrapper( newWriterOnPath( path ), writer -> copy( reader, writer ) );
 		}
 
 		@Override default void writeAllToPath( Path path, Buffer buffer )
 		{
-			Kit.tryWith( newWriterOnPath( path ), writer -> writer.writeBytes( buffer.getBytes() ) );
+			Kit.tryWithWrapper( newWriterOnPath( path ), writer -> writer.writeBytes( buffer.getBytes() ) );
 		}
 	}
 
@@ -49,13 +50,13 @@ public interface BinaryStreamWritingDomain
 	{
 		BinaryStreamWritingDomain getDecoratedBinaryStreamWritingDomain();
 
-		@Override default CloseableBinaryStreamWriter newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose )
+		@Override default CloseableWrapper<BinaryStreamWriter> newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose )
 		{
 			BinaryStreamWritingDomain decoree = getDecoratedBinaryStreamWritingDomain();
 			return decoree.newWriterOnOutputStream( outputStream, onClose );
 		}
 
-		@Override default CloseableBinaryStreamWriter newWriterOnPath( Path path )
+		@Override default CloseableWrapper<BinaryStreamWriter> newWriterOnPath( Path path )
 		{
 			BinaryStreamWritingDomain decoree = getDecoratedBinaryStreamWritingDomain();
 			return decoree.newWriterOnPath( path );

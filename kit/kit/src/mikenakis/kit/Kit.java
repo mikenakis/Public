@@ -18,6 +18,7 @@ import mikenakis.kit.functional.ThrowingFunction1;
 import mikenakis.kit.functional.ThrowingProcedure0;
 import mikenakis.kit.functional.ThrowingProcedure1;
 import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.logging.Log;
 
 import java.io.PrintWriter;
@@ -2272,6 +2273,16 @@ public final class Kit
 				tryProcedure.invoke( closeable );
 			}
 		}
+	}
+
+	public static <C> void tryWithWrapper( CloseableWrapper<C> closeableWrapper, Procedure1<? super C> procedure )
+	{
+		tryWith( closeableWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
+	}
+
+	public static <R,C> R tryGetWithWrapper( CloseableWrapper<C> closeableWrapper, Function1<R,? super C> function )
+	{
+		return tryGetWith( closeableWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
 	}
 
 	/**

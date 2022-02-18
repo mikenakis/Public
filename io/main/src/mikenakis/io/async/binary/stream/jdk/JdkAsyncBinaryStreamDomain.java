@@ -1,12 +1,13 @@
 package mikenakis.io.async.binary.stream.jdk;
 
 import mikenakis.io.async.binary.stream.AsyncBinaryStreamDomain;
-import mikenakis.io.async.binary.stream.reading.CloseableAsyncBinaryStreamReader;
-import mikenakis.io.async.binary.stream.writing.CloseableAsyncBinaryStreamWriter;
+import mikenakis.io.async.binary.stream.reading.AsyncBinaryStreamReader;
+import mikenakis.io.async.binary.stream.writing.AsyncBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.Coherent;
+import mikenakis.kit.lifetime.CloseableWrapper;
 
 import java.nio.channels.AsynchronousByteChannel;
 import java.nio.channels.AsynchronousFileChannel;
@@ -41,12 +42,12 @@ public final class JdkAsyncBinaryStreamDomain extends Coherent implements AsyncB
 		return bufferAllocator;
 	}
 
-	@Override public CloseableAsyncBinaryStreamReader newReaderOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousByteChannel, boolean handOff )
+	@Override public CloseableWrapper<AsyncBinaryStreamReader> newReaderOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousByteChannel, boolean handOff )
 	{
 		return new AsyncBinaryStreamReaderOnAsynchronousByteChannel( getCoherence(), asynchronousByteChannel, handOff );
 	}
 
-	@Override public CloseableAsyncBinaryStreamWriter newWriterOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousFileChannel, boolean handOff )
+	@Override public CloseableWrapper<AsyncBinaryStreamWriter> newWriterOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousFileChannel, boolean handOff )
 	{
 		return new AsyncBinaryStreamWriterOnAsynchronousByteChannel( getCoherence(), asynchronousFileChannel, handOff );
 	}
@@ -58,7 +59,7 @@ public final class JdkAsyncBinaryStreamDomain extends Coherent implements AsyncB
 //		return ((JvmThreadPool)threadPool).executorService;
 	}
 
-	@Override public CloseableAsyncBinaryStreamReader newReaderOnPath( Path path )
+	@Override public CloseableWrapper<AsyncBinaryStreamReader> newReaderOnPath( Path path )
 	{
 		assert Kit.path.isAbsoluteNormalized( path );
 		ExecutorService executorService = executorService();
@@ -66,7 +67,7 @@ public final class JdkAsyncBinaryStreamDomain extends Coherent implements AsyncB
 		return newReaderOnAsynchronousFileChannel( asynchronousFileChannel );
 	}
 
-	@Override public CloseableAsyncBinaryStreamWriter newWriterOnPath( Path path )
+	@Override public CloseableWrapper<AsyncBinaryStreamWriter> newWriterOnPath( Path path )
 	{
 		assert Kit.path.isAbsoluteNormalized( path );
 		Kit.unchecked( () -> Files.createDirectories( path.getParent() ) ); //Note: ideally, the AsynchronousFileChannel.open() method would be doing this, but it has no provision for doing such a thing.
@@ -75,13 +76,13 @@ public final class JdkAsyncBinaryStreamDomain extends Coherent implements AsyncB
 		return newWriterOnAsynchronousFileChannel( asynchronousFileChannel );
 	}
 
-	private CloseableAsyncBinaryStreamReader newReaderOnAsynchronousFileChannel( AsynchronousFileChannel asynchronousFileChannel )
+	private CloseableWrapper<AsyncBinaryStreamReader> newReaderOnAsynchronousFileChannel( AsynchronousFileChannel asynchronousFileChannel )
 	{
 		AsynchronousByteChannel asynchronousByteChannel = new AsynchronousByteChannelOnAsynchronousFileChannel( mutationContext, asynchronousFileChannel, true, 0L );
 		return new AsyncBinaryStreamReaderOnAsynchronousByteChannel( getCoherence(), asynchronousByteChannel, true );
 	}
 
-	private CloseableAsyncBinaryStreamWriter newWriterOnAsynchronousFileChannel( AsynchronousFileChannel asynchronousFileChannel )
+	private CloseableWrapper<AsyncBinaryStreamWriter> newWriterOnAsynchronousFileChannel( AsynchronousFileChannel asynchronousFileChannel )
 	{
 		AsynchronousByteChannel asynchronousByteChannel = new AsynchronousByteChannelOnAsynchronousFileChannel( mutationContext, asynchronousFileChannel, true, 0L );
 		return new AsyncBinaryStreamWriterOnAsynchronousByteChannel( getCoherence(), asynchronousByteChannel, true );

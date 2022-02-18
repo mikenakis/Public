@@ -1,7 +1,9 @@
 package mikenakis.io.sync.binary.stream.reading;
 
+import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
+import mikenakis.kit.lifetime.CloseableWrapper;
 
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -13,9 +15,9 @@ import java.nio.file.Path;
  */
 public interface BinaryStreamReadingDomain
 {
-	CloseableBinaryStreamReader newReaderOnInputStream( InputStream inputStream, Procedure0 onClose );
+	CloseableWrapper<BinaryStreamReader> newReaderOnInputStream( InputStream inputStream, Procedure0 onClose );
 
-	CloseableBinaryStreamReader newReaderOnPath( Path path );
+	CloseableWrapper<BinaryStreamReader> newReaderOnPath( Path path );
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,10 +31,7 @@ public interface BinaryStreamReadingDomain
 	{
 		@Override default boolean compareToPath( BinaryStreamReader reader, Path path )
 		{
-			try( CloseableBinaryStreamReader reader2 = newReaderOnPath( path ) )
-			{
-				return compare( reader, reader2 );
-			}
+			return Kit.tryGetWithWrapper(newReaderOnPath( path ), reader2 -> compare( reader, reader2 ) );
 		}
 	}
 
@@ -42,13 +41,13 @@ public interface BinaryStreamReadingDomain
 	{
 		BinaryStreamReadingDomain getDecoratedBinaryStreamReadingDomain();
 
-		@Override default CloseableBinaryStreamReader newReaderOnInputStream( InputStream inputStream, Procedure0 onClose )
+		@Override default CloseableWrapper<BinaryStreamReader> newReaderOnInputStream( InputStream inputStream, Procedure0 onClose )
 		{
 			BinaryStreamReadingDomain decoree = getDecoratedBinaryStreamReadingDomain();
 			return decoree.newReaderOnInputStream( inputStream, onClose );
 		}
 
-		@Override default CloseableBinaryStreamReader newReaderOnPath( Path path )
+		@Override default CloseableWrapper<BinaryStreamReader> newReaderOnPath( Path path )
 		{
 			BinaryStreamReadingDomain decoree = getDecoratedBinaryStreamReadingDomain();
 			return decoree.newReaderOnPath( path );

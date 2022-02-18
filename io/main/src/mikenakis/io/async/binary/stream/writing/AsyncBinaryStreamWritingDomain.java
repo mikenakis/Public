@@ -1,10 +1,8 @@
 package mikenakis.io.async.binary.stream.writing;
 
-import mikenakis.io.async.Async;
 import mikenakis.kit.buffers.BufferAllocator;
-import mikenakis.kit.functional.Procedure1;
+import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.io.async.binary.stream.reading.AsyncBinaryStreamReader;
 
 import java.nio.channels.AsynchronousByteChannel;
 import java.nio.file.Path;
@@ -16,9 +14,9 @@ import java.nio.file.Path;
  */
 public interface AsyncBinaryStreamWritingDomain
 {
-	CloseableAsyncBinaryStreamWriter newWriterOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousFileChannel, boolean handOff );
+	CloseableWrapper<AsyncBinaryStreamWriter> newWriterOnAsynchronousByteChannel( AsynchronousByteChannel asynchronousFileChannel, boolean handOff );
 
-	CloseableAsyncBinaryStreamWriter newWriterOnPath( Path path );
+	CloseableWrapper<AsyncBinaryStreamWriter> newWriterOnPath( Path path );
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
