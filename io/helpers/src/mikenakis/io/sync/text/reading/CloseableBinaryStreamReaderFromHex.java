@@ -32,7 +32,7 @@ public final class CloseableBinaryStreamReaderFromHex implements CloseableBinary
 			Kit.tryGetWith( of( textStreamReader, Procedure0.noOp ), delegee ) );
 	}
 
-	public static CloseableBinaryStreamReaderFromHex of( TextStreamReader textStreamReader, Procedure0 onClose )
+	public static CloseableBinaryStreamReader of( TextStreamReader textStreamReader, Procedure0 onClose )
 	{
 		return new CloseableBinaryStreamReaderFromHex( textStreamReader, onClose );
 	}

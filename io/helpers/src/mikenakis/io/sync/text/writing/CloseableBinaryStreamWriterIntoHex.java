@@ -13,7 +13,7 @@ import java.util.Arrays;
 
 public final class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStreamWriter.Defaults
 {
-	public static CloseableBinaryStreamWriterIntoHex of( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
+	public static CloseableBinaryStreamWriter of( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
 	{
 		return new CloseableBinaryStreamWriterIntoHex( textStreamWriter, width, onClose );
 	}

@@ -10,18 +10,18 @@ import mikenakis.kit.mutation.MutationContext;
  *
  * @author michael.gr
  */
-public final class CloseableMemoryTextStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
+public final class CloseableInMemoryTextStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
 {
 	public static CloseableTextStreamWriter of( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
 	{
-		return new CloseableMemoryTextStreamWriter( mutationContext, stringBuilder, onClose );
+		return new CloseableInMemoryTextStreamWriter( mutationContext, stringBuilder, onClose );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final StringBuilder stringBuilder;
 
-	private CloseableMemoryTextStreamWriter( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
+	private CloseableInMemoryTextStreamWriter( MutationContext mutationContext, StringBuilder stringBuilder, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert stringBuilder != null;

@@ -16,7 +16,7 @@ import java.util.Optional;
 
 public final class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable implements CloseableTextStreamReader.Defaults
 {
-	public static CloseableTextStreamReaderOnBinaryStreamReader of( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	public static CloseableTextStreamReader of( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
 	{
 		return new CloseableTextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, onClose );
 	}

@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public final class CloseableTextStreamWriterOnBinaryStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
 {
-	public static CloseableTextStreamWriterOnBinaryStreamWriter of( MutationContext mutationContext, BinaryStreamWriter binaryStreamWriter, Procedure0 onClose )
+	public static CloseableTextStreamWriter of( MutationContext mutationContext, BinaryStreamWriter binaryStreamWriter, Procedure0 onClose )
 	{
 		return new CloseableTextStreamWriterOnBinaryStreamWriter( mutationContext, binaryStreamWriter, onClose );
 	}

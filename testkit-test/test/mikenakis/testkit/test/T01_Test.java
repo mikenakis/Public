@@ -2,7 +2,7 @@ package mikenakis.testkit.test;
 
 import mikenakis.io.sync.text.reading.CloseableTextStreamReaderOnBinaryStreamReader;
 import mikenakis.io.sync.text.reading.CloseableMemoryTextStreamReader;
-import mikenakis.io.sync.text.writing.CloseableMemoryTextStreamWriter;
+import mikenakis.io.sync.text.writing.CloseableInMemoryTextStreamWriter;
 import mikenakis.io.sync.text.writing.CloseableTextStreamWriterOnBinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
@@ -40,7 +40,7 @@ public final class T01_Test
 	private String hexFromText( String text )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		Kit.tryWith( CloseableMemoryTextStreamWriter.of( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
+		Kit.tryWith( CloseableInMemoryTextStreamWriter.of( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
 			Kit.tryWith( CloseableBinaryStreamWriterIntoHex.of( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
 				Kit.tryWith( CloseableTextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
 					textStreamWriter.write( text ) ) ) );
