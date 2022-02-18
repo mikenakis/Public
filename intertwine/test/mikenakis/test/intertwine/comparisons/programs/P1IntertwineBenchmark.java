@@ -9,11 +9,6 @@ import mikenakis.test.intertwine.comparisons.implementations.alternative.reflect
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.lambdatwine.AnyLambda;
-import mikenakis.lambdatwine.Lambdatwine;
-import mikenakis.lambdatwine.LambdatwineFactory;
-import mikenakis.lambdatwine.implementations.methodhandle.MethodHandleLambdatwineFactory;
-import mikenakis.lambdatwine.implementations.reflecting.ReflectingLambdatwineFactory;
 import mikenakis.testkit.TestKit;
 
 import java.io.IOException;
@@ -38,7 +33,7 @@ public final class P1IntertwineBenchmark
 
 	private static class NullOutputStream extends OutputStream
 	{
-		@Override public void write( int b ) throws IOException
+		@Override public void write( int b )
 		{
 		}
 	}
@@ -58,8 +53,6 @@ public final class P1IntertwineBenchmark
 			runBenchmark( out, "Reflecting Intertwine    ", new ReflectingIntertwineBenchmarkable()::run );
 			runBenchmark( out, "MethodHandle Intertwine  ", new MethodHandleIntertwineBenchmarkable()::run );
 			runBenchmark( out, "Compiling Intertwine     ", new CompilingIntertwineBenchmarkable()::run );
-			runBenchmark( out, "Reflecting Lambdatwine   ", new ReflectingLambdatwineBenchmarkable()::run );
-			runBenchmark( out, "MethodHandle Lambdatwine ", new MethodHandleLambdatwineBenchmarkable()::run );
 			out.println();
 		}
 	}
@@ -138,35 +131,6 @@ public final class P1IntertwineBenchmark
 		MethodHandleIntertwineBenchmarkable()
 		{
 			super( MethodHandleIntertwineFactory.instance );
-		}
-	}
-
-	abstract static class LambdatwineBenchmarkable extends MyBenchmarkable
-	{
-		LambdatwineBenchmarkable( LambdatwineFactory lambdatwineFactory )
-		{
-			super( foo ->
-			{
-				Lambdatwine<Foo> lambdatwiner = lambdatwineFactory.getLambdatwine( Foo.class );
-				AnyLambda<Foo> untwiner = lambdatwiner.newUntwiner( foo );
-				return lambdatwiner.newEntwiner( untwiner );
-			} );
-		}
-	}
-
-	static class ReflectingLambdatwineBenchmarkable extends LambdatwineBenchmarkable
-	{
-		ReflectingLambdatwineBenchmarkable()
-		{
-			super( new ReflectingLambdatwineFactory() );
-		}
-	}
-
-	static class MethodHandleLambdatwineBenchmarkable extends LambdatwineBenchmarkable
-	{
-		MethodHandleLambdatwineBenchmarkable()
-		{
-			super( MethodHandleLambdatwineFactory.instance );
 		}
 	}
 
