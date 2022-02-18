@@ -17,7 +17,7 @@ public class AsyncBufferStreamWriterOnAsyncBinaryStreamWriter extends Mutable im
 		return new AsyncBufferStreamWriterOnAsyncBinaryStreamWriter( mutationContext, binaryStreamWriter );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsyncBinaryStreamWriter binaryStreamWriter;
 
 	private AsyncBufferStreamWriterOnAsyncBinaryStreamWriter( MutationContext mutationContext, AsyncBinaryStreamWriter binaryStreamWriter )

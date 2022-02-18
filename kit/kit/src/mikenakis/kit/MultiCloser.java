@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MultiCloser implements Closeable.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final List<Closeable> closeables = new ArrayList<>();
 
 	public MultiCloser( Closeable... closeables )

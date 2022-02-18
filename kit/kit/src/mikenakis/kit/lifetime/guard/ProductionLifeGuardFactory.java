@@ -11,30 +11,25 @@ public final class ProductionLifeGuardFactory implements LifeGuardFactory.Defaul
 {
 	public static final LifeGuardFactory instance = new ProductionLifeGuardFactory();
 
-	private final LifeGuard lifeGuard = new LifeGuard.Defaults()
+	private ProductionLifeGuardFactory()
+	{
+	}
+
+	private final LifeGuard dummyLifeGuardInstance = new LifeGuard.Defaults()
 	{
 		@Override public boolean lifeStateAssertion( boolean value )
 		{
-			throw new RuntimeException(); //we do not expect this to ever be invoked on production.
+			throw new RuntimeException(); //we do not expect this to ever be invoked in production.
 		}
 
 		@Override public void close()
 		{
 			/* nothing to do */
 		}
-
-		@Override public void open()
-		{
-			/* nothing to do */
-		}
 	};
 
-	private ProductionLifeGuardFactory()
+	@Override public LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace )
 	{
-	}
-
-	@Override public LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace, boolean initiallyAlive )
-	{
-		return lifeGuard;
+		return dummyLifeGuardInstance;
 	}
 }

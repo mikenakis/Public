@@ -15,7 +15,7 @@ import mikenakis.kit.mutation.MutationContext;
  */
 public final class BufferingBinaryStreamWriter extends Mutable implements CloseableBinaryStreamWriter.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final CloseableBinaryStreamWriter unbufferedWriter;
 	private final Procedure0 onClose;
 	private final byte[] cachingBuffer;

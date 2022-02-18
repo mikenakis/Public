@@ -27,10 +27,9 @@ public class CleaningDevelopmentLifeGuardFactory extends DevelopmentLifeGuardFac
 		private boolean closed;
 		private final Cleaner.Cleanable cleanable;
 
-		Guard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace, boolean initialState )
+		Guard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
 		{
 			assert closeable != null;
-			closed = !initialState;
 			this.stackTrace = stackTrace;
 			closeableClass = closeable.getClass();
 			cleanable = cleaner.register( closeable, () -> clean() );
@@ -41,12 +40,6 @@ public class CleaningDevelopmentLifeGuardFactory extends DevelopmentLifeGuardFac
 			assert !closed;
 			closed = true;
 			cleanable.clean();
-		}
-
-		@Override public void open()
-		{
-			assert closed;
-			closed = false;
 		}
 
 		@Override public boolean lifeStateAssertion( boolean value )
@@ -66,8 +59,8 @@ public class CleaningDevelopmentLifeGuardFactory extends DevelopmentLifeGuardFac
 		}
 	}
 
-	@Override public LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, boolean initiallyAlive, Optional<StackWalker.StackFrame[]> stackTrace )
+	@Override public LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
-		return new Guard( closeable, stackTrace, initiallyAlive );
+		return new Guard( closeable, stackTrace );
 	}
 }

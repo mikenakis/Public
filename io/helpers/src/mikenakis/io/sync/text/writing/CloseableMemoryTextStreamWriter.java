@@ -17,7 +17,7 @@ public class CloseableMemoryTextStreamWriter extends Mutable implements Closeabl
 		return new CloseableMemoryTextStreamWriter( mutationContext, stringBuilder, onClose );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final StringBuilder stringBuilder;
 

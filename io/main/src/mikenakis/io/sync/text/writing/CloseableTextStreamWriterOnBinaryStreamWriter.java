@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 public class CloseableTextStreamWriterOnBinaryStreamWriter extends Mutable implements CloseableTextStreamWriter.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final BinaryStreamWriter binaryStreamWriter;
 

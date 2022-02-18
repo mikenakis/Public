@@ -20,7 +20,7 @@ public class CloseableBinaryStreamWriterIntoHex implements CloseableBinaryStream
 			Kit.tryWith( new CloseableBinaryStreamWriterIntoHex( textStreamWriter, width, Procedure0.noOp ), delegee ) );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final TextStreamWriter textStreamWriter;
 	private final char[] hexField;
 	private final char[] charField;

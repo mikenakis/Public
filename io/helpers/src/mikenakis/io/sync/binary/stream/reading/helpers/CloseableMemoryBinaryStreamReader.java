@@ -20,7 +20,7 @@ public class CloseableMemoryBinaryStreamReader extends Mutable implements Closea
 		return new CloseableMemoryBinaryStreamReader( mutationContext, buffer, onClose );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final Buffer buffer;
 	private int position;

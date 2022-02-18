@@ -48,12 +48,12 @@ public abstract class DevelopmentLifeGuardFactory implements LifeGuardFactory.De
 		Debug.breakPoint();
 	}
 
-	protected abstract LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, boolean initiallyAlive, Optional<StackWalker.StackFrame[]> stackTrace );
+	protected abstract LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace );
 
-	@Override public final LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace, boolean initiallyAlive )
+	@Override public final LifeGuard newLifeGuard( int framesToSkip, Closeable closeable, boolean collectStackTrace )
 	{
 		Optional<StackWalker.StackFrame[]> stackTrace = collectStackTrace ? Optional.of( Kit.getStackTrace( framesToSkip + 2 ) ) : Optional.empty();
-		return onNewDevelopmentLifeGuard( closeable, initiallyAlive, stackTrace );
+		return onNewDevelopmentLifeGuard( closeable, stackTrace );
 	}
 
 	private static String stackFramesToString( StackWalker.StackFrame[] stackFrames )

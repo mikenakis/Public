@@ -8,7 +8,7 @@ import java.io.Writer;
 
 public class JdkWriterOnTextStreamWriter extends Writer implements Closeable.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final TextStreamWriter textStreamWriter;
 	private final Procedure0 onClose;
 

@@ -32,7 +32,7 @@ public class CloseableBinaryStreamReaderFromHex implements CloseableBinaryStream
 			Kit.tryGetWith( new CloseableBinaryStreamReaderFromHex( textStreamReader, Procedure0.noOp ), delegee ) );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final TextStreamReader textStreamReader;
 	private final Procedure0 onClose;
 	private byte[] buffer;

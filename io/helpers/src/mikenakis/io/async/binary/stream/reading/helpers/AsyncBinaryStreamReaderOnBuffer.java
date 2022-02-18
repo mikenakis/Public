@@ -14,7 +14,7 @@ import mikenakis.kit.buffer.Buffer;
  */
 public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements CloseableAsyncBinaryStreamReader.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Buffer buffer;
 	private int arrayOffset;
 	private int arrayLength;

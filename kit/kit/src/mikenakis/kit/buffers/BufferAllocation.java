@@ -11,7 +11,7 @@ import mikenakis.kit.mutation.Mutable;
  */
 public final class BufferAllocation extends Mutable implements Closeable.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final BufferAllocator bufferAllocator;
 	public final byte[] bytes;
 

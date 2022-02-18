@@ -11,12 +11,12 @@ import mikenakis.kit.lifetime.Closeable;
  */
 public interface LifeGuard extends Closeable
 {
-	static LifeGuard create( Closeable closeable )
+	static LifeGuard of( Closeable closeable )
 	{
 		return factory().newLifeGuard( closeable, false );
 	}
 
-	static LifeGuard create( Closeable closeable, boolean collectStackTrace )
+	static LifeGuard of( Closeable closeable, boolean collectStackTrace )
 	{
 		return factory().newLifeGuard( closeable, collectStackTrace );
 	}
@@ -25,8 +25,6 @@ public interface LifeGuard extends Closeable
 	{
 		return Kit.areAssertionsEnabled() ? CleaningDevelopmentLifeGuardFactory.instance : ProductionLifeGuardFactory.instance;
 	}
-
-	void open();
 
 	interface Defaults extends LifeGuard, Closeable.Defaults
 	{

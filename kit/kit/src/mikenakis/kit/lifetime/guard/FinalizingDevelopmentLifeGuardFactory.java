@@ -26,10 +26,9 @@ public class FinalizingDevelopmentLifeGuardFactory extends DevelopmentLifeGuardF
 		private final Optional<StackWalker.StackFrame[]> stackTrace;
 		private boolean closed;
 
-		Guard( Class<? extends Closeable> closeableClass, String closeableIdentity, Optional<StackWalker.StackFrame[]> stackTrace, boolean initialState )
+		Guard( Class<? extends Closeable> closeableClass, String closeableIdentity, Optional<StackWalker.StackFrame[]> stackTrace )
 		{
 			assert closeableClass != null;
-			closed = !initialState;
 			this.closeableClass = closeableClass;
 			this.closeableIdentity = closeableIdentity;
 			this.stackTrace = stackTrace;
@@ -57,22 +56,16 @@ public class FinalizingDevelopmentLifeGuardFactory extends DevelopmentLifeGuardF
 			return true;
 		}
 
-		@Override public void open()
-		{
-			assert closed;
-			closed = false;
-		}
-
 		@Override public String toString()
 		{
 			return (closed ? "not " : "") + "alive";
 		}
 	}
 
-	@Override public LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, boolean initiallyAlive, Optional<StackWalker.StackFrame[]> stackTrace )
+	@Override public LifeGuard onNewDevelopmentLifeGuard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
 		String closeableIdentity = Kit.identityString( closeable );
-		Guard guard = new Guard( closeable.getClass(), closeableIdentity, stackTrace, initiallyAlive );
+		Guard guard = new Guard( closeable.getClass(), closeableIdentity, stackTrace );
 		System.out.println( "New guard: " + Kit.identityString( guard ) + " for closeable " + closeableIdentity );
 		return guard;
 	}

@@ -19,7 +19,7 @@ public class BufferStreamWriterOnAsyncBufferStreamWriter extends Mutable impleme
 		return new BufferStreamWriterOnAsyncBufferStreamWriter( mutationContext, asyncBufferStreamWriter, errorHandler );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsyncBufferStreamWriter asyncBufferStreamWriter;
 	private final Procedure1<Throwable> errorHandler;
 	private final Queue<Buffer> queue = MutableCollections.of( mutationContext ).newLinkedQueue();

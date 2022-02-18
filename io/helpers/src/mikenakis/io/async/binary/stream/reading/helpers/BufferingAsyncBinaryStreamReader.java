@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 public final class BufferingAsyncBinaryStreamReader extends Coherent implements CloseableAsyncBinaryStreamReader.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsyncBinaryStreamReader unbufferedReader;
 	private final Procedure0 onClose;
 	private final FillableBuffer fillableBuffer;

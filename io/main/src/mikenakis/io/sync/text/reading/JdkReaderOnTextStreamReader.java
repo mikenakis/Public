@@ -17,7 +17,7 @@ public class JdkReaderOnTextStreamReader extends Reader implements Closeable.Def
 	{
 		assert textStreamReader != null;
 		assert onClose != null;
-		lifeGuard = LifeGuard.create( this );
+		lifeGuard = LifeGuard.of( this );
 		this.textStreamReader = textStreamReader;
 		this.onClose = onClose;
 	}

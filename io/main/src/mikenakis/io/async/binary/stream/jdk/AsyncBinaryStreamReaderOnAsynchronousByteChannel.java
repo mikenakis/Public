@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 final class AsyncBinaryStreamReaderOnAsynchronousByteChannel extends Coherent implements CloseableAsyncBinaryStreamReader.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsynchronousByteChannel asynchronousByteChannel;
 	private final boolean handOff;
 	private Optional<Procedure1<Integer>> currentCompletionHandler = Optional.empty();

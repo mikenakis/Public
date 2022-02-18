@@ -19,7 +19,7 @@ public class CloseableTextStreamReaderOnBinaryStreamReader extends Mutable imple
 	public static final BufferKey bufferKey = new BufferKey( CloseableTextStreamReaderOnBinaryStreamReader.class.getName() );
 	private static final Buffer EndOfLine = Buffer.of( "\n" );
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Procedure0 onClose;
 	private final BufferingBinaryStreamReader bufferingReader;
 	private final BufferAllocation readBufferAllocation;

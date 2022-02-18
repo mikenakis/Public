@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public final class BufferingBinaryStreamReader extends Mutable implements CloseableBinaryStreamReader.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final BinaryStreamReader reader;
 	private final Procedure0 onClose;
 	private final FillableBuffer fillableBuffer;

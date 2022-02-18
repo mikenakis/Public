@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
  */
 final class AsynchronousByteChannelOnAsynchronousFileChannel extends Mutable implements AsynchronousByteChannel, Closeable.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsynchronousFileChannel asynchronousFileChannel;
 	private final boolean handOff;
 	private long position;

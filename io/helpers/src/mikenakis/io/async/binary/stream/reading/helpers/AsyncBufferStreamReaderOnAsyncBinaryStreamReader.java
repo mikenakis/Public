@@ -17,7 +17,7 @@ public class AsyncBufferStreamReaderOnAsyncBinaryStreamReader implements AsyncBu
 		return new AsyncBufferStreamReaderOnAsyncBinaryStreamReader( binaryStreamReader, errorHandler );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsyncBinaryStreamReader binaryStreamReader;
 	private final Procedure1<Throwable> errorHandler;
 

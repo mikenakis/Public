@@ -17,7 +17,7 @@ import java.io.OutputStream;
  */
 final class BinaryStreamWriterOnOutputStream extends Mutable implements CloseableBinaryStreamWriter.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final OutputStream outputStream;
 	private final Procedure0 onClose;
 

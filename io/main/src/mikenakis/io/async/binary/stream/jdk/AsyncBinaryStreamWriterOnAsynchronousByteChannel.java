@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 final class AsyncBinaryStreamWriterOnAsynchronousByteChannel extends Coherent implements CloseableAsyncBinaryStreamWriter.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.create( this );
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final AsynchronousByteChannel asynchronousByteChannel;
 	private final boolean handOff;
 	private Optional<Procedure0> currentCompletionHandler = Optional.empty();
