@@ -2,7 +2,6 @@ package mikenakis.bytecode;
 
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.kit.Kit;
-import mikenakis.kit.logging.Log;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -45,8 +44,6 @@ public class ByteCodeClassLoader extends ClassLoader
 
 	@Override protected Class<?> findClass( String name ) throws ClassNotFoundException
 	{
-		Log.debug( "load: " + name );
-
 		byte[] code = byteArraysByTypeName.get( name );
 		if( code != null )
 			return defineClass( name, code, 0, code.length );

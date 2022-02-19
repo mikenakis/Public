@@ -1,14 +1,13 @@
 package mikenakis.tyraki;
 
-import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.functional.Function1;
-import mikenakis.kit.Kit;
-import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.kit.DefaultComparator;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.functional.Function1;
+import mikenakis.tyraki.conversion.ConversionCollections;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -150,20 +149,11 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	/**
 	 * Converts this {@link UnmodifiableCollection} to an array.
 	 *
-	 * @param elementClass the class of the elements of the array. (Needed because of type erasure)
+	 * @param arrayFactory a {@link Function1} to create an array of the required number of elements.
 	 *
 	 * @return an array of elements.
 	 */
-	E[] toArray( Class<E> elementClass );
-
-	/**
-	 * Converts this {@link UnmodifiableCollection} to an array.
-	 *
-	 * @param elementClass the class of the elements of the array. (Needed because of type erasure)
-	 *
-	 * @return an array of elements.
-	 */
-	E[] toGenericArray( Class<?> elementClass );
+	E[] toArray( Function1<E[],Integer> arrayFactory );
 
 	/**
 	 * Checks whether this {@link UnmodifiableCollection} is equal to the given {@link UnmodifiableCollection}.
@@ -281,19 +271,13 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 			return array;
 		}
 
-		@Override default E[] toArray( Class<E> elementClass )
+		@Override default E[] toArray( Function1<E[],Integer> arrayFactory )
 		{
-			@SuppressWarnings( "unchecked" )
-			E[] array = (E[])Array.newInstance( elementClass, size() );
+			E[] array = arrayFactory.invoke( size() );
 			int index = 0;
 			for( E element : this )
 				array[index++] = element;
 			return array;
-		}
-
-		@Override default E[] toGenericArray( Class<?> elementClass )
-		{
-			return toArray( Kit.uncheckedClassCast( elementClass ) );
 		}
 
 		/**
