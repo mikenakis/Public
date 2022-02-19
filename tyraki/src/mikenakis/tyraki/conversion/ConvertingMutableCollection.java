@@ -59,10 +59,10 @@ class ConvertingMutableCollection<T, F> extends AbstractUnmodifiableCollection<T
 		return foundItem.map( i -> converter.invoke( i ) );
 	}
 
-	@Override public boolean tryAdd( T element )
+	@Override public Optional<T> tryAdd( T element )
 	{
 		F from = reverter.invoke( element );
-		return collectionToConvert.tryAdd( from );
+		return collectionToConvert.tryAdd( from ).map( t -> converter.invoke( t ) );
 	}
 
 	@Override public boolean tryRemove( T element )

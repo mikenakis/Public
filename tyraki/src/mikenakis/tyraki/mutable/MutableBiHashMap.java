@@ -8,6 +8,8 @@ import mikenakis.tyraki.MutableMap;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 
+import java.util.Optional;
+
 /**
  * A hashing implementation of {@link MutableBiMap}.
  *
@@ -133,13 +135,14 @@ public class MutableBiHashMap<K, V> extends AbstractMutableHashMap<K,V> implemen
 		return true;
 	}
 
-	@Override public boolean tryAdd( K k, V v )
+	@Override public Optional<V> tryAdd( K k, V v )
 	{
 		assert k != null;
 		assert v != null;
-		if( !super.tryAdd( k, v ) )
-			return false;
+		Optional<V> existing = super.tryAdd( k, v );
+		if( existing.isPresent() )
+			return existing;
 		reverse.add( v, k );
-		return true;
+		return Optional.empty();
 	}
 }

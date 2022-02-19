@@ -121,11 +121,11 @@ public abstract class MutableCollectionTest<T>
 		T b = newElement();
 		T c = newElement();
 		assert collection.isEmpty();
-		assert collection.tryAdd( a );
+		assert collection.tryAdd( a ).isEmpty();
 		assert collection.equalsCollection( UnmodifiableCollection.of( a ) );
-		assert collection.tryAdd( b );
+		assert collection.tryAdd( b ).isEmpty();
 		assert collection.equalsCollection( UnmodifiableCollection.of( a, b ) );
-		assert collection.tryAdd( c );
+		assert collection.tryAdd( c ).isEmpty();
 		assert collection.equalsCollection( UnmodifiableCollection.of( a, b, c ) );
 	}
 

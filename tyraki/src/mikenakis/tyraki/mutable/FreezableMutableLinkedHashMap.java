@@ -125,7 +125,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		return Optional.of( MapEntry.of( item.key, item.value ) );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
@@ -133,11 +133,11 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		if( item1 != null )
 		{
 			assert isValidAssertion( item1 );
-			return false; //key already exists.
+			return Optional.of( item1.value ); //key already exists.
 		}
 		Item item2 = new Item( key, value );
-		boolean ok = hashTable.tryAdd( item2 );
-		assert ok;
+		Optional<Item> existing = hashTable.tryAdd( item2 );
+		assert existing.isEmpty();
 		if( tail == null )
 		{
 			assert head == null;
@@ -153,7 +153,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 			tail = item2;
 		}
 		assert isValidAssertion( item2 );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

@@ -69,12 +69,12 @@ final class LegacyMutableCollectionOnJavaCollection<E> extends LegacyAbstractMut
 		return true;
 	}
 
-	@Override public boolean tryAdd( E element )
+	@Override public Optional<E> tryAdd( E element )
 	{
 		if( !Kit.collection.tryAdd( collection, element ) )
-			return false;
+			return Optional.of( element );
 		modificationCount++;
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryRemove( E element )

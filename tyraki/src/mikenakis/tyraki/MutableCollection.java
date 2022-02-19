@@ -50,9 +50,9 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 	 *
 	 * @param element the item to add.
 	 *
-	 * @return {@code true} if the item was added successfully; {@code false} if the item could not be added because it was already present.
+	 * @return {@link Optional#empty()} if the item was added successfully; the previously existing item if the item could not be added because it was already present.
 	 */
-	boolean tryAdd( E element );
+	Optional<E> tryAdd( E element );
 
 	/**
 	 * Tries to remove an element.
@@ -174,8 +174,8 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 	{
 		@Override default MutableCollection<E> add( E element )
 		{
-			boolean ok = tryAdd( element );
-			assert ok : new DuplicateElementException( element );
+			Optional<E> previous = tryAdd( element );
+			assert previous.isEmpty() : new DuplicateElementException( element );
 			return this;
 		}
 
@@ -217,7 +217,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 			int addCount = 0;
 			int endIndex = startIndex + count;
 			for( int i = startIndex; i < endIndex; i++ )
-				if( tryAdd( elements[i] ) )
+				if( tryAdd( elements[i] ).isEmpty() )
 					addCount++;
 			return addCount;
 		}
@@ -238,7 +238,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 			assert canWriteAssertion();
 			int addCount = 0;
 			for( E element : other )
-				if( tryAdd( element ) )
+				if( tryAdd( element ).isEmpty() )
 					addCount++;
 			return addCount;
 		}
@@ -316,7 +316,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 			return decoree.tryReplace( oldElement, newElement );
 		}
 
-		@Override default boolean tryAdd( E element )
+		@Override default Optional<E> tryAdd( E element )
 		{
 			MutableCollection<E> decoree = getDecoratedMutableCollection();
 			return decoree.tryAdd( element );

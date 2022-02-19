@@ -68,14 +68,15 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 		return hashSet.tryGet( key );
 	}
 
-	@Override public boolean tryAdd( E key )
+	@Override public Optional<E> tryAdd( E key )
 	{
 		assert key != null;
 		assert canWriteAssertion();
-		if( !hashSet.tryAdd( key ) )
-			return false;
+		Optional<E> existing = hashSet.tryAdd( key );
+		if( existing.isPresent() )
+			return existing;
 		list.add( key );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
@@ -125,7 +126,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 		if( equalityComparator.equals( element, oldElement ) )
 			return;
 		assert canWriteAssertion();
-		if( !hashSet.tryAdd( element ) )
+		if( hashSet.tryAdd( element ).isPresent() )
 			throw new DuplicateElementException( element );
 		hashSet.remove( oldElement );
 	}
@@ -133,7 +134,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 	@Override public void insertAt( int index, E element )
 	{
 		assert canWriteAssertion();
-		if( !hashSet.tryAdd( element ) )
+		if( hashSet.tryAdd( element ).isPresent() )
 			throw new DuplicateElementException( element );
 		list.insertAt( index, element );
 	}

@@ -60,14 +60,14 @@ class MutableMapKeysCollection<K, V> extends AbstractMutableCollection<K>
 		return true;
 	}
 
-	@Override public boolean tryAdd( K element )
+	@Override public Optional<K> tryAdd( K element )
 	{
 		assert element != null;
 		assert false : element; //cannot add a key, because I do not know what value to associate it with.
 		// TODO what this means is that even a mutable map should have structurally immutable keys and values collections!  If you really want a mutable collection on map keys or values
 		// then you should have to instantiate some custom collection, passing it a method to create a value given a key, or vice versa, and if such a function cannot be defined,
 		// then to pass a function that asserts "false", assuming all responsibility in the event that the function gets invoked.
-		return false;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryRemove( K element )

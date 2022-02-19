@@ -128,15 +128,16 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 		return Optional.of( bindingsList.get( index ) );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
-		if( containsKey( key ) )
-			return false;
+		Optional<Binding<K,V>> existing = tryGetBindingByKey( key );
+		if( existing.isPresent() )
+			return Optional.of( existing.get().getValue() );
 		MyBinding myBinding = new MyBinding( key, value );
 		bindingsList.add( myBinding );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

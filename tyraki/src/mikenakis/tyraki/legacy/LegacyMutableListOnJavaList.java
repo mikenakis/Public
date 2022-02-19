@@ -6,6 +6,7 @@ import mikenakis.tyraki.MutableList;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A {@link MutableList} on a {@link List}.
@@ -93,9 +94,9 @@ final class LegacyMutableListOnJavaList<E> extends LegacyAbstractMutableCollecti
 		modificationCount++;
 	}
 
-	@Override public boolean tryAdd( E element )
+	@Override public Optional<E> tryAdd( E element )
 	{
 		insertAt( size(), element );
-		return true;
+		return Optional.empty();
 	}
 }

@@ -64,11 +64,11 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 		return Optional.of( item.element );
 	}
 
-	@Override public boolean tryAdd( E element )
+	@Override public Optional<E> tryAdd( E element )
 	{
 		assert canWriteAssertion();
 		Item myItem = new Item( element );
-		return hashTable.tryAdd( myItem );
+		return hashTable.tryAdd( myItem ).map( existing -> existing.element );
 	}
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
@@ -81,8 +81,8 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 			return false;
 		hashTable.remove( oldItem );
 		Item newItem = new Item( newElement );
-		boolean ok = hashTable.tryAdd( newItem );
-		assert ok;
+		Optional<Item> existing = hashTable.tryAdd( newItem );
+		assert existing.isEmpty();
 		return true;
 	}
 

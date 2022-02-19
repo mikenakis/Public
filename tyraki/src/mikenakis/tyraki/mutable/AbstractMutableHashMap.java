@@ -77,12 +77,12 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 		return Optional.ofNullable( hashTable.tryFindByKey( key ) );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		HashMapNode<K,V> item = newItem( key, value );
-		return hashTable.tryAdd( item );
+		return hashTable.tryAdd( item ).map( existing -> existing.value );
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

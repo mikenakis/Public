@@ -159,18 +159,18 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 		return Kit.downCast( item );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		Optional<Item> oldItem = keysToItems.tryGet( key );
 		if( oldItem.isPresent() )
-			return false;
+			return Optional.of( oldItem.get().getValue() );
 		Item newItem = new Item( timestampSeed++, key, value );
 		keysToItems.add( key, newItem );
 		items.add( newItem );
 		trim();
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

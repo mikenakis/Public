@@ -134,16 +134,17 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 		return Optional.of( item );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		Item item = new Item( key );
-		if( javaMap.containsKey( item ) )
-			return false;
+		V existing = javaMap.get( item );
+		if( existing != null )
+			return Optional.of( existing );
 		Kit.map.add( javaMap, item, value );
 		modificationCount++;
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

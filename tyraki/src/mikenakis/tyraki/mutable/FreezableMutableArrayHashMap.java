@@ -166,13 +166,14 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 		return map.tryGetBindingByKey( key );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		if( !map.tryAdd( key, value ) )
-			return false;
+		Optional<V> existing = map.tryAdd( key, value );
+		if( existing.isPresent() )
+			return existing;
 		keyList.add( key );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

@@ -79,14 +79,14 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 		return Optional.of( element ); //Note: the java set does not support fetching any of its contents, so the best we can do is simply return the element that was passed to us here.
 	}
 
-	@Override public boolean tryAdd( T element )
+	@Override public Optional<T> tryAdd( T element )
 	{
 		assert canWriteAssertion();
 		Item item = new Item( element );
 		if( !Kit.collection.tryAdd( javaSet, item ) )
-			return false;
+			return Optional.of( element );
 		modificationCount++;
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplace( T oldElement, T newElement )

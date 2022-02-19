@@ -40,9 +40,9 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 	 * @param key   the key to add.
 	 * @param value the value to add.
 	 *
-	 * @return {@code true} if the binding was successfully added; false if the key already existed.
+	 * @return {@link Optional#empty()} if the binding was successfully added; the previous value if the key already existed.
 	 */
-	boolean tryAdd( K key, V value );
+	Optional<V> tryAdd( K key, V value );
 
 	/**
 	 * Tries to replace the value associated with a key; has no effect if the key does not already exist.
@@ -137,7 +137,7 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 			return decoree.tryRemoveKey( key );
 		}
 
-		@Override default boolean tryAdd( K key, V value )
+		@Override default Optional<V> tryAdd( K key, V value )
 		{
 			MutableMap<K,V> decoree = getDecoratedMutableMap();
 			return decoree.tryAdd( key, value );
@@ -234,14 +234,14 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 		@Override default void add( K key, V value )
 		{
 			assert key != null;
-			boolean ok = tryAdd( key, value );
-			assert ok : new DuplicateKeyException( key, value, get( key ) );
+			Optional<V> previous = tryAdd( key, value );
+			assert previous.isEmpty() : new DuplicateKeyException( key, value, previous.get() );
 		}
 
 		@Override default void addOrReplace( K key, V value )
 		{
 			assert key != null;
-			if( tryAdd( key, value ) )
+			if( tryAdd( key, value ).isEmpty() )
 				return;
 			replaceValue( key, value );
 		}

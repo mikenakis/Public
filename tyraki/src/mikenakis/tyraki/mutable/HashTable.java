@@ -8,6 +8,7 @@ import mikenakis.tyraki.UnmodifiableEnumerator;
 import java.lang.reflect.Array;
 import java.util.ConcurrentModificationException;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Hash Table.
@@ -170,21 +171,22 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		return hashNodeCount;
 	}
 
-	public boolean tryAdd( T hashNode )
+	public Optional<T> tryAdd( T hashNode )
 	{
 		assert !frozen;
 		assert canWriteAssertion();
 		ensureCapacity();
 		Bucket<K,T> bucket = getBucket( hashNode );
 		K key = hashNode.getKey();
-		if( bucket.tryFindNodeByKey( key ) != null )
-			return false;
+		T existing = bucket.tryFindNodeByKey( key );
+		if( existing != null )
+			return Optional.of( existing );
 		bucket.add( hashNode );
 		hashNodeCount++;
 		modificationCount++;
 		if( EXTRA_CHECKING )
 			assert isValidAssertion();
-		return true;
+		return Optional.empty();
 	}
 
 	private Bucket<K,T> getBucket( T hashNode )

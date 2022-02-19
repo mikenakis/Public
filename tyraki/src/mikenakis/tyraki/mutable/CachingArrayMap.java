@@ -90,18 +90,18 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 		return Optional.of( binding );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		int index = find( key );
 		if( index != -1 )
-			return false;
+			return Optional.of( bindings.get( index ).value );
 		MyBinding newBinding = new MyBinding( key, value );
 		int newIndex = bindings.size() / 2;
 		bindings.insertAt( newIndex, newBinding );
 		trim();
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

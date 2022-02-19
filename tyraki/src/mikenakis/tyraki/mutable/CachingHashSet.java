@@ -96,16 +96,16 @@ final class CachingHashSet<E> extends AbstractMutableCollection<E> implements Mu
 		return true;
 	}
 
-	@Override public boolean tryAdd( E element )
+	@Override public Optional<E> tryAdd( E element )
 	{
 		Optional<Entry<E>> oldEntry = map.tryGet( element );
 		if( oldEntry.isPresent() )
-			return false;
+			return Optional.of( oldEntry.get().value );
 		Entry<E> newEntry = new Entry<>( timestamp++, element );
 		map.add( element, newEntry );
 		entries.add( newEntry );
 		trim();
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryRemove( E element )

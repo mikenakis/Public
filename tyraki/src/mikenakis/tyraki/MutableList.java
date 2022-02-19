@@ -4,6 +4,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Optional;
 
 /**
  * Mutable List.
@@ -124,11 +125,11 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 	 */
 	interface Defaults<E> extends MutableList<E>, MutableCollection.Defaults<E>, UnmodifiableList.Defaults<E>
 	{
-		@Override default boolean tryAdd( E element )
+		@Override default Optional<E> tryAdd( E element )
 		{
 			int index = size();
 			insertAt( index, element );
-			return true;
+			return Optional.empty();
 		}
 
 		@Override default MutableList<E> add( E element )
@@ -274,7 +275,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 			decoree.removeAt( index );
 		}
 
-		@Override default boolean tryAdd( E element )
+		@Override default Optional<E> tryAdd( E element )
 		{
 			MutableList<E> decoree = getDecoratedMutableList();
 			return decoree.tryAdd( element );

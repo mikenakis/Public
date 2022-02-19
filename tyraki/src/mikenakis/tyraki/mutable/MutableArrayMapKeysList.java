@@ -60,10 +60,10 @@ final class MutableArrayMapKeysList<K, V> extends AbstractMutableList<K> impleme
 		return true;
 	}
 
-	@Override public boolean tryAdd( K element )
+	@Override public Optional<K> tryAdd( K element )
 	{
 		assert false : element; //cannot add a key, because I do not know what value to associate it with.
-		return false;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryRemove( K element )

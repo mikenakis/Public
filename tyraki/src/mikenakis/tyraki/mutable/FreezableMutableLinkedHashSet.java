@@ -82,12 +82,13 @@ final class FreezableMutableLinkedHashSet<E> extends AbstractMutableCollection<E
 		return Optional.of( item.element );
 	}
 
-	@Override public boolean tryAdd( E element )
+	@Override public Optional<E> tryAdd( E element )
 	{
 		assert canWriteAssertion();
 		Item item = new Item( element );
-		if( !hashTable.tryAdd( item ) )
-			return false;
+		Optional<Item> existing = hashTable.tryAdd( item );
+		if( existing.isPresent() )
+			return Optional.of( existing.get().element );
 		if( tail == null )
 		{
 			assert head == null;
@@ -103,7 +104,7 @@ final class FreezableMutableLinkedHashSet<E> extends AbstractMutableCollection<E
 			tail = item;
 		}
 		assert isValidAssertion( item );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryRemove( E element )

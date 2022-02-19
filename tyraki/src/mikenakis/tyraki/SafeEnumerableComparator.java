@@ -37,7 +37,7 @@ public class SafeEnumerableComparator<R>
 			R elementA = enumeratorA.getCurrent();
 			R elementB = enumeratorB.getCurrent();
 			RowComparison comparison = new RowComparison( elementA, elementB );
-			if( comparisons.tryAdd( comparison ) )
+			if( comparisons.tryAdd( comparison ).isEmpty() )
 				if( !valueComparator.invoke( elementA, elementB ) )
 					return false;
 			enumeratorA.moveNext();

@@ -124,12 +124,12 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 		return Optional.of( MapEntry.of( newKey, item.value ) );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		Item item = new Item( key, value );
-		return hashTable.tryAdd( item );
+		return hashTable.tryAdd( item ).map( previous -> previous.value );
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

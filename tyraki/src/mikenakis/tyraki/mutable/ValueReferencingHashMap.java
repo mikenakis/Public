@@ -116,25 +116,26 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		return Optional.of( MapEntry.of( item.key, value ) );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		Item item1 = hashTable.tryFindByKey( key );
 		if( item1 != null )
 		{
-			if( item1.valueReference.get() != null )
-				return false; //key already exists and has a value.
+			V existing = item1.valueReference.get();
+			if( existing != null )
+				return Optional.of( existing ); //key already exists and has a value.
 			item1.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
 			modificationCount++;
 		}
 		else
 		{
 			Item item2 = new Item( key, value );
-			boolean ok = hashTable.tryAdd( item2 );
-			assert ok;
+			Optional<Item> existing = hashTable.tryAdd( item2 );
+			assert existing.isEmpty();
 		}
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )

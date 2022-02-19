@@ -3,6 +3,7 @@ package mikenakis.tyraki.mutable;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.DebugView;
+import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableMap;
 import mikenakis.tyraki.UnmodifiableMap;
 import mikenakis.kit.EqualityComparator;
@@ -46,9 +47,10 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 			return AbstractMutableMap.this;
 		}
 
-		@Override public boolean tryAdd( Binding<K,V> element )
+		@Override public Optional<Binding<K,V>> tryAdd( Binding<K,V> element )
 		{
-			return AbstractMutableMap.this.tryAdd( element.getKey(), element.getValue() );
+			return AbstractMutableMap.this.tryAdd( element.getKey(), element.getValue() ).map( previous -> MapEntry.of( element.getKey(), previous ) );
+
 		}
 
 		@Override public boolean tryReplace( Binding<K,V> oldElement, Binding<K,V> newElement )

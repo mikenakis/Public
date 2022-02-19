@@ -138,14 +138,14 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 		return Optional.of( MapEntry.of( key, values.get( key ) ) );
 	}
 
-	@Override public boolean tryAdd( Integer key, V value )
+	@Override public Optional<V> tryAdd( Integer key, V value )
 	{
 		assert key != null;
 		assert isWritableAssertion();
 		if( key != values.size() )
-			return false;
+			return Optional.of( value );
 		values.add( value );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( Integer key, V value )

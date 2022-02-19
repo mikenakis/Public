@@ -56,13 +56,13 @@ final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> imp
 		return list.getModificationCount();
 	}
 
-	@Override public boolean tryAdd( E element )
+	@Override public Optional<E> tryAdd( E element )
 	{
 		assert canWriteAssertion();
 		if( list.contains( element ) )
-			return false;
+			return Optional.of( element );
 		list.add( element );
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplace( E oldElement, E newElement )

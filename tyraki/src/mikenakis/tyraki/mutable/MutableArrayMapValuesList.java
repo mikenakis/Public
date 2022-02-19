@@ -58,10 +58,10 @@ final class MutableArrayMapValuesList<K, V> extends AbstractMutableList<V>
 		return false;
 	}
 
-	@Override public boolean tryAdd( V element )
+	@Override public Optional<V> tryAdd( V element )
 	{
 		assert false; //this is meaningless, because we do not know what key to bind this value to.
-		return false;
+		return Optional.empty();
 	}
 
 	//TODO: this method could accept a boolean specifying whether we want all values removed, or just the first matching value removed.

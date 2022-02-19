@@ -71,9 +71,10 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return ConversionCollections.newConvertingMutableEnumerator( enumerator, converter );
 		}
 
-		@Override public boolean tryAdd( Binding<K,V> element )
+		@Override public Optional<Binding<K,V>> tryAdd( Binding<K,V> element )
 		{
-			return LegacyMutableMapOnJavaMap.this.tryAdd( element.getKey(), element.getValue() );
+			return LegacyMutableMapOnJavaMap.this.tryAdd( element.getKey(), element.getValue() ).map( existing ->
+				MapEntry.of( element.getKey(), existing ) );
 		}
 
 		@Override public boolean tryReplace( Binding<K,V> oldElement, Binding<K,V> newElement )
@@ -148,10 +149,10 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return true;
 		}
 
-		@Override public boolean tryAdd( K element )
+		@Override public Optional<K> tryAdd( K element )
 		{
 			assert false : element; //cannot add a key, because then I do not know what value to associate it with.
-			return false;
+			return Optional.empty();
 		}
 
 		@Override public boolean tryRemove( K element )
@@ -242,10 +243,10 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return false;
 		}
 
-		@Override public boolean tryAdd( V element )
+		@Override public Optional<V> tryAdd( V element )
 		{
 			assert false; //this is meaningless, because we do not know what key to bind this value to.
-			return false;
+			return Optional.empty();
 		}
 
 		//TODO: this method could accept a boolean specifying whether we want all values removed, or just the first matching value removed.
@@ -344,13 +345,13 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		return Optional.of( MapEntry.of( key, value ) );
 	}
 
-	@Override public boolean tryAdd( K key, V value )
+	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		if( !Kit.map.tryAdd( javaMap, key, value ) )
-			return false;
+			return Optional.of( Kit.map.get( javaMap, key ) );
 		modificationCount++;
-		return true;
+		return Optional.empty();
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )
