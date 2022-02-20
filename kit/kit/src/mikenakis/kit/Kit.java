@@ -269,8 +269,18 @@ public final class Kit
 
 	public static String stringFromThrowable( Throwable throwable )
 	{
+		return stringFromThrowable( "", throwable );
+	}
+
+	public static String stringFromThrowable( String message, Throwable throwable )
+	{
 		StringWriter stringWriter = new StringWriter();
 		PrintWriter printWriter = new PrintWriter( stringWriter );
+		if( !message.isEmpty() )
+		{
+			printWriter.print( message );
+			printWriter.print( ": " );
+		}
 		throwable.printStackTrace( printWriter );
 		return stringWriter.toString();
 	}
@@ -1923,7 +1933,7 @@ public final class Kit
 
 	public static void trySwallow( Procedure0 procedure0 )
 	{
-		tryCatch( procedure0, throwable -> Log.error( throwable ) );
+		tryCatch( procedure0, Log::error );
 	}
 
 	/**

@@ -131,4 +131,15 @@ public final class Log
 		String message = Kit.stringFromThrowable( throwable );
 		message( Level.ERROR, 1, message );
 	}
+
+	/**
+	 * Logs an error message about a {@link Throwable}.
+	 *
+	 * @param throwable the {@link Throwable} to log.
+	 */
+	public static void error( String message, Throwable throwable )
+	{
+		message = Kit.stringFromThrowable( message, throwable );
+		message( Level.ERROR, 1, message );
+	}
 }

@@ -1,21 +1,34 @@
 package mikenakis.kit.debug;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.UncheckedException;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.logging.Log;
 
 public class Debug
 {
-	public static class BreakpointException extends RuntimeException
+	public static class BreakpointException extends UncheckedException
 	{
+		public final String message;
+
+		public BreakpointException( String message )
+		{
+			this.message = message;
+		}
 	}
 
 	public static void breakPoint()
 	{
+		breakPoint( "" );
+	}
+
+	public static void breakPoint( String message )
+	{
+		Log.debug( message );
 		try
 		{
-			throw new BreakpointException();
+			throw new BreakpointException( message );
 		}
 		catch( BreakpointException breakpointException )
 		{
