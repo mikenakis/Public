@@ -20,10 +20,12 @@ import mikenakis.kit.functional.ThrowingProcedure1;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.logging.Log;
+import mikenakis.kit.ref.Ref;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -66,6 +68,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -309,6 +312,26 @@ public final class Kit
 	public static <T> Optional<T> flatOptionalIf( boolean expression, Function0<Optional<T>> provider )
 	{
 		return expression ? provider.invoke() : Optional.empty();
+	}
+
+	/**
+	 * Runs a full garbage collection.
+	 * <p>
+	 * Adapted from <a href="https://stackoverflow.com/a/6915221/773113">Stack Overflow: Forcing Garbage Collection in Java?</a>
+	 */
+	public static void runGarbageCollection()
+	{
+		runGarbageCollection0();
+		runGarbageCollection0();
+	}
+
+	private static void runGarbageCollection0()
+	{
+		for( WeakReference<Object> ref = new WeakReference<>( new Object() ); ref.get() != null; Thread.yield() )
+		{
+			Runtime.getRuntime().gc();
+			Runtime.getRuntime().runFinalization();
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3303,5 +3326,24 @@ public final class Kit
 		int i = indexOfPrimitiveType( clazz );
 		assert i != -1;
 		return uncheckedClassCast( primitiveTypeInfo.get( i ).wrapperClass );
+	}
+
+	public record RunnableAndThread<T extends Runnable>( T runnable, Thread thread ) { }
+
+	public static <T extends Runnable> RunnableAndThread<T> createAndRunInNewThread( Function0<T> factory )
+	{
+		Ref<T> runnableRef = new Ref<>( null );
+		CountDownLatch latch = new CountDownLatch( 1 );
+		Thread thread = new Thread( () -> //
+		{
+			T myThread = factory.invoke();
+			runnableRef.value = myThread;
+			latch.countDown();
+			myThread.run();
+		} );
+		thread.start();
+		unchecked( () -> latch.await() );
+		assert runnableRef.value != null;
+		return new RunnableAndThread<>( runnableRef.value, thread );
 	}
 }

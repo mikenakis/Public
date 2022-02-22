@@ -9,9 +9,7 @@ import mikenakis.test.intertwine.comparisons.implementations.alternative.reflect
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.testkit.TestKit;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -59,7 +57,7 @@ public final class P1IntertwineBenchmark
 
 	private void runBenchmark( PrintStream out, String prefix, Procedure0 runnable )
 	{
-		TestKit.runGarbageCollection();
+		Kit.runGarbageCollection();
 		double t0 = timeSeconds();
 		for( int i = 0; i < iterations; i++ )
 			runnable.invoke();

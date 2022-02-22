@@ -179,6 +179,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, Anycall.class ) );
 	}
 
+	///TODO perhaps also somehow generate debug information so that IntellijIdea can step into (or through) the entwiner?
 	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, int maxMethodArgumentCount, ByteCodeField keysField, //
 		ByteCodeField exitPointField, int interfaceMethodIndex, MethodPrototype interfaceMethodPrototype )
 	{
@@ -295,6 +296,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.RETURN();
 	}
 
+	//TODO perhaps also somehow generate debug information so that IntellijIdea can step into (or through) the untwiner?
 	private static void addUntwinerAnycallMethod( ByteCodeType untwinerByteCodeType, TerminalTypeDescriptor interfaceTypeDescriptor, //
 		List<MethodPrototype> methodPrototypes, int maxArgumentCount )
 	{

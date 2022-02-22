@@ -32,7 +32,7 @@ public class Debug
 		}
 		catch( BreakpointException breakpointException )
 		{
-			Log.error( breakpointException ); // <-- place breakpoint here!
+			Kit.get( true ); // <-- place breakpoint here!
 		}
 	}
 

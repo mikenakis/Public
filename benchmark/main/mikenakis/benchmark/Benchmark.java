@@ -6,7 +6,6 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.ref.DoubleRef;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.ref.IntRef;
-import mikenakis.testkit.TestKit;
 
 import java.util.Locale;
 
@@ -136,7 +135,7 @@ public class Benchmark
 		IntRef batchLengthRef = new IntRef( 1 );
 		DoubleRef minimumDurationNanosecondsRef = new DoubleRef( Double.MAX_VALUE );
 		//Log.debug( "calculateBatchLength()..." );
-		TestKit.runGarbageCollection();
+		Kit.runGarbageCollection();
 		converge( accuracy, sampleGroupSize, () -> //
 		{
 			double durationNanoseconds = measureOneBatchNanoseconds( benchmarkable, batchLengthRef.value, unpredictability );
@@ -225,7 +224,7 @@ public class Benchmark
 		/**
 		 * On my machine, the overhead seems to be ~22 nanoseconds.
 		 */
-		TestKit.runGarbageCollection();
+		Kit.runGarbageCollection();
 		long[] readings = new long[100];
 		DoubleRef minimumOverheadNanosecondsRef = new DoubleRef( Double.POSITIVE_INFINITY );
 		converge( 0.001, 1000, () -> //

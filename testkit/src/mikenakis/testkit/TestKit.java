@@ -6,7 +6,6 @@ import mikenakis.kit.functional.Procedure0;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -20,29 +19,6 @@ import java.util.List;
 public final class TestKit
 {
 	private TestKit() { }
-
-	/**
-	 * Runs a full garbage collection.
-	 * <p>
-	 * Adapted from <a href="https://stackoverflow.com/q/1481178/773113">Stack Overflow: Forcing Garbage Collection in Java?</a>
-	 */
-	public static void runGarbageCollection()
-	{
-		runGarbageCollection0();
-		runGarbageCollection0();
-	}
-
-	private static void runGarbageCollection0()
-	{
-		for( WeakReference<Object> ref = new WeakReference<>( new Object() ); ; )
-		{
-			System.gc();
-			Runtime.getRuntime().runFinalization();
-			if( ref.get() == null )
-				break;
-			Thread.yield();
-		}
-	}
 
 	public static <T extends Throwable> T expect( Class<T> expectedThrowableClass, Procedure0 procedure )
 	{
