@@ -3,9 +3,18 @@ package mikenakis.kit.mutation;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 
-/* package-private */ class LocalMutationContext implements MutationContext, Closeable.Defaults
+public class TemporaryMutationContext implements MutationContext, Closeable.Defaults
 {
+	public static TemporaryMutationContext of()
+	{
+		return new TemporaryMutationContext();
+	}
+
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
+
+	private TemporaryMutationContext()
+	{
+	}
 
 	@Override public boolean inContextAssertion()
 	{
@@ -13,9 +22,10 @@ import mikenakis.kit.lifetime.guard.LifeGuard;
 		return true;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()

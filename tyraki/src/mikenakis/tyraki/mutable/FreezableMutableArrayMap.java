@@ -55,7 +55,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 
 	private boolean frozen = false;
 	private final MyEntries entries;
-	private final MutableList<MyBinding> bindingsList = getMutableCollections().newArrayList();
+	private final MutableList<MyBinding> bindingsList = mutableCollections.newArrayList();
 	private final MutableArraySet<K> keys;
 	private final MutableList<V> values;
 

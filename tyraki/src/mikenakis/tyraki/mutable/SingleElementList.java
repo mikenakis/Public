@@ -63,7 +63,7 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		return new MutableEnumeratorOnMutableList<>( getMutableCollections(), this );
+		return new MutableEnumeratorOnMutableList<>( mutableCollections, this );
 	}
 
 	@Override public int getModificationCount()

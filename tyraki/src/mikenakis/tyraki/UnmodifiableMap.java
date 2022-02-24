@@ -1,8 +1,10 @@
 package mikenakis.tyraki;
 
 import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -58,8 +60,9 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <T, K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
 	{
-		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
+			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
 			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( T item : items )
 			{
@@ -73,8 +76,9 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
 	{
-		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
+			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
 			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( K key : keys )
 			{
@@ -112,8 +116,9 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<Binding<K,V>> bindings )
 	{
-		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
+			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
 			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( var binding : bindings )
 				freezableMap.add( binding.getKey(), binding.getValue() );

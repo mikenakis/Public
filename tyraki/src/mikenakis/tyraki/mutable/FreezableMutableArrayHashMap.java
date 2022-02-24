@@ -78,7 +78,7 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 
 			MyEnumerator()
 			{
-				super( FreezableMutableArrayHashMap.this.getMutableCollections() );
+				super( FreezableMutableArrayHashMap.this.mutableCollections );
 				decoree = keyList.newMutableEnumerator();
 			}
 

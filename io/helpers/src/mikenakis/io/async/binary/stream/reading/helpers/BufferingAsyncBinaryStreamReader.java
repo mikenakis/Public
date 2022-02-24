@@ -43,9 +43,10 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 		fillableBuffer = new FillableBuffer( coherence.mutationContext(), cacheBuffer );
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()
@@ -61,7 +62,7 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 
 	@Override public boolean isBusy()
 	{
-		return cohere( () ->
+		return cohere( () -> //
 		{
 			assert isAliveAssertion();
 			return busyCount > 0 || unbufferedReader.isBusy();
@@ -76,7 +77,7 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 		assert offset + length <= bytes.length;
 		assert completionHandler != null;
 		assert errorHandler != null;
-		cohere( () ->
+		cohere( () -> //
 		{
 			assert isAliveAssertion();
 			assert !endHasBeenReached;
@@ -102,7 +103,7 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 	public void readUntilDelimiter( Buffer delimiter, Procedure1<Optional<Buffer>> completionHandler, Procedure1<Throwable> errorHandler )
 	{
 		assert !delimiter.isEmpty();
-		cohere( () ->
+		cohere( () -> //
 		{
 			assert isAliveAssertion();
 			assert !isBusy();

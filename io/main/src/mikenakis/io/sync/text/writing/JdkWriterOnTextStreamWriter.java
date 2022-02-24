@@ -30,9 +30,9 @@ public class JdkWriterOnTextStreamWriter extends Writer implements Closeable.Def
 		/* nothing to do */
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		assert lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
 

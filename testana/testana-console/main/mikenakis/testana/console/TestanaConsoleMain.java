@@ -113,7 +113,7 @@ public class TestanaConsoleMain
 		return 0;
 	}
 
-	private void run1( Path sourceDirectory, Path configurationPathName, Path persistencePathName, Path cachePathName, //
+	private static void run1( Path sourceDirectory, Path configurationPathName, Path persistencePathName, Path cachePathName, //
 		ProjectStructure.ShowOption showStructureOption, TestPlan.ShowOption showTestPlanOption, boolean noRun, boolean noSave, //
 		ModuleOrdering moduleOrdering, ClassOrdering classOrdering, MethodOrdering methodOrdering, AncestryOrdering ancestryOrdering )
 	{

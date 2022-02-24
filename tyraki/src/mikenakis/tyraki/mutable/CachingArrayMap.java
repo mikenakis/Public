@@ -39,7 +39,7 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 	}
 
 	private final int capacity;
-	private final MutableList<MyBinding> bindings = getMutableCollections().newArrayList();
+	private final MutableList<MyBinding> bindings = mutableCollections.newArrayList();
 	private final MutableArraySet<K> keys;
 	private final MutableList<V> values;
 

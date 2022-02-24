@@ -3,6 +3,7 @@ package mikenakis.tyraki;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.BooleanFunction2;
+import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -19,7 +20,7 @@ public class SafeEnumerableComparator<R> extends Mutable
 	public static <R> boolean compare( BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher, //
 		UnmodifiableEnumerable<? extends R> enumerableA, UnmodifiableEnumerable<? extends R> enumerableB )
 	{
-		return MutationContext.tryGetWithLocal( mutationContext -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
 			SafeEnumerableComparator<R> safeEnumerableComparator = new SafeEnumerableComparator<>( mutationContext, valueComparator, identityComparator, identityHasher );
 			return safeEnumerableComparator.compare( enumerableA, enumerableB );

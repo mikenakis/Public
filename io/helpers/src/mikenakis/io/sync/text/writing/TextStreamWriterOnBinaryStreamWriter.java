@@ -29,9 +29,9 @@ public final class TextStreamWriterOnBinaryStreamWriter extends Mutable implemen
 		this.binaryStreamWriter = binaryStreamWriter;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		assert lifeGuard.lifeStateAssertion( true );
+		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
 

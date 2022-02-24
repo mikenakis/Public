@@ -73,8 +73,8 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 		this.keyComparator = keyComparator;
 		EqualityComparator<? super K> keyEqualityComparator = new EqualityComparatorOnComparator<>( keyComparator );
 		entries = new MyEntries( mutableCollections, keyEqualityComparator, valueEqualityComparator );
-		keys = new MutableMapKeysCollection<>( getMutableCollections(), this, keyEqualityComparator );
-		values = new MutableMapValuesCollection<>( getMutableCollections(), this, valueEqualityComparator );
+		keys = new MutableMapKeysCollection<>( mutableCollections, this, keyEqualityComparator );
+		values = new MutableMapValuesCollection<>( mutableCollections, this, valueEqualityComparator );
 	}
 
 	@Override public boolean isFrozen()

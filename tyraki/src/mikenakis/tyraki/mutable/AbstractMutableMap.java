@@ -90,13 +90,13 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 
 	@SuppressWarnings( "SameReturnValue" ) boolean isReadableAssertion()
 	{
-		assert isFrozen() || getMutableCollections().inMutationContextAssertion();
+		assert isFrozen() || inMutationContextAssertion();
 		return true;
 	}
 
 	@SuppressWarnings( "SameReturnValue" ) boolean isWritableAssertion()
 	{
-		assert !isFrozen() && getMutableCollections().inMutationContextAssertion();
+		assert !isFrozen() && inMutationContextAssertion();
 		return true;
 	}
 

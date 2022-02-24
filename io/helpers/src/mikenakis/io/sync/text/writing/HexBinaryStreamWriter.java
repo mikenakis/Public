@@ -6,7 +6,7 @@ import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.TemporaryMutationContext;
 
 import java.util.Arrays;
 
@@ -19,7 +19,7 @@ public final class HexBinaryStreamWriter implements CloseableWrapper<BinaryStrea
 
 	public static void tryWith( BinaryStreamWriter binaryStreamWriter, int width, Procedure1<BinaryStreamWriter> delegee )
 	{
-		MutationContext.tryWithLocal( mutationContext -> //
+		Kit.tryWith( TemporaryMutationContext.of(), mutationContext -> //
 			Kit.tryWithWrapper( TextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter -> //
 				Kit.tryWithWrapper( of( textStreamWriter, width, Procedure0.noOp ), delegee ) ) );
 	}
@@ -76,9 +76,10 @@ public final class HexBinaryStreamWriter implements CloseableWrapper<BinaryStrea
 		}
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()

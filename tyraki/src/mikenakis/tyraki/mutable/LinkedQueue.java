@@ -29,14 +29,14 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 	@SuppressWarnings( "SameReturnValue" )
 	boolean canReadAssertion()
 	{
-		assert getMutableCollections().inMutationContextAssertion();
+		assert inMutationContextAssertion();
 		return true;
 	}
 
 	@SuppressWarnings( "SameReturnValue" )
 	boolean canWriteAssertion()
 	{
-		assert getMutableCollections().inMutationContextAssertion();
+		assert inMutationContextAssertion();
 		return true;
 	}
 

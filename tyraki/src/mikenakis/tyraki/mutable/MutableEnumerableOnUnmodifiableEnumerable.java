@@ -1,8 +1,6 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.functional.Procedure1;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerable;
@@ -28,12 +26,12 @@ class MutableEnumerableOnUnmodifiableEnumerable<T> extends MutableCollectionsSub
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
 		var unmodifiableEnumerator = unmodifiableEnumerable.newUnmodifiableEnumerator();
-		return new MutableEnumeratorOnUnmodifiableEnumerator<>( getMutableCollections(), unmodifiableEnumerator, deleter );
+		return new MutableEnumeratorOnUnmodifiableEnumerator<>( mutableCollections, unmodifiableEnumerator, deleter );
 	}
 
 	@Override public boolean canWriteAssertion()
 	{
-		assert !isFrozen() && super.getMutableCollections().inMutationContextAssertion();
+		assert !isFrozen() && inMutationContextAssertion();
 		return true;
 	}
 

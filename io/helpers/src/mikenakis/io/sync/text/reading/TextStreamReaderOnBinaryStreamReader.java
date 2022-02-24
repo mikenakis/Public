@@ -40,9 +40,9 @@ public final class TextStreamReaderOnBinaryStreamReader extends Mutable implemen
 		bufferingReader = new BufferingBinaryStreamReader( mutationContext, readBufferAllocation.bytes, binaryStreamReader, Procedure0.noOp );
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		assert lifeGuard.lifeStateAssertion( true );
+		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
 

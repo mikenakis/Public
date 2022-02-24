@@ -30,9 +30,10 @@ final class BinaryStreamReaderOnInputStream extends Mutable implements Closeable
 		this.onClose = onClose;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()

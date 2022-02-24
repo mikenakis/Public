@@ -33,12 +33,14 @@ final class AsynchronousByteChannelOnAsynchronousFileChannel extends Mutable imp
 
 	@Override public boolean isOpen()
 	{
-		return !lifeStateAssertion( handOff );
+		assert false; //we do not have this information. TODO we need a stateful lifeguard.
+		return true;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()

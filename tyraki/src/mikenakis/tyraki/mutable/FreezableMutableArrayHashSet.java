@@ -159,7 +159,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 		MyEnumerator()
 		{
-			super( FreezableMutableArrayHashSet.this.getMutableCollections() );
+			super( FreezableMutableArrayHashSet.this.mutableCollections );
 			decoree = list.newMutableEnumerator();
 		}
 

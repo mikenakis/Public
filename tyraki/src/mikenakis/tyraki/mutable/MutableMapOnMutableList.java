@@ -50,7 +50,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		MyEnumerator()
 		{
-			super( MutableMapOnMutableList.this.getMutableCollections() );
+			super( MutableMapOnMutableList.this.mutableCollections );
 		}
 
 		@Override public boolean isFinished()
@@ -92,7 +92,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	{
 		super( mutableCollections );
 		this.values = values;
-		keys = new MutableMapKeysCollection<>( getMutableCollections(), this, DefaultEqualityComparator.getInstance() );
+		keys = new MutableMapKeysCollection<>( mutableCollections, this, DefaultEqualityComparator.getInstance() );
 		entries = new MyEntries( mutableCollections, DefaultEqualityComparator.getInstance(), values.getEqualityComparator() );
 	}
 

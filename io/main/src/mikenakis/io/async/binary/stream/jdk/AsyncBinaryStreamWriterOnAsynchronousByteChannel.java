@@ -37,15 +37,17 @@ final class AsyncBinaryStreamWriterOnAsynchronousByteChannel extends Coherent im
 		this.handOff = handOff;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()
 	{
 		assert coherenceAssertion();
-		cohere( () -> {
+		cohere( () -> //
+		{
 			assert isAliveAssertion();
 			if( handOff )
 				Kit.unchecked( asynchronousByteChannel::close );
@@ -60,7 +62,8 @@ final class AsyncBinaryStreamWriterOnAsynchronousByteChannel extends Coherent im
 
 	@Override public void write( byte[] buffer, int offset, int length, Procedure0 completionHandler, Procedure1<Throwable> errorHandler )
 	{
-		cohere( () -> {
+		cohere( () -> //
+		{
 			assert isAliveAssertion();
 			assert offset >= 0;
 			assert offset < buffer.length;

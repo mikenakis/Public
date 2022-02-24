@@ -3,8 +3,10 @@ package mikenakis.tyraki;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -102,8 +104,9 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return ImmutableCollections.emptyArrayHashMap();
-		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
+			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
 			FreezableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
 				keyEqualityComparator, valueEqualityComparator );
 			mutableMap.addAll( bindings );

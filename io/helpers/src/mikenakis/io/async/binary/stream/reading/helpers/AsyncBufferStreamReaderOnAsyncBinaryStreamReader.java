@@ -28,9 +28,10 @@ public class AsyncBufferStreamReaderOnAsyncBinaryStreamReader implements AsyncBu
 		this.errorHandler = errorHandler;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()

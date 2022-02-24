@@ -35,9 +35,9 @@ public final class InMemoryBinaryStreamReader extends Mutable implements Closeab
 		this.onClose = onClose;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		assert lifeGuard.lifeStateAssertion( true );
+		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
 

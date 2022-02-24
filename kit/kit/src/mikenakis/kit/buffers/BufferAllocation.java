@@ -29,8 +29,9 @@ public final class BufferAllocation extends Mutable implements Closeable.Default
 		lifeGuard.close();
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 }

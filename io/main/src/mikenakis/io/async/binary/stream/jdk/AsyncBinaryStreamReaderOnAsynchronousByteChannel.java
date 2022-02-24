@@ -36,15 +36,17 @@ final class AsyncBinaryStreamReaderOnAsynchronousByteChannel extends Coherent im
 		this.handOff = handOff;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()
 	{
 		assert inMutationContextAssertion();
-		cohere( () -> {
+		cohere( () -> //
+		{
 			assert isAliveAssertion();
 			if( handOff )
 				Kit.unchecked( asynchronousByteChannel::close );

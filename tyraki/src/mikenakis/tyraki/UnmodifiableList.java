@@ -5,6 +5,7 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -71,8 +72,9 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements instanceof UnmodifiableList && elements.isFrozen() ) //TODO perhaps introduce UnmodifiableCollection.tryAsList()
 			return (UnmodifiableList<E>)elements;
-		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
+			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
 			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
 			return mutableList.frozen();
@@ -85,8 +87,9 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements.isFrozen() )
 			return elements;
-		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
 		{
+			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
 			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
 			return mutableList.frozen();

@@ -1,5 +1,6 @@
 package mikenakis.testana.runtime;
 
+import mikenakis.kit.Kit;
 import mikenakis.testana.Persistence;
 import mikenakis.testana.kit.TimeMeasurement;
 import mikenakis.testana.kit.TestanaLog;
@@ -26,7 +27,7 @@ public final class TestRunner
 {
 	public static TestResult run( TestPlan testPlan, Persistence persistence )
 	{
-		return TimeMeasurement.run( "Running tests", "Ran %d tests in %d classes", timeMeasurement -> //
+		TestResult testResult = TimeMeasurement.run( "Running tests", "Ran %d tests in %d classes", timeMeasurement -> //
 		{
 			List<TestResult> testResults = new ArrayList<>();
 			for( TestModule testModule : testPlan.testModules() )
@@ -47,6 +48,11 @@ public final class TestRunner
 			timeMeasurement.setArguments( rootTestResult.successCount() + rootTestResult.failureCount(), testPlan.testClassCount() );
 			return rootTestResult;
 		} );
+
+		/* at the end of all tests, run garbage collection to detect any leaks */
+		Kit.runGarbageCollection();
+
+		return testResult;
 	}
 
 	private static NonLeafTestResult runTestClass( TestClass testClass, Intent intent, Persistence persistence )

@@ -49,7 +49,7 @@ final class CachingHashSet<E> extends AbstractMutableCollection<E> implements Mu
 	}
 
 	private final MutableHashMap<E,Entry<E>> map;
-	private final MutableCollection<Entry<E>> entries = getMutableCollections().newTreeSet( ObjectHasher.INSTANCE, ( a, b ) -> Entry.comparator( a, b ) );
+	private final MutableCollection<Entry<E>> entries = mutableCollections.newTreeSet( ObjectHasher.INSTANCE, ( a, b ) -> Entry.comparator( a, b ) );
 	private final int capacity;
 	private int timestamp = 0;
 

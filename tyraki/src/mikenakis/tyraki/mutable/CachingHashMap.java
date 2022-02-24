@@ -96,7 +96,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	private final int capacity;
 	private int timestampSeed;
 	private final MutableMap<K,Item> keysToItems;
-	private final MutableCollection<Item> items = getMutableCollections().newTreeSet( ObjectHasher.INSTANCE, Comparator.comparingInt( a -> a.timestamp ) );
+	private final MutableCollection<Item> items = mutableCollections.newTreeSet( ObjectHasher.INSTANCE, Comparator.comparingInt( a -> a.timestamp ) );
 	private final MutableCollection<K> keys;
 	private final MutableCollection<V> values;
 

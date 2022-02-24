@@ -162,7 +162,7 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
 		assert canReadAssertion();
-		return new MyEnumerator( getMutableCollections() );
+		return new MyEnumerator( mutableCollections );
 	}
 
 	final class MyEnumerator extends AbstractMutableEnumerator<E>

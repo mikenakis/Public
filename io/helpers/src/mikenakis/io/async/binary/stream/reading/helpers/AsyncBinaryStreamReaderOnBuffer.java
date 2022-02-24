@@ -40,9 +40,10 @@ public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements Cl
 		this.arrayLength = arrayLength;
 	}
 
-	@Override public boolean lifeStateAssertion( boolean value )
+	@Override public boolean isAliveAssertion()
 	{
-		return lifeGuard.lifeStateAssertion( value );
+		assert lifeGuard.isAliveAssertion();
+		return true;
 	}
 
 	@Override public void close()
