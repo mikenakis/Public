@@ -3,7 +3,7 @@ package mikenakis.tyraki;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 /**
  * Unmodifiable Array Hash Set.
@@ -23,9 +23,12 @@ public interface UnmodifiableArrayHashSet<E> extends UnmodifiableArraySet<E>, Un
 	{
 		if( items.isEmpty() )
 			return of();
-		FreezableArrayHashSet<E> mutableSet = SingleThreadedMutableCollections.instance().newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
-		mutableSet.addAll( items );
-		return mutableSet.frozen();
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		{
+			FreezableArrayHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
+			mutableSet.addAll( items );
+			return mutableSet.frozen();
+		} );
 	}
 
 	/**

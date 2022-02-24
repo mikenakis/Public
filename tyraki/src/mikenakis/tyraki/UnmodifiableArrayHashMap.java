@@ -7,7 +7,7 @@ import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 /**
  * Unmodifiable Hash Map.
@@ -102,10 +102,13 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return ImmutableCollections.emptyArrayHashMap();
-		FreezableArrayHashMap<K,V> mutableMap = SingleThreadedMutableCollections.instance().newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
-			keyEqualityComparator, valueEqualityComparator );
-		mutableMap.addAll( bindings );
-		return mutableMap.frozen();
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		{
+			FreezableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
+				keyEqualityComparator, valueEqualityComparator );
+			mutableMap.addAll( bindings );
+			return mutableMap.frozen();
+		} );
 	}
 
 	/**

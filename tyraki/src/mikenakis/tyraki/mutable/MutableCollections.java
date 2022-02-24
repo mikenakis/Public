@@ -7,6 +7,8 @@ import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffer.CaseInsensitiveBufferEqualityComparator;
 import mikenakis.kit.buffer.CaseInsensitiveBufferHasher;
+import mikenakis.kit.functional.Function0;
+import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
@@ -46,6 +48,24 @@ import java.util.Comparator;
  */
 public final class MutableCollections extends Mutable
 {
+	public static void tryWithLocal( Procedure1<MutableCollections> procedure )
+	{
+		MutationContext.tryWithLocal( mutationContext -> //
+		{
+			MutableCollections mutableCollections = of( mutationContext );
+			procedure.invoke( mutableCollections );
+		} );
+	}
+
+	public static <T> T tryGetWithLocal( Function1<T,MutableCollections> function )
+	{
+		return MutationContext.tryGetWithLocal( mutationContext -> //
+		{
+			MutableCollections mutableCollections = of( mutationContext );
+			return function.invoke( mutableCollections );
+		} );
+	}
+
 	public static MutableCollections of( MutationContext mutationContext )
 	{
 		return new MutableCollections( mutationContext );

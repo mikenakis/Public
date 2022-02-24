@@ -7,7 +7,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -71,9 +71,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements instanceof UnmodifiableList && elements.isFrozen() ) //TODO perhaps introduce UnmodifiableCollection.tryAsList()
 			return (UnmodifiableList<E>)elements;
-		FreezableList<E> mutableList = SingleThreadedMutableCollections.instance().newArrayList( elements.size(), equalityComparator );
-		mutableList.addAll( elements );
-		return mutableList.frozen();
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		{
+			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			mutableList.addAll( elements );
+			return mutableList.frozen();
+		} );
 	}
 
 	static <E> UnmodifiableList<E> from( UnmodifiableList<E> elements, EqualityComparator<? super E> equalityComparator )
@@ -82,9 +85,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		if( elements.isFrozen() )
 			return elements;
-		FreezableList<E> mutableList = SingleThreadedMutableCollections.instance().newArrayList( elements.size(), equalityComparator );
-		mutableList.addAll( elements );
-		return mutableList.frozen();
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		{
+			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			mutableList.addAll( elements );
+			return mutableList.frozen();
+		} );
 	}
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
@@ -105,7 +111,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	 *
 	 * @return the empty {@link UnmodifiableList}.
 	 */
-	static <E> UnmodifiableList<E> of()	{ return ImmutableCollections.emptyArrayList(); }
+	static <E> UnmodifiableList<E> of() { return ImmutableCollections.emptyArrayList(); }
 
 	static <E> UnmodifiableList<E> of( E e0 ) { return of0( e0 ); }
 	static <E> UnmodifiableList<E> of( E e0, E e1 ) { return of0( e0, e1 ); }

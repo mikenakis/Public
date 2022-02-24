@@ -3,7 +3,9 @@ package mikenakis.tyraki;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.BooleanFunction2;
-import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
+import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Objects;
 
@@ -12,15 +14,26 @@ import java.util.Objects;
  *
  * @param <R>
  */
-public class SafeEnumerableComparator<R>
+public class SafeEnumerableComparator<R> extends Mutable
 {
+	public static <R> boolean compare( BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher, //
+		UnmodifiableEnumerable<? extends R> enumerableA, UnmodifiableEnumerable<? extends R> enumerableB )
+	{
+		return MutationContext.tryGetWithLocal( mutationContext -> //
+		{
+			SafeEnumerableComparator<R> safeEnumerableComparator = new SafeEnumerableComparator<>( mutationContext, valueComparator, identityComparator, identityHasher );
+			return safeEnumerableComparator.compare( enumerableA, enumerableB );
+		} );
+	}
+
 	private final BooleanFunction2<R,R> valueComparator;
 	private final BooleanFunction2<R,R> identityComparator;
 	private final Hasher<R> identityHasher;
-	private final MutableCollection<RowComparison> comparisons = SingleThreadedMutableCollections.instance().newLinkedHashSet();
+	private final MutableCollection<MyComparison> comparisons = MutableCollections.of( mutationContext ).newLinkedHashSet();
 
-	public SafeEnumerableComparator( BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher )
+	private SafeEnumerableComparator( MutationContext mutationContext, BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher )
 	{
+		super( mutationContext );
 		this.valueComparator = valueComparator;
 		this.identityComparator = identityComparator;
 		this.identityHasher = identityHasher;
@@ -36,7 +49,7 @@ public class SafeEnumerableComparator<R>
 				return enumeratorA.isFinished() == enumeratorB.isFinished();
 			R elementA = enumeratorA.getCurrent();
 			R elementB = enumeratorB.getCurrent();
-			RowComparison comparison = new RowComparison( elementA, elementB );
+			MyComparison comparison = new MyComparison( elementA, elementB );
 			if( comparisons.tryAdd( comparison ).isEmpty() )
 				if( !valueComparator.invoke( elementA, elementB ) )
 					return false;
@@ -45,12 +58,12 @@ public class SafeEnumerableComparator<R>
 		}
 	}
 
-	private class RowComparison
+	private class MyComparison
 	{
 		final R elementA;
 		final R elementB;
 
-		RowComparison( R elementA, R elementB )
+		MyComparison( R elementA, R elementB )
 		{
 			this.elementA = elementA;
 			this.elementB = elementB;
@@ -64,7 +77,7 @@ public class SafeEnumerableComparator<R>
 			return false;
 		}
 
-		public boolean equals( RowComparison other )
+		public boolean equals( MyComparison other )
 		{
 			if( this == other )
 				return true;

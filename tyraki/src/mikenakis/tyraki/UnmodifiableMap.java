@@ -1,12 +1,12 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
 import mikenakis.tyraki.immutable.ImmutableCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
+import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -41,44 +41,48 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	/**
 	 * Casts keys to a supertype.
 	 */
-	static <K extends TK,V,TK> UnmodifiableMap<TK,V> downCastKeys( UnmodifiableMap<K,V> map )
+	static <K extends TK, V, TK> UnmodifiableMap<TK,V> downCastKeys( UnmodifiableMap<K,V> map )
 	{
-		@SuppressWarnings( "unchecked" )
-		UnmodifiableMap<TK,V> result = (UnmodifiableMap<TK,V>)map;
+		@SuppressWarnings( "unchecked" ) UnmodifiableMap<TK,V> result = (UnmodifiableMap<TK,V>)map;
 		return result;
 	}
 
 	/**
 	 * Casts values to a supertype.
 	 */
-	static <K,V extends TV,TV> UnmodifiableMap<K,TV> downCastValues( UnmodifiableMap<K,V> map )
+	static <K, V extends TV, TV> UnmodifiableMap<K,TV> downCastValues( UnmodifiableMap<K,V> map )
 	{
-		@SuppressWarnings( "unchecked" )
-		UnmodifiableMap<K,TV> result = (UnmodifiableMap<K,TV>)map;
+		@SuppressWarnings( "unchecked" ) UnmodifiableMap<K,TV> result = (UnmodifiableMap<K,TV>)map;
 		return result;
 	}
 
 	static <T, K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
 	{
-		FreezableHashMap<K,V> freezableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap();
-		for( T item : items )
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
 		{
-			K key = keyFromItemConverter.invoke( item );
-			V value = valueFromItemConverter.invoke( item );
-			freezableMap.add( key, value );
-		}
-		return freezableMap.frozen();
+			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
+			for( T item : items )
+			{
+				K key = keyFromItemConverter.invoke( item );
+				V value = valueFromItemConverter.invoke( item );
+				freezableMap.add( key, value );
+			}
+			return freezableMap.frozen();
+		} );
 	}
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
 	{
-		FreezableHashMap<K,V> freezableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap();
-		for( K key : keys )
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
 		{
-			V value = valueFromKeyConverter.invoke( key );
-			freezableMap.add( key, value );
-		}
-		return freezableMap.frozen();
+			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
+			for( K key : keys )
+			{
+				V value = valueFromKeyConverter.invoke( key );
+				freezableMap.add( key, value );
+			}
+			return freezableMap.frozen();
+		} );
 	}
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1 )
@@ -93,7 +97,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2, K key3, V value3 )
 	{
-		return UnmodifiableMap.newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ) );
+		return newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ) );
 	}
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4 )
@@ -101,17 +105,20 @@ public interface UnmodifiableMap<K, V> extends Freezile
 		return UnmodifiableMap.<K,V>newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ), MapEntry.of( key4, value4 ) );
 	}
 
-	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Binding<K,V> ... bindings )
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Binding<K,V>... bindings )
 	{
 		return newLinkedHashMap( UnmodifiableList.of( bindings ) );
 	}
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<Binding<K,V>> bindings )
 	{
-		FreezableHashMap<K,V> freezableMap = SingleThreadedMutableCollections.instance().newLinkedHashMap();
-		for( var binding : bindings )
-			freezableMap.add( binding.getKey(), binding.getValue() );
-		return freezableMap.frozen();
+		return MutableCollections.tryGetWithLocal( mutableCollections -> //
+		{
+			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
+			for( var binding : bindings )
+				freezableMap.add( binding.getKey(), binding.getValue() );
+			return freezableMap.frozen();
+		} );
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -346,7 +353,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 		@Override default boolean equals( UnmodifiableMap<?,?> other )
 		{
-			@SuppressWarnings( "unchecked" ) UnmodifiableMap<K,V> kin = (UnmodifiableMap<K, V>)other;
+			@SuppressWarnings( "unchecked" ) UnmodifiableMap<K,V> kin = (UnmodifiableMap<K,V>)other;
 			return equalsMap( kin );
 		}
 	}
@@ -407,7 +414,8 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
 	 * earliest point possible, and not when compiling some derived class.
 	 */
-	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
 	final class Canary<K, V> implements Decorator<K,V>
 	{
 		@Override public UnmodifiableMap<K,V> getDecoratedUnmodifiableMap()
