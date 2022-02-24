@@ -50,7 +50,7 @@ class DebugThreadPool
 		else
 		{
 			CountDownLatch latch = new CountDownLatch( 1 );
-			Ref<T> resultRef = new Ref<>( null );
+			Ref<T> resultRef = Ref.of( null );
 			queue.add( () -> //
 			{
 				resultRef.value = function0.invoke();

@@ -82,7 +82,7 @@ public final class BufferingAsyncBinaryStreamReader extends Coherent implements 
 			assert !endHasBeenReached;
 			assert !isBusy();
 			busyCount++;
-			Ref<Integer> countRef = new Ref<>( 0 );
+			Ref<Integer> countRef = Ref.of( 0 );
 			read0( bytes, offset, length, countRef, //
 				count -> //
 				{

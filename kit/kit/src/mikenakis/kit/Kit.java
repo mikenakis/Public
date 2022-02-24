@@ -3332,7 +3332,7 @@ public final class Kit
 
 	public static <T extends Runnable> RunnableAndThread<T> createAndRunInNewThread( Function0<T> factory )
 	{
-		Ref<T> runnableRef = new Ref<>( null );
+		Ref<T> runnableRef = Ref.of( null );
 		CountDownLatch latch = new CountDownLatch( 1 );
 		Thread thread = new Thread( () -> //
 		{

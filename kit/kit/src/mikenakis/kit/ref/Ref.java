@@ -9,9 +9,14 @@ package mikenakis.kit.ref;
  */
 public class Ref<T>
 {
+	public static <T> Ref<T> of( T value )
+	{
+		return new Ref<>( value );
+	}
+
 	public T value;
 
-	public Ref( T value )
+	private Ref( T value )
 	{
 		this.value = value;
 	}

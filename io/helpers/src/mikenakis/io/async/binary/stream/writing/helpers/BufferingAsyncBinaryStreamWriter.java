@@ -63,7 +63,7 @@ public final class BufferingAsyncBinaryStreamWriter extends Mutable implements C
 		assert offset < buffer.length;
 		assert length > 0;
 		assert offset + length <= buffer.length;
-		Ref<Integer> countRef = new Ref<>( 0 );
+		Ref<Integer> countRef = Ref.of( 0 );
 		write( buffer, offset, length, completionHandler, errorHandler, countRef );
 	}
 

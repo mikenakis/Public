@@ -1,9 +1,5 @@
 package mikenakis.kit.mutation;
 
-import mikenakis.kit.Kit;
-import mikenakis.kit.functional.Function1;
-import mikenakis.kit.functional.Procedure1;
-
 public interface MutationContext
 {
 	/**
