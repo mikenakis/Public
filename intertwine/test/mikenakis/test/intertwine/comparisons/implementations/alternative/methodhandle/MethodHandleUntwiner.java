@@ -3,7 +3,6 @@ package mikenakis.test.intertwine.comparisons.implementations.alternative.method
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
-import mikenakis.kit.logging.Log;
 
 import java.lang.invoke.MethodHandle;
 import java.util.Map;
@@ -36,15 +35,7 @@ class MethodHandleUntwiner<T>
 		{
 			MethodHandleKey<T> key = (MethodHandleKey<T>)key0;
 			MethodHandle boundMethodHandle = Kit.map.get( boundMethodHandles, key );
-			try
-			{
-				return Kit.invokeThrowableThrowingFunction( () -> boundMethodHandle.invokeExact( arguments ) );
-			}
-			catch( Throwable throwable )
-			{
-				Log.error( throwable );
-				throw throwable;
-			}
+			return Kit.invokeThrowableThrowingFunction( () -> boundMethodHandle.invokeExact( arguments ) );
 		}
 	};
 }

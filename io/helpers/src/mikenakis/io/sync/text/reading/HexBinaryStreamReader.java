@@ -1,15 +1,14 @@
 package mikenakis.io.sync.text.reading;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
-import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 import java.util.Optional;
 
@@ -17,7 +16,7 @@ public final class HexBinaryStreamReader implements CloseableWrapper<BinaryStrea
 {
 	public static void tryWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Procedure1<BinaryStreamReader> delegee )
 	{
-		Object result = tryGetWith( binaryStreamReader, bufferAllocator, hexBinaryStreamReader ->
+		Object result = tryGetWith( binaryStreamReader, bufferAllocator, hexBinaryStreamReader -> //
 		{
 			delegee.invoke( hexBinaryStreamReader );
 			return null;
@@ -27,9 +26,9 @@ public final class HexBinaryStreamReader implements CloseableWrapper<BinaryStrea
 
 	public static <T> T tryGetWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Function1<T,BinaryStreamReader> delegee )
 	{
-		MutationContext mutationContext = SingleThreadedMutationContext.instance();
-		return Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
-			Kit.tryGetWithWrapper( of( textStreamReader, Procedure0.noOp ), delegee ) );
+		return MutationContext.tryGetWithLocal( mutationContext -> //
+			Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader -> //
+				Kit.tryGetWithWrapper( of( textStreamReader, Procedure0.noOp ), delegee ) ) );
 	}
 
 	public static CloseableWrapper<BinaryStreamReader> of( TextStreamReader textStreamReader, Procedure0 onClose )
@@ -65,7 +64,7 @@ public final class HexBinaryStreamReader implements CloseableWrapper<BinaryStrea
 		assert dividerIndex % 3 == 0;
 		int width = dividerIndex / 3;
 		buffer = new byte[width];
-		for( int i = 0;  i < width;  i++ )
+		for( int i = 0; i < width; i++ )
 			buffer[i] = Kit.bytes.fromHex( line, i * 3 );
 		position = 0;
 	}

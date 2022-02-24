@@ -1,13 +1,12 @@
 package mikenakis.io.sync.text.writing;
 
+import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
-import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
 
 import java.util.Arrays;
 
@@ -20,9 +19,9 @@ public final class HexBinaryStreamWriter implements CloseableWrapper<BinaryStrea
 
 	public static void tryWith( BinaryStreamWriter binaryStreamWriter, int width, Procedure1<BinaryStreamWriter> delegee )
 	{
-		MutationContext mutationContext = SingleThreadedMutationContext.instance();
-		Kit.tryWithWrapper( TextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
-			Kit.tryWithWrapper( of( textStreamWriter, width, Procedure0.noOp ), delegee ) );
+		MutationContext.tryWithLocal( mutationContext -> //
+			Kit.tryWithWrapper( TextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter -> //
+				Kit.tryWithWrapper( of( textStreamWriter, width, Procedure0.noOp ), delegee ) ) );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
@@ -35,8 +34,8 @@ public final class HexBinaryStreamWriter implements CloseableWrapper<BinaryStrea
 	private HexBinaryStreamWriter( TextStreamWriter textStreamWriter, int width, Procedure0 onClose )
 	{
 		this.textStreamWriter = textStreamWriter;
-		hexField = new char[ width * 3 ];
-		charField = new char[ width ];
+		hexField = new char[width * 3];
+		charField = new char[width];
 		this.onClose = onClose;
 		clear();
 	}
