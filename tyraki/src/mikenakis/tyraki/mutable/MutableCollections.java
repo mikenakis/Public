@@ -7,7 +7,6 @@ import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffer.CaseInsensitiveBufferEqualityComparator;
 import mikenakis.kit.buffer.CaseInsensitiveBufferHasher;
-import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.mutation.Mutable;
