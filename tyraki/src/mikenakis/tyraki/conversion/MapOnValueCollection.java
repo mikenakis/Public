@@ -51,6 +51,11 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 			super( MapOnValueCollection.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
+		@Override public boolean isFrozenAssertion()
+		{
+			return MapOnValueCollection.this.isFrozenAssertion();
+		}
+
 		@Override public int getModificationCount()
 		{
 			return collection.getModificationCount();
@@ -59,11 +64,6 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
 			return collection.newUnmodifiableEnumerator().map( value -> new MyBinding( value ) );
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return MapOnValueCollection.this.isFrozen();
 		}
 	}
 
@@ -81,9 +81,9 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 		this.converter = converter;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return collection.isFrozen();
+		return collection.isFrozenAssertion();
 	}
 
 	@Override public int size()

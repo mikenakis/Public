@@ -20,11 +20,6 @@ final class MutableListOnMutableMap<T> extends AbstractMutableList<T>
 		this.map = map;
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return map.isFrozen();
-	}
-
 	@Override public int size()
 	{
 		return map.size();

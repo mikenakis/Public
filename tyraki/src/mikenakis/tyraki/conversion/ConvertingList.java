@@ -1,9 +1,9 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.TotalConverterWithIndex;
 import mikenakis.tyraki.UnmodifiableList;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 
@@ -33,9 +33,9 @@ class ConvertingList<T, F> extends AbstractList<T>
 		this.reverter = reverter;
 	}
 
-	@Override public final boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return false;
+		return listToConvert.isFrozenAssertion();
 	}
 
 	@Override public final int size()

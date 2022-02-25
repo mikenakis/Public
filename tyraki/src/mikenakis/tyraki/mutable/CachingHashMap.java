@@ -114,11 +114,6 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 		values = new MutableMapValuesCollection<>( mutableCollections, this, valueEqualityComparator );
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return false;
-	}
-
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()
 	{
 		return entries;
@@ -147,7 +142,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		Optional<Item> item = keysToItems.tryGet( key );
 		if( item.isEmpty() )
 			return Optional.empty();
@@ -162,7 +157,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Optional<Item> oldItem = keysToItems.tryGet( key );
 		if( oldItem.isPresent() )
 			return Optional.of( oldItem.get().getValue() );
@@ -176,7 +171,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item newItem = new Item( timestampSeed++, key, value );
 		Optional<Item> oldItem = keysToItems.tryGet( key );
 		if( oldItem.isEmpty() )
@@ -193,7 +188,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Optional<Item> value = keysToItems.tryGet( key );
 		if( value.isEmpty() )
 			return false;
@@ -204,7 +199,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		if( items.isEmpty() )
 			return false;
 		boolean ok1 = keysToItems.clear();

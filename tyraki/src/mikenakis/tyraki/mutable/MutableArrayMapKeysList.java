@@ -19,11 +19,6 @@ final class MutableArrayMapKeysList<K, V> extends AbstractMutableList<K> impleme
 		this.map = map;
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return map.isFrozen();
-	}
-
 	@Override public int size()
 	{
 		return map.size();

@@ -2,11 +2,10 @@ package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
-import mikenakis.tyraki.FreezableArrayHashSet;
-import mikenakis.tyraki.FreezableHashSet;
-import mikenakis.tyraki.FreezableList;
+import mikenakis.tyraki.MutableArrayHashSet;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.UnmodifiableArrayHashSet;
+import mikenakis.tyraki.MutableHashSet;
+import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.exceptions.DuplicateElementException;
 
 import java.util.Optional;
@@ -17,11 +16,10 @@ import java.util.Optional;
  * @author michael.gr
  */
 //IntellijIdea blooper: good code red: "Class must either be declared abstract or implement abstract method m in I"
-final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E> implements FreezableArrayHashSet.Defaults<E>
+final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E> implements MutableArrayHashSet.Defaults<E>
 {
-	private boolean frozen = false;
-	private final FreezableList<E> list;
-	private final FreezableHashSet<E> hashSet;
+	private final MutableList<E> list;
+	private final MutableHashSet<E> hashSet;
 
 	FreezableMutableArrayHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher,
 		EqualityComparator<? super E> equalityComparator )
@@ -29,25 +27,6 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 		super( mutableCollections, equalityComparator );
 		list = mutableCollections.newArrayList( initialCapacity, equalityComparator );
 		hashSet = mutableCollections.newHashSet( initialCapacity, fillFactor, hasher, equalityComparator );
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		list.freeze();
-		hashSet.freeze();
-		frozen = true;
-	}
-
-	@Override public UnmodifiableArrayHashSet<E> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public Hasher<? super E> getElementHasher()
@@ -71,7 +50,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 	@Override public Optional<E> tryAdd( E key )
 	{
 		assert key != null;
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Optional<E> existing = hashSet.tryAdd( key );
 		if( existing.isPresent() )
 			return existing;
@@ -81,7 +60,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert !equalityComparator.equals( oldElement, newElement );
 		if( !hashSet.tryReplace( oldElement, newElement ) )
 			return false;
@@ -92,7 +71,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public boolean tryRemove( E key )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( !hashSet.tryRemove( key ) )
 			return false;
 		list.remove( key );
@@ -101,7 +80,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( !hashSet.clear() )
 			return false;
 		boolean ok = list.clear();
@@ -125,7 +104,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 		E oldElement = list.get( index );
 		if( equalityComparator.equals( element, oldElement ) )
 			return;
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( hashSet.tryAdd( element ).isPresent() )
 			throw new DuplicateElementException( element );
 		hashSet.remove( oldElement );
@@ -133,7 +112,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public void insertAt( int index, E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( hashSet.tryAdd( element ).isPresent() )
 			throw new DuplicateElementException( element );
 		list.insertAt( index, element );
@@ -141,7 +120,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public void removeAt( int index )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		E oldElement = list.get( index );
 		hashSet.remove( oldElement );
 		list.removeAt( index );
@@ -165,7 +144,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 		@Override public void deleteCurrent()
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			E key = getCurrent();
 			hashSet.remove( key );
 			decoree.deleteCurrent();

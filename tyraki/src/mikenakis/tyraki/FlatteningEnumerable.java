@@ -13,6 +13,11 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 		this.multiplier = multiplier;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		return primaryEnumerable.isFrozenAssertion();
+	}
+
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
 		return new MyEnumerator<>( primaryEnumerable.newUnmodifiableEnumerator(), multiplier );
@@ -21,11 +26,6 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 	@Override public int getModificationCount()
 	{
 		return primaryEnumerable.getModificationCount();
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return primaryEnumerable.isFrozen();
 	}
 
 	private static class MyEnumerator<T, E> implements UnmodifiableEnumerator.Defaults<T>

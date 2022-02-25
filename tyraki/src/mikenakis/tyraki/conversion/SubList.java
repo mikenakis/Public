@@ -26,9 +26,9 @@ final class SubList<T> extends AbstractList<T>
 		this.endOffset = endOffset;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return list.isFrozen();
+		return list.isFrozenAssertion();
 	}
 
 	@Override public int size()

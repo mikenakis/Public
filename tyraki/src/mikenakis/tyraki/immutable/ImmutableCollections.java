@@ -29,6 +29,11 @@ public final class ImmutableCollections
 
 	private static final UnmodifiableArrayHashMap<Object,Object> emptyArrayHashMap = new UnmodifiableArrayHashMap.Defaults<>()
 	{
+		@Override public boolean isFrozenAssertion()
+		{
+			return true;
+		}
+
 		@Override public Hasher<Object> getKeyHasher()
 		{
 			return ObjectHasher.INSTANCE;
@@ -60,11 +65,6 @@ public final class ImmutableCollections
 			return Optional.empty();
 		}
 
-		@Override public boolean isFrozen()
-		{
-			return true;
-		}
-
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()
 		{
 			return "empty";
@@ -73,6 +73,11 @@ public final class ImmutableCollections
 
 	private static final UnmodifiableArrayHashSet<Object> emptyArrayHashSet = new UnmodifiableArrayHashSet.Defaults<>()
 	{
+		@Override public boolean isFrozenAssertion()
+		{
+			return true;
+		}
+
 		@Override public Object get( int index )
 		{
 			assert false : new ArrayIndexOutOfBoundsException( index );
@@ -103,15 +108,15 @@ public final class ImmutableCollections
 		{
 			return 0;
 		}
-
-		@Override public boolean isFrozen()
-		{
-			return true;
-		}
 	};
 
 	private static final UnmodifiableList<Object> emptyList = new UnmodifiableList.Defaults<>()
 	{
+		@Override public boolean isFrozenAssertion()
+		{
+			return true;
+		}
+
 		@Override public EqualityComparator<? super Object> getEqualityComparator()
 		{
 			return DefaultEqualityComparator.getInstance();
@@ -136,11 +141,6 @@ public final class ImmutableCollections
 		@Override public int getModificationCount()
 		{
 			return 0;
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return true;
 		}
 
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()

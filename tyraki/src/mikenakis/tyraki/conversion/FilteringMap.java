@@ -1,11 +1,11 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -19,6 +19,11 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 			super( FilteringMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
+		@Override public boolean isFrozenAssertion()
+		{
+			return mapToFilter.isFrozenAssertion();
+		}
+
 		@Override public int getModificationCount()
 		{
 			return mapToFilter.entries().getModificationCount();
@@ -27,11 +32,6 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
 			return new FilteringEnumerator<>( mapToFilter.entries().newUnmodifiableEnumerator(), predicate );
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return FilteringMap.this.isFrozen();
 		}
 	}
 
@@ -52,9 +52,9 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 		values = entries.map( kvBinding -> kvBinding.getValue() );
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return mapToFilter.isFrozen();
+		return mapToFilter.isFrozenAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<K,V>> entries()

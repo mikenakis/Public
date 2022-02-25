@@ -7,7 +7,7 @@ package mikenakis.kit.functional;
  * @param <P> the type of the parameter.
  * @param <E> the type of the checked exception that may be thrown.
  */
-public interface ThrowingFunction1<R, P, E extends Exception>
+public interface ThrowingFunction1<R, P, E extends Throwable>
 {
 	R invoke( P p ) throws E;
 }

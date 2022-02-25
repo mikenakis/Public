@@ -6,6 +6,7 @@ import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.FreezableMutationContext;
 import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -33,13 +34,13 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( bindings.size(), fillFactor, keyHasher, //
+			MutableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( bindings.size(), fillFactor, keyHasher, //
 				keyEqualityComparator, valueEqualityComparator );
 			mutableMap.addAll( bindings );
-			return mutableMap.frozen();
+			return mutableMap;
 		} );
 	}
 
@@ -58,13 +59,13 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( 1, fillFactor, keyHasher, //
+			MutableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( 1, fillFactor, keyHasher, //
 				keyEqualityComparator, valueEqualityComparator );
 			mutableMap.addAll( bindings );
-			return mutableMap.frozen();
+			return mutableMap;
 		} );
 	}
 
@@ -163,8 +164,6 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 
 	static <K, V> UnmodifiableHashMap<K,V> of( UnmodifiableHashMap<K,V> map )
 	{
-		if( map.isFrozen() )
-			return map;
 		return from( map );
 	}
 

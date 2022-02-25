@@ -21,10 +21,15 @@ final class DebugSingleThreadedMutationContext implements MutationContext
 		constructionThread = Thread.currentThread();
 	}
 
-	@Override public boolean inContextAssertion()
+	@Override public boolean isInContextAssertion()
 	{
 		assert Thread.currentThread() == constructionThread;
 		return true;
+	}
+
+	@Override public boolean isFrozen()
+	{
+		return false;
 	}
 
 	@Override public String toString()

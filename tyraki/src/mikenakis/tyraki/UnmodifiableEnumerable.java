@@ -21,7 +21,7 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<UnmodifiableList<E>>, Freezile
+public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<UnmodifiableList<E>>
 {
 	/**
 	 * Down-casts to an ancestral type.
@@ -88,6 +88,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	boolean isFrozenAssertion();
 
 	/**
 	 * Creates a new {@link UnmodifiableEnumerator} to enumerate elements.
@@ -412,7 +414,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 *
 	 * @author michael.gr
 	 */
-	interface Defaults<E> extends UnmodifiableEnumerable<E>, Freezile.Defaults
+	interface Defaults<E> extends UnmodifiableEnumerable<E>
 	{
 		@Override default UnmodifiableList<E> toList()
 		{
@@ -727,13 +729,14 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	interface Decorator<E> extends Defaults<E>, Freezile.Decorator
+	interface Decorator<E> extends Defaults<E>
 	{
 		UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable();
 
-		@Override default Freezile getDecoratedFreezile()
+		@Override default boolean isFrozenAssertion()
 		{
-			return getDecoratedUnmodifiableEnumerable();
+			UnmodifiableEnumerable<E> decoree = getDecoratedUnmodifiableEnumerable();
+			return decoree.isFrozenAssertion();
 		}
 
 		@Override default UnmodifiableEnumerator<E> newUnmodifiableEnumerator()

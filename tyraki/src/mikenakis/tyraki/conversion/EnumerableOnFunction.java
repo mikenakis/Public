@@ -25,6 +25,11 @@ final class EnumerableOnFunction<E> implements UnmodifiableEnumerable.Defaults<E
 		this.nextElementProducer = nextElementProducer;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		return true;
+	}
+
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
 		return new EnumeratorOnFunction<>( firstElement, nextElementProducer );
@@ -33,10 +38,5 @@ final class EnumerableOnFunction<E> implements UnmodifiableEnumerable.Defaults<E
 	@Override public int getModificationCount()
 	{
 		return 0;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return true; //NOTE: perhaps this should be a parameter, because we cannot guarantee that the function producing next elements will not do anything funky.
 	}
 }

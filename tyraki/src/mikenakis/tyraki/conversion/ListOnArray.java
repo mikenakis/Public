@@ -1,8 +1,9 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.mutation.NotFrozenException;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableList;
-import mikenakis.kit.EqualityComparator;
 
 /**
  * An {@link UnmodifiableList} which wraps an array.
@@ -23,9 +24,10 @@ final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements 
 		this.frozen = frozen;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return frozen;
+		assert frozen : new NotFrozenException( null );
+		return true;
 	}
 
 	@Override public E get( int index )

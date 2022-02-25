@@ -1983,7 +1983,7 @@ public final class Kit
 	 *
 	 * @return the result of the try-function or catch-function.
 	 */
-	public static <R> R tryGetCatch( Function0<R> tryFunction, Function1<R,Throwable> catchFunction )
+	public static <R> R tryGetCatch( Function0<R> tryFunction, ThrowingFunction1<R,Throwable,Throwable> catchFunction )
 	{
 		if( bypassTryCatch() )
 			return tryFunction.invoke();
@@ -1995,7 +1995,7 @@ public final class Kit
 			}
 			catch( Throwable throwable )
 			{
-				catchFunction.invoke( throwable );
+				uncheckedThrowable( () -> catchFunction.invoke( throwable ) );
 				return null;
 			}
 		}
@@ -2022,7 +2022,7 @@ public final class Kit
 	 * @param tryProcedure   the procedure to be invoked in the 'try' block.
 	 * @param catchProcedure the handler to receive any throwable thrown.
 	 */
-	public static void tryCatch( Procedure0 tryProcedure, Procedure1<Throwable> catchProcedure )
+	public static void tryCatch( Procedure0 tryProcedure, ThrowingProcedure1<Throwable,Throwable> catchProcedure )
 	{
 		if( bypassTryCatch() )
 		{
@@ -2036,7 +2036,7 @@ public final class Kit
 			}
 			catch( Throwable throwable )
 			{
-				catchProcedure.invoke( throwable );
+				uncheckedThrowable( () -> catchProcedure.invoke( throwable ) );
 			}
 		}
 	}
@@ -2374,6 +2374,12 @@ public final class Kit
 	 * @param <E>               the type of checked exception declared by the {@link ThrowingProcedure0}.
 	 */
 	public static <E extends Exception> void unchecked( ThrowingProcedure0<E> throwingProcedure )
+	{
+		@SuppressWarnings( "unchecked" ) ThrowingProcedure0<RuntimeException> p = (ThrowingProcedure0<RuntimeException>)throwingProcedure;
+		p.invoke();
+	}
+
+	public static <E extends Throwable> void uncheckedThrowable( ThrowingProcedure0<E> throwingProcedure )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingProcedure0<RuntimeException> p = (ThrowingProcedure0<RuntimeException>)throwingProcedure;
 		p.invoke();

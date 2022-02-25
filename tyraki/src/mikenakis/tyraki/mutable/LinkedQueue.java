@@ -26,20 +26,6 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 		super( mutableCollections );
 	}
 
-	@SuppressWarnings( "SameReturnValue" )
-	boolean canReadAssertion()
-	{
-		assert inMutationContextAssertion();
-		return true;
-	}
-
-	@SuppressWarnings( "SameReturnValue" )
-	boolean canWriteAssertion()
-	{
-		assert inMutationContextAssertion();
-		return true;
-	}
-
 	@Override public int getModificationCount()
 	{
 		return modificationCount;
@@ -47,13 +33,12 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
 		return size;
 	}
 
 	@Override public boolean enqueue( E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item item = new Item( element );
 		if( tail == null )
 		{
@@ -77,7 +62,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	@Override public Optional<E> tryDequeue()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( size == 0 )
 			return Optional.empty();
 		Item item = head;
@@ -88,7 +73,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( size == 0 )
 		{
 			assert head == null;

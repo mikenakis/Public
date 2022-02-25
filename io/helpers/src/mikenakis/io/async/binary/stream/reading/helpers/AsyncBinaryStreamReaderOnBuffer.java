@@ -34,7 +34,7 @@ public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements Cl
 	private AsyncBinaryStreamReaderOnBuffer( MutationContext mutationContext, Buffer buffer, int arrayOffset, int arrayLength )
 	{
 		super( mutationContext );
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		this.buffer = buffer;
 		this.arrayOffset = arrayOffset;
 		this.arrayLength = arrayLength;
@@ -48,7 +48,7 @@ public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements Cl
 
 	@Override public void close()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert isAliveAssertion();
 		assert !isBusy();
 		lifeGuard.close();
@@ -64,7 +64,7 @@ public final class AsyncBinaryStreamReaderOnBuffer extends Mutable implements Cl
 	{
 		assert isAliveAssertion();
 		assert !isBusy();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert offset >= 0;
 		assert offset < bytes.length;
 		assert length > 0;

@@ -1,14 +1,13 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparatorOnComparator;
+import mikenakis.kit.Hasher;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.Kit;
-import mikenakis.tyraki.FreezableHashSet;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.UnmodifiableHashSet;
+import mikenakis.tyraki.MutableHashSet;
 import mikenakis.tyraki.legacy.LegacyCollections;
-import mikenakis.kit.Hasher;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -21,9 +20,8 @@ import java.util.TreeSet;
  *
  * @author michael.gr
  */
-final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> implements FreezableHashSet.Defaults<T>
+final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> implements MutableHashSet.Defaults<T>
 {
-	private boolean frozen = false;
 	private final Collection<Item> javaSet = new TreeSet<>();
 	private int modificationCount = 0;
 	final Hasher<? super T> hasher;
@@ -34,23 +32,6 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 		super( mutableCollections, new EqualityComparatorOnComparator<>( comparator ) );
 		this.hasher = hasher;
 		this.comparator = comparator;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		frozen = true;
-	}
-
-	@Override public UnmodifiableHashSet<T> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public Hasher<? super T> getElementHasher()
@@ -81,7 +62,7 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 
 	@Override public Optional<T> tryAdd( T element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item item = new Item( element );
 		if( !Kit.collection.tryAdd( javaSet, item ) )
 			return Optional.of( element );
@@ -91,7 +72,7 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 
 	@Override public boolean tryReplace( T oldElement, T newElement )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item oldItem = new Item( oldElement );
 		if( !Kit.collection.tryRemove( javaSet, oldItem ) )
 			return false;
@@ -103,7 +84,7 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 
 	@Override public boolean tryRemove( T element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item item = new Item( element );
 		if( !Kit.collection.tryRemove( javaSet, item ) )
 			return false;
@@ -113,7 +94,7 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( javaSet.isEmpty() )
 			return false;
 		javaSet.clear();

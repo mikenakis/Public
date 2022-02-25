@@ -59,7 +59,7 @@ public interface AsyncBinaryStreamReader extends Async
 			byte[] bytes = new byte[length];
 			read( bytes, 0, length, bytesRead ->
 			{
-				assert mutationContext().inContextAssertion();
+				assert mutationContext().canMutateAssertion();
 				Optional<Buffer> buffer = bytesRead < 0 ? Optional.empty() : Optional.of( Buffer.of( bytes, 0, bytesRead ) );
 				completionHandler.invoke( buffer );
 			}, errorHandler );
@@ -80,7 +80,7 @@ public interface AsyncBinaryStreamReader extends Async
 			AsyncReader( MutationContext mutationContext, AsyncBinaryStreamReader reader, Optional<byte[]> bytes, BufferAllocator bufferAllocator, Procedure1<byte[]> completionHandler,	Procedure1<Throwable> errorHandler )
 			{
 				super( mutationContext );
-				assert inMutationContextAssertion();
+				assert canMutateAssertion();
 				this.reader = reader;
 				this.bufferSize = bufferAllocator.getBufferSize( readUntilEndBufferKey );
 				this.completionHandler = completionHandler;
@@ -91,14 +91,14 @@ public interface AsyncBinaryStreamReader extends Async
 
 			void start()
 			{
-				assert inMutationContextAssertion();
+				assert canMutateAssertion();
 				int count = bytes.length - offset;
 				reader.read( bytes, offset, count, this::onReadCompleted, this::onError );
 			}
 
 			private void onReadCompleted( int bytesRead )
 			{
-				assert inMutationContextAssertion();
+				assert canMutateAssertion();
 				if( bytesRead <= 0 )
 				{
 					if( untilTheEnd )
@@ -130,17 +130,17 @@ public interface AsyncBinaryStreamReader extends Async
 
 			private void onError( Throwable throwable )
 			{
-				assert inMutationContextAssertion();
+				assert canMutateAssertion();
 				errorHandler.invoke( throwable );
 			}
 		}
 
 		@Override default void readUntilEnd( BufferAllocator bufferAllocator, Procedure1<Buffer> completionHandler, Procedure1<Throwable> errorHandler )
 		{
-			assert mutationContext().inContextAssertion();
+			assert mutationContext().canMutateAssertion();
 			AsyncReader asyncReader = new AsyncReader( mutationContext(), this, Optional.empty(), bufferAllocator, bytes ->
 			{
-				assert mutationContext().inContextAssertion();
+				assert mutationContext().canMutateAssertion();
 				Buffer buffer = Buffer.of( bytes );
 				completionHandler.invoke( buffer );
 			}, errorHandler );
@@ -149,10 +149,10 @@ public interface AsyncBinaryStreamReader extends Async
 
 		@Override default void readFull( BufferAllocator bufferAllocator, byte[] bytes, Procedure0 completionHandler, Procedure1<Throwable> errorHandler )
 		{
-			assert mutationContext().inContextAssertion();
+			assert mutationContext().canMutateAssertion();
 			AsyncReader asyncReader = new AsyncReader( mutationContext(), this, Optional.of( bytes ), bufferAllocator, bytes2 ->
 			{
-				assert mutationContext().inContextAssertion();
+				assert mutationContext().canMutateAssertion();
 				//noinspection ArrayEquality
 				assert bytes2 == bytes;
 				completionHandler.invoke();
@@ -162,11 +162,11 @@ public interface AsyncBinaryStreamReader extends Async
 
 		@Override default void readFull( BufferAllocator bufferAllocator, int length, Procedure1<Buffer> completionHandler, Procedure1<Throwable> errorHandler )
 		{
-			assert mutationContext().inContextAssertion();
+			assert mutationContext().canMutateAssertion();
 			byte[] bytes = new byte[length];
 			AsyncReader asyncReader = new AsyncReader( mutationContext(), this, Optional.of( bytes ), bufferAllocator, bytes2 ->
 			{
-				assert mutationContext().inContextAssertion();
+				assert mutationContext().canMutateAssertion();
 				//noinspection ArrayEquality
 				assert bytes2 == bytes;
 				Buffer buffer = Buffer.of( bytes );

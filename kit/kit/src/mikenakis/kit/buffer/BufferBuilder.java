@@ -37,19 +37,19 @@ public final class BufferBuilder extends Mutable
 
 	public int getLength()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return count;
 	}
 
 	public int getCapacity()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return value.length;
 	}
 
 	public void ensureCapacity( int minimumCapacity )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( minimumCapacity > 0 )
 			ensureCapacityInternal( minimumCapacity );
 	}
@@ -77,14 +77,14 @@ public final class BufferBuilder extends Mutable
 
 	public void trimToSize()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( count < value.length )
 			value = Arrays.copyOf( value, count );
 	}
 
 	public void setLength( int newLength )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert newLength >= 0 : new IndexOutOfBoundsException( Integer.toString( newLength ) );
 		ensureCapacityInternal( newLength );
 		if( count < newLength )
@@ -94,37 +94,37 @@ public final class BufferBuilder extends Mutable
 
 	public byte charAt( int index )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return value[index];
 	}
 
 	public void getChars( int srcBegin, int srcEnd, byte[] dst, int dstBegin )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		System.arraycopy( value, srcBegin, dst, dstBegin, srcEnd - srcBegin );
 	}
 
 	public void setCharAt( int index, byte ch )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		value[index] = ch;
 	}
 
 	public BufferBuilder append( Object obj )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return append( String.valueOf( obj ) );
 	}
 
 	public BufferBuilder append( String str )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return append( str, StandardCharsets.UTF_8 );
 	}
 
 	public BufferBuilder append( String str, Charset charset )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		Buffer buffer = Buffer.of( str, charset );
 		append( buffer );
 		return this;
@@ -132,13 +132,13 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( Buffer buffer )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return append( buffer, 0, buffer.size() );
 	}
 
 	public BufferBuilder append( byte[] str )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		int len = str.length;
 		ensureCapacityInternal( count + len );
 		System.arraycopy( str, 0, value, count, len );
@@ -148,19 +148,19 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( char[] str )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return append( str, StandardCharsets.UTF_8 );
 	}
 
 	public BufferBuilder append( char[] str, Charset charset )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return append( Buffer.of( str, charset ) );
 	}
 
 	public BufferBuilder append( byte[] bytes, int offset, int len )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( len > 0 )
 			ensureCapacityInternal( count + len );
 		System.arraycopy( bytes, offset, value, count, len );
@@ -170,7 +170,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( Buffer buffer, int offset, int len )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( len > 0 )
 			ensureCapacityInternal( count + len );
 		buffer.copyBytes( offset, value, count, len );
@@ -180,13 +180,13 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( char[] str, int offset, int len )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return append( Buffer.of( str ), offset, len );
 	}
 
 	public BufferBuilder append( boolean b )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		//noinspection IfStatementWithIdenticalBranches
 		if( b )
 		{
@@ -210,7 +210,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( byte b )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		ensureCapacityInternal( count + 1 );
 		value[count++] = b;
 		return this;
@@ -218,14 +218,14 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( char c )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		char[] chars = { c };
 		return append( chars );
 	}
 
 	public BufferBuilder append( int i )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		String s = Integer.toString( i );
 		append( s );
 		return this;
@@ -233,7 +233,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( long l )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		String s = Long.toString( l );
 		append( s );
 		return this;
@@ -241,7 +241,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( float f )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		String s = Float.toString( f );
 		append( s );
 		return this;
@@ -249,7 +249,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder append( double d )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		String s = Double.toString( d );
 		append( s );
 		return this;
@@ -257,7 +257,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder delete( int start, int end )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( start < 0 )
 			throw new StringIndexOutOfBoundsException( start );
 		if( end > count )
@@ -275,7 +275,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder deleteCharAt( int index )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( (index < 0) || (index >= count) )
 			throw new StringIndexOutOfBoundsException( index );
 		System.arraycopy( value, index + 1, value, index, count - index - 1 );
@@ -285,13 +285,13 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder replace( int start, int end, String str )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return replace( start, end, Buffer.of( str ) );
 	}
 
 	public BufferBuilder replace( int start, int end, Buffer buffer )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert start >= 0 : new IndexOutOfBoundsException( Integer.toString( start ) );
 		assert start <= count : new IndexOutOfBoundsException( start + " count: " + count );
 		assert start <= end : new IndexOutOfBoundsException( start + " end: " + end );
@@ -310,19 +310,19 @@ public final class BufferBuilder extends Mutable
 
 	public String substring( int start )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return substring( start, count );
 	}
 
 	public String substring( int start, int end )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return new String( value, start, end - start );
 	}
 
 	public BufferBuilder insert( int index, byte[] str, int offset, int len )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert index >= 0 : new IndexOutOfBoundsException( Integer.toString( index ) );
 		assert index <= count : new IndexOutOfBoundsException( index + " count: " + count );
 		assert offset >= 0 : new IndexOutOfBoundsException( Integer.toString( offset ) );
@@ -337,13 +337,13 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder insert( int offset, Object obj )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return insert( offset, Buffer.valueOf( obj ) );
 	}
 
 	public BufferBuilder insert( int offset, byte[] str )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert offset >= 0;
 		assert offset <= count;
 		int len = str.length;
@@ -358,7 +358,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder insert( int dstOffset, Buffer buffer )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( buffer == null )
 			buffer = NULL;
 		return insert( dstOffset, buffer, 0, buffer.size() );
@@ -366,7 +366,7 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder insert( int dstOffset, Buffer buffer, int start, int end )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( buffer == null )
 			buffer = NULL;
 		assert dstOffset >= 0;
@@ -385,13 +385,13 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder insert( int offset, boolean b )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return insert( offset, String.valueOf( b ) );
 	}
 
 	public BufferBuilder insert( int offset, byte b )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		ensureCapacityInternal( count + 1 );
 		System.arraycopy( value, offset, value, offset + 1, count - offset );
 		value[offset] = b;
@@ -401,43 +401,43 @@ public final class BufferBuilder extends Mutable
 
 	public BufferBuilder insert( int offset, int i )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return insert( offset, String.valueOf( i ) );
 	}
 
 	public BufferBuilder insert( int offset, long l )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return insert( offset, String.valueOf( l ) );
 	}
 
 	public BufferBuilder insert( int offset, float f )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return insert( offset, String.valueOf( f ) );
 	}
 
 	public BufferBuilder insert( int offset, double d )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return insert( offset, String.valueOf( d ) );
 	}
 
 	public int indexOf( Buffer pattern )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return Buffer.indexOf( value, pattern );
 	}
 
 	public int lastIndexOf( Buffer pattern )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return Buffer.lastIndexOf( value, pattern );
 	}
 
 	public BufferBuilder reverse()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		int n = count - 1;
 		for( int j = (n - 1) >> 1; j >= 0; j-- )
 		{
@@ -452,13 +452,13 @@ public final class BufferBuilder extends Mutable
 
 	@Override public String toString()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return new String( value, 0, count );
 	}
 
 	public Buffer toBuffer()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return Buffer.of( value, 0, count );
 	}
 }

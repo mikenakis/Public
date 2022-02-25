@@ -18,11 +18,6 @@ final class MutableArrayMapValuesList<K, V> extends AbstractMutableList<V>
 		this.map = map;
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return map.isFrozen();
-	}
-
 	@Override public int size()
 	{
 		return map.size();

@@ -19,19 +19,9 @@ abstract class AbstractMutableEnumerable<E> extends MutableCollectionsSubject im
 		super( mutableCollections );
 	}
 
-	@SuppressWarnings( "SameReturnValue" )
-	final boolean canReadAssertion()
+	@Override public boolean isFrozenAssertion()
 	{
-		assert isFrozen() || inMutationContextAssertion();
-		return true;
-	}
-
-	@SuppressWarnings( "SameReturnValue" )
-	@Override public final boolean canWriteAssertion()
-	{
-		assert !isFrozen();
-		assert inMutationContextAssertion();
-		return true;
+		return mutationContext.isFrozenAssertion();
 	}
 
 	@Override public final int hashCode()

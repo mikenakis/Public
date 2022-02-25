@@ -30,6 +30,11 @@ class ConvertingUnmodifiableCollection<T, F> extends AbstractUnmodifiableCollect
 		this.reverter = reverter;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		return collectionToConvert.isFrozenAssertion();
+	}
+
 	@Override public final UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
 		UnmodifiableEnumerator<F> unmodifiableEnumerator = collectionToConvert.newUnmodifiableEnumerator();
@@ -39,11 +44,6 @@ class ConvertingUnmodifiableCollection<T, F> extends AbstractUnmodifiableCollect
 	@Override public int getModificationCount()
 	{
 		return collectionToConvert.getModificationCount();
-	}
-
-	@Override public final boolean isFrozen()
-	{
-		return false;
 	}
 
 	@Override public final int size()

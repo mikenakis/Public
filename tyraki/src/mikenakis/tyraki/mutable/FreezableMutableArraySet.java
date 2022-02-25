@@ -1,9 +1,8 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.tyraki.FreezableArraySet;
-import mikenakis.tyraki.FreezableList;
+import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.UnmodifiableArraySet;
+import mikenakis.tyraki.MutableList;
 import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
@@ -13,30 +12,14 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> implements FreezableArraySet.Defaults<E>
+final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> implements MutableArraySet.Defaults<E>
 {
-	private final FreezableList<E> list;
+	private final MutableList<E> list;
 
 	FreezableMutableArraySet( MutableCollections mutableCollections, EqualityComparator<? super E> equalityComparator, int initialCapacity )
 	{
 		super( mutableCollections, equalityComparator );
 		list = mutableCollections.newArrayList( initialCapacity, equalityComparator );
-	}
-
-	@Override public void freeze()
-	{
-		list.freeze();
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return list.isFrozen();
-	}
-
-	@Override public UnmodifiableArraySet<E> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public int size()
@@ -58,7 +41,7 @@ final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> imp
 
 	@Override public Optional<E> tryAdd( E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( list.contains( element ) )
 			return Optional.of( element );
 		list.add( element );
@@ -67,7 +50,7 @@ final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> imp
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( !list.tryRemove( oldElement ) )
 			return false;
 		list.add( newElement );
@@ -76,13 +59,13 @@ final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> imp
 
 	@Override public boolean tryRemove( E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		return list.tryRemove( element );
 	}
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( list.isEmpty() )
 			return false;
 		list.clear();
@@ -103,7 +86,7 @@ final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> imp
 
 	@Override public void replaceAt( int index, E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( getEqualityComparator().equals( element, list.get( index ) ) )
 			return;
 		assert !contains( element );
@@ -112,14 +95,14 @@ final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> imp
 
 	@Override public void insertAt( int index, E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert !contains( element );
 		list.insertAt( index, element );
 	}
 
 	@Override public void removeAt( int index )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		list.removeAt( index );
 	}
 

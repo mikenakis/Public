@@ -13,7 +13,7 @@ public final class SingleThreadedMutationContext
 	{
 		if( Kit.areAssertionsEnabled() )
 			return DebugSingleThreadedMutationContext.instance();
-		return ReleaseSingleThreadedMutationContext.instance;
+		return ProductionSingleThreadedMutationContext.instance;
 	}
 
 	private SingleThreadedMutationContext()

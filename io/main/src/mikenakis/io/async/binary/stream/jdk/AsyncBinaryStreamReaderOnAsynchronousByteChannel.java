@@ -44,7 +44,7 @@ final class AsyncBinaryStreamReaderOnAsynchronousByteChannel extends Coherent im
 
 	@Override public void close()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		cohere( () -> //
 		{
 			assert isAliveAssertion();

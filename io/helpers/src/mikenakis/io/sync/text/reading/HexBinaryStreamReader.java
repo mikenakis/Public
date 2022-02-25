@@ -8,7 +8,7 @@ import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.TemporaryMutationContext;
+import mikenakis.kit.mutation.FreezableMutationContext;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public final class HexBinaryStreamReader implements CloseableWrapper<BinaryStrea
 
 	public static <T> T tryGetWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Function1<T,BinaryStreamReader> delegee )
 	{
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 			Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader -> //
 				Kit.tryGetWithWrapper( of( textStreamReader, Procedure0.noOp ), delegee ) ) );
 	}

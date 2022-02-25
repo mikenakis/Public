@@ -1,10 +1,8 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.tyraki.FreezableList;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
-import mikenakis.tyraki.UnmodifiableList;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Arrays;
 import java.util.ConcurrentModificationException;
@@ -15,11 +13,10 @@ import java.util.Iterator;
  *
  * @author michael.gr
  */
-final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implements FreezableList.Defaults<E>
+final class FreezableMutableArrayList<E> extends AbstractMutableList<E>
 {
 	private static final Object[] EMPTY_DATA = {};
 
-	private boolean frozen = false;
 	private Object[] elementData; // non-private to simplify nested class access
 	private int size;
 	private int modificationCount;
@@ -31,29 +28,6 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 		elementData = initialCapacity == 0 ? EMPTY_DATA : new Object[initialCapacity];
 		size = 0;
 		modificationCount = 0;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		trimToSize();
-		frozen = true;
-	}
-
-	@Override public UnmodifiableList<E> frozen()
-	{
-		freeze();
-		return this;
-	}
-
-	@Override public FreezableList<E> add( E element )
-	{
-		return FreezableList.Defaults.super.add( element );
 	}
 
 	/**
@@ -83,10 +57,9 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 	 * Trims the capacity of this <tt>ArrayList</tt> instance to be the list's current size.  An application can use this operation to minimize the storage of an
 	 * <tt>ArrayList</tt> instance.
 	 */
-	@SuppressWarnings( "unused" )
-	public void trimToSize()
+	@SuppressWarnings( "unused" ) public void trimToSize()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		modificationCount++;
 		if( size < elementData.length )
 			elementData = Arrays.copyOf( elementData, size );
@@ -100,32 +73,34 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 	@Override public int size()
 	{
+		assert canReadAssertion();
 		return size;
 	}
 
 	@Override public int getModificationCount()
 	{
+		assert canReadAssertion();
 		return modificationCount;
 	}
 
 	@Override public E get( int index )
 	{
+		assert canReadAssertion();
 		assert index < size : new ArrayIndexOutOfBoundsException( index );
-		@SuppressWarnings( "unchecked" )
-		E result = (E)elementData[index];
+		@SuppressWarnings( "unchecked" ) E result = (E)elementData[index];
 		return result;
 	}
 
 	@Override public void replaceAt( int index, E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		//modificationCount++;
 		elementData[index] = element;
 	}
 
 	@Override public void insertAt( int index, E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert index >= 0 : new ArrayIndexOutOfBoundsException();
 		assert index <= size : new ArrayIndexOutOfBoundsException();
 		modificationCount++;
@@ -137,7 +112,7 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 	@Override public void removeAt( int index )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert index >= 0 : new ArrayIndexOutOfBoundsException();
 		assert index < size : new ArrayIndexOutOfBoundsException();
 		modificationCount++;
@@ -149,7 +124,7 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( size == 0 )
 			return false;
 		modificationCount++;
@@ -181,6 +156,7 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 		@Override public void deleteCurrent()
 		{
+			assert canMutateAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert index < size : new IllegalStateException();
@@ -192,12 +168,14 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 		@Override public boolean isFinished()
 		{
+			assert canReadAssertion();
 			assert !deleted : new IllegalStateException();
 			return index >= size;
 		}
 
 		@Override public E getCurrent()
 		{
+			assert canReadAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert index < size : new IllegalStateException();
@@ -206,6 +184,7 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 		@Override public UnmodifiableEnumerator<E> moveNext()
 		{
+			assert canReadAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();
 			if( deleted )
 				deleted = false;
@@ -235,12 +214,13 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E> implemen
 
 		@Override public boolean hasNext()
 		{
+			assert canReadAssertion();
 			return index < size;
 		}
 
-		@SuppressWarnings( "IteratorNextCanNotThrowNoSuchElementException" )
-		@Override public E next()
+		@SuppressWarnings( "IteratorNextCanNotThrowNoSuchElementException" ) @Override public E next()
 		{
+			assert canReadAssertion();
 			return get( index++ );
 		}
 	}

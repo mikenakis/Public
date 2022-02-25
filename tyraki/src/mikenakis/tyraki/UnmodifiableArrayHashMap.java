@@ -6,6 +6,7 @@ import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.FreezableMutationContext;
 import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -104,13 +105,13 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return ImmutableCollections.emptyArrayHashMap();
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
+			MutableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
 				keyEqualityComparator, valueEqualityComparator );
 			mutableMap.addAll( bindings );
-			return mutableMap.frozen();
+			return mutableMap;
 		} );
 	}
 

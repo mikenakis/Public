@@ -16,10 +16,15 @@ public class TemporaryMutationContext implements MutationContext, Closeable.Defa
 	{
 	}
 
-	@Override public boolean inContextAssertion()
+	@Override public boolean isInContextAssertion()
 	{
 		assert isAliveAssertion();
 		return true;
+	}
+
+	@Override public boolean isFrozen()
+	{
+		return false;
 	}
 
 	@Override public boolean isAliveAssertion()

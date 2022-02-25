@@ -35,7 +35,7 @@ public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defa
 	private AsyncBinaryStreamCopier( MutationContext mutationContext, BufferAllocator bufferAllocator, AsyncBinaryStreamReader reader, AsyncBinaryStreamWriter writer, Procedure1<Long> completionHandler, Procedure1<Throwable> errorHandler )
 	{
 		super( mutationContext );
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert !reader.isBusy();
 		assert !writer.isBusy();
 		this.reader = reader;
@@ -53,7 +53,7 @@ public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defa
 
 	public Async start()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert !isBusy();
 		assert !eof;
 		assert !reader.isBusy();
@@ -65,7 +65,7 @@ public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defa
 
 	private void onError( Throwable throwable )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert isBusy();
 		stop();
 		errorHandler.invoke( throwable );
@@ -74,7 +74,7 @@ public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defa
 
 	private void onReadComplete( Integer count )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert isBusy();
 		readCount = count;
 		if( count <= 0 )
@@ -84,7 +84,7 @@ public final class AsyncBinaryStreamCopier extends Mutable implements Async.Defa
 
 	private void onWriteComplete()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert isBusy();
 		totalCount += writeCount;
 		writeCount = 0;

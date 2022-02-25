@@ -40,9 +40,11 @@ final class ChainingEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 		return sum;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return enumerablesToChain.isFrozen() && enumerablesToChain.trueForAll( es -> es.isFrozen() );
+		assert enumerablesToChain.isFrozenAssertion();
+		assert enumerablesToChain.trueForAll( es -> es.isFrozenAssertion() );
+		return true;
 	}
 
 	private static final class MyEnumerator<E> extends AbstractUnmodifiableEnumerator<E>

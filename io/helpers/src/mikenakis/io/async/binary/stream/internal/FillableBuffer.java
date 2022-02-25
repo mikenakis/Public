@@ -20,37 +20,37 @@ public final class FillableBuffer extends Mutable
 	public FillableBuffer( MutationContext mutationContext, byte[] bytes )
 	{
 		super( mutationContext );
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		this.bytes = bytes;
 	}
 
 	public byte[] getBytes()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return bytes;
 	}
 
 	public int getLength()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return length;
 	}
 
 	public int getFreeOffset()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return position + length;
 	}
 
 	public int getFreeLength()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return bytes.length - (position + length);
 	}
 
 	public Buffer readBuffer( int count )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert count > 0;
 		assert count <= length;
 		Buffer result = Buffer.of( bytes, position, count );
@@ -60,7 +60,7 @@ public final class FillableBuffer extends Mutable
 
 	public Optional<Buffer> readUntilDelimiter( Buffer delimiter, boolean endHasBeenReached )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert delimiter.size() > 0;
 		int skipCount = delimiter.size();
 		int n = Buffer.indexOf( bytes, position, length, delimiter );
@@ -83,7 +83,7 @@ public final class FillableBuffer extends Mutable
 
 	public void fill( int count )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert count > 0;
 		assert count <= getFreeLength();
 		length += count;
@@ -91,7 +91,7 @@ public final class FillableBuffer extends Mutable
 
 	public boolean pack()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		if( position == 0 )
 			return false;
 		System.arraycopy( bytes, position, bytes, 0, length );
@@ -101,7 +101,7 @@ public final class FillableBuffer extends Mutable
 
 	public int read( byte[] buffer, int index, int count )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert index >= 0;
 		assert index < buffer.length;
 		assert count > 0;

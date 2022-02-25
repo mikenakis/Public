@@ -40,7 +40,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 	 */
 	MutableEnumerator<E> newMutableEnumerator();
 
-	boolean canWriteAssertion();
+	boolean canMutateAssertion();
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -155,11 +155,6 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			return newMutableEnumerator();
 		}
 
-		@Override default boolean isFrozen()
-		{
-			return false;
-		}
-
 		@Override default <T extends E> Optional<T> tryExtractOneInstanceOf( Class<T> javaClass )
 		{
 			for( MutableEnumerator<E> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
@@ -220,14 +215,9 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			return MutableEnumerable.Defaults.super.newUnmodifiableEnumerator();
 		}
 
-		@Override default boolean isFrozen()
+		@Override default boolean canMutateAssertion()
 		{
-			return false;
-		}
-
-		@Override default boolean canWriteAssertion()
-		{
-			return getDecoratedMutableEnumerable().canWriteAssertion();
+			return getDecoratedMutableEnumerable().canMutateAssertion();
 		}
 	}
 

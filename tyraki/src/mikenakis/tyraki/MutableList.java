@@ -311,7 +311,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
-		@Override public boolean canWriteAssertion()
+		@Override public boolean canMutateAssertion()
 		{
 			return true;
 		}

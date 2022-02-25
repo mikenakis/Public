@@ -1,6 +1,7 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.mutation.NotFrozenException;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 
@@ -27,7 +28,12 @@ final class LegacyMutableListOnJavaList<E> extends LegacyAbstractMutableCollecti
 		this.javaList = javaList;
 	}
 
-	@Override public boolean canWriteAssertion()
+	@Override public boolean isFrozenAssertion()
+	{
+		throw new NotFrozenException( null );
+	}
+
+	@Override public boolean canMutateAssertion()
 	{
 		return true; //we have no way of determining this with a java collection.
 	}

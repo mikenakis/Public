@@ -72,11 +72,6 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		values = new MutableMapValuesCollection<>( mutableCollections, this, valueEqualityComparator );
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return false;
-	}
-
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()
 	{
 		return entries;
@@ -99,14 +94,14 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public int size()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return Optional.empty();
@@ -119,7 +114,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item1 = hashTable.tryFindByKey( key );
 		if( item1 != null )
 		{
@@ -141,7 +136,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -153,7 +148,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -163,7 +158,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		for( ; ; ) // clear reference queue. We don't need to expunge entries since table is getting cleared.
 			if( referenceQueue.poll() == null )
 				break;

@@ -42,7 +42,7 @@ public final class BufferingAsyncBinaryStreamWriter extends Mutable implements C
 
 	@Override public void close()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		isAliveAssertion();
 		flush( Procedure0.noOp, Log::error );
 		onClose.invoke();
@@ -51,14 +51,14 @@ public final class BufferingAsyncBinaryStreamWriter extends Mutable implements C
 
 	@Override public boolean isBusy()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		isAliveAssertion();
 		return unbufferedWriter.isBusy();
 	}
 
 	@Override public void write( byte[] buffer, int offset, int length, Procedure0 completionHandler, Procedure1<Throwable> errorHandler )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		isAliveAssertion();
 		assert offset >= 0;
 		assert offset < buffer.length;
@@ -73,7 +73,7 @@ public final class BufferingAsyncBinaryStreamWriter extends Mutable implements C
 	 */
 	public void flush( Procedure0 completionHandler, Procedure1<Throwable> errorHandler )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		isAliveAssertion();
 		int length = cacheLength;
 		cacheLength = 0;
@@ -87,7 +87,7 @@ public final class BufferingAsyncBinaryStreamWriter extends Mutable implements C
 	 */
 	public boolean isDirty()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		isAliveAssertion();
 		return cacheLength != 0;
 	}
@@ -99,14 +99,14 @@ public final class BufferingAsyncBinaryStreamWriter extends Mutable implements C
 	 */
 	public void writeAndFlush( Buffer buffer, Procedure0 completionHandler, Procedure1<Throwable> errorHandler )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		isAliveAssertion();
 		write( buffer, () -> flush( completionHandler, errorHandler ), errorHandler );
 	}
 
 	private void write( byte[] buffer, int offset, int length, Procedure0 completionHandler, Procedure1<Throwable> errorHandler, Ref<Integer> countRef )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		for( ; ; )
 		{
 			if( cacheLength >= cachingBuffer.length )

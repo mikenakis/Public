@@ -38,7 +38,7 @@ final class DebugSingleThreadedCoherence extends Mutable implements Coherence.De
 
 	@Override public boolean assertCoherence()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return true;
 	}
 

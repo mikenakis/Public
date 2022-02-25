@@ -5,6 +5,7 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.FreezableMutationContext;
 import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -70,14 +71,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	{
 		if( elements.isEmpty() )
 			return of();
-		if( elements instanceof UnmodifiableList && elements.isFrozen() ) //TODO perhaps introduce UnmodifiableCollection.tryAsList()
-			return (UnmodifiableList<E>)elements;
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			MutableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
-			return mutableList.frozen();
+			return mutableList;
 		} );
 	}
 
@@ -85,14 +84,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	{
 		if( elements.isEmpty() )
 			return of();
-		if( elements.isFrozen() )
-			return elements;
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			MutableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
-			return mutableList.frozen();
+			return mutableList;
 		} );
 	}
 
@@ -578,8 +575,6 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 
 		@Override default UnmodifiableList<E> toList()
 		{
-			if( this instanceof MutableArraySet && isFrozen() )
-				return this;
 			if( isEmpty() )
 				return UnmodifiableList.of();
 			EqualityComparator<? super E> equalityComparator = getEqualityComparator();

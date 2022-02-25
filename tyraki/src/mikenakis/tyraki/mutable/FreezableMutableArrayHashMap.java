@@ -1,16 +1,14 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Hasher;
 import mikenakis.tyraki.Binding;
-import mikenakis.tyraki.FreezableArrayHashMap;
-import mikenakis.tyraki.FreezableArraySet;
-import mikenakis.tyraki.FreezableMap;
 import mikenakis.tyraki.MapEntry;
+import mikenakis.tyraki.MutableArrayHashMap;
 import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
-import mikenakis.tyraki.UnmodifiableArrayHashMap;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.Hasher;
+import mikenakis.tyraki.MutableMap;
 
 import java.util.Optional;
 
@@ -20,18 +18,13 @@ import java.util.Optional;
  * @author michael.gr
  */
 //IntellijIdea blooper: "Class 'FreezableMutableArrayHashMap' must either be declared abstract or implement abstract method 'getEntries()' in 'UnmodifiableArrayMap'"
-final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> implements FreezableArrayHashMap.Defaults<K,V>
+final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> implements MutableArrayHashMap.Defaults<K,V>
 {
 	private final class MyEntries extends AbstractMutableEntries implements MutableList.Defaults<Binding<K,V>>
 	{
 		MyEntries( MutableCollections mutableCollections, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 		{
 			super( mutableCollections, keyEqualityComparator, valueEqualityComparator );
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return FreezableMutableArrayHashMap.this.isFrozen();
 		}
 
 		@Override public void replaceAt( int index, Binding<K,V> element )
@@ -84,7 +77,7 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 
 			@Override public void deleteCurrent()
 			{
-				assert canWriteAssertion();
+				assert canMutateAssertion();
 				K key = getCurrent();
 				map.removeKey( key );
 				decoree.deleteCurrent();
@@ -97,9 +90,8 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 		}
 	}
 
-	private boolean frozen = false;
-	private final FreezableArraySet<K> keyList;
-	private final FreezableMap<K,V> map;
+	private final MutableArraySet<K> keyList;
+	private final MutableMap<K,V> map;
 	final Hasher<? super K> keyHasher;
 	private final MutableList<V> values;
 	private final MyEntries entries;
@@ -114,25 +106,6 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 		entries = new MyEntries( mutableCollections, keyEqualityComparator, valueEqualityComparator );
 		//keys = new MutableArrayMapKeysList<>( mutableCollections, this, keyEqualityComparator );
 		values = new MutableArrayMapValuesList<>( mutableCollections, this, valueEqualityComparator );
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		keyList.freeze();
-		map.freeze();
-		frozen = true;
-	}
-
-	@Override public UnmodifiableArrayHashMap<K,V> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public MutableList<Binding<K,V>> mutableEntries()

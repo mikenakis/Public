@@ -14,10 +14,10 @@ import java.util.Optional;
  */
 class ChainingMap<K, V> extends AbstractMap<K,V>
 {
-	final UnmodifiableCollection<UnmodifiableMap<K,V>> mapsToChain;
-	final UnmodifiableCollection<Binding<K,V>> entries;
-	final UnmodifiableCollection<K> keys;
-	final UnmodifiableCollection<V> values;
+	private final UnmodifiableCollection<UnmodifiableMap<K,V>> mapsToChain;
+	private final UnmodifiableCollection<Binding<K,V>> entries;
+	private final UnmodifiableCollection<K> keys;
+	private final UnmodifiableCollection<V> values;
 
 	ChainingMap( UnmodifiableCollection<UnmodifiableMap<K,V>> mapsToChain )
 	{
@@ -27,9 +27,11 @@ class ChainingMap<K, V> extends AbstractMap<K,V>
 		values = ConversionCollections.newChainingCollection( this.mapsToChain.map( kvUnmodifiableMap -> kvUnmodifiableMap.values() ) );
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return false;
+		assert mapsToChain.isFrozenAssertion();
+		assert mapsToChain.trueForAll( m -> m.isFrozenAssertion() );
+		return true;
 	}
 
 	@Override public int size()

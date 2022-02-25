@@ -1,11 +1,10 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.tyraki.FreezableHashSet;
-import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.UnmodifiableHashSet;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.tyraki.MutableEnumerator;
+import mikenakis.tyraki.MutableHashSet;
 
 import java.util.Optional;
 
@@ -14,33 +13,14 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> implements FreezableHashSet.Defaults<E>
+final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
 {
-	private boolean frozen = false;
 	private final HashTable<E,Item> hashTable;
 
 	FreezableMutableHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
 	{
 		super( mutableCollections, equalityComparator );
 		hashTable = new HashTable<>( mutableCollections, hasher, initialCapacity, fillFactor );
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		hashTable.freeze();
-		frozen = true;
-	}
-
-	@Override public UnmodifiableHashSet<E> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public Hasher<? super E> getElementHasher()
@@ -66,14 +46,14 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public Optional<E> tryAdd( E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item myItem = new Item( element );
 		return hashTable.tryAdd( myItem ).map( existing -> existing.element );
 	}
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item oldItem = hashTable.tryFindByKey( oldElement );
 		if( oldItem == null )
 			return false;
@@ -88,7 +68,7 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public boolean tryRemove( E element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Item oldItem = hashTable.tryFindByKey( element );
 		if( oldItem == null )
 			return false;
@@ -98,7 +78,7 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		return hashTable.clear();
 	}
 

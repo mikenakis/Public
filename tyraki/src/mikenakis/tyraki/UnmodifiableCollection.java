@@ -389,8 +389,6 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 
 		@Override default UnmodifiableCollection<E> toCollection()
 		{
-			if( isFrozen() )
-				return this;
 			return toList();
 		}
 

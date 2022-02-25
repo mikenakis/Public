@@ -4,6 +4,7 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
+import mikenakis.kit.mutation.NotFrozenException;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.MapEntry;
@@ -35,7 +36,12 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public boolean canWriteAssertion()
+		@Override public boolean isFrozenAssertion()
+		{
+			throw new NotFrozenException( null );
+		}
+
+		@Override public boolean canMutateAssertion()
 		{
 			return true; //we have no way of determining this with a java collection.
 		}
@@ -110,7 +116,12 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public boolean canWriteAssertion()
+		@Override public boolean isFrozenAssertion()
+		{
+			throw new NotFrozenException( null );
+		}
+
+		@Override public boolean canMutateAssertion()
 		{
 			return true; //we have no way of determining this with a java collection.
 		}
@@ -202,7 +213,12 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public boolean canWriteAssertion()
+		@Override public boolean isFrozenAssertion()
+		{
+			throw new NotFrozenException( null );
+		}
+
+		@Override public boolean canMutateAssertion()
 		{
 			return true; //we have no way of determining this with a java collection.
 		}
@@ -311,6 +327,11 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		this.javaMap = javaMap;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		throw new NotFrozenException( null );
+	}
+
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()
 	{
 		return entries;
@@ -379,11 +400,6 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		javaMap.clear();
 		modificationCount++;
 		return true;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return false;
 	}
 
 	@Override public V computeIfAbsent( K key, Function1<? extends V,? super K> mappingFunction )

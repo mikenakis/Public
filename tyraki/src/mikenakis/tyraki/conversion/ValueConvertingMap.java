@@ -1,5 +1,6 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
@@ -7,7 +8,6 @@ import mikenakis.tyraki.PartiallyConvertingEqualityComparator;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 
@@ -52,6 +52,11 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 			super( ValueConvertingMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
+		@Override public boolean isFrozenAssertion()
+		{
+			return ValueConvertingMap.this.isFrozenAssertion();
+		}
+
 		@Override public int getModificationCount()
 		{
 			return mapToConvert.entries().getModificationCount();
@@ -60,11 +65,6 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 		@Override public UnmodifiableEnumerator<Binding<K,TV>> newUnmodifiableEnumerator()
 		{
 			return mapToConvert.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return mapToConvert.isFrozen();
 		}
 	}
 
@@ -84,9 +84,9 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 		this.reverter = reverter;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return mapToConvert.isFrozen();
+		return mapToConvert.isFrozenAssertion();
 	}
 
 	@Override public final int size()

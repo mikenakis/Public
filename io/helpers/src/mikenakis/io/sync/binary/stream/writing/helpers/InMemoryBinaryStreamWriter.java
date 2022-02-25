@@ -43,7 +43,7 @@ public final class InMemoryBinaryStreamWriter extends Mutable implements Closeab
 	@Override public void close()
 	{
 		assert isAliveAssertion();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		lifeGuard.close();
 		onClose.invoke();
 	}
@@ -51,7 +51,7 @@ public final class InMemoryBinaryStreamWriter extends Mutable implements Closeab
 	@Override public void writeBytes( byte[] bytes, int index, int count )
 	{
 		assert isAliveAssertion();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, index, count );
 		bufferBuilder.append( bytes, index, count );
 	}

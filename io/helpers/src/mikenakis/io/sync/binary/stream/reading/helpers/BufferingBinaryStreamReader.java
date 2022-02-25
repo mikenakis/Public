@@ -42,7 +42,7 @@ public final class BufferingBinaryStreamReader extends Mutable implements Closea
 
 	@Override public void close()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert isAliveAssertion();
 		lifeGuard.close();
 		onClose.invoke();
@@ -50,7 +50,7 @@ public final class BufferingBinaryStreamReader extends Mutable implements Closea
 
 	public Optional<Buffer> tryReadUntilDelimiter( Buffer delimiter )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		for( ; ; )
 		{
 			Optional<Buffer> result = fillableBuffer.readUntilDelimiter( delimiter, endHasBeenReached );
@@ -67,7 +67,7 @@ public final class BufferingBinaryStreamReader extends Mutable implements Closea
 
 	@Override public int readBuffer( byte[] bytes, int offset, int count )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, offset, count );
 		if( endHasBeenReached )
 			return -1; //XXX MINUS ONE

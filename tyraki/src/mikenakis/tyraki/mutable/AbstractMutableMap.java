@@ -88,16 +88,9 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 		super( mutableCollections );
 	}
 
-	@SuppressWarnings( "SameReturnValue" ) boolean isReadableAssertion()
+	@Override public boolean isFrozenAssertion()
 	{
-		assert isFrozen() || inMutationContextAssertion();
-		return true;
-	}
-
-	@SuppressWarnings( "SameReturnValue" ) boolean isWritableAssertion()
-	{
-		assert !isFrozen() && inMutationContextAssertion();
-		return true;
+		return mutationContext.isFrozenAssertion();
 	}
 
 	@Override public boolean equals( Object other )
@@ -112,6 +105,6 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 
 	@Override public final String toString()
 	{
-		return size() + " entries; " + (isFrozen()? "" : "not ") + "frozen";
+		return size() + " entries";
 	}
 }

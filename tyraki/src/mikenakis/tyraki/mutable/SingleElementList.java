@@ -34,7 +34,7 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 	@Override public void replaceAt( int index, T element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert index == 0 : new IndexOutOfBoundsException();
 		if( Objects.equals( theElement, element ) )
 			return;
@@ -44,19 +44,19 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 	@Override public void insertAt( int index, T element )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert false : new UnsupportedOperationException();
 	}
 
 	@Override public void removeAt( int index )
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert false : new UnsupportedOperationException();
 	}
 
 	@Override public boolean clear()
 	{
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		assert false : new UnsupportedOperationException();
 		return true;
 	}

@@ -211,7 +211,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 
 		@Override default int tryAddAll( E[] elements, int startIndex, int count )
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			assert startIndex >= 0 && startIndex < elements.length;
 			assert count > 0 && startIndex + count <= elements.length;
 			int addCount = 0;
@@ -235,7 +235,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 
 		@Override default int tryAddAll( UnmodifiableEnumerable<? extends E> other )
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			int addCount = 0;
 			for( E element : other )
 				if( tryAdd( element ).isEmpty() )
@@ -245,7 +245,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 
 		@Override default MutableCollection<E> addAll( UnmodifiableEnumerable<? extends E> other )
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			for( E element : other )
 				add( element );
 			return this;
@@ -258,7 +258,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 
 		@Override default boolean clear()
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			boolean workDone = false;
 			while( !isEmpty() )
 			{
@@ -271,7 +271,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 
 		@Override default E intern( E element )
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			Optional<E> existingElement = tryGet( element );
 			if( existingElement.isPresent() )
 				return existingElement.get();
@@ -346,7 +346,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
-		@Override public boolean canWriteAssertion()
+		@Override public boolean canMutateAssertion()
 		{
 			return true;
 		}

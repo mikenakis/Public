@@ -26,7 +26,6 @@ public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 
 	private CleaningDevelopmentLifeGuard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
-		assert closeable != null;
 		this.stackTrace = stackTrace;
 		closeableClass = closeable.getClass();
 		cleanable = cleaner.register( closeable, () -> clean() );

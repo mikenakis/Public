@@ -23,6 +23,11 @@ class FilteringEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 		this.predicate = predicate;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		return enumerableToFilter.isFrozenAssertion();
+	}
+
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
 		UnmodifiableEnumerator<E> enumeratorToFilter = enumerableToFilter.newUnmodifiableEnumerator();
@@ -32,10 +37,5 @@ class FilteringEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 	@Override public int getModificationCount()
 	{
 		return enumerableToFilter.getModificationCount();
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return enumerableToFilter.isFrozen();
 	}
 }

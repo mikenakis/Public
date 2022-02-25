@@ -40,7 +40,7 @@ public final class BufferingBinaryStreamWriter extends Mutable implements Closea
 	@Override public void close()
 	{
 		assert !isDirty();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert isAliveAssertion();
 		lifeGuard.close();
 		onClose.invoke();
@@ -48,7 +48,7 @@ public final class BufferingBinaryStreamWriter extends Mutable implements Closea
 
 	@Override public void writeBytes( byte[] bytes, int offset, int count )
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, offset, count );
 		for( int count2 = 0; ; )
 		{
@@ -65,14 +65,14 @@ public final class BufferingBinaryStreamWriter extends Mutable implements Closea
 
 	public void flush()
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		unbufferedWriter.writeBytes( cachingBuffer, 0, cacheLength );
 		cacheLength = 0;
 	}
 
 	public boolean isDirty() //I am not sure this method should exist.
 	{
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return cacheLength != 0;
 	}
 }

@@ -1,6 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.functional.Function2;
+import mikenakis.kit.mutation.NotFrozenException;
 import mikenakis.tyraki.TotalConverterWithIndex;
 import mikenakis.tyraki.UnmodifiableEnumerable;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -26,6 +27,11 @@ final class ConvertingEnumerable<T, F> extends AbstractUnmodifiableEnumerable<T>
 		this.converter = converter;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		return enumerableToConvert.isFrozenAssertion();
+	}
+
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
 		UnmodifiableEnumerator<F> enumeratorToConvert = enumerableToConvert.newUnmodifiableEnumerator();
@@ -35,10 +41,5 @@ final class ConvertingEnumerable<T, F> extends AbstractUnmodifiableEnumerable<T>
 	@Override public int getModificationCount()
 	{
 		return enumerableToConvert.getModificationCount();
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return enumerableToConvert.isFrozen();
 	}
 }

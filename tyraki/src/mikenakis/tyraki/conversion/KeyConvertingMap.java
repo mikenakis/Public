@@ -41,6 +41,11 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 			super( KeyConvertingMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
+		@Override public boolean isFrozenAssertion()
+		{
+			return KeyConvertingMap.this.isFrozenAssertion();
+		}
+
 		@Override public int getModificationCount()
 		{
 			return mapToConvert.entries().getModificationCount();
@@ -49,11 +54,6 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 		@Override public UnmodifiableEnumerator<Binding<TK,V>> newUnmodifiableEnumerator()
 		{
 			return mapToConvert.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return KeyConvertingMap.this.isFrozen();
 		}
 	}
 
@@ -75,9 +75,9 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 		entries = new MyEntriesCollection( keyEqualityComparator, valueEqualityComparator );
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return mapToConvert.isFrozen();
+		return mapToConvert.isFrozenAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<TK,V>> entries()

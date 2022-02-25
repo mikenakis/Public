@@ -1,17 +1,16 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Hasher;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
-import mikenakis.tyraki.FreezableHashMap;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
+import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
-import mikenakis.tyraki.UnmodifiableHashMap;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.Hasher;
 
 import java.util.ConcurrentModificationException;
 import java.util.Objects;
@@ -22,7 +21,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implements FreezableHashMap.Defaults<K,V>
+class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implements MutableHashMap.Defaults<K,V>
 {
 	private final class MyEntries extends AbstractMutableEntries
 	{
@@ -43,14 +42,8 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		}
 
 		private final Function1<Binding<K,V>,Item> converter = item -> MapEntry.of( item.key, item.value );
-
-		@Override public boolean isFrozen()
-		{
-			return FreezableMutableLinkedHashMap.this.isFrozen();
-		}
 	}
 
-	private boolean frozen = false;
 	private final HashTable<K,Item> hashTable;
 	final Hasher<? super K> keyHasher;
 	private final MutableCollection<K> keys;
@@ -68,24 +61,6 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 		entries = new MyEntries( mutableCollections, keyEqualityComparator, valueEqualityComparator );
 		keys = new MutableMapKeysCollection<>( mutableCollections, this, keyEqualityComparator );
 		values = new MutableMapValuesCollection<>( mutableCollections, this, valueEqualityComparator );
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		hashTable.freeze();
-		frozen = true;
-	}
-
-	@Override public UnmodifiableHashMap<K,V> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()
@@ -110,14 +85,14 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public int size()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return Optional.empty();
@@ -128,7 +103,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item1 = hashTable.tryFindByKey( key );
 		if( item1 != null )
 		{
@@ -159,7 +134,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -171,7 +146,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -190,7 +165,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		if( !hashTable.clear() )
 		{
 			assert head == null;

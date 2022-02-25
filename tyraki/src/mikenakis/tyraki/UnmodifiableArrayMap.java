@@ -2,6 +2,7 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.FreezableMutationContext;
 import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -24,12 +25,12 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
+			MutableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
 			mutableMap.addAll( bindings );
-			return mutableMap.frozen();
+			return mutableMap;
 		} );
 	}
 
@@ -80,9 +81,7 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 
 	static <K, V> UnmodifiableArrayMap<K,V> from( UnmodifiableArrayMap<K,V> map )
 	{
-		if( map.isFrozen() )
-			return map;
-		return from( map );
+		return from( map.entries() );
 	}
 
 	/**

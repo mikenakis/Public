@@ -24,9 +24,9 @@ final class FilteringCollection<E> extends FilteringEnumerable<E> implements Unm
 		this.collectionToFilter = collectionToFilter;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return collectionToFilter.isFrozen();
+		return collectionToFilter.isFrozenAssertion();
 	}
 
 	@Override public EqualityComparator<? super E> getEqualityComparator()

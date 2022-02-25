@@ -17,11 +17,6 @@ class MutableMapValuesCollection<K, V> extends AbstractMutableCollection<V>
 		this.map = map;
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return map.isFrozen();
-	}
-
 	@Override public int size()
 	{
 		return map.size();

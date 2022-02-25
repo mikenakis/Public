@@ -1,18 +1,17 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.EqualityComparatorOnComparator;
+import mikenakis.kit.Hasher;
+import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.Kit;
 import mikenakis.tyraki.Binding;
-import mikenakis.tyraki.FreezableHashMap;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.tyraki.UnmodifiableHashMap;
+import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.legacy.LegacyCollections;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.Hasher;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -26,7 +25,7 @@ import java.util.TreeMap;
  *
  * @author michael.gr
  */
-final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implements FreezableHashMap.Defaults<K,V>
+final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implements MutableHashMap.Defaults<K,V>
 {
 	private final Function1<Binding<K,V>,Entry<Item,V>> converter = item -> MapEntry.of( item.getKey().key, item.getValue() );
 
@@ -49,14 +48,8 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 			MutableEnumerator<Entry<Item,V>> modifiableEnumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
 			return modifiableEnumerator.map( converter );
 		}
-
-		@Override public boolean isFrozen()
-		{
-			return FreezableMutableTreeMap.this.isFrozen();
-		}
 	}
 
-	private boolean frozen = false;
 	private final SortedMap<Item,V> javaMap = new TreeMap<>();
 	private int modificationCount = 0;
 	final Hasher<? super K> keyHasher;
@@ -77,57 +70,40 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 		values = new MutableMapValuesCollection<>( mutableCollections, this, valueEqualityComparator );
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		frozen = true;
-	}
-
-	@Override public UnmodifiableHashMap<K,V> frozen()
-	{
-		freeze();
-		return this;
-	}
-
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return entries;
 	}
 
 	@Override public MutableCollection<K> mutableKeys()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return keys;
 	}
 
 	@Override public MutableCollection<V> mutableValues()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return values;
 	}
 
 	@Override public int size()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return javaMap.size();
 	}
 
 	@Override public Hasher<? super K> getKeyHasher()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return keyHasher;
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		Item item = new Item( key );
 		if( !javaMap.containsKey( item ) )
 			return Optional.empty();
@@ -137,7 +113,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = new Item( key );
 		V existing = javaMap.get( item );
 		if( existing != null )
@@ -150,7 +126,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = new Item( key );
 		if( !Kit.map.tryReplace( javaMap, item, value ) )
 			return false;
@@ -161,7 +137,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Item item = new Item( key );
 		if( !javaMap.containsKey( item ) )
 			return true;
@@ -172,7 +148,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		if( javaMap.isEmpty() )
 			return false;
 		javaMap.clear();

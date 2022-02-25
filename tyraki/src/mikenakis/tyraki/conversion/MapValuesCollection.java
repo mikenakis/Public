@@ -16,9 +16,9 @@ final class MapValuesCollection<K, V> extends AbstractUnmodifiableCollection<V>
 		this.map = map;
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean isFrozenAssertion()
 	{
-		return map.isFrozen();
+		return map.isFrozenAssertion();
 	}
 
 	@Override public int size()

@@ -16,6 +16,11 @@ final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumera
 		this.converter = converter;
 	}
 
+	@Override public boolean isFrozenAssertion()
+	{
+		return enumerableToConvert.isFrozenAssertion();
+	}
+
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
 		UnmodifiableEnumerator<F> unmodifiableEnumerator = enumerableToConvert.newUnmodifiableEnumerator();
@@ -33,13 +38,8 @@ final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumera
 		return enumerableToConvert.getModificationCount();
 	}
 
-	@Override public boolean isFrozen()
+	@Override public boolean canMutateAssertion()
 	{
-		return enumerableToConvert.isFrozen();
-	}
-
-	@Override public boolean canWriteAssertion()
-	{
-		return enumerableToConvert.canWriteAssertion();
+		return enumerableToConvert.canMutateAssertion();
 	}
 }

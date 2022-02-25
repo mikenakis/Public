@@ -33,13 +33,8 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		@Override public MutableEnumerator<Binding<Integer,V>> newMutableEnumerator()
 		{
-			assert canWriteAssertion();
+			assert canMutateAssertion();
 			return new MyEnumerator();
-		}
-
-		@Override public boolean isFrozen()
-		{
-			return MutableMapOnMutableList.this.isFrozen();
 		}
 	}
 
@@ -55,20 +50,20 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		@Override public boolean isFinished()
 		{
-			assert isReadableAssertion();
+			assert canReadAssertion();
 			return index >= values.size();
 		}
 
 		@Override public Binding<Integer,V> getCurrent()
 		{
-			assert isReadableAssertion();
+			assert canReadAssertion();
 			V element = values.get( index );
 			return MapEntry.of( index, element );
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<Integer,V>> moveNext()
 		{
-			assert isWritableAssertion(); //hmm, I am not sure about this.
+			assert canMutateAssertion(); //hmm, I am not sure about this.
 			if( !deleted )
 				index++;
 			deleted = false;
@@ -77,7 +72,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		@Override public void deleteCurrent()
 		{
-			assert isWritableAssertion();
+			assert canMutateAssertion();
 			assert !deleted;
 			values.removeAt( index );
 			deleted = true;
@@ -94,11 +89,6 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 		this.values = values;
 		keys = new MutableMapKeysCollection<>( mutableCollections, this, DefaultEqualityComparator.getInstance() );
 		entries = new MyEntries( mutableCollections, DefaultEqualityComparator.getInstance(), values.getEqualityComparator() );
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return values.isFrozen();
 	}
 
 	@Override public MutableCollection<Binding<Integer,V>> mutableEntries()
@@ -118,21 +108,21 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 	@Override public int size()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return values.size();
 	}
 
 	@Override public boolean containsKey( Integer key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return key >= 0 && key < values.size();
 	}
 
 	@Override public Optional<Binding<Integer,V>> tryGetBindingByKey( Integer key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		if( key < 0 || key >= values.size() )
 			return Optional.empty();
 		return Optional.of( MapEntry.of( key, values.get( key ) ) );
@@ -141,7 +131,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	@Override public Optional<V> tryAdd( Integer key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		if( key != values.size() )
 			return Optional.of( value );
 		values.add( value );
@@ -151,7 +141,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	@Override public boolean tryReplaceValue( Integer key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		values.replaceAt( key, value );
 		return true;
 	}
@@ -159,14 +149,14 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	@Override public boolean tryRemoveKey( Integer key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		values.removeAt( key );
 		return true;
 	}
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		return values.clear();
 	}
 }

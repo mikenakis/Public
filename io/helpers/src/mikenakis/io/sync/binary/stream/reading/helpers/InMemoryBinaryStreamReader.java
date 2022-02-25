@@ -44,7 +44,7 @@ public final class InMemoryBinaryStreamReader extends Mutable implements Closeab
 	@Override public void close()
 	{
 		assert isAliveAssertion();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		lifeGuard.close();
 		onClose.invoke();
 	}
@@ -57,7 +57,7 @@ public final class InMemoryBinaryStreamReader extends Mutable implements Closeab
 	@Override public int readBuffer( byte[] bytes, int index, int count )
 	{
 		assert isAliveAssertion();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		assert Kit.bytes.validArgumentsAssertion( bytes, index, count );
 		int availableLength = buffer.size() - position;
 		if( availableLength == 0 )
@@ -71,7 +71,7 @@ public final class InMemoryBinaryStreamReader extends Mutable implements Closeab
 	@Override public boolean isFinished()
 	{
 		assert isAliveAssertion();
-		assert inMutationContextAssertion();
+		assert canMutateAssertion();
 		return position >= buffer.size();
 	}
 

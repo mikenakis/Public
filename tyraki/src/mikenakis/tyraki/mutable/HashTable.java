@@ -107,7 +107,6 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		}
 	}
 
-	private boolean frozen;
 	public final Hasher<? super K> keyHasher;
 	public final float fillFactor;
 	private int modificationCount = 0;
@@ -124,20 +123,8 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		buckets = allocateBuckets( initialCapacity );
 	}
 
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	void freeze()
-	{
-		assert !frozen;
-		frozen = true;
-	}
-
 	void incrementModificationCount()
 	{
-		assert !frozen;
 		modificationCount++;
 	}
 
@@ -173,8 +160,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	public Optional<T> tryAdd( T hashNode )
 	{
-		assert !frozen;
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		ensureCapacity();
 		Bucket<K,T> bucket = getBucket( hashNode );
 		K key = hashNode.getKey();
@@ -198,8 +184,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	void remove( T hashNode )
 	{
-		assert !frozen;
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		Bucket<K,T> bucket = getBucket( hashNode );
 		bucket.remove( hashNode );
 		hashNodeCount--;
@@ -218,8 +203,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	@Override public boolean clear()
 	{
-		assert !frozen;
-		assert canWriteAssertion();
+		assert canMutateAssertion();
 		if( hashNodeCount == 0 )
 			return false;
 		for( Bucket<K,T> bucket : buckets )
@@ -303,8 +287,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 		@Override public void deleteCurrent()
 		{
-			assert !hashTable.frozen;
-			assert hashTable.canWriteAssertion();
+			assert hashTable.canMutateAssertion();
 			assert modificationCount == hashTable.modificationCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert currentNode != null : new IllegalStateException();

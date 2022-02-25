@@ -32,11 +32,6 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 		{
 			return MutableEnumerator.downCast( hashTable.newMutableEnumerator() );
 		}
-
-		@Override public boolean isFrozen()
-		{
-			return AbstractMutableHashMap.this.isFrozen();
-		}
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,16 +44,6 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 		hashTable = new HashTable<>( mutableCollections, keyHasher, initialCapacity, fillFactor );
 	}
 
-	public final void freeze()
-	{
-		hashTable.freeze();
-	}
-
-	@Override public final boolean isFrozen()
-	{
-		return hashTable.isFrozen();
-	}
-
 	@Override public Hasher<? super K> getKeyHasher()
 	{
 		return hashTable.keyHasher;
@@ -66,21 +51,21 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 
 	@Override public int size()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return Optional.ofNullable( hashTable.tryFindByKey( key ) );
 	}
 
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		HashMapNode<K,V> item = newItem( key, value );
 		return hashTable.tryAdd( item ).map( existing -> existing.value );
 	}
@@ -88,7 +73,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		HashMapNode<K,V> item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -100,7 +85,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		HashMapNode<K,V> item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -110,7 +95,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		return hashTable.clear();
 	}
 

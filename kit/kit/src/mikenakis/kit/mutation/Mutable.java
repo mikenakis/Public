@@ -15,9 +15,20 @@ public abstract class Mutable
 		return mutationContext;
 	}
 
-	public boolean inMutationContextAssertion()
+	public boolean isFrozen()
 	{
-		assert mutationContext.inContextAssertion();
+		return mutationContext.isFrozen();
+	}
+
+	public boolean canReadAssertion()
+	{
+		assert mutationContext.canReadAssertion();
+		return true;
+	}
+
+	public boolean canMutateAssertion()
+	{
+		assert mutationContext.canMutateAssertion();
 		return true;
 	}
 }

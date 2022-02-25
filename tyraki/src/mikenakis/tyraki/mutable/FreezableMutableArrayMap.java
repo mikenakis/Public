@@ -1,12 +1,11 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.Binding;
-import mikenakis.tyraki.FreezableArrayMap;
+import mikenakis.tyraki.MutableArrayMap;
 import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.MutableMap;
-import mikenakis.tyraki.UnmodifiableArrayMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 
@@ -15,7 +14,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implements FreezableArrayMap.Defaults<K,V>
+final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implements MutableArrayMap.Defaults<K,V>
 {
 	private final class MyBinding implements Binding<K,V>
 	{
@@ -53,7 +52,6 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 		}
 	}
 
-	private boolean frozen = false;
 	private final MyEntries entries;
 	private final MutableList<MyBinding> bindingsList = mutableCollections.newArrayList();
 	private final MutableArraySet<K> keys;
@@ -65,23 +63,6 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 		entries = new MyEntries( mutableCollections, keyEqualityComparator, valueEqualityComparator );
 		keys = new MutableArrayMapKeysList<>( mutableCollections, this, keyEqualityComparator );
 		values = new MutableArrayMapValuesList<>( mutableCollections, this, valueEqualityComparator );
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return frozen;
-	}
-
-	@Override public void freeze()
-	{
-		assert !frozen;
-		frozen = true;
-	}
-
-	@Override public UnmodifiableArrayMap<K,V> frozen()
-	{
-		freeze();
-		return this;
 	}
 
 	@Override public MutableList<Binding<K,V>> mutableEntries()
@@ -101,7 +82,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 
 	@Override public int size()
 	{
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		return bindingsList.size();
 	}
 
@@ -121,7 +102,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert isReadableAssertion();
+		assert canReadAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return Optional.empty();
@@ -131,7 +112,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		Optional<Binding<K,V>> existing = tryGetBindingByKey( key );
 		if( existing.isPresent() )
 			return Optional.of( existing.get().getValue() );
@@ -143,7 +124,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return false;
@@ -155,7 +136,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return false;
@@ -165,7 +146,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 
 	@Override public boolean clear()
 	{
-		assert isWritableAssertion();
+		assert canMutateAssertion();
 		return bindingsList.clear();
 	}
 }

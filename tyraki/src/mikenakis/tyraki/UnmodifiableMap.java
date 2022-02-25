@@ -4,7 +4,7 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.TemporaryMutationContext;
+import mikenakis.kit.mutation.FreezableMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -18,7 +18,7 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface UnmodifiableMap<K, V> extends Freezile
+public interface UnmodifiableMap<K, V>
 {
 	/**
 	 * Gets the empty {@link UnmodifiableMap}.
@@ -35,8 +35,6 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <K, V> UnmodifiableMap<K,V> of( UnmodifiableMap<K,V> map )
 	{
-		if( map.isFrozen() )
-			return map;
 		return UnmodifiableHashMap.from( map );
 	}
 
@@ -60,32 +58,32 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <T, K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
 	{
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
+			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( T item : items )
 			{
 				K key = keyFromItemConverter.invoke( item );
 				V value = valueFromItemConverter.invoke( item );
 				freezableMap.add( key, value );
 			}
-			return freezableMap.frozen();
+			return freezableMap;
 		} );
 	}
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
 	{
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
+			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( K key : keys )
 			{
 				V value = valueFromKeyConverter.invoke( key );
 				freezableMap.add( key, value );
 			}
-			return freezableMap.frozen();
+			return freezableMap;
 		} );
 	}
 
@@ -116,17 +114,19 @@ public interface UnmodifiableMap<K, V> extends Freezile
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<Binding<K,V>> bindings )
 	{
-		return Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
-			FreezableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
+			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( var binding : bindings )
 				freezableMap.add( binding.getKey(), binding.getValue() );
-			return freezableMap.frozen();
+			return freezableMap;
 		} );
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	boolean isFrozenAssertion();
 
 	/**
 	 * Gets the number of entries.
@@ -259,7 +259,7 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	 *
 	 * @author michael.gr
 	 */
-	interface Defaults<K, V> extends UnmodifiableMap<K,V>, Freezile.Defaults
+	interface Defaults<K, V> extends UnmodifiableMap<K,V>
 	{
 		@Override default boolean isEmpty()
 		{
@@ -370,13 +370,14 @@ public interface UnmodifiableMap<K, V> extends Freezile
 	 *
 	 * @author michael.gr
 	 */
-	interface Decorator<K, V> extends Defaults<K,V>, Freezile.Decorator
+	interface Decorator<K, V> extends Defaults<K,V>
 	{
 		UnmodifiableMap<K,V> getDecoratedUnmodifiableMap();
 
-		@Override default Freezile getDecoratedFreezile()
+		@Override default boolean isFrozenAssertion()
 		{
-			return getDecoratedUnmodifiableMap();
+			UnmodifiableMap<K,V> decoree = getDecoratedUnmodifiableMap();
+			return decoree.isFrozenAssertion();
 		}
 
 		@Override default int size()
