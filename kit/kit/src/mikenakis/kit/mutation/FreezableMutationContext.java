@@ -16,7 +16,7 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 		return new FreezableMutationContext( parentMutationContext );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.of( this ); //TODO perhaps replace with StatefulLifeGuard ?
+	private final LifeGuard lifeGuard = LifeGuard.of( this, true ); //TODO perhaps replace with StatefulLifeGuard ?
 	private final MutationContext parentMutationContext;
 	private boolean closed;
 
