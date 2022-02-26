@@ -21,7 +21,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implements MutableHashMap.Defaults<K,V>
+class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implements MutableHashMap.Defaults<K,V>
 {
 	private final class MyEntries extends AbstractMutableEntries
 	{
@@ -52,7 +52,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	private Item head = null;
 	private Item tail = null;
 
-	FreezableMutableLinkedHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
+	ConcreteMutableLinkedHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );
@@ -228,7 +228,7 @@ class FreezableMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 		@Override public boolean equals( Object other )
 		{
-			if( other instanceof FreezableMutableLinkedHashMap<?,?>.Item )
+			if( other instanceof ConcreteMutableLinkedHashMap<?,?>.Item )
 			{
 				@SuppressWarnings( "unchecked" )
 				Item otherItem = (Item)other;

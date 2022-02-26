@@ -13,7 +13,7 @@ import java.util.Iterator;
  *
  * @author michael.gr
  */
-final class FreezableMutableArrayList<E> extends AbstractMutableList<E>
+final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 {
 	private static final Object[] EMPTY_DATA = {};
 
@@ -21,7 +21,7 @@ final class FreezableMutableArrayList<E> extends AbstractMutableList<E>
 	private int size;
 	private int modificationCount;
 
-	FreezableMutableArrayList( MutableCollections mutableCollections, EqualityComparator<? super E> equalityComparator, int initialCapacity )
+	ConcreteMutableArrayList( MutableCollections mutableCollections, EqualityComparator<? super E> equalityComparator, int initialCapacity )
 	{
 		super( mutableCollections, equalityComparator );
 		assert initialCapacity >= 0 : new IllegalArgumentException();

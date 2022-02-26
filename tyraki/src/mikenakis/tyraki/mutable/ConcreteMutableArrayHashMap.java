@@ -17,8 +17,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-//IntellijIdea blooper: "Class 'FreezableMutableArrayHashMap' must either be declared abstract or implement abstract method 'getEntries()' in 'UnmodifiableArrayMap'"
-final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> implements MutableArrayHashMap.Defaults<K,V>
+final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> implements MutableArrayHashMap.Defaults<K,V>
 {
 	private final class MyEntries extends AbstractMutableEntries implements MutableList.Defaults<Binding<K,V>>
 	{
@@ -71,7 +70,7 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 
 			MyEnumerator()
 			{
-				super( FreezableMutableArrayHashMap.this.mutableCollections );
+				super( ConcreteMutableArrayHashMap.this.mutableCollections );
 				decoree = keyList.newMutableEnumerator();
 			}
 
@@ -96,7 +95,7 @@ final class FreezableMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> i
 	private final MutableList<V> values;
 	private final MyEntries entries;
 
-	FreezableMutableArrayHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
+	ConcreteMutableArrayHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );

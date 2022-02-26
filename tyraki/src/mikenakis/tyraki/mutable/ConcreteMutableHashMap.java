@@ -10,13 +10,13 @@ import mikenakis.tyraki.MutableCollection;
  *
  * @author michael.gr
  */
-class FreezableMutableHashMap<K, V> extends AbstractMutableHashMap<K,V>
+class ConcreteMutableHashMap<K, V> extends AbstractMutableHashMap<K,V>
 {
 	private final MutableCollection<K> keys;
 	private final MutableCollection<V> values;
 	private final MutableHashEntries entries;
 
-	FreezableMutableHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
+	ConcreteMutableHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections, initialCapacity, fillFactor, keyHasher );

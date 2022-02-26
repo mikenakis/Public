@@ -12,11 +12,12 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableArraySet<E> extends AbstractMutableCollection<E> implements MutableArraySet.Defaults<E>
+//IntellijIdea blooper: good code red: "Class must either be declared abstract or implement abstract method m in I"
+final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> implements MutableArraySet.Defaults<E>
 {
 	private final MutableList<E> list;
 
-	FreezableMutableArraySet( MutableCollections mutableCollections, EqualityComparator<? super E> equalityComparator, int initialCapacity )
+	ConcreteMutableArraySet( MutableCollections mutableCollections, EqualityComparator<? super E> equalityComparator, int initialCapacity )
 	{
 		super( mutableCollections, equalityComparator );
 		list = mutableCollections.newArrayList( initialCapacity, equalityComparator );

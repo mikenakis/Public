@@ -13,11 +13,11 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
+final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
 {
 	private final HashTable<E,Item> hashTable;
 
-	FreezableMutableHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
+	ConcreteMutableHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
 	{
 		super( mutableCollections, equalityComparator );
 		hashTable = new HashTable<>( mutableCollections, hasher, initialCapacity, fillFactor );
@@ -115,7 +115,7 @@ final class FreezableMutableHashSet<E> extends AbstractMutableCollection<E> impl
 
 		@Override public boolean equals( Object o )
 		{
-			if( o instanceof FreezableMutableHashSet<?>.Item )
+			if( o instanceof ConcreteMutableHashSet<?>.Item )
 			{
 				@SuppressWarnings( "unchecked" )
 				Item otherItem = (Item)o;

@@ -25,7 +25,7 @@ import java.util.TreeMap;
  *
  * @author michael.gr
  */
-final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implements MutableHashMap.Defaults<K,V>
+final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implements MutableHashMap.Defaults<K,V>
 {
 	private final Function1<Binding<K,V>,Entry<Item,V>> converter = item -> MapEntry.of( item.getKey().key, item.getValue() );
 
@@ -58,7 +58,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 	private final MutableCollection<V> values;
 	private final MyEntries entries;
 
-	FreezableMutableTreeMap( MutableCollections mutableCollections, Hasher<? super K> keyHasher, Comparator<? super K> keyComparator,
+	ConcreteMutableTreeMap( MutableCollections mutableCollections, Hasher<? super K> keyHasher, Comparator<? super K> keyComparator,
 		EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );
@@ -172,7 +172,7 @@ final class FreezableMutableTreeMap<K, V> extends AbstractMutableMap<K,V> implem
 
 		@Override public boolean equals( Object o )
 		{
-			if( o instanceof FreezableMutableTreeMap<?,?>.Item )
+			if( o instanceof ConcreteMutableTreeMap<?,?>.Item )
 			{
 				@SuppressWarnings( "unchecked" )
 				Item otherItem = (Item)o;

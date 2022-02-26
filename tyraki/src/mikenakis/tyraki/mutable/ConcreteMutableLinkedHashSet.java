@@ -16,13 +16,13 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableLinkedHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
+final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
 {
 	private final HashTable<E,Item> hashTable;
 	private Item head;
 	private Item tail;
 
-	FreezableMutableLinkedHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
+	ConcreteMutableLinkedHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
 	{
 		super( mutableCollections, equalityComparator );
 		hashTable = new HashTable<>( mutableCollections, hasher, initialCapacity, fillFactor );
@@ -151,7 +151,7 @@ final class FreezableMutableLinkedHashSet<E> extends AbstractMutableCollection<E
 
 		@Override public boolean equals( Object o )
 		{
-			if( o instanceof FreezableMutableLinkedHashSet<?>.Item )
+			if( o instanceof ConcreteMutableLinkedHashSet<?>.Item )
 			{
 				@SuppressWarnings( "unchecked" )
 				Item otherItem = (Item)o;

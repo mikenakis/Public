@@ -73,17 +73,17 @@ public final class MutableCollections extends Mutable
 	 */
 	public <T> MutableHashSet<T> newHashSet( int initialCapacity, float fillFactor, Hasher<? super T> hasher, EqualityComparator<? super T> equalityComparator )
 	{
-		return new FreezableMutableHashSet<>( this, initialCapacity, fillFactor, hasher, equalityComparator );
+		return new ConcreteMutableHashSet<>( this, initialCapacity, fillFactor, hasher, equalityComparator );
 	}
 
 	public <T> MutableArrayHashSet<T> newArrayHashSet( int initialCapacity, float fillFactor, Hasher<? super T> hasher, EqualityComparator<? super T> equalityComparator )
 	{
-		return new FreezableMutableArrayHashSet<>( this, initialCapacity, fillFactor, hasher, equalityComparator );
+		return new ConcreteMutableArrayHashSet<>( this, initialCapacity, fillFactor, hasher, equalityComparator );
 	}
 
 	public <T> MutableHashSet<T> newLinkedHashSet( int initialCapacity, float fillFactor, Hasher<? super T> hasher, EqualityComparator<? super T> equalityComparator )
 	{
-		return new FreezableMutableLinkedHashSet<>( this, initialCapacity, fillFactor, hasher, equalityComparator );
+		return new ConcreteMutableLinkedHashSet<>( this, initialCapacity, fillFactor, hasher, equalityComparator );
 	}
 
 	public <T> MutableHashSet<T> newLinkedHashSet()
@@ -102,13 +102,13 @@ public final class MutableCollections extends Mutable
 	 */
 	public <T> MutableList<T> newArrayList( int initialCapacity, EqualityComparator<? super T> equalityComparator )
 	{
-		return new FreezableMutableArrayList<>( this, equalityComparator, initialCapacity );
+		return new ConcreteMutableArrayList<>( this, equalityComparator, initialCapacity );
 	}
 
 	public <K, V> MutableHashMap<K,V> newHashMap( int initialCapacity, float loadFactor, Hasher<? super K> keyHasher, EqualityComparator<? super K> keyEqualityComparator,
 		EqualityComparator<? super V> valueEqualityComparator )
 	{
-		return new FreezableMutableHashMap<>( this, initialCapacity, loadFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
+		return new ConcreteMutableHashMap<>( this, initialCapacity, loadFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
 	public <K, V> MutableHashMap<K,V> newKeyReferencingHashMap( ReferencingMethod referencingMethod, Hasher<? super K> keyHasher,
@@ -126,13 +126,13 @@ public final class MutableCollections extends Mutable
 	public <K, V> MutableArrayHashMap<K,V> newArrayHashMap( int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
-		return new FreezableMutableArrayHashMap<>( this, initialCapacity, fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
+		return new ConcreteMutableArrayHashMap<>( this, initialCapacity, fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
 	public <K, V> MutableHashMap<K,V> newLinkedHashMap( int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
-		return new FreezableMutableLinkedHashMap<>( this, initialCapacity, fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
+		return new ConcreteMutableLinkedHashMap<>( this, initialCapacity, fillFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
 	public <K, V> MutableHashMap<K,V> newLinkedHashMap()
@@ -150,7 +150,7 @@ public final class MutableCollections extends Mutable
 	 */
 	public <K, V> MutableArrayMap<K,V> newArrayMap()
 	{
-		return new FreezableMutableArrayMap<>( this, DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
+		return new ConcreteMutableArrayMap<>( this, DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
 	}
 
 	public <V> MutableMap<Integer,V> newMapOnList( MutableList<V> list )
@@ -174,7 +174,7 @@ public final class MutableCollections extends Mutable
 	 */
 	public <T> MutableArraySet<T> newArraySet( int initialCapacity, EqualityComparator<? super T> equalityComparator )
 	{
-		return new FreezableMutableArraySet<>( this, equalityComparator, initialCapacity );
+		return new ConcreteMutableArraySet<>( this, equalityComparator, initialCapacity );
 	}
 
 	public <K, V> MutableArrayMap<K,V> newCachingArrayMap( int capacity, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
@@ -207,12 +207,12 @@ public final class MutableCollections extends Mutable
 
 	public <K, V> MutableHashMap<K,V> newTreeMap( Hasher<? super K> keyHasher, Comparator<? super K> keyComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
-		return new FreezableMutableTreeMap<>( this, keyHasher, keyComparator, valueEqualityComparator );
+		return new ConcreteMutableTreeMap<>( this, keyHasher, keyComparator, valueEqualityComparator );
 	}
 
 	public <T> MutableHashSet<T> newTreeSet( Hasher<? super T> hasher, Comparator<? super T> comparator )
 	{
-		return new FreezableMutableTreeSet<>( this, hasher, comparator );
+		return new ConcreteMutableTreeSet<>( this, hasher, comparator );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

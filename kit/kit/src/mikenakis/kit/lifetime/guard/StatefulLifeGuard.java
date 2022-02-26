@@ -30,6 +30,11 @@ public final class StatefulLifeGuard extends Mutable implements Closeable.Defaul
 		lifeGuard = LifeGuard.of( framesToSkip + 1, closeable, collectStackTrace );
 	}
 
+	public boolean isClosed()
+	{
+		return closed;
+	}
+
 	public boolean isOpen()
 	{
 		return !closed;

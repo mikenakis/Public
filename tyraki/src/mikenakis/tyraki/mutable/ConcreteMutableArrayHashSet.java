@@ -16,12 +16,12 @@ import java.util.Optional;
  * @author michael.gr
  */
 //IntellijIdea blooper: good code red: "Class must either be declared abstract or implement abstract method m in I"
-final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E> implements MutableArrayHashSet.Defaults<E>
+final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> implements MutableArrayHashSet.Defaults<E>
 {
 	private final MutableList<E> list;
 	private final MutableHashSet<E> hashSet;
 
-	FreezableMutableArrayHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher,
+	ConcreteMutableArrayHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher,
 		EqualityComparator<? super E> equalityComparator )
 	{
 		super( mutableCollections, equalityComparator );
@@ -138,7 +138,7 @@ final class FreezableMutableArrayHashSet<E> extends AbstractMutableCollection<E>
 
 		MyEnumerator()
 		{
-			super( FreezableMutableArrayHashSet.this.mutableCollections );
+			super( ConcreteMutableArrayHashSet.this.mutableCollections );
 			decoree = list.newMutableEnumerator();
 		}
 

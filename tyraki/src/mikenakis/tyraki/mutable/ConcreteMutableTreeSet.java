@@ -20,14 +20,14 @@ import java.util.TreeSet;
  *
  * @author michael.gr
  */
-final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> implements MutableHashSet.Defaults<T>
+final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> implements MutableHashSet.Defaults<T>
 {
 	private final Collection<Item> javaSet = new TreeSet<>();
 	private int modificationCount = 0;
 	final Hasher<? super T> hasher;
 	final Comparator<? super T> comparator;
 
-	FreezableMutableTreeSet( MutableCollections mutableCollections, Hasher<? super T> hasher, Comparator<? super T> comparator )
+	ConcreteMutableTreeSet( MutableCollections mutableCollections, Hasher<? super T> hasher, Comparator<? super T> comparator )
 	{
 		super( mutableCollections, new EqualityComparatorOnComparator<>( comparator ) );
 		this.hasher = hasher;
@@ -133,7 +133,7 @@ final class FreezableMutableTreeSet<T> extends AbstractMutableCollection<T> impl
 
 		@Override public boolean equals( Object o )
 		{
-			if( o instanceof FreezableMutableTreeSet<?>.Item )
+			if( o instanceof ConcreteMutableTreeSet<?>.Item )
 			{
 				@SuppressWarnings( "unchecked" )
 				Item otherItem = (Item)o;

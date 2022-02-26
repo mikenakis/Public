@@ -1,7 +1,7 @@
 package mikenakis.kit.mutation;
 
 import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.guard.LifeGuard;
+import mikenakis.kit.lifetime.guard.StatefulLifeGuard;
 
 public class FreezableMutationContext implements MutationContext, Closeable.Defaults
 {
@@ -16,13 +16,13 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 		return new FreezableMutationContext( parentMutationContext );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.of( this, true ); //TODO perhaps replace with StatefulLifeGuard ?
+	private final StatefulLifeGuard lifeGuard;
 	private final MutationContext parentMutationContext;
-	private boolean closed;
 
 	private FreezableMutationContext( MutationContext parentMutationContext )
 	{
 		this.parentMutationContext = parentMutationContext;
+		lifeGuard = StatefulLifeGuard.of( parentMutationContext, this );
 	}
 
 	@Override public boolean isInContextAssertion()
@@ -33,7 +33,7 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 
 	@Override public boolean isFrozen()
 	{
-		return closed;
+		return lifeGuard.isClosed();
 	}
 
 	@Override public boolean isAliveAssertion()
@@ -47,6 +47,5 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 		assert isAliveAssertion();
 		assert isInContextAssertion();
 		lifeGuard.close();
-		closed = true;
 	}
 }

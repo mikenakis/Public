@@ -14,7 +14,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implements MutableArrayMap.Defaults<K,V>
+final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implements MutableArrayMap.Defaults<K,V>
 {
 	private final class MyBinding implements Binding<K,V>
 	{
@@ -57,7 +57,7 @@ final class FreezableMutableArrayMap<K, V> extends AbstractMutableMap<K,V> imple
 	private final MutableArraySet<K> keys;
 	private final MutableList<V> values;
 
-	FreezableMutableArrayMap( MutableCollections mutableCollections, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
+	ConcreteMutableArrayMap( MutableCollections mutableCollections, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );
 		entries = new MyEntries( mutableCollections, keyEqualityComparator, valueEqualityComparator );
