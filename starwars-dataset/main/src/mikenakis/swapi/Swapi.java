@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public final class Swapi
 {
-	final TextDomain textDomain = new TextDomain( Arrays.asList( "films", "people", "planets", "species", "starships", "vehicles" ) );
+	private final TextDomain textDomain = new TextDomain( Arrays.asList( "films", "people", "planets", "species", "starships", "vehicles" ) );
 
 	public Swapi()
 	{

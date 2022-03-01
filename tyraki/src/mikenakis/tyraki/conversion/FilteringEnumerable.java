@@ -1,5 +1,6 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.tyraki.DebugView;
 import mikenakis.tyraki.UnmodifiableEnumerable;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
@@ -14,6 +15,8 @@ import java.util.function.Predicate;
  */
 class FilteringEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 {
+	@SuppressWarnings( { "unused", "FieldNamingConvention" } )
+	private final DebugView _debugView = DebugView.create( this::toList );
 	private final UnmodifiableEnumerable<E> enumerableToFilter;
 	final Predicate<? super E> predicate;
 

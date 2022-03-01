@@ -47,10 +47,15 @@ public class UncheckedException extends RuntimeException
 
 	private String fieldValueToString( Field field )
 	{
+		Object value = fieldValue( field );
+		return Kit.string.from( value );
+	}
+
+	private Object fieldValue( Field field )
+	{
 		try
 		{
-			Object value = field.get( this );
-			return Kit.string.from( value );
+			return field.get( this );
 		}
 		catch( IllegalAccessException ignore )
 		{
