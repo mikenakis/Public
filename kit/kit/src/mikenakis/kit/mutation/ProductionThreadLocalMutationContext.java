@@ -5,11 +5,11 @@ package mikenakis.kit.mutation;
  *
  * @author michael.gr
  */
-final class ProductionSingleThreadedMutationContext implements MutationContext
+final class ProductionThreadLocalMutationContext implements MutationContext
 {
-	static final MutationContext instance = new ProductionSingleThreadedMutationContext();
+	static final MutationContext instance = new ProductionThreadLocalMutationContext();
 
-	private ProductionSingleThreadedMutationContext()
+	private ProductionThreadLocalMutationContext()
 	{
 	}
 

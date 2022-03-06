@@ -3,7 +3,7 @@ package mikenakis.kit.coherence;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 
 /**
  * Single-threaded {@link Coherence}.
@@ -21,7 +21,7 @@ final class DebugSingleThreadedCoherence extends Mutable implements Coherence.De
 
 	private DebugSingleThreadedCoherence()
 	{
-		super( SingleThreadedMutationContext.instance() );
+		super( ThreadLocalMutationContext.instance() );
 	}
 
 	@Override public <R> R cohere( Function0<R> function )

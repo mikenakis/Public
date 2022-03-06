@@ -3,7 +3,7 @@ package mikenakis.kit.buffers;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,18 +15,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class BufferAllocator extends Mutable
 {
-	public static BufferAllocator of( MutationContext mutationContext, int defaultBufferSize )
+	private static final BufferAllocator instance = new BufferAllocator();
+
+	public static BufferAllocator instance()
 	{
-		return new BufferAllocator( mutationContext, defaultBufferSize );
+		return instance;
 	}
 
-	private final int defaultBufferSize;
+	private static final int defaultBufferSize = 65536;
 	private final Map<BufferKey,Integer> bufferSizes = new ConcurrentHashMap<>();
 
-	private BufferAllocator( MutationContext mutationContext, int defaultBufferSize )
+	private BufferAllocator()
 	{
-		super( mutationContext );
-		this.defaultBufferSize = defaultBufferSize;
+		super( ThreadLocalMutationContext.instance() );
 	}
 
 	public int getBufferSize( BufferKey bufferKey )

@@ -8,7 +8,7 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import mikenakis.testkit.TestInfo;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,10 +22,9 @@ import java.nio.file.Path;
  */
 public class T010_BinaryStreamCopier
 {
-	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
-	private final BufferAllocator bufferAllocator = BufferAllocator.of( mutationContext, 65536 );
-	private final BinaryStreamReadingDomain binaryStreamReadingDomain = new JdkBinaryStreamReadingDomain( mutationContext, bufferAllocator );
-	private final BinaryStreamWritingDomain binaryStreamWritingDomain = new JdkBinaryStreamWritingDomain( mutationContext, bufferAllocator );
+	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
+	private final BinaryStreamReadingDomain binaryStreamReadingDomain = new JdkBinaryStreamReadingDomain( mutationContext );
+	private final BinaryStreamWritingDomain binaryStreamWritingDomain = new JdkBinaryStreamWritingDomain( mutationContext );
 
 	public T010_BinaryStreamCopier()
 	{
@@ -35,7 +34,7 @@ public class T010_BinaryStreamCopier
 	public void Small_Test()
 	{
 		TestInfo testInfo = TestInfo.of( getClass(), TestSourceRootMarker.getTestSourceRoot() );
-		bufferAllocator.setBufferSize( JdkBinaryStreamReadingDomain.binaryComparatorBufferKey, 10 );
+		BufferAllocator.instance().setBufferSize( JdkBinaryStreamReadingDomain.binaryComparatorBufferKey, 10 );
 		test( testInfo, "small", 10 );
 	}
 
@@ -44,7 +43,7 @@ public class T010_BinaryStreamCopier
 	public void Long_Test()
 	{
 		TestInfo testInfo = TestInfo.of( getClass(), TestSourceRootMarker.getTestSourceRoot() );
-		bufferAllocator.setBufferSize( JdkBinaryStreamReadingDomain.binaryComparatorBufferKey, 65536 );
+		BufferAllocator.instance().setBufferSize( JdkBinaryStreamReadingDomain.binaryComparatorBufferKey, 65536 );
 		test( testInfo, "large", 100_000_000 );
 	}
 

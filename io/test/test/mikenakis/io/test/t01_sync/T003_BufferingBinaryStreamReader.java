@@ -7,7 +7,7 @@ import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -22,7 +22,7 @@ public class T003_BufferingBinaryStreamReader
 {
 	private static final Buffer LF = Buffer.of( '\n' );
 
-	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
+	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
 	private final byte[] bytes = new byte[10];
 
 	public T003_BufferingBinaryStreamReader()

@@ -1,16 +1,15 @@
 package mikenakis.testkit.test;
 
-import mikenakis.io.sync.text.reading.TextStreamReaderOnBinaryStreamReader;
+import mikenakis.io.sync.text.reading.HexBinaryStreamReader;
 import mikenakis.io.sync.text.reading.InMemoryTextStreamReader;
+import mikenakis.io.sync.text.reading.TextStreamReaderOnBinaryStreamReader;
+import mikenakis.io.sync.text.writing.HexBinaryStreamWriter;
 import mikenakis.io.sync.text.writing.InMemoryTextStreamWriter;
 import mikenakis.io.sync.text.writing.TextStreamWriterOnBinaryStreamWriter;
 import mikenakis.kit.Kit;
-import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
-import mikenakis.io.sync.text.reading.HexBinaryStreamReader;
-import mikenakis.io.sync.text.writing.HexBinaryStreamWriter;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import org.junit.Test;
 
 /**
@@ -20,8 +19,7 @@ import org.junit.Test;
  */
 public final class T01_Test
 {
-	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
-	private final BufferAllocator bufferAllocator = BufferAllocator.of( mutationContext, 65536 );
+	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
 
 	public T01_Test()
 	{
@@ -49,9 +47,9 @@ public final class T01_Test
 
 	private String textFromHex( String hexString )
 	{
-		return Kit.tryGetWithWrapper( InMemoryTextStreamReader.of( mutationContext, bufferAllocator, hexString, Procedure0.noOp ), memoryTextStreamReader ->
+		return Kit.tryGetWithWrapper( InMemoryTextStreamReader.of( mutationContext, hexString, Procedure0.noOp ), memoryTextStreamReader ->
 			Kit.tryGetWithWrapper( HexBinaryStreamReader.of( memoryTextStreamReader, Procedure0.noOp ), binaryStreamReader ->
-				Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
+				Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
 				{
 					String text = textStreamReader.tryReadLine().orElseThrow();
 					assert textStreamReader.tryReadLine().isEmpty();

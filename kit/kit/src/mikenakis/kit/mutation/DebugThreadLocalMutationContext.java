@@ -5,18 +5,18 @@ package mikenakis.kit.mutation;
  *
  * @author michael.gr
  */
-final class DebugSingleThreadedMutationContext implements MutationContext
+final class DebugThreadLocalMutationContext implements MutationContext
 {
-	private static final ThreadLocal<DebugSingleThreadedMutationContext> instance = ThreadLocal.withInitial( DebugSingleThreadedMutationContext::new );
+	private static final ThreadLocal<DebugThreadLocalMutationContext> instance = ThreadLocal.withInitial( DebugThreadLocalMutationContext::new );
 
-	static DebugSingleThreadedMutationContext instance()
+	static DebugThreadLocalMutationContext instance()
 	{
 		return instance.get();
 	}
 
 	private final Thread constructionThread;
 
-	private DebugSingleThreadedMutationContext()
+	private DebugThreadLocalMutationContext()
 	{
 		constructionThread = Thread.currentThread();
 	}

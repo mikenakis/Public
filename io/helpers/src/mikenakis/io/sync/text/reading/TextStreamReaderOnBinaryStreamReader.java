@@ -1,12 +1,12 @@
 package mikenakis.io.sync.text.reading;
 
+import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.io.sync.binary.stream.reading.helpers.BufferingBinaryStreamReader;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffers.BufferAllocation;
 import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.buffers.BufferKey;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
@@ -17,9 +17,9 @@ import java.util.Optional;
 
 public final class TextStreamReaderOnBinaryStreamReader extends Mutable implements CloseableWrapper<TextStreamReader>, TextStreamReader.Defaults
 {
-	public static CloseableWrapper<TextStreamReader> of( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	public static CloseableWrapper<TextStreamReader> of( MutationContext mutationContext, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
 	{
-		return new TextStreamReaderOnBinaryStreamReader( mutationContext, bufferAllocator, binaryStreamReader, onClose );
+		return new TextStreamReaderOnBinaryStreamReader( mutationContext, binaryStreamReader, onClose );
 	}
 
 	public static final BufferKey bufferKey = new BufferKey( TextStreamReaderOnBinaryStreamReader.class.getName() );
@@ -30,13 +30,13 @@ public final class TextStreamReaderOnBinaryStreamReader extends Mutable implemen
 	private final BufferingBinaryStreamReader bufferingReader;
 	private final BufferAllocation readBufferAllocation;
 
-	private TextStreamReaderOnBinaryStreamReader( MutationContext mutationContext, BufferAllocator bufferAllocator, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
+	private TextStreamReaderOnBinaryStreamReader( MutationContext mutationContext, BinaryStreamReader binaryStreamReader, Procedure0 onClose )
 	{
 		super( mutationContext );
 		assert binaryStreamReader != null;
 		assert onClose != null;
 		this.onClose = onClose;
-		readBufferAllocation = bufferAllocator.newBufferAllocation( bufferKey );
+		readBufferAllocation = BufferAllocator.instance().newBufferAllocation( bufferKey );
 		bufferingReader = new BufferingBinaryStreamReader( mutationContext, readBufferAllocation.bytes, binaryStreamReader, Procedure0.noOp );
 	}
 

@@ -2,7 +2,6 @@ package mikenakis.io.sync.text.reading;
 
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.kit.Kit;
-import mikenakis.kit.buffers.BufferAllocator;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.functional.Procedure1;
@@ -14,9 +13,9 @@ import java.util.Optional;
 
 public final class HexBinaryStreamReader implements CloseableWrapper<BinaryStreamReader>, BinaryStreamReader.Defaults
 {
-	public static void tryWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Procedure1<BinaryStreamReader> delegee )
+	public static void tryWith( BinaryStreamReader binaryStreamReader, Procedure1<BinaryStreamReader> delegee )
 	{
-		Object result = tryGetWith( binaryStreamReader, bufferAllocator, hexBinaryStreamReader -> //
+		Object result = tryGetWith( binaryStreamReader, hexBinaryStreamReader -> //
 		{
 			delegee.invoke( hexBinaryStreamReader );
 			return null;
@@ -24,10 +23,10 @@ public final class HexBinaryStreamReader implements CloseableWrapper<BinaryStrea
 		assert result == null;
 	}
 
-	public static <T> T tryGetWith( BinaryStreamReader binaryStreamReader, BufferAllocator bufferAllocator, Function1<T,BinaryStreamReader> delegee )
+	public static <T> T tryGetWith( BinaryStreamReader binaryStreamReader, Function1<T,BinaryStreamReader> delegee )
 	{
 		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
-			Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReader, Procedure0.noOp ), textStreamReader -> //
+			Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, binaryStreamReader, Procedure0.noOp ), textStreamReader -> //
 				Kit.tryGetWithWrapper( of( textStreamReader, Procedure0.noOp ), delegee ) ) );
 	}
 

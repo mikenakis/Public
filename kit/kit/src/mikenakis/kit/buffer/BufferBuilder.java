@@ -2,7 +2,7 @@ package mikenakis.kit.buffer;
 
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -12,7 +12,7 @@ public final class BufferBuilder extends Mutable
 {
 	public static BufferBuilder of()
 	{
-		return of( SingleThreadedMutationContext.instance() );
+		return of( ThreadLocalMutationContext.instance() );
 	}
 
 	public static BufferBuilder of( MutationContext mutationContext )

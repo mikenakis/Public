@@ -16,11 +16,11 @@ import mikenakis.kit.buffer.Buffer;
  */
 public final class InMemoryTextStreamReader
 {
-	public static CloseableWrapper<TextStreamReader> of( MutationContext mutationContext, BufferAllocator bufferAllocator, String string, Procedure0 onClose )
+	public static CloseableWrapper<TextStreamReader> of( MutationContext mutationContext, String string, Procedure0 onClose )
 	{
 		assert onClose != null;
 		Buffer buffer = Buffer.of( string );
 		CloseableWrapper<BinaryStreamReader> binaryStreamReaderCloseableWrapper = InMemoryBinaryStreamReader.of( mutationContext, buffer, Procedure0.noOp );
-		return TextStreamReaderOnBinaryStreamReader.of( mutationContext, bufferAllocator, binaryStreamReaderCloseableWrapper.getTarget(), () -> { binaryStreamReaderCloseableWrapper.close(); onClose.invoke(); } );
+		return TextStreamReaderOnBinaryStreamReader.of( mutationContext, binaryStreamReaderCloseableWrapper.getTarget(), () -> { binaryStreamReaderCloseableWrapper.close(); onClose.invoke(); } );
 	}
 }

@@ -7,8 +7,7 @@ import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.MutationDisallowedException;
 import mikenakis.kit.mutation.OutOfMutationContextException;
-import mikenakis.kit.mutation.ReadingDisallowedException;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableList;
@@ -142,7 +141,7 @@ public class T05_Mutation
 
 	@Test public void test_FreezableMutationContext()
 	{
-		MutationContext parentMutationContext = SingleThreadedMutationContext.instance();
+		MutationContext parentMutationContext = ThreadLocalMutationContext.instance();
 		TestClass testObject = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
 		{
 			TestClass t = new TestClass( mutationContext );

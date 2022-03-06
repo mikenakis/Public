@@ -6,7 +6,7 @@ import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 
 import java.nio.charset.StandardCharsets;
 
@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class T001_ReaderOnBuffer extends BinaryStreamReaderTest
 {
-	private final MutationContext mutationContext = SingleThreadedMutationContext.instance();
+	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
 
 	public T001_ReaderOnBuffer()
 	{

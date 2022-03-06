@@ -1,14 +1,14 @@
 package mikenakis.io.sync.binary.stream.jdk;
 
-import mikenakis.kit.Kit;
-import mikenakis.kit.functional.Procedure0;
 import mikenakis.io.sync.binary.stream.reading.BinaryStreamReader;
 import mikenakis.io.sync.binary.stream.writing.BinaryStreamWriter;
+import mikenakis.io.sync.binary.stream.writing.BinaryStreamWritingDomain;
+import mikenakis.kit.Kit;
+import mikenakis.kit.buffers.BufferAllocator;
+import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.CloseableWrapper;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.io.sync.binary.stream.writing.BinaryStreamWritingDomain;
-import mikenakis.kit.buffers.BufferAllocator;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -22,12 +22,9 @@ import java.nio.file.StandardOpenOption;
  */
 public final class JdkBinaryStreamWritingDomain extends Mutable implements BinaryStreamWritingDomain.Defaults
 {
-	private final BufferAllocator bufferAllocator;
-
-	public JdkBinaryStreamWritingDomain( MutationContext mutationContext, BufferAllocator bufferAllocator )
+	public JdkBinaryStreamWritingDomain( MutationContext mutationContext )
 	{
 		super( mutationContext );
-		this.bufferAllocator = bufferAllocator;
 	}
 
 	@Override public CloseableWrapper<BinaryStreamWriter> newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose )
@@ -45,8 +42,7 @@ public final class JdkBinaryStreamWritingDomain extends Mutable implements Binar
 
 	@Override public long copy( BinaryStreamReader reader, BinaryStreamWriter writer )
 	{
-		return Kit.tryGetWith( bufferAllocator.newBufferAllocation( binaryCopierBufferKey ), bufferAllocation ->
-		{
+		return Kit.tryGetWith( BufferAllocator.instance().newBufferAllocation( binaryCopierBufferKey ), bufferAllocation -> {
 			long totalCount = 0;
 			for( ; ; )
 			{

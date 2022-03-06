@@ -3,7 +3,7 @@ package mikenakis.kit.coherence;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.SingleThreadedMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 
 /**
  * Production {@link Coherence}.
@@ -16,7 +16,7 @@ final class ReleaseSingleThreadedCoherence extends Mutable implements Coherence.
 
 	private ReleaseSingleThreadedCoherence()
 	{
-		super( SingleThreadedMutationContext.instance() );
+		super( ThreadLocalMutationContext.instance() );
 	}
 
 	@Override public <R> R cohere( Function0<R> function )

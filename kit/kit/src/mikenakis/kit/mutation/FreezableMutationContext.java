@@ -7,7 +7,7 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 {
 	public static FreezableMutationContext of()
 	{
-		MutationContext mutationContext = SingleThreadedMutationContext.instance();
+		MutationContext mutationContext = ThreadLocalMutationContext.instance();
 		return of( mutationContext );
 	}
 

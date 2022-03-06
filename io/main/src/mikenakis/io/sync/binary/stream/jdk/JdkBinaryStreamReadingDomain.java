@@ -27,12 +27,9 @@ public final class JdkBinaryStreamReadingDomain extends Mutable implements Binar
 	public static final BufferKey binaryComparatorBufferKey = new BufferKey( JdkBinaryStreamReadingDomain.class.getName() + ".binaryComparison" );
 	public static final BufferKey readUntilEndBufferKey = new BufferKey( JdkBinaryStreamReadingDomain.class.getName() + ".readUntilEnd()" );
 
-	private final BufferAllocator bufferAllocator;
-
-	public JdkBinaryStreamReadingDomain( MutationContext mutationContext, BufferAllocator bufferAllocator )
+	public JdkBinaryStreamReadingDomain( MutationContext mutationContext )
 	{
 		super( mutationContext );
-		this.bufferAllocator = bufferAllocator;
 	}
 
 	@Override public CloseableWrapper<BinaryStreamReader> newReaderOnInputStream( InputStream inputStream, Procedure0 onClose )
@@ -49,8 +46,8 @@ public final class JdkBinaryStreamReadingDomain extends Mutable implements Binar
 
 	@Override public boolean compare( BinaryStreamReader reader1, BinaryStreamReader reader2 )
 	{
-		try( BufferAllocation bufferAllocation1 = bufferAllocator.newBufferAllocation( binaryComparatorBufferKey );
-		     BufferAllocation bufferAllocation2 = bufferAllocator.newBufferAllocation( binaryComparatorBufferKey ) )
+		try( BufferAllocation bufferAllocation1 = BufferAllocator.instance().newBufferAllocation( binaryComparatorBufferKey );
+		     BufferAllocation bufferAllocation2 = BufferAllocator.instance().newBufferAllocation( binaryComparatorBufferKey ) )
 		{
 			for( ; ; )
 			{
@@ -71,7 +68,7 @@ public final class JdkBinaryStreamReadingDomain extends Mutable implements Binar
 	{
 		return Kit.tryGetWithWrapper( newReaderOnPath( path ), reader ->
 		{
-			int bufferSize = bufferAllocator.getBufferSize( readUntilEndBufferKey );
+			int bufferSize = BufferAllocator.instance().getBufferSize( readUntilEndBufferKey );
 			byte[] buffer = new byte[bufferSize];
 			byte[] bytes = reader.readUntilEnd( buffer );
 			return Buffer.of( bytes );
