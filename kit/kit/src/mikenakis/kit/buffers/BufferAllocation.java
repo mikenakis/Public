@@ -3,6 +3,7 @@ package mikenakis.kit.buffers;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
 
 /**
  * Represents a buffer allocation.
@@ -15,9 +16,9 @@ public final class BufferAllocation extends Mutable implements Closeable.Default
 	private final BufferAllocator bufferAllocator;
 	public final byte[] bytes;
 
-	BufferAllocation( BufferAllocator bufferAllocator, byte[] bytes )
+	BufferAllocation( MutationContext mutationContext, BufferAllocator bufferAllocator, byte[] bytes )
 	{
-		super( bufferAllocator.mutationContext() );
+		super( mutationContext );
 		this.bufferAllocator = bufferAllocator;
 		this.bytes = bytes;
 	}

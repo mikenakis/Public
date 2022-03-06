@@ -19,4 +19,10 @@ public class GenericException extends UncheckedException
 	{
 		this.message = message;
 	}
+
+	public GenericException( Throwable cause, String message )
+	{
+		super( cause );
+		this.message = message;
+	}
 }

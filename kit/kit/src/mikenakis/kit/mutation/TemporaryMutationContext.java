@@ -11,9 +11,11 @@ public class TemporaryMutationContext implements MutationContext, Closeable.Defa
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
+	private final Thread constructionThread;
 
 	private TemporaryMutationContext()
 	{
+		constructionThread = Thread.currentThread();
 	}
 
 	@Override public boolean isInContextAssertion()
@@ -29,12 +31,14 @@ public class TemporaryMutationContext implements MutationContext, Closeable.Defa
 
 	@Override public boolean isAliveAssertion()
 	{
+		assert Thread.currentThread() == constructionThread;
 		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
 
 	@Override public void close()
 	{
+		assert Thread.currentThread() == constructionThread;
 		lifeGuard.close();
 	}
 }

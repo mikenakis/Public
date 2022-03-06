@@ -54,6 +54,7 @@ public class InMemoryBufferStream extends Mutable
 
 	public void tick()
 	{
+		assert canMutateAssertion();
 		while( pendingReceiver != null && !buffers.isEmpty() )
 		{
 			Buffer buffer = buffers.dequeue();

@@ -433,7 +433,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		@Override default E fetchSingleElement()
 		{
 			Optional<E> result = tryFetchSingleElement();
-			assert result.isPresent();
+			assert result.isPresent() : new GenericException( "no element found!" );
 			return result.get();
 		}
 

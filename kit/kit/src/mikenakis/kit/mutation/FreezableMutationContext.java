@@ -21,6 +21,7 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 
 	private FreezableMutationContext( MutationContext parentMutationContext )
 	{
+		assert parentMutationContext.isInContextAssertion();
 		this.parentMutationContext = parentMutationContext;
 		lifeGuard = StatefulLifeGuard.of( parentMutationContext, this );
 	}
@@ -38,6 +39,7 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 
 	@Override public boolean isAliveAssertion()
 	{
+		assert canReadAssertion();
 		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
@@ -45,7 +47,7 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 	@Override public void close()
 	{
 		assert isAliveAssertion();
-		assert isInContextAssertion();
+		assert canMutateAssertion();
 		lifeGuard.close();
 	}
 }

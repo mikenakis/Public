@@ -92,6 +92,8 @@ public class T01_TestanaTest
 
 	public T01_TestanaTest()
 	{
+		if( !Kit.areAssertionsEnabled() )
+			throw new AssertionError();
 	}
 
 	@Test public void Normal_Scenario_Runs_Nothing()

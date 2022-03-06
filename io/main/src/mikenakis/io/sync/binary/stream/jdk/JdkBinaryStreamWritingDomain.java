@@ -29,11 +29,13 @@ public final class JdkBinaryStreamWritingDomain extends Mutable implements Binar
 
 	@Override public CloseableWrapper<BinaryStreamWriter> newWriterOnOutputStream( OutputStream outputStream, Procedure0 onClose )
 	{
+		assert canReadAssertion();
 		return new BinaryStreamWriterOnOutputStream( mutationContext, outputStream, onClose );
 	}
 
 	@Override public CloseableWrapper<BinaryStreamWriter> newWriterOnPath( Path path )
 	{
+		assert canReadAssertion();
 		assert Kit.path.isAbsoluteNormalized( path );
 		Kit.unchecked( () -> Files.createDirectories( path.getParent() ) );
 		OutputStream outputStream = Kit.unchecked( () -> Files.newOutputStream( path, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING ) );
@@ -42,6 +44,7 @@ public final class JdkBinaryStreamWritingDomain extends Mutable implements Binar
 
 	@Override public long copy( BinaryStreamReader reader, BinaryStreamWriter writer )
 	{
+		assert canReadAssertion();
 		return Kit.tryGetWith( BufferAllocator.instance().newBufferAllocation( binaryCopierBufferKey ), bufferAllocation -> {
 			long totalCount = 0;
 			for( ; ; )

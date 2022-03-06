@@ -3,6 +3,7 @@ package mikenakis.kit.buffers;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.kit.mutation.ThreadLocalMutationContext;
 
 import java.util.Map;
@@ -49,7 +50,8 @@ public final class BufferAllocator extends Mutable
 		int bufferSize = getBufferSize( bufferKey );
 		/* TODO */
 		byte[] bytes = new byte[bufferSize];
-		return new BufferAllocation( this, bytes );
+		MutationContext mutationContext = ThreadLocalMutationContext.instance();
+		return new BufferAllocation( mutationContext, this, bytes );
 	}
 
 	void release( BufferAllocation bufferAllocation )

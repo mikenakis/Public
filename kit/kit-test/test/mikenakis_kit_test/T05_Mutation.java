@@ -35,18 +35,18 @@ public class T05_Mutation
 
 		public void readingOperation()
 		{
-			assert mutationContext().canReadAssertion();
+			assert canReadAssertion();
 		}
 
 		public void mutationOperation()
 		{
-			assert mutationContext().canMutateAssertion();
+			assert canMutateAssertion();
 		}
 	}
 
 	private static class TestMutationContext implements MutationContext
 	{
-		boolean inContext;
+		boolean inContext = true;
 		boolean isFrozen;
 
 		@Override public boolean isInContextAssertion()
@@ -65,7 +65,6 @@ public class T05_Mutation
 	{
 		TestMutationContext testMutationContext = new TestMutationContext();
 		TestClass testObject = new TestClass( testMutationContext );
-		testMutationContext.inContext = true;
 		testMutationContext.isFrozen = false;
 		testObject.readingOperation();
 		testObject.mutationOperation();
@@ -75,7 +74,6 @@ public class T05_Mutation
 	{
 		TestMutationContext testMutationContext = new TestMutationContext();
 		MutableList<String> testObject = MutableCollections.of( testMutationContext ).newArrayList();
-		testMutationContext.inContext = true;
 		testMutationContext.isFrozen = false;
 		testObject.size();
 		testObject.add( "a" );
@@ -85,7 +83,6 @@ public class T05_Mutation
 	{
 		TestMutationContext testMutationContext = new TestMutationContext();
 		TestClass testObject = new TestClass( testMutationContext );
-		testMutationContext.inContext = true;
 		testMutationContext.isFrozen = true;
 		testObject.readingOperation();
 		var exception = TestKit.expect( MutationDisallowedException.class, () -> testObject.mutationOperation() );

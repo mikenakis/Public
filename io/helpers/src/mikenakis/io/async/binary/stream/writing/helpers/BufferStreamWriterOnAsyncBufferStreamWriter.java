@@ -34,6 +34,7 @@ public class BufferStreamWriterOnAsyncBufferStreamWriter extends Mutable impleme
 
 	@Override public boolean isAliveAssertion()
 	{
+		assert canReadAssertion();
 		assert lifeGuard.isAliveAssertion();
 		return true;
 	}
@@ -41,11 +42,13 @@ public class BufferStreamWriterOnAsyncBufferStreamWriter extends Mutable impleme
 	@Override public void close()
 	{
 		assert isAliveAssertion();
+		assert canMutateAssertion();
 		lifeGuard.close();
 	}
 
 	@Override public void writeBuffer( Buffer buffer )
 	{
+		assert canMutateAssertion();
 		Buffer lengthBuffer = bufferFromInt( buffer.size() );
 		write0( lengthBuffer );
 		write0( buffer );
