@@ -11,8 +11,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>publishing</module>
-		<module>publishing-test</module>
+		<module>main</module>
+		<module>test</module>
 	</modules>
 
 </project>
