@@ -1,7 +1,7 @@
 package mikenakis_dispatch_test;
 
 import mikenakis.dispatch.Dispatcher;
-import mikenakis.dispatch.implementations.AutonomousDispatcher;
+import mikenakis.dispatch.implementations.autonomous.AutonomousDispatcher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.mutation.MutationContext;

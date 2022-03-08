@@ -7,27 +7,9 @@ import mikenakis.publishing.bespoke.Subscription;
 public interface Dispatcher
 {
 	/**
-	 * Obtains the {@link MutationContext} of this {@link Dispatcher}.
+	 * Obtains the {@link DispatcherProxy} of this {@link Dispatcher}.
 	 */
-	MutationContext mutationContext();
-
-	default boolean isInContextAssertion()
-	{
-		assert mutationContext().isInContextAssertion();
-		return true;
-	}
-
-	default boolean canReadAssertion()
-	{
-		assert mutationContext().canReadAssertion();
-		return true;
-	}
-
-	default boolean canMutateAssertion()
-	{
-		assert mutationContext().canMutateAssertion();
-		return true;
-	}
+	DispatcherProxy proxy();
 
 	/**
 	 * Adds a subscriber to the 'quit' event.
@@ -45,19 +27,19 @@ public interface Dispatcher
 
 	/**
 	 * Requests this {@link Dispatcher} to quit.
-	 * Can be invoked either in-context or out-of-context.
+	 *
+	 * The {@link Dispatcher} will quit after the processing of the current event has ended,
+	 * and possibly also after all events in the current event burst have been processed.
 	 */
 	void quit();
 
 	/**
 	 * Checks whether this {@link Dispatcher} is running.
-	 * Can be invoked either in-context or out-of-context.
 	 */
 	boolean isRunning();
 
 	/**
-	 * Registers a handler to be invoked once on the next idle event.
-	 * Can only be invoked in-context.
+	 * Causes a handler to be invoked once on the next idle event, and then automatically un-subscribed, for convenience.
 	 */
 	default void onNextIdle( Procedure0 handler )
 	{
@@ -83,7 +65,34 @@ public interface Dispatcher
 	}
 
 	/**
-	 * Obtains the {@link DispatcherProxy} for this {@link Dispatcher}.
+	 * Obtains the {@link MutationContext} of this {@link Dispatcher}.
 	 */
-	DispatcherProxy proxy();
+	MutationContext mutationContext();
+
+	/**
+	 * Asserts that we are currently executing within the {@link MutationContext} of this dispatcher.
+	 */
+	default boolean isInContextAssertion()
+	{
+		assert mutationContext().isInContextAssertion();
+		return true;
+	}
+
+	/**
+	 * Asserts that it is safe to perform read operations in the {@link MutationContext} of this dispatcher.
+	 */
+	default boolean canReadAssertion()
+	{
+		assert mutationContext().canReadAssertion();
+		return true;
+	}
+
+	/**
+	 * Asserts that it is safe to perform mutation operations in the {@link MutationContext} of this dispatcher.
+	 */
+	default boolean canMutateAssertion()
+	{
+		assert mutationContext().canMutateAssertion();
+		return true;
+	}
 }

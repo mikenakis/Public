@@ -1,4 +1,4 @@
-package mikenakis.dispatch.fake;
+package mikenakis.dispatch.implementations.fake;
 
 import java.time.Clock;
 import java.time.Duration;

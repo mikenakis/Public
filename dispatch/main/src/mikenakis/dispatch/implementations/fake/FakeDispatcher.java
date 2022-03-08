@@ -1,4 +1,4 @@
-package mikenakis.dispatch.implementations;
+package mikenakis.dispatch.implementations.fake;
 
 import mikenakis.dispatch.Dispatcher;
 import mikenakis.dispatch.DispatcherProxy;
