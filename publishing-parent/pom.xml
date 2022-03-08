@@ -1,0 +1,18 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>mikenakis</groupId>
+		<artifactId>public-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>publishing-parent</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>publishing</module>
+		<module>publishing-test</module>
+	</modules>
+
+</project>
