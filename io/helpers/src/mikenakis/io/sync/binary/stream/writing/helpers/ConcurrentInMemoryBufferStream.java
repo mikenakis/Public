@@ -91,7 +91,8 @@ public class ConcurrentInMemoryBufferStream
 			if( receiver == null )
 				break;
 			Buffer buffer = Kit.unchecked( () -> buffers.take() );
-			remoteDispatcherProxy.post( () -> receiver.invoke( Optional.of( buffer ) ) );
+			remoteDispatcherProxy.post( () -> //
+				receiver.invoke( Optional.of( buffer ) ) );
 		}
 	}
 

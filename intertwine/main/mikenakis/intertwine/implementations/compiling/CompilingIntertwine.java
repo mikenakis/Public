@@ -5,6 +5,9 @@ import mikenakis.bytecode.model.ByteCodeField;
 import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.model.attributes.CodeAttribute;
+import mikenakis.bytecode.model.attributes.LineNumberTableAttribute;
+import mikenakis.bytecode.model.attributes.LineNumberTableEntry;
+import mikenakis.bytecode.model.attributes.SourceFileAttribute;
 import mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
@@ -30,8 +33,10 @@ import mikenakis.kit.logging.Log;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -49,6 +54,8 @@ import java.util.stream.Stream;
  */
 class CompilingIntertwine<T> implements Intertwine<T>
 {
+	private static final String dummySourceFileName = "DummySourceFile.java";
+
 	private final ClassLoader classLoader;
 	private final Class<? super T> interfaceType;
 	private final TerminalTypeDescriptor interfaceTypeDescriptor;
@@ -80,7 +87,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private static void getInterfaceMethodPrototypes( ClassLoader classLoader, ByteCodeType interfaceByteCodeType, Set<MethodPrototype> methodPrototypes )
 	{
-		interfaceByteCodeType.interfaces().forEach( superInterfaceTypeDescriptor ->
+		interfaceByteCodeType.interfaces().forEach( superInterfaceTypeDescriptor -> //
 		{
 			Class<?> superInterfaceType = Kit.unchecked( () -> classLoader.loadClass( superInterfaceTypeDescriptor.typeName ) );
 			ByteCodeType superInterfaceByteCodeType = ByteCodeType.read( superInterfaceType );
@@ -106,7 +113,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private CompilingKey<T>[] buildArrayOfKey( List<MethodPrototype> methodPrototypes )
 	{
-		// IntellijIdea blooper: IntellijIdea thinks that the following code only needs the "unchecked" suppression. Javac thinks differently.
+		// PEARL: IntellijIdea blooper: IntellijIdea thinks that the following code only needs the "unchecked" suppression.
+		// Javac thinks differently.
 		// In order to keep Javac happy, the raw-types suppression must be added,
 		// but then IntellijIdea thinks that raw-types is redundant and complains about it,
 		// so we need to also suppress the "redundant suppression" inspection of IntellijIdea.
@@ -151,9 +159,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private Constructor<T> createEntwinerClassAndGetConstructor()
 	{
+		String className = "Entwiner_" + identifierFromTypeName( interfaceType );
 		ByteCodeType entwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "CompiledEntwiner_" + identifierFromTypeName( interfaceType ) ), //
+			TerminalTypeDescriptor.of( getClass().getPackageName() + "." + className ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( interfaceTypeDescriptor ) );
 		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
@@ -163,17 +172,16 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			FieldPrototype.of( "exitPoint", FieldDescriptor.of( Anycall.class ) ) );
 		entwinerByteCodeType.fields.add( exitPointField );
 		addEntwinerInitMethod( entwinerByteCodeType, keysField, exitPointField );
-
 		int maxArgumentCount = maxArgumentCount( interfaceMethodPrototypes );
 		int methodCount = interfaceMethodPrototypes.size();
 		for( int methodIndex = 0; methodIndex < methodCount; methodIndex++ )
 			addEntwinerInterfaceMethod( entwinerByteCodeType, maxArgumentCount, keysField, exitPointField, methodIndex, interfaceMethodPrototypes.get( methodIndex ) );
+		entwinerByteCodeType.attributeSet.addAttribute( SourceFileAttribute.of( dummySourceFileName ) );
 
+		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
+			save( className, entwinerByteCodeType );
 		if( Kit.get( false ) )
-		{
-			saveBytes( Path.of( "C:\\temp\\intertwine", entwinerByteCodeType.typeDescriptor().typeName + ".class" ), entwinerByteCodeType.write() );
 			System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
-		}
 
 		Class<T> entwinerClass = ByteCodeClassLoader.load( classLoader, entwinerByteCodeType );
 		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, Anycall.class ) );
@@ -235,6 +243,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			code.CHECKCAST( interfaceMethodPrototype.descriptor.returnTypeDescriptor );
 			code.ARETURN();
 		}
+
+		code.attributeSet.addAttribute( LineNumberTableAttribute.of( List.of( LineNumberTableEntry.of( code.instructions.all().get( 0 ), 1 ) ) ) );
 	}
 
 	private static void addEntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField )
@@ -259,22 +269,23 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private Constructor<Anycall<T>> createUntwinerClassAndGetConstructor()
 	{
+		String className = "Untwiner_" + identifierFromTypeName( interfaceType );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			untwinerExitPointFieldPrototype( interfaceTypeDescriptor ) );
 		ByteCodeType untwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
-			TerminalTypeDescriptor.of( "CompiledUntwiner_" + identifierFromTypeName( interfaceType ) ), //
+			TerminalTypeDescriptor.of( getClass().getPackageName() + "." + className ), //
 			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
 			List.of( TerminalTypeDescriptor.of( Anycall.class ) ) );
 		untwinerByteCodeType.fields.add( exitPointField );
 		addUntwinerInitMethod( untwinerByteCodeType, interfaceTypeDescriptor, exitPointField );
 		addUntwinerAnycallMethod( untwinerByteCodeType, interfaceTypeDescriptor, interfaceMethodPrototypes, maxArgumentCount( interfaceMethodPrototypes ) );
+		untwinerByteCodeType.attributeSet.addAttribute( SourceFileAttribute.of( dummySourceFileName ) );
 
+		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
+			save( className, untwinerByteCodeType );
 		if( Kit.get( false ) )
-		{
-			saveBytes( Path.of( "C:\\temp\\intertwine", untwinerByteCodeType.typeDescriptor().typeName + ".class" ), untwinerByteCodeType.write() );
 			System.out.println( ByteCodePrinter.printByteCodeType( untwinerByteCodeType, Optional.empty() ) );
-		}
 
 		Class<T> untwinerClass = ByteCodeClassLoader.load( getClass().getClassLoader(), untwinerByteCodeType );
 		@SuppressWarnings( "unchecked" ) Constructor<Anycall<T>> result = (Constructor<Anycall<T>>)Kit.unchecked( () -> untwinerClass.getDeclaredConstructor( interfaceType ) );
@@ -329,6 +340,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		Instruction defaultInstruction = emitThrowAssertionErrorSequence( code, 3 );
 		tableSwitchInstruction.setDefaultInstruction( defaultInstruction );
 		stackMapTableAttribute.addSameFrame( defaultInstruction );
+
+		code.attributeSet.addAttribute( LineNumberTableAttribute.of( List.of( LineNumberTableEntry.of( code.instructions.all().get( 0 ), 1 ) ) ) );
 	}
 
 	private static Instruction addUntwinerSwitchCase( ByteCodeType untwinerByteCodeType, CodeAttribute code, //
@@ -399,6 +412,16 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			}
 		}
 		return count;
+	}
+
+	private void save( String className, ByteCodeType entwinerByteCodeType )
+	{
+		URL url = getClass().getResource( "" );
+		assert url != null;
+		assert url.getProtocol().equals( "file" );
+		var path = Paths.get( Kit.unchecked( () -> url.toURI() ) ).resolve( className + ".class" );
+		//var path = Path.of( "C:\\temp\\intertwine", entwinerByteCodeType.typeDescriptor().typeName + ".class" );
+		saveBytes( path, entwinerByteCodeType.write() );
 	}
 
 	private static void saveBytes( Path path, byte[] bytes )

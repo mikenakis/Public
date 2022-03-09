@@ -1,6 +1,5 @@
 package mikenakis.bytecode.model.attributes.code;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +33,7 @@ public final class InstructionList
 		this.insertionPoint = insertionPoint;
 	}
 
-	public Collection<Instruction> all() { return Collections.unmodifiableCollection( instructions ); }
+	public List<Instruction> all() { return Collections.unmodifiableList( instructions ); }
 	public void add( Instruction instruction ) { instructions.add( insertionPoint++, instruction ); }
 	public void insert( int index, Instruction instruction ) { instructions.add( index, instruction ); }
 	public boolean contains( Instruction instruction ) { return instructions.contains( instruction ); }
