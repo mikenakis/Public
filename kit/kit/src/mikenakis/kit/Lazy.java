@@ -4,7 +4,7 @@ import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure1;
 
 /**
- * Lazy factory.
+ * Implements a lazily created value.
  *
  * @author michael.gr
  */
