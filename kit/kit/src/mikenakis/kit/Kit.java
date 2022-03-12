@@ -304,14 +304,9 @@ public final class Kit
 		return assertWeakly( value, () -> "" );
 	}
 
-	private static <T> Optional<T> optionalIf( boolean expression, Function0<T> provider )
+	public static <T> Optional<T> filterOptional( T value, BooleanFunction1<T> predicate )
 	{
-		return expression ? Optional.of( provider.invoke() ) : Optional.empty();
-	}
-
-	public static <T> Optional<T> flatOptionalIf( boolean expression, Function0<Optional<T>> provider )
-	{
-		return expression ? provider.invoke() : Optional.empty();
+		return predicate.invoke( value ) ? Optional.of( value ) : Optional.empty();
 	}
 
 	/**

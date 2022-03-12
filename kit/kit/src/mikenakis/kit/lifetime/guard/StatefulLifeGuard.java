@@ -16,6 +16,11 @@ public final class StatefulLifeGuard extends Mutable implements Closeable.Defaul
 		return new StatefulLifeGuard( mutationContext, 1, closeable, false );
 	}
 
+	public static StatefulLifeGuard of( MutationContext mutationContext, Closeable closeable, boolean collectStackTrace )
+	{
+		return new StatefulLifeGuard( mutationContext, 1, closeable, collectStackTrace );
+	}
+
 	public static StatefulLifeGuard of( MutationContext mutationContext, int framesToSkip, Closeable closeable, boolean collectStackTrace )
 	{
 		return new StatefulLifeGuard( mutationContext, framesToSkip + 1, closeable, collectStackTrace );
