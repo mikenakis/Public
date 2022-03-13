@@ -51,4 +51,33 @@ public class Debug
 		else
 			return function0.invoke();
 	}
+
+	public static void boundary2( Procedure0 procedure0 )
+	{
+		try
+		{
+			procedure0.invoke();
+		}
+		catch( RuntimeException e )
+		{
+			Log.error( e );
+		}
+//		catch( Throwable throwable )
+//		{
+//			Log.error( throwable );
+//		}
+	}
+
+	public static <T> T boundary2( Function0<T> function0 )
+	{
+		try
+		{
+			return function0.invoke();
+		}
+		catch( Throwable throwable )
+		{
+			Log.error( throwable );
+			return null;
+		}
+	}
 }
