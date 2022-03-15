@@ -109,6 +109,7 @@ public final class MutableCollections extends Mutable
 		EqualityComparator<? super V> valueEqualityComparator )
 	{
 		return new ConcreteMutableHashMap<>( this, initialCapacity, loadFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
+		//return new ConcreteMutableLinkedHashMap<>( this, initialCapacity, loadFactor, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
 	public <K, V> MutableHashMap<K,V> newKeyReferencingHashMap( ReferencingMethod referencingMethod, Hasher<? super K> keyHasher,

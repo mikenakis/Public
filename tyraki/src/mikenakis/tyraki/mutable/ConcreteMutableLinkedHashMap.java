@@ -45,7 +45,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	}
 
 	private final HashTable<K,Item> hashTable;
-	final Hasher<? super K> keyHasher;
+	private final Hasher<? super K> keyHasher;
 	private final MutableCollection<K> keys;
 	private final MutableCollection<V> values;
 	private final MyEntries entries;
@@ -104,6 +104,13 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	{
 		assert key != null;
 		assert canMutateAssertion();
+//		Optional<V> result = tryAdd0( key, value );
+//		Log.debug( "key=" + key + ", value=" + value + ", result=" + result );
+//		return result;
+//	}
+//
+//	private Optional<V> tryAdd0( K key, V value )
+//	{
 		Item item1 = hashTable.tryFindByKey( key );
 		if( item1 != null )
 		{

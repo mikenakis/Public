@@ -18,6 +18,7 @@ Configuration necessary after a fresh clone:
           - ensure "Caught exception" is **unchecked**.
           - ensure "Uncaught exception" is **checked**.
     - Configure breaking on handled exceptions in foreign threads
+      - See https://stackoverflow.com/a/71482180/773113 
       - Go to "Run" -> "View Breakpoints..."
         - Under "Java Exception Breakpoints":
           - Add a Java Exception Breakpoint.

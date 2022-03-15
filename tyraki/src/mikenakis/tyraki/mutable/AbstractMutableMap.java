@@ -50,7 +50,6 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 		@Override public Optional<Binding<K,V>> tryAdd( Binding<K,V> element )
 		{
 			return AbstractMutableMap.this.tryAdd( element.getKey(), element.getValue() ).map( previous -> MapEntry.of( element.getKey(), previous ) );
-
 		}
 
 		@Override public boolean tryReplace( Binding<K,V> oldElement, Binding<K,V> newElement )
