@@ -66,7 +66,7 @@ public final class ByteCodeType
 		String prefix = jvmClass.getPackageName();
 		assert className.startsWith( prefix + "." );
 		String resourceName = className.substring( prefix.length() + 1 ) + ".class";
-		byte[] bytes = Kit.uncheckedTryGetWithResources( //
+		byte[] bytes = Kit.uncheckedTryGetWith( //
 			() -> jvmClass.getResourceAsStream( resourceName ), //
 			i -> i.readAllBytes() );
 		return read( bytes );

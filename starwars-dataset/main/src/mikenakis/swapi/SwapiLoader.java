@@ -106,8 +106,8 @@ public final class SwapiLoader
 		if( Kit.get( true ) )
 		{
 			ClassLoader classloader = SwapiLoader.class.getClassLoader();
-			Kit.uncheckedTryWithResources( () -> classloader.getResourceAsStream(entityTypeName + ".txt" ), (InputStream inputStream) -> //
-				Kit.uncheckedTryWithResources( () -> new InputStreamReader( inputStream ), (InputStreamReader inputStreamReader) -> //
+			Kit.uncheckedTryWith( () -> classloader.getResourceAsStream(entityTypeName + ".txt" ), (InputStream inputStream) -> //
+				Kit.uncheckedTryWith( () -> new InputStreamReader( inputStream ), (InputStreamReader inputStreamReader) -> //
 					readFromFile( inputStreamReader, mutableObjects ) ) );
 		}
 		else
@@ -116,7 +116,7 @@ public final class SwapiLoader
 			File file = path.toAbsolutePath().toFile();
 			if( file.exists() )
 			{
-				Kit.uncheckedTryWithResources( () -> new FileReader( file ), (InputStreamReader inputStreamReader) -> //
+				Kit.uncheckedTryWith( () -> new FileReader( file ), (InputStreamReader inputStreamReader) -> //
 					readFromFile( inputStreamReader, mutableObjects ) );
 			}
 			else

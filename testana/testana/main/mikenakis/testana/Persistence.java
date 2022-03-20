@@ -75,7 +75,7 @@ public final class Persistence
 
 	private void load( Path persistencePathName )
 	{
-		Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
+		Kit.uncheckedTryWith( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
@@ -104,7 +104,7 @@ public final class Persistence
 
 	public void save()
 	{
-		Kit.uncheckedTryWithResources( () -> Files.newBufferedWriter( persistencePathName ), ( Writer writer ) -> //
+		Kit.uncheckedTryWith( () -> Files.newBufferedWriter( persistencePathName ), ( Writer writer ) -> //
 		{
 			JsonWriter jsonWriter = new JsonWriter( writer, true, true );
 			StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );

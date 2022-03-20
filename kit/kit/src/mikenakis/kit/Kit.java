@@ -2412,7 +2412,7 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryGetWithResources( ThrowingFunction0<C,E> closeableFactory, //
+	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryGetWith( ThrowingFunction0<C,E> closeableFactory, //
 		ThrowingFunction1<R,C,E> tryFunction )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
@@ -2438,7 +2438,7 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWithResources( ThrowingFunction0<C,E> closeableFactory, //
+	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWith( ThrowingFunction0<C,E> closeableFactory, //
 		ThrowingProcedure1<C,E> tryProcedure )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;

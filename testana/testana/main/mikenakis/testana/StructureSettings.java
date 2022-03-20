@@ -41,7 +41,7 @@ public class StructureSettings
 		assert Kit.path.isAbsoluteNormalized( configurationPathName );
 		if( configurationPathName.toFile().exists() )
 		{
-			Kit.uncheckedTryWithResources( () -> Files.newBufferedReader( configurationPathName ), ( BufferedReader reader ) -> //
+			Kit.uncheckedTryWith( () -> Files.newBufferedReader( configurationPathName ), ( BufferedReader reader ) -> //
 			{
 				for( ; ; )
 				{

@@ -35,7 +35,7 @@ public class Cache
 
 	public static Cache fromFile( Path cachePathName )
 	{
-		Map<String,CacheModule> modules = Kit.uncheckedTryGetWithResources( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
+		Map<String,CacheModule> modules = Kit.uncheckedTryGetWith( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
@@ -160,7 +160,7 @@ public class Cache
 
 	public void save( Path path )
 	{
-		Kit.uncheckedTryWithResources( () -> Files.newBufferedWriter( path ), ( Writer writer ) -> //
+		Kit.uncheckedTryWith( () -> Files.newBufferedWriter( path ), ( Writer writer ) -> //
 		{
 			JsonWriter jsonWriter = new JsonWriter( writer, true, true );
 			StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
