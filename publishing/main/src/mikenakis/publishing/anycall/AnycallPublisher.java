@@ -26,7 +26,7 @@ public final class AnycallPublisher<T> extends Mutable implements Closeable.Defa
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this, true );
-	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( mutationContext ).newIdentityHashSet();
+	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( mutationContext ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
 
 	private AnycallPublisher( MutationContext mutationContext )
 	{
