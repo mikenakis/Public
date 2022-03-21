@@ -2,6 +2,7 @@ package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableArrayHashMap;
@@ -9,6 +10,7 @@ import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.MutableMap;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -64,13 +66,17 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 			return keyEnumerator.map( k -> MapEntry.of( k, map.get( k ) ) );
 		}
 
-		private final class MyEnumerator extends AbstractMutableEnumerator<K> implements MutableEnumerator.Decorator<K>
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			return newMutableEnumerator();
+		}
+
+		private final class MyEnumerator extends AbstractEnumerator<K> implements MutableEnumerator.Decorator<K>
 		{
 			final MutableEnumerator<K> decoree;
 
 			MyEnumerator()
 			{
-				super( ConcreteMutableArrayHashMap.this.mutableCollections );
 				decoree = keyList.newMutableEnumerator();
 			}
 

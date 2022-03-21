@@ -6,6 +6,7 @@ import mikenakis.kit.mutation.NotFrozenException;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -103,6 +104,11 @@ final class LegacyMutableCollectionOnJavaCollection<E> extends LegacyAbstractMut
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
 		return LegacyCollections.newEnumeratorOnJavaIterator( collection.iterator(), () -> modificationCount++ );
+	}
+
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		return newMutableEnumerator();
 	}
 
 	@Override public Iterator<E> iterator()

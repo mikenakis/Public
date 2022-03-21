@@ -9,6 +9,7 @@ import mikenakis.tyraki.MutableHashSet;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -132,6 +133,11 @@ final class CachingHashSet<E> extends AbstractMutableCollection<E> implements Mu
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
 		return map.mutableKeys().newMutableEnumerator();
+	}
+
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		return map.keys().newUnmodifiableEnumerator();
 	}
 
 	@Override public boolean containsDuplicates()

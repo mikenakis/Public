@@ -11,6 +11,7 @@ import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.MutableMap;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.ObjectHasher;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Comparator;
 import java.util.Objects;
@@ -86,6 +87,11 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			return keysToItems.mutableEntries().newMutableEnumerator().map( binding -> MapEntry.of( binding.getKey(), binding.getValue().value ) );
+		}
+
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			return keysToItems.entries().newUnmodifiableEnumerator().map( binding -> MapEntry.of( binding.getKey(), binding.getValue().value ) );
 		}
 	}
 

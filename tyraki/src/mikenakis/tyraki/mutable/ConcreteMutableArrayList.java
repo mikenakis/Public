@@ -1,6 +1,7 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
@@ -136,19 +137,24 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		assert canReadAssertion();
-		return new MyEnumerator( mutableCollections );
+		assert canMutateAssertion();
+		return new MyEnumerator();
 	}
 
-	final class MyEnumerator extends AbstractMutableEnumerator<E>
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return new MyEnumerator();
+	}
+
+	final class MyEnumerator extends AbstractEnumerator<E> implements MutableEnumerator.Defaults<E>
 	{
 		private int expectedModCount;
 		private int index;
 		private boolean deleted;
 
-		MyEnumerator( MutableCollections mutableCollections )
+		MyEnumerator()
 		{
-			super( mutableCollections );
 			expectedModCount = modificationCount; //NOTE: checking whether assertions are enabled to skip this is more expensive than just doing this.
 			index = 0;
 			deleted = false;

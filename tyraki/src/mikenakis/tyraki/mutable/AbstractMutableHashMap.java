@@ -6,6 +6,7 @@ import mikenakis.tyraki.HashMapNode;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -31,6 +32,11 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			return MutableEnumerator.downCast( hashTable.newMutableEnumerator() );
+		}
+
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			return UnmodifiableEnumerator.downCast( hashTable.newUnmodifiableEnumerator() );
 		}
 	}
 

@@ -2,10 +2,12 @@ package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.MutableArrayHashSet;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashSet;
 import mikenakis.tyraki.MutableList;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.exceptions.DuplicateElementException;
 
 import java.util.Optional;
@@ -99,6 +101,12 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 		return new MyEnumerator();
 	}
 
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return newMutableEnumerator();
+	}
+
 	@Override public void replaceAt( int index, E element )
 	{
 		E oldElement = list.get( index );
@@ -132,13 +140,12 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 		return list.get( index );
 	}
 
-	private final class MyEnumerator extends AbstractMutableEnumerator<E> implements MutableEnumerator.Decorator<E>
+	private final class MyEnumerator extends AbstractEnumerator<E> implements MutableEnumerator.Decorator<E>
 	{
 		final MutableEnumerator<E> decoree;
 
 		MyEnumerator()
 		{
-			super( ConcreteMutableArrayHashSet.this.mutableCollections );
 			decoree = list.newMutableEnumerator();
 		}
 

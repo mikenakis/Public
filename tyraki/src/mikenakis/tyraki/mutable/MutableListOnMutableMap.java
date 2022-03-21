@@ -1,9 +1,9 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.MutableMap;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 /**
  * A {@link MutableList} on a {@link MutableMap} whose keys are of type {@link Integer}.
@@ -22,43 +22,56 @@ final class MutableListOnMutableMap<T> extends AbstractMutableList<T>
 
 	@Override public int size()
 	{
+		assert canReadAssertion();
 		return map.size();
 	}
 
 	@Override public boolean clear()
 	{
+		assert canMutateAssertion();
 		return map.clear();
 	}
 
 	@Override public void replaceAt( int index, T element )
 	{
+		assert canMutateAssertion();
 		map.replaceValue( index, element );
 	}
 
 	@Override public void insertAt( int index, T element )
 	{
+		assert canMutateAssertion();
 		assert index == size(); //TODO: we can actually insert values, but it is a bit of work. Implement if there is a need.
 		map.add( index, element );
 	}
 
 	@Override public void removeAt( int index )
 	{
+		assert canMutateAssertion();
 		map.removeKey( index );
 	}
 
 	@Override public T get( int index )
 	{
+		assert canReadAssertion();
 		return map.get( index );
 	}
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		MutableEnumerator<Binding<Integer,T>> enumerator = map.mutableEntries().newMutableEnumerator();
-		return enumerator.map( integerTBinding -> integerTBinding.getValue() );
+		assert canMutateAssertion();
+		return map.mutableEntries().newMutableEnumerator().map( integerTBinding -> integerTBinding.getValue() );
+	}
+
+	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return map.entries().newUnmodifiableEnumerator().map( integerTBinding -> integerTBinding.getValue() );
 	}
 
 	@Override public int getModificationCount()
 	{
+		assert canReadAssertion();
 		return map.mutableEntries().getModificationCount();
 	}
 }

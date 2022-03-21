@@ -10,6 +10,7 @@ import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
@@ -40,7 +41,13 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
 			assert canReadAssertion();
-			return hashTable.newMutableEnumerator().map( converter ).mutableFiltered( obj -> Objects.nonNull( obj ) );
+			return hashTable.newMutableEnumerator().map( converter ).mutableFilter( obj -> Objects.nonNull( obj ) );
+		}
+
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			assert canReadAssertion();
+			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( obj -> Objects.nonNull( obj ) );
 		}
 
 		private final Function1<Binding<K,V>,Item> converter = item ->

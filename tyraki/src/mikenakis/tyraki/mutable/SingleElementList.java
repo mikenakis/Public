@@ -1,8 +1,11 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
+import java.util.ConcurrentModificationException;
 import java.util.Objects;
 
 /**
@@ -63,11 +66,58 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		return new MutableEnumeratorOnMutableList<>( mutableCollections, this );
+		assert canMutateAssertion();
+		return new MyEnumerator();
+	}
+
+	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return new MyEnumerator();
 	}
 
 	@Override public int getModificationCount()
 	{
 		return modificationCount;
+	}
+
+	final class MyEnumerator extends AbstractEnumerator<T> implements MutableEnumerator.Defaults<T>
+	{
+		private final int expectedModCount;
+		private int index;
+
+		MyEnumerator()
+		{
+			expectedModCount = getModificationCount(); //NOTE: checking whether assertions are enabled to skip this is more expensive than just doing this.
+			index = 0;
+		}
+
+		@Override public void deleteCurrent()
+		{
+			assert false; //this is actually a rigid collection.
+		}
+
+		@Override public boolean isFinished()
+		{
+			assert canReadAssertion();
+			return index >= size();
+		}
+
+		@Override public T getCurrent()
+		{
+			assert canReadAssertion();
+			assert getModificationCount() == expectedModCount : new ConcurrentModificationException();
+			assert !isFinished() : new IllegalStateException();
+			return get( index );
+		}
+
+		@Override public UnmodifiableEnumerator<T> moveNext()
+		{
+			assert canReadAssertion();
+			assert getModificationCount() == expectedModCount : new ConcurrentModificationException();
+			assert !isFinished() : new IllegalStateException();
+			index++;
+			return this;
+		}
 	}
 }

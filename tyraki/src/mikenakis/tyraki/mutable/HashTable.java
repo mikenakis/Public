@@ -217,6 +217,13 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
+		assert canMutateAssertion();
+		return new MyEnumerator<>( this );
+	}
+
+	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
 		return new MyEnumerator<>( this );
 	}
 

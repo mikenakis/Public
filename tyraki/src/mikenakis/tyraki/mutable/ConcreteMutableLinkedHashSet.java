@@ -39,6 +39,12 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 		return new MyEnumerator().map( item -> item.element );
 	}
 
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return newMutableEnumerator();
+	}
+
 	@Override public int getModificationCount()
 	{
 		return hashTable.getModificationCount();

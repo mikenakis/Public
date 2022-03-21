@@ -1,6 +1,7 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableCollection;
@@ -36,17 +37,18 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 			assert canMutateAssertion();
 			return new MyEnumerator();
 		}
+
+		@Override public UnmodifiableEnumerator<Binding<Integer,V>> newUnmodifiableEnumerator()
+		{
+			assert canReadAssertion();
+			return new MyEnumerator();
+		}
 	}
 
-	private class MyEnumerator extends AbstractMutableEnumerator<Binding<Integer,V>>
+	private class MyEnumerator extends AbstractEnumerator<Binding<Integer,V>> implements MutableEnumerator.Defaults<Binding<Integer,V>>
 	{
 		int index = 0;
 		boolean deleted = false;
-
-		MyEnumerator()
-		{
-			super( MutableMapOnMutableList.this.mutableCollections );
-		}
 
 		@Override public boolean isFinished()
 		{

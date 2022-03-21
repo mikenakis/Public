@@ -7,6 +7,7 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashSet;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.legacy.LegacyCollections;
 
 import java.util.Collection;
@@ -109,6 +110,12 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 		Iterator<Item> iterator = javaSet.iterator();
 		MutableEnumerator<Item> modifiableEnumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
 		return modifiableEnumerator.map( converter );
+	}
+
+	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return newMutableEnumerator();
 	}
 
 	@Override public boolean containsDuplicates()

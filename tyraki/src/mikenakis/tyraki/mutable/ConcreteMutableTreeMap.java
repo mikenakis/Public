@@ -11,6 +11,7 @@ import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.legacy.LegacyCollections;
 
 import java.util.Comparator;
@@ -47,6 +48,12 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 			Iterator<Entry<Item,V>> iterator = javaMap.entrySet().iterator();
 			MutableEnumerator<Entry<Item,V>> modifiableEnumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
 			return modifiableEnumerator.map( converter );
+		}
+
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			assert canReadAssertion();
+			return newMutableEnumerator();
 		}
 	}
 

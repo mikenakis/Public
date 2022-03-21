@@ -4,6 +4,7 @@ import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -77,6 +78,12 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 	{
 		assert canReadAssertion();
 		return list.newMutableEnumerator();
+	}
+
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return newMutableEnumerator();
 	}
 
 	@Override public boolean containsDuplicates()

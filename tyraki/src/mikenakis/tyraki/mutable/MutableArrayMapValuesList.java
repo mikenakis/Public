@@ -5,6 +5,7 @@ import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableArrayMap;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -36,7 +37,14 @@ final class MutableArrayMapValuesList<K, V> extends AbstractMutableList<V>
 
 	@Override public MutableEnumerator<V> newMutableEnumerator()
 	{
+		assert canMutateAssertion();
 		return map.mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getValue() );
+	}
+
+	@Override public UnmodifiableEnumerator<V> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getValue() );
 	}
 
 	@Override public boolean tryReplace( V oldElement, V newElement )

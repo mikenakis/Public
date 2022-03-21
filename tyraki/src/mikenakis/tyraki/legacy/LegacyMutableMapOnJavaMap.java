@@ -12,6 +12,7 @@ import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableMap;
 import mikenakis.tyraki.UnmodifiableCollection;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.kit.EqualityComparator;
@@ -75,6 +76,11 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			Iterator<Entry<K,V>> iterator = javaMap.entrySet().iterator();
 			MutableEnumerator<Entry<K,V>> enumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
 			return ConversionCollections.newConvertingMutableEnumerator( enumerator, converter );
+		}
+
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			return newMutableEnumerator();
 		}
 
 		@Override public Optional<Binding<K,V>> tryAdd( Binding<K,V> element )
@@ -146,6 +152,11 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		@Override public MutableEnumerator<K> newMutableEnumerator()
 		{
 			return mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getKey() );
+		}
+
+		@Override public UnmodifiableEnumerator<K> newUnmodifiableEnumerator()
+		{
+			return entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getKey() );
 		}
 
 		@Override public boolean tryReplace( K oldElement, K newElement )
@@ -243,6 +254,11 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		@Override public MutableEnumerator<V> newMutableEnumerator()
 		{
 			return mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getValue() );
+		}
+
+		@Override public UnmodifiableEnumerator<V> newUnmodifiableEnumerator()
+		{
+			return entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getValue() );
 		}
 
 		@Override public boolean tryReplace( V oldElement, V newElement )

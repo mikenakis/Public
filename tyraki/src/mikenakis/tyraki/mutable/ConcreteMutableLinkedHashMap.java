@@ -41,6 +41,12 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return new MyEnumerator().map( converter );
 		}
 
+		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
+		{
+			assert canReadAssertion();
+			return newMutableEnumerator();
+		}
+
 		private final Function1<Binding<K,V>,Item> converter = item -> MapEntry.of( item.key, item.value );
 	}
 

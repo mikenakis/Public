@@ -5,6 +5,7 @@ import mikenakis.kit.Hasher;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashSet;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -90,7 +91,14 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
+		assert canReadAssertion();
 		return hashTable.newMutableEnumerator().map( item -> item.element );
+	}
+
+	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return hashTable.newUnmodifiableEnumerator().map( item -> item.element );
 	}
 
 	@Override public int getModificationCount()

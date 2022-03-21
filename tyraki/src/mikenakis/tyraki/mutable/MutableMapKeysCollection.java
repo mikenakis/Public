@@ -4,6 +4,7 @@ import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableMap;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
 
@@ -38,7 +39,14 @@ class MutableMapKeysCollection<K, V> extends AbstractMutableCollection<K>
 
 	@Override public MutableEnumerator<K> newMutableEnumerator()
 	{
+		assert canMutateAssertion();
 		return map.mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getKey() );
+	}
+
+	@Override public UnmodifiableEnumerator<K> newUnmodifiableEnumerator()
+	{
+		assert canReadAssertion();
+		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getKey() );
 	}
 
 	@Override public boolean tryReplace( K oldElement, K newElement )
