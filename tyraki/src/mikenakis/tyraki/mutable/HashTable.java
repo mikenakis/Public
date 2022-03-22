@@ -1,5 +1,6 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.GenericException;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.MutableEnumerator;
@@ -178,7 +179,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 	private Bucket<K,T> getBucket( T hashNode )
 	{
 		int hashCode = hashNode.hashCode();
-		assert hashCode == keyHasher.getHashCode( hashNode.getKey() );
+		assert hashCode == keyHasher.getHashCode( hashNode.getKey() ) : new GenericException( "Class used as key in hashMap appears to be mutable: " + hashNode.getKey().getClass().getName() );
 		return getBucket( buckets, hashCode );
 	}
 
