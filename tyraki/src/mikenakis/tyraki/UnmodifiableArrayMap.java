@@ -3,7 +3,6 @@ package mikenakis.tyraki;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.mutation.FreezableMutationContext;
-import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 
