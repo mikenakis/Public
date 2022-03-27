@@ -8,6 +8,7 @@ import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Function2;
 import mikenakis.kit.GenericException;
+import mikenakis.kit.functional.Procedure1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 
 import java.util.Iterator;
@@ -150,6 +151,11 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 * @return the first element of the {@link UnmodifiableEnumerable}.
 	 */
 	Optional<E> tryFetchFirstElement();
+
+	/**
+	 * Executes a given method if this {@link UnmodifiableEnumerable} is non-empty.
+	 */
+	void ifNonEmpty( Procedure1<UnmodifiableEnumerable<E>> handler );
 
 	/**
 	 * Fetches the Nth element, or {@link Optional#empty()} if the {@link UnmodifiableEnumerable} is empty.
@@ -460,6 +466,12 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			if( enumerator.isFinished() )
 				return Optional.empty();
 			return Optional.of( enumerator.getCurrent() );
+		}
+
+		@Override default void ifNonEmpty( Procedure1<UnmodifiableEnumerable<E>> handler )
+		{
+			if( !isEmpty() )
+				handler.invoke( this );
 		}
 
 		@Override default Optional<E> tryFetchNthElement( int n )
