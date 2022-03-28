@@ -24,6 +24,10 @@ Two implementations are provided:
  - The `autonomous` implementation, which provides a stand-alone `Dispatcher` for 
 building event-driven systems.
 
+It is fairly easy to create implementations that encapsulate other existing
+dispatchers. For example, in my private projects I have a `Dispatcher` 
+implementation for AWT/Swing.
+
 ## License
 
 This creative work is explicitly published under ***No License***. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)

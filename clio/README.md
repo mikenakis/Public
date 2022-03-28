@@ -20,8 +20,8 @@ order to have your arguments parsed.)
 
 You can see how it is used in the following projects:
 
-- my [mikenakis-classdump project](https://github.com/mikenakis/mikenakis-classdump)
-- my [mikenakis-testana project](https://github.com/mikenakis/mikenakis-testana)
+- my [mikenakis-classdump project](https://github.com/mikenakis/Public/tree/master/classdump)
+- my [mikenakis-testana project](https://github.com/mikenakis/Public/tree/master/testana)
 
 ## Coding style
 
