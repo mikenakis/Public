@@ -316,16 +316,18 @@ public final class Kit
 	 */
 	public static void runGarbageCollection()
 	{
-		runGarbageCollection0();
-		runGarbageCollection0();
-	}
-
-	private static void runGarbageCollection0()
-	{
-		for( WeakReference<Object> ref = new WeakReference<>( new Object() ); ref.get() != null; Thread.yield() )
+		// TODO: replace this loop of an arbitrary number of iterations with a more structured approach.
+		for( int i = 0;  i < 10;  i++ )
 		{
-			Runtime.getRuntime().gc();
-			Runtime.getRuntime().runFinalization();
+			WeakReference<Object> ref = new WeakReference<>( new Object() );
+			for( ; ; )
+			{
+				Thread.yield();
+				Runtime.getRuntime().gc();
+				Runtime.getRuntime().runFinalization();
+				if( ref.get() == null )
+					break;
+			}
 		}
 	}
 
@@ -1074,6 +1076,8 @@ public final class Kit
 					break;
 				}
 				builder.append( original, i, j );
+				while( indexOf( original, subString, j + 1, ignoreCase ) == j + 1 )
+					j++;
 				i = j;
 				builder.append( replacement );
 				i += subString.length();

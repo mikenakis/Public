@@ -55,14 +55,6 @@
 
 	<build>
 		<directory>OUT</directory>
-		<resources>
-			<resource>
-				<directory>resources</directory>
-				<includes>
-					<include>*</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 
 			<plugin>

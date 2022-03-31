@@ -24,7 +24,7 @@ public final class Log
 
 	public static Logger logger = new DebugLogger();
 	private static final AtomicInteger eventNumberSeed = new AtomicInteger( 0 );
-	public static boolean isTracingEnabled = true;
+	public static boolean isTracingEnabled = false;
 
 	private Log()
 	{
