@@ -112,7 +112,7 @@ public interface UnmodifiableMap<K, V>
 		return newLinkedHashMap( UnmodifiableList.of( bindings ) );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<Binding<K,V>> bindings )
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableEnumerable<Binding<K,V>> bindings )
 	{
 		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
 		{

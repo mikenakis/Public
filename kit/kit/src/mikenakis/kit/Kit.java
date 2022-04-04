@@ -228,8 +228,8 @@ public final class Kit
 	{
 		if( object == null )
 			return "null";
-		int hashCode = System.identityHashCode( object );  //note: the default Object.toString() invokes own hashCode() instead of System.identityHashCode() !
-		return object.getClass().getName() + "@" + Integer.toHexString( hashCode );
+		int identityHashCode = System.identityHashCode( object );
+		return object.getClass().getName() + "@" + Integer.toHexString( identityHashCode );
 	}
 
 	/**

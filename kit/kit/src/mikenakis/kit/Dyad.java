@@ -9,10 +9,15 @@ import java.util.Objects;
  */
 public class Dyad<A, B>
 {
+	public static <A,B> Dyad<A,B> of( A a, B b )
+	{
+		return new Dyad<>( a, b );
+	}
+
 	public final A a;
 	public final B b;
 
-	public Dyad( A a, B b )
+	private Dyad( A a, B b )
 	{
 		this.a = a;
 		this.b = b;

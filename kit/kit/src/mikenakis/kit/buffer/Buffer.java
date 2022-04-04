@@ -150,7 +150,7 @@ public final class Buffer implements Comparable<Buffer>
 
 	public boolean equals( byte... bytes )
 	{
-		return equals( Buffer.of( bytes ) );
+		return equals( of( bytes ) );
 	}
 
 	@SuppressWarnings( "NonFinalFieldReferencedInHashCode" ) @Override public int hashCode()
@@ -421,7 +421,7 @@ public final class Buffer implements Comparable<Buffer>
 		if( i == -1 || i >= k )
 		{
 			Buffer firstPart = subBuffer( h, k );
-			return new Dyad<>( firstPart, Optional.empty() );
+			return Dyad.of( firstPart, Optional.empty() );
 		}
 
 		int j = i + delimiter.bytes.length;
@@ -432,7 +432,7 @@ public final class Buffer implements Comparable<Buffer>
 			j = skipWhitespaceForward( j, k );
 		}
 
-		return new Dyad<>( subBuffer( h, i ), Optional.of( subBuffer( j, k ) ) );
+		return Dyad.of( subBuffer( h, i ), Optional.of( subBuffer( j, k ) ) );
 	}
 
 	public Buffer trim()
