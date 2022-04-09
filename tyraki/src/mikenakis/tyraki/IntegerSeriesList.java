@@ -85,7 +85,7 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 				return index >= length;
 			}
 
-			@Override public Integer getCurrent()
+			@Override public Integer current()
 			{
 				assert !isFinished() : new NoSuchElementException();
 				return index;

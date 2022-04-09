@@ -43,7 +43,7 @@ public interface Dispatcher
 	 */
 	default void onNextIdle( Procedure0 handler )
 	{
-		assert mutationContext().isInContextAssertion();
+		assert mutationContext().inContextAssertion();
 		final class AutoRemovableHandler implements Procedure0
 		{
 			private final Procedure0 delegee;
@@ -74,7 +74,7 @@ public interface Dispatcher
 	 */
 	default boolean isInContextAssertion()
 	{
-		assert mutationContext().isInContextAssertion();
+		assert mutationContext().inContextAssertion();
 		return true;
 	}
 

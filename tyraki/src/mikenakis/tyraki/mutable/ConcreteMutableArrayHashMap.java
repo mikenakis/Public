@@ -83,7 +83,7 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 			@Override public void deleteCurrent()
 			{
 				assert canMutateAssertion();
-				K key = getCurrent();
+				K key = current();
 				map.removeKey( key );
 				decoree.deleteCurrent();
 			}

@@ -41,7 +41,7 @@ class ChainingSet<E> extends ChainingCollection<E>
 		{
 			this.set = set;
 			collections = set.collectionsToChain.newUnmodifiableEnumerator();
-			enumerator = collections.getCurrent().newUnmodifiableEnumerator();
+			enumerator = collections.current().newUnmodifiableEnumerator();
 			bump();
 		}
 
@@ -49,7 +49,7 @@ class ChainingSet<E> extends ChainingCollection<E>
 		{
 			for( UnmodifiableCollection<E> collection : set.collectionsToChain )
 			{
-				if( collection == collections.getCurrent() )
+				if( collection == collections.current() )
 					break;
 				if( collection.contains( item ) )
 					return true;
@@ -62,10 +62,10 @@ class ChainingSet<E> extends ChainingCollection<E>
 			return enumerator == null;
 		}
 
-		@Override public E getCurrent()
+		@Override public E current()
 		{
 			assert !isFinished();
-			return enumerator.getCurrent();
+			return enumerator.current();
 		}
 
 		@Override public UnmodifiableEnumerator<E> moveNext()
@@ -87,10 +87,10 @@ class ChainingSet<E> extends ChainingCollection<E>
 						enumerator = null;
 						break;
 					}
-					enumerator = collections.getCurrent().newUnmodifiableEnumerator();
+					enumerator = collections.current().newUnmodifiableEnumerator();
 					continue;
 				}
-				if( shouldSkip( enumerator.getCurrent() ) )
+				if( shouldSkip( enumerator.current() ) )
 				{
 					enumerator.moveNext();
 					continue;

@@ -27,7 +27,7 @@ public interface UnmodifiableEnumerator<E>
 			return true;
 		}
 
-		@Override public Object getCurrent()
+		@Override public Object current()
 		{
 			assert false;
 			return null;
@@ -69,7 +69,7 @@ public interface UnmodifiableEnumerator<E>
 	 *
 	 * @return the current element.
 	 */
-	E getCurrent(); //FIXME FIXME TODO perhaps ModifiableEnumerator should have a setCurrent() function?
+	E current(); //FIXME FIXME TODO perhaps ModifiableEnumerator should have a setCurrent() function?
 
 	/**
 	 * Moves to the next element.
@@ -105,7 +105,7 @@ public interface UnmodifiableEnumerator<E>
 	{
 		@Override default E fetchCurrentAndMoveNext()
 		{
-			E element = getCurrent();
+			E element = current();
 			moveNext();
 			return element;
 		}
@@ -120,7 +120,7 @@ public interface UnmodifiableEnumerator<E>
 			if( isFinished() )
 				stringBuilder.append( "finished" );
 			else
-				stringBuilder.append( "current: " ).append( getCurrent() );
+				stringBuilder.append( "current: " ).append( current() );
 		}
 
 		@Override default <U extends E> UnmodifiableEnumerator<U> upCast()
@@ -153,10 +153,10 @@ public interface UnmodifiableEnumerator<E>
 			return decoree.isFinished();
 		}
 
-		@Override default E getCurrent()
+		@Override default E current()
 		{
 			UnmodifiableEnumerator<E> decoree = getDecoratedUnmodifiableEnumerator();
-			return decoree.getCurrent();
+			return decoree.current();
 		}
 
 		@Override default UnmodifiableEnumerator<E> moveNext()

@@ -49,7 +49,7 @@ public class T05_Mutation
 		boolean inContext = true;
 		boolean isFrozen;
 
-		@Override public boolean isInContextAssertion()
+		@Override public boolean inContextAssertion()
 		{
 			assert inContext : new OutOfMutationContextException( this );
 			return true;

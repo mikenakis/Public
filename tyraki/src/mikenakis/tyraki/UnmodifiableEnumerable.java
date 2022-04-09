@@ -448,7 +448,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			UnmodifiableEnumerator<E> enumerator = newUnmodifiableEnumerator();
 			if( enumerator.isFinished() )
 				return Optional.empty();
-			E result = enumerator.getCurrent();
+			E result = enumerator.current();
 			assert enumerator.moveNext().isFinished() : new GenericException( "more elements present!" );
 			return Optional.of( result );
 		}
@@ -457,7 +457,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		{
 			UnmodifiableEnumerator<E> enumerator = newUnmodifiableEnumerator();
 			assert !enumerator.isFinished() : new NoSuchElementException();
-			return enumerator.getCurrent();
+			return enumerator.current();
 		}
 
 		@Override default Optional<E> tryFetchFirstElement()
@@ -465,7 +465,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			UnmodifiableEnumerator<E> enumerator = newUnmodifiableEnumerator();
 			if( enumerator.isFinished() )
 				return Optional.empty();
-			return Optional.of( enumerator.getCurrent() );
+			return Optional.of( enumerator.current() );
 		}
 
 		@Override default void ifNonEmpty( Procedure1<UnmodifiableEnumerable<E>> handler )
@@ -485,7 +485,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 			}
 			if( enumerator.isFinished() )
 				return Optional.empty();
-			return Optional.of( enumerator.getCurrent() );
+			return Optional.of( enumerator.current() );
 		}
 
 		@Override default E fetchNthElement( int n )
@@ -618,8 +618,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 					return otherEnumerator.isFinished() ? 0 : 1;
 				if( otherEnumerator.isFinished() )
 					return -1;
-				E a = enumerator.getCurrent();
-				E b = otherEnumerator.getCurrent();
+				E a = enumerator.current();
+				E b = otherEnumerator.current();
 				int d = compare( a, b );
 				if( d != 0 )
 					return d;
@@ -712,8 +712,8 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 					return otherEnumerator.isFinished();
 				if( otherEnumerator.isFinished() )
 					return false;
-				E value = enumerator.getCurrent();
-				E otherValue = otherEnumerator.getCurrent();
+				E value = enumerator.current();
+				E otherValue = otherEnumerator.current();
 				if( !equalityComparator.equals( value, otherValue ) )
 					return false;
 				enumerator.moveNext();

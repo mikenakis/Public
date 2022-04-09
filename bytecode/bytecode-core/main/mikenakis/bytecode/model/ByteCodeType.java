@@ -54,10 +54,8 @@ public final class ByteCodeType
 
 	public static ByteCodeType read( Class<?> jvmClass )
 	{
-		synchronized( byteCodeTypesByClass )
-		{
-			return byteCodeTypesByClass.computeIfAbsent( jvmClass, c -> read0( c ) );
-		}
+		return Kit.sync.synchronize( byteCodeTypesByClass, () -> //
+			byteCodeTypesByClass.computeIfAbsent( jvmClass, c -> read0( c ) ) );
 	}
 
 	private static ByteCodeType read0( Class<?> jvmClass )

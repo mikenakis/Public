@@ -210,7 +210,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			return currentNode == null;
 		}
 
-		@Override public Item getCurrent()
+		@Override public Item current()
 		{
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();

@@ -48,7 +48,7 @@ final class SingleElementEnumerable<E> implements UnmodifiableEnumerable.Default
 			return element == null;
 		}
 
-		@Override public E getCurrent()
+		@Override public E current()
 		{
 			assert !isFinished();
 			return element;

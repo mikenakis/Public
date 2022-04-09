@@ -53,12 +53,13 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		/**
 		 * first, lock the cache only for as long as it takes to check whether the requested {@link Intertwine} has already been cached; if so, we are done.
 		 */
-		synchronized( cache )
+		Intertwine<T> existingIntertwine = Kit.sync.synchronize( cache, () ->
 		{
-			@SuppressWarnings( "unchecked" ) Intertwine<T> existingIntertwine = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
-			if( existingIntertwine != null )
-				return existingIntertwine;
-		}
+			@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
+			return result;
+		} );
+		if( existingIntertwine != null )
+			return existingIntertwine;
 
 		/**
 		 * Then, and while the cache is _not_ locked, invoke the other {@link IntertwineFactory} to create the requested {@link Intertwine}.
@@ -70,13 +71,13 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		 * {@link Intertwine} has already been cached by now; if so, then discard the newly created instance and return the cached one.
 		 * Otherwise, cache the new instance and return it.
 		 */
-		synchronized( cache )
+		return Kit.sync.synchronize( cache, () ->
 		{
-			@SuppressWarnings( "unchecked" ) Intertwine<T> existingIntertwine = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
-			if( existingIntertwine != null )
-				return existingIntertwine;
+			@SuppressWarnings( "unchecked" ) Intertwine<T> existing = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
+			if( existing != null )
+				return existing;
 			Kit.map.add( cache, interfaceType, intertwine );
 			return intertwine;
-		}
+		} );
 	}
 }

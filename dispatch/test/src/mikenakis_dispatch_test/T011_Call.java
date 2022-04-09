@@ -24,7 +24,7 @@ public class T011_Call
 	@Test
 	public void Call_Works()
 	{
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		Kit.tryWith( AutonomousDispatcher.of( mutationContext, Clock.systemUTC() ), dispatcher -> //
 		{
 			this.dispatcher = dispatcher;
@@ -39,21 +39,21 @@ public class T011_Call
 	private void call1()
 	{
 		Log.debug( "call1" );
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		thread2.worker().callBack( this::call2 );
 	}
 
 	private void call2()
 	{
 		Log.debug( "call2" );
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		thread2.worker().callBack( this::call3 );
 	}
 
 	private void call3()
 	{
 		Log.debug( "call3" );
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		dispatcher.quit();
 	}
 }

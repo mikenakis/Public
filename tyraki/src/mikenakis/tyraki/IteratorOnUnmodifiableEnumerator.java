@@ -41,7 +41,7 @@ public final class IteratorOnUnmodifiableEnumerator<T> implements Iterator<T>
 		assert !mustMoveNext; //next() was invoked without first invoking hasNext().  Strictly speaking, this is not an error, but it should not really be happening.
 		assert !enumerator.isFinished() : new NoSuchElementException();
 		mustMoveNext = true;
-		return enumerator.getCurrent();
+		return enumerator.current();
 	}
 
 	@Override public void remove()

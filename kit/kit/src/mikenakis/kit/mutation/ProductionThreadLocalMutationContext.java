@@ -13,7 +13,7 @@ final class ProductionThreadLocalMutationContext implements MutationContext
 	{
 	}
 
-	@Override public boolean isInContextAssertion()
+	@Override public boolean inContextAssertion()
 	{
 		throw new AssertionError(); //this method should never be invoked in production.
 	}

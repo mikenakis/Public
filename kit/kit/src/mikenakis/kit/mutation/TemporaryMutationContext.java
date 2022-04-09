@@ -18,7 +18,7 @@ public class TemporaryMutationContext implements MutationContext, Closeable.Defa
 		constructionThread = Thread.currentThread();
 	}
 
-	@Override public boolean isInContextAssertion()
+	@Override public boolean inContextAssertion()
 	{
 		assert isAliveAssertion();
 		return true;

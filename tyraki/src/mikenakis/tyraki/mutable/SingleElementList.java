@@ -103,7 +103,7 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 			return index >= size();
 		}
 
-		@Override public T getCurrent()
+		@Override public T current()
 		{
 			assert canReadAssertion();
 			assert getModificationCount() == expectedModCount : new ConcurrentModificationException();

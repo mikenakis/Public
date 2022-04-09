@@ -48,7 +48,7 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 					return index >= list.size();
 				}
 
-				@Override public Binding<Integer,V> getCurrent()
+				@Override public Binding<Integer,V> current()
 				{
 					return MapEntry.of( index, list.get( index ) );
 				}

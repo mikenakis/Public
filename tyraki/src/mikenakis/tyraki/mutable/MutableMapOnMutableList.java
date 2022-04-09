@@ -56,7 +56,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 			return index >= values.size();
 		}
 
-		@Override public Binding<Integer,V> getCurrent()
+		@Override public Binding<Integer,V> current()
 		{
 			assert canReadAssertion();
 			V element = values.get( index );

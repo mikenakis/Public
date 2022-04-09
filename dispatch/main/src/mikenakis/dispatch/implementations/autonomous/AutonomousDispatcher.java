@@ -7,10 +7,8 @@ import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.logging.Log;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.ref.Ref;
 import mikenakis.publishing.bespoke.Publisher;
 import mikenakis.publishing.bespoke.Subscription;
 
@@ -19,7 +17,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -160,27 +157,6 @@ public final class AutonomousDispatcher extends Mutable implements Dispatcher, C
 		{
 			assert outOfContextAssertion();
 			queue.add( procedure );
-		}
-
-		@Override public <R> R call( Function0<R> function )
-		{
-			assert outOfContextAssertion();
-			Ref<R> resultRef = Ref.of( null );
-			CountDownLatch latch = new CountDownLatch( 1 );
-			post( () -> //
-			{
-				assert Thread.currentThread() == dispatcherThread;
-				resultRef.value = function.invoke();
-				latch.countDown();
-			} );
-			for( ; ; )
-			{
-				if( Kit.unchecked( () -> latch.await( 1000, TimeUnit.MILLISECONDS ) ) )
-					break;
-				Log.warning( "waiting..." );
-			}
-			assert latch.getCount() == 0;
-			return resultRef.value;
 		}
 	}
 }

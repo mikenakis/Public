@@ -1,7 +1,13 @@
 package mikenakis.dispatch;
 
+import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
+import mikenakis.kit.logging.Log;
+import mikenakis.kit.ref.Ref;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Allows using some functionality of a {@link Dispatcher} from a different thread.
@@ -10,6 +16,7 @@ public interface DispatcherProxy
 {
 	/**
 	 * Asserts that we are NOT running in the context of the {@link Dispatcher}.
+	 * TODO: get rid of! this assertion should be unnecessary, since post() must contain this assertion.
 	 */
 	boolean outOfContextAssertion();
 
@@ -28,5 +35,23 @@ public interface DispatcherProxy
 	 *
 	 * @return the return value of the function.
 	 */
-	<R> R call( Function0<R> function );
+	default <R> R call( Function0<R> function )
+	{
+		assert outOfContextAssertion();
+		Ref<R> resultRef = Ref.of( null );
+		CountDownLatch latch = new CountDownLatch( 1 );
+		post( () -> //
+		{
+			resultRef.value = function.invoke();
+			latch.countDown();
+		} );
+		for( ; ; )
+		{
+			if( Kit.unchecked( () -> latch.await( 1000, TimeUnit.MILLISECONDS ) ) )
+				break;
+			Log.warning( "waiting..." );
+		}
+		assert latch.getCount() == 0;
+		return resultRef.value;
+	}
 }

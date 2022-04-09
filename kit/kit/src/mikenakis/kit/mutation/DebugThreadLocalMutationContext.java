@@ -21,7 +21,7 @@ final class DebugThreadLocalMutationContext implements MutationContext
 		constructionThread = Thread.currentThread();
 	}
 
-	@Override public boolean isInContextAssertion()
+	@Override public boolean inContextAssertion()
 	{
 		assert Thread.currentThread() == constructionThread;
 		return true;

@@ -46,10 +46,10 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 			return secondaryEnumerator == null;
 		}
 
-		@Override public T getCurrent()
+		@Override public T current()
 		{
 			assert secondaryEnumerator != null;
-			return secondaryEnumerator.getCurrent();
+			return secondaryEnumerator.current();
 		}
 
 		@Override public UnmodifiableEnumerator<T> moveNext()
@@ -68,7 +68,7 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 			{
 				if( primaryEnumerator.isFinished() )
 					return null;
-				E primaryElement = primaryEnumerator.getCurrent();
+				E primaryElement = primaryEnumerator.current();
 				primaryEnumerator.moveNext();
 				UnmodifiableEnumerable<T> secondaryEnumerable = multiplier.invoke( primaryElement );
 				UnmodifiableEnumerator<T> secondaryEnumerator = secondaryEnumerable.newUnmodifiableEnumerator();

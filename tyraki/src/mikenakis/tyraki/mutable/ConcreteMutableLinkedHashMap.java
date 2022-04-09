@@ -296,7 +296,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return currentNode == null;
 		}
 
-		@Override public Item getCurrent()
+		@Override public Item current()
 		{
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();

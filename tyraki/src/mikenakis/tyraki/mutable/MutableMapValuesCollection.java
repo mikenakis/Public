@@ -73,7 +73,7 @@ class MutableMapValuesCollection<K, V> extends AbstractMutableCollection<V>
 	{
 		for( MutableEnumerator<V> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
 		{
-			if( enumerator.getCurrent() == element )
+			if( enumerator.current() == element )
 			{
 				enumerator.deleteCurrent();
 				return true;

@@ -24,11 +24,11 @@ class FlatteningCollection<T, E> extends FlatteningEnumerable<T,E> implements Un
 		UnmodifiableEnumerator<E> primaryEnumerator = primaryCollection.newUnmodifiableEnumerator();
 		if( primaryEnumerator.isFinished() )
 			return true;
-		EqualityComparator<? super T> equalityComparator = multiplier.invoke( primaryEnumerator.getCurrent() ).getEqualityComparator();
+		EqualityComparator<? super T> equalityComparator = multiplier.invoke( primaryEnumerator.current() ).getEqualityComparator();
 		primaryEnumerator.moveNext();
 		while( !primaryEnumerator.isFinished() )
 		{
-			assert multiplier.invoke( primaryEnumerator.getCurrent() ).getEqualityComparator().equals( equalityComparator );
+			assert multiplier.invoke( primaryEnumerator.current() ).getEqualityComparator().equals( equalityComparator );
 			primaryEnumerator.moveNext();
 		}
 		return true;

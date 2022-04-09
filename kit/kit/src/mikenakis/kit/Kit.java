@@ -7,6 +7,7 @@ import mikenakis.kit.collections.MappingIterable;
 import mikenakis.kit.collections.OptionalsFlatMappingIterable;
 import mikenakis.kit.collections.UnmodifiableIterable;
 import mikenakis.kit.collections.UnmodifiableIterator;
+import mikenakis.kit.debug.Debug;
 import mikenakis.kit.functional.BooleanFunction1;
 import mikenakis.kit.functional.BooleanFunction1Double;
 import mikenakis.kit.functional.Function0;
@@ -69,6 +70,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -81,7 +83,7 @@ public final class Kit
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
 	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
-	public static boolean inTry;
+	public static boolean expectingException;
 
 	private Kit() { }
 
@@ -1946,9 +1948,9 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debugging helpers (try-catch, try-finally, etc.)
 
-	private static boolean bypassTryCatch()
+	private static boolean debugging()
 	{
-		if( inTry )
+		if( expectingException )
 			return false;
 		return areAssertionsEnabled();
 	}
@@ -1984,7 +1986,7 @@ public final class Kit
 	 */
 	public static <R> R tryGetCatch( Function0<R> tryFunction, ThrowingFunction1<R,Throwable,Throwable> catchFunction )
 	{
-		if( bypassTryCatch() )
+		if( debugging() )
 			return tryFunction.invoke();
 		else
 		{
@@ -2023,10 +2025,8 @@ public final class Kit
 	 */
 	public static void tryCatch( Procedure0 tryProcedure, ThrowingProcedure1<Throwable,Throwable> catchProcedure )
 	{
-		if( bypassTryCatch() )
-		{
+		if( debugging() )
 			tryProcedure.invoke();
-		}
 		else
 		{
 			try
@@ -2062,7 +2062,7 @@ public final class Kit
 	 */
 	public static Optional<Throwable> tryCatch( Procedure0 tryProcedure )
 	{
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			tryProcedure.invoke();
 			return Optional.empty();
@@ -2111,7 +2111,7 @@ public final class Kit
 	 */
 	public static <R> R tryFinally( Function0<R> tryFunction, Procedure0 finallyHandler )
 	{
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			R result = tryFunction.invoke();
 			finallyHandler.invoke();
@@ -2158,7 +2158,7 @@ public final class Kit
 	 */
 	public static void tryFinally( Procedure0 tryProcedure, Procedure0 finallyHandler )
 	{
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			tryProcedure.invoke();
 			finallyHandler.invoke();
@@ -2214,7 +2214,7 @@ public final class Kit
 	public static <C extends Closeable, R> R tryGetWith( C closeable, Function1<R,? super C> tryFunction )
 	{
 		assert closeable != null;
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			R result = tryFunction.invoke( closeable );
 			closeable.close();
@@ -2245,7 +2245,7 @@ public final class Kit
 	public static <C extends Closeable, R> R tryGetWith( C closeable, Function0<R> tryFunction )
 	{
 		assert closeable != null;
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			R result = tryFunction.invoke();
 			closeable.close();
@@ -2293,7 +2293,7 @@ public final class Kit
 	 */
 	public static <C extends Closeable> void tryWith( C closeable, Procedure1<? super C> tryProcedure )
 	{
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			tryProcedure.invoke( closeable );
 			closeable.close();
@@ -2329,7 +2329,7 @@ public final class Kit
 	 */
 	public static <C extends Closeable> void tryWith( C closeable, Procedure0 tryProcedure )
 	{
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			tryProcedure.invoke();
 			closeable.close();
@@ -2422,7 +2422,7 @@ public final class Kit
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
 		C closeable = f.invoke();
 		assert closeable != null;
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			R result = unchecked( () -> tryFunction.invoke( closeable ) );
 			unchecked( closeable::close );
@@ -2448,7 +2448,7 @@ public final class Kit
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
 		C closeable = f.invoke();
 		assert closeable != null;
-		if( bypassTryCatch() )
+		if( debugging() )
 		{
 			unchecked( () -> tryProcedure.invoke( closeable ) );
 			unchecked( closeable::close );
@@ -3159,47 +3159,74 @@ public final class Kit
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Synchronization
 
-	public static void synchronize( Lock lock, Procedure0 procedure )
+	public static final class sync
 	{
-		if( bypassTryCatch() )
+		public static <T> void assertAndSet( AtomicReference<T> atomicReference, T expectedValue, T newValue )
 		{
-			lock.lock();
-			procedure.invoke();
-			lock.unlock();
+			boolean ok = atomicReference.compareAndSet( expectedValue, newValue );
+			assert ok;
 		}
-		else
-		{
-			lock.lock();
-			try
-			{
-				procedure.invoke();
-			}
-			finally
-			{
-				lock.unlock();
-			}
-		}
-	}
 
-	public static <T> T synchronize( Lock lock, Function0<T> function )
-	{
-		if( bypassTryCatch() )
+		public static void synchronize( Object lock, Procedure0 procedure )
 		{
-			lock.lock();
-			T result = function.invoke();
-			lock.unlock();
-			return result;
-		}
-		else
-		{
-			lock.lock();
-			try
+			//noinspection SynchronizationOnLocalVariableOrMethodParameter
+			synchronized( lock )
 			{
-				return function.invoke();
+				Debug.boundary( procedure );
 			}
-			finally
+		}
+
+		public static <T> T synchronize( Object lock, Function0<T> function )
+		{
+			//noinspection SynchronizationOnLocalVariableOrMethodParameter
+			synchronized( lock )
 			{
+				return Debug.boundary( function );
+			}
+		}
+
+		public static void lock( Lock lock, Procedure0 procedure )
+		{
+			if( debugging() )
+			{
+				lock.lock();
+				procedure.invoke();
 				lock.unlock();
+			}
+			else
+			{
+				lock.lock();
+				try
+				{
+					procedure.invoke();
+				}
+				finally
+				{
+					lock.unlock();
+				}
+			}
+		}
+
+		public static <T> T lock( Lock lock, Function0<T> function )
+		{
+			if( debugging() )
+			{
+				lock.lock();
+				T result = function.invoke();
+				lock.unlock();
+				return result;
+			}
+			else
+			{
+				lock.lock();
+				try
+				{
+					return function.invoke();
+				}
+				finally
+				{
+					lock.unlock();
+				}
 			}
 		}
 	}

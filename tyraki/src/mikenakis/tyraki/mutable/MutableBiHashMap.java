@@ -46,8 +46,8 @@ public class MutableBiHashMap<K, V> extends AbstractMutableHashMap<K,V> implemen
 
 			@Override public void deleteCurrent()
 			{
-				V value = getCurrent().getValue();
-				assert reverse.get( value ) == getCurrent().getKey();
+				V value = current().getValue();
+				assert reverse.get( value ) == current().getKey();
 				wrappedEnumerator.deleteCurrent();
 				reverse.removeKey( value );
 			}

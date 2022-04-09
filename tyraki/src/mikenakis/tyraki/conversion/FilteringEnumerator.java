@@ -26,9 +26,9 @@ class FilteringEnumerator<E> extends AbstractUnmodifiableEnumerator<E>
 		return enumeratorToFilter.isFinished();
 	}
 
-	@Override public E getCurrent()
+	@Override public E current()
 	{
-		return enumeratorToFilter.getCurrent();
+		return enumeratorToFilter.current();
 	}
 
 	@Override public UnmodifiableEnumerator<E> moveNext()
@@ -40,7 +40,7 @@ class FilteringEnumerator<E> extends AbstractUnmodifiableEnumerator<E>
 
 	private void skipToMatch()
 	{
-		while( !enumeratorToFilter.isFinished() && !predicate.test( enumeratorToFilter.getCurrent() ) )
+		while( !enumeratorToFilter.isFinished() && !predicate.test( enumeratorToFilter.current() ) )
 			enumeratorToFilter.moveNext();
 	}
 }

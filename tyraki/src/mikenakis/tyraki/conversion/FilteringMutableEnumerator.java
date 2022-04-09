@@ -35,9 +35,9 @@ final class FilteringMutableEnumerator<E> implements MutableEnumerator.Defaults<
 		return enumeratorToFilter.isFinished();
 	}
 
-	@Override public E getCurrent()
+	@Override public E current()
 	{
-		return enumeratorToFilter.getCurrent();
+		return enumeratorToFilter.current();
 	}
 
 	@Override public UnmodifiableEnumerator<E> moveNext()
@@ -56,7 +56,7 @@ final class FilteringMutableEnumerator<E> implements MutableEnumerator.Defaults<
 
 	private void skipToMatch()
 	{
-		while( !enumeratorToFilter.isFinished() && !predicate.test( enumeratorToFilter.getCurrent() ) )
+		while( !enumeratorToFilter.isFinished() && !predicate.test( enumeratorToFilter.current() ) )
 			enumeratorToFilter.moveNext();
 	}
 }

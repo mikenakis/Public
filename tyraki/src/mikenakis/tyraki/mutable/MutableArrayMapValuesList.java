@@ -72,7 +72,7 @@ final class MutableArrayMapValuesList<K, V> extends AbstractMutableList<V>
 	{
 		for( MutableEnumerator<V> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
 		{
-			if( enumerator.getCurrent() == element )
+			if( enumerator.current() == element )
 			{
 				enumerator.deleteCurrent();
 				return true;

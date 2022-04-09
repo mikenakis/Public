@@ -46,7 +46,7 @@ public abstract class EnumeratorTest
 		Factory<String> factory = onCreateFactory( "a" );
 		MutableEnumerator<String> enumerator = factory.getResults();
 		assert !enumerator.isFinished();
-		assert enumerator.getCurrent().equals( "a" );
+		assert enumerator.current().equals( "a" );
 		assert !enumerator.isFinished();
 		enumerator.moveNext();
 		assert enumerator.isFinished();
@@ -59,7 +59,7 @@ public abstract class EnumeratorTest
 		Factory<String> factory = onCreateFactory( "a" );
 		MutableEnumerator<String> enumerator = factory.getResults();
 		assert !enumerator.isFinished();
-		assert enumerator.getCurrent().equals( "a" );
+		assert enumerator.current().equals( "a" );
 		assert !enumerator.isFinished();
 		enumerator.deleteCurrent();
 		checkForDeleted( enumerator );
@@ -75,13 +75,13 @@ public abstract class EnumeratorTest
 		Factory<String> factory = onCreateFactory( "a", "b", "c" );
 		MutableEnumerator<String> enumerator = factory.getResults();
 		assert !enumerator.isFinished();
-		assert enumerator.getCurrent().equals( "a" );
+		assert enumerator.current().equals( "a" );
 		assert !enumerator.isFinished();
 		enumerator.moveNext();
-		assert enumerator.getCurrent().equals( "b" );
+		assert enumerator.current().equals( "b" );
 		assert !enumerator.isFinished();
 		enumerator.moveNext();
-		assert enumerator.getCurrent().equals( "c" );
+		assert enumerator.current().equals( "c" );
 		assert !enumerator.isFinished();
 		enumerator.moveNext();
 		assert enumerator.isFinished();
@@ -94,16 +94,16 @@ public abstract class EnumeratorTest
 		Factory<String> factory = onCreateFactory( "a", "b", "c" );
 		MutableEnumerator<String> enumerator = factory.getResults();
 		assert !enumerator.isFinished();
-		assert enumerator.getCurrent().equals( "a" );
+		assert enumerator.current().equals( "a" );
 		assert !enumerator.isFinished();
 		enumerator.moveNext();
-		assert enumerator.getCurrent().equals( "b" );
+		assert enumerator.current().equals( "b" );
 		enumerator.deleteCurrent();
 		checkForDeleted( enumerator );
 		enumerator.moveNext();
 		assert collect( factory ).equalsCollection( UnmodifiableCollection.of( "a", "c" ) );
 		assert !enumerator.isFinished();
-		assert enumerator.getCurrent().equals( "c" );
+		assert enumerator.current().equals( "c" );
 		enumerator.deleteCurrent();
 		checkForDeleted( enumerator );
 		enumerator.moveNext();
@@ -115,14 +115,14 @@ public abstract class EnumeratorTest
 
 	private static void checkForFinished( MutableEnumerator<?> enumerator )
 	{
-		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.current() );
 		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 		TestKit.expect( IllegalStateException.class, () -> enumerator.moveNext() );
 	}
 
 	private static void checkForDeleted( MutableEnumerator<?> enumerator )
 	{
-		TestKit.expect( IllegalStateException.class, () -> enumerator.getCurrent() );
+		TestKit.expect( IllegalStateException.class, () -> enumerator.current() );
 		TestKit.expect( IllegalStateException.class, () -> enumerator.deleteCurrent() );
 	}
 
@@ -132,7 +132,7 @@ public abstract class EnumeratorTest
 		MutableCollection<T> collection = SingleThreadedMutableCollections.instance().newArrayList();
 		while( !enumerator.isFinished() )
 		{
-			T element = enumerator.getCurrent();
+			T element = enumerator.current();
 			collection.add( element );
 			enumerator.moveNext();
 		}

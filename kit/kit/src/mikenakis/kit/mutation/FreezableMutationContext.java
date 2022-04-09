@@ -21,14 +21,14 @@ public class FreezableMutationContext implements MutationContext, Closeable.Defa
 
 	private FreezableMutationContext( MutationContext parentMutationContext )
 	{
-		assert parentMutationContext.isInContextAssertion();
+		assert parentMutationContext.inContextAssertion();
 		this.parentMutationContext = parentMutationContext;
 		lifeGuard = StatefulLifeGuard.of( parentMutationContext, this );
 	}
 
-	@Override public boolean isInContextAssertion()
+	@Override public boolean inContextAssertion()
 	{
-		assert parentMutationContext.isInContextAssertion();
+		assert parentMutationContext.inContextAssertion();
 		return true;
 	}
 

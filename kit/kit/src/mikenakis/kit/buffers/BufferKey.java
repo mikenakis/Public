@@ -16,10 +16,8 @@ public final class BufferKey
 
 	private static boolean uniqueAssertion( BufferKey bufferKey )
 	{
-		synchronized( bufferKeys )
-		{
-			Kit.map.add( bufferKeys, bufferKey.name, bufferKey );
-		}
+		Kit.sync.synchronize( bufferKeys, () -> //
+			Kit.map.add( bufferKeys, bufferKey.name, bufferKey ) );
 		return true;
 	}
 

@@ -30,9 +30,9 @@ final class ConvertingMutableEnumerator<T, F> implements MutableEnumerator.Defau
 		return enumeratorToConvert.isFinished();
 	}
 
-	@Override public T getCurrent()
+	@Override public T current()
 	{
-		F item = enumeratorToConvert.getCurrent();
+		F item = enumeratorToConvert.current();
 		return converter.invoke( item );
 	}
 

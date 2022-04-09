@@ -144,7 +144,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 			return currentNode == null;
 		}
 
-		@Override public Item getCurrent()
+		@Override public Item current()
 		{
 			assert modificationCount == LinkedQueue.this.modificationCount : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();

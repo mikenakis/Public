@@ -269,7 +269,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 			return currentNode == null;
 		}
 
-		@Override public T getCurrent()
+		@Override public T current()
 		{
 			assert hashTable.canReadAssertion();
 			assert modificationCount == hashTable.modificationCount : new ConcurrentModificationException();

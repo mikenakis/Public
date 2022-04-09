@@ -179,7 +179,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 			return index >= size;
 		}
 
-		@Override public E getCurrent()
+		@Override public E current()
 		{
 			assert canReadAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();

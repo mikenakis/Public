@@ -31,9 +31,9 @@ class ConvertingUnmodifiableEnumerator<T, F> extends AbstractUnmodifiableEnumera
 		return enumeratorToConvert.isFinished();
 	}
 
-	@Override public T getCurrent()
+	@Override public T current()
 	{
-		F itemToConvert = enumeratorToConvert.getCurrent();
+		F itemToConvert = enumeratorToConvert.current();
 		return converter.invoke( index, itemToConvert );
 	}
 

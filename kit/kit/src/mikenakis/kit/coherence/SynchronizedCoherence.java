@@ -16,7 +16,7 @@ public class SynchronizedCoherence implements Coherence.Defaults
 {
 	private final MutationContext mutationContext = new MutationContext()
 	{
-		@Override public boolean isInContextAssertion()
+		@Override public boolean inContextAssertion()
 		{
 			assert assertCoherence();
 			return true;
@@ -42,7 +42,7 @@ public class SynchronizedCoherence implements Coherence.Defaults
 
 	@Override public <R> R cohere( Function0<R> function )
 	{
-		return Kit.synchronize( lock, () ->
+		return Kit.sync.lock( lock, () ->
 		{
 			if( entered )
 				return function.invoke();
@@ -56,7 +56,7 @@ public class SynchronizedCoherence implements Coherence.Defaults
 
 	@Override public void cohere( Procedure0 procedure )
 	{
-		Kit.synchronize( lock, () ->
+		Kit.sync.lock( lock, () ->
 		{
 			if( entered )
 				procedure.invoke();

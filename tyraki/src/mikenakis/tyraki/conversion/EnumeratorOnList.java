@@ -25,7 +25,7 @@ class EnumeratorOnList<E> extends AbstractUnmodifiableEnumerator<E>
 		return index >= list.size();
 	}
 
-	@Override public E getCurrent()
+	@Override public E current()
 	{
 		assert list.getModificationCount() == initialModCount : new ConcurrentModificationException();
 		assert !isFinished() : new NoSuchElementException();

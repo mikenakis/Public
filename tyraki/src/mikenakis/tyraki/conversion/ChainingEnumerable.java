@@ -78,10 +78,10 @@ final class ChainingEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 			return enumerator == null;
 		}
 
-		@Override public E getCurrent()
+		@Override public E current()
 		{
 			assert !isFinished() : new IllegalStateException();
-			return enumerator.getCurrent();
+			return enumerator.current();
 		}
 
 		@Override public UnmodifiableEnumerator<E> moveNext()

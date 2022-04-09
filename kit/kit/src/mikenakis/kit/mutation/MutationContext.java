@@ -5,7 +5,7 @@ public interface MutationContext
 	/**
 	 * Checks whether it is currently safe to access this {@link MutationContext}.
 	 */
-	boolean isInContextAssertion();
+	boolean inContextAssertion();
 
 	/**
 	 * Checks whether this {@link MutationContext} has been frozen.
@@ -41,7 +41,7 @@ public interface MutationContext
 	 */
 	default boolean canReadAssertion()
 	{
-		assert isFrozen() || isInContextAssertion() : new ReadingDisallowedException( this );
+		assert isFrozen() || inContextAssertion() : new ReadingDisallowedException( this );
 		return true;
 	}
 
@@ -52,7 +52,7 @@ public interface MutationContext
 	 */
 	default boolean canMutateAssertion()
 	{
-		assert !isFrozen() && isInContextAssertion() : new MutationDisallowedException( this );
+		assert !isFrozen() && inContextAssertion() : new MutationDisallowedException( this );
 		return true;
 	}
 }

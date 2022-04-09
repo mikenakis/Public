@@ -24,7 +24,7 @@ public class T010_Post
 	@Test
 	public void Post_Works()
 	{
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		Kit.tryWith( AutonomousDispatcher.of( mutationContext, Clock.systemUTC() ), dispatcher -> //
 		{
 			this.dispatcher = dispatcher;
@@ -39,21 +39,21 @@ public class T010_Post
 	private void post1()
 	{
 		Log.debug( "post1" );
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		thread2.worker().postBack( this::post2 );
 	}
 
 	private void post2()
 	{
 		Log.debug( "post2" );
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		thread2.worker().postBack( this::post3 );
 	}
 
 	private void post3()
 	{
 		Log.debug( "post3" );
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		dispatcher.quit();
 	}
 }

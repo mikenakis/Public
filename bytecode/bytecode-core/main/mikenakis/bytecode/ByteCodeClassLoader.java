@@ -14,11 +14,8 @@ public class ByteCodeClassLoader extends ClassLoader
 
 	public static <T> Class<T> load( ClassLoader parentClassLoader, ByteCodeType byteCodeType )
 	{
-		ByteCodeClassLoader byteCodeClassLoader;
-		synchronized( byteCodeClassLoadersByParent )
-		{
-			byteCodeClassLoader = byteCodeClassLoadersByParent.computeIfAbsent( parentClassLoader, c -> new ByteCodeClassLoader( c ) );
-		}
+		ByteCodeClassLoader byteCodeClassLoader = Kit.sync.synchronize( byteCodeClassLoadersByParent, () -> //
+			byteCodeClassLoadersByParent.computeIfAbsent( parentClassLoader, c -> new ByteCodeClassLoader( c ) ) );
 		return byteCodeClassLoader.load0( byteCodeType );
 	}
 

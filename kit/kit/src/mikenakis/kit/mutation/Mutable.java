@@ -6,7 +6,7 @@ public abstract class Mutable
 
 	protected Mutable( MutationContext mutationContext )
 	{
-		assert mutationContext.isInContextAssertion();
+		assert mutationContext.inContextAssertion();
 		this.mutationContext = mutationContext;
 	}
 

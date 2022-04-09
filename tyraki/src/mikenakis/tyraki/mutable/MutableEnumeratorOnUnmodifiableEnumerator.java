@@ -23,7 +23,7 @@ class MutableEnumeratorOnUnmodifiableEnumerator<T> extends MutableCollectionsSub
 
 	@Override public void deleteCurrent()
 	{
-		T element = getCurrent();
+		T element = current();
 		deleter.invoke( element );
 	}
 }

@@ -47,7 +47,8 @@ public final class TestKit
 
 	private static Throwable invokeAndCatch( Procedure0 procedure )
 	{
-		Kit.inTry = true;
+		assert !Kit.expectingException;
+		Kit.expectingException = true;
 		try
 		{
 			procedure.invoke();
@@ -59,7 +60,8 @@ public final class TestKit
 		}
 		finally
 		{
-			Kit.inTry = false;
+			assert Kit.expectingException;
+			Kit.expectingException = false;
 		}
 	}
 

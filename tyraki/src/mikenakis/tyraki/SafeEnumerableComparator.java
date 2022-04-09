@@ -4,7 +4,6 @@ import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.BooleanFunction2;
 import mikenakis.kit.mutation.FreezableMutationContext;
-import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -49,8 +48,8 @@ public class SafeEnumerableComparator<R> extends Mutable
 		{
 			if( enumeratorA.isFinished() || enumeratorB.isFinished() )
 				return enumeratorA.isFinished() == enumeratorB.isFinished();
-			R elementA = enumeratorA.getCurrent();
-			R elementB = enumeratorB.getCurrent();
+			R elementA = enumeratorA.current();
+			R elementB = enumeratorB.current();
 			MyComparison comparison = new MyComparison( elementA, elementB );
 			if( comparisons.tryAdd( comparison ).isEmpty() )
 				if( !valueComparator.invoke( elementA, elementB ) )

@@ -99,7 +99,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			int count = 0;
 			for( MutableEnumerator<E> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
 			{
-				E element = enumerator.getCurrent();
+				E element = enumerator.current();
 				if( filter.test( element ) )
 				{
 					enumerator.deleteCurrent();
@@ -114,7 +114,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			List<E> legacyList = null;
 			for( MutableEnumerator<E> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
 			{
-				E element = enumerator.getCurrent();
+				E element = enumerator.current();
 				if( filter.test( element ) )
 				{
 					if( legacyList == null )
@@ -131,7 +131,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			assert filter != null : new IllegalArgumentException();
 			for( MutableEnumerator<E> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
 			{
-				E element = enumerator.getCurrent();
+				E element = enumerator.current();
 				if( filter.test( element ) )
 				{
 					enumerator.deleteCurrent();
@@ -145,7 +145,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 		{
 			MutableEnumerator<E> enumerator = newMutableEnumerator();
 			assert !enumerator.isFinished() : new NoSuchElementException();
-			E current = enumerator.getCurrent();
+			E current = enumerator.current();
 			enumerator.deleteCurrent();
 			return current;
 		}
@@ -154,7 +154,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 		{
 			for( MutableEnumerator<E> enumerator = newMutableEnumerator(); !enumerator.isFinished(); enumerator.moveNext() )
 			{
-				E element = enumerator.getCurrent();
+				E element = enumerator.current();
 				if( javaClass.isInstance( element ) )
 				{
 					enumerator.deleteCurrent();

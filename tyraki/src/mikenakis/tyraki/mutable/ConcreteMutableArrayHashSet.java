@@ -152,7 +152,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 		@Override public void deleteCurrent()
 		{
 			assert canMutateAssertion();
-			E key = getCurrent();
+			E key = current();
 			hashSet.remove( key );
 			decoree.deleteCurrent();
 		}

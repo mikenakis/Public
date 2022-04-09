@@ -41,7 +41,7 @@ final class LegacyMutableEnumeratorOnJavaIterator<E> implements MutableEnumerato
 		return !hasCurrent;
 	}
 
-	@Override public E getCurrent()
+	@Override public E current()
 	{
 		assert !isFinished() : new IllegalStateException();
 		return current;

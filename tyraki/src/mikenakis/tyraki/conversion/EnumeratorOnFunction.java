@@ -29,7 +29,7 @@ final class EnumeratorOnFunction<E> extends AbstractUnmodifiableEnumerator<E>
 		return current.isEmpty();
 	}
 
-	@Override public E getCurrent()
+	@Override public E current()
 	{
 		return current.orElseThrow();
 	}
