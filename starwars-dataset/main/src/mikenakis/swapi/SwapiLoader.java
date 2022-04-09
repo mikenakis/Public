@@ -131,6 +131,7 @@ public final class SwapiLoader
 			else
 			{
 				String url = SOURCE_URL + entityTypeName + "/";
+				Log.debug( "File '" + file + "' does not exist, will download from " + url );
 				readFromSwapi( url, mutableObjects );
 				writeIntoFile( file, "This file is part of the SWAPI project. It was downloaded from " + url, mutableObjects );
 			}
@@ -176,7 +177,10 @@ public final class SwapiLoader
 	{
 		//DO NOT USE! see header comment.
 		if( Kit.get( true ) )
+		{
+			Log.debug( "Downloading has been disabled." );
 			throw new AssertionError();
+		}
 		for( ; ; )
 		{
 			System.out.println( "Sending SWAPI request: " + url );
