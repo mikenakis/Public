@@ -15,9 +15,9 @@ import java.util.Optional;
 public class TextTable
 {
 	public final String name;
-	final Map<Integer,TextRow> rowsById = new HashMap<>();
+	private final Map<Integer,TextRow> rowsById = new HashMap<>();
 
-	public TextTable( String name )
+	TextTable( String name )
 	{
 		this.name = name;
 	}

@@ -1,6 +1,7 @@
 package mikenakis.swapi;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.logging.Log;
 import mikenakis.swapi.modeling.TextRow;
 import mikenakis.swapi.modeling.TextTable;
 import org.json.JSONArray;
@@ -44,7 +45,15 @@ public final class SwapiLoader
 	 * (If the code path that downloads files is reached, an exception will be thrown.)
 	 */
 	private static final String SOURCE_URL = "http://swapi.co/api/";
+	private static final Path filesPath = getFilesPath();
 	private final Swapi swapi;
+
+	private static Path getFilesPath()
+	{
+		Path result = Path.of( System.getProperty( "user.dir" ), "files" );
+		Log.debug( "files path: " + result );
+		return result;
+	}
 
 	/**
 	 * Constructor.
@@ -112,7 +121,7 @@ public final class SwapiLoader
 		}
 		else
 		{
-			Path path = Path.of( System.getProperty( "user.dir" ), "files", entityTypeName + ".txt" );
+			Path path = filesPath.resolve( entityTypeName + ".txt" );
 			File file = path.toAbsolutePath().toFile();
 			if( file.exists() )
 			{
