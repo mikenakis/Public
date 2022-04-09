@@ -1,5 +1,6 @@
 package mikenakis.swapi.test;
 
+import mikenakis.kit.Kit;
 import mikenakis.swapi.Swapi;
 import mikenakis.swapi.SwapiFixer;
 import mikenakis.swapi.SwapiLoader;
@@ -22,6 +23,8 @@ public class T010_Swapi
 {
 	public T010_Swapi()
 	{
+		if( !Kit.areAssertionsEnabled() )
+			throw new AssertionError();
 	}
 
 	private static String getPintableField( TextRow textRow, String fieldName )
