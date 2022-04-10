@@ -14,12 +14,18 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "pom.xml" }}
+          - v1-dependencies-{{ find . -type f -regex ".*/pom.xml" -exec cat {} \; | checksum }}
           - v1-dependencies-
       - run: mvn dependency:go-offline
       - run: mvn -s .circleci/mvn-settings.xml clean | grep -Ev "Download(ing|ed)"
       - run: mvn -s .circleci/mvn-settings.xml install | grep -Ev "Download(ing|ed)"
       - run: mvn -s .circleci/mvn-settings.xml deploy -DskipTests -Dmaven.install.skip=true
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
       - save_cache:
           paths:
             - ~/.m2
