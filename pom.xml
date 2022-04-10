@@ -126,6 +126,10 @@
 							We correct this problem here by annihilating the plugin's concept of inclusions. -->
 						<include>**/*.java</include>
 					</includes>
+					<argLine>--enable-preview</argLine>
+					<!-- magical incantation needed for the enable-preview option to work, from https://stackoverflow.com/a/69754577/773113 -->
+					<reuseForks>true</reuseForks>
+					<useFile>false</useFile>
 				</configuration>
 			</plugin>
 
