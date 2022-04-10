@@ -1,7 +1,7 @@
 package mikenakis_dispatch_test;
 
+import mikenakis.dispatch.EventDriver;
 import mikenakis.dispatch.Dispatcher;
-import mikenakis.dispatch.DispatcherProxy;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 
@@ -10,16 +10,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 final class Echo implements Runnable
 {
+	private final EventDriver eventDriver;
 	private final Dispatcher dispatcher;
-	private final DispatcherProxy dispatcherProxy;
 	private final Thread thread;
 	private final BlockingQueue<Procedure0> queue = new LinkedBlockingQueue<>();
 	private boolean running;
 
-	Echo( Dispatcher dispatcher )
+	Echo( EventDriver eventDriver )
 	{
-		this.dispatcher = dispatcher;
-		dispatcherProxy = dispatcher.proxy();
+		this.eventDriver = eventDriver;
+		dispatcher = eventDriver.dispatcher();
 		thread = Thread.currentThread();
 	}
 
@@ -36,7 +36,7 @@ final class Echo implements Runnable
 	void quit()
 	{
 		assert Thread.currentThread() != thread;
-		assert dispatcher.isInContextAssertion();
+		assert eventDriver.isInContextAssertion();
 		queue.add( () -> //
 		{
 			assert Thread.currentThread() == thread;
@@ -47,14 +47,14 @@ final class Echo implements Runnable
 	void callBack( Procedure0 receiver )
 	{
 		assert Thread.currentThread() != thread;
-		assert dispatcher.isInContextAssertion();
+		assert eventDriver.isInContextAssertion();
 		queue.add( () -> //
 		{
 			assert Thread.currentThread() == thread;
-			dispatcherProxy.call( () -> //
+			dispatcher.call( () -> //
 			{
 				assert Thread.currentThread() != thread;
-				assert dispatcher.isInContextAssertion();
+				assert eventDriver.isInContextAssertion();
 				receiver.invoke();
 				return null;
 			} );
@@ -64,14 +64,14 @@ final class Echo implements Runnable
 	void postBack( Procedure0 receiver )
 	{
 		assert Thread.currentThread() != thread;
-		assert dispatcher.isInContextAssertion();
+		assert eventDriver.isInContextAssertion();
 		queue.add( () -> //
 		{
 			assert Thread.currentThread() == thread;
-			dispatcherProxy.post( () -> //
+			dispatcher.post( () -> //
 			{
 				assert Thread.currentThread() != thread;
-				assert dispatcher.isInContextAssertion();
+				assert eventDriver.isInContextAssertion();
 				receiver.invoke();
 			} );
 		} );

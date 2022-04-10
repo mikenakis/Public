@@ -1,98 +1,50 @@
 package mikenakis.dispatch;
 
+import mikenakis.kit.Kit;
+import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.publishing.bespoke.Subscription;
+import mikenakis.kit.logging.Log;
+import mikenakis.kit.ref.Ref;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Allows code from outside an event-driven system to execute functions within the event driven system.
+ */
 public interface Dispatcher
 {
 	/**
-	 * Obtains the {@link DispatcherProxy} of this {@link Dispatcher}.
-	 */
-	DispatcherProxy proxy();
-
-	/**
-	 * Adds a subscriber to the 'quit' event.
-	 * Can only be invoked in-context.
-	 * Use this to add handlers to be invoked when this {@link Dispatcher} quits.
-	 */
-	Subscription<Procedure0> newQuitEventSubscription( Procedure0 subscriber );
-
-	/**
-	 * Adds a subscriber to the 'idle' event.
-	 * Can only be invoked in-context.
-	 * Use this to add handlers to be invoked when this {@link Dispatcher} becomes idle.
-	 */
-	Subscription<Procedure0> newIdleEventSubscription( Procedure0 subscriber );
-
-	/**
-	 * Requests this {@link Dispatcher} to quit.
+	 * Invokes a method in the context of the {@link EventDriver}.
 	 *
-	 * The {@link Dispatcher} will quit after the processing of the current event has ended,
-	 * and possibly also after all events in the current event burst have been processed.
+	 * @param procedure0 the method to invoke.
 	 */
-	void quit();
+	void post( Procedure0 procedure0 );
 
 	/**
-	 * Checks whether this {@link Dispatcher} is running.
+	 * Invokes a method in the context of the {@link EventDriver}, waits for it to finish, and returns the result.
+	 *
+	 * @param function the function to invoke.
+	 * @param <R>      the type of the return value of the function.
+	 *
+	 * @return the return value of the function.
 	 */
-	boolean isRunning();
-
-	/**
-	 * Causes a handler to be invoked once on the next idle event, and then automatically un-subscribed, for convenience.
-	 */
-	default void onNextIdle( Procedure0 handler )
+	default <R> R call( Function0<R> function )
 	{
-		assert mutationContext().inContextAssertion();
-		final class AutoRemovableHandler implements Procedure0
+		Ref<R> resultRef = Ref.of( null );
+		CountDownLatch latch = new CountDownLatch( 1 );
+		post( () -> //
 		{
-			private final Procedure0 delegee;
-			private final Subscription<Procedure0> subscription;
-
-			private AutoRemovableHandler( Procedure0 delegee )
-			{
-				this.delegee = delegee;
-				subscription = newIdleEventSubscription( this );
-			}
-
-			@Override public void invoke()
-			{
-				subscription.close();
-				delegee.invoke();
-			}
+			resultRef.value = function.invoke();
+			latch.countDown();
+		} );
+		for( ; ; )
+		{
+			if( Kit.unchecked( () -> latch.await( 1000, TimeUnit.MILLISECONDS ) ) )
+				break;
+			Log.warning( "waiting..." );
 		}
-		new AutoRemovableHandler( handler );
-	}
-
-	/**
-	 * Obtains the {@link MutationContext} of this {@link Dispatcher}.
-	 */
-	MutationContext mutationContext();
-
-	/**
-	 * Asserts that we are currently executing within the {@link MutationContext} of this dispatcher.
-	 */
-	default boolean isInContextAssertion()
-	{
-		assert mutationContext().inContextAssertion();
-		return true;
-	}
-
-	/**
-	 * Asserts that it is safe to perform read operations in the {@link MutationContext} of this dispatcher.
-	 */
-	default boolean canReadAssertion()
-	{
-		assert mutationContext().canReadAssertion();
-		return true;
-	}
-
-	/**
-	 * Asserts that it is safe to perform mutation operations in the {@link MutationContext} of this dispatcher.
-	 */
-	default boolean canMutateAssertion()
-	{
-		assert mutationContext().canMutateAssertion();
-		return true;
+		assert latch.getCount() == 0;
+		return resultRef.value;
 	}
 }

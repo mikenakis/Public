@@ -1,7 +1,7 @@
 package mikenakis.io.sync.binary.stream.writing.helpers;
 
+import mikenakis.dispatch.EventDriver;
 import mikenakis.dispatch.Dispatcher;
-import mikenakis.dispatch.DispatcherProxy;
 import mikenakis.io.async.binary.stream.reading.helpers.AsyncBufferStreamReader;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
@@ -14,20 +14,20 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Concurrent {@link BufferStreamWriter} and {@link AsyncBufferStreamReader} in memory.
- * The {@link AsyncBufferStreamReader} must be invoked from the dispatcher thread and calls back into the dispatcher thread.
- * The {@link BufferStreamWriter} must be invoked from the remoteDispatcher thread and calls back into th remoteDispatcher thread.
+ * The {@link AsyncBufferStreamReader} must be invoked from the {@link EventDriver} thread and calls back into the {@link EventDriver} thread.
+ * The {@link BufferStreamWriter} must be invoked from the {@link Dispatcher} thread and calls back into the {@link Dispatcher} thread.
  *
  * @author michael.gr
  */
 public class ConcurrentInMemoryBufferStream
 {
-	public static ConcurrentInMemoryBufferStream of( Dispatcher dispatcher, DispatcherProxy remoteDispatcherProxy )
+	public static ConcurrentInMemoryBufferStream of( EventDriver eventDriver, Dispatcher remoteDispatcher )
 	{
-		return new ConcurrentInMemoryBufferStream( dispatcher, remoteDispatcherProxy );
+		return new ConcurrentInMemoryBufferStream( eventDriver, remoteDispatcher );
 	}
 
-	private final Dispatcher dispatcher;
-	private final DispatcherProxy remoteDispatcherProxy;
+	private final EventDriver eventDriver;
+	private final Dispatcher remoteDispatcher;
 	private final BlockingQueue<Buffer> buffers = new LinkedBlockingQueue<>();
 
 	private final AtomicReference<Procedure1<Optional<Buffer>>> pendingReceiverReference = new AtomicReference<>();
@@ -36,7 +36,7 @@ public class ConcurrentInMemoryBufferStream
 	{
 		@Override public boolean isBusy()
 		{
-			assert dispatcher.isInContextAssertion();
+			assert eventDriver.isInContextAssertion();
 			return pendingReceiverReference.get() != null;
 		}
 		@Override public void readBuffer( Procedure1<Optional<Buffer>> receiver )
@@ -47,7 +47,7 @@ public class ConcurrentInMemoryBufferStream
 				assert b != null;
 				return b;
 			} );
-			dispatcher.proxy().post( () -> tick() );
+			eventDriver.dispatcher().post( () -> tick() );
 		}
 	};
 
@@ -56,41 +56,41 @@ public class ConcurrentInMemoryBufferStream
 		@Override public void writeBuffer( Buffer buffer )
 		{
 			buffers.add( buffer );
-			//remoteDispatcherProxy.post( () -> tick() );
-			//dispatcher.proxy().post( () -> tick() );
+			//remoteDispatcher.post( () -> tick() );
+			//eventDriver.proxy().post( () -> tick() );
 			tick();
 		}
 	};
 
-	private ConcurrentInMemoryBufferStream( Dispatcher dispatcher, DispatcherProxy remoteDispatcherProxy )
+	private ConcurrentInMemoryBufferStream( EventDriver eventDriver, Dispatcher remoteDispatcher )
 	{
-		assert dispatcher.isInContextAssertion();
-		this.dispatcher = dispatcher;
-		this.remoteDispatcherProxy = remoteDispatcherProxy;
+		assert eventDriver.isInContextAssertion();
+		this.eventDriver = eventDriver;
+		this.remoteDispatcher = remoteDispatcher;
 	}
 
 	public BufferStreamWriter writer()
 	{
-		assert dispatcher.mutationContext().inContextAssertion();
+		assert eventDriver.mutationContext().inContextAssertion();
 		return writer;
 	}
 
 	public AsyncBufferStreamReader reader()
 	{
-		assert dispatcher.mutationContext().inContextAssertion();
+		assert eventDriver.mutationContext().inContextAssertion();
 		return reader;
 	}
 
 	private void tick()
 	{
-		assert dispatcher.isInContextAssertion();
+		assert eventDriver.isInContextAssertion();
 		while( !buffers.isEmpty() )
 		{
 			var receiver = pendingReceiverReference.getAndSet( null );
 			if( receiver == null )
 				break;
 			Buffer buffer = Kit.unchecked( () -> buffers.take() );
-			remoteDispatcherProxy.post( () -> //
+			remoteDispatcher.post( () -> //
 				receiver.invoke( Optional.of( buffer ) ) );
 		}
 	}

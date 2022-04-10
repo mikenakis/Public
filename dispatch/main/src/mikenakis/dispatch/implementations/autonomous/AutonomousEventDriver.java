@@ -1,7 +1,7 @@
 package mikenakis.dispatch.implementations.autonomous;
 
+import mikenakis.dispatch.EventDriver;
 import mikenakis.dispatch.Dispatcher;
-import mikenakis.dispatch.DispatcherProxy;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.Closeable;
@@ -19,29 +19,29 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-public final class AutonomousDispatcher extends Mutable implements Dispatcher, Closeable.Defaults
+public final class AutonomousEventDriver extends Mutable implements EventDriver, Closeable.Defaults
 {
-	public static AutonomousDispatcher of( MutationContext mutationContext, Clock clock )
+	public static AutonomousEventDriver of( MutationContext mutationContext, Clock clock )
 	{
-		return new AutonomousDispatcher( mutationContext, clock );
+		return new AutonomousEventDriver( mutationContext, clock );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Publisher<Procedure0> idleEventPublisher = Publisher.of( mutationContext, Procedure0.class );
 	private final Publisher<Procedure0> quitEventPublisher = Publisher.of( mutationContext, Procedure0.class );
-	private final DispatcherProxy proxy = this::post;
+	private final Dispatcher dispatcher = this::post;
 	private final TickableClock tickableClock;
-	private final Thread dispatcherThread;
+	private final Thread myThread;
 	private final BlockingQueue<Procedure0> queue = new LinkedBlockingQueue<>();
 	private boolean running;
 	private boolean entered;
 	private Instant timeToUnblock = null;
 
-	private AutonomousDispatcher( MutationContext mutationContext, Clock clock )
+	private AutonomousEventDriver( MutationContext mutationContext, Clock clock )
 	{
 		super( mutationContext );
 		tickableClock = new TickableClock( clock );
-		dispatcherThread = Thread.currentThread();
+		myThread = Thread.currentThread();
 	}
 
 	@Override public boolean isAliveAssertion()
@@ -62,7 +62,7 @@ public final class AutonomousDispatcher extends Mutable implements Dispatcher, C
 
 	private void post( Procedure0 procedure )
 	{
-		assert Thread.currentThread() != dispatcherThread;
+		assert Thread.currentThread() != myThread;
 		queue.add( procedure );
 	}
 
@@ -122,9 +122,9 @@ public final class AutonomousDispatcher extends Mutable implements Dispatcher, C
 		procedure.invoke();
 	}
 
-	@Override public DispatcherProxy proxy()
+	@Override public Dispatcher dispatcher()
 	{
-		return proxy;
+		return dispatcher;
 	}
 
 	@Override public Subscription<Procedure0> newQuitEventSubscription( Procedure0 subscriber )

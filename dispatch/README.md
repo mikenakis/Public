@@ -3,30 +3,15 @@
 
 ## Description
 
-`mikenakis-dispatch` is a Java class library that defines the `Dispatcher`
-interface, which represents the heart of an event-driven system, otherwise 
-known as `message pump`, `event loop`, `event driver`, etc.
-
-Unlike other dispatcher implementations, the `post()` and `call()` methods
-are not part of this interface.  Instead, these methods can be found in a
-separate `DispatcherProxy` interface, which can be obtained by invoking
-`Dispatcher.proxy()`. This way, code running outside of the dispatcher
-thread can be given only a `DispatcherProxy` to work with, so that it 
-cannot invoke any of the other methods of the `Dispatcher` interface,
-because these methods only make sense to be invoked from within the 
-dispatcher thread.
-
-A companion `Timekeeper` interface provides a means of creating timers.
+`mikenakis-dispatch` is a Java class library for building event-driven systems.
 
 Two implementations are provided:
 
  - The `fake` implementation, which is useful for testing event-driven software.
- - The `autonomous` implementation, which provides a stand-alone `Dispatcher` for 
-building event-driven systems.
+ - The `autonomous` implementation, which allows building stand-alone (autonomous) event-driven systems.
 
-It is fairly easy to create implementations that encapsulate other existing
-dispatchers. For example, in my private projects I have a `Dispatcher` 
-implementation for AWT/Swing.
+It is fairly easy to create implementations that encapsulate the message pumps of other existing
+event-driven systems, for example the Event Dispatch Thread (EDT) of AWT/Swing.
 
 ## License
 

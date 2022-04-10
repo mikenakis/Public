@@ -17,23 +17,23 @@ import java.time.Instant;
 
 public class AutonomousTimekeeper extends Mutable implements Timekeeper, Closeable.Defaults
 {
-	public static AutonomousTimekeeper of( MutationContext mutationContext, AutonomousDispatcher dispatcher, Clock clock )
+	public static AutonomousTimekeeper of( MutationContext mutationContext, AutonomousEventDriver autonomousEventDriver, Clock clock )
 	{
-		return new AutonomousTimekeeper( mutationContext, dispatcher, clock );
+		return new AutonomousTimekeeper( mutationContext, autonomousEventDriver, clock );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final AutonomousDispatcher autonomousDispatcher;
+	private final AutonomousEventDriver autonomousEventDriver;
 	private final Clock clock;
 	private final MutableCollection<MyTimer> timers = MutableCollections.of( mutationContext ).newLinkedHashSet();
 	private final Subscription<Procedure0> idleEventSubscription;
 
-	private AutonomousTimekeeper( MutationContext mutationContext, AutonomousDispatcher autonomousDispatcher, Clock clock )
+	private AutonomousTimekeeper( MutationContext mutationContext, AutonomousEventDriver autonomousEventDriver, Clock clock )
 	{
 		super( mutationContext );
-		this.autonomousDispatcher = autonomousDispatcher;
+		this.autonomousEventDriver = autonomousEventDriver;
 		this.clock = clock;
-		idleEventSubscription = autonomousDispatcher.newIdleEventSubscription( this::onIdle );
+		idleEventSubscription = autonomousEventDriver.newIdleEventSubscription( this::onIdle );
 	}
 
 	@Override public boolean isAliveAssertion()
@@ -82,7 +82,7 @@ public class AutonomousTimekeeper extends Mutable implements Timekeeper, Closeab
 			Instant timeNow = clock.instant();
 			if( minTimeToFire.isBefore( timeNow ) )
 				minTimeToFire = timeNow;
-			autonomousDispatcher.setTimeToUnblock( minTimeToFire );
+			autonomousEventDriver.setTimeToUnblock( minTimeToFire );
 		}
 	}
 

@@ -1,7 +1,7 @@
 package mikenakis.dispatch.implementations.fake;
 
+import mikenakis.dispatch.EventDriver;
 import mikenakis.dispatch.Dispatcher;
-import mikenakis.dispatch.DispatcherProxy;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.mutation.Mutable;
@@ -14,11 +14,11 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 
-public final class FakeDispatcher extends Mutable implements Dispatcher
+public final class FakeEventDriver extends Mutable implements EventDriver
 {
 	private final Publisher<Procedure0> idleEventPublisher = Publisher.of( mutationContext, Procedure0.class );
 	private final Publisher<Procedure0> quitEventPublisher = Publisher.of( mutationContext, Procedure0.class );
-	private final DispatcherProxy proxy = new DispatcherProxy()
+	private final Dispatcher dispatcher = new Dispatcher()
 	{
 		@Override public void post( Procedure0 procedure )
 		{
@@ -36,7 +36,7 @@ public final class FakeDispatcher extends Mutable implements Dispatcher
 	private final Queue<Procedure0> queue = new LinkedList<>();
 	private boolean running;
 
-	private FakeDispatcher( MutationContext mutationContext )
+	private FakeEventDriver( MutationContext mutationContext )
 	{
 		super( mutationContext );
 		running = true;
@@ -53,9 +53,9 @@ public final class FakeDispatcher extends Mutable implements Dispatcher
 		idleEventPublisher.allSubscribers().invoke();
 	}
 
-	@Override public DispatcherProxy proxy()
+	@Override public Dispatcher dispatcher()
 	{
-		return proxy;
+		return dispatcher;
 	}
 
 	@Override public Subscription<Procedure0> newQuitEventSubscription( Procedure0 subscriber )
@@ -70,7 +70,7 @@ public final class FakeDispatcher extends Mutable implements Dispatcher
 
 	@Override public void quit()
 	{
-		proxy().post( () -> running = false );
+		dispatcher().post( () -> running = false );
 	}
 
 	@Override public boolean isRunning()

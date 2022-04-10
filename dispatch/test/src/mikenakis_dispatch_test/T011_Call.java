@@ -1,7 +1,7 @@
 package mikenakis_dispatch_test;
 
-import mikenakis.dispatch.Dispatcher;
-import mikenakis.dispatch.implementations.autonomous.AutonomousDispatcher;
+import mikenakis.dispatch.EventDriver;
+import mikenakis.dispatch.implementations.autonomous.AutonomousEventDriver;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.mutation.MutationContext;
@@ -19,18 +19,18 @@ public class T011_Call
 {
 	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
 	private Thread2<Echo> thread2;
-	private Dispatcher dispatcher;
+	private EventDriver eventDriver;
 
 	@Test
 	public void Call_Works()
 	{
 		assert mutationContext.inContextAssertion();
-		Kit.tryWith( AutonomousDispatcher.of( mutationContext, Clock.systemUTC() ), dispatcher -> //
+		Kit.tryWith( AutonomousEventDriver.of( mutationContext, Clock.systemUTC() ), autonomousEventDriver -> //
 		{
-			this.dispatcher = dispatcher;
-			thread2 = new Thread2<>( () -> new Echo( dispatcher ) );
+			eventDriver = autonomousEventDriver;
+			thread2 = new Thread2<>( () -> new Echo( eventDriver ) );
 			thread2.worker().postBack( this::call1 );
-			dispatcher.run();
+			autonomousEventDriver.run();
 			thread2.worker().quit();
 			Kit.unchecked( () -> thread2.join() );
 		} );
@@ -54,6 +54,6 @@ public class T011_Call
 	{
 		Log.debug( "call3" );
 		assert mutationContext.inContextAssertion();
-		dispatcher.quit();
+		eventDriver.quit();
 	}
 }
