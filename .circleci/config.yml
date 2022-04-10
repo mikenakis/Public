@@ -12,15 +12,15 @@ jobs:
       - image: cimg/openjdk:16.0.0
     steps:
       - checkout
-#      - restore_cache:
-#          keys:
-#          - v1-dependencies-{{ checksum "pom.xml" }}
-#          - v1-dependencies-
-#      - run: mvn dependency:go-offline
-#      - save_cache:
-#          paths:
-#            - ~/.m2
-#          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "pom.xml" }}
+          - v1-dependencies-
+      - run: mvn dependency:go-offline
       - run: mvn -s .circleci/mvn-settings.xml clean | grep -Ev "Download(ing|ed)"
       - run: mvn -s .circleci/mvn-settings.xml install | grep -Ev "Download(ing|ed)"
       - run: mvn -s .circleci/mvn-settings.xml deploy -DskipTests -Dmaven.install.skip=true
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
