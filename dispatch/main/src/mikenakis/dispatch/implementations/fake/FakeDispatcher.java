@@ -18,14 +18,8 @@ public final class FakeDispatcher extends Mutable implements Dispatcher
 {
 	private final Publisher<Procedure0> idleEventPublisher = Publisher.of( mutationContext, Procedure0.class );
 	private final Publisher<Procedure0> quitEventPublisher = Publisher.of( mutationContext, Procedure0.class );
-
 	private final DispatcherProxy proxy = new DispatcherProxy()
 	{
-		@Override public boolean outOfContextAssertion()
-		{
-			return true;
-		}
-
 		@Override public void post( Procedure0 procedure )
 		{
 			queue.add( procedure );

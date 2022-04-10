@@ -3,7 +3,6 @@ package mikenakis.dispatch.implementations.autonomous;
 import mikenakis.dispatch.Dispatcher;
 import mikenakis.dispatch.DispatcherProxy;
 import mikenakis.kit.Kit;
-import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
@@ -30,7 +29,7 @@ public final class AutonomousDispatcher extends Mutable implements Dispatcher, C
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Publisher<Procedure0> idleEventPublisher = Publisher.of( mutationContext, Procedure0.class );
 	private final Publisher<Procedure0> quitEventPublisher = Publisher.of( mutationContext, Procedure0.class );
-	private final DispatcherProxy proxy = new MyDispatcherProxy();
+	private final DispatcherProxy proxy = this::post;
 	private final TickableClock tickableClock;
 	private final Thread dispatcherThread;
 	private final BlockingQueue<Procedure0> queue = new LinkedBlockingQueue<>();
@@ -59,6 +58,12 @@ public final class AutonomousDispatcher extends Mutable implements Dispatcher, C
 		idleEventPublisher.close();
 		quitEventPublisher.close();
 		lifeGuard.close();
+	}
+
+	private void post( Procedure0 procedure )
+	{
+		assert Thread.currentThread() != dispatcherThread;
+		queue.add( procedure );
 	}
 
 	public Clock clock()
@@ -143,20 +148,5 @@ public final class AutonomousDispatcher extends Mutable implements Dispatcher, C
 	@Override public boolean isRunning()
 	{
 		return running;
-	}
-
-	private class MyDispatcherProxy implements DispatcherProxy
-	{
-		@Override public boolean outOfContextAssertion()
-		{
-			assert Thread.currentThread() != dispatcherThread;
-			return true;
-		}
-
-		@Override public void post( Procedure0 procedure )
-		{
-			assert outOfContextAssertion();
-			queue.add( procedure );
-		}
 	}
 }

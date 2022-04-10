@@ -15,12 +15,6 @@ import java.util.concurrent.TimeUnit;
 public interface DispatcherProxy
 {
 	/**
-	 * Asserts that we are NOT running in the context of the {@link Dispatcher}.
-	 * TODO: get rid of! this assertion should be unnecessary, since post() must contain this assertion.
-	 */
-	boolean outOfContextAssertion();
-
-	/**
 	 * Invokes a method in the context of the {@link Dispatcher}.
 	 *
 	 * @param procedure0 the method to invoke.
@@ -37,7 +31,6 @@ public interface DispatcherProxy
 	 */
 	default <R> R call( Function0<R> function )
 	{
-		assert outOfContextAssertion();
 		Ref<R> resultRef = Ref.of( null );
 		CountDownLatch latch = new CountDownLatch( 1 );
 		post( () -> //

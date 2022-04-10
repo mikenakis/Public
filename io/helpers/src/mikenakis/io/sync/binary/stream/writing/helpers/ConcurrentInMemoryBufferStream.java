@@ -65,20 +65,19 @@ public class ConcurrentInMemoryBufferStream
 	private ConcurrentInMemoryBufferStream( Dispatcher dispatcher, DispatcherProxy remoteDispatcherProxy )
 	{
 		assert dispatcher.isInContextAssertion();
-		assert remoteDispatcherProxy.outOfContextAssertion();
 		this.dispatcher = dispatcher;
 		this.remoteDispatcherProxy = remoteDispatcherProxy;
 	}
 
 	public BufferStreamWriter writer()
 	{
-		//assert dispatcher.proxy().outOfContextAssertion();
+		assert dispatcher.mutationContext().inContextAssertion();
 		return writer;
 	}
 
 	public AsyncBufferStreamReader reader()
 	{
-		//assert dispatcher.mutationContext().isInContextAssertion();
+		assert dispatcher.mutationContext().inContextAssertion();
 		return reader;
 	}
 

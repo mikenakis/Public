@@ -26,7 +26,6 @@ final class Echo implements Runnable
 	@Override public void run()
 	{
 		assert Thread.currentThread() == thread;
-		assert dispatcherProxy.outOfContextAssertion();
 		for( running = true; running; )
 		{
 			Procedure0 procedure = Kit.unchecked( () -> queue.take() );
@@ -41,7 +40,6 @@ final class Echo implements Runnable
 		queue.add( () -> //
 		{
 			assert Thread.currentThread() == thread;
-			assert dispatcherProxy.outOfContextAssertion();
 			running = false;
 		} );
 	}
@@ -53,7 +51,6 @@ final class Echo implements Runnable
 		queue.add( () -> //
 		{
 			assert Thread.currentThread() == thread;
-			assert dispatcherProxy.outOfContextAssertion();
 			dispatcherProxy.call( () -> //
 			{
 				assert Thread.currentThread() != thread;
@@ -71,7 +68,6 @@ final class Echo implements Runnable
 		queue.add( () -> //
 		{
 			assert Thread.currentThread() == thread;
-			assert dispatcherProxy.outOfContextAssertion();
 			dispatcherProxy.post( () -> //
 			{
 				assert Thread.currentThread() != thread;
