@@ -22,9 +22,31 @@ public interface Dispatcher
 	void post( Procedure0 procedure0 );
 
 	/**
+	 * Invokes a method in the context of the {@link EventDriver} and waits for it to finish.
+	 *
+	 * @param procedure the {@link Procedure0} to invoke.
+	 */
+	default void call( Procedure0 procedure )
+	{
+		CountDownLatch latch = new CountDownLatch( 1 );
+		post( () -> //
+		{
+			procedure.invoke();
+			latch.countDown();
+		} );
+		for( ; ; )
+		{
+			if( Kit.unchecked( () -> latch.await( 1000, TimeUnit.MILLISECONDS ) ) )
+				break;
+			Log.warning( "waiting..." );
+		}
+		assert latch.getCount() == 0;
+	}
+
+	/**
 	 * Invokes a method in the context of the {@link EventDriver}, waits for it to finish, and returns the result.
 	 *
-	 * @param function the function to invoke.
+	 * @param function the {@link Function0} to invoke.
 	 * @param <R>      the type of the return value of the function.
 	 *
 	 * @return the return value of the function.

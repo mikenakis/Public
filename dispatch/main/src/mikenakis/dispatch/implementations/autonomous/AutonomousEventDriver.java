@@ -86,12 +86,12 @@ public final class AutonomousEventDriver extends Mutable implements EventDriver,
 		entered = true;
 		assert !running;
 		for( running = true; running; )
-			pumpMessageBurst();
+			processEventBurst();
 		invoke( () -> quitEventPublisher.allSubscribers().invoke() );
 		entered = false;
 	}
 
-	private void pumpMessageBurst()
+	public void processEventBurst()
 	{
 		tickableClock.tick();
 		for( ; ; )
@@ -142,6 +142,7 @@ public final class AutonomousEventDriver extends Mutable implements EventDriver,
 	@Override public void quit()
 	{
 		assert canMutateAssertion();
+		assert running;
 		running = false;
 	}
 
