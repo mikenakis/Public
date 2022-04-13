@@ -13,9 +13,9 @@ final class ProductionLifeGuard implements LifeGuard.Defaults
 	{
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		throw new AssertionError(); //we do not expect this to ever be invoked in production.
+		return true;
 	}
 
 	@Override public void close()

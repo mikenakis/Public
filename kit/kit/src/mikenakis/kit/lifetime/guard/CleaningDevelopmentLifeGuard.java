@@ -38,9 +38,9 @@ public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 		cleanable.clean();
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert !closed : new EndOfLifeException( closeableClass );
+		assert !closed : new MustBeAliveException( closeableClass );
 		return true;
 	}
 

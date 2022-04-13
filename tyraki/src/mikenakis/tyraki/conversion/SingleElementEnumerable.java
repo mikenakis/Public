@@ -29,7 +29,7 @@ final class SingleElementEnumerable<E> implements UnmodifiableEnumerable.Default
 		return 0;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
 		return true;
 	}

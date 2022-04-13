@@ -27,9 +27,9 @@ class ChainingCollection<E> extends AbstractUnmodifiableCollection<E>
 		this.collectionsToChain = collectionsToChain.toList();
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return collectionsToChain.isFrozenAssertion();
+		return collectionsToChain.isImmutableAssertion();
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()

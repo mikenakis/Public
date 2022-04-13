@@ -148,7 +148,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Optional<Item> item = keysToItems.tryGet( key );
 		if( item.isEmpty() )
 			return Optional.empty();
@@ -163,7 +163,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Optional<Item> oldItem = keysToItems.tryGet( key );
 		if( oldItem.isPresent() )
 			return Optional.of( oldItem.get().getValue() );
@@ -177,7 +177,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item newItem = new Item( timestampSeed++, key, value );
 		Optional<Item> oldItem = keysToItems.tryGet( key );
 		if( oldItem.isEmpty() )
@@ -194,7 +194,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Optional<Item> value = keysToItems.tryGet( key );
 		if( value.isEmpty() )
 			return false;
@@ -205,7 +205,7 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( items.isEmpty() )
 			return false;
 		boolean ok1 = keysToItems.clear();

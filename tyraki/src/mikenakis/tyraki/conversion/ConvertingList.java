@@ -17,30 +17,30 @@ import java.util.Optional;
  */
 class ConvertingList<T, F> extends AbstractList<T>
 {
-	private final UnmodifiableList<F> listToConvert;
+	private final UnmodifiableList<F> list;
 	private final TotalConverterWithIndex<? extends T,? super F> converter;
 	private final Function1<Optional<? extends F>,? super T> reverter;
 
-	ConvertingList( UnmodifiableList<F> listToConvert, TotalConverterWithIndex<? extends T,? super F> converter, //
+	ConvertingList( UnmodifiableList<F> list, TotalConverterWithIndex<? extends T,? super F> converter, //
 		Function1<Optional<? extends F>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 	{
 		super( equalityComparator );
-		assert listToConvert != null;
+		assert list != null;
 		assert converter != null;
 		assert reverter != null;
-		this.listToConvert = listToConvert;
+		this.list = list;
 		this.converter = converter;
 		this.reverter = reverter;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return listToConvert.isFrozenAssertion();
+		return list.isImmutableAssertion();
 	}
 
 	@Override public final int size()
 	{
-		return listToConvert.size();
+		return list.size();
 	}
 
 	@Override public final Optional<T> tryGet( T element )
@@ -49,18 +49,18 @@ class ConvertingList<T, F> extends AbstractList<T>
 		int index = indexOf( element );
 		if( index == -1 )
 			return Optional.empty();
-		F foundItem = listToConvert.get( index );
+		F foundItem = list.get( index );
 		return Optional.of( converter.invoke( index, foundItem ) );
 	}
 
 	@Override public int getModificationCount()
 	{
-		return listToConvert.getModificationCount();
+		return list.getModificationCount();
 	}
 
 	@Override public final T get( int index )
 	{
-		F from = listToConvert.get( index );
+		F from = list.get( index );
 		return converter.invoke( index, from );
 	}
 
@@ -69,6 +69,6 @@ class ConvertingList<T, F> extends AbstractList<T>
 		Optional<? extends F> from = reverter.invoke( element );
 		if( from.isEmpty() )
 			return -1;
-		return listToConvert.indexOf( from.get() );
+		return list.indexOf( from.get() );
 	}
 }

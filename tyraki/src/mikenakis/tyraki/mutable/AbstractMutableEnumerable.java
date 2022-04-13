@@ -1,5 +1,6 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.mutation.FreezableMutationContext;
 import mikenakis.tyraki.DebugView;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.UnmodifiableCollection;
@@ -19,9 +20,9 @@ abstract class AbstractMutableEnumerable<E> extends MutableCollectionsSubject im
 		super( mutableCollections );
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return mutationContext.isFrozenAssertion();
+		return mutationContext instanceof FreezableMutationContext freezableMutationContext && freezableMutationContext.mustBeFrozenAssertion();
 	}
 
 	@Override public final int hashCode()

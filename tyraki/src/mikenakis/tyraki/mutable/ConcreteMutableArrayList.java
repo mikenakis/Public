@@ -60,7 +60,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 	 */
 	@SuppressWarnings( "unused" ) public void trimToSize()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		modificationCount++;
 		if( size < elementData.length )
 			elementData = Arrays.copyOf( elementData, size );
@@ -74,19 +74,19 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return size;
 	}
 
 	@Override public int getModificationCount()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return modificationCount;
 	}
 
 	@Override public E get( int index )
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		assert index < size : new ArrayIndexOutOfBoundsException( index );
 		@SuppressWarnings( "unchecked" ) E result = (E)elementData[index];
 		return result;
@@ -94,14 +94,14 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public void replaceAt( int index, E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		//modificationCount++;
 		elementData[index] = element;
 	}
 
 	@Override public void insertAt( int index, E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert index >= 0 : new ArrayIndexOutOfBoundsException();
 		assert index <= size : new ArrayIndexOutOfBoundsException();
 		modificationCount++;
@@ -113,7 +113,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public void removeAt( int index )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert index >= 0 : new ArrayIndexOutOfBoundsException();
 		assert index < size : new ArrayIndexOutOfBoundsException();
 		modificationCount++;
@@ -125,7 +125,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( size == 0 )
 			return false;
 		modificationCount++;
@@ -137,13 +137,13 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return new MyEnumerator();
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return new MyEnumerator();
 	}
 
@@ -162,7 +162,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 		@Override public void deleteCurrent()
 		{
-			assert canMutateAssertion();
+			assert mustBeWritableAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert index < size : new IllegalStateException();
@@ -174,14 +174,14 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 		@Override public boolean isFinished()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			assert !deleted : new IllegalStateException();
 			return index >= size;
 		}
 
 		@Override public E current()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert index < size : new IllegalStateException();
@@ -190,7 +190,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 		@Override public UnmodifiableEnumerator<E> moveNext()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			assert modificationCount == expectedModCount : new ConcurrentModificationException();
 			if( deleted )
 				deleted = false;
@@ -205,7 +205,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 	@Override public Iterator<E> iterator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return new MyIterator();
 	}
 
@@ -220,13 +220,13 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 
 		@Override public boolean hasNext()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return index < size;
 		}
 
 		@SuppressWarnings( "IteratorNextCanNotThrowNoSuchElementException" ) @Override public E next()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return get( index++ );
 		}
 	}

@@ -22,56 +22,56 @@ final class MutableListOnMutableMap<T> extends AbstractMutableList<T>
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return map.size();
 	}
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return map.clear();
 	}
 
 	@Override public void replaceAt( int index, T element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		map.replaceValue( index, element );
 	}
 
 	@Override public void insertAt( int index, T element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert index == size(); //TODO: we can actually insert values, but it is a bit of work. Implement if there is a need.
 		map.add( index, element );
 	}
 
 	@Override public void removeAt( int index )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		map.removeKey( index );
 	}
 
 	@Override public T get( int index )
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return map.get( index );
 	}
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return map.mutableEntries().newMutableEnumerator().map( integerTBinding -> integerTBinding.getValue() );
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return map.entries().newUnmodifiableEnumerator().map( integerTBinding -> integerTBinding.getValue() );
 	}
 
 	@Override public int getModificationCount()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return map.mutableEntries().getModificationCount();
 	}
 }

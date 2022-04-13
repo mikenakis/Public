@@ -5,35 +5,12 @@ package mikenakis.kit.mutation;
  *
  * @author michael.gr
  */
-final class DebugThreadLocalMutationContext implements MutationContext
+final class DebugThreadLocalMutationContext
 {
-	private static final ThreadLocal<DebugThreadLocalMutationContext> instance = ThreadLocal.withInitial( DebugThreadLocalMutationContext::new );
+	private static final ThreadLocal<ThreadMutationContext> instance = ThreadLocal.withInitial( ThreadMutationContext::new );
 
-	static DebugThreadLocalMutationContext instance()
+	static MutationContext instance()
 	{
 		return instance.get();
-	}
-
-	private final Thread constructionThread;
-
-	private DebugThreadLocalMutationContext()
-	{
-		constructionThread = Thread.currentThread();
-	}
-
-	@Override public boolean inContextAssertion()
-	{
-		assert Thread.currentThread() == constructionThread;
-		return true;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return false;
-	}
-
-	@Override public String toString()
-	{
-		return Thread.currentThread() == constructionThread ? "entered" : "not entered";
 	}
 }

@@ -37,13 +37,13 @@ final class MutableArrayMapValuesList<K, V> extends AbstractMutableList<V>
 
 	@Override public MutableEnumerator<V> newMutableEnumerator()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return map.mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getValue() );
 	}
 
 	@Override public UnmodifiableEnumerator<V> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getValue() );
 	}
 

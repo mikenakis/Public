@@ -1,6 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -18,67 +19,67 @@ import java.util.Optional;
  */
 class ConvertingMutableCollection<T, F> extends AbstractUnmodifiableCollection<T> implements MutableCollection.Defaults<T>
 {
-	private final MutableCollection<F> collectionToConvert;
+	private final MutableCollection<F> collection;
 	private final Function1<? extends T,? super F> converter;
 	private final Function1<F,? super T> reverter;
 
-	ConvertingMutableCollection( MutableCollection<F> collectionToConvert, Function1<? extends T,? super F> converter, Function1<F,? super T> reverter,
+	ConvertingMutableCollection( MutableCollection<F> collection, Function1<? extends T,? super F> converter, Function1<F,? super T> reverter,
 		EqualityComparator<? super T> equalityComparator )
 	{
 		super( equalityComparator );
-		this.collectionToConvert = collectionToConvert;
+		this.collection = collection;
 		this.converter = converter;
 		this.reverter = reverter;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public MutationContext mutationContext()
 	{
-		return collectionToConvert.isFrozenAssertion();
+		return collection.mutationContext();
+	}
+
+	@Override public boolean isImmutableAssertion()
+	{
+		return collection.isImmutableAssertion();
 	}
 
 	@Override public final UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
-		UnmodifiableEnumerator<F> unmodifiableEnumerator = collectionToConvert.newUnmodifiableEnumerator();
+		UnmodifiableEnumerator<F> unmodifiableEnumerator = collection.newUnmodifiableEnumerator();
 		return new ConvertingUnmodifiableEnumerator<>( unmodifiableEnumerator, ( i, e ) -> converter.invoke( e ) );
 	}
 
 	@Override public int getModificationCount()
 	{
-		return collectionToConvert.getModificationCount();
+		return collection.getModificationCount();
 	}
 
 	@Override public final int size()
 	{
-		return collectionToConvert.size();
+		return collection.size();
 	}
 
 	@Override public final Optional<T> tryGet( T element )
 	{
 		F from = reverter.invoke( element );
-		Optional<F> foundItem = collectionToConvert.tryGet( from );
+		Optional<F> foundItem = collection.tryGet( from );
 		return foundItem.map( i -> converter.invoke( i ) );
 	}
 
 	@Override public Optional<T> tryAdd( T element )
 	{
 		F from = reverter.invoke( element );
-		return collectionToConvert.tryAdd( from ).map( t -> converter.invoke( t ) );
+		return collection.tryAdd( from ).map( t -> converter.invoke( t ) );
 	}
 
 	@Override public boolean tryRemove( T element )
 	{
 		F from = reverter.invoke( element );
-		return collectionToConvert.tryRemove( from );
-	}
-
-	@Override public boolean canMutateAssertion()
-	{
-		return collectionToConvert.canMutateAssertion();
+		return collection.tryRemove( from );
 	}
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		MutableEnumerator<F> mutableEnumerator = collectionToConvert.newMutableEnumerator();
-		return new ConvertingMutableEnumerator<>( mutableEnumerator, e -> converter.invoke( e ) );
+		MutableEnumerator<F> mutableEnumerator = collection.newMutableEnumerator();
+		return new ConvertingMutableEnumerator<>( mutableEnumerator, converter );
 	}
 }

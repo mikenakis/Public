@@ -3,7 +3,7 @@ package mikenakis_kit_test;
 import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.DevelopmentLifeGuard;
-import mikenakis.kit.lifetime.guard.EndOfLifeException;
+import mikenakis.kit.lifetime.guard.MustBeAliveException;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
@@ -28,10 +28,9 @@ public class T04_LifeGuard
 	{
 		private final LifeGuard lifeGuard = LifeGuard.of( this );
 
-		@Override public boolean isAliveAssertion()
+		@Override public boolean mustBeAliveAssertion()
 		{
-			assert lifeGuard.isAliveAssertion();
-			return true;
+			return lifeGuard.mustBeAliveAssertion();
 		}
 
 		@Override public void close()
@@ -43,9 +42,9 @@ public class T04_LifeGuard
 	@Test public void object_is_not_alive_after_being_closed()
 	{
 		TestClass testObject = new TestClass();
-		assert testObject.isAliveAssertion();
+		assert testObject.mustBeAliveAssertion();
 		testObject.close();
-		var exception = TestKit.expect( EndOfLifeException.class, () -> testObject.isAliveAssertion() );
+		var exception = TestKit.expect( MustBeAliveException.class, () -> testObject.mustBeAliveAssertion() );
 		assert exception.closeableClass == TestClass.class;
 	}
 
@@ -67,7 +66,7 @@ public class T04_LifeGuard
 	private static WeakReference<TestClass> createAndForget()
 	{
 		TestClass testObject = new TestClass();
-		assert testObject.isAliveAssertion();
+		assert testObject.mustBeAliveAssertion();
 		return new WeakReference<>( testObject );
 	}
 }

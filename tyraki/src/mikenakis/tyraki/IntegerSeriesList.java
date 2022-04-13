@@ -4,7 +4,6 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.mutation.NotFrozenException;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -29,7 +28,7 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 		this.length = length;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
 		return true;
 	}

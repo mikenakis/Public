@@ -32,7 +32,7 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 	@Override public Optional<E> tryGet( E element )
 	{
 		assert element != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return list.tryGet( element );
 	}
 
@@ -43,7 +43,7 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public Optional<E> tryAdd( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( list.contains( element ) )
 			return Optional.of( element );
 		list.add( element );
@@ -52,7 +52,7 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( !list.tryRemove( oldElement ) )
 			return false;
 		list.add( newElement );
@@ -61,13 +61,13 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public boolean tryRemove( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return list.tryRemove( element );
 	}
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( list.isEmpty() )
 			return false;
 		list.clear();
@@ -76,13 +76,13 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return list.newMutableEnumerator();
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return newMutableEnumerator();
 	}
 
@@ -94,7 +94,7 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public void replaceAt( int index, E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( getEqualityComparator().equals( element, list.get( index ) ) )
 			return;
 		assert !contains( element );
@@ -103,20 +103,20 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 
 	@Override public void insertAt( int index, E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert !contains( element );
 		list.insertAt( index, element );
 	}
 
 	@Override public void removeAt( int index )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		list.removeAt( index );
 	}
 
 	@Override public E get( int index )
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return list.get( index );
 	}
 }

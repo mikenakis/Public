@@ -17,28 +17,28 @@ class FilteringEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 {
 	@SuppressWarnings( { "unused", "FieldNamingConvention" } )
 	private final DebugView _debugView = DebugView.create( this::toList );
-	private final UnmodifiableEnumerable<E> enumerableToFilter;
+	private final UnmodifiableEnumerable<E> enumerable;
 	final Predicate<? super E> predicate;
 
-	FilteringEnumerable( UnmodifiableEnumerable<E> enumerableToFilter, Predicate<? super E> predicate )
+	FilteringEnumerable( UnmodifiableEnumerable<E> enumerable, Predicate<? super E> predicate )
 	{
-		this.enumerableToFilter = enumerableToFilter;
+		this.enumerable = enumerable;
 		this.predicate = predicate;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return enumerableToFilter.isFrozenAssertion();
+		return enumerable.isImmutableAssertion();
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
-		UnmodifiableEnumerator<E> enumeratorToFilter = enumerableToFilter.newUnmodifiableEnumerator();
+		UnmodifiableEnumerator<E> enumeratorToFilter = enumerable.newUnmodifiableEnumerator();
 		return new FilteringEnumerator<>( enumeratorToFilter, predicate );
 	}
 
 	@Override public int getModificationCount()
 	{
-		return enumerableToFilter.getModificationCount();
+		return enumerable.getModificationCount();
 	}
 }

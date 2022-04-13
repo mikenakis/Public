@@ -19,9 +19,9 @@ class MapKeysCollection<K, V> implements UnmodifiableCollection.Defaults<K>
 		this.keyEqualityComparator = keyEqualityComparator;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return map.isFrozenAssertion();
+		return map.isImmutableAssertion();
 	}
 
 	@Override public int size()

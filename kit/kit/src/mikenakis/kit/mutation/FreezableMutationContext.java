@@ -1,53 +1,29 @@
 package mikenakis.kit.mutation;
 
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.guard.StatefulLifeGuard;
-
-public class FreezableMutationContext implements MutationContext, Closeable.Defaults
+public interface FreezableMutationContext extends MutationContext
 {
-	public static FreezableMutationContext of()
+	static ConcreteFreezableMutationContext of()
 	{
-		MutationContext mutationContext = ThreadLocalMutationContext.instance();
-		return of( mutationContext );
+		MutationContext parentMutationContext = ThreadLocalMutationContext.instance();
+		return new ConcreteFreezableMutationContext( parentMutationContext );
 	}
 
-	public static FreezableMutationContext of( MutationContext parentMutationContext )
+	static ConcreteFreezableMutationContext of( MutationContext parentMutationContext )
 	{
-		return new FreezableMutationContext( parentMutationContext );
+		return new ConcreteFreezableMutationContext( parentMutationContext );
 	}
 
-	private final StatefulLifeGuard lifeGuard;
-	private final MutationContext parentMutationContext;
+	/**
+	 * Asserts that this {@link FreezableMutationContext} has been frozen.
+	 *
+	 * @return always true (otherwise it throws.)
+	 */
+	boolean mustBeFrozenAssertion();
 
-	private FreezableMutationContext( MutationContext parentMutationContext )
-	{
-		assert parentMutationContext.inContextAssertion();
-		this.parentMutationContext = parentMutationContext;
-		lifeGuard = StatefulLifeGuard.of( parentMutationContext, this );
-	}
-
-	@Override public boolean inContextAssertion()
-	{
-		assert parentMutationContext.inContextAssertion();
-		return true;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return lifeGuard.isClosed();
-	}
-
-	@Override public boolean isAliveAssertion()
-	{
-		assert canReadAssertion();
-		assert lifeGuard.isAliveAssertion();
-		return true;
-	}
-
-	@Override public void close()
-	{
-		assert isAliveAssertion();
-		assert canMutateAssertion();
-		lifeGuard.close();
-	}
+	/**
+	 * Asserts that this {@link FreezableMutationContext} has not been frozen.
+	 *
+	 * @return always true (otherwise it throws.)
+	 */
+	boolean mustNotBeFrozenAssertion();
 }

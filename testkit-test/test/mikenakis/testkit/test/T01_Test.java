@@ -1,16 +1,9 @@
 package mikenakis.testkit.test;
 
-import mikenakis.io.sync.text.reading.HexBinaryStreamReader;
-import mikenakis.io.sync.text.reading.InMemoryTextStreamReader;
-import mikenakis.io.sync.text.reading.TextStreamReaderOnBinaryStreamReader;
-import mikenakis.io.sync.text.writing.HexBinaryStreamWriter;
-import mikenakis.io.sync.text.writing.InMemoryTextStreamWriter;
-import mikenakis.io.sync.text.writing.TextStreamWriterOnBinaryStreamWriter;
 import mikenakis.kit.Kit;
-import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import org.junit.Test;
+
+import java.util.Locale;
 
 /**
  * Test.
@@ -19,8 +12,6 @@ import org.junit.Test;
  */
 public final class T01_Test
 {
-	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
-
 	public T01_Test()
 	{
 		if( !Kit.areAssertionsEnabled() )
@@ -35,26 +26,52 @@ public final class T01_Test
 		assert content2.equals( content1 );
 	}
 
-	private String hexFromText( String text )
+	private static String hexFromText( String text )
+	{
+		return hexFromText( text, 16 );
+	}
+
+	private static String hexFromText( String text, int width )
+	{
+		StringBuilder stringBuilder1 = new StringBuilder();
+		StringBuilder stringBuilder2 = new StringBuilder();
+		char[] chars = text.toCharArray();
+		int i;
+		for( i = 0; i < chars.length; i++ )
+		{
+			char c = chars[i];
+			String hexString = Integer.toHexString( c ).toUpperCase( Locale.ROOT );
+			stringBuilder1.append( hexString );
+			stringBuilder1.append( ' ' );
+			stringBuilder2.append( c < 32 ? '.' : c );
+		}
+		for( ;  i < width;  i++ )
+		{
+			stringBuilder1.append( "   " );
+			stringBuilder2.append( " " );
+		}
+		return stringBuilder1.toString() + "  " + stringBuilder2.toString() + "\n";
+	}
+
+	private static String textFromHex( String hexString )
+	{
+		return textFromHex( hexString, 16 );
+	}
+
+	private static String textFromHex( String hexString, int width )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		Kit.tryWithWrapper( InMemoryTextStreamWriter.of( mutationContext, stringBuilder, Procedure0.noOp ), memoryTextStreamWriter ->
-			Kit.tryWithWrapper( HexBinaryStreamWriter.of( memoryTextStreamWriter, 16, Procedure0.noOp ), binaryStreamWriter ->
-				Kit.tryWithWrapper( TextStreamWriterOnBinaryStreamWriter.of( mutationContext, binaryStreamWriter, Procedure0.noOp ), textStreamWriter ->
-					textStreamWriter.write( text ) ) ) );
+		char[] charArray = hexString.toCharArray();
+		for( int i = 0; i < width; i++ )
+		{
+			char c1 = charArray[(i * 3)];
+			char c2 = charArray[(i * 3) + 1];
+			if( c1 == ' ' && c2 == ' ' )
+				break;
+			String st = c1 + "" + c2;
+			char c = (char)Integer.parseInt( st, 16 );
+			stringBuilder.append( c );
+		}
 		return stringBuilder.toString();
 	}
-
-	private String textFromHex( String hexString )
-	{
-		return Kit.tryGetWithWrapper( InMemoryTextStreamReader.of( mutationContext, hexString, Procedure0.noOp ), memoryTextStreamReader ->
-			Kit.tryGetWithWrapper( HexBinaryStreamReader.of( memoryTextStreamReader, Procedure0.noOp ), binaryStreamReader ->
-				Kit.tryGetWithWrapper( TextStreamReaderOnBinaryStreamReader.of( mutationContext, binaryStreamReader, Procedure0.noOp ), textStreamReader ->
-				{
-					String text = textStreamReader.tryReadLine().orElseThrow();
-					assert textStreamReader.tryReadLine().isEmpty();
-					return text;
-				} ) ) );
-	}
-
 }

@@ -13,7 +13,7 @@ public final class ThreadLocalMutationContext
 	{
 		if( Kit.areAssertionsEnabled() )
 			return DebugThreadLocalMutationContext.instance();
-		return ProductionThreadLocalMutationContext.instance;
+		return UnknownMutationContext.instance;
 	}
 
 	private ThreadLocalMutationContext()

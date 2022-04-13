@@ -3378,4 +3378,17 @@ public final class Kit
 		assert runnableRef.value != null;
 		return new RunnableAndThread<>( runnableRef.value, thread );
 	}
+
+	public static boolean assertion( Function0<Boolean> nestedAssertion, Function1<Throwable,Throwable> throwableFactory )
+	{
+		try
+		{
+			assert nestedAssertion.invoke();
+			return true;
+		}
+		catch( Throwable throwable )
+		{
+			throw sneakyException( throwableFactory.invoke( throwable ) );
+		}
+	}
 }

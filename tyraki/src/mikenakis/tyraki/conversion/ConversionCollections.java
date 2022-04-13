@@ -620,9 +620,9 @@ public final class ConversionCollections
 		return new SubList<>( list, startOffset, endOffset );
 	}
 
-	public static <E> E[] arrayOfObjectFromIterable( Iterable<E> iterable, int initialCapacity )
+	public static <E> E[] arrayOfObjectFromIterable( Iterable<E> iterable, int lengthHint )
 	{
-		Object[] elements = initialCapacity == 0 ? ARRAY_OF_ZERO_OBJECTS : new Object[initialCapacity];
+		Object[] elements = lengthHint == 0 ? ARRAY_OF_ZERO_OBJECTS : new Object[lengthHint];
 		int length = 0;
 		for( Object element : iterable )
 		{

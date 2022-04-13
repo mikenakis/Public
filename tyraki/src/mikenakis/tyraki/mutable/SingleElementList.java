@@ -37,7 +37,7 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 	@Override public void replaceAt( int index, T element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert index == 0 : new IndexOutOfBoundsException();
 		if( Objects.equals( theElement, element ) )
 			return;
@@ -47,32 +47,32 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 	@Override public void insertAt( int index, T element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert false : new UnsupportedOperationException();
 	}
 
 	@Override public void removeAt( int index )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert false : new UnsupportedOperationException();
 	}
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert false : new UnsupportedOperationException();
 		return true;
 	}
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return new MyEnumerator();
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return new MyEnumerator();
 	}
 
@@ -99,13 +99,13 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 		@Override public boolean isFinished()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return index >= size();
 		}
 
 		@Override public T current()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			assert getModificationCount() == expectedModCount : new ConcurrentModificationException();
 			assert !isFinished() : new IllegalStateException();
 			return get( index );
@@ -113,7 +113,7 @@ final class SingleElementList<T> extends AbstractMutableList<T>
 
 		@Override public UnmodifiableEnumerator<T> moveNext()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			assert getModificationCount() == expectedModCount : new ConcurrentModificationException();
 			assert !isFinished() : new IllegalStateException();
 			index++;

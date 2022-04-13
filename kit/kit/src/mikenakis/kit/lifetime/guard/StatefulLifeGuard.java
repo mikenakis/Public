@@ -37,26 +37,28 @@ public final class StatefulLifeGuard extends Mutable implements Closeable.Defaul
 
 	public boolean isClosed()
 	{
+		assert mustBeReadableAssertion();
 		return closed;
 	}
 
 	public boolean isOpen()
 	{
+		assert mustBeReadableAssertion();
 		return !closed;
 	}
 
 	@Override public void close()
 	{
-		assert canMutateAssertion();
+		assert mustBeReadableAssertion();
 		assert !closed;
+		assert mustBeWritableAssertion();
 		lifeGuard.close();
 		closed = true;
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
 	@Override public String toString()

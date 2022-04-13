@@ -37,9 +37,7 @@
 		<module>bytecode</module>
 		<module>classdump</module>
 		<module>clio</module>
-		<module>dispatch</module>
 		<module>intertwine</module>
-		<module>io</module>
 		<module>java-type-model</module>
 		<module>kit/kit</module>
 		<module>kit/kit-test</module>

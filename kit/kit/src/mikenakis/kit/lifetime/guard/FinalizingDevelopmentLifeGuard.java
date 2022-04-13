@@ -44,9 +44,9 @@ public final class FinalizingDevelopmentLifeGuard extends DevelopmentLifeGuard
 		closed = true;
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert !closed : new EndOfLifeException( closeableClass );
+		assert !closed : new MustBeAliveException( closeableClass );
 		return true;
 	}
 

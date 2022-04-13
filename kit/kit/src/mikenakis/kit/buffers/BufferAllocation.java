@@ -23,16 +23,17 @@ public final class BufferAllocation extends Mutable implements Closeable.Default
 		this.bytes = bytes;
 	}
 
-	@Override public void close()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert isAliveAssertion();
-		bufferAllocator.release( this );
-		lifeGuard.close();
+		assert mustBeReadableAssertion();
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public void close()
 	{
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
+		bufferAllocator.release( this );
+		lifeGuard.close();
 	}
 }

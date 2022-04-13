@@ -1,7 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.mutation.NotFrozenException;
+import mikenakis.kit.mutation.MustBeFrozenException;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableList;
 
@@ -24,9 +24,9 @@ final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements 
 		this.frozen = frozen;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		assert frozen : new NotFrozenException( null );
+		assert frozen : new MustBeFrozenException( null );
 		return true;
 	}
 

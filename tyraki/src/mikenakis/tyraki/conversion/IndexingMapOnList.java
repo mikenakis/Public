@@ -1,7 +1,6 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.DefaultEqualityComparator;
-import mikenakis.kit.mutation.NotFrozenException;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.IntegerSeriesList;
 import mikenakis.tyraki.MapEntry;
@@ -27,9 +26,9 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 			super( IndexingMapOnList.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return IndexingMapOnList.this.isFrozenAssertion();
+			return IndexingMapOnList.this.isImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
@@ -72,9 +71,9 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 		entries = new MyEntriesCollection( DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return list.isFrozenAssertion();
+		return list.isImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<Integer,V>> entries()

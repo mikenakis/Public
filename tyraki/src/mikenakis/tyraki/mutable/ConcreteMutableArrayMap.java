@@ -82,7 +82,7 @@ final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return bindingsList.size();
 	}
 
@@ -102,7 +102,7 @@ final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return Optional.empty();
@@ -112,7 +112,7 @@ final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Optional<Binding<K,V>> existing = tryGetBindingByKey( key );
 		if( existing.isPresent() )
 			return Optional.of( existing.get().getValue() );
@@ -124,7 +124,7 @@ final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return false;
@@ -136,7 +136,7 @@ final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return false;
@@ -146,7 +146,7 @@ final class ConcreteMutableArrayMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return bindingsList.clear();
 	}
 }

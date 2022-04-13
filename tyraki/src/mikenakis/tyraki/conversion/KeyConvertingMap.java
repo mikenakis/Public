@@ -41,43 +41,42 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 			super( KeyConvertingMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return KeyConvertingMap.this.isFrozenAssertion();
+			return KeyConvertingMap.this.isImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
 		{
-			return mapToConvert.entries().getModificationCount();
+			return map.entries().getModificationCount();
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<TK,V>> newUnmodifiableEnumerator()
 		{
-			return mapToConvert.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
+			return map.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
 		}
 	}
 
-	private final UnmodifiableMap<SK,V> mapToConvert;
+	private final UnmodifiableMap<SK,V> map;
 	private final Function1<? extends TK,? super SK> converter;
 	private final Function1<Optional<? extends SK>,? super TK> reverter;
 	private final MyEntriesCollection entries;
 
-	KeyConvertingMap( UnmodifiableMap<SK,V> mapToConvert, Function1<? extends TK,? super SK> converter, Function1<Optional<? extends SK>,? super TK> reverter )
+	KeyConvertingMap( UnmodifiableMap<SK,V> map, Function1<? extends TK,? super SK> converter, Function1<Optional<? extends SK>,? super TK> reverter )
 	{
-		assert mapToConvert != null;
 		assert converter != null;
 		assert reverter != null;
-		this.mapToConvert = mapToConvert;
+		this.map = map;
 		this.converter = converter;
 		this.reverter = reverter;
 		EqualityComparator<TK> keyEqualityComparator = new PartiallyConvertingEqualityComparator<>( reverter );
-		EqualityComparator<? super V> valueEqualityComparator = mapToConvert.values().getEqualityComparator();
+		EqualityComparator<? super V> valueEqualityComparator = map.values().getEqualityComparator();
 		entries = new MyEntriesCollection( keyEqualityComparator, valueEqualityComparator );
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return mapToConvert.isFrozenAssertion();
+		return map.isImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<TK,V>> entries()
@@ -87,7 +86,7 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 
 	@Override public final int size()
 	{
-		return mapToConvert.size();
+		return map.size();
 	}
 
 	@Override public final Optional<Binding<TK,V>> tryGetBindingByKey( TK tk )
@@ -96,7 +95,7 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 		Optional<? extends SK> sk = reverter.invoke( tk );
 		if( sk.isEmpty() )
 			return Optional.empty();
-		Optional<Binding<SK,V>> binding = mapToConvert.tryGetBindingByKey( sk.get() );
+		Optional<Binding<SK,V>> binding = map.tryGetBindingByKey( sk.get() );
 		if( binding.isEmpty() )
 			return Optional.empty();
 		TK key = converter.invoke( binding.get().getKey() );
@@ -105,11 +104,11 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 
 	@Override public final UnmodifiableCollection<TK> keys()
 	{
-		return mapToConvert.keys().map( converter, reverter );
+		return map.keys().map( converter, reverter );
 	}
 
 	@Override public final UnmodifiableCollection<V> values()
 	{
-		return mapToConvert.values();
+		return map.values();
 	}
 }

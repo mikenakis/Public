@@ -16,22 +16,22 @@ import java.util.function.Predicate;
  */
 final class FilteringCollection<E> extends FilteringEnumerable<E> implements UnmodifiableCollection.Defaults<E>
 {
-	private final UnmodifiableCollection<E> collectionToFilter;
+	private final UnmodifiableCollection<E> collection;
 
-	FilteringCollection( UnmodifiableCollection<E> collectionToFilter, Predicate<E> predicate )
+	FilteringCollection( UnmodifiableCollection<E> collection, Predicate<E> predicate )
 	{
-		super( collectionToFilter, predicate );
-		this.collectionToFilter = collectionToFilter;
+		super( collection, predicate );
+		this.collection = collection;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return collectionToFilter.isFrozenAssertion();
+		return collection.isImmutableAssertion();
 	}
 
 	@Override public EqualityComparator<? super E> getEqualityComparator()
 	{
-		return collectionToFilter.getEqualityComparator();
+		return collection.getEqualityComparator();
 	}
 
 	@Override public int size()
@@ -41,7 +41,7 @@ final class FilteringCollection<E> extends FilteringEnumerable<E> implements Unm
 
 	@Override public int getModificationCount()
 	{
-		return collectionToFilter.getModificationCount();
+		return collection.getModificationCount();
 	}
 
 	@Override public Optional<E> tryGet( E element )
@@ -49,7 +49,7 @@ final class FilteringCollection<E> extends FilteringEnumerable<E> implements Unm
 		assert element != null;
 		if( !predicate.test( element ) )
 			return Optional.empty();
-		return collectionToFilter.tryGet( element );
+		return collection.tryGet( element );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()

@@ -39,13 +39,13 @@ class MutableMapKeysCollection<K, V> extends AbstractMutableCollection<K>
 
 	@Override public MutableEnumerator<K> newMutableEnumerator()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return map.mutableEntries().newMutableEnumerator().map( kvBinding -> kvBinding.getKey() );
 	}
 
 	@Override public UnmodifiableEnumerator<K> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getKey() );
 	}
 

@@ -37,13 +37,13 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return new MyEnumerator().map( converter );
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return newMutableEnumerator();
 		}
 
@@ -91,14 +91,14 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return Optional.empty();
@@ -109,7 +109,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 //		Optional<V> result = tryAdd0( key, value );
 //		Log.debug( "key=" + key + ", value=" + value + ", result=" + result );
 //		return result;
@@ -147,7 +147,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -159,7 +159,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -178,7 +178,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( !hashTable.clear() )
 		{
 			assert head == null;

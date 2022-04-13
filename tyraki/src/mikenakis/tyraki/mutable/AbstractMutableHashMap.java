@@ -57,21 +57,21 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return Optional.ofNullable( hashTable.tryFindByKey( key ) );
 	}
 
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		HashMapNode<K,V> item = newItem( key, value );
 		return hashTable.tryAdd( item ).map( existing -> existing.value );
 	}
@@ -79,7 +79,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		HashMapNode<K,V> item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -91,7 +91,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		HashMapNode<K,V> item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -101,7 +101,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return hashTable.clear();
 	}
 

@@ -33,7 +33,7 @@ public final class Publisher<T> extends Mutable implements Closeable.Defaults
 
 	public Subscription<T> addSubscription( T subscriber )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Anycall<T> untwiner = IntertwineFactory.instance.getIntertwine( interfaceType ).newUntwiner( subscriber );
 		AnycallSubscription<T> anycallSubscription = anycallPublisher.addSubscription( untwiner );
 		return new Subscription<>( this, subscriber, anycallSubscription );
@@ -49,14 +49,14 @@ public final class Publisher<T> extends Mutable implements Closeable.Defaults
 		anycallPublisher.close();
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
 		throw new RuntimeException(); //I do not expect this to ever be called.
 	}
 
 	public T allSubscribers()
 	{
-		assert canMutateAssertion();
+		assert mustBeReadableAssertion();
 		return entwiner;
 	}
 

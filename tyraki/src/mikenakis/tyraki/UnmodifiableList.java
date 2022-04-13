@@ -6,7 +6,6 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.mutation.FreezableMutationContext;
-import mikenakis.kit.mutation.TemporaryMutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -91,17 +90,6 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			mutableList.addAll( elements );
 			return mutableList;
 		} );
-	}
-
-	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
-	static <E> UnmodifiableList<E> from( EqualityComparator<? super E> equalityComparator, E... arrayOfElements )
-	{
-		return ConversionCollections.newArrayWrapper( arrayOfElements, equalityComparator, false );
-	}
-
-	static <E> UnmodifiableList<E> from( EqualityComparator<? super E> equalityComparator, boolean frozen, E[] arrayOfElements )
-	{
-		return ConversionCollections.newArrayWrapper( arrayOfElements, equalityComparator, frozen );
 	}
 
 	/**

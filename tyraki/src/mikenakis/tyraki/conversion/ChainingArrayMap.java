@@ -30,11 +30,9 @@ class ChainingArrayMap<K, V> extends AbstractMap<K,V> implements UnmodifiableArr
 		values = ConversionCollections.newChainingList( this.mapsToChain.map( UnmodifiableArrayMap::values ) );
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		assert mapsToChain.isFrozenAssertion();
-		assert mapsToChain.trueForAll( m -> m.isFrozenAssertion() );
-		return true;
+		return mapsToChain.isImmutableAssertion() && mapsToChain.trueForAll( m -> m.isImmutableAssertion() );
 	}
 
 	@Override public int size()

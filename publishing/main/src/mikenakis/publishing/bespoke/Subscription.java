@@ -25,15 +25,16 @@ public class Subscription<T> extends Mutable implements Closeable.Defaults
 		this.anycallSubscription = anycallSubscription;
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		assert mustBeReadableAssertion();
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
 	@Override public void close()
 	{
-		assert isAliveAssertion();
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		anycallSubscription.close();
 		lifeGuard.close();
 	}

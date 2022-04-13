@@ -29,12 +29,6 @@ class MutableEnumerableOnUnmodifiableEnumerable<T> extends MutableCollectionsSub
 		return new MutableEnumeratorOnUnmodifiableEnumerator<>( mutableCollections, unmodifiableEnumerator, deleter );
 	}
 
-	@Override public boolean canMutateAssertion()
-	{
-		assert super.canMutateAssertion();
-		return true;
-	}
-
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
 		return unmodifiableEnumerable.newUnmodifiableEnumerator();

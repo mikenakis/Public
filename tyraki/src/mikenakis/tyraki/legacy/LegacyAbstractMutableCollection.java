@@ -1,6 +1,8 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.UnknownMutationContext;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.kit.EqualityComparator;
@@ -18,6 +20,11 @@ abstract class LegacyAbstractMutableCollection<E> implements MutableCollection.D
 	{
 		assert equalityComparator != null;
 		this.equalityComparator = equalityComparator;
+	}
+
+	@Override public MutationContext mutationContext()
+	{
+		return UnknownMutationContext.instance;
 	}
 
 	@Override public final EqualityComparator<? super E> getEqualityComparator()

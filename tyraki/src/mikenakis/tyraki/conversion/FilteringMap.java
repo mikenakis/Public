@@ -19,23 +19,23 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 			super( FilteringMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return mapToFilter.isFrozenAssertion();
+			return map.isImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
 		{
-			return mapToFilter.entries().getModificationCount();
+			return map.entries().getModificationCount();
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			return new FilteringEnumerator<>( mapToFilter.entries().newUnmodifiableEnumerator(), predicate );
+			return new FilteringEnumerator<>( map.entries().newUnmodifiableEnumerator(), predicate );
 		}
 	}
 
-	private final UnmodifiableMap<K,V> mapToFilter;
+	private final UnmodifiableMap<K,V> map;
 	private final Predicate<Binding<K,V>> predicate;
 	private final MyEntriesCollection entries;
 	private final UnmodifiableCollection<K> keys;
@@ -43,18 +43,18 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 	private int lastModificationCount = -1;
 	private int lastLength = 0;
 
-	FilteringMap( UnmodifiableMap<K,V> mapToFilter, Predicate<Binding<K,V>> predicate )
+	FilteringMap( UnmodifiableMap<K,V> map, Predicate<Binding<K,V>> predicate )
 	{
-		this.mapToFilter = mapToFilter;
+		this.map = map;
 		this.predicate = predicate;
-		entries = new MyEntriesCollection( mapToFilter.keys().getEqualityComparator(), mapToFilter.values().getEqualityComparator() );
-		keys = entries.map( kvBinding1 -> kvBinding1.getKey(), mapToFilter.keys().getEqualityComparator() );
+		entries = new MyEntriesCollection( map.keys().getEqualityComparator(), map.values().getEqualityComparator() );
+		keys = entries.map( kvBinding1 -> kvBinding1.getKey(), map.keys().getEqualityComparator() );
 		values = entries.map( kvBinding -> kvBinding.getValue() );
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return mapToFilter.isFrozenAssertion();
+		return map.isImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<K,V>> entries()
@@ -64,7 +64,7 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 
 	@Override public int size()
 	{
-		int modificationCount = mapToFilter.keys().getModificationCount();
+		int modificationCount = map.keys().getModificationCount();
 		if( modificationCount != lastModificationCount )
 		{
 			lastModificationCount = modificationCount;
@@ -78,7 +78,7 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K k )
 	{
 		assert k != null;
-		Optional<V> existingValueOption = mapToFilter.tryGet( k );
+		Optional<V> existingValueOption = map.tryGet( k );
 		return existingValueOption.map( existingValue ->
 		{
 			Binding<K,V> binding = MapEntry.of( k, existingValue ); //TODO this looks wrong.

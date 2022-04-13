@@ -6,7 +6,7 @@ public abstract class Mutable
 
 	protected Mutable( MutationContext mutationContext )
 	{
-		assert mutationContext.inContextAssertion();
+		assert mutationContext.mustBeWritableAssertion();
 		this.mutationContext = mutationContext;
 	}
 
@@ -15,20 +15,13 @@ public abstract class Mutable
 		return mutationContext;
 	}
 
-	public boolean isFrozen()
+	protected boolean mustBeReadableAssertion()
 	{
-		return mutationContext.isFrozen();
+		return mutationContext.mustBeReadableAssertion();
 	}
 
-	public boolean canReadAssertion()
+	protected boolean mustBeWritableAssertion()
 	{
-		assert mutationContext.canReadAssertion();
-		return true;
-	}
-
-	public boolean canMutateAssertion()
-	{
-		assert mutationContext.canMutateAssertion();
-		return true;
+		return mutationContext.mustBeWritableAssertion();
 	}
 }

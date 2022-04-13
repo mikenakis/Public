@@ -1,44 +1,52 @@
 package mikenakis.kit.mutation;
 
+import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 
-public class TemporaryMutationContext implements MutationContext, Closeable.Defaults
+public class TemporaryMutationContext extends Mutable implements MutationContext, Closeable.Defaults
 {
 	public static TemporaryMutationContext of()
 	{
-		return new TemporaryMutationContext();
+		return of( ThreadLocalMutationContext.instance() );
+	}
+
+	public static TemporaryMutationContext of( MutationContext parentMutationContext )
+	{
+		return new TemporaryMutationContext( parentMutationContext );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final Thread constructionThread;
 
-	private TemporaryMutationContext()
+	private TemporaryMutationContext( MutationContext parentMutationContext )
 	{
-		constructionThread = Thread.currentThread();
+		super( parentMutationContext );
 	}
 
-	@Override public boolean inContextAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert isAliveAssertion();
-		return true;
-	}
-
-	@Override public boolean isFrozen()
-	{
-		return false;
-	}
-
-	@Override public boolean isAliveAssertion()
-	{
-		assert Thread.currentThread() == constructionThread;
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
 	@Override public void close()
 	{
-		assert Thread.currentThread() == constructionThread;
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		lifeGuard.close();
+	}
+
+	@Override public boolean mustBeReadableAssertion()
+	{
+		return Kit.assertion( this::mustBeAliveAssertion, cause -> new MustBeReadableException( this, cause ) );
+	}
+
+	@Override public boolean mustBeWritableAssertion()
+	{
+		return Kit.assertion( this::mustBeAliveAssertion, cause -> new MustBeWritableException( this, cause ) );
+	}
+
+	@Override public String toString()
+	{
+		return lifeGuard.toString() + "; parent: " + super.toString();
 	}
 }

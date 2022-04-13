@@ -44,7 +44,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			Iterator<Entry<Item,V>> iterator = javaMap.entrySet().iterator();
 			MutableEnumerator<Entry<Item,V>> modifiableEnumerator = LegacyCollections.newEnumeratorOnJavaIterator( iterator, () -> modificationCount++ );
 			return modifiableEnumerator.map( converter );
@@ -52,7 +52,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return newMutableEnumerator();
 		}
 	}
@@ -79,38 +79,38 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return entries;
 	}
 
 	@Override public MutableCollection<K> mutableKeys()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return keys;
 	}
 
 	@Override public MutableCollection<V> mutableValues()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return values;
 	}
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return javaMap.size();
 	}
 
 	@Override public Hasher<? super K> getKeyHasher()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return keyHasher;
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = new Item( key );
 		if( !javaMap.containsKey( item ) )
 			return Optional.empty();
@@ -120,7 +120,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( key );
 		V existing = javaMap.get( item );
 		if( existing != null )
@@ -133,7 +133,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( key );
 		if( !Kit.map.tryReplace( javaMap, item, value ) )
 			return false;
@@ -144,7 +144,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( key );
 		if( !javaMap.containsKey( item ) )
 			return true;
@@ -155,7 +155,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( javaMap.isEmpty() )
 			return false;
 		javaMap.clear();

@@ -55,11 +55,6 @@ public final class MutableCollections extends Mutable
 		super( mutationContext );
 	}
 
-	public boolean assertCoherence() //FIXME XXX TODO inline this!
-	{
-		return canMutateAssertion();
-	}
-
 	/**
 	 * Creates a new {@link MutableHashSet}.
 	 *

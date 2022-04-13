@@ -1,58 +1,23 @@
 package mikenakis.kit.mutation;
 
+/**
+ * Alternative naming:
+ *  Mutable, MutationContext - > Coherent, Coherence
+ *  Coherent, Coherence -> Coherable, Coherability
+ */
 public interface MutationContext
 {
-	/**
-	 * Checks whether it is currently safe to access this {@link MutationContext}.
-	 */
-	boolean inContextAssertion();
-
-	/**
-	 * Checks whether this {@link MutationContext} has been frozen.
-	 */
-	boolean isFrozen();
-
-	/**
-	 * Asserts that this {@link MutationContext} has been frozen.
-	 *
-	 * @return always true (otherwise it throws.)
-	 */
-	default boolean isFrozenAssertion()
-	{
-		assert isFrozen() : new NotFrozenException( this );
-		return true;
-	}
-
-	/**
-	 * Asserts that this {@link MutationContext} has not been frozen.
-	 *
-	 * @return always true (otherwise it throws.)
-	 */
-	default boolean isNotFrozenAssertion()
-	{
-		assert !isFrozen() : new FrozenException( this );
-		return true;
-	}
-
 	/**
 	 * Asserts that it is safe to access mutable state for reading.
 	 *
 	 * @return always true (otherwise it throws.)
 	 */
-	default boolean canReadAssertion()
-	{
-		assert isFrozen() || inContextAssertion() : new ReadingDisallowedException( this );
-		return true;
-	}
+	boolean mustBeReadableAssertion();
 
 	/**
 	 * Asserts that it is safe to modify mutable state.
 	 *
 	 * @return always true (otherwise it throws.)
 	 */
-	default boolean canMutateAssertion()
-	{
-		assert !isFrozen() && inContextAssertion() : new MutationDisallowedException( this );
-		return true;
-	}
+	boolean mustBeWritableAssertion();
 }

@@ -31,14 +31,14 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<E> tryGet( E element )
 	{
 		assert element != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = hashTable.tryFindByKey( element );
 		if( item == null )
 			return Optional.empty();
@@ -47,14 +47,14 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 
 	@Override public Optional<E> tryAdd( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item myItem = new Item( element );
 		return hashTable.tryAdd( myItem ).map( existing -> existing.element );
 	}
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item oldItem = hashTable.tryFindByKey( oldElement );
 		if( oldItem == null )
 			return false;
@@ -69,7 +69,7 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 
 	@Override public boolean tryRemove( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item oldItem = hashTable.tryFindByKey( element );
 		if( oldItem == null )
 			return false;
@@ -79,7 +79,7 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return hashTable.clear();
 	}
 
@@ -91,13 +91,13 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.newMutableEnumerator().map( item -> item.element );
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.newUnmodifiableEnumerator().map( item -> item.element );
 	}
 

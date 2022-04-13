@@ -39,13 +39,13 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return hashTable.newMutableEnumerator().map( converter ).mutableFilter( k -> k != null );
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( k -> k != null );
 		}
 
@@ -101,14 +101,14 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return Optional.empty();
@@ -121,7 +121,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item1 = hashTable.tryFindByKey( key );
 		if( item1 != null )
 		{
@@ -143,7 +143,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -155,7 +155,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -165,7 +165,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		for( ; ; ) // clear reference queue. We don't need to expunge entries since table is getting cleared.
 			if( referenceQueue.poll() == null )
 				break;

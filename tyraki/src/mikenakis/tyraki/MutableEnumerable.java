@@ -2,6 +2,7 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.mutation.MutationContext;
 import mikenakis.tyraki.conversion.ConversionCollections;
 
 import java.util.ArrayList;
@@ -33,14 +34,14 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 		return result;
 	}
 
+	MutationContext mutationContext();
+
 	/**
 	 * Returns a {@link MutableEnumerator} over elements of type T.
 	 *
 	 * @return a {@link MutableEnumerator}.
 	 */
 	MutableEnumerator<E> newMutableEnumerator();
-
-	boolean canMutateAssertion();
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -194,6 +195,11 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 	{
 		MutableEnumerable<E> getDecoratedMutableEnumerable();
 
+		@Override default MutationContext mutationContext()
+		{
+			return getDecoratedMutableEnumerable().mutationContext();
+		}
+
 		@Override default UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable()
 		{
 			return getDecoratedMutableEnumerable();
@@ -208,12 +214,6 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 		@Override default UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 		{
 			return UnmodifiableEnumerable.Decorator.super.newUnmodifiableEnumerator();
-		}
-
-		@Override default boolean canMutateAssertion()
-		{
-			MutableEnumerable<E> decoree = getDecoratedMutableEnumerable();
-			return decoree.canMutateAssertion();
 		}
 	}
 
@@ -231,6 +231,11 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 		@Override public MutableEnumerable<E> getDecoratedMutableEnumerable()
 		{
 			return this;
+		}
+
+		@Override public MutationContext mutationContext()
+		{
+			return getDecoratedMutableEnumerable().mutationContext();
 		}
 	}
 }

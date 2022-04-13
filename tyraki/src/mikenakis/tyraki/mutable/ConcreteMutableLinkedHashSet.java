@@ -35,13 +35,13 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return new MyEnumerator().map( item -> item.element );
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return newMutableEnumerator();
 	}
 
@@ -52,14 +52,14 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.getLength();
 	}
 
 	@Override public Optional<E> tryGet( E element )
 	{
 		assert element != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = hashTable.tryFindByKey( element );
 		if( item == null )
 			return Optional.empty();
@@ -69,7 +69,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public Optional<E> tryAdd( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( element );
 		Optional<Item> existing = hashTable.tryAdd( item );
 		if( existing.isPresent() )
@@ -94,7 +94,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public boolean tryRemove( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( element );
 		if( item == null )
 			return false;
@@ -113,7 +113,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( !hashTable.clear() )
 		{
 			assert head == null;

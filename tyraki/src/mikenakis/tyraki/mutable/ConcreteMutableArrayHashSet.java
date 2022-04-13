@@ -38,21 +38,21 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashSet.size();
 	}
 
 	@Override public Optional<E> tryGet( E key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashSet.tryGet( key );
 	}
 
 	@Override public Optional<E> tryAdd( E key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Optional<E> existing = hashSet.tryAdd( key );
 		if( existing.isPresent() )
 			return existing;
@@ -62,7 +62,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		assert !equalityComparator.equals( oldElement, newElement );
 		if( !hashSet.tryReplace( oldElement, newElement ) )
 			return false;
@@ -73,7 +73,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public boolean tryRemove( E key )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( !hashSet.tryRemove( key ) )
 			return false;
 		list.remove( key );
@@ -82,7 +82,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( !hashSet.clear() )
 			return false;
 		boolean ok = list.clear();
@@ -97,13 +97,13 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public MutableEnumerator<E> newMutableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return new MyEnumerator();
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return newMutableEnumerator();
 	}
 
@@ -112,7 +112,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 		E oldElement = list.get( index );
 		if( equalityComparator.equals( element, oldElement ) )
 			return;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( hashSet.tryAdd( element ).isPresent() )
 			throw new DuplicateElementException( element );
 		hashSet.remove( oldElement );
@@ -120,7 +120,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public void insertAt( int index, E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( hashSet.tryAdd( element ).isPresent() )
 			throw new DuplicateElementException( element );
 		list.insertAt( index, element );
@@ -128,7 +128,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public void removeAt( int index )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		E oldElement = list.get( index );
 		hashSet.remove( oldElement );
 		list.removeAt( index );
@@ -136,7 +136,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 	@Override public E get( int index )
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return list.get( index );
 	}
 
@@ -151,7 +151,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 
 		@Override public void deleteCurrent()
 		{
-			assert canMutateAssertion();
+			assert mustBeWritableAssertion();
 			E key = current();
 			hashSet.remove( key );
 			decoree.deleteCurrent();

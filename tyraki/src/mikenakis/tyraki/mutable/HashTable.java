@@ -161,7 +161,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	public Optional<T> tryAdd( T hashNode )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		ensureCapacity();
 		Bucket<K,T> bucket = getBucket( hashNode );
 		K key = hashNode.getKey();
@@ -185,7 +185,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	void remove( T hashNode )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Bucket<K,T> bucket = getBucket( hashNode );
 		bucket.remove( hashNode );
 		hashNodeCount--;
@@ -196,7 +196,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	public T tryFindByKey( K key )
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		int hashCode = keyHasher.getHashCode( key );
 		Bucket<K,T> bucket = getBucket( buckets, hashCode );
 		return bucket.tryFindNodeByKey( key );
@@ -204,7 +204,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( hashNodeCount == 0 )
 			return false;
 		for( Bucket<K,T> bucket : buckets )
@@ -218,13 +218,13 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 	@Override public MutableEnumerator<T> newMutableEnumerator()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return new MyEnumerator<>( this );
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return new MyEnumerator<>( this );
 	}
 
@@ -263,7 +263,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 		@Override public boolean isFinished()
 		{
-			assert hashTable.canReadAssertion();
+			assert hashTable.mustBeReadableAssertion();
 			//assert ownerModificationCount == modificationCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			return currentNode == null;
@@ -271,7 +271,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 		@Override public T current()
 		{
-			assert hashTable.canReadAssertion();
+			assert hashTable.mustBeReadableAssertion();
 			assert modificationCount == hashTable.modificationCount : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
 			assert !deleted : new IllegalStateException();
@@ -280,7 +280,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 		@Override public UnmodifiableEnumerator<T> moveNext()
 		{
-			assert hashTable.canReadAssertion();
+			assert hashTable.mustBeReadableAssertion();
 			assert modificationCount == hashTable.modificationCount : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
 			deleted = false;
@@ -295,7 +295,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 		@Override public void deleteCurrent()
 		{
-			assert hashTable.canMutateAssertion();
+			assert hashTable.mustBeWritableAssertion();
 			assert modificationCount == hashTable.modificationCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert currentNode != null : new IllegalStateException();

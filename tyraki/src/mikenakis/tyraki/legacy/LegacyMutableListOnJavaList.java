@@ -1,7 +1,7 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.DefaultEqualityComparator;
-import mikenakis.kit.mutation.NotFrozenException;
+import mikenakis.kit.mutation.MustBeFrozenException;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -15,8 +15,6 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-//IntellijIdea blooper: 'mapToValues(Function1<? extends V, ? super E>)' in 'saganaki.collections.UnmodifiableCollection.Defaults' clashes with 'mapToValues(Function1<? extends
-// V, ? super E>)' in 'saganaki.collections.UnmodifiableList'; attempting to use incompatible return type
 final class LegacyMutableListOnJavaList<E> extends LegacyAbstractMutableCollection<E> implements MutableList.Defaults<E>
 {
 	private final List<E> javaList;
@@ -29,14 +27,9 @@ final class LegacyMutableListOnJavaList<E> extends LegacyAbstractMutableCollecti
 		this.javaList = javaList;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		throw new NotFrozenException( null );
-	}
-
-	@Override public boolean canMutateAssertion()
-	{
-		return true; //we have no way of determining this with a java collection.
+		throw new MustBeFrozenException( null );
 	}
 
 	@Override public int hashCode()

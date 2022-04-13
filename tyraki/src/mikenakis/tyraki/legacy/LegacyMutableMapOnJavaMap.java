@@ -4,7 +4,9 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
-import mikenakis.kit.mutation.NotFrozenException;
+import mikenakis.kit.mutation.MustBeFrozenException;
+import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.UnknownMutationContext;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.MapEntry;
@@ -37,14 +39,14 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public MutationContext mutationContext()
 		{
-			throw new NotFrozenException( null );
+			return UnknownMutationContext.instance;
 		}
 
-		@Override public boolean canMutateAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return true; //we have no way of determining this with a java collection.
+			throw new MustBeFrozenException( null );
 		}
 
 		@Override public EqualityComparator<? super Binding<K,V>> getEqualityComparator()
@@ -122,14 +124,14 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public MutationContext mutationContext()
 		{
-			throw new NotFrozenException( null );
+			return UnknownMutationContext.instance;
 		}
 
-		@Override public boolean canMutateAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return true; //we have no way of determining this with a java collection.
+			throw new MustBeFrozenException( null );
 		}
 
 		@Override public int size()
@@ -224,14 +226,14 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public MutationContext mutationContext()
 		{
-			throw new NotFrozenException( null );
+			return UnknownMutationContext.instance;
 		}
 
-		@Override public boolean canMutateAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return true; //we have no way of determining this with a java collection.
+			throw new MustBeFrozenException( null );
 		}
 
 		@Override public int size()
@@ -343,9 +345,9 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		this.javaMap = javaMap;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		throw new NotFrozenException( null );
+		throw new MustBeFrozenException( null );
 	}
 
 	@Override public MutableCollection<Binding<K,V>> mutableEntries()

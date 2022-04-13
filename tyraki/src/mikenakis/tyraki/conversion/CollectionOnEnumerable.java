@@ -20,9 +20,9 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 		this.equalityComparator = equalityComparator;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return enumerable.isFrozenAssertion();
+		return enumerable.isImmutableAssertion();
 	}
 
 	@Override public int size()

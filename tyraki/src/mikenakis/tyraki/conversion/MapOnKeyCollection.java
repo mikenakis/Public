@@ -46,9 +46,9 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 			super( MapOnKeyCollection.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
-			return MapOnKeyCollection.this.isFrozenAssertion();
+			return MapOnKeyCollection.this.isImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
@@ -78,9 +78,9 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 		this.converter = converter;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		return collection.isFrozenAssertion();
+		return collection.isImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<K,V>> entries()

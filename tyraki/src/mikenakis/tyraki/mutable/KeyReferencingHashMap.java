@@ -40,13 +40,13 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return hashTable.newMutableEnumerator().map( converter ).mutableFilter( obj -> Objects.nonNull( obj ) );
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( obj -> Objects.nonNull( obj ) );
 		}
 
@@ -102,7 +102,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return hashTable.getLength();
 	}
 
@@ -116,7 +116,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return Optional.empty();
@@ -129,7 +129,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( key, value );
 		return hashTable.tryAdd( item ).map( previous -> previous.value );
 	}
@@ -137,7 +137,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -151,7 +151,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
@@ -161,7 +161,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		for( ; ; ) // clear reference queue. We don't need to expunge entries since table is getting cleared.
 			if( referenceQueue.poll() == null )
 				break;

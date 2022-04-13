@@ -126,7 +126,7 @@ public interface UnmodifiableMap<K, V>
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	boolean isFrozenAssertion();
+	boolean isImmutableAssertion();
 
 	/**
 	 * Gets the number of entries.
@@ -374,10 +374,10 @@ public interface UnmodifiableMap<K, V>
 	{
 		UnmodifiableMap<K,V> getDecoratedUnmodifiableMap();
 
-		@Override default boolean isFrozenAssertion()
+		@Override default boolean isImmutableAssertion()
 		{
 			UnmodifiableMap<K,V> decoree = getDecoratedUnmodifiableMap();
-			return decoree.isFrozenAssertion();
+			return decoree.isImmutableAssertion();
 		}
 
 		@Override default int size()

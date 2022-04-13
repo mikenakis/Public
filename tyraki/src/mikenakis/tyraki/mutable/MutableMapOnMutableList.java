@@ -34,13 +34,13 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		@Override public MutableEnumerator<Binding<Integer,V>> newMutableEnumerator()
 		{
-			assert canMutateAssertion();
+			assert mustBeWritableAssertion();
 			return new MyEnumerator();
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<Integer,V>> newUnmodifiableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return new MyEnumerator();
 		}
 	}
@@ -52,20 +52,20 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		@Override public boolean isFinished()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return index >= values.size();
 		}
 
 		@Override public Binding<Integer,V> current()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			V element = values.get( index );
 			return MapEntry.of( index, element );
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<Integer,V>> moveNext()
 		{
-			assert canMutateAssertion(); //hmm, I am not sure about this.
+			assert mustBeWritableAssertion(); //hmm, I am not sure about this.
 			if( !deleted )
 				index++;
 			deleted = false;
@@ -74,7 +74,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 		@Override public void deleteCurrent()
 		{
-			assert canMutateAssertion();
+			assert mustBeWritableAssertion();
 			assert !deleted;
 			values.removeAt( index );
 			deleted = true;
@@ -110,21 +110,21 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return values.size();
 	}
 
 	@Override public boolean containsKey( Integer key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return key >= 0 && key < values.size();
 	}
 
 	@Override public Optional<Binding<Integer,V>> tryGetBindingByKey( Integer key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		if( key < 0 || key >= values.size() )
 			return Optional.empty();
 		return Optional.of( MapEntry.of( key, values.get( key ) ) );
@@ -133,7 +133,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	@Override public Optional<V> tryAdd( Integer key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( key != values.size() )
 			return Optional.of( value );
 		values.add( value );
@@ -143,7 +143,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	@Override public boolean tryReplaceValue( Integer key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		values.replaceAt( key, value );
 		return true;
 	}
@@ -151,14 +151,14 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 	@Override public boolean tryRemoveKey( Integer key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		values.removeAt( key );
 		return true;
 	}
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return values.clear();
 	}
 }

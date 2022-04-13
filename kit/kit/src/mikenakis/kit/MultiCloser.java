@@ -23,10 +23,9 @@ public class MultiCloser implements Closeable.Defaults
 		return closeable;
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
 	@Override public void close()

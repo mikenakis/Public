@@ -75,7 +75,7 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 	@Override public Optional<Binding<K,V>> tryGetBindingByKey( K key )
 	{
 		assert key != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return Optional.empty();
@@ -88,7 +88,7 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		int index = find( key );
 		if( index != -1 )
 			return Optional.of( bindings.get( index ).value );
@@ -102,7 +102,7 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		int index = find( key );
 		if( index == -1 )
 		{
@@ -124,7 +124,7 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 	@Override public boolean tryRemoveKey( K key )
 	{
 		assert key != null;
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		int index = find( key );
 		if( index == -1 )
 			return false;
@@ -134,7 +134,7 @@ final class CachingArrayMap<K, V> extends AbstractMutableMap<K,V> implements Mut
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		return bindings.clear();
 	}
 

@@ -85,13 +85,20 @@ final class MavenHelper
 		{
 			modelBuildingResult = e.getResult();
 		}
-		reportMavenModelProblems( modelBuildingResult.getProblems() );
+		boolean errors = reportMavenModelProblems( modelBuildingResult.getProblems() );
+		assert !errors;
 		Model model = modelBuildingResult.getEffectiveModel();
 		/**
 		 * PEARL: the documentation of ModelBuildingResult.getEffectiveModel() says "Returns: The assembled model, never null."
-		 * It is kind of strange that they mention "never null", right?
-		 * The documentation of Object.getClass() or Thread.currentThread() does not bother stating that it never returns null; it is taken for granted.
-		 * So, this one sounds kind of suspicious, right? Well, indeed, IT HAS BEEN OBSERVED TO RETURN NULL. So we have to assert against that.
+		 * Now, if you look at the documentation of the vast majority of methods out there, (for example, for Object.getClass() or Thread.currentThread()) they
+		 * never say that a method never returns null; it is taken for granted. In general, mentioning null is warranted when a function may return null, not
+		 * when it may not. So, it is kind of strange that for ModelBuildingResult.getEffectiveModel() they explicitly state that it never returns null, right?
+		 * It sounds kind of suspicious, right? Well, indeed, IT HAS BEEN OBSERVED TO RETURN NULL.
+		 * This has been observed to happen when something is wrong with the pom file preventing the model from being assembled, for example referring to a
+		 * non-existent parent pom.
+		 * I have added an assertion above to ensure that we do not try to get the effective model if there have been "maven problems", but since documentation
+		 * is so scarce and lame, and ModelBuildingResult.getEffectiveModel() has been observed to return null despite the documentation promising that it
+		 * will not, we also have to assert against null here.
 		 */
 		assert model != null;
 		return model;
@@ -102,13 +109,15 @@ final class MavenHelper
 		return new Properties();
 	}
 
-	private static void reportMavenModelProblems( Iterable<ModelProblem> mavenModelProblems )
+	private static boolean reportMavenModelProblems( Iterable<ModelProblem> mavenModelProblems )
 	{
+		boolean error = false;
 		for( var mavenModelProblem : mavenModelProblems )
-			reportMavenModelProblem( mavenModelProblem );
+			error |= reportMavenModelProblem( mavenModelProblem );
+		return error;
 	}
 
-	private static void reportMavenModelProblem( ModelProblem mavenModelProblem )
+	private static boolean reportMavenModelProblem( ModelProblem mavenModelProblem )
 	{
 		Log.Level level = switch( mavenModelProblem.getSeverity() )
 			{
@@ -116,6 +125,7 @@ final class MavenHelper
 				case WARNING -> Log.Level.WARN;
 			};
 		Log.message( level, mavenModelProblem.getMessage() );
+		return level == Log.Level.ERROR;
 	}
 
 	private static ServiceLocator newMavenServiceLocator()

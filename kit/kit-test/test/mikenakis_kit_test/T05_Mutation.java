@@ -1,17 +1,18 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.guard.EndOfLifeException;
+import mikenakis.kit.mutation.ConcreteFreezableMutationContext;
 import mikenakis.kit.mutation.FreezableMutationContext;
+import mikenakis.kit.mutation.MustBeFrozenException;
+import mikenakis.kit.mutation.MustBeReadableException;
+import mikenakis.kit.mutation.MustBeWritableException;
+import mikenakis.kit.mutation.MustNotBeFrozenException;
 import mikenakis.kit.mutation.Mutable;
 import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.MutationDisallowedException;
-import mikenakis.kit.mutation.OutOfMutationContextException;
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import mikenakis.kit.mutation.TemporaryMutationContext;
+import mikenakis.kit.mutation.ThreadLocalMutationContext;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableList;
-import mikenakis.tyraki.UnmodifiableList;
 import mikenakis.tyraki.mutable.MutableCollections;
 import org.junit.Test;
 
@@ -28,51 +29,75 @@ public class T05_Mutation
 
 	private static class TestClass extends Mutable
 	{
-		protected TestClass( MutationContext mutationContext )
+		TestClass( MutationContext mutationContext )
 		{
 			super( mutationContext );
 		}
 
-		public void readingOperation()
+		void readOperation()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 		}
 
-		public void mutationOperation()
+		void writeOperation()
 		{
-			assert canMutateAssertion();
+			assert mustBeWritableAssertion();
 		}
 	}
 
-	private static class TestMutationContext implements MutationContext
+	private static class TestMutationContext implements FreezableMutationContext
 	{
-		boolean inContext = true;
+		boolean isEntered;
 		boolean isFrozen;
 
-		@Override public boolean inContextAssertion()
+		TestMutationContext( boolean isEntered, boolean isFrozen )
 		{
-			assert inContext : new OutOfMutationContextException( this );
+			this.isEntered = isEntered;
+			this.isFrozen = isFrozen;
+		}
+
+		@Override public boolean mustBeReadableAssertion()
+		{
+			assert isFrozen || isEntered : new MustBeReadableException( this );
 			return true;
 		}
 
-		@Override public boolean isFrozen()
+		@Override public boolean mustBeWritableAssertion()
 		{
-			return isFrozen;
+			assert !isFrozen && isEntered : new MustBeWritableException( this );
+			return true;
+		}
+
+		@Override public boolean mustBeFrozenAssertion()
+		{
+			assert isFrozen : new MustBeFrozenException( this );
+			return true;
+		}
+
+		@Override public boolean mustNotBeFrozenAssertion()
+		{
+			assert !isFrozen : new MustNotBeFrozenException( this );
+			return true;
+		}
+
+		@Override public String toString()
+		{
+			return "isEntered: " + isEntered + "; isFrozen: " + isFrozen;
 		}
 	}
 
 	@Test public void object_can_read_and_mutate_when_both_allowed()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext();
+		TestMutationContext testMutationContext = new TestMutationContext( true, false );
 		TestClass testObject = new TestClass( testMutationContext );
 		testMutationContext.isFrozen = false;
-		testObject.readingOperation();
-		testObject.mutationOperation();
+		testObject.readOperation();
+		testObject.writeOperation();
 	}
 
 	@Test public void object_can_read_and_mutate_when_both_allowed2()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext();
+		TestMutationContext testMutationContext = new TestMutationContext( true, false );
 		MutableList<String> testObject = MutableCollections.of( testMutationContext ).newArrayList();
 		testMutationContext.isFrozen = false;
 		testObject.size();
@@ -81,59 +106,56 @@ public class T05_Mutation
 
 	@Test public void object_can_read_but_not_mutate_when_frozen()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext();
+		TestMutationContext testMutationContext = new TestMutationContext( true, false );
 		TestClass testObject = new TestClass( testMutationContext );
 		testMutationContext.isFrozen = true;
-		testObject.readingOperation();
-		var exception = TestKit.expect( MutationDisallowedException.class, () -> testObject.mutationOperation() );
+		testObject.readOperation();
+		var exception = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
 		assert exception.mutationContext == testMutationContext;
 	}
 
 	@Test public void object_can_neither_read_nor_mutate_when_not_in_context()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext();
+		TestMutationContext testMutationContext = new TestMutationContext( true, false );
 		TestClass testObject = new TestClass( testMutationContext );
-		testMutationContext.inContext = false;
+		testMutationContext.isEntered = false;
 		testMutationContext.isFrozen = false;
-		var exception1 = TestKit.expect( OutOfMutationContextException.class, () -> testObject.readingOperation() );
+		var exception1 = TestKit.expect( MustBeReadableException.class, () -> testObject.readOperation() );
 		assert exception1.mutationContext == testMutationContext;
-		var exception2 = TestKit.expect( OutOfMutationContextException.class, () -> testObject.mutationOperation() );
+		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
 		assert exception2.mutationContext == testMutationContext;
 	}
 
-	@Test public void test_TemporaryMutationContext()
+	@Test public void test_TemporaryMutationContext1()
 	{
-		TestClass testObject = Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+		TemporaryMutationContext temporaryMutationContext = TemporaryMutationContext.of();
+		TestClass testObject = Kit.tryGetWith( temporaryMutationContext, mutationContext -> //
 		{
 			TestClass t = new TestClass( mutationContext );
-			t.readingOperation();
-			t.mutationOperation();
+			t.readOperation();
+			t.writeOperation();
 			return t;
 		} );
-		var exception1 = TestKit.expect( EndOfLifeException.class, () -> testObject.readingOperation() );
-		assert exception1.closeableClass == TemporaryMutationContext.class;
-		var exception2 = TestKit.expect( EndOfLifeException.class, () -> testObject.mutationOperation() );
-		assert exception2.closeableClass == TemporaryMutationContext.class;
+		var exception1 = TestKit.expect( MustBeReadableException.class, () -> testObject.readOperation() );
+		assert exception1.mutationContext == temporaryMutationContext;
+		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
+		assert exception2.mutationContext == temporaryMutationContext;
+	}
 
-		MutableList<String> testList = Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
+	@Test public void test_TemporaryMutationContext2()
+	{
+		TemporaryMutationContext temporaryMutationContext = TemporaryMutationContext.of();
+		MutableList<String> testList = Kit.tryGetWith( temporaryMutationContext, mutationContext -> //
 		{
 			MutableList<String> t = MutableCollections.of( mutationContext ).newArrayList();
 			t.size();
 			t.add( "a" );
 			return t;
 		} );
-		TestKit.expect( EndOfLifeException.class, () -> testList.size() );
-		TestKit.expect( EndOfLifeException.class, () -> testList.add( "b" ) );
-
-		UnmodifiableList<String> testList2 = Kit.tryGetWith( TemporaryMutationContext.of(), mutationContext -> //
-		{
-			MutableList<String> t = MutableCollections.of( mutationContext ).newArrayList();
-			t.size();
-			t.add( "a" );
-			return t;
-		} );
-		TestKit.expect( EndOfLifeException.class, () -> testList2.size() );
-		TestKit.expect( EndOfLifeException.class, () -> testList.add( "b" ) );
+		var exception1 = TestKit.expect( MustBeReadableException.class, () -> testList.size() );
+		assert exception1.mutationContext == temporaryMutationContext;
+		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testList.add( "b" ) );
+		assert exception2.mutationContext == temporaryMutationContext;
 	}
 
 	@Test public void test_FreezableMutationContext()
@@ -142,13 +164,13 @@ public class T05_Mutation
 		TestClass testObject = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
 		{
 			TestClass t = new TestClass( mutationContext );
-			t.readingOperation();
-			t.mutationOperation();
+			t.readOperation();
+			t.writeOperation();
 			return t;
 		} );
-		testObject.readingOperation();
-		var exception2 = TestKit.expect( MutationDisallowedException.class, () -> testObject.mutationOperation() );
-		assert exception2.mutationContext.getClass() == FreezableMutationContext.class;
+		testObject.readOperation();
+		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
+		assert exception2.mutationContext.getClass() == ConcreteFreezableMutationContext.class;
 
 		MutableList<String> testList = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
 		{
@@ -158,8 +180,8 @@ public class T05_Mutation
 			return t;
 		} );
 		testList.size();
-		var exception4 = TestKit.expect( MutationDisallowedException.class, () -> testList.add( "b" ) );
-		assert exception4.mutationContext.getClass() == FreezableMutationContext.class;
+		var exception4 = TestKit.expect( MustBeWritableException.class, () -> testList.add( "b" ) );
+		assert exception4.mutationContext.getClass() == ConcreteFreezableMutationContext.class;
 
 		MutableList<String> testList2 = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
 		{
@@ -169,7 +191,7 @@ public class T05_Mutation
 			return t;
 		} );
 		testList2.size();
-		var exception5 = TestKit.expect( MutationDisallowedException.class, () -> testList2.add( "b" ) );
-		assert exception5.mutationContext.getClass() == FreezableMutationContext.class;
+		var exception5 = TestKit.expect( MustBeWritableException.class, () -> testList2.add( "b" ) );
+		assert exception5.mutationContext.getClass() == ConcreteFreezableMutationContext.class;
 	}
 }

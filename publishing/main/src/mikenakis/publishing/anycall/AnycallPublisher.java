@@ -35,8 +35,8 @@ public final class AnycallPublisher<T> extends Mutable implements Closeable.Defa
 
 	public AnycallSubscription<T> addSubscription( Anycall<T> subscriber )
 	{
-		assert isAliveAssertion();
-		assert canMutateAssertion();
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		var subscription = new AnycallSubscription<>( this, subscriber );
 		subscriptions.add( subscription );
 		return subscription;
@@ -44,15 +44,15 @@ public final class AnycallPublisher<T> extends Mutable implements Closeable.Defa
 
 	void deregisterSubscription( AnycallSubscription<T> subscription )
 	{
-		assert isAliveAssertion();
-		assert canMutateAssertion();
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		subscriptions.remove( subscription );
 	}
 
 	@Override public void close()
 	{
-		assert isAliveAssertion();
-		assert canMutateAssertion();
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		if( subscriptions.nonEmpty() )
 		{
 			Log.warning( subscriptions.size() + "  subscriptions still open: " );
@@ -63,17 +63,16 @@ public final class AnycallPublisher<T> extends Mutable implements Closeable.Defa
 		lifeGuard.close();
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert canReadAssertion();
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		assert mustBeReadableAssertion();
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
 	public Anycall<T> allSubscribers()
 	{
-		assert isAliveAssertion();
-		assert canMutateAssertion();
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		return this::anycall;
 	}
 
@@ -90,7 +89,8 @@ public final class AnycallPublisher<T> extends Mutable implements Closeable.Defa
 
 	public boolean isEmpty()
 	{
-		assert isAliveAssertion();
+		assert mustBeAliveAssertion();
+		assert mustBeReadableAssertion();
 		return subscriptions.isEmpty();
 	}
 

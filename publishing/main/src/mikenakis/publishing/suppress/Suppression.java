@@ -17,14 +17,16 @@ public class Suppression extends Mutable implements Closeable.Defaults
 		suppressable.incrementSuppressionCount();
 	}
 
-	@Override public boolean isAliveAssertion()
+	@Override public boolean mustBeAliveAssertion()
 	{
-		assert lifeGuard.isAliveAssertion();
-		return true;
+		assert mustBeReadableAssertion();
+		return lifeGuard.mustBeAliveAssertion();
 	}
 
 	@Override public void close()
 	{
+		assert mustBeAliveAssertion();
+		assert mustBeWritableAssertion();
 		suppressable.decrementSuppressionCount();
 		lifeGuard.close();
 	}

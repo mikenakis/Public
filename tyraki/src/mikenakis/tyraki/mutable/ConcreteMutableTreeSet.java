@@ -42,7 +42,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 
 	@Override public int size()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return javaSet.size();
 	}
 
@@ -54,7 +54,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 	@Override public Optional<T> tryGet( T element )
 	{
 		assert element != null;
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		Item item = new Item( element );
 		if( !Kit.collection.contains( javaSet, item ) )
 			 return Optional.empty();
@@ -63,7 +63,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 
 	@Override public Optional<T> tryAdd( T element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( element );
 		if( !Kit.collection.tryAdd( javaSet, item ) )
 			return Optional.of( element );
@@ -73,7 +73,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 
 	@Override public boolean tryReplace( T oldElement, T newElement )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item oldItem = new Item( oldElement );
 		if( !Kit.collection.tryRemove( javaSet, oldItem ) )
 			return false;
@@ -85,7 +85,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 
 	@Override public boolean tryRemove( T element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( element );
 		if( !Kit.collection.tryRemove( javaSet, item ) )
 			return false;
@@ -95,7 +95,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( javaSet.isEmpty() )
 			return false;
 		javaSet.clear();
@@ -114,7 +114,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
 	{
-		assert canReadAssertion();
+		assert mustBeReadableAssertion();
 		return newMutableEnumerator();
 	}
 

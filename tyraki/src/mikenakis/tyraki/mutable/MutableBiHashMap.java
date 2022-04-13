@@ -26,7 +26,7 @@ public class MutableBiHashMap<K, V> extends AbstractMutableHashMap<K,V> implemen
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			assert canReadAssertion();
+			assert mustBeReadableAssertion();
 			return new MyEnumerator( super.newMutableEnumerator() );
 		}
 

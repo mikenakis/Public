@@ -2,7 +2,7 @@ package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.mutation.NotFrozenException;
+import mikenakis.kit.mutation.MustBeFrozenException;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.kit.EqualityComparator;
@@ -29,14 +29,9 @@ final class LegacyMutableCollectionOnJavaCollection<E> extends LegacyAbstractMut
 		this.collection = collection;
 	}
 
-	@Override public boolean isFrozenAssertion()
+	@Override public boolean isImmutableAssertion()
 	{
-		throw new NotFrozenException( null );
-	}
-
-	@Override public boolean canMutateAssertion()
-	{
-		return true; //we have no way of determining this with a java collection.
+		throw new MustBeFrozenException( null );
 	}
 
 	@Override public int hashCode()

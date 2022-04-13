@@ -29,7 +29,7 @@ public final class ImmutableCollections
 
 	private static final UnmodifiableArrayHashMap<Object,Object> emptyArrayHashMap = new UnmodifiableArrayHashMap.Defaults<>()
 	{
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
 			return true;
 		}
@@ -73,7 +73,7 @@ public final class ImmutableCollections
 
 	private static final UnmodifiableArrayHashSet<Object> emptyArrayHashSet = new UnmodifiableArrayHashSet.Defaults<>()
 	{
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
 			return true;
 		}
@@ -112,7 +112,7 @@ public final class ImmutableCollections
 
 	private static final UnmodifiableList<Object> emptyList = new UnmodifiableList.Defaults<>()
 	{
-		@Override public boolean isFrozenAssertion()
+		@Override public boolean isImmutableAssertion()
 		{
 			return true;
 		}

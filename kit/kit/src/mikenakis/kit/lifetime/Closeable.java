@@ -12,7 +12,7 @@ package mikenakis.kit.lifetime;
  */
 public interface Closeable extends AutoCloseable
 {
-	boolean isAliveAssertion();
+	boolean mustBeAliveAssertion();
 
 	@Override void close(); //overriding the close() method without any checked exceptions.
 

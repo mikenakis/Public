@@ -38,7 +38,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	@Override public boolean enqueue( E element )
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		Item item = new Item( element );
 		if( tail == null )
 		{
@@ -62,7 +62,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	@Override public Optional<E> tryDequeue()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( size == 0 )
 			return Optional.empty();
 		Item item = head;
@@ -73,7 +73,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	@Override public boolean clear()
 	{
-		assert canMutateAssertion();
+		assert mustBeWritableAssertion();
 		if( size == 0 )
 		{
 			assert head == null;
