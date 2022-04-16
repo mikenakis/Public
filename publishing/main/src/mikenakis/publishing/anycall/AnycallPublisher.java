@@ -3,10 +3,8 @@ package mikenakis.publishing.anycall;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.guard.LifeGuard;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.logging.Log;
-import mikenakis.kit.mutation.AbstractCoherent;
 import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -18,14 +16,13 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public final class AnycallPublisher<T> extends AbstractCoherent implements Closeable.Defaults
+public final class AnycallPublisher<T> extends AbstractMortalCoherent
 {
 	public static <T> AnycallPublisher<T> of( Coherence coherence )
 	{
 		return new AnycallPublisher<>( coherence );
 	}
 
-	private final LifeGuard lifeGuard = LifeGuard.of( this, true );
 	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( coherence ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
 
 	private AnycallPublisher( Coherence coherence )
@@ -49,10 +46,8 @@ public final class AnycallPublisher<T> extends AbstractCoherent implements Close
 		subscriptions.remove( subscription );
 	}
 
-	@Override public void close()
+	@Override protected void onClose()
 	{
-		assert mustBeAliveAssertion();
-		assert mustBeWritableAssertion();
 		if( subscriptions.nonEmpty() )
 		{
 			Log.warning( subscriptions.size() + "  subscriptions still open: " );
@@ -60,13 +55,7 @@ public final class AnycallPublisher<T> extends AbstractCoherent implements Close
 				Log.warning( "    " + subscription );
 			subscriptions.clear(); //forget them so that their lifeguards will raise warnings
 		}
-		lifeGuard.close();
-	}
-
-	@Override public boolean mustBeAliveAssertion()
-	{
-		assert mustBeReadableAssertion();
-		return lifeGuard.mustBeAliveAssertion();
+		super.onClose();
 	}
 
 	public Anycall<T> allSubscribers()
@@ -96,6 +85,6 @@ public final class AnycallPublisher<T> extends AbstractCoherent implements Close
 
 	@Override public String toString()
 	{
-		return lifeGuard.toString() + "; " + subscriptions.size() + " subscriptions";
+		return super.toString() + "; " + subscriptions.size() + " subscriptions";
 	}
 }

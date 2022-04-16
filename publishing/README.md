@@ -12,9 +12,9 @@ when invoked, multicasts the invocation to all subscribers that are currently re
 - The `Subscription` class represents the registration of a subscriber to a publisher.
 - The `Publisher` exposes a method for registering a subscriber but not for
 de-registering. Instead, when a subscriber is registered, a new `Subscription` object 
-is created, which is `Closeable`.  Cancelling the subscription and thus de-registering
+is created, which is `Mortal`.  Cancelling the subscription and thus de-registering
 the subscriber from the publisher is done by means of invoking `Subscription.close()`.
-- A `Publisher` is also `Closeable`, so that it can check, upon closing, to ensure that
+- A `Publisher` is also `Mortal`, so that it can check, upon closing, to ensure that
 all subscriptions have been closed beforehand.
 
 Two layers are provided:

@@ -176,7 +176,8 @@ The home page of the project is:
 
     - Avoid invoking the constructor of the test class for each test method.
 
-    - Get rid of `@Before` and `@After`: initialization should be done in the constructor and cleanup should be done in `close()` if the test class `implements AutoCloseable`.
+    - Get rid of `@Before` and `@After`: initialization should be done in the constructor and cleanup should be done 
+      in `close()` if the test class `implements AutoCloseable`.
 
 - TODO: try determining the order of testing based on packages instead of individual classes, see if it makes any interesting difference.
 

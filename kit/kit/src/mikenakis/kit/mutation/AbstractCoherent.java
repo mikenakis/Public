@@ -13,7 +13,7 @@ public abstract class AbstractCoherent implements Coherent
 		this.coherence = coherence;
 	}
 
-	@Override public Coherence coherence()
+	@Override public final Coherence coherence()
 	{
 		return coherence;
 	}

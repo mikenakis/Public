@@ -1,8 +1,6 @@
 package mikenakis.publishing.bespoke;
 
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.publishing.anycall.AnycallSubscription;
 
 /**
@@ -10,9 +8,8 @@ import mikenakis.publishing.anycall.AnycallSubscription;
  *
  * @author michael.gr
  */
-public class Subscription<T> extends AbstractCoherent implements Closeable.Defaults
+public class Subscription<T> extends AbstractMortalCoherent
 {
-	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Publisher<T> publisher;
 	private final T subscriber;
 	private final AnycallSubscription<T> anycallSubscription;
@@ -25,22 +22,14 @@ public class Subscription<T> extends AbstractCoherent implements Closeable.Defau
 		this.anycallSubscription = anycallSubscription;
 	}
 
-	@Override public boolean mustBeAliveAssertion()
+	@Override protected void onClose()
 	{
-		assert mustBeReadableAssertion();
-		return lifeGuard.mustBeAliveAssertion();
-	}
-
-	@Override public void close()
-	{
-		assert mustBeAliveAssertion();
-		assert mustBeWritableAssertion();
 		anycallSubscription.close();
-		lifeGuard.close();
+		super.onClose();
 	}
 
 	@Override public String toString()
 	{
-		return lifeGuard.toString() + " publisher: " + publisher + " subscriber: " + subscriber;
+		return super.toString() + " publisher: " + publisher + " subscriber: " + subscriber;
 	}
 }

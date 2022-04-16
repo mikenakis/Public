@@ -1,7 +1,9 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.debug.Debug;
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 
 import java.util.Optional;
 
@@ -10,17 +12,18 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public abstract class DevelopmentLifeGuard implements LifeGuard.Defaults
+public abstract class DevelopmentLifeGuard extends AbstractCoherent implements LifeGuard.Defaults
 {
 	public interface LifetimeErrorHandler
 	{
-		void invoke( Class<? extends Closeable> closeableClass, Optional<StackWalker.StackFrame[]> stackTrace );
+		void invoke( Class<? extends Mortal> mortalClass, Optional<StackWalker.StackFrame[]> stackTrace );
 	}
 
 	private static LifetimeErrorHandler lifetimeErrorHandler = DevelopmentLifeGuard::defaultLifetimeErrorHandler;
 
-	DevelopmentLifeGuard()
+	DevelopmentLifeGuard( Coherence coherence )
 	{
+		super( coherence );
 	}
 
 	static LifetimeErrorHandler getLifetimeErrorHandler()
@@ -37,10 +40,10 @@ public abstract class DevelopmentLifeGuard implements LifeGuard.Defaults
 		DevelopmentLifeGuard.lifetimeErrorHandler = lifetimeErrorHandler;
 	}
 
-	private static void defaultLifetimeErrorHandler( Class<?> closeableClass, Optional<StackWalker.StackFrame[]> allocationStackTrace )
+	private static void defaultLifetimeErrorHandler( Class<?> mortalClass, Optional<StackWalker.StackFrame[]> allocationStackTrace )
 	{
 		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuard::stackFramesToString ).orElse( "Collection of allocation stack trace is not enabled for this class." );
-		Debug.breakPoint( "Closeable class not closed: " + closeableClass + "\n" + stackTraceText );
+		Debug.breakPoint( "Mortal is still alive: " + mortalClass + "\n" + stackTraceText );
 	}
 
 	private static String stackFramesToString( StackWalker.StackFrame[] stackFrames )

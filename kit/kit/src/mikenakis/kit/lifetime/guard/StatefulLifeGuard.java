@@ -1,6 +1,6 @@
 package mikenakis.kit.lifetime.guard;
 
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.kit.mutation.AbstractCoherent;
 import mikenakis.kit.mutation.Coherence;
 
@@ -9,30 +9,30 @@ import mikenakis.kit.mutation.Coherence;
  *
  * @author michael.gr
  */
-public final class StatefulLifeGuard extends AbstractCoherent implements Closeable.Defaults
+public final class StatefulLifeGuard extends AbstractCoherent implements Mortal.Defaults
 {
-	public static StatefulLifeGuard of( Coherence coherence, Closeable closeable )
+	public static StatefulLifeGuard of( Coherence coherence, Mortal mortal )
 	{
-		return new StatefulLifeGuard( coherence, 1, closeable, false );
+		return of( coherence, 1, mortal, false );
 	}
 
-	public static StatefulLifeGuard of( Coherence coherence, Closeable closeable, boolean collectStackTrace )
+	public static StatefulLifeGuard of( Coherence coherence, Mortal mortal, boolean collectStackTrace )
 	{
-		return new StatefulLifeGuard( coherence, 1, closeable, collectStackTrace );
+		return of( coherence, 1, mortal, collectStackTrace );
 	}
 
-	public static StatefulLifeGuard of( Coherence coherence, int framesToSkip, Closeable closeable, boolean collectStackTrace )
+	public static StatefulLifeGuard of( Coherence coherence, int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
-		return new StatefulLifeGuard( coherence, framesToSkip + 1, closeable, collectStackTrace );
+		return new StatefulLifeGuard( coherence, framesToSkip + 1, mortal, collectStackTrace );
 	}
 
 	private final LifeGuard lifeGuard;
 	private boolean closed;
 
-	private StatefulLifeGuard( Coherence coherence, int framesToSkip, Closeable closeable, boolean collectStackTrace )
+	private StatefulLifeGuard( Coherence coherence, int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
 		super( coherence );
-		lifeGuard = LifeGuard.of( framesToSkip + 1, closeable, collectStackTrace );
+		lifeGuard = LifeGuard.of( framesToSkip + 1, mortal, collectStackTrace );
 	}
 
 	public boolean isClosed()

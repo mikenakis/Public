@@ -1,10 +1,10 @@
 package mikenakis.kit.mutation;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 
-public class TemporaryCoherence extends AbstractCoherent implements Coherence, Closeable.Defaults
+public class TemporaryCoherence extends AbstractCoherent implements Coherence, Mortal.Defaults
 {
 	public static TemporaryCoherence of()
 	{

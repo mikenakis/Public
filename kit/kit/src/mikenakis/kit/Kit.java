@@ -18,8 +18,8 @@ import mikenakis.kit.functional.ThrowingFunction0;
 import mikenakis.kit.functional.ThrowingFunction1;
 import mikenakis.kit.functional.ThrowingProcedure0;
 import mikenakis.kit.functional.ThrowingProcedure1;
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.CloseableWrapper;
+import mikenakis.kit.lifetime.Mortal;
+import mikenakis.kit.lifetime.MortalWrapper;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.ref.Ref;
 
@@ -2182,16 +2182,16 @@ public final class Kit
 	 *     <li><p>If assertions <b>are not</b> enabled:
 	 *         <ul>
 	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-function, passing it the closeable object, and returns its result.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes {@link Closeable#close()} on the closeable object.</p></li>
+	 *             <li><p>In the {@code try} part, it invokes the try-function, passing it the {@link Mortal} object, and returns its result.</p></li>
+	 *             <li><p>In the {@code finally} part, it invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
 	 *         </ul></p></li>
 	 *     <li><p>If assertions <b>are</b> enabled:
 	 *         <ul>
-	 *             <li><p>It invokes the try-function, passing it the closeable object, but it does so without using a {@code try-catch} block,
+	 *             <li><p>It invokes the try-function, passing it the {@link Mortal} object, but it does so without using a {@code try-catch} block,
 	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
 	 *             <li><p>If no exception is thrown:
 	 *                  <ul>
-	 *                      <li><p>It invokes {@link Closeable#close()} on the closeable object.</p></li>
+	 *                      <li><p>It invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
 	 *                      <li><p>It returns the result of invoking try-function.</p></li>
 	 *                  </ul></p></li>
 	 *         </ul></p></li>
@@ -2199,61 +2199,61 @@ public final class Kit
 	 *         <ul>
 	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
 	 *              (You supply the {@code try} code in a lambda, so you get to decide whether to use curly braces or not)</p></li>
-	 *             <li><p>it forces you to declare a variable, complete with its type, for the closeable object
+	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
 	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
 	 *        </ul></p></li>
 	 * </ul>
 	 *
-	 * @param closeable   the {@link Closeable} to close when done.
-	 * @param tryFunction a function which receives the {@link Closeable} object and produces a result.
-	 * @param <C>         the type of the {@link Closeable}. (Must extend {@link Closeable}.)
+	 * @param mortal      the {@link Mortal} to close when done.
+	 * @param tryFunction a function which receives the {@link Mortal} object and produces a result.
+	 * @param <C>         the type of the {@link Mortal}. (Must extend {@link Mortal}.)
 	 * @param <R>         the type of the result.
 	 *
 	 * @return the result of the try-function.
 	 */
-	public static <C extends Closeable, R> R tryGetWith( C closeable, Function1<R,? super C> tryFunction )
+	public static <C extends Mortal, R> R tryGetWith( C mortal, Function1<R,? super C> tryFunction )
 	{
-		assert closeable != null;
+		assert mortal != null;
 		if( debugging() )
 		{
-			R result = tryFunction.invoke( closeable );
-			closeable.close();
+			R result = tryFunction.invoke( mortal );
+			mortal.close();
 			return result;
 		}
 		else
 		{
-			try( closeable )
+			try( mortal )
 			{
-				return tryFunction.invoke( closeable );
+				return tryFunction.invoke( mortal );
 			}
 		}
 	}
 
 	/**
-	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Closeable}, execute some code,
-	 * and then destroy the {@link Closeable} but the code does not actually need to use the {@link Closeable}.
+	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Mortal}, execute some code,
+	 * and then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
 	 * <p>
-	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
+	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the mortal.
 	 *
-	 * @param closeable   the {@link Closeable} to close when done.
+	 * @param mortal      the {@link Mortal} to close when done.
 	 * @param tryFunction a function which produces a result.
-	 * @param <C>         the type of the {@link Closeable}. (Must extend {@link Closeable}.)
+	 * @param <C>         the type of the {@link Mortal}. (Must extend {@link Mortal}.)
 	 * @param <R>         the type of the result.
 	 *
 	 * @return the result of the try-function.
 	 */
-	public static <C extends Closeable, R> R tryGetWith( C closeable, Function0<R> tryFunction )
+	public static <C extends Mortal, R> R tryGetWith( C mortal, Function0<R> tryFunction )
 	{
-		assert closeable != null;
+		assert mortal != null;
 		if( debugging() )
 		{
 			R result = tryFunction.invoke();
-			closeable.close();
+			mortal.close();
 			return result;
 		}
 		else
 		{
-			try( closeable )
+			try( mortal )
 			{
 				return tryFunction.invoke();
 			}
@@ -2266,77 +2266,77 @@ public final class Kit
 	 *     <li><p>If assertions <b>are not</b> enabled:
 	 *         <ul>
 	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-procedure, passing it the closeable object.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes {@link Closeable#close()} on the closeable object.</p></li>
+	 *             <li><p>In the {@code try} part, it invokes the try-procedure, passing it the {@link Mortal} object.</p></li>
+	 *             <li><p>In the {@code finally} part, it invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
 	 *         </ul></p></li>
 	 *     <li><p>If assertions <b>are</b> enabled:
 	 *         <ul>
-	 *             <li><p>It invokes the try-procedure, passing it the closeable object, but it does so without using a {@code try-catch} block,
+	 *             <li><p>It invokes the try-procedure, passing it the {@link Mortal} object, but it does so without using a {@code try-catch} block,
 	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
 	 *             <li><p>If no exception is thrown:
 	 *                  <ul>
-	 *                      <li><p>It invokes {@link Closeable#close()} on the closeable object.</p></li>
+	 *                      <li><p>It invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
 	 *                  </ul></p></li>
 	 *         </ul></p></li>
 	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
 	 *         <ul>
 	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
 	 *              (You supply the {@code try} code in a lambda, so you get to decide whether to use curly braces or not)</p></li>
-	 *             <li><p>it forces you to declare a variable, complete with its type, for the closeable object
+	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
 	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
 	 *        </ul></p></li>
 	 * </ul>
 	 *
-	 * @param closeable    the {@link Closeable} to close when done.
-	 * @param tryProcedure a {@link Procedure1} which receives the closeable object and does something with it.
-	 * @param <C>          the type of the {@link Closeable}. (Must extend {@link Closeable}.)
+	 * @param mortal       the {@link Mortal} to close when done.
+	 * @param tryProcedure a {@link Procedure1} which receives the {@link Mortal} object and does something with it.
+	 * @param <C>          the type of the {@link Mortal}. (Must extend {@link Mortal}.)
 	 */
-	public static <C extends Closeable> void tryWith( C closeable, Procedure1<? super C> tryProcedure )
+	public static <C extends Mortal> void tryWith( C mortal, Procedure1<? super C> tryProcedure )
 	{
 		if( debugging() )
 		{
-			tryProcedure.invoke( closeable );
-			closeable.close();
+			tryProcedure.invoke( mortal );
+			mortal.close();
 		}
 		else
 		{
-			try( closeable )
+			try( mortal )
 			{
-				tryProcedure.invoke( closeable );
+				tryProcedure.invoke( mortal );
 			}
 		}
 	}
 
-	public static <C> void tryWithWrapper( CloseableWrapper<C> closeableWrapper, Procedure1<? super C> procedure )
+	public static <C> void tryWithWrapper( MortalWrapper<C> mortalWrapper, Procedure1<? super C> procedure )
 	{
-		tryWith( closeableWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
+		tryWith( mortalWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
 	}
 
-	public static <R,C> R tryGetWithWrapper( CloseableWrapper<C> closeableWrapper, Function1<R,? super C> function )
+	public static <R,C> R tryGetWithWrapper( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
 	{
-		return tryGetWith( closeableWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
+		return tryGetWith( mortalWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
 	}
 
 	/**
-	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Closeable}, execute some code,
-	 * and then destroy the {@link Closeable} but the code does not actually need to use the {@link Closeable}.
+	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Mortal}, execute some code,
+	 * and then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
 	 * <p>
-	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the closeable.
+	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the mortal.
 	 *
-	 * @param closeable    the {@link Closeable} to close when done.
+	 * @param mortal       the {@link Mortal} to close when done.
 	 * @param tryProcedure the {@link Procedure0} to execute.
-	 * @param <C>          the type of the {@link Closeable}. (Must extend {@link Closeable}.)
+	 * @param <C>          the type of the {@link Mortal}. (Must extend {@link Mortal}.)
 	 */
-	public static <C extends Closeable> void tryWith( C closeable, Procedure0 tryProcedure )
+	public static <C extends Mortal> void tryWith( C mortal, Procedure0 tryProcedure )
 	{
 		if( debugging() )
 		{
 			tryProcedure.invoke();
-			closeable.close();
+			mortal.close();
 		}
 		else
 		{
-			try( closeable )
+			try( mortal )
 			{
 				tryProcedure.invoke();
 			}
@@ -2416,25 +2416,25 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryGetWith( ThrowingFunction0<C,E> closeableFactory, //
+	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryGetWith( ThrowingFunction0<C,E> autoCloseableFactory, //
 		ThrowingFunction1<R,C,E> tryFunction )
 	{
-		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
-		C closeable = f.invoke();
-		assert closeable != null;
+		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
+		C autoCloseable = f.invoke();
+		assert autoCloseable != null;
 		if( debugging() )
 		{
-			R result = unchecked( () -> tryFunction.invoke( closeable ) );
-			unchecked( closeable::close );
+			R result = unchecked( () -> tryFunction.invoke( autoCloseable ) );
+			unchecked( autoCloseable::close );
 			return result;
 		}
 		try
 		{
-			return unchecked( () -> tryFunction.invoke( closeable ) );
+			return unchecked( () -> tryFunction.invoke( autoCloseable ) );
 		}
 		finally
 		{
-			unchecked( closeable::close );
+			unchecked( autoCloseable::close );
 		}
 	}
 
@@ -2442,26 +2442,26 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWith( ThrowingFunction0<C,E> closeableFactory, //
+	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWith( ThrowingFunction0<C,E> autoCloseableFactory, //
 		ThrowingProcedure1<C,E> tryProcedure )
 	{
-		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)closeableFactory;
-		C closeable = f.invoke();
-		assert closeable != null;
+		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
+		C autoCloseable = f.invoke();
+		assert autoCloseable != null;
 		if( debugging() )
 		{
-			unchecked( () -> tryProcedure.invoke( closeable ) );
-			unchecked( closeable::close );
+			unchecked( () -> tryProcedure.invoke( autoCloseable ) );
+			unchecked( autoCloseable::close );
 		}
 		else
 		{
 			try
 			{
-				unchecked( () -> tryProcedure.invoke( closeable ) );
+				unchecked( () -> tryProcedure.invoke( autoCloseable ) );
 			}
 			finally
 			{
-				unchecked( closeable::close );
+				unchecked( autoCloseable::close );
 			}
 		}
 	}

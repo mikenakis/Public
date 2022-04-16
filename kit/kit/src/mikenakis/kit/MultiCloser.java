@@ -1,37 +1,33 @@
 package mikenakis.kit;
 
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.guard.LifeGuard;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
+import mikenakis.kit.lifetime.Mortal;
+import mikenakis.kit.mutation.Coherence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MultiCloser implements Closeable.Defaults
+public class MultiCloser extends AbstractMortalCoherent
 {
-	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final List<Closeable> closeables = new ArrayList<>();
+	private final List<Mortal> mortals = new ArrayList<>();
 
-	public MultiCloser( Closeable... closeables )
+	public MultiCloser( Coherence coherence, Mortal... mortals )
 	{
-		this.closeables.addAll( Arrays.asList( closeables ) );
+		super( coherence );
+		this.mortals.addAll( Arrays.asList( mortals ) );
 	}
 
-	public <T extends Closeable> T add( T closeable )
+	public <T extends Mortal> T add( T mortal )
 	{
-		closeables.add( closeable );
-		return closeable;
+		mortals.add( mortal );
+		return mortal;
 	}
 
-	@Override public boolean mustBeAliveAssertion()
+	@Override protected void onClose()
 	{
-		return lifeGuard.mustBeAliveAssertion();
-	}
-
-	@Override public void close()
-	{
-		lifeGuard.close();
-		for( int i = closeables.size() - 1;  i >= 0;  i-- )
-			closeables.get( i ).close();
+		super.onClose();
+		for( int i = mortals.size() - 1;  i >= 0;  i-- )
+			mortals.get( i ).close();
 	}
 }

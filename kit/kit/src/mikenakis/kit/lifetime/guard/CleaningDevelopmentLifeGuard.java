@@ -1,6 +1,6 @@
 package mikenakis.kit.lifetime.guard;
 
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
 
 import java.lang.ref.Cleaner;
 import java.util.Optional;
@@ -12,23 +12,24 @@ import java.util.Optional;
  */
 public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 {
-	public static LifeGuard of( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
+	public static LifeGuard of( Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
-		return new CleaningDevelopmentLifeGuard( closeable, stackTrace );
+		return new CleaningDevelopmentLifeGuard( mortal, stackTrace );
 	}
 
 	private static final Cleaner cleaner = Cleaner.create(); //this must be static, or else the tests will suffer a huge performance penalty! See https://stackoverflow.com/q/46697432/773113
 
-	private final Class<? extends Closeable> closeableClass;
+	private final Class<? extends Mortal> mortalClass;
 	private final Optional<StackWalker.StackFrame[]> stackTrace;
 	private boolean closed;
 	private final Cleaner.Cleanable cleanable;
 
-	private CleaningDevelopmentLifeGuard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
+	private CleaningDevelopmentLifeGuard( Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
+		super( mortal.coherence() );
 		this.stackTrace = stackTrace;
-		closeableClass = closeable.getClass();
-		cleanable = cleaner.register( closeable, () -> clean() );
+		mortalClass = mortal.getClass();
+		cleanable = cleaner.register( mortal, () -> clean() );
 	}
 
 	@Override public void close()
@@ -40,14 +41,14 @@ public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 
 	@Override public boolean mustBeAliveAssertion()
 	{
-		assert !closed : new MustBeAliveException( closeableClass );
+		assert !closed : new MustBeAliveException( mortalClass );
 		return true;
 	}
 
 	private void clean()
 	{
 		if( !closed )
-			getLifetimeErrorHandler().invoke( closeableClass, stackTrace );
+			getLifetimeErrorHandler().invoke( mortalClass, stackTrace );
 	}
 
 	@Override public String toString()

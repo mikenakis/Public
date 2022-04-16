@@ -1,5 +1,8 @@
 package mikenakis.kit.lifetime.guard;
 
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.UnknownCoherence;
+
 /**
  * Production {@link LifeGuard}.
  *
@@ -21,5 +24,10 @@ final class ProductionLifeGuard implements LifeGuard.Defaults
 	@Override public void close()
 	{
 		/* nothing to do */
+	}
+
+	@Override public Coherence coherence()
+	{
+		return UnknownCoherence.instance;
 	}
 }

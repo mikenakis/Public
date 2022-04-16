@@ -2,8 +2,7 @@ package mikenakis.publishing.bespoke;
 
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.mutation.Coherence;
 import mikenakis.publishing.anycall.AnycallPublisher;
 import mikenakis.publishing.anycall.AnycallSubscription;
@@ -13,7 +12,7 @@ import mikenakis.publishing.anycall.AnycallSubscription;
  *
  * @author michael.gr
  */
-public final class Publisher<T> extends AbstractCoherent implements Closeable.Defaults
+public final class Publisher<T> extends AbstractMortalCoherent
 {
 	public static <T> Publisher<T> of( Coherence coherence, Class<T> interfaceType )
 	{
@@ -44,14 +43,10 @@ public final class Publisher<T> extends AbstractCoherent implements Closeable.De
 		return anycallPublisher.addSubscription( subscriber );
 	}
 
-	@Override public void close()
+	@Override protected void onClose()
 	{
 		anycallPublisher.close();
-	}
-
-	@Override public boolean mustBeAliveAssertion()
-	{
-		throw new RuntimeException(); //I do not expect this to ever be called.
+		super.onClose();
 	}
 
 	public T allSubscribers()

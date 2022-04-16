@@ -1,16 +1,16 @@
 package mikenakis.kit.lifetime;
 
+import mikenakis.kit.mutation.Coherent;
+
 /**
  * An object which is aware of its own lifetime.
  * See https://blog.michael.gr/2021/01/object-lifetime-awareness.html
  * In other words, this is an {@link AutoCloseable} which does not throw checked exceptions, and is capable of asserting its own 'alive' state.
- *
- * Normally this should be called 'LifetimeAware', but I have (at least for the time being) opted to call it "Closeable" since Java already has
- * the 'AutoCloseable' interface, which essentially serves the same purpose.
+ * Normally this should be called 'LifetimeAware', but that's too long.
  *
  * @author michael.gr
  */
-public interface Closeable extends AutoCloseable
+public interface Mortal extends AutoCloseable, Coherent
 {
 	boolean mustBeAliveAssertion();
 
@@ -18,7 +18,7 @@ public interface Closeable extends AutoCloseable
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	interface Defaults extends Closeable
+	interface Defaults extends Mortal
 	{
 	}
 }

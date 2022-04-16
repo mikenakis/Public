@@ -1,24 +1,21 @@
 package mikenakis.kit.mutation;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.lifetime.guard.LifeGuard;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.lifetime.guard.MustBeAliveException;
 
-public final class ConcreteFreezableCoherence implements FreezableCoherence, Closeable.Defaults
+public final class ConcreteFreezableCoherence extends AbstractMortalCoherent implements FreezableCoherence
 {
-	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final Coherence parentCoherence;
 	private boolean isFrozen;
 
 	ConcreteFreezableCoherence( Coherence parentCoherence )
 	{
-		this.parentCoherence = parentCoherence;
+		super( parentCoherence );
 	}
 
 	@Override public String toString()
 	{
-		return "parent: " + parentCoherence + "; isFrozen: " + isFrozen();
+		return "parent: " + coherence + "; isFrozen: " + isFrozen();
 	}
 
 	private boolean isFrozen()
@@ -41,24 +38,22 @@ public final class ConcreteFreezableCoherence implements FreezableCoherence, Clo
 	@Override public boolean mustBeAliveAssertion()
 	{
 		assert mustBeReadableAssertion();
-		return Kit.assertion( lifeGuard::mustBeAliveAssertion, cause -> new MustBeAliveException( getClass(), cause ) );
+		return Kit.assertion( super::mustBeAliveAssertion, cause -> new MustBeAliveException( getClass(), cause ) );
 	}
 
-	@Override public void close()
+	@Override protected void onClose()
 	{
-		assert mustBeAliveAssertion();
-		assert mustBeWritableAssertion();
-		lifeGuard.close();
 		isFrozen = true;
+		super.onClose();
 	}
 
 	@Override public boolean mustBeReadableAssertion()
 	{
-		return Kit.assertion( () -> isFrozen() || parentCoherence.mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
+		return Kit.assertion( () -> isFrozen() || coherence.mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
 	}
 
 	@Override public boolean mustBeWritableAssertion()
 	{
-		return Kit.assertion( () -> !isFrozen() && parentCoherence.mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
+		return Kit.assertion( () -> !isFrozen() && coherence.mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
 	}
 }

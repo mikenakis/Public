@@ -1,10 +1,12 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.kit.lifetime.guard.DevelopmentLifeGuard;
 import mikenakis.kit.lifetime.guard.MustBeAliveException;
-import mikenakis.kit.lifetime.guard.LifeGuard;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.ThreadLocalCoherence;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
@@ -24,48 +26,43 @@ public class T04_LifeGuard
 			throw new AssertionError();
 	}
 
-	private static class TestClass implements Closeable.Defaults
+	private static class TestClass extends AbstractMortalCoherent
 	{
-		private final LifeGuard lifeGuard = LifeGuard.of( this );
-
-		@Override public boolean mustBeAliveAssertion()
+		TestClass( Coherence coherence )
 		{
-			return lifeGuard.mustBeAliveAssertion();
-		}
-
-		@Override public void close()
-		{
-			lifeGuard.close();
+			super( coherence );
 		}
 	}
 
+	private final Coherence coherence = ThreadLocalCoherence.instance();
+
 	@Test public void object_is_not_alive_after_being_closed()
 	{
-		TestClass testObject = new TestClass();
+		TestClass testObject = new TestClass( coherence );
 		assert testObject.mustBeAliveAssertion();
 		testObject.close();
 		var exception = TestKit.expect( MustBeAliveException.class, () -> testObject.mustBeAliveAssertion() );
-		assert exception.closeableClass == TestClass.class;
+		assert exception.mortalClass == TestClass.class;
 	}
 
 	@Test public void failure_to_close_object_is_detected()
 	{
 		Kit.runGarbageCollection();
-		Collection<Class<? extends Closeable>> closeableClasses = new ConcurrentLinkedQueue<>();
-		DevelopmentLifeGuard.setLifetimeErrorHandler( ( Class<? extends Closeable> closeableClass, Optional<StackWalker.StackFrame[]> stackTrace ) -> //
+		Collection<Class<? extends Mortal>> mortalClasses = new ConcurrentLinkedQueue<>();
+		DevelopmentLifeGuard.setLifetimeErrorHandler( ( Class<? extends Mortal> mortalClass, Optional<StackWalker.StackFrame[]> stackTrace ) -> //
 		{
 			/* PEARL: if an exception is thrown here, the JVM will silently swallow it! */
-			closeableClasses.add( closeableClass );
+			mortalClasses.add( mortalClass );
 		} );
 		WeakReference<TestClass> weakReference = createAndForget();
 		while( weakReference.get() != null )
 			Kit.runGarbageCollection();
-		assert closeableClasses.stream().toList().contains( TestClass.class );
+		assert mortalClasses.stream().toList().contains( TestClass.class );
 	}
 
-	private static WeakReference<TestClass> createAndForget()
+	private WeakReference<TestClass> createAndForget()
 	{
-		TestClass testObject = new TestClass();
+		TestClass testObject = new TestClass( coherence );
 		assert testObject.mustBeAliveAssertion();
 		return new WeakReference<>( testObject );
 	}

@@ -1,37 +1,38 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
+import mikenakis.kit.mutation.Coherent;
 
 import java.util.Optional;
 
 /**
- * Object lifetime guard (for classes implementing {@link Closeable}).
+ * Object lifetime guard (for classes implementing {@link Mortal}).
  * See https://blog.michael.gr/2021/01/object-lifetime-awareness.html
  *
  * @author michael.gr
  */
-public interface LifeGuard extends Closeable
+public interface LifeGuard extends Mortal
 {
-	static LifeGuard of( Closeable closeable )
+	static LifeGuard of( Mortal mortal )
 	{
-		return of( 1, closeable, false );
+		return of( 1, mortal, false );
 	}
 
-	static LifeGuard of( Closeable closeable, boolean collectStackTrace )
+	static LifeGuard of( Mortal mortal, boolean collectStackTrace )
 	{
-		return of( 1, closeable, collectStackTrace );
+		return of( 1, mortal, collectStackTrace );
 	}
 
-	static LifeGuard of( int framesToSkip, Closeable closeable, boolean collectStackTrace )
+	static LifeGuard of( int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
 		if( !Kit.areAssertionsEnabled() )
 			return ProductionLifeGuard.instance;
 		Optional<StackWalker.StackFrame[]> stackTrace = collectStackTrace( framesToSkip + 1, collectStackTrace );
 		if( Kit.get( true ) )
-			return CleaningDevelopmentLifeGuard.of( closeable, stackTrace );
+			return CleaningDevelopmentLifeGuard.of( mortal, stackTrace );
 		else
-			return FinalizingDevelopmentLifeGuard.of( closeable, stackTrace );
+			return FinalizingDevelopmentLifeGuard.of( mortal, stackTrace );
 	}
 
 	private static Optional<StackWalker.StackFrame[]> collectStackTrace( int framesToSkip, boolean collectStackTrace )
@@ -41,7 +42,7 @@ public interface LifeGuard extends Closeable
 		return Optional.of( Kit.getStackTrace( framesToSkip + 1 ) );
 	}
 
-	interface Defaults extends LifeGuard, Closeable.Defaults
+	interface Defaults extends LifeGuard, Mortal.Defaults
 	{
 	}
 }

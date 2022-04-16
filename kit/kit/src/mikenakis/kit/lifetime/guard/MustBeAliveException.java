@@ -1,20 +1,20 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.UncheckedException;
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
 
 public class MustBeAliveException extends UncheckedException
 {
-	public final Class<? extends Closeable> closeableClass;
+	public final Class<? extends Mortal> mortalClass;
 
-	public MustBeAliveException( Class<? extends Closeable> closeableClass )
+	public MustBeAliveException( Class<? extends Mortal> mortalClass )
 	{
-		this.closeableClass = closeableClass;
+		this.mortalClass = mortalClass;
 	}
 
-	public MustBeAliveException( Class<? extends Closeable> closeableClass, Throwable cause )
+	public MustBeAliveException( Class<? extends Mortal> mortalClass, Throwable cause )
 	{
 		super( cause );
-		this.closeableClass = closeableClass;
+		this.mortalClass = mortalClass;
 	}
 }

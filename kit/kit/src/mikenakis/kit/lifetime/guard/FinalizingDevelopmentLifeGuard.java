@@ -1,7 +1,7 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.lifetime.Closeable;
+import mikenakis.kit.lifetime.Mortal;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Optional;
@@ -13,28 +13,29 @@ import java.util.Optional;
  */
 public final class FinalizingDevelopmentLifeGuard extends DevelopmentLifeGuard
 {
-	public static FinalizingDevelopmentLifeGuard of( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
+	public static FinalizingDevelopmentLifeGuard of( Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
-		return new FinalizingDevelopmentLifeGuard( closeable, stackTrace );
+		return new FinalizingDevelopmentLifeGuard( mortal, stackTrace );
 	}
 
-	private final Class<? extends Closeable> closeableClass;
+	private final Class<? extends Mortal> mortalClass;
 	private final Optional<StackWalker.StackFrame[]> stackTrace;
-	private final String closeableIdentity;
+	private final String mortalIdentity;
 	private boolean closed;
 
-	private FinalizingDevelopmentLifeGuard( Closeable closeable, Optional<StackWalker.StackFrame[]> stackTrace )
+	private FinalizingDevelopmentLifeGuard( Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
-		closeableClass = closeable.getClass();
+		super( mortal.coherence() );
+		mortalClass = mortal.getClass();
 		this.stackTrace = stackTrace;
-		closeableIdentity = Kit.identityString( closeable );
+		mortalIdentity = Kit.identityString( mortal );
 	}
 
 	@SuppressWarnings( "deprecation" ) @OverridingMethodsMustInvokeSuper @Deprecated @Override protected void finalize() throws Throwable
 	{
-		System.out.println( Kit.identityString( this ) + ": finalization of " + closeableIdentity + ": closed = " + closed );
+		System.out.println( Kit.identityString( this ) + ": finalization of " + mortalIdentity + ": closed = " + closed );
 		if( !closed )
-			getLifetimeErrorHandler().invoke( closeableClass, stackTrace );
+			getLifetimeErrorHandler().invoke( mortalClass, stackTrace );
 		super.finalize();
 	}
 
@@ -46,7 +47,7 @@ public final class FinalizingDevelopmentLifeGuard extends DevelopmentLifeGuard
 
 	@Override public boolean mustBeAliveAssertion()
 	{
-		assert !closed : new MustBeAliveException( closeableClass );
+		assert !closed : new MustBeAliveException( mortalClass );
 		return true;
 	}
 
