@@ -1,7 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -32,9 +32,9 @@ class ConvertingMutableCollection<T, F> extends AbstractUnmodifiableCollection<T
 		this.reverter = reverter;
 	}
 
-	@Override public MutationContext mutationContext()
+	@Override public Coherence coherence()
 	{
-		return collection.mutationContext();
+		return collection.coherence();
 	}
 
 	@Override public boolean isImmutableAssertion()

@@ -3,8 +3,8 @@ package mikenakis.publishing.bespoke;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.publishing.anycall.AnycallPublisher;
 import mikenakis.publishing.anycall.AnycallSubscription;
 
@@ -13,20 +13,20 @@ import mikenakis.publishing.anycall.AnycallSubscription;
  *
  * @author michael.gr
  */
-public final class Publisher<T> extends Mutable implements Closeable.Defaults
+public final class Publisher<T> extends AbstractCoherent implements Closeable.Defaults
 {
-	public static <T> Publisher<T> of( MutationContext mutationContext, Class<T> interfaceType )
+	public static <T> Publisher<T> of( Coherence coherence, Class<T> interfaceType )
 	{
-		return new Publisher<>( mutationContext, interfaceType );
+		return new Publisher<>( coherence, interfaceType );
 	}
 
 	private final Class<T> interfaceType;
 	private final T entwiner;
-	private final AnycallPublisher<T> anycallPublisher = AnycallPublisher.of( mutationContext );
+	private final AnycallPublisher<T> anycallPublisher = AnycallPublisher.of( coherence );
 
-	private Publisher( MutationContext mutationContext, Class<T> interfaceType )
+	private Publisher( Coherence coherence, Class<T> interfaceType )
 	{
-		super( mutationContext );
+		super( coherence );
 		this.interfaceType = interfaceType;
 		entwiner = IntertwineFactory.instance.getIntertwine( interfaceType ).newEntwiner( anycallPublisher.allSubscribers() );
 	}

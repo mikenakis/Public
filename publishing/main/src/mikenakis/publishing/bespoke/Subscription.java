@@ -2,7 +2,7 @@ package mikenakis.publishing.bespoke;
 
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.AbstractCoherent;
 import mikenakis.publishing.anycall.AnycallSubscription;
 
 /**
@@ -10,7 +10,7 @@ import mikenakis.publishing.anycall.AnycallSubscription;
  *
  * @author michael.gr
  */
-public class Subscription<T> extends Mutable implements Closeable.Defaults
+public class Subscription<T> extends AbstractCoherent implements Closeable.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Publisher<T> publisher;
@@ -19,7 +19,7 @@ public class Subscription<T> extends Mutable implements Closeable.Defaults
 
 	Subscription( Publisher<T> publisher, T subscriber, AnycallSubscription<T> anycallSubscription )
 	{
-		super( publisher.mutationContext() );
+		super( publisher.coherence() );
 		this.publisher = publisher;
 		this.subscriber = subscriber;
 		this.anycallSubscription = anycallSubscription;

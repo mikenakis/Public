@@ -1,6 +1,6 @@
 package mikenakis.kit.mutation;
 
-public abstract class SimpleMutationContext implements MutationContext
+public abstract class SimpleCoherence implements Coherence
 {
 	protected abstract boolean isEntered();
 

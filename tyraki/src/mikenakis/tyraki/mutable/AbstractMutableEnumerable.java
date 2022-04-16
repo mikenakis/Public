@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.mutation.FreezableMutationContext;
+import mikenakis.kit.mutation.FreezableCoherence;
 import mikenakis.tyraki.DebugView;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.UnmodifiableCollection;
@@ -22,7 +22,7 @@ abstract class AbstractMutableEnumerable<E> extends MutableCollectionsSubject im
 
 	@Override public boolean isImmutableAssertion()
 	{
-		return mutationContext instanceof FreezableMutationContext freezableMutationContext && freezableMutationContext.mustBeFrozenAssertion();
+		return coherence instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
 	}
 
 	@Override public final int hashCode()

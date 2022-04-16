@@ -4,23 +4,23 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 
-public class TemporaryMutationContext extends Mutable implements MutationContext, Closeable.Defaults
+public class TemporaryCoherence extends AbstractCoherent implements Coherence, Closeable.Defaults
 {
-	public static TemporaryMutationContext of()
+	public static TemporaryCoherence of()
 	{
-		return of( ThreadLocalMutationContext.instance() );
+		return of( ThreadLocalCoherence.instance() );
 	}
 
-	public static TemporaryMutationContext of( MutationContext parentMutationContext )
+	public static TemporaryCoherence of( Coherence parentCoherence )
 	{
-		return new TemporaryMutationContext( parentMutationContext );
+		return new TemporaryCoherence( parentCoherence );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 
-	private TemporaryMutationContext( MutationContext parentMutationContext )
+	private TemporaryCoherence( Coherence parentCoherence )
 	{
-		super( parentMutationContext );
+		super( parentCoherence );
 	}
 
 	@Override public boolean mustBeAliveAssertion()

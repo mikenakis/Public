@@ -4,13 +4,13 @@ import mikenakis.kit.UncheckedException;
 
 public class MustBeWritableException extends UncheckedException
 {
-	public final MutationContext mutationContext;
+	public final Coherence coherence;
 
-	public MustBeWritableException( MutationContext mutationContext ) { this.mutationContext = mutationContext; }
+	public MustBeWritableException( Coherence coherence ) { this.coherence = coherence; }
 
-	public MustBeWritableException( MutationContext mutationContext, Throwable cause )
+	public MustBeWritableException( Coherence coherence, Throwable cause )
 	{
 		super( cause );
-		this.mutationContext = mutationContext;
+		this.coherence = coherence;
 	}
 }

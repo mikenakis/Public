@@ -8,8 +8,8 @@ import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffer.CaseInsensitiveBufferEqualityComparator;
 import mikenakis.kit.buffer.CaseInsensitiveBufferHasher;
 import mikenakis.kit.functional.Procedure1;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.CaseInsensitiveStringEqualityComparator;
 import mikenakis.tyraki.CaseInsensitiveStringHasher;
 import mikenakis.tyraki.IdentityHasher;
@@ -40,19 +40,19 @@ import java.util.Comparator;
  *
  * @author michael.gr
  */
-public final class MutableCollections extends Mutable
+public final class MutableCollections extends AbstractCoherent
 {
-	public static MutableCollections of( MutationContext mutationContext )
+	public static MutableCollections of( Coherence coherence )
 	{
-		return new MutableCollections( mutationContext );
+		return new MutableCollections( coherence );
 	}
 
 	private static final int DEFAULT_INITIAL_CAPACITY = 16;
 	private static final float DEFAULT_FILL_FACTOR = 0.75f;
 
-	private MutableCollections( MutationContext mutationContext  )
+	private MutableCollections( Coherence coherence  )
 	{
-		super( mutationContext );
+		super( coherence );
 	}
 
 	/**

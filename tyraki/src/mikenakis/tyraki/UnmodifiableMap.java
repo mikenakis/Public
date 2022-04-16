@@ -4,7 +4,7 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.FreezableMutationContext;
+import mikenakis.kit.mutation.FreezableCoherence;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -58,9 +58,9 @@ public interface UnmodifiableMap<K, V>
 
 	static <T, K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
 	{
-		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
+			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( T item : items )
 			{
@@ -74,9 +74,9 @@ public interface UnmodifiableMap<K, V>
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
 	{
-		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
+			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( K key : keys )
 			{
@@ -114,9 +114,9 @@ public interface UnmodifiableMap<K, V>
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableEnumerable<Binding<K,V>> bindings )
 	{
-		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
+			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
 			for( var binding : bindings )
 				freezableMap.add( binding.getKey(), binding.getValue() );

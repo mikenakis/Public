@@ -4,7 +4,7 @@ import mikenakis.kit.UncheckedException;
 
 public class MustBeFrozenException extends UncheckedException
 {
-	public final MutationContext mutationContext;
+	public final Coherence coherence;
 
-	public MustBeFrozenException( MutationContext mutationContext ) { this.mutationContext = mutationContext; }
+	public MustBeFrozenException( Coherence coherence ) { this.coherence = coherence; }
 }

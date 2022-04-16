@@ -1,19 +1,19 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.mutation.Mutable;
+import mikenakis.kit.mutation.AbstractCoherent;
 
 /**
  * A subject of {@link MutableCollections}.
  *
  * @author michael.gr
  */
-public abstract class MutableCollectionsSubject extends Mutable
+public abstract class MutableCollectionsSubject extends AbstractCoherent
 {
 	protected final MutableCollections mutableCollections;
 
 	protected MutableCollectionsSubject( MutableCollections mutableCollections )
 	{
-		super( mutableCollections.mutationContext() );
+		super( mutableCollections.coherence() );
 		assert mutableCollections != null;
 		this.mutableCollections = mutableCollections;
 	}

@@ -3,9 +3,9 @@ package mikenakis.tyraki;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.BooleanFunction2;
-import mikenakis.kit.mutation.FreezableMutationContext;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.FreezableCoherence;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Objects;
@@ -15,14 +15,14 @@ import java.util.Objects;
  *
  * @param <R>
  */
-public class SafeEnumerableComparator<R> extends Mutable
+public class SafeEnumerableComparator<R> extends AbstractCoherent
 {
 	public static <R> boolean compare( BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher, //
 		UnmodifiableEnumerable<? extends R> enumerableA, UnmodifiableEnumerable<? extends R> enumerableB )
 	{
-		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
-			SafeEnumerableComparator<R> safeEnumerableComparator = new SafeEnumerableComparator<>( mutationContext, valueComparator, identityComparator, identityHasher );
+			SafeEnumerableComparator<R> safeEnumerableComparator = new SafeEnumerableComparator<>( coherence, valueComparator, identityComparator, identityHasher );
 			return safeEnumerableComparator.compare( enumerableA, enumerableB );
 		} );
 	}
@@ -30,11 +30,11 @@ public class SafeEnumerableComparator<R> extends Mutable
 	private final BooleanFunction2<R,R> valueComparator;
 	private final BooleanFunction2<R,R> identityComparator;
 	private final Hasher<R> identityHasher;
-	private final MutableCollection<MyComparison> comparisons = MutableCollections.of( mutationContext ).newLinkedHashSet();
+	private final MutableCollection<MyComparison> comparisons = MutableCollections.of( coherence ).newLinkedHashSet();
 
-	private SafeEnumerableComparator( MutationContext mutationContext, BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher )
+	private SafeEnumerableComparator( Coherence coherence, BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher )
 	{
-		super( mutationContext );
+		super( coherence );
 		this.valueComparator = valueComparator;
 		this.identityComparator = identityComparator;
 		this.identityHasher = identityHasher;

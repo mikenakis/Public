@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
+import mikenakis.kit.mutation.ThreadLocalCoherence;
 
 /**
  * Single-threaded {@link MutableCollections}.
@@ -10,7 +10,7 @@ import mikenakis.kit.mutation.ThreadLocalMutationContext;
 public final class SingleThreadedMutableCollections
 {
 	private static final ThreadLocal<MutableCollections> instance = ThreadLocal.withInitial( () -> //
-		MutableCollections.of( ThreadLocalMutationContext.instance() ) );
+		MutableCollections.of( ThreadLocalCoherence.instance() ) );
 
 	public static MutableCollections instance()
 	{

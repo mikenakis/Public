@@ -1,7 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -17,9 +17,9 @@ final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumera
 		this.converter = converter;
 	}
 
-	@Override public MutationContext mutationContext()
+	@Override public Coherence coherence()
 	{
-		return enumerable.mutationContext();
+		return enumerable.coherence();
 	}
 
 	@Override public boolean isImmutableAssertion()

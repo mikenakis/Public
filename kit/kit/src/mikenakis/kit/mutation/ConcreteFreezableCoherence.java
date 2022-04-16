@@ -5,20 +5,20 @@ import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.lifetime.guard.MustBeAliveException;
 
-public final class ConcreteFreezableMutationContext implements FreezableMutationContext, Closeable.Defaults
+public final class ConcreteFreezableCoherence implements FreezableCoherence, Closeable.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final MutationContext parentMutationContext;
+	private final Coherence parentCoherence;
 	private boolean isFrozen;
 
-	ConcreteFreezableMutationContext( MutationContext parentMutationContext )
+	ConcreteFreezableCoherence( Coherence parentCoherence )
 	{
-		this.parentMutationContext = parentMutationContext;
+		this.parentCoherence = parentCoherence;
 	}
 
 	@Override public String toString()
 	{
-		return "parent: " + parentMutationContext + "; isFrozen: " + isFrozen();
+		return "parent: " + parentCoherence + "; isFrozen: " + isFrozen();
 	}
 
 	private boolean isFrozen()
@@ -54,11 +54,11 @@ public final class ConcreteFreezableMutationContext implements FreezableMutation
 
 	@Override public boolean mustBeReadableAssertion()
 	{
-		return Kit.assertion( () -> isFrozen() || parentMutationContext.mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
+		return Kit.assertion( () -> isFrozen() || parentCoherence.mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
 	}
 
 	@Override public boolean mustBeWritableAssertion()
 	{
-		return Kit.assertion( () -> !isFrozen() && parentMutationContext.mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
+		return Kit.assertion( () -> !isFrozen() && parentCoherence.mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
 	}
 }

@@ -5,8 +5,8 @@ import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
 import mikenakis.kit.mutation.MustBeFrozenException;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.UnknownMutationContext;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.UnknownCoherence;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.MapEntry;
@@ -39,9 +39,9 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public MutationContext mutationContext()
+		@Override public Coherence coherence()
 		{
-			return UnknownMutationContext.instance;
+			return UnknownCoherence.instance;
 		}
 
 		@Override public boolean isImmutableAssertion()
@@ -124,9 +124,9 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public MutationContext mutationContext()
+		@Override public Coherence coherence()
 		{
-			return UnknownMutationContext.instance;
+			return UnknownCoherence.instance;
 		}
 
 		@Override public boolean isImmutableAssertion()
@@ -226,9 +226,9 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		{
 		}
 
-		@Override public MutationContext mutationContext()
+		@Override public Coherence coherence()
 		{
-			return UnknownMutationContext.instance;
+			return UnknownCoherence.instance;
 		}
 
 		@Override public boolean isImmutableAssertion()

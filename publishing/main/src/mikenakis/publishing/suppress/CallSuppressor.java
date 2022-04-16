@@ -2,7 +2,7 @@ package mikenakis.publishing.suppress;
 
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.intertwine.Intertwine;
@@ -37,9 +37,9 @@ public class CallSuppressor<N> extends Suppressor
 	private N entryPoint;
 	private Optional<MutableCollection<QueueEntry<N>>> queue = Optional.empty();
 
-	public CallSuppressor( MutationContext mutationContext, IntertwineFactory intertwineFactory, Class<? super N> interfaceType, N delegee )
+	public CallSuppressor( Coherence coherence, IntertwineFactory intertwineFactory, Class<? super N> interfaceType, N delegee )
 	{
-		super( mutationContext );
+		super( coherence );
 		this.delegee = delegee;
 		Intertwine<N> intertwine = intertwineFactory.getIntertwine( interfaceType );
 		entwiner = intertwine.newEntwiner( ( k, a ) -> //
@@ -55,7 +55,7 @@ public class CallSuppressor<N> extends Suppressor
 	@Override protected void onSuppress()
 	{
 		assert queue.isEmpty();
-		queue = Optional.of( MutableCollections.of( mutationContext ).newArrayList() );
+		queue = Optional.of( MutableCollections.of( coherence ).newArrayList() );
 		entryPoint = entwiner;
 	}
 

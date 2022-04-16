@@ -4,13 +4,13 @@ import mikenakis.kit.UncheckedException;
 
 public class MustBeReadableException extends UncheckedException
 {
-	public final MutationContext mutationContext;
+	public final Coherence coherence;
 
-	public MustBeReadableException( MutationContext mutationContext ) { this.mutationContext = mutationContext; }
+	public MustBeReadableException( Coherence coherence ) { this.coherence = coherence; }
 
-	public MustBeReadableException( MutationContext mutationContext, Throwable cause )
+	public MustBeReadableException( Coherence coherence, Throwable cause )
 	{
 		super( cause );
-		this.mutationContext = mutationContext;
+		this.coherence = coherence;
 	}
 }

@@ -1,15 +1,15 @@
 package mikenakis.kit.mutation;
 
 /**
- * Thread {@link MutationContext}.
+ * Thread {@link Coherence}.
  *
  * @author michael.gr
  */
-final class ThreadMutationContext extends SimpleMutationContext
+final class ThreadCoherence extends SimpleCoherence
 {
 	private final Thread constructionThread;
 
-	ThreadMutationContext()
+	ThreadCoherence()
 	{
 		constructionThread = Thread.currentThread();
 	}

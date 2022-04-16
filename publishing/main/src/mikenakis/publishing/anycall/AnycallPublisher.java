@@ -6,8 +6,8 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.logging.Log;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.mutable.MutableCollections;
 
@@ -18,19 +18,19 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public final class AnycallPublisher<T> extends Mutable implements Closeable.Defaults
+public final class AnycallPublisher<T> extends AbstractCoherent implements Closeable.Defaults
 {
-	public static <T> AnycallPublisher<T> of( MutationContext mutationContext )
+	public static <T> AnycallPublisher<T> of( Coherence coherence )
 	{
-		return new AnycallPublisher<>( mutationContext );
+		return new AnycallPublisher<>( coherence );
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this, true );
-	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( mutationContext ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
+	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( coherence ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
 
-	private AnycallPublisher( MutationContext mutationContext )
+	private AnycallPublisher( Coherence coherence )
 	{
-		super( mutationContext );
+		super( coherence );
 	}
 
 	public AnycallSubscription<T> addSubscription( Anycall<T> subscriber )

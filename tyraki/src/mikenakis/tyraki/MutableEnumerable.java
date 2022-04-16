@@ -2,7 +2,8 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.Coherent;
 import mikenakis.tyraki.conversion.ConversionCollections;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
+public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>, Coherent
 {
 	/**
 	 * Down-casts to an ancestral type.
@@ -33,8 +34,6 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 		MutableEnumerable<T> result = (MutableEnumerable<T>)enumerable;
 		return result;
 	}
-
-	MutationContext mutationContext();
 
 	/**
 	 * Returns a {@link MutableEnumerator} over elements of type T.
@@ -195,9 +194,9 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 	{
 		MutableEnumerable<E> getDecoratedMutableEnumerable();
 
-		@Override default MutationContext mutationContext()
+		@Override default Coherence coherence()
 		{
-			return getDecoratedMutableEnumerable().mutationContext();
+			return getDecoratedMutableEnumerable().coherence();
 		}
 
 		@Override default UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable()
@@ -233,9 +232,9 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 			return this;
 		}
 
-		@Override public MutationContext mutationContext()
+		@Override public Coherence coherence()
 		{
-			return getDecoratedMutableEnumerable().mutationContext();
+			return getDecoratedMutableEnumerable().coherence();
 		}
 	}
 }

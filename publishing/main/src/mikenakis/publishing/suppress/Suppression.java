@@ -2,17 +2,17 @@ package mikenakis.publishing.suppress;
 
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 
-public class Suppression extends Mutable implements Closeable.Defaults
+public class Suppression extends AbstractCoherent implements Closeable.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final Suppressable suppressable;
 
-	public Suppression( MutationContext mutationContext, Suppressable suppressable )
+	public Suppression( Coherence coherence, Suppressable suppressable )
 	{
-		super( mutationContext );
+		super( coherence );
 		this.suppressable = suppressable;
 		suppressable.incrementSuppressionCount();
 	}

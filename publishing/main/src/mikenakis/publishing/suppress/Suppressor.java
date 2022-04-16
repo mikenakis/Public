@@ -1,25 +1,25 @@
 package mikenakis.publishing.suppress;
 
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 
 /**
  * Base class for suppressors.
  *
  * @author michael.gr
  */
-public abstract class Suppressor extends Mutable implements Suppressable
+public abstract class Suppressor extends AbstractCoherent implements Suppressable
 {
 	private int suppressionCount = 0;
 
-	protected Suppressor( MutationContext mutationContext )
+	protected Suppressor( Coherence coherence )
 	{
-		super( mutationContext );
+		super( coherence );
 	}
 
 	@Override public Suppression newSuppression()
 	{
-		return new Suppression( mutationContext, this );
+		return new Suppression( coherence, this );
 	}
 
 	@Override public void incrementSuppressionCount()

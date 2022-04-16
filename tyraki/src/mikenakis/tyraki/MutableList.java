@@ -127,7 +127,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 	{
 		@Override default Optional<E> tryAdd( E element )
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			int index = size();
 			insertAt( index, element );
 			return Optional.empty();
@@ -135,7 +135,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default MutableList<E> add( E element )
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			int index = size();
 			insertAt( index, element );
 			return this;
@@ -151,7 +151,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default void revert()
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			int length = size();
 			for( int hi = length - 1, lo = 0; lo < hi; lo++, hi-- )
 			{
@@ -176,7 +176,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default void swapAt( int index1, int index2 )
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			E element1 = get( index1 );
 			E element2 = get( index2 );
 			replaceAt( index1, element2 );
@@ -185,7 +185,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default boolean tryReplace( E oldElement, E newElement )
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			int index = indexOf( oldElement );
 			if( index == -1 )
 				return false;
@@ -195,7 +195,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default boolean tryRemove( E element )
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			int index = indexOf( element );
 			if( index == -1 )
 				return false;
@@ -227,7 +227,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default E getAndRemove( int index )
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			E element = get( index );
 			removeAt( index );
 			return element;
@@ -235,7 +235,7 @@ public interface MutableList<E> extends MutableCollection<E>, UnmodifiableList<E
 
 		@Override default void removeLast()
 		{
-			assert mutationContext().mustBeWritableAssertion();
+			assert coherence().mustBeWritableAssertion();
 			int index = size() - 1;
 			removeAt( index );
 		}

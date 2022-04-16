@@ -1,37 +1,37 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.lifetime.Closeable;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 
 /**
  * A {@link LifeGuard} which contains an explicit open/closed state.
  *
  * @author michael.gr
  */
-public final class StatefulLifeGuard extends Mutable implements Closeable.Defaults
+public final class StatefulLifeGuard extends AbstractCoherent implements Closeable.Defaults
 {
-	public static StatefulLifeGuard of( MutationContext mutationContext, Closeable closeable )
+	public static StatefulLifeGuard of( Coherence coherence, Closeable closeable )
 	{
-		return new StatefulLifeGuard( mutationContext, 1, closeable, false );
+		return new StatefulLifeGuard( coherence, 1, closeable, false );
 	}
 
-	public static StatefulLifeGuard of( MutationContext mutationContext, Closeable closeable, boolean collectStackTrace )
+	public static StatefulLifeGuard of( Coherence coherence, Closeable closeable, boolean collectStackTrace )
 	{
-		return new StatefulLifeGuard( mutationContext, 1, closeable, collectStackTrace );
+		return new StatefulLifeGuard( coherence, 1, closeable, collectStackTrace );
 	}
 
-	public static StatefulLifeGuard of( MutationContext mutationContext, int framesToSkip, Closeable closeable, boolean collectStackTrace )
+	public static StatefulLifeGuard of( Coherence coherence, int framesToSkip, Closeable closeable, boolean collectStackTrace )
 	{
-		return new StatefulLifeGuard( mutationContext, framesToSkip + 1, closeable, collectStackTrace );
+		return new StatefulLifeGuard( coherence, framesToSkip + 1, closeable, collectStackTrace );
 	}
 
 	private final LifeGuard lifeGuard;
 	private boolean closed;
 
-	private StatefulLifeGuard( MutationContext mutationContext, int framesToSkip, Closeable closeable, boolean collectStackTrace )
+	private StatefulLifeGuard( Coherence coherence, int framesToSkip, Closeable closeable, boolean collectStackTrace )
 	{
-		super( mutationContext );
+		super( coherence );
 		lifeGuard = LifeGuard.of( framesToSkip + 1, closeable, collectStackTrace );
 	}
 

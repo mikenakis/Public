@@ -1,10 +1,10 @@
 package mikenakis.kit.mutation;
 
-public final class UnknownMutationContext implements MutationContext
+public final class UnknownCoherence implements Coherence
 {
-	public static final MutationContext instance = new UnknownMutationContext();
+	public static final Coherence instance = new UnknownCoherence();
 
-	private UnknownMutationContext()
+	private UnknownCoherence()
 	{
 	}
 

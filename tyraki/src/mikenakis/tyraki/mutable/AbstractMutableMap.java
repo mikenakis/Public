@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.mutation.FreezableMutationContext;
+import mikenakis.kit.mutation.FreezableCoherence;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.DebugView;
@@ -90,7 +90,7 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 
 	@Override public boolean isImmutableAssertion()
 	{
-		return mutationContext instanceof FreezableMutationContext freezableMutationContext && freezableMutationContext.mustBeFrozenAssertion();
+		return coherence instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
 	}
 
 	@Override public boolean equals( Object other )

@@ -2,9 +2,9 @@ package mikenakis.kit.buffers;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.ThreadLocalCoherence;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author michael.gr
  */
-public final class BufferAllocator extends Mutable
+public final class BufferAllocator extends AbstractCoherent
 {
 	private static final BufferAllocator instance = new BufferAllocator();
 
@@ -28,7 +28,7 @@ public final class BufferAllocator extends Mutable
 
 	private BufferAllocator()
 	{
-		super( ThreadLocalMutationContext.instance() );
+		super( ThreadLocalCoherence.instance() );
 	}
 
 	public int getBufferSize( BufferKey bufferKey )
@@ -50,8 +50,8 @@ public final class BufferAllocator extends Mutable
 		int bufferSize = getBufferSize( bufferKey );
 		/* TODO */
 		byte[] bytes = new byte[bufferSize];
-		MutationContext mutationContext = ThreadLocalMutationContext.instance();
-		return new BufferAllocation( mutationContext, this, bytes );
+		Coherence coherence = ThreadLocalCoherence.instance();
+		return new BufferAllocation( coherence, this, bytes );
 	}
 
 	void release( BufferAllocation bufferAllocation )

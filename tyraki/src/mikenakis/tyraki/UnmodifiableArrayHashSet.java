@@ -3,8 +3,7 @@ package mikenakis.tyraki;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
-import mikenakis.kit.mutation.FreezableMutationContext;
-import mikenakis.kit.mutation.TemporaryMutationContext;
+import mikenakis.kit.mutation.FreezableCoherence;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 
@@ -26,9 +25,9 @@ public interface UnmodifiableArrayHashSet<E> extends UnmodifiableArraySet<E>, Un
 	{
 		if( items.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableMutationContext.of(), mutationContext -> //
+		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( mutationContext );
+			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableArrayHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
 			mutableSet.addAll( items );
 			return mutableSet;

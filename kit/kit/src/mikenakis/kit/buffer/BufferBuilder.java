@@ -1,36 +1,36 @@
 package mikenakis.kit.buffer;
 
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.ThreadLocalCoherence;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public final class BufferBuilder extends Mutable
+public final class BufferBuilder extends AbstractCoherent
 {
 	public static BufferBuilder of()
 	{
-		return of( ThreadLocalMutationContext.instance() );
+		return of( ThreadLocalCoherence.instance() );
 	}
 
-	public static BufferBuilder of( MutationContext mutationContext )
+	public static BufferBuilder of( Coherence coherence )
 	{
-		return of( mutationContext, 16 );
+		return of( coherence, 16 );
 	}
 
-	public static BufferBuilder of( MutationContext mutationContext, int capacity )
+	public static BufferBuilder of( Coherence coherence, int capacity )
 	{
-		return new BufferBuilder( mutationContext, capacity );
+		return new BufferBuilder( coherence, capacity );
 	}
 
 	private byte[] value;
 	private int count;
 
-	private BufferBuilder( MutationContext mutationContext, int capacity )
+	private BufferBuilder( Coherence coherence, int capacity )
 	{
-		super( mutationContext );
+		super( coherence );
 		value = new byte[capacity];
 		count = 0;
 	}

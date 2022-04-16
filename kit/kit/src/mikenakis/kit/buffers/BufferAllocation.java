@@ -2,23 +2,23 @@ package mikenakis.kit.buffers;
 
 import mikenakis.kit.lifetime.Closeable;
 import mikenakis.kit.lifetime.guard.LifeGuard;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
 
 /**
  * Represents a buffer allocation.
  *
  * @author michael.gr
  */
-public final class BufferAllocation extends Mutable implements Closeable.Defaults
+public final class BufferAllocation extends AbstractCoherent implements Closeable.Defaults
 {
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final BufferAllocator bufferAllocator;
 	public final byte[] bytes;
 
-	BufferAllocation( MutationContext mutationContext, BufferAllocator bufferAllocator, byte[] bytes )
+	BufferAllocation( Coherence coherence, BufferAllocator bufferAllocator, byte[] bytes )
 	{
-		super( mutationContext );
+		super( coherence );
 		this.bufferAllocator = bufferAllocator;
 		this.bytes = bytes;
 	}

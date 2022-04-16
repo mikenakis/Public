@@ -1,16 +1,16 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.mutation.ConcreteFreezableMutationContext;
-import mikenakis.kit.mutation.FreezableMutationContext;
+import mikenakis.kit.mutation.ConcreteFreezableCoherence;
+import mikenakis.kit.mutation.FreezableCoherence;
 import mikenakis.kit.mutation.MustBeFrozenException;
 import mikenakis.kit.mutation.MustBeReadableException;
 import mikenakis.kit.mutation.MustBeWritableException;
 import mikenakis.kit.mutation.MustNotBeFrozenException;
-import mikenakis.kit.mutation.Mutable;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.TemporaryMutationContext;
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
+import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.TemporaryCoherence;
+import mikenakis.kit.mutation.ThreadLocalCoherence;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -27,11 +27,11 @@ public class T05_Mutation
 			throw new AssertionError();
 	}
 
-	private static class TestClass extends Mutable
+	private static class TestClass extends AbstractCoherent
 	{
-		TestClass( MutationContext mutationContext )
+		TestClass( Coherence coherence )
 		{
-			super( mutationContext );
+			super( coherence );
 		}
 
 		void readOperation()
@@ -45,12 +45,12 @@ public class T05_Mutation
 		}
 	}
 
-	private static class TestMutationContext implements FreezableMutationContext
+	private static class TestCoherence implements FreezableCoherence
 	{
 		boolean isEntered;
 		boolean isFrozen;
 
-		TestMutationContext( boolean isEntered, boolean isFrozen )
+		TestCoherence( boolean isEntered, boolean isFrozen )
 		{
 			this.isEntered = isEntered;
 			this.isFrozen = isFrozen;
@@ -88,110 +88,110 @@ public class T05_Mutation
 
 	@Test public void object_can_read_and_mutate_when_both_allowed()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext( true, false );
-		TestClass testObject = new TestClass( testMutationContext );
-		testMutationContext.isFrozen = false;
+		TestCoherence testCoherence = new TestCoherence( true, false );
+		TestClass testObject = new TestClass( testCoherence );
+		testCoherence.isFrozen = false;
 		testObject.readOperation();
 		testObject.writeOperation();
 	}
 
 	@Test public void object_can_read_and_mutate_when_both_allowed2()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext( true, false );
-		MutableList<String> testObject = MutableCollections.of( testMutationContext ).newArrayList();
-		testMutationContext.isFrozen = false;
+		TestCoherence testCoherence = new TestCoherence( true, false );
+		MutableList<String> testObject = MutableCollections.of( testCoherence ).newArrayList();
+		testCoherence.isFrozen = false;
 		testObject.size();
 		testObject.add( "a" );
 	}
 
 	@Test public void object_can_read_but_not_mutate_when_frozen()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext( true, false );
-		TestClass testObject = new TestClass( testMutationContext );
-		testMutationContext.isFrozen = true;
+		TestCoherence testCoherence = new TestCoherence( true, false );
+		TestClass testObject = new TestClass( testCoherence );
+		testCoherence.isFrozen = true;
 		testObject.readOperation();
 		var exception = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
-		assert exception.mutationContext == testMutationContext;
+		assert exception.coherence == testCoherence;
 	}
 
 	@Test public void object_can_neither_read_nor_mutate_when_not_in_context()
 	{
-		TestMutationContext testMutationContext = new TestMutationContext( true, false );
-		TestClass testObject = new TestClass( testMutationContext );
-		testMutationContext.isEntered = false;
-		testMutationContext.isFrozen = false;
+		TestCoherence testCoherence = new TestCoherence( true, false );
+		TestClass testObject = new TestClass( testCoherence );
+		testCoherence.isEntered = false;
+		testCoherence.isFrozen = false;
 		var exception1 = TestKit.expect( MustBeReadableException.class, () -> testObject.readOperation() );
-		assert exception1.mutationContext == testMutationContext;
+		assert exception1.coherence == testCoherence;
 		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
-		assert exception2.mutationContext == testMutationContext;
+		assert exception2.coherence == testCoherence;
 	}
 
-	@Test public void test_TemporaryMutationContext1()
+	@Test public void test_TemporaryCoherence1()
 	{
-		TemporaryMutationContext temporaryMutationContext = TemporaryMutationContext.of();
-		TestClass testObject = Kit.tryGetWith( temporaryMutationContext, mutationContext -> //
+		TemporaryCoherence temporaryCoherence = TemporaryCoherence.of();
+		TestClass testObject = Kit.tryGetWith( temporaryCoherence, coherence -> //
 		{
-			TestClass t = new TestClass( mutationContext );
+			TestClass t = new TestClass( coherence );
 			t.readOperation();
 			t.writeOperation();
 			return t;
 		} );
 		var exception1 = TestKit.expect( MustBeReadableException.class, () -> testObject.readOperation() );
-		assert exception1.mutationContext == temporaryMutationContext;
+		assert exception1.coherence == temporaryCoherence;
 		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
-		assert exception2.mutationContext == temporaryMutationContext;
+		assert exception2.coherence == temporaryCoherence;
 	}
 
-	@Test public void test_TemporaryMutationContext2()
+	@Test public void test_TemporaryCoherence2()
 	{
-		TemporaryMutationContext temporaryMutationContext = TemporaryMutationContext.of();
-		MutableList<String> testList = Kit.tryGetWith( temporaryMutationContext, mutationContext -> //
+		TemporaryCoherence temporaryCoherence = TemporaryCoherence.of();
+		MutableList<String> testList = Kit.tryGetWith( temporaryCoherence, coherence -> //
 		{
-			MutableList<String> t = MutableCollections.of( mutationContext ).newArrayList();
+			MutableList<String> t = MutableCollections.of( coherence ).newArrayList();
 			t.size();
 			t.add( "a" );
 			return t;
 		} );
 		var exception1 = TestKit.expect( MustBeReadableException.class, () -> testList.size() );
-		assert exception1.mutationContext == temporaryMutationContext;
+		assert exception1.coherence == temporaryCoherence;
 		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testList.add( "b" ) );
-		assert exception2.mutationContext == temporaryMutationContext;
+		assert exception2.coherence == temporaryCoherence;
 	}
 
-	@Test public void test_FreezableMutationContext()
+	@Test public void test_FreezableCoherence()
 	{
-		MutationContext parentMutationContext = ThreadLocalMutationContext.instance();
-		TestClass testObject = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
+		Coherence parentCoherence = ThreadLocalCoherence.instance();
+		TestClass testObject = Kit.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
 		{
-			TestClass t = new TestClass( mutationContext );
+			TestClass t = new TestClass( coherence );
 			t.readOperation();
 			t.writeOperation();
 			return t;
 		} );
 		testObject.readOperation();
 		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
-		assert exception2.mutationContext.getClass() == ConcreteFreezableMutationContext.class;
+		assert exception2.coherence.getClass() == ConcreteFreezableCoherence.class;
 
-		MutableList<String> testList = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
+		MutableList<String> testList = Kit.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
 		{
-			MutableList<String> t = MutableCollections.of( mutationContext ).newArrayList();
+			MutableList<String> t = MutableCollections.of( coherence ).newArrayList();
 			t.size();
 			t.add( "a" );
 			return t;
 		} );
 		testList.size();
 		var exception4 = TestKit.expect( MustBeWritableException.class, () -> testList.add( "b" ) );
-		assert exception4.mutationContext.getClass() == ConcreteFreezableMutationContext.class;
+		assert exception4.coherence.getClass() == ConcreteFreezableCoherence.class;
 
-		MutableList<String> testList2 = Kit.tryGetWith( FreezableMutationContext.of( parentMutationContext ), mutationContext -> //
+		MutableList<String> testList2 = Kit.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
 		{
-			MutableList<String> t = MutableCollections.of( mutationContext ).newArrayList();
+			MutableList<String> t = MutableCollections.of( coherence ).newArrayList();
 			t.size();
 			t.add( "a" );
 			return t;
 		} );
 		testList2.size();
 		var exception5 = TestKit.expect( MustBeWritableException.class, () -> testList2.add( "b" ) );
-		assert exception5.mutationContext.getClass() == ConcreteFreezableMutationContext.class;
+		assert exception5.coherence.getClass() == ConcreteFreezableCoherence.class;
 	}
 }

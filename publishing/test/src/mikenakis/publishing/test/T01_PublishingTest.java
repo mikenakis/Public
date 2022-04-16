@@ -2,8 +2,8 @@ package mikenakis.publishing.test;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.mutation.MutationContext;
-import mikenakis.kit.mutation.ThreadLocalMutationContext;
+import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.mutation.ThreadLocalCoherence;
 import mikenakis.kit.ref.Ref;
 import mikenakis.publishing.bespoke.Publisher;
 import mikenakis.testkit.TestKit;
@@ -18,7 +18,7 @@ import org.junit.Test;
  */
 public class T01_PublishingTest
 {
-	private final MutationContext mutationContext = ThreadLocalMutationContext.instance();
+	private final Coherence coherence = ThreadLocalCoherence.instance();
 
 	public T01_PublishingTest()
 	{
@@ -43,7 +43,7 @@ public class T01_PublishingTest
 
 	@Test public void subscriber_receives_no_issues_published_while_not_subscribed()
 	{
-		Kit.tryWith( Publisher.of( mutationContext, Procedure0.class ), publisher -> //
+		Kit.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
 			publisher.allSubscribers().invoke();
 			Ref<Integer> issueCount = Ref.of( 0 );
@@ -56,7 +56,7 @@ public class T01_PublishingTest
 
 	@Test public void subscriber_receives_one_issue_for_one_publication()
 	{
-		Kit.tryWith( Publisher.of( mutationContext, Procedure0.class ), publisher -> //
+		Kit.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
@@ -68,7 +68,7 @@ public class T01_PublishingTest
 
 	@Test public void subscriber_receives_two_issues_for_two_publications()
 	{
-		Kit.tryWith( Publisher.of( mutationContext, Procedure0.class ), publisher -> //
+		Kit.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
@@ -84,7 +84,7 @@ public class T01_PublishingTest
 	@Ignore
 	@Test public void subscribing_twice_fails()
 	{
-		Kit.tryWith( Publisher.of( mutationContext, Procedure0.class ), publisher -> //
+		Kit.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
@@ -96,7 +96,7 @@ public class T01_PublishingTest
 
 	@Test public void subscribing_twice_causes_two_invocations_per_publication()
 	{
-		Kit.tryWith( Publisher.of( mutationContext, Procedure0.class ), publisher -> //
+		Kit.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
@@ -109,7 +109,7 @@ public class T01_PublishingTest
 
 	@Test public void subscriber_survives_garbage_collection()
 	{
-		Kit.tryWith( Publisher.of( mutationContext, Procedure0.class ), publisher -> //
+		Kit.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
