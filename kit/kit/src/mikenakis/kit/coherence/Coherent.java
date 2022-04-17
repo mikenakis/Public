@@ -1,4 +1,4 @@
-package mikenakis.kit.mutation;
+package mikenakis.kit.coherence;
 
 /**
  * A coherence-aware object.

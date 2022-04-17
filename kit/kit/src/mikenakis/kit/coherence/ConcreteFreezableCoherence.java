@@ -1,4 +1,4 @@
-package mikenakis.kit.mutation;
+package mikenakis.kit.coherence;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.AbstractMortalCoherent;

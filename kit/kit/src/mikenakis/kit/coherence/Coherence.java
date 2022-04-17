@@ -1,4 +1,4 @@
-package mikenakis.kit.mutation;
+package mikenakis.kit.coherence;
 
 /**
  * An assertion-only abstraction of a state of coherence, indicating whether it is permissible to read or write.

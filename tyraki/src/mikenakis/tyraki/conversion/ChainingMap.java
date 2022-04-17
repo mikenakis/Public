@@ -27,9 +27,9 @@ class ChainingMap<K, V> extends AbstractMap<K,V>
 		values = ConversionCollections.newChainingCollection( this.mapsToChain.map( kvUnmodifiableMap -> kvUnmodifiableMap.values() ) );
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return mapsToChain.isImmutableAssertion() && mapsToChain.trueForAll( m -> m.isImmutableAssertion() );
+		return mapsToChain.mustBeImmutableAssertion() && mapsToChain.trueForAll( m -> m.mustBeImmutableAssertion() );
 	}
 
 	@Override public int size()

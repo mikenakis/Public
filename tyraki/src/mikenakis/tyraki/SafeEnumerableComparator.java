@@ -3,9 +3,9 @@ package mikenakis.tyraki;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.BooleanFunction2;
-import mikenakis.kit.mutation.FreezableCoherence;
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
 import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Objects;

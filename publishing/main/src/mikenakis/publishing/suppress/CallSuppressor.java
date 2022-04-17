@@ -2,7 +2,7 @@ package mikenakis.publishing.suppress;
 
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.intertwine.Intertwine;

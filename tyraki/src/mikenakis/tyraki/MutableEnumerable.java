@@ -2,8 +2,8 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.Coherent;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.Coherent;
 import mikenakis.tyraki.conversion.ConversionCollections;
 
 import java.util.ArrayList;

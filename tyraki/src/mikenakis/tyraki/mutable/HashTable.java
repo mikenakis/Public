@@ -46,7 +46,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 
 		void remove( T node )
 		{
-			assert isValidAssertion( node );
+			assert mustBeValidAssertion( node );
 			if( node.prev == null )
 				head = node.next;
 			else
@@ -71,7 +71,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		}
 
 		@SuppressWarnings( "SameReturnValue" )
-		private boolean isValidAssertion( T node )
+		private boolean mustBeValidAssertion( T node )
 		{
 			assert node.prev == null ? head == node : node.prev.next == node;
 			assert node.next == null ? tail == node : node.next.prev == node;
@@ -87,7 +87,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		{
 			for( T node = head; node != null; node = node.next )
 			{
-				assert isValidAssertion( node );
+				assert mustBeValidAssertion( node );
 				if( node.keyEquals( key ) )
 					return node;
 			}
@@ -172,7 +172,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		hashNodeCount++;
 		modificationCount++;
 		if( EXTRA_CHECKING )
-			assert isValidAssertion();
+			assert mustBeValidAssertion();
 		return Optional.empty();
 	}
 
@@ -191,7 +191,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		hashNodeCount--;
 		modificationCount++;
 		if( EXTRA_CHECKING )
-			assert isValidAssertion();
+			assert mustBeValidAssertion();
 	}
 
 	public T tryFindByKey( K key )
@@ -212,7 +212,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		hashNodeCount = 0;
 		modificationCount++;
 		if( EXTRA_CHECKING )
-			assert isValidAssertion();
+			assert mustBeValidAssertion();
 		return true;
 	}
 
@@ -305,7 +305,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 			hashTable.modificationCount++;
 			modificationCount++;
 			if( EXTRA_CHECKING )
-				assert hashTable.isValidAssertion();
+				assert hashTable.mustBeValidAssertion();
 		}
 
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()
@@ -323,7 +323,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 	}
 
 	@SuppressWarnings( "SameReturnValue" )
-	private boolean isValidAssertion()
+	private boolean mustBeValidAssertion()
 	{
 		int actualHashNodeCount = countHashNodes();
 		assert hashNodeCount == actualHashNodeCount;
@@ -350,7 +350,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		}
 		modificationCount++;
 		if( EXTRA_CHECKING )
-			assert isValidAssertion();
+			assert mustBeValidAssertion();
 	}
 
 	private T[] getAllHashNodes()

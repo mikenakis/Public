@@ -4,6 +4,7 @@ import mikenakis.benchmark.Benchmarkable;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.kit.logging.Log;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Locale;
@@ -109,6 +110,7 @@ public class T02_Trigonometry
 		checksOutLongRange( "cos2pi()", x -> Math.cos( 2 * π * x ), Kit.math::cos2pi, 1e-2 );
 	}
 
+	@Ignore //too slow
 	@Test
 	public void Kit_sin_is_considerably_faster_than_jdk_sin()
 	{
@@ -142,11 +144,5 @@ public class T02_Trigonometry
 		Log.info( String.format( Locale.ROOT, "Math.sin(): %f nanoseconds;  Kit.sin(): %f nanoseconds (%.2f times faster)\n",
 			t1 * 1e9, t2 * 1e9, r ) );
 		assert r > 2;
-//		double t0 = Kit.measureDuration( 10, T02_Trigonometry::exerciseNothing );
-//		double t1 = Kit.measureDuration( 10, T02_Trigonometry::exerciseJdkSin ) - t0;
-//		double t2 = Kit.measureDuration( 10, T02_Trigonometry::exerciseKitSin ) - t0;
-//		double r = t1 / t2;
-//		System.out.printf( Locale.ROOT, "Math.sin(): %.3f s;  Kit.sin(): %.3f s (%.2f times faster)\n", t1, t2, r );
-//		assert r > 5;
 	}
 }

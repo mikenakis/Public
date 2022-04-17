@@ -63,7 +63,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 		Item item = hashTable.tryFindByKey( element );
 		if( item == null )
 			return Optional.empty();
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		return Optional.of( item.element );
 	}
 
@@ -88,7 +88,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			item.prevInSet = tail;
 			tail = item;
 		}
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		return Optional.empty();
 	}
 
@@ -99,7 +99,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 		if( item == null )
 			return false;
 		hashTable.remove( item );
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		if( item.prevInSet == null )
 			head = item.nextInSet;
 		else
@@ -131,7 +131,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 		return false;
 	}
 
-	@SuppressWarnings( "SameReturnValue" ) private boolean isValidAssertion( Item item )
+	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Item item )
 	{
 		assert item.prevInSet == null? head == item : item.prevInSet.nextInSet == item;
 		assert item.nextInSet == null? tail == item : item.nextInSet.prevInSet == item;
@@ -215,7 +215,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
 			assert !deleted : new IllegalStateException();
-			assert isValidAssertion( currentNode );
+			assert mustBeValidAssertion( currentNode );
 			return currentNode;
 		}
 
@@ -233,7 +233,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert currentNode != null : new IllegalStateException();
-			assert isValidAssertion( currentNode );
+			assert mustBeValidAssertion( currentNode );
 			remove( currentNode.element );
 			deleted = true;
 			modificationCount++;

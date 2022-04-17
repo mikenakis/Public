@@ -2,7 +2,6 @@ package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.Mortal;
-import mikenakis.kit.mutation.Coherent;
 
 import java.util.Optional;
 

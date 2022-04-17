@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.mutation.AbstractCoherent;
+import mikenakis.kit.coherence.AbstractCoherent;
 
 /**
  * A subject of {@link MutableCollections}.

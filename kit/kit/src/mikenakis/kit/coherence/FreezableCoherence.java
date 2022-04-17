@@ -1,4 +1,4 @@
-package mikenakis.kit.mutation;
+package mikenakis.kit.coherence;
 
 public interface FreezableCoherence extends Coherence
 {

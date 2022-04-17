@@ -118,7 +118,7 @@ public class LoadConstantInstruction extends Instruction
 	private LoadConstantInstruction( Constant constant )
 	{
 		super( groupTag_LoadConstant );
-		assert isValidAssertion( constant );
+		assert mustBeValidAssertion( constant );
 		this.constant = constant;
 	}
 
@@ -129,7 +129,7 @@ public class LoadConstantInstruction extends Instruction
 	@Deprecated @Override public LoadConstantInstruction asLoadConstantInstruction() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "LoadConstant"; }
 
-	private static boolean isValidAssertion( Constant constant )
+	private static boolean mustBeValidAssertion( Constant constant )
 	{
 		switch( constant.tag )
 		{

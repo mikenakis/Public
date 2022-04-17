@@ -26,9 +26,9 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 			super( IndexingMapOnList.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
-			return IndexingMapOnList.this.isImmutableAssertion();
+			return IndexingMapOnList.this.mustBeImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
@@ -71,9 +71,9 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 		entries = new MyEntriesCollection( DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return list.isImmutableAssertion();
+		return list.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<Integer,V>> entries()

@@ -2,8 +2,8 @@ package mikenakis.publishing.test;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.ThreadLocalCoherence;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.ThreadLocalCoherence;
 import mikenakis.kit.ref.Ref;
 import mikenakis.publishing.bespoke.Publisher;
 import mikenakis.testkit.TestKit;

@@ -1,8 +1,8 @@
 package mikenakis.kit.buffer;
 
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.ThreadLocalCoherence;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.ThreadLocalCoherence;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

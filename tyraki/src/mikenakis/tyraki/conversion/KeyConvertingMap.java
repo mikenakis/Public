@@ -41,9 +41,9 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 			super( KeyConvertingMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
-			return KeyConvertingMap.this.isImmutableAssertion();
+			return KeyConvertingMap.this.mustBeImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
@@ -74,9 +74,9 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 		entries = new MyEntriesCollection( keyEqualityComparator, valueEqualityComparator );
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return map.isImmutableAssertion();
+		return map.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<TK,V>> entries()

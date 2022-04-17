@@ -56,7 +56,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 		}
 		modificationCount++;
 		size++;
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		return true;
 	}
 
@@ -89,7 +89,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 
 	private void remove( Item item )
 	{
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		if( item.prevInSet == null )
 			head = item.nextInSet;
 		else
@@ -102,7 +102,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 		size--;
 	}
 
-	@SuppressWarnings( "SameReturnValue" ) private boolean isValidAssertion( Item item )
+	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Item item )
 	{
 		assert item.prevInSet == null? head == item : item.prevInSet.nextInSet == item;
 		assert item.nextInSet == null? tail == item : item.nextInSet.prevInSet == item;
@@ -149,7 +149,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 			assert modificationCount == LinkedQueue.this.modificationCount : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
 			assert !deleted : new IllegalStateException();
-			assert isValidAssertion( currentNode );
+			assert mustBeValidAssertion( currentNode );
 			return currentNode;
 		}
 
@@ -167,7 +167,7 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 			assert modificationCount == LinkedQueue.this.modificationCount : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert currentNode != null : new IllegalStateException();
-			assert isValidAssertion( currentNode );
+			assert mustBeValidAssertion( currentNode );
 			remove( currentNode );
 			deleted = true;
 		}

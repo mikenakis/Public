@@ -90,7 +90,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	boolean isImmutableAssertion();
+	boolean mustBeImmutableAssertion();
 
 	/**
 	 * Creates a new {@link UnmodifiableEnumerator} to enumerate elements.
@@ -745,10 +745,10 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	{
 		UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable();
 
-		@Override default boolean isImmutableAssertion()
+		@Override default boolean mustBeImmutableAssertion()
 		{
 			UnmodifiableEnumerable<E> decoree = getDecoratedUnmodifiableEnumerable();
-			return decoree.isImmutableAssertion();
+			return decoree.mustBeImmutableAssertion();
 		}
 
 		@Override default UnmodifiableEnumerator<E> newUnmodifiableEnumerator()

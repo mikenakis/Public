@@ -26,9 +26,9 @@ class FilteringEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 		this.predicate = predicate;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return enumerable.isImmutableAssertion();
+		return enumerable.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()

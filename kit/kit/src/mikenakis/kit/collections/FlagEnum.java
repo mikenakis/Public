@@ -56,7 +56,7 @@ public class FlagEnum<E extends Enum<E>>
 		return Kit.map.get( valuesFromBits, value );
 	}
 
-	public boolean isValidIntAssertion( int flags )
+	public boolean mustBeValidIntAssertion( int flags )
 	{
 		assert (flags & ~mask) == 0;
 		return true;

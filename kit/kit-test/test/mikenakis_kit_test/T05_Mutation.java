@@ -1,16 +1,16 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.mutation.ConcreteFreezableCoherence;
-import mikenakis.kit.mutation.FreezableCoherence;
-import mikenakis.kit.mutation.MustBeFrozenException;
-import mikenakis.kit.mutation.MustBeReadableException;
-import mikenakis.kit.mutation.MustBeWritableException;
-import mikenakis.kit.mutation.MustNotBeFrozenException;
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.TemporaryCoherence;
-import mikenakis.kit.mutation.ThreadLocalCoherence;
+import mikenakis.kit.coherence.ConcreteFreezableCoherence;
+import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.coherence.MustBeFrozenException;
+import mikenakis.kit.coherence.MustBeReadableException;
+import mikenakis.kit.coherence.MustBeWritableException;
+import mikenakis.kit.coherence.MustNotBeFrozenException;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.TemporaryCoherence;
+import mikenakis.kit.coherence.ThreadLocalCoherence;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.mutable.MutableCollections;

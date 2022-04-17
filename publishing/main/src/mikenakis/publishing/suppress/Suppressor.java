@@ -1,7 +1,7 @@
 package mikenakis.publishing.suppress;
 
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
 
 /**
  * Base class for suppressors.

@@ -26,9 +26,9 @@ final class SubList<T> extends AbstractList<T>
 		this.endOffset = endOffset;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return list.isImmutableAssertion();
+		return list.mustBeImmutableAssertion();
 	}
 
 	@Override public int size()

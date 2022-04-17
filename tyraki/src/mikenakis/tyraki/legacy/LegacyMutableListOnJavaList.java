@@ -1,7 +1,7 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.DefaultEqualityComparator;
-import mikenakis.kit.mutation.MustBeFrozenException;
+import mikenakis.kit.coherence.MustBeFrozenException;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -27,7 +27,7 @@ final class LegacyMutableListOnJavaList<E> extends LegacyAbstractMutableCollecti
 		this.javaList = javaList;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
 		throw new MustBeFrozenException( null );
 	}

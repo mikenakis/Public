@@ -42,6 +42,11 @@ public final class Debug
 
 	public static void boundary( Procedure0 procedure0 )
 	{
+		if( Kit.expectingException )
+		{
+			procedure0.invoke();
+			return;
+		}
 		try
 		{
 			procedure0.invoke();
@@ -54,6 +59,8 @@ public final class Debug
 
 	public static <T> T boundary( Function0<T> function0 )
 	{
+		if( Kit.expectingException )
+			return function0.invoke();
 		try
 		{
 			return function0.invoke();

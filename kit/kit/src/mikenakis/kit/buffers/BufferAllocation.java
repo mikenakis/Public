@@ -1,7 +1,7 @@
 package mikenakis.kit.buffers;
 
 import mikenakis.kit.lifetime.AbstractMortalCoherent;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.Coherence;
 
 /**
  * Represents a buffer allocation.

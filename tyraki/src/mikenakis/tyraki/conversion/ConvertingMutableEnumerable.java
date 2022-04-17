@@ -1,7 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.Coherence;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
@@ -22,9 +22,9 @@ final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumera
 		return enumerable.coherence();
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return enumerable.isImmutableAssertion();
+		return enumerable.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()

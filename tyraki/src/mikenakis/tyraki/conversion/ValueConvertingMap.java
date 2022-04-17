@@ -52,9 +52,9 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 			super( ValueConvertingMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
-			return ValueConvertingMap.this.isImmutableAssertion();
+			return ValueConvertingMap.this.mustBeImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
@@ -83,9 +83,9 @@ class ValueConvertingMap<K, TV, SV> extends AbstractMap<K,TV>
 		this.reverter = reverter;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return map.isImmutableAssertion();
+		return map.mustBeImmutableAssertion();
 	}
 
 	@Override public final int size()

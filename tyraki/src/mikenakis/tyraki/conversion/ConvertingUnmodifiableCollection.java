@@ -30,9 +30,9 @@ class ConvertingUnmodifiableCollection<T, F> extends AbstractUnmodifiableCollect
 		this.reverter = reverter;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return collection.isImmutableAssertion();
+		return collection.mustBeImmutableAssertion();
 	}
 
 	@Override public final UnmodifiableEnumerator<T> newUnmodifiableEnumerator()

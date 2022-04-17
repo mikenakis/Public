@@ -26,9 +26,9 @@ final class ConvertingEnumerable<T, F> extends AbstractUnmodifiableEnumerable<T>
 		this.converter = converter;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return enumerable.isImmutableAssertion();
+		return enumerable.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()

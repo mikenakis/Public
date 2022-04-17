@@ -4,7 +4,7 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.FreezableCoherence;
+import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -126,7 +126,7 @@ public interface UnmodifiableMap<K, V>
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	boolean isImmutableAssertion();
+	boolean mustBeImmutableAssertion();
 
 	/**
 	 * Gets the number of entries.
@@ -374,10 +374,10 @@ public interface UnmodifiableMap<K, V>
 	{
 		UnmodifiableMap<K,V> getDecoratedUnmodifiableMap();
 
-		@Override default boolean isImmutableAssertion()
+		@Override default boolean mustBeImmutableAssertion()
 		{
 			UnmodifiableMap<K,V> decoree = getDecoratedUnmodifiableMap();
-			return decoree.isImmutableAssertion();
+			return decoree.mustBeImmutableAssertion();
 		}
 
 		@Override default int size()

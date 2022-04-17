@@ -4,7 +4,7 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
-import mikenakis.kit.mutation.FreezableCoherence;
+import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 

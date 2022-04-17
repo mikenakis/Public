@@ -40,9 +40,9 @@ final class ChainingEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 		return sum;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return enumerablesToChain.isImmutableAssertion() && enumerablesToChain.trueForAll( e -> e.isImmutableAssertion() );
+		return enumerablesToChain.mustBeImmutableAssertion() && enumerablesToChain.trueForAll( e -> e.mustBeImmutableAssertion() );
 	}
 
 	private static final class MyEnumerator<E> extends AbstractUnmodifiableEnumerator<E>

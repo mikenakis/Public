@@ -28,7 +28,7 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 		this.length = length;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
 		return true;
 	}

@@ -25,7 +25,7 @@ public class FlagSet<E extends Enum<E>>
 
 	private FlagSet( FlagEnum<E> flagEnum, int bits )
 	{
-		assert flagEnum.isValidIntAssertion( bits );
+		assert flagEnum.mustBeValidIntAssertion( bits );
 		this.flagEnum = flagEnum;
 		this.bits = bits;
 	}

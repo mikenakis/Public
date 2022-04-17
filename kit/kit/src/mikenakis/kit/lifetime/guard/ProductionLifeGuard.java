@@ -1,7 +1,7 @@
 package mikenakis.kit.lifetime.guard;
 
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.UnknownCoherence;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.UnknownCoherence;
 
 /**
  * Production {@link LifeGuard}.

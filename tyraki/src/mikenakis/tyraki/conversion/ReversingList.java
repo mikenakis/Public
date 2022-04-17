@@ -21,9 +21,9 @@ final class ReversingList<T> extends AbstractList<T>
 		this.listToConvert = listToConvert;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return listToConvert.isImmutableAssertion();
+		return listToConvert.mustBeImmutableAssertion();
 	}
 
 	@Override public int size()

@@ -33,9 +33,9 @@ class ConvertingList<T, F> extends AbstractList<T>
 		this.reverter = reverter;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return list.isImmutableAssertion();
+		return list.mustBeImmutableAssertion();
 	}
 
 	@Override public final int size()

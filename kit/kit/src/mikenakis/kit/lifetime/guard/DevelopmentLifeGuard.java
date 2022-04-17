@@ -2,8 +2,8 @@ package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.debug.Debug;
 import mikenakis.kit.lifetime.Mortal;
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
 
 import java.util.Optional;
 

@@ -25,7 +25,7 @@ final class EnumerableOnFunction<E> implements UnmodifiableEnumerable.Defaults<E
 		this.nextElementProducer = nextElementProducer;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
 		return true; //XXX I am not sure whether this should be true or false.
 	}

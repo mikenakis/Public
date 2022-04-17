@@ -1,8 +1,8 @@
 package mikenakis.kit.lifetime.guard;
 
 import mikenakis.kit.lifetime.Mortal;
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
 
 /**
  * A {@link LifeGuard} which contains an explicit open/closed state.

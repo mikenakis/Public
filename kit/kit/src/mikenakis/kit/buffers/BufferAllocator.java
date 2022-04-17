@@ -2,9 +2,9 @@ package mikenakis.kit.buffers;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
-import mikenakis.kit.mutation.AbstractCoherent;
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.ThreadLocalCoherence;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.ThreadLocalCoherence;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.mutation.ThreadLocalCoherence;
+import mikenakis.kit.coherence.ThreadLocalCoherence;
 
 /**
  * Single-threaded {@link MutableCollections}.

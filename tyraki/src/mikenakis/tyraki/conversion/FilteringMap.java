@@ -19,9 +19,9 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 			super( FilteringMap.this, keyEqualityComparator, valueEqualityComparator );
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
-			return map.isImmutableAssertion();
+			return map.mustBeImmutableAssertion();
 		}
 
 		@Override public int getModificationCount()
@@ -52,9 +52,9 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 		values = entries.map( kvBinding -> kvBinding.getValue() );
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return map.isImmutableAssertion();
+		return map.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableCollection<Binding<K,V>> entries()

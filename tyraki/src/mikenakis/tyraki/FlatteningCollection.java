@@ -14,12 +14,12 @@ class FlatteningCollection<T, E> extends FlatteningEnumerable<T,E> implements Un
 	FlatteningCollection( UnmodifiableCollection<E> primaryCollection, Function1<UnmodifiableCollection<T>,E> multiplier )
 	{
 		super( primaryCollection, multiplier::invoke );
-		assert allEqualityComparatorsAreSameAssertion( primaryCollection, multiplier );
+		assert allEqualityComparatorsMustBeSameAssertion( primaryCollection, multiplier );
 		this.primaryCollection = primaryCollection;
 		this.multiplier = multiplier;
 	}
 
-	private static <T,E> boolean allEqualityComparatorsAreSameAssertion( UnmodifiableEnumerable<E> primaryCollection, Function1<UnmodifiableCollection<T>,E> multiplier )
+	private static <T,E> boolean allEqualityComparatorsMustBeSameAssertion( UnmodifiableEnumerable<E> primaryCollection, Function1<UnmodifiableCollection<T>,E> multiplier )
 	{
 		UnmodifiableEnumerator<E> primaryEnumerator = primaryCollection.newUnmodifiableEnumerator();
 		if( primaryEnumerator.isFinished() )

@@ -2944,7 +2944,7 @@ public final class Kit
 		return Modifier.isStatic( modifiers );
 	}
 
-	private static boolean isValidMemberAssertion( Optional<Object> optionalTarget, Member member )
+	private static boolean mustBeValidMemberAssertion( Optional<Object> optionalTarget, Member member )
 	{
 		assert isStatic( member ) == optionalTarget.isEmpty();
 		optionalTarget.ifPresent( target ->
@@ -2956,22 +2956,22 @@ public final class Kit
 		return true;
 	}
 
-	private static boolean isValidMethodCallAssertion( Optional<Object> optionalTarget, Method method, Object[] arguments )
+	private static boolean mustBeValidMethodCallAssertion( Optional<Object> optionalTarget, Method method, Object[] arguments )
 	{
-		assert isValidMemberAssertion( optionalTarget, method );
+		assert mustBeValidMemberAssertion( optionalTarget, method );
 		assert method.getParameterCount() == arguments.length;
 		return true;
 	}
 
-	private static <T> boolean isValidConstructorAssertion( Class<T> targetClass, Constructor<T> constructor )
+	private static <T> boolean mustBeValidConstructorAssertion( Class<T> targetClass, Constructor<T> constructor )
 	{
 		assert constructor.getDeclaringClass() == targetClass;
 		return true;
 	}
 
-	private static <T> boolean isValidConstructorCallAssertion( Class<T> targetClass, Constructor<T> constructor, Object[] arguments )
+	private static <T> boolean mustBeValidConstructorCallAssertion( Class<T> targetClass, Constructor<T> constructor, Object[] arguments )
 	{
-		assert isValidConstructorAssertion( targetClass, constructor );
+		assert mustBeValidConstructorAssertion( targetClass, constructor );
 		assert constructor.getParameterCount() == arguments.length;
 		return true;
 	}
@@ -2983,7 +2983,7 @@ public final class Kit
 
 	public static <T> T invokeMethod( Optional<Object> target, Method method, Object... arguments )
 	{
-		assert isValidMemberAssertion( target, method );
+		assert mustBeValidMemberAssertion( target, method );
 		//method.setAccessible( true );
 		try
 		{
@@ -3005,7 +3005,7 @@ public final class Kit
 
 	public static <T> T newInstance( Class<T> targetClass, Constructor<T> constructor, Object... arguments )
 	{
-		assert isValidConstructorCallAssertion( targetClass, constructor, arguments );
+		assert mustBeValidConstructorCallAssertion( targetClass, constructor, arguments );
 		//method.setAccessible( true );
 		try
 		{

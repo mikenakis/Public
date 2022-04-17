@@ -4,9 +4,9 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.Kit;
-import mikenakis.kit.mutation.MustBeFrozenException;
-import mikenakis.kit.mutation.Coherence;
-import mikenakis.kit.mutation.UnknownCoherence;
+import mikenakis.kit.coherence.MustBeFrozenException;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.UnknownCoherence;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.MapEntry;
@@ -44,7 +44,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return UnknownCoherence.instance;
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
 			throw new MustBeFrozenException( null );
 		}
@@ -129,7 +129,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return UnknownCoherence.instance;
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
 			throw new MustBeFrozenException( null );
 		}
@@ -231,7 +231,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return UnknownCoherence.instance;
 		}
 
-		@Override public boolean isImmutableAssertion()
+		@Override public boolean mustBeImmutableAssertion()
 		{
 			throw new MustBeFrozenException( null );
 		}
@@ -345,7 +345,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		this.javaMap = javaMap;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
 		throw new MustBeFrozenException( null );
 	}

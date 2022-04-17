@@ -1,6 +1,6 @@
 package mikenakis.kit.lifetime;
 
-import mikenakis.kit.mutation.Coherent;
+import mikenakis.kit.coherence.Coherent;
 
 /**
  * An object which is aware of its own lifetime.

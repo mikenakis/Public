@@ -102,7 +102,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return Optional.empty();
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		return Optional.of( MapEntry.of( item.key, item.value ) );
 	}
 
@@ -120,7 +120,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		Item item1 = hashTable.tryFindByKey( key );
 		if( item1 != null )
 		{
-			assert isValidAssertion( item1 );
+			assert mustBeValidAssertion( item1 );
 			return Optional.of( item1.value ); //key already exists.
 		}
 		Item item2 = new Item( key, value );
@@ -140,7 +140,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			item2.prevInMap = tail;
 			tail = item2;
 		}
-		assert isValidAssertion( item2 );
+		assert mustBeValidAssertion( item2 );
 		return Optional.empty();
 	}
 
@@ -151,7 +151,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		Item item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		item.value = value;
 		return true;
 	}
@@ -164,7 +164,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		if( item == null )
 			return false;
 		hashTable.remove( item );
-		assert isValidAssertion( item );
+		assert mustBeValidAssertion( item );
 		if( item.prevInMap == null )
 			head = item.nextInMap;
 		else
@@ -200,7 +200,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		return values;
 	}
 
-	@SuppressWarnings( "SameReturnValue" ) private boolean isValidAssertion( Item item )
+	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Item item )
 	{
 		assert item.prevInMap == null? head == item : item.prevInMap.nextInMap == item;
 		assert item.nextInMap == null? tail == item : item.nextInMap.prevInMap == item;
@@ -301,7 +301,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
 			assert !deleted : new IllegalStateException();
-			assert isValidAssertion( currentNode );
+			assert mustBeValidAssertion( currentNode );
 			return currentNode;
 		}
 
@@ -319,7 +319,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert !deleted : new IllegalStateException();
 			assert currentNode != null : new IllegalStateException();
-			assert isValidAssertion( currentNode );
+			assert mustBeValidAssertion( currentNode );
 			removeKey( currentNode.key );
 			deleted = true;
 			modificationCount++;

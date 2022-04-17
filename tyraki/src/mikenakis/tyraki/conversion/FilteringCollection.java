@@ -24,9 +24,9 @@ final class FilteringCollection<E> extends FilteringEnumerable<E> implements Unm
 		this.collection = collection;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return collection.isImmutableAssertion();
+		return collection.mustBeImmutableAssertion();
 	}
 
 	@Override public EqualityComparator<? super E> getEqualityComparator()

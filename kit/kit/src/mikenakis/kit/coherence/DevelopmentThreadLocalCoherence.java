@@ -1,4 +1,4 @@
-package mikenakis.kit.mutation;
+package mikenakis.kit.coherence;
 
 /**
  * Debug Single-threaded {@link Coherence}.

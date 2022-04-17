@@ -6,7 +6,7 @@ import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.functional.Function1;
-import mikenakis.kit.mutation.FreezableCoherence;
+import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;

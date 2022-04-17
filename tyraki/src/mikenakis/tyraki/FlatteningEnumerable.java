@@ -13,9 +13,9 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 		this.multiplier = multiplier;
 	}
 
-	@Override public boolean isImmutableAssertion()
+	@Override public boolean mustBeImmutableAssertion()
 	{
-		return primaryEnumerable.isImmutableAssertion();
+		return primaryEnumerable.mustBeImmutableAssertion();
 	}
 
 	@Override public UnmodifiableEnumerator<T> newUnmodifiableEnumerator()
