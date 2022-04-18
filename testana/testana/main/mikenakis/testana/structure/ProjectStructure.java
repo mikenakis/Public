@@ -53,7 +53,7 @@ public final class ProjectStructure
 				private ProjectDependency( DiscoveryModule discoveryModule ) { this.discoveryModule = discoveryModule; }
 			}
 
-			Function1<Iterable<Object>,Object> breeder = object -> //
+			Function1<Iterable<? extends Object>,Object> breeder = object -> //
 			{
 				if( object instanceof ProjectStructure projectStructure )
 					return Kit.iterable.downCast( projectStructure.rootDiscoveryModules );

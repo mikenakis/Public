@@ -3125,7 +3125,7 @@ public final class Kit
 
 	public static final class tree
 	{
-		public static <T> void print( T rootNode, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
+		public static <T> void print( T rootNode, Function1<Iterable<? extends T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			printTreeRecursive( stringBuilder, "", rootNode, "", breeder, stringizer, emitter );
@@ -3137,9 +3137,9 @@ public final class Kit
 		private static final String endNode = "  ";
 		private static final String terminal = "■ ";
 
-		private static <T> void printTreeRecursive( StringBuilder stringBuilder, String parentPrefix, T node, String childPrefix, Function1<Iterable<T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
+		private static <T> void printTreeRecursive( StringBuilder stringBuilder, String parentPrefix, T node, String childPrefix, Function1<Iterable<? extends T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
 		{
-			Iterator<T> iterator = breeder.invoke( node ).iterator();
+			Iterator<? extends T> iterator = breeder.invoke( node ).iterator();
 			int position = stringBuilder.length();
 			stringBuilder.append( parentPrefix ).append( terminal );
 			stringBuilder.append( stringizer.invoke( node ) );

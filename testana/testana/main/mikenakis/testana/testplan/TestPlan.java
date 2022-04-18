@@ -69,7 +69,7 @@ public class TestPlan
 	{
 		if( showOption != ShowOption.None )
 		{
-			Function1<Iterable<Object>,Object> breeder = object -> //
+			Function1<Iterable<? extends Object>,Object> breeder = object -> //
 			{
 				if( object instanceof TestPlan testPlan )
 					return Kit.iterable.downCast( testPlan.testModules );
