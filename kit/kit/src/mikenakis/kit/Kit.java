@@ -234,19 +234,6 @@ public final class Kit
 		return object.getClass().getName() + "@" + Integer.toHexString( identityHashCode );
 	}
 
-	/**
-	 * Note: the documentation of Class.newInstance() gives the following justification for its deprecation:
-	 * <p>
-	 * "This method propagates any exception thrown by the nullary constructor, including a checked exception.
-	 * Use of this method effectively bypasses the compile-time exception checking that would otherwise be performed by the compiler."
-	 * <p>
-	 * Yes, yes, that is precisely what we want.
-	 */
-	@SuppressWarnings( "deprecation" ) public static Object newInstance( Class<?> javaClass )
-	{
-		return unchecked( javaClass::newInstance );
-	}
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Stacks, Stack Traces, Source code locations
 
@@ -319,7 +306,7 @@ public final class Kit
 	public static void runGarbageCollection()
 	{
 		// TODO: replace this loop of an arbitrary number of iterations with a more structured approach.
-		for( int i = 0;  i < 10;  i++ )
+		for( int i = 0; i < 10; i++ )
 		{
 			WeakReference<Object> ref = new WeakReference<>( new Object() );
 			for( ; ; )
@@ -505,7 +492,7 @@ public final class Kit
 
 		public static String hex( byte value )
 		{
-			char[]  chars = new char[2];
+			char[] chars = new char[2];
 			toHex( value, chars, 0 );
 			return new String( chars );
 		}
@@ -526,7 +513,7 @@ public final class Kit
 		{
 			int hi = nybble( s.charAt( offset ) );
 			int lo = nybble( s.charAt( offset + 1 ) );
-			return (byte) ((hi << 4) | lo);
+			return (byte)((hi << 4) | lo);
 		}
 
 		public static boolean isFirstIdentifier( byte b )
@@ -2312,7 +2299,7 @@ public final class Kit
 		tryWith( mortalWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
 	}
 
-	public static <R,C> R tryGetWithWrapper( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
+	public static <R, C> R tryGetWithWrapper( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
 	{
 		return tryGetWith( mortalWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
 	}
@@ -2947,7 +2934,7 @@ public final class Kit
 	private static boolean mustBeValidMemberAssertion( Optional<Object> optionalTarget, Member member )
 	{
 		assert isStatic( member ) == optionalTarget.isEmpty();
-		optionalTarget.ifPresent( target ->
+		optionalTarget.ifPresent( target -> //
 		{
 			Class<?> declaringClass = member.getDeclaringClass();
 			Class<?> targetClass = target.getClass();
@@ -2963,15 +2950,8 @@ public final class Kit
 		return true;
 	}
 
-	private static <T> boolean mustBeValidConstructorAssertion( Class<T> targetClass, Constructor<T> constructor )
+	private static <T> boolean mustBeValidConstructorCallAssertion( Constructor<T> constructor, Object[] arguments )
 	{
-		assert constructor.getDeclaringClass() == targetClass;
-		return true;
-	}
-
-	private static <T> boolean mustBeValidConstructorCallAssertion( Class<T> targetClass, Constructor<T> constructor, Object[] arguments )
-	{
-		assert mustBeValidConstructorAssertion( targetClass, constructor );
 		assert constructor.getParameterCount() == arguments.length;
 		return true;
 	}
@@ -3003,9 +2983,22 @@ public final class Kit
 		}
 	}
 
-	public static <T> T newInstance( Class<T> targetClass, Constructor<T> constructor, Object... arguments )
+	/**
+	 * Note: the documentation of Class.newInstance() gives the following justification for its deprecation:
+	 * <p>
+	 * "This method propagates any exception thrown by the nullary constructor, including a checked exception.
+	 * Use of this method effectively bypasses the compile-time exception checking that would otherwise be performed by the compiler."
+	 * <p>
+	 * Yes, yes, that is precisely what we want!
+	 */
+	@SuppressWarnings( "deprecation" ) public static Object newInstance( Class<?> jvmClass )
 	{
-		assert mustBeValidConstructorCallAssertion( targetClass, constructor, arguments );
+		return unchecked( jvmClass::newInstance );
+	}
+
+	public static <T> T newInstance( Constructor<T> constructor, Object... arguments )
+	{
+		assert mustBeValidConstructorCallAssertion( constructor, arguments );
 		//method.setAccessible( true );
 		try
 		{
@@ -3243,7 +3236,7 @@ public final class Kit
 		return class1.isAssignableFrom( class2 );
 	}
 
-	public static <R,S> Optional<R> tryAs( Class<R> jvmClass, S instance )
+	public static <R, S> Optional<R> tryAs( Class<R> jvmClass, S instance )
 	{
 		if( jvmClass.isInstance( instance ) )
 			return Optional.of( jvmClass.cast( instance ) );
@@ -3290,14 +3283,26 @@ public final class Kit
 	{
 		final Class<T> primitiveClass;
 		final Class<T> wrapperClass;
-		private PrimitiveInfo( Class<T> primitiveClass, Class<T> wrapperClass )
+		final T defaultInstance;
+
+		private PrimitiveInfo( Class<T> primitiveClass, Class<T> wrapperClass, T defaultInstance )
 		{
 			this.primitiveClass = primitiveClass;
 			this.wrapperClass = wrapperClass;
+			this.defaultInstance = defaultInstance;
 		}
 	}
 
-	private static final List<PrimitiveInfo<?>> primitiveTypeInfo = List.of( new PrimitiveInfo<>( boolean.class /**/, Boolean.class   /**/ ), new PrimitiveInfo<>( char.class    /**/, Character.class /**/ ), new PrimitiveInfo<>( byte.class    /**/, Byte.class      /**/ ), new PrimitiveInfo<>( short.class   /**/, Short.class     /**/ ), new PrimitiveInfo<>( int.class     /**/, Integer.class   /**/ ), new PrimitiveInfo<>( long.class    /**/, Long.class      /**/ ), new PrimitiveInfo<>( float.class   /**/, Float.class     /**/ ), new PrimitiveInfo<>( double.class  /**/, Double.class    /**/ ), new PrimitiveInfo<>( void.class    /**/, Void.class      /**/ ) );
+	private static final List<PrimitiveInfo<?>> primitiveTypeInfo = List.of( //
+		new PrimitiveInfo<>( boolean.class /**/, Boolean.class   /**/, false ), //
+		new PrimitiveInfo<>( char.class    /**/, Character.class /**/, '\0' ), //
+		new PrimitiveInfo<>( byte.class    /**/, Byte.class      /**/, (byte)0 ), //
+		new PrimitiveInfo<>( short.class   /**/, Short.class     /**/, (short)0 ), //
+		new PrimitiveInfo<>( int.class     /**/, Integer.class   /**/, 0 ), //
+		new PrimitiveInfo<>( long.class    /**/, Long.class      /**/, 0L ), //
+		new PrimitiveInfo<>( float.class   /**/, Float.class     /**/, 0f ), //
+		new PrimitiveInfo<>( double.class  /**/, Double.class    /**/, 0d ), //
+		new PrimitiveInfo<>( void.class    /**/, Void.class      /**/, null ) );
 
 	private static int indexOfPrimitiveType( Class<?> clazz )
 	{
@@ -3348,16 +3353,29 @@ public final class Kit
 	/**
 	 * Gets the wrapper type of the given primitive type.
 	 *
-	 * @param clazz the primitive class whose wrapper is requested.
+	 * @param primitiveClass the primitive class whose wrapper is requested.
 	 *
 	 * @return the class of the wrapper type for the given type, or null if the given type was not a primitive type.
 	 */
-	public static <T> Class<T> getPrimitiveWrapperType( Class<T> clazz )
+	public static <T> Class<T> getPrimitiveWrapperType( Class<T> primitiveClass )
 	{
-		assert clazz.isPrimitive();
-		int i = indexOfPrimitiveType( clazz );
+		PrimitiveInfo<T> primitiveInfo = getPrimitiveTypeInfoByPrimitiveClass( primitiveClass );
+		return primitiveInfo.wrapperClass;
+	}
+
+	public static <T> T getPrimitiveInstance( Class<T> primitiveClass )
+	{
+		PrimitiveInfo<T> primitiveInfo = getPrimitiveTypeInfoByPrimitiveClass( primitiveClass );
+		return primitiveInfo.defaultInstance;
+	}
+
+	private static <T> PrimitiveInfo<T> getPrimitiveTypeInfoByPrimitiveClass( Class<T> primitiveClass )
+	{
+		assert primitiveClass.isPrimitive();
+		int i = indexOfPrimitiveType( primitiveClass );
 		assert i != -1;
-		return uncheckedClassCast( primitiveTypeInfo.get( i ).wrapperClass );
+		@SuppressWarnings( "unchecked" ) PrimitiveInfo<T> primitiveInfo = (PrimitiveInfo<T>)primitiveTypeInfo.get( i );
+		return primitiveInfo;
 	}
 
 	public record RunnableAndThread<T extends Runnable>( T runnable, Thread thread ) { }
