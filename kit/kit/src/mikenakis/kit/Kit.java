@@ -3313,7 +3313,7 @@ public final class Kit
 		return -1;
 	}
 
-	private static int indexOfPrimitiveWrapperType( Class<?> clazz )
+	private static int indexOfPrimitiveWrapperClass( Class<?> clazz )
 	{
 		int n = primitiveTypeInfo.size();
 		for( int i = 0; i < n; i++ )
@@ -3329,9 +3329,9 @@ public final class Kit
 	 *
 	 * @return {@code true} if the class is a primitive wrapper type. (One of Boolean, Character, Byte, Short, Integer, Long, Float, Double and Void.)
 	 */
-	public static boolean isPrimitiveWrapperType( Class<?> clazz )
+	public static boolean isPrimitiveWrapperClass( Class<?> clazz )
 	{
-		return indexOfPrimitiveWrapperType( clazz ) != -1;
+		return indexOfPrimitiveWrapperClass( clazz ) != -1;
 	}
 
 	/**
@@ -3363,9 +3363,9 @@ public final class Kit
 		return primitiveInfo.wrapperClass;
 	}
 
-	public static <T> T getPrimitiveInstance( Class<T> primitiveClass )
+	public static <T> T getDefaultPrimitiveWrapperInstance( Class<T> primitiveWrapperClass )
 	{
-		PrimitiveInfo<T> primitiveInfo = getPrimitiveTypeInfoByPrimitiveClass( primitiveClass );
+		PrimitiveInfo<T> primitiveInfo = getPrimitiveTypeInfoByPrimitiveWrapperClass( primitiveWrapperClass );
 		return primitiveInfo.defaultInstance;
 	}
 
@@ -3373,6 +3373,15 @@ public final class Kit
 	{
 		assert primitiveClass.isPrimitive();
 		int i = indexOfPrimitiveType( primitiveClass );
+		assert i != -1;
+		@SuppressWarnings( "unchecked" ) PrimitiveInfo<T> primitiveInfo = (PrimitiveInfo<T>)primitiveTypeInfo.get( i );
+		return primitiveInfo;
+	}
+
+	private static <T> PrimitiveInfo<T> getPrimitiveTypeInfoByPrimitiveWrapperClass( Class<T> primitiveWrapperClass )
+	{
+		assert isPrimitiveWrapperClass( primitiveWrapperClass );
+		int i = indexOfPrimitiveWrapperClass( primitiveWrapperClass );
 		assert i != -1;
 		@SuppressWarnings( "unchecked" ) PrimitiveInfo<T> primitiveInfo = (PrimitiveInfo<T>)primitiveTypeInfo.get( i );
 		return primitiveInfo;
