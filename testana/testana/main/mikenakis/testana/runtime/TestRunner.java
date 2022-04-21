@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Runner.
- *
+ * <p>
  * FIXME find out why modifying this class fails to cause the tests of Testana to be re-run.
  *
  * @author michael.gr
@@ -41,8 +41,11 @@ public final class TestRunner
 				for( TestClass testClass : testModule.testClasses() )
 				{
 					Intent intent = testPlan.getIntent( testClass );
-					TestResult nonLeafTestResult = runTestClass( testClass, intent, persistence );
-					testResults.add( nonLeafTestResult );
+					if( intent.isToRun() )
+					{
+						TestResult nonLeafTestResult = runTestClass( testClass, persistence );
+						testResults.add( nonLeafTestResult );
+					}
 				}
 			}
 			NonLeafTestResult rootTestResult = new NonLeafTestResult( "root", testResults );
@@ -56,10 +59,9 @@ public final class TestRunner
 		return testResult;
 	}
 
-	private static NonLeafTestResult runTestClass( TestClass testClass, Intent intent, Persistence persistence )
+	private static NonLeafTestResult runTestClass( TestClass testClass, Persistence persistence )
 	{
-		if( intent.isToRun() )
-			TestanaLog.report( indentation( 2 ) + "Test class " + testClass.projectType.getClassSourceLocation() );
+		TestanaLog.report( indentation( 2 ) + "Test class " + testClass.projectType.getClassSourceLocation() );
 		List<TestMethodResult> childTestResults = new ArrayList<>();
 		for( TestMethod testMethod : testClass.testMethods() )
 		{
@@ -67,13 +69,10 @@ public final class TestRunner
 			childTestResults.add( testMethodResult );
 		}
 		NonLeafTestResult result = new NonLeafTestResult( testClass.fullName(), childTestResults );
-		if( intent.isToRun() )
-		{
-			if( result.failureCount() > 0 )
-				TestanaLog.report( indentation( 2 ) + testClass.fullName() + " " + result.getOutcomeMessage() );
-			else
-				persistence.setTimeOfLastRun( testClass.fullName(), Instant.now() );
-		}
+		if( result.failureCount() > 0 )
+			TestanaLog.report( indentation( 2 ) + testClass.fullName() + " " + result.getOutcomeMessage() );
+		else
+			persistence.setTimeOfLastRun( testClass.fullName(), Instant.now() );
 		return result;
 	}
 
