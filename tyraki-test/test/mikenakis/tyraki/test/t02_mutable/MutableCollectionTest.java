@@ -186,7 +186,7 @@ public abstract class MutableCollectionTest<T>
 		T b = newElement();
 		T c = newElement();
 		assert collection.isEmpty();
-		fuck( collection );
+		assert !collection.clear();
 		collection.add( a );
 		assert collection.clear();
 		collection.isEmpty();
@@ -197,11 +197,6 @@ public abstract class MutableCollectionTest<T>
 		collection.add( c );
 		assert collection.clear();
 		collection.isEmpty();
-	}
-
-	void fuck( MutableCollection<T> collection )
-	{
-		assert !collection.clear();
 	}
 
 	@Test
