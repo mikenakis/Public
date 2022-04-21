@@ -40,19 +40,20 @@ public final class T01_CompilingIntertwine
 				String theKitchenSink( byte a, byte[] aa, boolean b, short c, char d, int e, float f, long g, double h, String i, String[] ii, List<?> j );
 			}
 
+			private final Alpha implementation = new Alpha()
+			{
+				@Override public int intReturningMethod()
+				{
+					return 0;
+				}
+				@Override public String theKitchenSink( byte a, byte[] aa, boolean b, short c, char d, int e, float f, long g, double h, String i, String[] ii, List<?> j )
+				{
+					return a + " " + Arrays.toString( aa ) + " " + b + " " + c + " " + d + " " + e + " " + f + " " + g + " " + h + " " + i + " " + Arrays.toString( ii ) + " " + j;
+				}
+			};
+
 			@Override public void run()
 			{
-				Alpha implementation = new Alpha()
-				{
-					@Override public int intReturningMethod()
-					{
-						return 0;
-					}
-					@Override public String theKitchenSink( byte a, byte[] aa, boolean b, short c, char d, int e, float f, long g, double h, String i, String[] ii, List<?> j )
-					{
-						return a + " " + Arrays.toString( aa ) + " " + b + " " + c + " " + d + " " + e + " " + f + " " + g + " " + h + " " + i + " " + Arrays.toString( ii ) + " " + j;
-					}
-				};
 				Intertwine<Alpha> intertwine = intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ Alpha.class );
 				Anycall<Alpha> untwiner = intertwine.newUntwiner( implementation );
 				Alpha entwiner = intertwine.newEntwiner( untwiner );
@@ -78,7 +79,7 @@ public final class T01_CompilingIntertwine
 				String stringReturningMethod( int i );
 			}
 
-			final Bravo implementation = new Bravo()
+			private final Bravo implementation = new Bravo()
 			{
 				@Override public int intReturningMethod()
 				{
