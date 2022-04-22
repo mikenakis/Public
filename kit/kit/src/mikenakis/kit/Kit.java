@@ -1705,7 +1705,7 @@ public final class Kit
 			assert key != null;
 			assert value != null;
 			Object previous = map.put( key, value );
-			assert previous == null : key + " " + value;
+			assert previous == null : "key = {" + key + "}; value = {" + value + "}";
 		}
 
 		/**
@@ -1730,7 +1730,7 @@ public final class Kit
 		public static <K, V> void remove( Map<K,V> map, K key, V value )
 		{
 			V previous = remove( map, key );
-			assert previous.equals( value );
+			assert previous.equals( value ) : "key = {" + key + "}; previous = {" + previous + "}; value = {" + value + "}";
 		}
 
 		/**
@@ -1771,7 +1771,7 @@ public final class Kit
 			Object previous = map.put( key, value );
 			if( previous == null )
 				return true;
-			assert Objects.equals( previous, value );
+			assert previous.equals( value ) : "key = {" + key + "}; previous = {" + previous + "}; value = {" + value + "}";
 			return false;
 		}
 
@@ -1805,12 +1805,13 @@ public final class Kit
 		 * exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
-		public static <K, V> void replace( Map<K,V> map, K key, V value )
+		public static <K, V> V replace( Map<K,V> map, K key, V value )
 		{
 			assert key != null;
 			assert value != null;
-			Object old = map.put( key, value );
+			V old = map.put( key, value );
 			assert old != null;
+			return old;
 		}
 
 		/**
