@@ -1963,8 +1963,8 @@ public final class Kit
 	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
 	 *         </ul></p></li>
 	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-catch} to use curly braces
-	 *     even when the code blocks consist of single statements. (You supply the {@code try} code in a lambda, so you get to decide whether to
-	 *     use curly braces or not.)</p></li>
+	 *     even when the code blocks consist of single statements.
+	 *     (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
 	 *
 	 * @param tryFunction   the function to be invoked in the 'try' block.
 	 * @param catchFunction the function to handle any throwable thrown.
@@ -2005,8 +2005,8 @@ public final class Kit
 	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
 	 *         </ul></p></li>
 	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-catch} to use curly braces
-	 *     even when the code blocks consist of single statements. (You supply the {@code try} code in a lambda, so you get to decide whether to
-	 *     use curly braces or not.)</p></li>
+	 *     even when the code blocks consist of single statements.
+	 *     (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
 	 *
 	 * @param tryProcedure   the procedure to be invoked in the 'try' block.
 	 * @param catchProcedure the handler to receive any throwable thrown.
@@ -2043,8 +2043,8 @@ public final class Kit
 	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
 	 *         </ul></p></li>
 	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-catch} to use curly braces
-	 *     even when the code blocks consist of single statements. (You supply the {@code try} code in a lambda, so you get to decide whether to
-	 *     use curly braces or not.)</p></li>
+	 *     even when the code blocks consist of single statements.
+	 *     (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
 	 *
 	 * @param tryProcedure the procedure to be invoked in the 'try' block.
 	 */
@@ -2165,6 +2165,46 @@ public final class Kit
 	}
 
 	/**
+	 * Performs a debugger-friendly try-catch-and-transform that does not return a value.
+	 *
+	 * @param tryProcedure the {@link Procedure0} to invoke as the try-block.
+	 * @param transformer a function to transform the caught {@link Throwable} into another {@link Throwable}.
+	 * @param <T> the type of the transformed {@link Throwable}
+	 */
+	public static <T extends Throwable> void tryTransform( Procedure0 tryProcedure, Function1<T,Throwable> transformer )
+	{
+		try
+		{
+			Debug.boundary( tryProcedure );
+		}
+		catch( Throwable throwable )
+		{
+			T wrappedThrowable = transformer.invoke( throwable );
+			throw sneakyException( wrappedThrowable );
+		}
+	}
+
+	/**
+	 * Performs a debugger-friendly try-catch-and-transform that returns a value.
+	 *
+	 * @param tryFunction the {@link Function0} to invoke as the try-block and return its result.
+	 * @param transformer a function to transform the caught {@link Throwable} into another {@link Throwable}.
+	 * @param <T> the type of the transformed {@link Throwable}
+	 */
+	public static <R,T extends Throwable> R tryGetTransform( Function0<R> tryFunction, Function1<T,Throwable> transformer )
+	{
+		try
+		{
+			return Debug.boundary( tryFunction );
+		}
+		catch( Throwable throwable )
+		{
+			T wrappedThrowable = transformer.invoke( throwable );
+			throw sneakyException( wrappedThrowable );
+		}
+	}
+
+	/**
 	 * <p>Performs a debugger-friendly {@code try-with-resources} that returns a result.</p>
 	 * <ul>
 	 *     <li><p>If assertions <b>are not</b> enabled:
@@ -2186,7 +2226,7 @@ public final class Kit
 	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
 	 *         <ul>
 	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
-	 *              (You supply the {@code try} code in a lambda, so you get to decide whether to use curly braces or not)</p></li>
+	 *              (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
 	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
 	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
 	 *        </ul></p></li>
@@ -2269,7 +2309,7 @@ public final class Kit
 	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
 	 *         <ul>
 	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
-	 *              (You supply the {@code try} code in a lambda, so you get to decide whether to use curly braces or not)</p></li>
+	 *              (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
 	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
 	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
 	 *        </ul></p></li>
@@ -2295,12 +2335,12 @@ public final class Kit
 		}
 	}
 
-	public static <C> void tryWithWrapper( MortalWrapper<C> mortalWrapper, Procedure1<? super C> procedure )
+	public static <C> void tryWithMortalWrapper( MortalWrapper<C> mortalWrapper, Procedure1<? super C> procedure )
 	{
 		tryWith( mortalWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
 	}
 
-	public static <R, C> R tryGetWithWrapper( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
+	public static <R, C> R tryGetWithMortalWrapper( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
 	{
 		return tryGetWith( mortalWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
 	}
@@ -3133,13 +3173,13 @@ public final class Kit
 
 		private static <T> void printTreeRecursive( StringBuilder stringBuilder, String parentPrefix, T node, String childPrefix, Function1<Iterable<? extends T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
 		{
-			Iterator<? extends T> iterator = breeder.invoke( node ).iterator();
 			int position = stringBuilder.length();
 			stringBuilder.append( parentPrefix ).append( terminal );
 			stringBuilder.append( stringizer.invoke( node ) );
 			emitter.invoke( stringBuilder.toString() );
 			stringBuilder.setLength( position );
 			stringBuilder.append( childPrefix );
+			Iterator<? extends T> iterator = breeder.invoke( node ).iterator();
 			while( iterator.hasNext() )
 			{
 				T childNode = iterator.next();
