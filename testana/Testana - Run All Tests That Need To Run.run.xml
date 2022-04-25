@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Testana - All" type="Application" factoryName="Application">
+  <configuration default="false" name="Testana - Run All Tests That Need To Run" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="mikenakis.testana.console.TestanaConsoleMain" />
     <module name="testana-console" />
     <option name="PROGRAM_PARAMETERS" value="--show-structure Verbose --show-test-plan Normal" />
