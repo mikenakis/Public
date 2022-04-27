@@ -3,10 +3,10 @@ package mikenakis.tyraki;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
-import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -33,7 +33,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( bindings.size(), fillFactor, keyHasher, //
@@ -58,7 +58,7 @@ public interface UnmodifiableHashMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableHashMap<K,V> mutableMap = mutableCollections.newLinkedHashMap( 1, fillFactor, keyHasher, //

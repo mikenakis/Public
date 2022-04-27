@@ -1,8 +1,5 @@
 package mikenakis.benchmark.util;
 
-import mikenakis.kit.functional.DoubleFunction2Double;
-import mikenakis.kit.functional.Procedure1Double;
-
 public class CircularQueueOfDouble
 {
 	private final double[] values;
@@ -59,6 +56,11 @@ public class CircularQueueOfDouble
 		return array;
 	}
 
+	public interface Procedure1Double
+	{
+		void invoke( double arg1 );
+	}
+
 	public void foreach( Procedure1Double consumer )
 	{
 		for( int si = tail;  si != head;  )
@@ -68,6 +70,11 @@ public class CircularQueueOfDouble
 			if( si >= values.length )
 				si = 0;
 		}
+	}
+
+	public interface DoubleFunction2Double
+	{
+		double invoke( double arg1, double arg2 );
 	}
 
 	public double reduce( double seed, DoubleFunction2Double consumer )

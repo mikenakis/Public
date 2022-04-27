@@ -11,6 +11,7 @@ import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.TemporaryCoherence;
 import mikenakis.kit.coherence.ThreadLocalCoherence;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -129,7 +130,7 @@ public class T05_Mutation
 	@Test public void test_TemporaryCoherence1()
 	{
 		TemporaryCoherence temporaryCoherence = TemporaryCoherence.of();
-		TestClass testObject = Kit.tryGetWith( temporaryCoherence, coherence -> //
+		TestClass testObject = Mortal.tryGetWith( temporaryCoherence, coherence -> //
 		{
 			TestClass t = new TestClass( coherence );
 			t.readOperation();
@@ -145,7 +146,7 @@ public class T05_Mutation
 	@Test public void test_TemporaryCoherence2()
 	{
 		TemporaryCoherence temporaryCoherence = TemporaryCoherence.of();
-		MutableList<String> testList = Kit.tryGetWith( temporaryCoherence, coherence -> //
+		MutableList<String> testList = Mortal.tryGetWith( temporaryCoherence, coherence -> //
 		{
 			MutableList<String> t = MutableCollections.of( coherence ).newArrayList();
 			t.size();
@@ -161,7 +162,7 @@ public class T05_Mutation
 	@Test public void test_FreezableCoherence()
 	{
 		Coherence parentCoherence = ThreadLocalCoherence.instance();
-		TestClass testObject = Kit.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
+		TestClass testObject = Mortal.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
 		{
 			TestClass t = new TestClass( coherence );
 			t.readOperation();
@@ -172,7 +173,7 @@ public class T05_Mutation
 		var exception2 = TestKit.expect( MustBeWritableException.class, () -> testObject.writeOperation() );
 		assert exception2.coherence.getClass() == ConcreteFreezableCoherence.class;
 
-		MutableList<String> testList = Kit.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
+		MutableList<String> testList = Mortal.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
 		{
 			MutableList<String> t = MutableCollections.of( coherence ).newArrayList();
 			t.size();
@@ -183,7 +184,7 @@ public class T05_Mutation
 		var exception4 = TestKit.expect( MustBeWritableException.class, () -> testList.add( "b" ) );
 		assert exception4.coherence.getClass() == ConcreteFreezableCoherence.class;
 
-		MutableList<String> testList2 = Kit.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
+		MutableList<String> testList2 = Mortal.tryGetWith( FreezableCoherence.of( parentCoherence ), coherence -> //
 		{
 			MutableList<String> t = MutableCollections.of( coherence ).newArrayList();
 			t.size();

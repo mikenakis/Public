@@ -6,6 +6,7 @@ import mikenakis.kit.functional.BooleanFunction2;
 import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class SafeEnumerableComparator<R> extends AbstractCoherent
 	public static <R> boolean compare( BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher, //
 		UnmodifiableEnumerable<? extends R> enumerableA, UnmodifiableEnumerable<? extends R> enumerableB )
 	{
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			SafeEnumerableComparator<R> safeEnumerableComparator = new SafeEnumerableComparator<>( coherence, valueComparator, identityComparator, identityHasher );
 			return safeEnumerableComparator.compare( enumerableA, enumerableB );

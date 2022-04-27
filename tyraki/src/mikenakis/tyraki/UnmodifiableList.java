@@ -6,6 +6,7 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
@@ -70,7 +71,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	{
 		if( elements.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
@@ -83,7 +84,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	{
 		if( elements.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );

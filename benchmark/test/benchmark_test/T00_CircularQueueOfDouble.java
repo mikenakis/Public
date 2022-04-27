@@ -1,8 +1,8 @@
 package benchmark_test;
 
 import mikenakis.benchmark.util.CircularQueueOfDouble;
+import mikenakis.benchmark.util.IntRef;
 import mikenakis.kit.Kit;
-import mikenakis.kit.ref.IntRef;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 

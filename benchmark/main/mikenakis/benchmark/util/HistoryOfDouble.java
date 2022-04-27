@@ -1,7 +1,6 @@
 package mikenakis.benchmark.util;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.functional.DoubleFunction2Double;
 
 /**
  * Maintains a rolling sequence of values and calculates their sum, average ('mean'), and standard deviation from the mean ('sigma').
@@ -52,11 +51,9 @@ public class HistoryOfDouble
 		return mean;
 	}
 
-	private final DoubleFunction2Double calculateSumOfSquaredDifferences = ( s, v ) -> s + Kit.math.squared( v - mean );
-
 	public double sigma()
 	{
-		double sumOfSquaredDifferences = queue.reduce( 0, calculateSumOfSquaredDifferences );
+		double sumOfSquaredDifferences = queue.reduce( 0, ( s, v ) -> s + Kit.math.squared( v - mean ) );
 		double sigma = Math.sqrt( sumOfSquaredDifferences / queue.size() );
 		assert Kit.math.eq( sigma, calculateSigma( queue.toArray() ), 1e-9 );
 		return sigma;

@@ -22,8 +22,6 @@ public final class TestKit
 
 	public static <T extends Throwable> T expect( Class<T> expectedThrowableClass, Procedure0 procedure )
 	{
-		assert expectedThrowableClass != null;
-		assert procedure != null;
 		Throwable caughtThrowable = invokeAndCatch( procedure );
 		assert caughtThrowable != null : new ExceptionExpectedException( expectedThrowableClass );
 		caughtThrowable = unwrap( caughtThrowable );

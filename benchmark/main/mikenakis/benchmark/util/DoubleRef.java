@@ -1,4 +1,4 @@
-package mikenakis.kit.ref;
+package mikenakis.benchmark.util;
 
 /**
  * A mutable reference to a {@code double}.

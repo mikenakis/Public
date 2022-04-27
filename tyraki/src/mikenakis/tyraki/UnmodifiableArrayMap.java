@@ -1,8 +1,8 @@
 package mikenakis.tyraki;
 
-import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 
@@ -24,7 +24,7 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 	{
 		if( bindings.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();

@@ -9,7 +9,6 @@ import mikenakis.kit.collections.UnmodifiableIterable;
 import mikenakis.kit.collections.UnmodifiableIterator;
 import mikenakis.kit.debug.Debug;
 import mikenakis.kit.functional.BooleanFunction1;
-import mikenakis.kit.functional.BooleanFunction1Double;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure0;
@@ -18,8 +17,6 @@ import mikenakis.kit.functional.ThrowingFunction0;
 import mikenakis.kit.functional.ThrowingFunction1;
 import mikenakis.kit.functional.ThrowingProcedure0;
 import mikenakis.kit.functional.ThrowingProcedure1;
-import mikenakis.kit.lifetime.Mortal;
-import mikenakis.kit.lifetime.MortalWrapper;
 import mikenakis.kit.logging.Log;
 import mikenakis.kit.ref.Ref;
 
@@ -1936,7 +1933,7 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debugging helpers (try-catch, try-finally, etc.)
 
-	private static boolean debugging()
+	public static boolean debugging()
 	{
 		if( expectingException )
 			return false;
@@ -2201,173 +2198,6 @@ public final class Kit
 		{
 			T wrappedThrowable = transformer.invoke( throwable );
 			throw sneakyException( wrappedThrowable );
-		}
-	}
-
-	/**
-	 * <p>Performs a debugger-friendly {@code try-with-resources} that returns a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-function, passing it the {@link Mortal} object, and returns its result.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-function, passing it the {@link Mortal} object, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *             <li><p>If no exception is thrown:
-	 *                  <ul>
-	 *                      <li><p>It invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *                      <li><p>It returns the result of invoking try-function.</p></li>
-	 *                  </ul></p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
-	 *         <ul>
-	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
-	 *              (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
-	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
-	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
-	 *        </ul></p></li>
-	 * </ul>
-	 *
-	 * @param mortal      the {@link Mortal} to close when done.
-	 * @param tryFunction a function which receives the {@link Mortal} object and produces a result.
-	 * @param <C>         the type of the {@link Mortal}. (Must extend {@link Mortal}.)
-	 * @param <R>         the type of the result.
-	 *
-	 * @return the result of the try-function.
-	 */
-	public static <C extends Mortal, R> R tryGetWith( C mortal, Function1<R,? super C> tryFunction )
-	{
-		assert mortal != null;
-		if( debugging() )
-		{
-			R result = tryFunction.invoke( mortal );
-			mortal.close();
-			return result;
-		}
-		else
-		{
-			try( mortal )
-			{
-				return tryFunction.invoke( mortal );
-			}
-		}
-	}
-
-	/**
-	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Mortal}, execute some code,
-	 * and then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
-	 * <p>
-	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the mortal.
-	 *
-	 * @param mortal      the {@link Mortal} to close when done.
-	 * @param tryFunction a function which produces a result.
-	 * @param <C>         the type of the {@link Mortal}. (Must extend {@link Mortal}.)
-	 * @param <R>         the type of the result.
-	 *
-	 * @return the result of the try-function.
-	 */
-	public static <C extends Mortal, R> R tryGetWith( C mortal, Function0<R> tryFunction )
-	{
-		assert mortal != null;
-		if( debugging() )
-		{
-			R result = tryFunction.invoke();
-			mortal.close();
-			return result;
-		}
-		else
-		{
-			try( mortal )
-			{
-				return tryFunction.invoke();
-			}
-		}
-	}
-
-	/**
-	 * <p>Performs a debugger-friendly {@code try-with-resources} that does not return a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-procedure, passing it the {@link Mortal} object.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-procedure, passing it the {@link Mortal} object, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *             <li><p>If no exception is thrown:
-	 *                  <ul>
-	 *                      <li><p>It invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *                  </ul></p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
-	 *         <ul>
-	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
-	 *              (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
-	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
-	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
-	 *        </ul></p></li>
-	 * </ul>
-	 *
-	 * @param mortal       the {@link Mortal} to close when done.
-	 * @param tryProcedure a {@link Procedure1} which receives the {@link Mortal} object and does something with it.
-	 * @param <C>          the type of the {@link Mortal}. (Must extend {@link Mortal}.)
-	 */
-	public static <C extends Mortal> void tryWith( C mortal, Procedure1<? super C> tryProcedure )
-	{
-		if( debugging() )
-		{
-			tryProcedure.invoke( mortal );
-			mortal.close();
-		}
-		else
-		{
-			try( mortal )
-			{
-				tryProcedure.invoke( mortal );
-			}
-		}
-	}
-
-	public static <C> void tryWithMortalWrapper( MortalWrapper<C> mortalWrapper, Procedure1<? super C> procedure )
-	{
-		tryWith( mortalWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
-	}
-
-	public static <R, C> R tryGetWithMortalWrapper( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
-	{
-		return tryGetWith( mortalWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
-	}
-
-	/**
-	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Mortal}, execute some code,
-	 * and then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
-	 * <p>
-	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the mortal.
-	 *
-	 * @param mortal       the {@link Mortal} to close when done.
-	 * @param tryProcedure the {@link Procedure0} to execute.
-	 * @param <C>          the type of the {@link Mortal}. (Must extend {@link Mortal}.)
-	 */
-	public static <C extends Mortal> void tryWith( C mortal, Procedure0 tryProcedure )
-	{
-		if( debugging() )
-		{
-			tryProcedure.invoke();
-			mortal.close();
-		}
-		else
-		{
-			try( mortal )
-			{
-				tryProcedure.invoke();
-			}
 		}
 	}
 
@@ -2933,6 +2763,11 @@ public final class Kit
 				if( predicate.invoke( element ) )
 					return true;
 			return false;
+		}
+
+		public interface BooleanFunction1Double
+		{
+			boolean invoke( double value );
 		}
 
 		public static boolean trueForAll( double[] array, BooleanFunction1Double predicate )

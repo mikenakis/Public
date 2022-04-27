@@ -2,9 +2,9 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
-import mikenakis.kit.Kit;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 
@@ -28,7 +28,7 @@ public interface UnmodifiableHashSet<E> extends UnmodifiableCollection<E>
 	{
 		if( items.isEmpty() )
 			return of();
-		return Kit.tryGetWith( FreezableCoherence.of(), coherence -> //
+		return Mortal.tryGetWith( FreezableCoherence.of(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
 			MutableHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );

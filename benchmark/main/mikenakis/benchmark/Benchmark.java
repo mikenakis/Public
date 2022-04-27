@@ -1,11 +1,10 @@
 package mikenakis.benchmark;
 
+import mikenakis.benchmark.util.DoubleRef;
 import mikenakis.benchmark.util.HistoryOfDouble;
-import mikenakis.kit.functional.DoubleFunction0;
+import mikenakis.benchmark.util.IntRef;
 import mikenakis.kit.Kit;
-import mikenakis.kit.ref.DoubleRef;
 import mikenakis.kit.logging.Log;
-import mikenakis.kit.ref.IntRef;
 
 import java.util.Locale;
 
@@ -194,6 +193,11 @@ public class Benchmark
 		readingsNanoseconds[0] = t1;
 		for( int i = 1; i < readingsNanoseconds.length; i++ )
 			readingsNanoseconds[i] = System.nanoTime();
+	}
+
+	public interface DoubleFunction0
+	{
+		double invoke();
 	}
 
 	/**

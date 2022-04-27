@@ -1,7 +1,5 @@
 package mikenakis.kit;
 
-import mikenakis.kit.functional.IntFunction0;
-
 /**
  * Implements a lazily computed int.
  *
@@ -9,6 +7,11 @@ import mikenakis.kit.functional.IntFunction0;
  */
 public final class LazyInt
 {
+	interface IntFunction0
+	{
+		int invoke();
+	}
+
 	public static  LazyInt of( IntFunction0 factory )
 	{
 		return new LazyInt( factory );
