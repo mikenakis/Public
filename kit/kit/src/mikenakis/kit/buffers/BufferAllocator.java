@@ -1,10 +1,10 @@
 package mikenakis.kit.buffers;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.logging.Log;
 import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.ThreadLocalCoherence;
+import mikenakis.kit.logging.Log;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

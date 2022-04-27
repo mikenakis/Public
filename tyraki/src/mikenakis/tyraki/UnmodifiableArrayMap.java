@@ -1,7 +1,7 @@
 package mikenakis.tyraki;
 
-import mikenakis.kit.functional.Function1;
 import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.functional.Function1;
 import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.mutable.MutableCollections;

@@ -1,9 +1,9 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.UnmodifiableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

@@ -1,9 +1,6 @@
 package mikenakis.testana.test_engines.junit;
 
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
 
 class NaturalOrderMethodComparator implements Comparator<JunitTestMethod>
 {

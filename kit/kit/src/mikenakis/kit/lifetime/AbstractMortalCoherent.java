@@ -1,8 +1,8 @@
 package mikenakis.kit.lifetime;
 
-import mikenakis.kit.lifetime.guard.LifeGuard;
 import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.lifetime.guard.LifeGuard;
 
 /**
  * Abstract base class for lifetime-aware objects.

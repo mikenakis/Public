@@ -1,8 +1,8 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableList;
-import mikenakis.kit.EqualityComparator;
 
 /**
  * Abstract {@link UnmodifiableList}.

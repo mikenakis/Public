@@ -1,8 +1,8 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.ConcurrentModificationException;

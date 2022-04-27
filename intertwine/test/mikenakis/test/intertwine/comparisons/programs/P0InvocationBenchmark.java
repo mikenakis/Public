@@ -1,8 +1,8 @@
 package mikenakis.test.intertwine.comparisons.programs;
 
-import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
+import mikenakis.kit.Kit;
 
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;

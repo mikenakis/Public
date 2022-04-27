@@ -1,7 +1,7 @@
 package mikenakis.publishing.suppress;
 
-import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.lifetime.AbstractMortalCoherent;
 
 public class Suppression extends AbstractMortalCoherent
 {

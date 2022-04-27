@@ -1,9 +1,9 @@
 package mikenakis.tyraki.test.t02_mutable.map;
 
+import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.IdentityEqualityComparator;
 import mikenakis.tyraki.IdentityHasher;
 import mikenakis.tyraki.MutableMap;
-import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import mikenakis.tyraki.test.t02_mutable.ValueSemanticsClass;
 

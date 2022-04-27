@@ -1,8 +1,8 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableList;
-import mikenakis.kit.EqualityComparator;
 
 /**
  * Chains lists together into a single list.

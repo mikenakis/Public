@@ -2,8 +2,8 @@ package mikenakis.testana.runtime;
 
 import mikenakis.kit.Kit;
 import mikenakis.testana.Persistence;
-import mikenakis.testana.kit.TimeMeasurement;
 import mikenakis.testana.kit.TestanaLog;
+import mikenakis.testana.kit.TimeMeasurement;
 import mikenakis.testana.runtime.result.NonLeafTestResult;
 import mikenakis.testana.runtime.result.TestMethodResult;
 import mikenakis.testana.runtime.result.TestResult;

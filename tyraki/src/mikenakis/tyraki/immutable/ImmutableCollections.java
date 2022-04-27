@@ -1,16 +1,16 @@
 package mikenakis.tyraki.immutable;
 
+import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Hasher;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.Binding;
-import mikenakis.kit.Hasher;
 import mikenakis.tyraki.UnmodifiableArrayHashMap;
 import mikenakis.tyraki.UnmodifiableArrayHashSet;
 import mikenakis.tyraki.UnmodifiableArraySet;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableList;
-import mikenakis.kit.DefaultEqualityComparator;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

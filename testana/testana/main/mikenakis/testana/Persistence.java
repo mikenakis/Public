@@ -2,8 +2,8 @@ package mikenakis.testana;
 
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
-import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.JsonReader;
+import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.reading.JsonStructuredReader;
 import mikenakis.testana.kit.structured.json.writing.JsonStructuredWriter;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -78,7 +78,7 @@ public final class Persistence
 		Kit.uncheckedTryWith( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
-			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
+			StructuredReader rootReader = new JsonStructuredReader( jsonReader );
 			rootReader.readArray( "elementName", arrayReader -> //
 			{
 				Map<String,TestClassInfo> mutableMap = new LinkedHashMap<>();

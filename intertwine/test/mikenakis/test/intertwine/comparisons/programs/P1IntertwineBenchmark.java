@@ -4,11 +4,11 @@ import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.implementations.compiling.CompilingIntertwineFactory;
+import mikenakis.kit.Kit;
+import mikenakis.kit.functional.Function1;
+import mikenakis.kit.functional.Procedure0;
 import mikenakis.test.intertwine.comparisons.implementations.alternative.methodhandle.MethodHandleIntertwineFactory;
 import mikenakis.test.intertwine.comparisons.implementations.alternative.reflecting.ReflectingIntertwineFactory;
-import mikenakis.kit.functional.Function1;
-import mikenakis.kit.Kit;
-import mikenakis.kit.functional.Procedure0;
 
 import java.io.OutputStream;
 import java.io.PrintStream;

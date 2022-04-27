@@ -1,6 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
@@ -8,7 +9,6 @@ import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

@@ -1,5 +1,7 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Hasher;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
@@ -8,8 +10,6 @@ import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.UnmodifiableCollection;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.Hasher;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.lang.ref.Reference;

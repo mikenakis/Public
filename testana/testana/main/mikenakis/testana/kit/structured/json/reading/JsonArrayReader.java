@@ -1,6 +1,5 @@
 package mikenakis.testana.kit.structured.json.reading;
 
-import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.reading.ArrayReader;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -26,7 +25,7 @@ public class JsonArrayReader implements ArrayReader
 				first = false;
 			else
 				jsonReader.skip( JsonReader.TokenType.Comma );
-			StructuredReader arrayElementReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Array );
+			StructuredReader arrayElementReader = new JsonStructuredReader( jsonReader );
 			structuredReaderConsumer.accept( arrayElementReader );
 		}
 		done = true;

@@ -1,11 +1,11 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.DebugView;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerable;
-import mikenakis.kit.EqualityComparator;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 

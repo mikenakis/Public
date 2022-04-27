@@ -1,11 +1,11 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableArrayMap;
 import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableEnumerator;
-import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;

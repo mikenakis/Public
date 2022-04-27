@@ -1,9 +1,9 @@
 package mikenakis.publishing.test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.ThreadLocalCoherence;
+import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.lifetime.Mortal;
 import mikenakis.kit.ref.Ref;
 import mikenakis.publishing.bespoke.Publisher;

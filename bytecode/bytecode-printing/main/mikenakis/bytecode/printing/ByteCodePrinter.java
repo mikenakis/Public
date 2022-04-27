@@ -92,17 +92,17 @@ import mikenakis.bytecode.model.attributes.target.TypeParameterTarget;
 import mikenakis.bytecode.model.attributes.target.TypePath;
 import mikenakis.bytecode.model.attributes.target.TypePathEntry;
 import mikenakis.bytecode.model.constants.ClassConstant;
-import mikenakis.bytecode.model.constants.value.DoubleValueConstant;
 import mikenakis.bytecode.model.constants.FieldReferenceConstant;
+import mikenakis.bytecode.model.constants.MethodHandleConstant;
+import mikenakis.bytecode.model.constants.MethodTypeConstant;
+import mikenakis.bytecode.model.constants.ReferenceConstant;
+import mikenakis.bytecode.model.constants.ValueConstant;
+import mikenakis.bytecode.model.constants.value.DoubleValueConstant;
 import mikenakis.bytecode.model.constants.value.FloatValueConstant;
 import mikenakis.bytecode.model.constants.value.IntegerValueConstant;
 import mikenakis.bytecode.model.constants.value.LongValueConstant;
-import mikenakis.bytecode.model.constants.MethodHandleConstant;
-import mikenakis.bytecode.model.constants.MethodTypeConstant;
 import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
-import mikenakis.bytecode.model.constants.ReferenceConstant;
 import mikenakis.bytecode.model.constants.value.StringValueConstant;
-import mikenakis.bytecode.model.constants.ValueConstant;
 import mikenakis.bytecode.printing.twig.Twig;
 import mikenakis.java_type_model.TerminalTypeDescriptor;
 import mikenakis.kit.Kit;
@@ -669,18 +669,15 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromStackMapFrame( Labeler labeler, Optional<StackMapFrame> previousFrame, StackMapFrame frame )
 	{
-		if( frame instanceof ChopStackMapFrame ) //TODO use switch
-			return twigFromChopStackMapFrame( frame.asChopStackMapFrame(), previousFrame, labeler );
-		else if( frame instanceof FullStackMapFrame )
-			return twigFromFullStackMapFrame( frame.asFullStackMapFrame(), previousFrame, labeler );
-		else if( frame instanceof AppendStackMapFrame )
-			return twigFromAppendStackMapFrame( frame.asAppendStackMapFrame(), previousFrame, labeler );
-		else if( frame instanceof SameStackMapFrame )
-			return twigFromSameStackMapFrame( frame.asSameStackMapFrame(), previousFrame, labeler );
-		else if( frame instanceof SameLocals1StackItemStackMapFrame )
-			return twigFromSameLocals1StackItemStackMapFrame( frame.asSameLocals1StackItemStackMapFrame(), previousFrame, labeler );
-		else
-			throw new AssertionError();
+		return switch( frame )
+			{
+				case ChopStackMapFrame ignored -> twigFromChopStackMapFrame( frame.asChopStackMapFrame(), previousFrame, labeler );
+				case FullStackMapFrame ignored -> twigFromFullStackMapFrame( frame.asFullStackMapFrame(), previousFrame, labeler );
+				case AppendStackMapFrame ignored -> twigFromAppendStackMapFrame( frame.asAppendStackMapFrame(), previousFrame, labeler );
+				case SameStackMapFrame ignored -> twigFromSameStackMapFrame( frame.asSameStackMapFrame(), previousFrame, labeler );
+				case SameLocals1StackItemStackMapFrame ignored -> twigFromSameLocals1StackItemStackMapFrame( frame.asSameLocals1StackItemStackMapFrame(), previousFrame, labeler );
+				case default -> throw new AssertionError();
+			};
 	}
 
 	private static Twig twigFromAnnotationsAttribute( AnnotationsAttribute annotationsAttribute )

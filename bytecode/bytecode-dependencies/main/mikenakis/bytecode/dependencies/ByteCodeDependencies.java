@@ -36,9 +36,9 @@ import mikenakis.bytecode.model.attributes.TypeAnnotationsAttribute;
 import mikenakis.bytecode.model.attributes.code.Instruction;
 import mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.FieldReferencingInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeDynamicInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.InvokeInterfaceInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.descriptors.MethodReference;
@@ -374,17 +374,15 @@ public final class ByteCodeDependencies
 	{
 		if( !includeSignatureDependencies )
 			return;
-		ObjectSignature parsedSignature = SignatureParser.make().parseFieldSig( signature ); // parseFieldTypeSignature() {
-		if( parsedSignature instanceof ClassSignature classSignature )
-			visitClassSignature( classSignature );
-		else if( parsedSignature instanceof TypeVariableSignature )
-			Kit.nop();
-		else if( parsedSignature instanceof ArrayTypeSignature arrayTypeSignature )
-			visitArrayTypeSignature( arrayTypeSignature );
-		else if( parsedSignature instanceof ClassTypeSignature classTypeSignature )
-			visitClassTypeSignature( classTypeSignature );
-		else
-			assert false;
+		ObjectSignature parsedSignature = SignatureParser.make().parseFieldSig( signature );
+		switch( parsedSignature )
+		{
+			case ClassSignature classSignature -> visitClassSignature( classSignature );
+			case TypeVariableSignature ignore -> Kit.nop();
+			case ArrayTypeSignature arrayTypeSignature -> visitArrayTypeSignature( arrayTypeSignature );
+			case ClassTypeSignature classTypeSignature -> visitClassTypeSignature( classTypeSignature );
+			default -> throw new AssertionError();
+		}
 	}
 
 	private void visitClassTypeSignatureString( String signature )
@@ -412,14 +410,13 @@ public final class ByteCodeDependencies
 	private void visitTypeSignature( TypeSignature typeSignature )
 	{
 		assert includeSignatureDependencies;
-		if( typeSignature instanceof ArrayTypeSignature arrayTypeSignature )
-			visitArrayTypeSignature( arrayTypeSignature );
-		else if( typeSignature instanceof ClassTypeSignature classTypeSignature )
-			visitClassTypeSignature( classTypeSignature );
-		else if( typeSignature instanceof TypeVariableSignature )
-			Kit.nop();
-		else
-			assert false;
+		switch( typeSignature )
+		{
+			case ArrayTypeSignature arrayTypeSignature -> visitArrayTypeSignature( arrayTypeSignature );
+			case ClassTypeSignature classTypeSignature -> visitClassTypeSignature( classTypeSignature );
+			case TypeVariableSignature ignore -> Kit.nop();
+			case default -> throw new AssertionError();
+		}
 	}
 
 	private void visitSignaturePath( Collection<SimpleClassTypeSignature> signaturePath )
@@ -445,32 +442,22 @@ public final class ByteCodeDependencies
 	private void visitSignatureTypeTree( TypeTree typeTree )
 	{
 		assert includeSignatureDependencies;
-		if( typeTree instanceof VoidDescriptor )
-			Kit.nop();
-		else if( typeTree instanceof ByteSignature )
-			Kit.nop();
-		else if( typeTree instanceof BooleanSignature )
-			Kit.nop();
-		else if( typeTree instanceof CharSignature )
-			Kit.nop();
-		else if( typeTree instanceof ShortSignature )
-			Kit.nop();
-		else if( typeTree instanceof IntSignature )
-			Kit.nop();
-		else if( typeTree instanceof FloatSignature )
-			Kit.nop();
-		else if( typeTree instanceof LongSignature )
-			Kit.nop();
-		else if( typeTree instanceof DoubleSignature )
-			Kit.nop();
-		else if( typeTree instanceof TypeVariableSignature )
-			Kit.nop();
-		else if( typeTree instanceof ClassTypeSignature classTypeSignature )
-			visitClassTypeSignature( classTypeSignature );
-		else if( typeTree instanceof ArrayTypeSignature arrayTypeSignature )
-			visitSignatureTypeTree( arrayTypeSignature.getComponentType() );
-		else
-			assert false;
+		switch( typeTree )
+		{
+			case VoidDescriptor voidDescriptor -> Kit.get( voidDescriptor );
+			case ByteSignature byteSignature -> Kit.get( byteSignature );
+			case BooleanSignature booleanSignature -> Kit.get( booleanSignature );
+			case CharSignature charSignature -> Kit.get( charSignature );
+			case ShortSignature shortSignature -> Kit.get( shortSignature );
+			case IntSignature intSignature -> Kit.get( intSignature );
+			case FloatSignature floatSignature -> Kit.get( floatSignature );
+			case LongSignature longSignature -> Kit.get( longSignature );
+			case DoubleSignature doubleSignature -> Kit.get( doubleSignature );
+			case TypeVariableSignature typeVariableSignature -> Kit.get( typeVariableSignature );
+			case ClassTypeSignature classTypeSignature -> visitClassTypeSignature( classTypeSignature );
+			case ArrayTypeSignature arrayTypeSignature -> visitSignatureTypeTree( arrayTypeSignature.getComponentType() );
+			case default -> throw new AssertionError();
+		}
 	}
 
 	private void visitClassTypeSignature( ClassTypeSignature classTypeSignature )
@@ -542,17 +529,17 @@ public final class ByteCodeDependencies
 	private void visitBootstrapArgument( Constant constant )
 	{
 		switch( constant.tag )
-			{
-				case Constant.tag_Class -> visitTypeDescriptor( constant.asClassConstant().typeDescriptor() );
-				case Constant.tag_MethodType -> visitMethodDescriptor( constant.asMethodTypeConstant().methodDescriptor() );
-				case Constant.tag_String -> { /* nothing to do */ }
-				case Constant.tag_MethodHandle -> //
-					{
-						DirectMethodHandleDesc directMethodHandleDesc = constant.asMethodHandleConstant().directMethodHandleDesc();
-						visitDirectMethodHandleDesc( directMethodHandleDesc );
-					}
-				default -> throw new AssertionError( constant );
-			}
+		{
+			case Constant.tag_Class -> visitTypeDescriptor( constant.asClassConstant().typeDescriptor() );
+			case Constant.tag_MethodType -> visitMethodDescriptor( constant.asMethodTypeConstant().methodDescriptor() );
+			case Constant.tag_String -> { /* nothing to do */ }
+			case Constant.tag_MethodHandle -> //
+				{
+					DirectMethodHandleDesc directMethodHandleDesc = constant.asMethodHandleConstant().directMethodHandleDesc();
+					visitDirectMethodHandleDesc( directMethodHandleDesc );
+				}
+			default -> throw new AssertionError( constant );
+		}
 	}
 
 	//DirectMethodHandleDesc java.lang.constant.ConstantDescs.ofCallsiteBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );

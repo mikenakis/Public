@@ -1,11 +1,11 @@
 package mikenakis.tyraki.conversion;
 
-import mikenakis.kit.functional.Function1;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

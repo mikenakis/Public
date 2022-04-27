@@ -1,5 +1,6 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
@@ -7,7 +8,6 @@ import mikenakis.tyraki.DebugView;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableMap;
 import mikenakis.tyraki.UnmodifiableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

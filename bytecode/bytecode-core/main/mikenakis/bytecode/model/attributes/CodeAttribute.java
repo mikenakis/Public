@@ -23,8 +23,8 @@ import mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingIn
 import mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.NewPrimitiveArrayInstruction;
 import mikenakis.bytecode.model.attributes.code.instructions.OperandlessInstruction;
-import mikenakis.bytecode.model.attributes.code.instructions.Type;
 import mikenakis.bytecode.model.attributes.code.instructions.TableSwitchInstruction;
+import mikenakis.bytecode.model.attributes.code.instructions.Type;
 import mikenakis.bytecode.model.attributes.code.instructions.TypedOperandlessInstruction;
 import mikenakis.bytecode.model.constants.InvokeDynamicConstant;
 import mikenakis.bytecode.model.descriptors.FieldReference;

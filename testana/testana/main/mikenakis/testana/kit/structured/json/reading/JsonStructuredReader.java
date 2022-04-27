@@ -1,7 +1,6 @@
 package mikenakis.testana.kit.structured.json.reading;
 
 import mikenakis.kit.functional.Function1;
-import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.reading.ArrayReader;
 import mikenakis.testana.kit.structured.reading.ObjectReader;
@@ -12,13 +11,11 @@ import java.util.Optional;
 public class JsonStructuredReader implements StructuredReader
 {
 	private final JsonReader jsonReader;
-	private final JsonWriter.Mode mode;
 	private boolean done;
 
-	public JsonStructuredReader( JsonReader jsonReader, JsonWriter.Mode mode )
+	public JsonStructuredReader( JsonReader jsonReader )
 	{
 		this.jsonReader = jsonReader;
-		this.mode = mode;
 	}
 
 	@Override public String readValue()

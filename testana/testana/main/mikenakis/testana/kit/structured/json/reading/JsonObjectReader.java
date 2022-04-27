@@ -1,6 +1,5 @@
 package mikenakis.testana.kit.structured.json.reading;
 
-import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.JsonReader;
 import mikenakis.testana.kit.structured.reading.ObjectReader;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -26,7 +25,7 @@ public class JsonObjectReader implements ObjectReader
 		String identifier = jsonReader.skip( JsonReader.TokenType.Identifier );
 		assert identifier.equals( memberName );
 		jsonReader.skip( JsonReader.TokenType.Colon );
-		StructuredReader objectMemberReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
+		StructuredReader objectMemberReader = new JsonStructuredReader( jsonReader );
 		return structuredReaderConsumer.apply( objectMemberReader );
 	}
 }

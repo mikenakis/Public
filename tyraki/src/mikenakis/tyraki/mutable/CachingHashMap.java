@@ -1,16 +1,16 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
+import mikenakis.kit.ObjectHasher;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.MutableMap;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.ObjectHasher;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Comparator;

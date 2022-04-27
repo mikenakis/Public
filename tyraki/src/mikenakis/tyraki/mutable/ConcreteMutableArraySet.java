@@ -1,9 +1,9 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
-import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;

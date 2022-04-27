@@ -2,8 +2,8 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.functional.Function1;
 import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.kit.functional.Function1;
 import mikenakis.kit.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;

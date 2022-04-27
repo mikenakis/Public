@@ -10,11 +10,11 @@ import mikenakis.testana.structure.ProjectModule;
 import mikenakis.testana.structure.ProjectStructure;
 import mikenakis.testana.structure.ProjectType;
 import mikenakis.testana.testplan.dependency.DependencyMatrix;
-import mikenakis.testana.testplan.intent.RunBecauseNeverRunBeforeIntent;
 import mikenakis.testana.testplan.intent.Intent;
-import mikenakis.testana.testplan.intent.RunBecauseModifiedSinceLastRunIntent;
 import mikenakis.testana.testplan.intent.NoRunBecauseUpToDateIntent;
 import mikenakis.testana.testplan.intent.RunBecauseDependenciesModifiedIntent;
+import mikenakis.testana.testplan.intent.RunBecauseModifiedSinceLastRunIntent;
+import mikenakis.testana.testplan.intent.RunBecauseNeverRunBeforeIntent;
 
 import java.time.Instant;
 import java.util.ArrayDeque;

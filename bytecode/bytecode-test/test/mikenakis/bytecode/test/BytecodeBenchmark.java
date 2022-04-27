@@ -3,7 +3,6 @@ package mikenakis.bytecode.test;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
 import mikenakis.bytecode.model.ByteCodeType;
-//import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Model;
 import mikenakis.kit.Kit;
 

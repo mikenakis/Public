@@ -1,15 +1,17 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.DefaultComparator;
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.IdentityEqualityComparator;
 import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.kit.buffer.CaseInsensitiveBufferEqualityComparator;
 import mikenakis.kit.buffer.CaseInsensitiveBufferHasher;
-import mikenakis.kit.functional.Procedure1;
 import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.functional.Procedure1;
 import mikenakis.tyraki.CaseInsensitiveStringEqualityComparator;
 import mikenakis.tyraki.CaseInsensitiveStringHasher;
 import mikenakis.tyraki.IdentityHasher;
@@ -27,8 +29,6 @@ import mikenakis.tyraki.MutableMap;
 import mikenakis.tyraki.Queue;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerable;
-import mikenakis.kit.DefaultComparator;
-import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Comparator;

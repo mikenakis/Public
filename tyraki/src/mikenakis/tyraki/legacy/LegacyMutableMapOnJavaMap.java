@@ -1,12 +1,13 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.DefaultEqualityComparator;
-import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.functional.Function1;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
-import mikenakis.kit.coherence.MustBeFrozenException;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.MustBeFrozenException;
 import mikenakis.kit.coherence.UnknownCoherence;
+import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.MapEntry;
@@ -17,7 +18,6 @@ import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableMap;
 import mikenakis.tyraki.conversion.ConversionCollections;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Iterator;
 import java.util.Map;

@@ -1,12 +1,12 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.coherence.ThreadLocalCoherence;
 import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.lifetime.Mortal;
 import mikenakis.kit.lifetime.guard.DevelopmentLifeGuard;
 import mikenakis.kit.lifetime.guard.MustBeAliveException;
-import mikenakis.kit.coherence.Coherence;
-import mikenakis.kit.coherence.ThreadLocalCoherence;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 

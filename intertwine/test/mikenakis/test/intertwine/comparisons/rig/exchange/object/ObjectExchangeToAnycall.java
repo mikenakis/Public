@@ -1,9 +1,9 @@
 package mikenakis.test.intertwine.comparisons.rig.exchange.object;
 
-import mikenakis.intertwine.MethodKey;
-import mikenakis.test.intertwine.comparisons.rig.exchange.ObjectExchange;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.MethodKey;
+import mikenakis.test.intertwine.comparisons.rig.exchange.ObjectExchange;
 
 public class ObjectExchangeToAnycall<T> implements ObjectExchange<AnycallResponse,AnycallRequest>
 {

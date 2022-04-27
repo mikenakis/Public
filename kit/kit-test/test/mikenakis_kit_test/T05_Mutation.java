@@ -1,14 +1,14 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.coherence.AbstractCoherent;
+import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.ConcreteFreezableCoherence;
 import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.kit.coherence.MustBeFrozenException;
 import mikenakis.kit.coherence.MustBeReadableException;
 import mikenakis.kit.coherence.MustBeWritableException;
 import mikenakis.kit.coherence.MustNotBeFrozenException;
-import mikenakis.kit.coherence.AbstractCoherent;
-import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.TemporaryCoherence;
 import mikenakis.kit.coherence.ThreadLocalCoherence;
 import mikenakis.kit.lifetime.Mortal;

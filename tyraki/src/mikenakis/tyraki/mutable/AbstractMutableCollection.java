@@ -1,8 +1,8 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
-import mikenakis.kit.EqualityComparator;
 
 /**
  * Abstract {@link MutableCollection}.

@@ -3,9 +3,9 @@ package mikenakis.publishing.anycall;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.Kit;
+import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.logging.Log;
-import mikenakis.kit.coherence.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.mutable.MutableCollections;
 

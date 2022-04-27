@@ -1,12 +1,12 @@
 package mikenakis.publishing.suppress;
 
 import mikenakis.intertwine.Anycall;
+import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.MethodKey;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
-import mikenakis.intertwine.Intertwine;
-import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.tyraki.mutable.MutableCollections;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;

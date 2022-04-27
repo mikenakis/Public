@@ -3,8 +3,8 @@ package mikenakis.testana.structure.cache;
 import mikenakis.kit.Kit;
 import mikenakis.testana.discovery.OutputDirectory;
 import mikenakis.testana.discovery.OutputFile;
-import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.JsonReader;
+import mikenakis.testana.kit.structured.json.JsonWriter;
 import mikenakis.testana.kit.structured.json.reading.JsonStructuredReader;
 import mikenakis.testana.kit.structured.json.writing.JsonStructuredWriter;
 import mikenakis.testana.kit.structured.reading.StructuredReader;
@@ -38,7 +38,7 @@ public class Cache
 		Map<String,CacheModule> modules = Kit.uncheckedTryGetWith( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
-			StructuredReader rootReader = new JsonStructuredReader( jsonReader, JsonWriter.Mode.Object );
+			StructuredReader rootReader = new JsonStructuredReader( jsonReader );
 			return rootReader.readArray( "modules", moduleArrayReader -> //
 			{
 				Map<String,CacheModule> modules1 = new LinkedHashMap<>();

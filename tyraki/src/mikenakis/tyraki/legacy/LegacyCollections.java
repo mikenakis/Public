@@ -1,12 +1,12 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.MutableMap;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Collection;
 import java.util.Iterator;

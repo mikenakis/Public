@@ -1,10 +1,10 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MutableArrayMap;
 import mikenakis.tyraki.MutableArraySet;
 import mikenakis.tyraki.MutableList;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

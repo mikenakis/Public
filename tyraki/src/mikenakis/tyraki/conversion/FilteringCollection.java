@@ -1,8 +1,8 @@
 package mikenakis.tyraki.conversion;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.UnmodifiableCollection;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 import java.util.function.Predicate;

@@ -1,10 +1,10 @@
 package mikenakis.tyraki;
 
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.DuplicateElementException;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;

@@ -1,5 +1,8 @@
 package mikenakis.test.intertwine.comparisons;
 
+import mikenakis.intertwine.Anycall;
+import mikenakis.intertwine.Intertwine;
+import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.kit.Kit;
 import mikenakis.test.intertwine.comparisons.rig.FooInterface;
 import mikenakis.test.intertwine.comparisons.rig.FooServer;
@@ -8,9 +11,6 @@ import mikenakis.test.intertwine.comparisons.rig.exchange.object.AnycallRequest;
 import mikenakis.test.intertwine.comparisons.rig.exchange.object.AnycallResponse;
 import mikenakis.test.intertwine.comparisons.rig.exchange.object.AnycallToObjectExchange;
 import mikenakis.test.intertwine.comparisons.rig.exchange.object.ObjectExchangeToAnycall;
-import mikenakis.intertwine.Anycall;
-import mikenakis.intertwine.Intertwine;
-import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 

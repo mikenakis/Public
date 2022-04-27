@@ -1,6 +1,7 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.DefaultEqualityComparator;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.tyraki.AbstractEnumerator;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MapEntry;
@@ -9,7 +10,6 @@ import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.MutableMap;
 import mikenakis.tyraki.UnmodifiableEnumerator;
-import mikenakis.kit.EqualityComparator;
 
 import java.util.Optional;
 

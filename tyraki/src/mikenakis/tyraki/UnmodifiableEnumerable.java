@@ -2,12 +2,12 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.GenericException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Function2;
-import mikenakis.kit.GenericException;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 

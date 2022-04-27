@@ -1,8 +1,8 @@
 package mikenakis.kit;
 
+import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.lifetime.AbstractMortalCoherent;
 import mikenakis.kit.lifetime.Mortal;
-import mikenakis.kit.coherence.Coherence;
 
 import java.util.ArrayList;
 import java.util.Arrays;

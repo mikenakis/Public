@@ -1,8 +1,8 @@
 package mikenakis_kit_test;
 
+import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
 import mikenakis.kit.Kit;
-import mikenakis.benchmark.Benchmark;
 import mikenakis.kit.logging.Log;
 import org.junit.Ignore;
 import org.junit.Test;

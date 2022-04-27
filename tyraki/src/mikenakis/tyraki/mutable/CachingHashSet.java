@@ -1,14 +1,14 @@
 package mikenakis.tyraki.mutable;
 
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.Hasher;
+import mikenakis.kit.ObjectHasher;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.MutableHashSet;
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.Hasher;
-import mikenakis.kit.ObjectHasher;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;
