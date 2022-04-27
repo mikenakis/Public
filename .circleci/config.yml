@@ -9,9 +9,18 @@ workflows:
 jobs:
   build:
     docker:
-      - image: cimg/openjdk:16.0.0
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
+
+
+
+
+
+
+
+
+
       - run: mvn -s .circleci/mvn-settings.xml clean | grep -Ev "Download(ing|ed)"
       - run: mvn -s .circleci/mvn-settings.xml install | grep -Ev "Download(ing|ed)"
       - run: mvn -s .circleci/mvn-settings.xml deploy -DskipTests -Dmaven.install.skip=true
