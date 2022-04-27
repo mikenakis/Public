@@ -3,6 +3,7 @@ package mikenakis.bytecode.test;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Model;
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class T301_Printing
 {
 	public T301_Printing()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 
@@ -54,7 +55,8 @@ public class T301_Printing
 		// The file comparison feature of the source control system can be used to see what has changed.
 		// We use an assertion to signal that a mismatch has been detected because we have no other means of alerting the programmer
 		// from within a test. (Nobody looks at the log. Testana even hides the log.)
-		assert mismatchCount == 0; //this is not an error! It just means that the output of the printer has changed since the last run of the test.
+		if( mismatchCount != 0 ) //this is not an error! It just means that the output of the printer has changed since the last run of the test.
+			Debug.breakPoint( "files changed in " +  printsPath );
 	}
 
 	private static boolean printAndCompareAgainstExpected( Path classFilePathName, Path printFilePathName, Path sourcesPath )

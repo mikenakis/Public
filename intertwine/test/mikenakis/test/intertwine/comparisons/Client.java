@@ -10,7 +10,7 @@ import mikenakis.test.intertwine.comparisons.rig.exchange.object.ObjectExchangeT
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.kit.Kit;
+import mikenakis.debug.Debug;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public abstract class Client
 {
 	protected Client()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

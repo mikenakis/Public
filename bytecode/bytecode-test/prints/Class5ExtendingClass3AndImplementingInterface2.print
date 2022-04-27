@@ -1,4 +1,4 @@
-■ ByteCodeType version = 60.0, accessFlags = [public, final, super], this = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2, super = mikenakis.bytecode.test.model.Class3ImplementingInterface
+■ ByteCodeType version = 61.0, accessFlags = [public, final, super], this = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2, super = mikenakis.bytecode.test.model.Class3ImplementingInterface
 ├─■ interfaces: 1 items
 │ └─■ [0] mikenakis.bytecode.test.model.Interface2
 ├─■ extraTypes: 0 items

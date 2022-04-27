@@ -1,6 +1,7 @@
 package mikenakis_kit_test;
 
 import mikenakis.benchmark.Benchmarkable;
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.kit.logging.Log;
@@ -15,7 +16,7 @@ public class T01_Arithmetic
 {
 	public T01_Arithmetic()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

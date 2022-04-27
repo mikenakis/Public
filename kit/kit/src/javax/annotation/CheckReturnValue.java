@@ -1,7 +1,5 @@
 package javax.annotation;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +10,7 @@ import java.lang.annotation.Target;
  * JSR 305 Check-Return-Value annotation.
  *
  * @author michael.gr
- * @see CanIgnoreReturnValue
+ * see com.google.errorprone.annotations.CanIgnoreReturnValue
  */
 @Documented
 @Retention( RetentionPolicy.CLASS )

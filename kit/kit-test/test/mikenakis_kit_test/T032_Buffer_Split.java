@@ -1,5 +1,6 @@
 package mikenakis_kit_test;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.buffer.Buffer;
 import mikenakis.testkit.TestKit;
@@ -14,7 +15,7 @@ public class T032_Buffer_Split
 {
 	public T032_Buffer_Split()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

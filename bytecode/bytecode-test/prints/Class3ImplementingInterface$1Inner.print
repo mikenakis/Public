@@ -1,4 +1,4 @@
-■ ByteCodeType version = 60.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] java.util.function.Supplier
 ├─■ extraTypes: 0 items

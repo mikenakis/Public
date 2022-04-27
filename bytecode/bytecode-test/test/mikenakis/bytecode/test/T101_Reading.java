@@ -6,6 +6,7 @@ import mikenakis.bytecode.model.ByteCodeMethod;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Model;
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class T101_Reading
 {
 	public T101_Reading()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

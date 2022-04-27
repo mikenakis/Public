@@ -1,5 +1,6 @@
 package mikenakis_kit_test;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ public class T020_String
 {
 	public T020_String()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

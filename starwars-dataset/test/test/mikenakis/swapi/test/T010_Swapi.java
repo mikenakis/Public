@@ -1,6 +1,6 @@
 package mikenakis.swapi.test;
 
-import mikenakis.kit.Kit;
+import mikenakis.debug.Debug;
 import mikenakis.swapi.Swapi;
 import mikenakis.swapi.SwapiFixer;
 import mikenakis.swapi.SwapiLoader;
@@ -23,7 +23,7 @@ public class T010_Swapi
 {
 	public T010_Swapi()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

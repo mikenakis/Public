@@ -14,6 +14,7 @@ public class HashMapNode<K,V> extends HashNode<K,HashMapNode<K,V>> implements Bi
 	{
 		this.hashMap = hashMap;
 		assert key != null : new IllegalArgumentException();
+		//TODO: assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( key );
 		this.key = key;
 		this.value = value;
 	}

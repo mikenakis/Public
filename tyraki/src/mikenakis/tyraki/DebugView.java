@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.kit.Kit;
+import mikenakis.debug.Debug;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
 
@@ -18,7 +18,7 @@ public final class DebugView extends AbstractList<Object>
 {
 	public static <E> DebugView create( Function0<UnmodifiableEnumerable<E>> enumerableSupplier )
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			return null;
 		return new DebugView( enumerableSupplier );
 	}

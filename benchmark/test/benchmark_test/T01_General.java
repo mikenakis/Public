@@ -3,6 +3,7 @@ package benchmark_test;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
+import mikenakis.debug.Debug;
 import mikenakis.kit.logging.Log;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class T01_General
 {
 	public T01_General()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

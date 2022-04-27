@@ -19,8 +19,7 @@ public final class AnnotationParameter
 	{
 		Mutf8ValueConstant nameConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMutf8ValueConstant();
 		AnnotationValue annotationValue = AnnotationValue.read( bufferReader, constantPool );
-		AnnotationParameter annotationParameter = of( nameConstant, annotationValue );
-		return annotationParameter;
+		return of( nameConstant, annotationValue );
 	}
 
 	private static AnnotationParameter of( Mutf8ValueConstant nameConstant, AnnotationValue annotationValue )

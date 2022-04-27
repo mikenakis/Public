@@ -1,5 +1,6 @@
 package mikenakis.test.intertwine.comparisons.programs;
 
+import mikenakis.debug.Debug;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
@@ -22,7 +23,7 @@ public final class P1IntertwineBenchmark
 {
 	public static void main( String[] commandLineArguments )
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 
 		new P1IntertwineBenchmark( 1_000 ).run( new PrintStream( new NullOutputStream() ) );

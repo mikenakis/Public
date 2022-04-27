@@ -1,5 +1,6 @@
 package mikenakis.testana.test;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.testana.AncestryOrdering;
@@ -92,7 +93,7 @@ public class T01_TestanaTest
 
 	public T01_TestanaTest()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

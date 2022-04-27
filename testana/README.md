@@ -151,26 +151,28 @@ The home page of the project is:
 
 
 ## Poor man's issue tracking
+                           
+- TODO: troubleshoot and fix bugs:
+  - IntellijIdea does not stop on breakpoints inside anonymous inner classes loaded by Testana. This may be
+    a bug in testana, or it may be a bug in IntellijIdea; we do not know. 
+    See Stackoverflow: "Intellij Idea breakpoints do not hit in anonymous inner class" https://stackoverflow.com/q/70949498/773113
+  - If two different modules contain a class with the exact same fully qualified name, testana will arbitrarily pick one 
+    of the two, resulting in miserable failure:
+    - A method may exist in both classes, but have a different implementation in each, resulting in malfunction.
+    - A method may not exist in both classes, resulting in "no such method" exceptions.    
 
 - TODO: add handling of resources (non-class files.)
   Resources are assumed to always be accessed through resource locator classes. A change in a resource needs to be handled as if it was a change in its resource locator class.
   Besides modification of resources, we also need to account for creation and deletion of resources, because a resource locator may be engaging in resource discovery. Given a
   resource, its resource locator class can be found as follows:
-
     - Begin at the folder of the resource.
-
     - If the folder contains one and only one class, then this is pesumed to be the resource locator class of the resource; done. Otherwise,
-
     - If the folder contains a class called `ResourceLocator.class`, then this is the resource locator class of the resource; done. Otherwise,
-
     - If the folder contains multiple classes, then we have an error: the resource locator is unknown or ambiguous. Otherwise,
-
     - Move to the folder above and repeat the search, unless we are in the root output folder of the module, in which case we have an error: the resource locator could not be
       found.
 
 - TODO: expand the syntax of settings so that we can exclude folders in the source tree, like `.idea` and `.git`, which are now handled by hard-coded exlusion. Alternatively, parse `.gitignore`. (Uhm, probably not.)
-
-- TODO: introduce a `TestanaTestEngine`, and make it have all the new functionality enabled by default. Then, make all of Testana's functionality optional in `JUnitTestEngine`, so that by default Testana's functionality is not applied to JUnit tests.
 
 - TODO: further enhancements to the Testana test engine, that deviate from the JUnit standard:
 
@@ -179,7 +181,11 @@ The home page of the project is:
     - Get rid of `@Before` and `@After`: initialization should be done in the constructor and cleanup should be done 
       in `close()` if the test class `implements AutoCloseable`.
 
-- TODO: try determining the order of testing based on packages instead of individual classes, see if it makes any interesting difference.
+- TODO: introduce a `TestanaTestEngine`, and make it have all the new functionality enabled by default. Then, make all of Testana's functionality optional in `JUnitTestEngine`, so that by default Testana's functionality is not applied to JUnit tests.
+
+- TODO: try determining the order of testing based on packages instead of individual classes, see if it makes any 
+        interesting difference. For one thing, we will then be able to execute all classes within a package by 
+        alphabetical order, thus honoring the T001_... test class name prefixes.
 
 - TODO: possibly research how we could optimize transitive dependency expansion by means of a dependency matrix. See whether transitive dependency expansion can be made fast enough to actually save more time than it wastes; otherwise, get rid of it.
 

@@ -1,6 +1,6 @@
 package mikenakis.tyraki.test.t02_mutable;
 
-import mikenakis.kit.Kit;
+import mikenakis.debug.Debug;
 import mikenakis.tyraki.UnmodifiableCollection;
 import mikenakis.tyraki.UnmodifiableList;
 import mikenakis.tyraki.conversion.ConversionCollections;
@@ -15,7 +15,7 @@ public class T802_ChainingUnmodifiableSet
 {
 	public T802_ChainingUnmodifiableSet()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

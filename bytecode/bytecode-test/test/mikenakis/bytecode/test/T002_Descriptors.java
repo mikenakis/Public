@@ -1,6 +1,7 @@
 package mikenakis.bytecode.test;
 
 import mikenakis.bytecode.model.ByteCodeHelpers;
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class T002_Descriptors
 {
 	public T002_Descriptors()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

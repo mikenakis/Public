@@ -9,28 +9,21 @@ import java.util.stream.Collectors;
  * Base class for unchecked exceptions. (Which are the only kind of exceptions that I use by my own free will.)
  * Disallows the setting of a human-readable message, builds the human-readable message using reflection.
  * Disallows overriding getMessage() and toString() to prevent misuse.
- * <p>
- * TODO: make more use of!
  *
  * @author michael.gr
  */
 public class UncheckedException extends RuntimeException
 {
-	public static UncheckedException create()
-	{
-		return new UncheckedException();
-	}
-
-	protected UncheckedException()
+	public UncheckedException()
 	{
 	}
 
-	protected UncheckedException( Optional<? extends Throwable> cause )
+	public UncheckedException( Optional<? extends Throwable> cause )
 	{
 		super( cause.orElse( null ) );
 	}
 
-	protected UncheckedException( Throwable cause )
+	public UncheckedException( Throwable cause )
 	{
 		super( cause );
 	}

@@ -28,8 +28,7 @@ public interface MutableCollection<E> extends UnmodifiableCollection<E>, Mutable
 	 */
 	static <T, U extends T> MutableCollection<T> downCast( MutableCollection<U> collection )
 	{
-		@SuppressWarnings( "unchecked" )
-		MutableCollection<T> result = (MutableCollection<T>)collection;
+		@SuppressWarnings( "unchecked" ) MutableCollection<T> result = (MutableCollection<T>)collection;
 		return result;
 	}
 

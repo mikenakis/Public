@@ -1,7 +1,8 @@
 package mikenakis.kit;
 
 import mikenakis.kit.functional.Function0;
-import mikenakis.kit.functional.Procedure1;
+
+import java.util.Optional;
 
 /**
  * Implements a lazily created value.
@@ -35,9 +36,8 @@ public final class Lazy<T>
 		return instance;
 	}
 
-	public void ifPresent( Procedure1<T> procedure )
+	public Optional<T> tryGet()
 	{
-		if( instance != null )
-			procedure.invoke( instance );
+		return Optional.ofNullable( instance );
 	}
 }

@@ -1,5 +1,6 @@
 package mikenakis.tyraki.test.t02_mutable;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
@@ -23,7 +24,7 @@ public abstract class MutableCollectionTest<T>
 {
 	protected MutableCollectionTest()
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

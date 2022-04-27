@@ -1,13 +1,12 @@
 package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.debug.Debug;
 import mikenakis.kit.collections.FilteringIterable;
 import mikenakis.kit.collections.MappingIterable;
 import mikenakis.kit.collections.OptionalsFlatMappingIterable;
 import mikenakis.kit.collections.UnmodifiableIterable;
 import mikenakis.kit.collections.UnmodifiableIterator;
-import mikenakis.kit.debug.Debug;
 import mikenakis.kit.functional.BooleanFunction1;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
@@ -137,7 +136,7 @@ public final class Kit
 	 *
 	 * @return does not return.
 	 */
-	@ExcludeFromJacocoGeneratedReport public static <T> T fail()
+	public static <T> T fail()
 	{
 		assert false;
 		return null;
@@ -2172,7 +2171,7 @@ public final class Kit
 	{
 		try
 		{
-			Debug.boundary( tryProcedure );
+			Debug.boundary( () -> tryProcedure.invoke() );
 		}
 		catch( Throwable throwable )
 		{
@@ -2192,7 +2191,7 @@ public final class Kit
 	{
 		try
 		{
-			return Debug.boundary( tryFunction );
+			return Debug.boundary( () -> tryFunction.invoke() );
 		}
 		catch( Throwable throwable )
 		{
@@ -3041,7 +3040,7 @@ public final class Kit
 			//noinspection SynchronizationOnLocalVariableOrMethodParameter
 			synchronized( lock )
 			{
-				Debug.boundary( procedure );
+				Debug.boundary( () -> procedure.invoke() );
 			}
 		}
 
@@ -3050,7 +3049,7 @@ public final class Kit
 			//noinspection SynchronizationOnLocalVariableOrMethodParameter
 			synchronized( lock )
 			{
-				return Debug.boundary( function );
+				return Debug.boundary( () -> function.invoke() );
 			}
 		}
 

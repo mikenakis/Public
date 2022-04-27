@@ -1,5 +1,6 @@
 package mikenakis.kit.lifetime.guard;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.lifetime.Mortal;
 
@@ -25,7 +26,7 @@ public interface LifeGuard extends Mortal
 
 	static LifeGuard of( int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
-		if( !Kit.areAssertionsEnabled() )
+		if( !Debug.areAssertionsEnabled() )
 			return ProductionLifeGuard.instance;
 		Optional<StackWalker.StackFrame[]> stackTrace = collectStackTrace( framesToSkip + 1, collectStackTrace );
 		if( Kit.get( true ) )
