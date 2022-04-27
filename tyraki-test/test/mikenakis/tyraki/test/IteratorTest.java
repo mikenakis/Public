@@ -1,6 +1,6 @@
 package mikenakis.tyraki.test;
 
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
@@ -19,7 +19,7 @@ public abstract class IteratorTest
 {
 	protected IteratorTest()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

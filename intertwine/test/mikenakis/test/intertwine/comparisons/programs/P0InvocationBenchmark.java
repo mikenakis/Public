@@ -3,7 +3,6 @@ package mikenakis.test.intertwine.comparisons.programs;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.benchmark.Benchmarkable;
-import mikenakis.debug.Debug;
 
 import java.lang.invoke.CallSite;
 import java.lang.invoke.LambdaMetafactory;
@@ -50,7 +49,7 @@ public final class P0InvocationBenchmark
 
 	public static void main( String... args )
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 
 		Invokable invokableInstance = new Invokable()

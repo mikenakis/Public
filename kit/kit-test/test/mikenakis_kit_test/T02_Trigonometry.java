@@ -1,7 +1,6 @@
 package mikenakis_kit_test;
 
 import mikenakis.benchmark.Benchmarkable;
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.benchmark.Benchmark;
 import mikenakis.kit.logging.Log;
@@ -16,7 +15,7 @@ public class T02_Trigonometry
 {
 	public T02_Trigonometry()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

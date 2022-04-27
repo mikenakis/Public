@@ -1,6 +1,6 @@
 package mikenakis_kit_test;
 
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import mikenakis.kit.coherence.ConcreteFreezableCoherence;
 import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.kit.coherence.MustBeFrozenException;
@@ -24,7 +24,7 @@ public class T05_Mutation
 {
 	public T05_Mutation()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

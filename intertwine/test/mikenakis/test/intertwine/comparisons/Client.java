@@ -1,5 +1,6 @@
 package mikenakis.test.intertwine.comparisons;
 
+import mikenakis.kit.Kit;
 import mikenakis.test.intertwine.comparisons.rig.FooInterface;
 import mikenakis.test.intertwine.comparisons.rig.FooServer;
 import mikenakis.test.intertwine.comparisons.rig.exchange.ObjectExchange;
@@ -10,7 +11,6 @@ import mikenakis.test.intertwine.comparisons.rig.exchange.object.ObjectExchangeT
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.debug.Debug;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
@@ -20,7 +20,7 @@ public abstract class Client
 {
 	protected Client()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

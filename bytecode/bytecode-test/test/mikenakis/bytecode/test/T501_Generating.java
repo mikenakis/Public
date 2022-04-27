@@ -4,7 +4,7 @@ import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Class9WithCode;
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class T501_Generating
 {
 	public T501_Generating()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

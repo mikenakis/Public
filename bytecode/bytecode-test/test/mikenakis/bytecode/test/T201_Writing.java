@@ -5,7 +5,6 @@ import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Class1WithFields;
 import mikenakis.bytecode.test.model.Enum1;
 import mikenakis.bytecode.test.model.Model;
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.testkit.TestKit;
@@ -26,7 +25,7 @@ public class T201_Writing
 {
 	public T201_Writing()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

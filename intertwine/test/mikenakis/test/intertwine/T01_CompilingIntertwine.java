@@ -5,7 +5,7 @@ import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.IntertwineFactory;
 import mikenakis.intertwine.implementations.caching.CachingIntertwineFactory;
 import mikenakis.intertwine.implementations.compiling.CompilingIntertwineFactory;
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public final class T01_CompilingIntertwine
 
 	public T01_CompilingIntertwine()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

@@ -22,7 +22,7 @@ public class T301_Printing
 {
 	public T301_Printing()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

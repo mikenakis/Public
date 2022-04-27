@@ -1,6 +1,6 @@
 package mikenakis.testkit.test;
 
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import org.junit.Test;
 
 import java.util.Locale;
@@ -14,7 +14,7 @@ public final class T01_Test
 {
 	public T01_Test()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

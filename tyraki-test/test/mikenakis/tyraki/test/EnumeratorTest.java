@@ -1,6 +1,6 @@
 package mikenakis.tyraki.test;
 
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
@@ -22,7 +22,7 @@ public abstract class EnumeratorTest
 
 	protected EnumeratorTest()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

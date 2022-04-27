@@ -1,5 +1,6 @@
 package mikenakis.testkit;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 
@@ -45,8 +46,8 @@ public final class TestKit
 
 	private static Throwable invokeAndCatch( Procedure0 procedure )
 	{
-		assert !Kit.expectingException;
-		Kit.expectingException = true;
+		assert !Debug.expectingException;
+		Debug.expectingException = true;
 		try
 		{
 			procedure.invoke();
@@ -58,8 +59,8 @@ public final class TestKit
 		}
 		finally
 		{
-			assert Kit.expectingException;
-			Kit.expectingException = false;
+			assert Debug.expectingException;
+			Debug.expectingException = false;
 		}
 	}
 

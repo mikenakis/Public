@@ -1,8 +1,8 @@
 package mikenakis.test.intertwine.comparisons;
 
+import mikenakis.kit.Kit;
 import mikenakis.test.intertwine.comparisons.rig.FooInterface;
 import mikenakis.test.intertwine.comparisons.rig.FooServer;
-import mikenakis.debug.Debug;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ public final class T00_Direct
 {
 	public T00_Direct()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

@@ -1,6 +1,5 @@
 package mikenakis_kit_test;
 
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure1;
@@ -15,7 +14,7 @@ public class T03_Bytes
 {
 	public T03_Bytes()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

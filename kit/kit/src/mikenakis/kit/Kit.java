@@ -79,12 +79,11 @@ public final class Kit
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
 	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
-	public static boolean expectingException;
 
 	private Kit() { }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Assertions
+	// Assertions & Debugging
 
 	//PEARL: this has been observed to return false even though assertions are enabled, when invoked from a static context, e.g. main()
 	public static boolean areAssertionsEnabled()
@@ -94,6 +93,13 @@ public final class Kit
 		assert b = true;
 		//noinspection ConstantConditions
 		return b;
+	}
+
+	public static boolean debugging()
+	{
+		if( Debug.expectingException )
+			return false;
+		return areAssertionsEnabled();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1931,13 +1937,6 @@ public final class Kit
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debugging helpers (try-catch, try-finally, etc.)
-
-	public static boolean debugging()
-	{
-		if( expectingException )
-			return false;
-		return areAssertionsEnabled();
-	}
 
 	public static void trySwallow( Procedure0 procedure0 )
 	{

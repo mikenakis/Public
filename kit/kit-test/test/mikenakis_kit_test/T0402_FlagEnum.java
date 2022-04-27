@@ -1,6 +1,5 @@
 package mikenakis_kit_test;
 
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.collections.FlagEnum;
 import mikenakis.kit.collections.FlagSet;
@@ -16,7 +15,7 @@ public class T0402_FlagEnum
 {
 	public T0402_FlagEnum()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

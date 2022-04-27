@@ -4,7 +4,7 @@ import mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import mikenakis.bytecode.exceptions.IncompleteMutf8Exception;
 import mikenakis.bytecode.exceptions.MalformedMutf8Exception;
 import mikenakis.bytecode.kit.Buffer;
-import mikenakis.debug.Debug;
+import mikenakis.kit.Kit;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class T001_Mutf8
 {
 	public T001_Mutf8()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

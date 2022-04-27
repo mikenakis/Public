@@ -1,6 +1,5 @@
 package mikenakis.publishing.test;
 
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.coherence.Coherence;
@@ -24,7 +23,7 @@ public class T01_PublishingTest
 
 	public T01_PublishingTest()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 

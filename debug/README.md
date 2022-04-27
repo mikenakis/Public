@@ -1,6 +1,6 @@
 # mikenakis:debug
 
-#### A tiny library used for debugging
+#### A tiny library for debugging
 
 <p align="center">
 <img title="mikenakis:debug logo" src="mikenakis-debug.svg" width="256"/><br/>
@@ -11,8 +11,17 @@ used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY</a> l
 </p>
 
 ## Description
-                                                   
-A smaller version of `mikenakis:kit`
+
+For an explanation as to why this is needed, I am going to do some writeup; until then, 
+see https://stackoverflow.com/q/71115356/773113 to get an idea.
+
+When I say 'tiny' I really mean tiny: the jar file should be about 1 kilobyte.
+
+## License
+
+This creative work is explicitly published under ***No License***. This means that I remain the exclusive copyright holder of this creative work, and you may not do anything with it other than view its source code and admire it. More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
+
+If you would like to do anything more with this creative work, contact me.
 
 ## Coding style
 

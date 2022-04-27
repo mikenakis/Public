@@ -4,7 +4,6 @@ import mikenakis.bytecode.ByteCodeClassLoader;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Class0HelloWorld;
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class T401_Rewriting
 {
 	public T401_Rewriting()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new RuntimeException( "assertions are not enabled!" );
 	}
 

@@ -1,6 +1,5 @@
 package mikenakis_kit_test;
 
-import mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Function1;
 import org.junit.Test;
@@ -12,7 +11,7 @@ public class T0401_Converting_And_Filtering_Iterable
 {
 	public T0401_Converting_And_Filtering_Iterable()
 	{
-		if( !Debug.areAssertionsEnabled() )
+		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 
