@@ -1,7 +1,7 @@
 package mikenakis_kit_test;
 
+import mikenakis.buffer.Buffer;
 import mikenakis.kit.Kit;
-import mikenakis.kit.buffer.Buffer;
 import mikenakis.testkit.TestKit;
 import org.junit.Test;
 

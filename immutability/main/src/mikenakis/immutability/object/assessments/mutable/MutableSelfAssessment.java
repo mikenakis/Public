@@ -2,7 +2,6 @@ package mikenakis.immutability.object.assessments.mutable;
 
 import mikenakis.immutability.Assessment;
 import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.MyKit;
 import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
@@ -30,10 +29,7 @@ public final class MutableSelfAssessment extends MutableObjectAssessment
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
-		stringBuilder.append( "object " );
-		if( MyKit.get( false ) )
-			stringBuilder.append( stringizer.stringize( object ) ).append( " " );
-		stringBuilder.append( "is self-assessable" );
-		stringBuilder.append( " because it is of type '" ).append( stringizer.stringize( typeAssessment.type ) ).append( "'" );
+		super.appendToStringBuilder( stringBuilder );
+		stringBuilder.append( " because it self-assessed itself as mutable" );
 	}
 }

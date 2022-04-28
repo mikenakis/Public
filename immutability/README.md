@@ -14,11 +14,12 @@ TODO
 
 ## License
 
-This creative work is explicitly published under ***No License***. This means that I remain the exclusive copyright 
-holder of this creative work, and you may not do anything with it other than view its source code and admire it. 
+This creative work is explicitly published under ***No License***. 
+This means that I remain the exclusive copyright holder of this creative work, 
+and you may not do anything with it other than view its source code and admire it. 
 More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
 
-If you would like to do anything more with this creative work, contact me.
+If you would like to do anything with this creative work, contact me.
 
 ## Coding style
 
@@ -46,7 +47,7 @@ determined to be immutable.
 TODO: add a quick check for records? -- probably won't gain anything because a record may contain mutable members.
 
 TODO: the generic arguments of fields can be discovered using reflection; therefore, it might be possible in many cases
-to conclusively assess whether a collection field is immutable if the collection is iterable-provisory and the 
+to conclusively assess whether a collection field is immutable if the collection is unmodifiable and the 
 element type is immutable.
 
 TODO: possibly use bytecode analysis to determine whether a class mutates a field or an array outside its constructor. 
@@ -56,3 +57,7 @@ that are not declared final are usually so because they are in fact mutated outs
 cached hashcode in `java.lang.String`.)
 
 TODO: possible bug: how will assessment go if an object has provisory fields and is also iterable?
+
+TODO: add @Pure method annotation and use bytecode analysis to make sure it is truthful.  (However, it will not buy us
+much, because purity does not imply thread-safety: a pure function may read memory that is concurrently written by
+another function.)

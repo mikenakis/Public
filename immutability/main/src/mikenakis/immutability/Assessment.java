@@ -2,6 +2,7 @@ package mikenakis.immutability;
 
 import mikenakis.immutability.helpers.Stringizable;
 import mikenakis.immutability.helpers.Stringizer;
+import mikenakis.immutability.mykit.MyKit;
 import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.List;
@@ -25,6 +26,13 @@ public abstract class Assessment extends Stringizable
 		StringBuilder stringBuilder = new StringBuilder();
 		appendToStringBuilder( stringBuilder );
 		stringBuilder.append( " (" ).append( getClass().getSimpleName() ).append( ")" );
+		return stringBuilder.toString();
+	}
+
+	public String fullAssessmentText()
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		MyKit.tree( this, a -> a.children(), a -> a.toString(), s -> stringBuilder.append( "    " ).append( s ).append( "\r\n" ) );
 		return stringBuilder.toString();
 	}
 }

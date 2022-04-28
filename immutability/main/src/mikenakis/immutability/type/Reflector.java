@@ -5,6 +5,7 @@ import mikenakis.immutability.helpers.Stringizable;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.NonImmutableTypeAssessment;
+import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.type.assessments.mutable.ArrayAssessment;
@@ -15,7 +16,6 @@ import mikenakis.immutability.type.assessments.provisory.InterfaceAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
 import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
 import mikenakis.immutability.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
-import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeInextensibleException;
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.field.FieldImmutabilityAssessor;
 import mikenakis.immutability.type.field.assessments.FieldAssessment;
@@ -52,7 +52,7 @@ final class Reflector extends Stringizable
 		if( ImmutabilitySelfAssessable.class.isAssignableFrom( type ) )
 		{
 			assert Helpers.isClass( type ) : new SelfAssessableAnnotationIsOnlyApplicableToClassException( type );
-			assert !Helpers.isExtensible( type  ) : new SelfAssessableClassMustBeInextensibleException( type );
+			//FIXME XXX TODO assert !Helpers.isExtensible( type  ) : new SelfAssessableClassMustBeInextensibleException( type );
 			assert assessment instanceof NonImmutableTypeAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
 			return new SelfAssessableAssessment( stringizer, type );
 		}
@@ -66,7 +66,7 @@ final class Reflector extends Stringizable
 		if( type.isInterface() )
 			return new InterfaceAssessment( stringizer, type );
 
-		Optional<ProvisoryContentAssessment> provisorySuperclassAssessment = Optional.empty();
+		Optional<ProvisoryTypeAssessment> provisorySuperclassAssessment = Optional.empty();
 		Class<?> superclass = type.getSuperclass();
 		if( superclass != null )
 		{
@@ -92,9 +92,11 @@ final class Reflector extends Stringizable
 					//DoNotCover
 					throw new AssertionError( interfaceAssessment );
 				case SelfAssessableAssessment selfAssessableAssessment:
-					//Cannot happen, because self-assessable objects are required to be inextensible, so there can be no self-assessable superclass.
-					//DoNotCover
-					throw new AssertionError( selfAssessableAssessment );
+					provisorySuperclassAssessment = Optional.of( selfAssessableAssessment );
+					break;
+//					//Cannot happen, because self-assessable objects are required to be inextensible, so there can be no self-assessable superclass.
+//					//DoNotCover
+//					throw new AssertionError( selfAssessableAssessment );
 				default:
 					//DoNotCover
 					throw new AssertionError( superclassAssessment );

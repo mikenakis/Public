@@ -33,7 +33,7 @@ public final class MutableFieldValueAssessment extends Assessment
 		if( MyKit.get( false ) )
 			stringBuilder.append( stringizer.stringize( provisoryFieldAssessment.field.getDeclaringClass() ) ).append( "." );
 		stringBuilder.append( provisoryFieldAssessment.field.getName() ).append( "'" );
-		stringBuilder.append( " (of advertised type '" ).append( stringizer.stringize( provisoryFieldAssessment.field.getType() ) ).append( "', which is provisory)" );
-		stringBuilder.append( " is of type '" ).append( stringizer.stringize( fieldValue.getClass() ) ).append( "', which is mutable" );
+		stringBuilder.append( " (of advertised provisory type '" ).append( stringizer.stringize( provisoryFieldAssessment.field.getType() ) ).append( "')" );
+		stringBuilder.append( " is of mutable type '" ).append( stringizer.stringize( fieldValue.getClass() ) ).append( "'" );
 	}
 }

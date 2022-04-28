@@ -8,7 +8,6 @@ import mikenakis.testana.discovery.OutputFile;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,17 +47,18 @@ public final class ProjectModule
 
 	public Collection<ProjectModule> allProjectDependencies()
 	{
-		Collection<ProjectModule> allDependencies = new LinkedHashSet<>();
-		addDependenciesRecursive( projectDependencies(), allDependencies );
-		return allDependencies;
+		return discoveryModule.allProjectDependencies().stream().map( n -> projectStructure.projectModuleFromDiscoveryModule( n ) ).collect( Collectors.toList() );
+//		Collection<ProjectModule> allDependencies = new LinkedHashSet<>();
+//		addDependenciesRecursive( projectDependencies(), allDependencies );
+//		return allDependencies;
 	}
 
-	private static void addDependenciesRecursive( Collection<ProjectModule> projectModules, Collection<ProjectModule> allDependencies )
-	{
-		allDependencies.addAll( projectModules );
-		for( ProjectModule projectModule : projectModules )
-			addDependenciesRecursive( projectModule.projectDependencies(), allDependencies );
-	}
+//	private static void addDependenciesRecursive( Collection<ProjectModule> projectModules, Collection<ProjectModule> allDependencies )
+//	{
+//		allDependencies.addAll( projectModules );
+//		for( ProjectModule projectModule : projectModules )
+//			addDependenciesRecursive( projectModule.projectDependencies(), allDependencies );
+//	}
 
 	public Optional<ProjectType> tryGetProjectTypeByName( String typeName )
 	{
@@ -70,17 +70,12 @@ public final class ProjectModule
 		Optional<ProjectType> ownProjectType = tryGetProjectTypeByName( typeName );
 		if( ownProjectType.isPresent() )
 			return Optional.of( this );
-		for( ProjectModule projectModule : projectDependencies() )
+		for( ProjectModule projectModule : allProjectDependencies() )
 		{
-			Optional<ProjectModule> result = projectModule.tryGetProjectModuleByTypeNameTransitively( typeName );
-			if( result.isPresent() )
-				return result;
+			Optional<ProjectType> thisProjectType = projectModule.tryGetProjectTypeByName( typeName );
+			if( thisProjectType.isPresent() )
+				return Optional.of( projectModule );
 		}
-//		{
-//			Optional<ProjectType> projectType = projectModule.tryGetProjectTypeByName( typeName );
-//			if( projectType.isPresent() )
-//				return Optional.of( projectModule );
-//		}
 		return Optional.empty();
 	}
 

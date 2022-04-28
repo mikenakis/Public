@@ -33,24 +33,25 @@
 	</properties>
 
 	<modules>
+		<module>allocation</module>
 		<module>benchmark</module>
+		<module>buffer</module>
 		<module>bytecode</module>
 		<module>classdump</module>
 		<module>clio</module>
+		<module>coherence</module>
 		<module>debug</module>
 		<module>immutability</module>
 		<module>intertwine</module>
 		<module>java-type-model</module>
-		<module>kit/kit</module>
-		<module>kit/kit-test</module>
+		<module>kit</module>
+		<module>lifetime</module>
 		<module>slf4j-to-kit</module>
 		<module>publishing</module>
 		<module>starwars-dataset</module>
 		<module>testana</module>
 		<module>testkit</module>
-		<module>testkit-test</module>
 		<module>tyraki</module>
-		<module>tyraki-test</module>
 	</modules>
 
 	<build>

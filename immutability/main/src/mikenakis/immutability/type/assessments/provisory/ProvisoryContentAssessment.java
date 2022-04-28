@@ -16,10 +16,10 @@ import java.util.stream.Stream;
  */
 public final class ProvisoryContentAssessment extends ProvisoryTypeAssessment
 {
-	public final Optional<ProvisoryContentAssessment> ancestorAssessment;
+	public final Optional<ProvisoryTypeAssessment> ancestorAssessment;
 	public final List<ProvisoryFieldAssessment> fieldAssessments;
 
-	public ProvisoryContentAssessment( Stringizer stringizer, Class<?> jvmClass, Optional<ProvisoryContentAssessment> ancestorAssessment, //
+	public ProvisoryContentAssessment( Stringizer stringizer, Class<?> jvmClass, Optional<ProvisoryTypeAssessment> ancestorAssessment, //
 		List<ProvisoryFieldAssessment> fieldAssessments )
 	{
 		super( stringizer, jvmClass );
@@ -35,14 +35,19 @@ public final class ProvisoryContentAssessment extends ProvisoryTypeAssessment
 		if( ancestorAssessment.isPresent() )
 			result = Stream.concat( result, Stream.of( ancestorAssessment.get() ) );
 		result = Stream.concat( result, fieldAssessments.stream() );
-//		if( ancestorAssessment instanceof ProvisoryFieldsAssessment provisoryFieldsAssessment )
-//			result = Stream.concat( result, provisoryFieldsAssessment.provisoryFieldAssessments.stream() );
 		return result.toList();
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " and provisory superclass" );
+		stringBuilder.append( " because" );
+		ancestorAssessment.ifPresent( p -> stringBuilder.append( " it extends provisory type '" ).append( stringizer.stringize( p.type ) ).append( "'" ) );
+		if( !fieldAssessments.isEmpty() )
+		{
+			if( ancestorAssessment.isPresent() )
+				stringBuilder.append( " and" );
+			stringBuilder.append( " it contains provisory fields" );
+		}
 	}
 }

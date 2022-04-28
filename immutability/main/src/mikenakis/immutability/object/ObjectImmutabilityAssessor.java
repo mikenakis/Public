@@ -2,6 +2,7 @@ package mikenakis.immutability.object;
 
 import mikenakis.immutability.helpers.Stringizable;
 import mikenakis.immutability.mykit.MyKit;
+import mikenakis.immutability.mykit.collections.IdentityLinkedHashSet;
 import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.object.assessments.ObjectAssessment;
@@ -26,7 +27,6 @@ import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAss
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +59,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 
 	public ObjectAssessment assess( Object object )
 	{
-		Set<Object> visitedValues = new LinkedHashSet<>();
+		Set<Object> visitedValues = new IdentityLinkedHashSet<>();
 		ObjectAssessment result = assessRecursively( object, visitedValues );
 		assert result != null;
 		return result;
@@ -175,6 +175,18 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 			assert objectAssessment instanceof ImmutableObjectAssessment;
 		}
 		typeAssessment.ancestorAssessment.ifPresent( ancestorAssessment -> //
-			collectMutableFieldValueAssessmentsRecursively( fieldValueAssessments, object, ancestorAssessment, visitedValues ) );
+		{
+			switch( ancestorAssessment )
+			{
+				case ProvisoryContentAssessment provisoryContentAssessment: //
+					collectMutableFieldValueAssessmentsRecursively( fieldValueAssessments, object, provisoryContentAssessment, visitedValues );
+					break;
+				case SelfAssessableAssessment selfAssessableAssessment:
+					assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
+					break;
+				default:
+					throw new AssertionError();
+			}
+		} );
 	}
 }

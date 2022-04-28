@@ -1,5 +1,6 @@
 package mikenakis.testana.structure;
 
+import mikenakis.kit.GenericException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import mikenakis.testana.StructureSettings;
@@ -138,6 +139,9 @@ public final class ProjectStructureBuilder
 			addRecursive( nameToModuleMap, discoveryModule );
 		for( DiscoveryModule discoveryModule : rootDiscoveryModules )
 			discoveryModule.resolveDependencies( nameToModuleMap );
+		for( DiscoveryModule discoveryModule : rootDiscoveryModules )
+			if( discoveryModule.detectCycles() )
+				throw new GenericException( "circular dependency detected" );
 	}
 
 	private static Collection<DiscoveryModule> collectDiscoveryModules( Path projectSourceDirectory, Iterable<Discoverer> discoverers, //

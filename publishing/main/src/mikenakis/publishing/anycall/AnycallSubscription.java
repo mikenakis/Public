@@ -1,7 +1,7 @@
 package mikenakis.publishing.anycall;
 
 import mikenakis.intertwine.Anycall;
-import mikenakis.kit.lifetime.AbstractMortalCoherent;
+import mikenakis.lifetime.AbstractMortalCoherent;
 
 /**
  * Represents a registration of a subscriber to an {@link AnycallPublisher}.

@@ -27,6 +27,6 @@ public final class OfMutableTypeAssessment extends MutableObjectAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is of mutable type '" ).append( stringizer.stringize( typeAssessment.type ) ).append( "'" );
+		stringBuilder.append( " because it is of a mutable type" );
 	}
 }

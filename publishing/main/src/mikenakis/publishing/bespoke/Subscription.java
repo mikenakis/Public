@@ -1,6 +1,6 @@
 package mikenakis.publishing.bespoke;
 
-import mikenakis.kit.lifetime.AbstractMortalCoherent;
+import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.publishing.anycall.AnycallSubscription;
 
 /**

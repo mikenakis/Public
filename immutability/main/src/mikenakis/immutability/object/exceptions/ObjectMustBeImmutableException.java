@@ -1,7 +1,5 @@
 package mikenakis.immutability.object.exceptions;
 
-import mikenakis.immutability.Assessment;
-import mikenakis.immutability.mykit.MyKit;
 import mikenakis.immutability.mykit.UncheckedException;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 
@@ -17,12 +15,5 @@ public final class ObjectMustBeImmutableException extends UncheckedException
 	public ObjectMustBeImmutableException( MutableObjectAssessment mutableObjectAssessment )
 	{
 		this.mutableObjectAssessment = mutableObjectAssessment;
-	}
-
-	public String fullAssessmentText()
-	{
-		StringBuilder stringBuilder = new StringBuilder();
-		MyKit.<Assessment>tree( mutableObjectAssessment, a -> a.children(), a -> a.toString(), s -> stringBuilder.append( "    " ).append( s ).append( "\r\n" ) );
-		return stringBuilder.toString();
 	}
 }

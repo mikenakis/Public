@@ -15,7 +15,7 @@ public class SelfAssessableClassMustBeInextensibleException extends UncheckedExc
 
 	public SelfAssessableClassMustBeInextensibleException( Class<?> jvmClass )
 	{
-		assert !Helpers.isExtensible( jvmClass );
+		assert Helpers.isExtensible( jvmClass );
 		this.jvmClass = jvmClass;
 	}
 }

@@ -8,21 +8,13 @@
 		<artifactId>public-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>testkit</artifactId>
+	<artifactId>testkit-parent</artifactId>
 	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-	</build>
-
-	<dependencies>
-
-		<dependency>
-			<groupId>mikenakis</groupId>
-			<artifactId>kit</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-
-	</dependencies>
+	<modules>
+		<module>testkit</module>
+		<module>testkit-test</module>
+	</modules>
 
 </project>
