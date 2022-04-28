@@ -38,6 +38,7 @@
 		<module>classdump</module>
 		<module>clio</module>
 		<module>debug</module>
+		<module>immutability</module>
 		<module>intertwine</module>
 		<module>java-type-model</module>
 		<module>kit/kit</module>
