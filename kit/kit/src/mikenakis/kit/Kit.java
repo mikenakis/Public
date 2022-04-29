@@ -1697,6 +1697,19 @@ public final class Kit
 		}
 
 		/**
+		 * Checks whether a {@link Map} contains a given key.
+		 * Corresponds to Java's {@link Map#containsKey(K)}.
+		 *
+		 * @return {@code true} if the {@link Map} contains the key; {@code false} otherwise.
+		 */
+		/*@SuppressWarnings( "deprecation" )*/
+		public static <K, V> boolean containsKey( Map<K,V> map, K key )
+		{
+			assert key != null;
+			return map.containsKey( key );
+		}
+
+		/**
 		 * Adds a key-value pair to a {@link Map}. The key must not already exist.
 		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key already
 		 * exists.

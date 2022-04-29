@@ -68,11 +68,18 @@ final class MavenDiscoveryModule extends DiscoveryModule
 
 	@Override public String toString()
 	{
+		String result = mavenModel.getGroupId() + ":" + mavenModel.getArtifactId();
+		if( Kit.get( false ) )
+			result += " (" + getPomFileName() + ")";
+		return result;
+	}
+
+	private String getPomFileName()
+	{
 		String pomFileName = mavenModel.getPomFile().toURI().toString();
 		final String prefix = "file:/";
 		assert pomFileName.startsWith( prefix );
-		pomFileName = "file:///" + pomFileName.substring( prefix.length() );
-		return mavenModel.getGroupId() + ":" + mavenModel.getArtifactId() + " (" + pomFileName + ")";
+		return "file:///" + pomFileName.substring( prefix.length() );
 	}
 
 	void addNestedModule( MavenDiscoveryModule nestedModule )

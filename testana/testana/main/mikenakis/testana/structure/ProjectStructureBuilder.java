@@ -39,7 +39,7 @@ public final class ProjectStructureBuilder
 		StructureSettings settings, Cache cache, Iterable<TestEngine> testEngines )
 	{
 		assert Kit.path.isAbsoluteNormalizedDirectory( sourceDirectory ) : sourceDirectory;
-		Collection<DiscoveryModule> rootDiscoveryModules = collectDiscoveryModules( sourceDirectory, discoverers, settings );
+		Collection<DiscoveryModule> rootDiscoveryModules = collectRootDiscoveryModules( sourceDirectory, discoverers, settings );
 		resolveDependencies( rootDiscoveryModules );
 
 		Map<String,TestEngine> testEngineMap = Kit.collection.stream.fromIterable( testEngines ).collect( Collectors.toMap( testEngine -> testEngine.name(), testEngine -> testEngine ) );
@@ -134,17 +134,17 @@ public final class ProjectStructureBuilder
 
 	private static void resolveDependencies( Iterable<DiscoveryModule> rootDiscoveryModules )
 	{
-		Map<String,DiscoveryModule> nameToModuleMap = new LinkedHashMap<>();
+		Map<String,DiscoveryModule> nameToDiscoveryModuleMap = new LinkedHashMap<>();
 		for( DiscoveryModule discoveryModule : rootDiscoveryModules )
-			addRecursive( nameToModuleMap, discoveryModule );
+			addRecursive( nameToDiscoveryModuleMap, discoveryModule );
 		for( DiscoveryModule discoveryModule : rootDiscoveryModules )
-			discoveryModule.resolveDependencies( nameToModuleMap );
-		for( DiscoveryModule discoveryModule : rootDiscoveryModules )
+			discoveryModule.resolveDependencies( nameToDiscoveryModuleMap );
+		for( DiscoveryModule discoveryModule : nameToDiscoveryModuleMap.values() )
 			if( discoveryModule.detectCycles() )
 				throw new GenericException( "circular dependency detected" );
 	}
 
-	private static Collection<DiscoveryModule> collectDiscoveryModules( Path projectSourceDirectory, Iterable<Discoverer> discoverers, //
+	private static Collection<DiscoveryModule> collectRootDiscoveryModules( Path projectSourceDirectory, Iterable<Discoverer> discoverers, //
 		StructureSettings settings )
 	{
 		return TimeMeasurement.run( "Looking for modules under " + projectSourceDirectory, "Found %d root modules, %d leaf modules with a total of %d classes, %d resources", timeMeasurement -> //

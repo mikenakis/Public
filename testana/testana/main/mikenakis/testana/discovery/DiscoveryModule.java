@@ -5,11 +5,14 @@ import mikenakis.kit.functional.Function1;
 import mikenakis.kit.logging.Log;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -43,27 +46,27 @@ public abstract class DiscoveryModule
 
 	public final boolean detectCycles()
 	{
-		//Graph<DiscoveryModule> graph = Graph.create( this, module -> module.projectDependencies() );
 		Graph<DiscoveryModule> graph = Graph.create( this, module -> module.allProjectDependencies() );
-		Collection<DiscoveryModule> cycle = graph.shortestCycle();
+		List<DiscoveryModule> cycle = graph.shortestCycle();
 		if( cycle != null )
 		{
 			Log.error( "Cyclic module dependency!" );
-			for( var module : cycle )
-				Log.error( "    " + module );
+			Kit.tree.print( 0, i -> i + 1 >= cycle.size() ? List.of() : List.of( i + 1 ),  i -> cycle.get( i ).toString(), s -> Log.error( s ) );
 			return true;
 		}
 		return false;
 	}
 
+	//This is some experimental graph stuff which I adapted from here: https://algs4.cs.princeton.edu/42digraph/BreadthFirstDirectedPaths.java.html
+
 	private static class Graph<V>
 	{
-		public static <V> Graph<V> create()
+		static <V> Graph<V> create()
 		{
 			return new Graph<>( new LinkedHashMap<>() );
 		}
 
-		public static <V> Graph<V> create( V root, Function1<Iterable<V>,V> breeder )
+		static <V> Graph<V> create( V root, Function1<Iterable<V>,V> breeder )
 		{
 			Graph<V> graph = create();
 			graph.tryAddRecursively( root, breeder );
@@ -77,60 +80,63 @@ public abstract class DiscoveryModule
 			this.map = map;
 		}
 
-		public void tryAddRecursively( V root, Function1<Iterable<V>,V> breeder )
+		void tryAddRecursively( V root, Function1<Iterable<V>,V> breeder )
 		{
 			tryAddVertex( root );
 			for( var neighbor : breeder.invoke( root ) )
 			{
-				tryAddNeighbor( root, neighbor );
-				tryAddRecursively( neighbor, breeder );
+				if( tryAddNeighbor( root, neighbor ) )
+					tryAddRecursively( neighbor, breeder );
 			}
 		}
 
-		public Set<V> vertices()
+		Set<V> vertices()
 		{
 			return map.keySet();
 		}
 
-		public Set<V> neighbors( V vertex )
+		Set<V> neighbors( V vertex )
 		{
 			return Kit.map.get( map, vertex );
 		}
 
-		public void addVertex( V vertex )
+		void addVertex( V vertex )
 		{
 			Kit.map.add( map, vertex, new LinkedHashSet<>() );
 		}
 
-		public boolean tryAddVertex( V vertex )
+		boolean tryAddVertex( V vertex )
 		{
-			return Kit.map.tryAdd( map, vertex, new LinkedHashSet<>() );
+			if( Kit.map.containsKey( map, vertex ) )
+				return false;
+			Kit.map.add( map, vertex, new LinkedHashSet<>() );
+			return true;
 		}
 
-		public void addNeighbor( V vertex, V neighbor )
+		void addNeighbor( V vertex, V neighbor )
 		{
 			LinkedHashSet<V> neighbors = Kit.map.get( map, vertex );
 			Kit.collection.add( neighbors, neighbor );
 		}
 
-		public boolean tryAddNeighbor( V vertex, V neighbor )
+		boolean tryAddNeighbor( V vertex, V neighbor )
 		{
 			LinkedHashSet<V> neighbors = Kit.map.get( map, vertex );
 			return Kit.collection.tryAdd( neighbors, neighbor );
 		}
 
-		public void removeNeighbor( V vertex, V neighbor )
+		void removeNeighbor( V vertex, V neighbor )
 		{
 			LinkedHashSet<V> neighbors = Kit.map.get( map, vertex );
 			Kit.collection.remove( neighbors, neighbor );
 		}
 
-		public int size()
+		int size()
 		{
 			return map.size();
 		}
 
-		public Graph<V> reverse()
+		Graph<V> reverse()
 		{
 			Graph<V> reverse = create();
 			for( Map.Entry<V,LinkedHashSet<V>> entry : map.entrySet() )
@@ -151,58 +157,69 @@ public abstract class DiscoveryModule
 		{
 			private record Entry<V>( V vertex, int distance ) { }
 
+			@SuppressWarnings( { "FieldCanBeLocal", "unused" } ) private final V startVertex;
 			private final Map<V,Entry<V>> vertexToEntryMap = new LinkedHashMap<>();
 
-			public MetaGraph( Graph<V> graph, V startVertex )
+			MetaGraph( Graph<V> graph, V startVertex )
 			{
+				this.startVertex = startVertex;
 				Kit.map.add( vertexToEntryMap, startVertex, new Entry<>( startVertex, 0 ) );
 				LinkedList<V> queue = new LinkedList<>();
 				queue.addLast( startVertex );
 				while( !queue.isEmpty() )
 				{
 					V vertex = queue.removeFirst();
-					int distanceToVertex = Kit.map.get( vertexToEntryMap, vertex ).distance;
+					int nextDistance = Kit.map.get( vertexToEntryMap, vertex ).distance + 1;
 					for( V neighbor : graph.neighbors( vertex ) )
 					{
 						if( vertexToEntryMap.containsKey( neighbor ) )
 							continue;
-						Kit.map.tryAdd( vertexToEntryMap, neighbor, new Entry<>( vertex, distanceToVertex + 1 ) );
+						Kit.map.add( vertexToEntryMap, neighbor, new Entry<>( vertex, nextDistance ) );
 						queue.addLast( neighbor );
 					}
 				}
 			}
 
-			public Collection<V> pathTo( V vertex )
+			List<V> pathTo( V vertex )
 			{
-				LinkedHashSet<V> path = new LinkedHashSet<>();
-				do
+				List<V> path = new ArrayList<>();
+				for( ; ; )
 				{
-					path.add( vertex );
-					vertex = Kit.map.get( vertexToEntryMap, vertex ).vertex;
+					assert !Kit.collection.contains( path, vertex );
+					Kit.collection.add( path, vertex );
+					Entry<V> entry = Kit.map.get( vertexToEntryMap, vertex );
+					if( entry.vertex == vertex )
+						break;
+					vertex = entry.vertex;
 				}
-				while( vertex != null );
+				Kit.collection.add( path, vertex );
 				return path;
 			}
 
-			public int distanceTo( V vertex )
+			Optional<Integer> distanceTo( V vertex )
 			{
 				Entry<V> entry = Kit.map.tryGet( vertexToEntryMap, vertex );
 				if( entry == null )
-					return Integer.MAX_VALUE;
-				return entry.distance;
+					return Optional.empty();
+				return Optional.of( entry.distance );
 			}
 		}
 
-		public Collection<V> shortestCycle()
+		List<V> shortestCycle()
 		{
 			Graph<V> reverse = reverse();
-			Collection<V> shortestCycle = null;
+			List<V> shortestCycle = null;
 			for( V v : map.keySet() )
 			{
 				MetaGraph<V> metaGraph = new MetaGraph<>( reverse, v );
 				for( V w : neighbors( v ) )
-					if( shortestCycle == null || metaGraph.distanceTo( w ) < shortestCycle.size() )
+				{
+					Optional<Integer> distance = metaGraph.distanceTo( w );
+					if( distance.isEmpty() )
+						continue;
+					if( shortestCycle == null || distance.get() < shortestCycle.size() )
 						shortestCycle = metaGraph.pathTo( w );
+				}
 			}
 			return shortestCycle;
 		}
