@@ -17,6 +17,6 @@ public abstract class NonImmutableFieldAssessment extends FieldAssessment
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
-		stringBuilder.append( "field '" ).append( field.getName() ).append( "'" );
+		stringBuilder.append( "field " ).append( stringizer.stringizeFieldName( field) );
 	}
 }

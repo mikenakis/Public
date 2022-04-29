@@ -5,13 +5,13 @@ import mikenakis.immutability.mykit.MyKit;
 import mikenakis.immutability.mykit.functional.Function0;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.annotations.InvariableArray;
-import mikenakis.immutability.type.annotations.InvariableField;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
+import mikenakis.immutability.type.field.annotations.InvariableField;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.mutable.ArrayAssessment;
+import mikenakis.immutability.type.assessments.mutable.MutableArrayAssessment;
 import mikenakis.immutability.type.assessments.mutable.MutableFieldsAssessment;
 import mikenakis.immutability.type.assessments.mutable.MutableSuperclassAssessment;
 import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
@@ -73,7 +73,7 @@ public class T01_TypeImmutabilityAssessor
 	private static TypeAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
 	{
 		TypeAssessment assessment = assessor.assess( type );
-		System.out.println( "assessment for type " + TestStringizer.instance.stringize( type ) + ":" );
+		System.out.println( "assessment for type " + TestStringizer.instance.stringizeClassName( type ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
@@ -101,7 +101,7 @@ public class T01_TypeImmutabilityAssessor
 	@Test public void array_class_is_mutable()
 	{
 		TypeAssessment assessment = assess( assessor, Integer[].class );
-		assert assessment instanceof ArrayAssessment : assessment;
+		assert assessment instanceof MutableArrayAssessment : assessment;
 	}
 
 	@Test public void java_lang_object_is_extensible()

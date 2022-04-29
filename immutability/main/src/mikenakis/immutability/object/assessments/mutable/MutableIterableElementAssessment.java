@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Signifies that an object is mutable because it is {@link Iterable}, and it has at least one element which is mutable.
  */
-public final class MutableElementAssessment<E> extends MutableObjectAssessment
+public final class MutableIterableElementAssessment<E> extends MutableObjectAssessment
 {
 	public final Iterable<E> iterableObject;
 	public final IterableAssessment typeAssessment;
@@ -19,7 +19,7 @@ public final class MutableElementAssessment<E> extends MutableObjectAssessment
 	public final E mutableElement;
 	public final MutableObjectAssessment elementAssessment;
 
-	public MutableElementAssessment( Stringizer stringizer, Iterable<E> iterableObject, IterableAssessment typeAssessment, //
+	public MutableIterableElementAssessment( Stringizer stringizer, Iterable<E> iterableObject, IterableAssessment typeAssessment, //
 		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
 	{
 		super( stringizer, iterableObject );
@@ -36,7 +36,7 @@ public final class MutableElementAssessment<E> extends MutableObjectAssessment
 	{
 		super.appendToStringBuilder( stringBuilder );
 		stringBuilder.append( " because its class is iterable-provisory" );
-		stringBuilder.append( " and element " ).append( stringizer.stringize( mutableElement ) ).append( " at index " ).append( mutableElementIndex );
+		stringBuilder.append( " and element " ).append( stringizer.stringizeObjectIdentity( mutableElement ) ).append( " at index " ).append( mutableElementIndex );
 		stringBuilder.append( " is mutable" );
 	}
 }

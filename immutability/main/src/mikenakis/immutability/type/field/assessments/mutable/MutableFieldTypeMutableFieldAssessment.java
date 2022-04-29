@@ -26,6 +26,6 @@ public final class MutableFieldTypeMutableFieldAssessment extends MutableFieldAs
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is of mutable type " ).append( stringizer.stringize( fieldTypeAssessment.type ) );
+		stringBuilder.append( " because it is of mutable type " ).append( stringizer.stringizeClassName( fieldTypeAssessment.type ) );
 	}
 }

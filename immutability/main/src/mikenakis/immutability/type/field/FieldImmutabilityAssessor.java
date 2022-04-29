@@ -2,8 +2,8 @@ package mikenakis.immutability.type.field;
 
 import mikenakis.immutability.helpers.Stringizable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.annotations.InvariableArray;
-import mikenakis.immutability.type.annotations.InvariableField;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
+import mikenakis.immutability.type.field.annotations.InvariableField;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
@@ -20,7 +20,7 @@ import mikenakis.immutability.type.field.assessments.UnderAssessmentFieldAssessm
 import mikenakis.immutability.type.field.assessments.mutable.ArrayMutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.MutableFieldTypeMutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.VariableMutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.ArrayFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.InvariableArrayFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldTypeAssessment;
 
 import java.lang.reflect.Field;
@@ -58,7 +58,7 @@ public class FieldImmutabilityAssessor extends Stringizable
 						case UnderAssessmentTypeAssessment ignore -> //
 							underAssessmentFieldAssessment;
 						case ProvisoryTypeAssessment provisoryTypeAssessment -> //
-							new ArrayFieldAssessment( stringizer, field, provisoryTypeAssessment );
+							new InvariableArrayFieldAssessment( stringizer, field, provisoryTypeAssessment );
 						case ImmutableTypeAssessment ignore -> //
 							immutableFieldAssessment;
 						case MutableTypeAssessment mutableTypeAssessment -> //

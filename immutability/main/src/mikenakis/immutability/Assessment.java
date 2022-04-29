@@ -5,6 +5,7 @@ import mikenakis.immutability.helpers.Stringizer;
 import mikenakis.immutability.mykit.MyKit;
 import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,10 +30,17 @@ public abstract class Assessment extends Stringizable
 		return stringBuilder.toString();
 	}
 
-	public String fullAssessmentText()
+	public List<String> assessmentTextLines()
+	{
+		ArrayList<String> lines = new ArrayList<>();
+		MyKit.tree( this, a -> a.children(), a -> a.toString(), s -> lines.add( s ) );
+		return lines;
+	}
+
+	public String assessmentTextInFull()
 	{
 		StringBuilder stringBuilder = new StringBuilder();
-		MyKit.tree( this, a -> a.children(), a -> a.toString(), s -> stringBuilder.append( "    " ).append( s ).append( "\r\n" ) );
+		assessmentTextLines().forEach( s -> stringBuilder.append( "    " ).append( s ).append( "\r\n" ) );
 		return stringBuilder.toString();
 	}
 }

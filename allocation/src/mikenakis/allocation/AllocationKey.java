@@ -2,8 +2,8 @@ package mikenakis.allocation;
 
 import mikenakis.kit.Kit;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * {@link Allocation} Key.
@@ -17,21 +17,18 @@ public final class AllocationKey
 	public AllocationKey( String name )
 	{
 		assert !name.isEmpty();
+		assert uniqueAssertion( name );
 		this.name = name;
-		assert uniqueAssertion( this );
 	}
 
-	public boolean equals( AllocationKey other ) { return this == other; }
-	@Override public boolean equals( Object other ) { return other instanceof AllocationKey kin && equals( kin ); }
-	@Override public int hashCode() { return System.identityHashCode( this ); }
 	@Override public String toString() { return "\"" + name + "\""; }
 
-	private static final Map<String,AllocationKey> allocationKeys = Kit.areAssertionsEnabled() ? new HashMap<>() : null;
+	private static final Set<String> allocationKeys = Kit.areAssertionsEnabled() ? new HashSet<>() : null;
 
-	private static boolean uniqueAssertion( AllocationKey allocationKey )
+	private static boolean uniqueAssertion( String name )
 	{
 		Kit.sync.synchronize( allocationKeys, () -> //
-			Kit.map.add( allocationKeys, allocationKey.name, allocationKey ) );
+			Kit.collection.add( allocationKeys, name ) );
 		return true;
 	}
 }

@@ -107,7 +107,15 @@ public final class MyKit
 		if( object == null )
 			return "null";
 		int identityHashCode = System.identityHashCode( object );
-		return object.getClass().getName() + "@" + Integer.toHexString( identityHashCode );
+		return getClassName( object.getClass() ) + "@" + Integer.toHexString( identityHashCode );
+	}
+
+	public static String getClassName( Class<?> jvmClass )
+	{
+		String text = jvmClass.getCanonicalName();
+		if( text == null )
+			return jvmClass.getName();
+		return text;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

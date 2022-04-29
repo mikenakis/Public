@@ -26,6 +26,6 @@ public final class ProvisoryFieldTypeAssessment extends ProvisoryFieldAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is of provisory type '" ).append( stringizer.stringize( field.getType() ) ).append( "'" );
+		stringBuilder.append( " because it is of provisory type " ).append( stringizer.stringizeClassName( field.getType() ) );
 	}
 }

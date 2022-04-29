@@ -7,7 +7,7 @@ import mikenakis.immutability.object.ObjectImmutabilityAssessor;
 import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.object.assessments.ObjectAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableComponentAssessment;
+import mikenakis.immutability.object.assessments.mutable.MutableComponentElementAssessment;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
@@ -36,7 +36,7 @@ public class T12_SupposedlyImmutableJdkMap
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
 		ObjectAssessment assessment = assessor.assess( object );
-		System.out.println( "assessment for object " + TestStringizer.instance.stringize( object ) + ":" );
+		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
@@ -137,8 +137,8 @@ public class T12_SupposedlyImmutableJdkMap
 		assert assessment instanceof MutableObjectAssessment;
 		MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
 		assert mutableObjectAssessment.object == mapObject;
-		assert mutableObjectAssessment instanceof MutableComponentAssessment;
-		MutableComponentAssessment<?,?> mutableElementAssessment = (MutableComponentAssessment<?,?>)mutableObjectAssessment;
+		assert mutableObjectAssessment instanceof MutableComponentElementAssessment;
+		MutableComponentElementAssessment<?,?> mutableElementAssessment = (MutableComponentElementAssessment<?,?>)mutableObjectAssessment;
 		assert mutableElementAssessment.compositeObject == mapObject;
 		assert mutableElementAssessment.typeAssessment.type == mapObject.getClass();
 		assert mutableElementAssessment.mutableElementIndex >= 0 && mutableElementAssessment.mutableElementIndex < size; //cannot assert precise index because hashmaps garble the order of items

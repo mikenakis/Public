@@ -25,6 +25,6 @@ public class MutableSuperclassAssessment extends MutableTypeAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it extends mutable class '" ).append( stringizer.stringize( superclassAssessment.type ) ).append( "'" );
+		stringBuilder.append( " because it extends mutable class " ).append( stringizer.stringizeClassName( superclassAssessment.type ) );
 	}
 }

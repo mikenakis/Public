@@ -30,7 +30,7 @@ public final class MutableFieldValuesAssessment extends MutableObjectAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is of provisory type '" ).append( stringizer.stringize( typeAssessment.type ) ).append( "'" );
+		stringBuilder.append( " because it is of provisory type " ).append( stringizer.stringizeClassName( typeAssessment.type ) );
 		stringBuilder.append( " and it has one or more fields that contain mutable values" );
 	}
 

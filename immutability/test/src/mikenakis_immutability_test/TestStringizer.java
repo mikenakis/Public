@@ -2,8 +2,9 @@ package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
 import mikenakis.immutability.helpers.Stringizer;
+import mikenakis.immutability.mykit.MyKit;
 
-public final class TestStringizer implements Stringizer
+public final class TestStringizer extends Stringizer
 {
 	private static final String testPackageName = TestStringizer.class.getPackageName();
 	private static final String immutabilityPackageName = Assessment.class.getPackageName();
@@ -14,16 +15,23 @@ public final class TestStringizer implements Stringizer
 	{
 	}
 
-	@Override public String stringize( Object object )
+	@Override public String stringizeObjectIdentity( Object object )
 	{
 		if( object == null )
 			return "null";
 		assert !(object instanceof Class<?>);
-		int identityHashCode = System.identityHashCode( object );
-		return stringize( object.getClass() ) + "@" + Integer.toHexString( identityHashCode );
+		return testIdentityString( object );
 	}
 
-	@Override public String stringize( Class<?> jvmClass )
+	private String testIdentityString( Object object )
+	{
+		if( object == null )
+			return "null";
+		int identityHashCode = System.identityHashCode( object );
+		return stringizeClassName0( object.getClass() ) + "@" + Integer.toHexString( identityHashCode );
+	}
+
+	@Override public String stringizeClassName0( Class<?> jvmClass )
 	{
 		String simpleName = jvmClass.getSimpleName();
 		String packageName = jvmClass.getPackageName();

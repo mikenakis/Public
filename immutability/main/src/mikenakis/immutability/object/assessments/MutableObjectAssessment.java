@@ -19,7 +19,7 @@ public abstract class MutableObjectAssessment extends ObjectAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		stringBuilder.append( "object " );
-		stringBuilder.append( stringizer.stringize( object ) ).append( " " );
+		stringBuilder.append( stringizer.stringizeObjectIdentity( object ) ).append( " " );
 		stringBuilder.append( "is mutable" );
 	}
 }

@@ -18,6 +18,6 @@ public abstract class NonImmutableTypeAssessment extends TypeAssessment
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
-		stringBuilder.append( "type '" ).append( stringizer.stringize( type ) ).append( "'" );
+		stringBuilder.append( "type " ).append( stringizer.stringizeClassName( type ) );
 	}
 }

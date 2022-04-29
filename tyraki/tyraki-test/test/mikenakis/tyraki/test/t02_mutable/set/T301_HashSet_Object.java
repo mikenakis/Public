@@ -17,7 +17,7 @@ public final class T301_HashSet_Object extends MutableSetTest<ObjectSemanticsCla
 
 	@Override protected MutableCollection<ObjectSemanticsClass> newCollection()
 	{
-		return SingleThreadedMutableCollections.instance().newHashSet( 4, 0.75f );
+		return SingleThreadedMutableCollections.instance().newIdentityHashSet();
 	}
 
 	@Override protected ObjectSemanticsClass newElement()

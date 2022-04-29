@@ -1,8 +1,9 @@
 package mikenakis.tyraki;
 
-import mikenakis.immutability.object.ObjectImmutabilityAssessor;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
+
+import java.lang.reflect.Method;
 
 /**
  * Implements {@link Hasher} by delegating to {@link Object#hashCode()}.
@@ -17,11 +18,28 @@ public final class ObjectHasher implements Hasher<Object>
 	{
 	}
 
-	@Override public int getHashCode( Object item )
+	@Override public int getHashCode( Object object )
 	{
-		if( Kit.get( false ) ) //FIXME XXX TODO enable this!
-			assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( item );
-		return item.hashCode();
+		//XXX TODO assert mustOverrideIdentityMethodsAssertion( object );
+		//XXX TODO assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( item );
+		return object.hashCode();
+	}
+
+	private static boolean mustOverrideIdentityMethodsAssertion( Object object )
+	{
+		assert isOverriding( object, Object.class, "hashCode", (Class<?>[])null );
+		assert isOverriding( object, Object.class, "equals", Object.class );
+		return true;
+	}
+
+	private static boolean isOverriding( Object object, Class<?> baseClass, String methodName, Class<?>... parameterTypes )
+	{
+		assert baseClass.isInstance( object );
+		Class<?> jvmClass = object.getClass();
+		if( jvmClass == baseClass )
+			return false; //not sure what to return here.
+		Method method = Kit.unchecked( () -> jvmClass.getMethod( methodName, parameterTypes ) );
+		return method.getDeclaringClass() != baseClass;
 	}
 
 	@Override public String toString()

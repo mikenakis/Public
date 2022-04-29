@@ -31,6 +31,6 @@ public final class ExtensibleAssessment extends ProvisoryTypeAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because is  " ).append( mode.text ).append( " as an extensible class" );
+		stringBuilder.append( " because it is " ).append( mode.text ).append( " as an extensible class" );
 	}
 }

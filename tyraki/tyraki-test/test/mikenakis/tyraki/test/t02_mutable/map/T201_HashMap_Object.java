@@ -17,7 +17,7 @@ public final class T201_HashMap_Object extends MutableMapTest<ObjectSemanticsCla
 
 	@Override protected MutableMap<ObjectSemanticsClass,String> newMap()
 	{
-		return SingleThreadedMutableCollections.instance().newHashMap( 4, 0.75f );
+		return SingleThreadedMutableCollections.instance().newIdentityHashMap();
 	}
 
 	@Override protected ObjectSemanticsClass newKey()

@@ -7,6 +7,7 @@ import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 /**
@@ -29,11 +30,9 @@ public final class MutableFieldValueAssessment extends Assessment
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
-		stringBuilder.append( "value of field '" );
-		if( MyKit.get( false ) )
-			stringBuilder.append( stringizer.stringize( provisoryFieldAssessment.field.getDeclaringClass() ) ).append( "." );
-		stringBuilder.append( provisoryFieldAssessment.field.getName() ).append( "'" );
-		stringBuilder.append( " (of advertised provisory type '" ).append( stringizer.stringize( provisoryFieldAssessment.field.getType() ) ).append( "')" );
-		stringBuilder.append( " is of mutable type '" ).append( stringizer.stringize( fieldValue.getClass() ) ).append( "'" );
+		Field field = provisoryFieldAssessment.field;
+		stringBuilder.append( "value of field " ).append( stringizer.stringizeFieldName( field ) );
+		stringBuilder.append( " (of advertised provisory type " ).append( stringizer.stringizeClassName( field.getType() ) ).append( ")" );
+		stringBuilder.append( " is of mutable type " ).append( stringizer.stringizeClassName( fieldValue.getClass() ) );
 	}
 }

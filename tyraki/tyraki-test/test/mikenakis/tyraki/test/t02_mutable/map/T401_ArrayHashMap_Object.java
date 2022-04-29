@@ -17,7 +17,7 @@ public final class T401_ArrayHashMap_Object extends MutableMapTest<ObjectSemanti
 
 	@Override protected MutableMap<ObjectSemanticsClass,String> newMap()
 	{
-		return SingleThreadedMutableCollections.instance().newArrayHashMap( 4, 0.75f );
+		return SingleThreadedMutableCollections.instance().newIdentityArrayHashMap();
 	}
 
 	@Override protected ObjectSemanticsClass newKey()

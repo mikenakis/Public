@@ -2,22 +2,35 @@ package mikenakis.immutability.helpers;
 
 import mikenakis.immutability.mykit.MyKit;
 
-public interface Stringizer
+import java.lang.reflect.Field;
+
+public abstract class Stringizer
 {
-	Stringizer defaultInstance = new Stringizer()
+	public static final Stringizer defaultInstance = new Stringizer()
 	{
-		@Override public String stringize( Object object )
+		@Override public String stringizeObjectIdentity( Object object )
 		{
 			assert !(object instanceof Class<?>);
 			return MyKit.identityString( object );
 		}
 
-		@Override public String stringize( Class<?> jvmClass )
+		@Override public String stringizeClassName0( Class<?> jvmClass )
 		{
-			return jvmClass.getName();
+			return MyKit.getClassName( jvmClass );
 		}
 	};
 
-	String stringize( Object object );
-	String stringize( Class<?> jvmClass );
+	public abstract String stringizeObjectIdentity( Object object );
+
+	public final String stringizeClassName( Class<?> jvmClass )
+	{
+		return "'" + stringizeClassName0( jvmClass ) + "'";
+	}
+
+	public final String stringizeFieldName( Field field )
+	{
+		return "'" + field.getName() + "'";
+	}
+
+	protected abstract String stringizeClassName0( Class<?> jvmClass );
 }

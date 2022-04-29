@@ -1,7 +1,7 @@
 package mikenakis.immutability.type.exceptions;
 
 import mikenakis.immutability.mykit.UncheckedException;
-import mikenakis.immutability.type.annotations.InvariableArray;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
 
 import java.lang.reflect.Field;
 

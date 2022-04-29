@@ -2,7 +2,7 @@ package mikenakis.immutability.type.field.assessments.mutable;
 
 import mikenakis.immutability.helpers.Stringizer;
 import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.type.annotations.InvariableArray;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
 import mikenakis.immutability.type.field.FieldImmutabilityAssessor;
 
 import java.lang.reflect.Field;

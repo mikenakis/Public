@@ -2,10 +2,12 @@ package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableHashMap;
 import mikenakis.tyraki.UnmodifiableEnumerator;
+import mikenakis.tyraki.UnmodifiableHashMap;
 
 import java.util.Optional;
 
@@ -41,7 +43,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private final HashTable<K,HashMapNode<K,V>> hashTable;
+	private final HashTable<K,Node<K,V>> hashTable;
 
 	AbstractMutableHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher )
 	{
@@ -71,7 +73,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		HashMapNode<K,V> item = newItem( key, value );
+		Node<K,V> item = newItem( key, value );
 		return hashTable.tryAdd( item ).map( existing -> existing.value );
 	}
 
@@ -79,7 +81,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		HashMapNode<K,V> item = hashTable.tryFindByKey( key );
+		Node<K,V> item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
 		item.value = value;
@@ -91,7 +93,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		HashMapNode<K,V> item = hashTable.tryFindByKey( key );
+		Node<K,V> item = hashTable.tryFindByKey( key );
 		if( item == null )
 			return false;
 		hashTable.remove( item );
@@ -104,8 +106,85 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 		return hashTable.clear();
 	}
 
-	protected HashMapNode<K,V> newItem( K key, V value )
+	private Node<K,V> newItem( K key, V value )
 	{
-		return new HashMapNode<>( this, key, value );
+		return new Node<>( this, key, value );
+	}
+
+	private  static class Node<K,V> extends HashNode<K,Node<K,V>> implements Binding<K,V>
+	{
+		private final UnmodifiableHashMap<K,V> hashMap;
+		private final K key;
+		public V value;
+		private int hashCode = 0;
+
+		Node( UnmodifiableHashMap<K,V> hashMap, K key, V value )
+		{
+			assert key != null;
+			this.hashMap = hashMap;
+			this.key = key;
+			this.value = value;
+		}
+
+		public boolean equals( Node<K,V> other )
+		{
+			if( !hashMap.keys().getEqualityComparator().equals( key, other.key ) )
+				return false;
+			if( !hashMap.values().getEqualityComparator().equals( value, other.value ) )
+				return false;
+			return true;
+		}
+
+		public boolean equals( Binding<K,V> other )
+		{
+			if( !hashMap.keys().getEqualityComparator().equals( key, other.getKey() ) )
+				return false;
+			if( !hashMap.values().getEqualityComparator().equals( value, other.getValue() ) )
+				return false;
+			return true;
+		}
+
+		@Override public boolean equals( Object other )
+		{
+			if( other instanceof Node<?,?> otherItem )
+				return equals( otherItem );
+			if( other instanceof Binding<?,?> )
+			{
+				@SuppressWarnings( "unchecked" )
+				Binding<K,V> otherBinding = (Binding<K,V>)other;
+				return equals( otherBinding );
+			}
+			assert false;
+			return false;
+		}
+
+		@SuppressWarnings( "NonFinalFieldReferencedInHashCode" )
+		@Override public int hashCode()
+		{
+			if( hashCode == 0 )
+				hashCode = hashMap.getKeyHasher().getHashCode( key );
+			assert hashMap.getKeyHasher().getHashCode( key ) == hashCode;
+			return hashCode;
+		}
+
+		@ExcludeFromJacocoGeneratedReport @Override public String toString()
+		{
+			return "{ " + key + " -> " + value + " }";
+		}
+
+		@Override public K getKey()
+		{
+			return key;
+		}
+
+		@Override public V getValue()
+		{
+			return value;
+		}
+
+		@Override public boolean keyEquals( K otherKey )
+		{
+			return hashMap.keys().getEqualityComparator().equals( key, otherKey );
+		}
 	}
 }

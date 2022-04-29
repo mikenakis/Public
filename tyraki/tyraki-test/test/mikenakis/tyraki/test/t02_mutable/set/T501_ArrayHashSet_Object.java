@@ -17,7 +17,7 @@ public final class T501_ArrayHashSet_Object extends MutableSetTest<ObjectSemanti
 
 	@Override protected MutableCollection<ObjectSemanticsClass> newCollection()
 	{
-		return SingleThreadedMutableCollections.instance().newArrayHashSet( 4, 0.75f );
+		return SingleThreadedMutableCollections.instance().newIdentityArrayHashSet();
 	}
 
 	@Override protected ObjectSemanticsClass newElement()

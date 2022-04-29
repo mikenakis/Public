@@ -4,26 +4,26 @@ import mikenakis.immutability.Assessment;
 import mikenakis.immutability.helpers.Stringizer;
 import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
-import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.InvariableArrayFieldAssessment;
 
 import java.util.List;
 
 /**
- * Signifies that an object is mutable because it is a composite of which at least one component is mutable.
+ * Signifies that an array is mutable because it has at least one element which is mutable.
  */
-public final class MutableComponentAssessment<T,E> extends MutableObjectAssessment
+public final class MutableArrayElementAssessment<E> extends MutableObjectAssessment
 {
-	public final T compositeObject;
-	public final ProvisoryCompositeAssessment<T,E> typeAssessment;
+	public final Iterable<E> iterableArrayWrapper;
+	public final InvariableArrayFieldAssessment typeAssessment;
 	public final int mutableElementIndex;
 	public final E mutableElement;
 	public final MutableObjectAssessment elementAssessment;
 
-	public MutableComponentAssessment( Stringizer stringizer, T compositeObject, ProvisoryCompositeAssessment<T,E> typeAssessment, //
+	public MutableArrayElementAssessment( Stringizer stringizer, Iterable<E> iterableArrayWrapper, InvariableArrayFieldAssessment typeAssessment, //
 		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
 	{
-		super( stringizer, compositeObject );
-		this.compositeObject = compositeObject;
+		super( stringizer, iterableArrayWrapper );
+		this.iterableArrayWrapper = iterableArrayWrapper;
 		this.typeAssessment = typeAssessment;
 		this.mutableElementIndex = mutableElementIndex;
 		this.mutableElement = mutableElement;
@@ -35,8 +35,8 @@ public final class MutableComponentAssessment<T,E> extends MutableObjectAssessme
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is composite" );
-		stringBuilder.append( " and element " ).append( stringizer.stringize( mutableElement ) ).append( " at index " ).append( mutableElementIndex );
+		stringBuilder.append( " because it is an invariable array" );
+		stringBuilder.append( " and element " ).append( stringizer.stringizeObjectIdentity( mutableElement ) ).append( " at index " ).append( mutableElementIndex );
 		stringBuilder.append( " is mutable" );
 	}
 }

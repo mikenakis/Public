@@ -4,6 +4,7 @@ import mikenakis.immutability.Assessment;
 import mikenakis.immutability.mykit.MyKit;
 import mikenakis.immutability.object.ObjectImmutabilityAssessor;
 import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
+import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.object.assessments.ObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableFieldValuesAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableSelfAssessment;
@@ -12,12 +13,14 @@ import mikenakis.immutability.object.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.object.fieldvalue.MutableFieldValueAssessment;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.InterfaceAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
 import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldTypeAssessment;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class T10_ObjectImmutabilityAssessor
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
 		ObjectAssessment assessment = assessor.assess( object );
-		System.out.println( "assessment for object " + TestStringizer.instance.stringize( object ) + ":" );
+		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
@@ -67,6 +70,20 @@ public class T10_ObjectImmutabilityAssessor
 		Object object = new Object();
 		ObjectAssessment assessment = assess( assessor, object );
 		assert assessment instanceof ImmutableObjectAssessment;
+	}
+
+	@Test public void empty_array_is_immutable()
+	{
+		Object object = new Object[0];
+		ObjectAssessment assessment = assess( assessor, object );
+		assert assessment instanceof ImmutableObjectAssessment;
+	}
+
+	@Test public void non_empty_array_is_mutable() //(even with immutable elements)
+	{
+		Object object = new Integer[] { 0 };
+		ObjectAssessment assessment = assess( assessor, object );
+		assert assessment instanceof MutableObjectAssessment;
 	}
 
 	@Test public void circularly_self_referencing_immutable_object_is_immutable()
@@ -228,6 +245,7 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
+				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesPositively.class ) instanceof SelfAssessableAssessment;
 				Object object = new ProvisorySelfAssessableClassWhichSelfAssessesPositively();
 				assert assessor.mustBeImmutableAssertion( object );
 			}
@@ -269,11 +287,35 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
+				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class ) instanceof SelfAssessableAssessment;
 				Object object = new ProvisorySelfAssessableClassWhichSelfAssessesNegatively();
 				var exception = MyTestKit.expect( ObjectMustBeImmutableException.class, () -> //
 					assessor.mustBeImmutableAssertion( object ) );
 				assert exception.mutableObjectAssessment.object == object;
 			}
 		}.run();
+	}
+
+	@Test public void object_with_invariable_array_of_provisory_element_type_with_immutable_elements_is_immutable()
+	{
+		new Runnable()
+		{
+			static class ClassWithInvariableArrayOfProvisoryType
+			{
+				@InvariableArray private final Object[] arrayField = { 1 };
+			}
+
+			@Override public void run()
+			{
+				Object object = new ClassWithInvariableArrayOfProvisoryType();
+				ObjectAssessment assessment = assess( assessor, object );
+				assert assessment instanceof ImmutableObjectAssessment;
+			}
+		}.run();
+	}
+
+	@Test public void object_with_array_of_array_is_mutable()
+	{
+		//TODO
 	}
 }

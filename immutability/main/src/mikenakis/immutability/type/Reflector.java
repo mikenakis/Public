@@ -8,7 +8,7 @@ import mikenakis.immutability.type.assessments.NonImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;
-import mikenakis.immutability.type.assessments.mutable.ArrayAssessment;
+import mikenakis.immutability.type.assessments.mutable.MutableArrayAssessment;
 import mikenakis.immutability.type.assessments.mutable.MutableFieldsAssessment;
 import mikenakis.immutability.type.assessments.mutable.MutableSuperclassAssessment;
 import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
@@ -62,7 +62,7 @@ final class Reflector extends Stringizable
 	private TypeAssessment assess0( Class<?> type )
 	{
 		if( type.isArray() )
-			return new ArrayAssessment( stringizer, type );
+			return new MutableArrayAssessment( stringizer, type );
 		if( type.isInterface() )
 			return new InterfaceAssessment( stringizer, type );
 

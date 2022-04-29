@@ -42,7 +42,7 @@ public final class ProvisoryContentAssessment extends ProvisoryTypeAssessment
 	{
 		super.appendToStringBuilder( stringBuilder );
 		stringBuilder.append( " because" );
-		ancestorAssessment.ifPresent( p -> stringBuilder.append( " it extends provisory type '" ).append( stringizer.stringize( p.type ) ).append( "'" ) );
+		ancestorAssessment.ifPresent( p -> stringBuilder.append( " it extends provisory type " ).append( stringizer.stringizeClassName( p.type ) ) );
 		if( !fieldAssessments.isEmpty() )
 		{
 			if( ancestorAssessment.isPresent() )

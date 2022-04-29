@@ -6,7 +6,7 @@ import mikenakis.immutability.object.ObjectImmutabilityAssessor;
 import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.object.assessments.ObjectAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableElementAssessment;
+import mikenakis.immutability.object.assessments.mutable.MutableIterableElementAssessment;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class T11_SupposedlyImmutableJdkList
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
 		ObjectAssessment assessment = assessor.assess( object );
-		System.out.println( "assessment for object " + TestStringizer.instance.stringize( object ) + ":" );
+		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
@@ -107,8 +107,8 @@ public class T11_SupposedlyImmutableJdkList
 		assert assessment instanceof MutableObjectAssessment;
 		MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
 		assert mutableObjectAssessment.object == supposedlyImmutableJdkList;
-		assert mutableObjectAssessment instanceof MutableElementAssessment;
-		MutableElementAssessment<?> mutableElementAssessment = (MutableElementAssessment<?>)mutableObjectAssessment;
+		assert mutableObjectAssessment instanceof MutableIterableElementAssessment;
+		MutableIterableElementAssessment<?> mutableElementAssessment = (MutableIterableElementAssessment<?>)mutableObjectAssessment;
 		assert mutableElementAssessment.iterableObject == supposedlyImmutableJdkList;
 		assert mutableElementAssessment.typeAssessment.type == supposedlyImmutableJdkList.getClass();
 		assert mutableElementAssessment.mutableElementIndex == size - 1;

@@ -17,7 +17,7 @@ public final class T601_LinkedHashMap_Object extends MutableMapTest<ObjectSemant
 
 	@Override protected MutableMap<ObjectSemanticsClass,String> newMap()
 	{
-		return SingleThreadedMutableCollections.instance().newLinkedHashMap( 4, 0.75f );
+		return SingleThreadedMutableCollections.instance().newIdentityLinkedHashMap();
 	}
 
 	@Override protected ObjectSemanticsClass newKey()

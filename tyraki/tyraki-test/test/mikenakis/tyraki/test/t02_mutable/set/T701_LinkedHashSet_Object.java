@@ -17,7 +17,7 @@ public final class T701_LinkedHashSet_Object extends MutableSetTest<ObjectSemant
 
 	@Override protected MutableCollection<ObjectSemanticsClass> newCollection()
 	{
-		return SingleThreadedMutableCollections.instance().newLinkedHashSet( 4, 0.75f );
+		return SingleThreadedMutableCollections.instance().newIdentityLinkedHashSet();
 	}
 
 	@Override protected ObjectSemanticsClass newElement()
