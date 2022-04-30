@@ -11,7 +11,7 @@ import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
  * This is used for classes that are not iterable but contain elements, i.e. implementations of {@link java.util.Map}, which is conceptually a collection
  * of entries, but does not extend {@link java.util.Collection<java.util.Map.Entry>} and instead offers an {@link java.util.Map#entrySet()} method.
  *
- * If the mode is {@link Mode#Assessed} then class has been assessed to be immutable in all other respects.
+ * If the mode is {@link Mode#Assessed} then the class has been assessed to be immutable in all other respects.
  *
  * If the mode is {@link Mode#Preassessed} then this assessment overrules an assessment that would normally come out as mutable, and promises that this class
  * will behave as immutable, with the caveat that it is iterable.

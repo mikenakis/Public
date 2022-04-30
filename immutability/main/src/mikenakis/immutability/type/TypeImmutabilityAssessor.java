@@ -7,9 +7,6 @@ import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
-import mikenakis.immutability.type.assessments.provisory.IterableAssessment;
-import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
 import mikenakis.immutability.type.exceptions.PreassessedClassMustNotAlreadyBeImmutableException;
 import mikenakis.immutability.type.exceptions.PreassessedClassMustNotBeExtensibleException;
 import mikenakis.immutability.type.exceptions.PreassessedClassMustNotBePreviouslyAssessedException;
@@ -35,7 +32,7 @@ public final class TypeImmutabilityAssessor extends Stringizable
 	public static TypeImmutabilityAssessor create( Stringizer stringizer )
 	{
 		TypeImmutabilityAssessor assessor = new TypeImmutabilityAssessor( stringizer );
-		StandardPreassessments.apply( assessor );
+		DefaultPreassessments.apply( assessor );
 		return assessor;
 	}
 
@@ -44,7 +41,7 @@ public final class TypeImmutabilityAssessor extends Stringizable
 	private final Map<Class<?>,TypeAssessment> assessmentsByType = new HashMap<>();
 	private final Reflector reflector = new Reflector( this );
 
-	private TypeImmutabilityAssessor( Stringizer stringizer )
+	TypeImmutabilityAssessor( Stringizer stringizer )
 	{
 		super( stringizer );
 	}
@@ -77,33 +74,7 @@ public final class TypeImmutabilityAssessor extends Stringizable
 		} );
 	}
 
-	void addDefaultExtensiblePreassessment( Class<?> jvmClass )
-	{
-		assert !(new TypeImmutabilityAssessor( stringizer ).assess( jvmClass ) instanceof ExtensibleAssessment);
-		ExtensibleAssessment assessment = new ExtensibleAssessment( stringizer, TypeAssessment.Mode.PreassessedByDefault, jvmClass );
-		addDefaultPreassessment( jvmClass, assessment );
-	}
-
-	void addDefaultImmutablePreassessment( Class<?> jvmClass )
-	{
-		assert !(new TypeImmutabilityAssessor( stringizer ).assess( jvmClass ) instanceof ImmutableTypeAssessment);
-		addDefaultPreassessment( jvmClass, immutableClassAssessmentInstance );
-	}
-
-	void addDefaultIterablePreassessment( Class<? extends Iterable<?>> jvmClass )
-	{
-		assert !(new TypeImmutabilityAssessor( stringizer ).assess( jvmClass ) instanceof IterableAssessment);
-		IterableAssessment assessment = new IterableAssessment( stringizer, TypeAssessment.Mode.PreassessedByDefault, jvmClass );
-		addDefaultPreassessment( jvmClass, assessment );
-	}
-
-	<T,E> void addDefaultCompositePreassessment( Class<T> compositeType, Decomposer<T,E> decomposer )
-	{
-		ProvisoryCompositeAssessment<T,E> assessment = new ProvisoryCompositeAssessment<>( stringizer, TypeAssessment.Mode.PreassessedByDefault, compositeType, decomposer );
-		addDefaultPreassessment( compositeType, assessment );
-	}
-
-	private void addDefaultPreassessment( Class<?> jvmClass, TypeAssessment classAssessment )
+	void addDefaultPreassessment( Class<?> jvmClass, TypeAssessment classAssessment )
 	{
 		assessmentsByType.put( jvmClass, classAssessment );
 	}

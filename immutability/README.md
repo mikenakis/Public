@@ -1,5 +1,5 @@
 # mikenakis:immutability
-#### Promising and asserting immutability.
+#### Promising and asserting deep immutability.
 
 <p align="center">
 <img title="mikenakis:immutability logo" src="mikenakis-immutability.svg" width="256"/><br/>

@@ -1,0 +1,142 @@
+package mikenakis.immutability.type;
+
+import mikenakis.immutability.internal.helpers.ConcreteMapEntry;
+import mikenakis.immutability.internal.helpers.ConvertingIterable;
+import mikenakis.immutability.internal.mykit.MyKit;
+import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
+import mikenakis.immutability.type.assessments.TypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
+import mikenakis.immutability.type.assessments.provisory.IterableAssessment;
+import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
+
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+
+/**
+ * Adds default preassessments to a {@link TypeImmutabilityAssessor}
+ *
+ * @author michael.gr
+ */
+final class DefaultPreassessments
+{
+	static void apply( TypeImmutabilityAssessor assessor )
+	{
+		addDefaultImmutablePreassessment( assessor, Class.class ); //contains caching
+		addDefaultImmutablePreassessment( assessor, String.class ); //contains caching
+		addDefaultExtensiblePreassessment( assessor, BigDecimal.class ); //is extensible, contains caching, and also a problematic 'precision' field.
+		addDefaultImmutablePreassessment( assessor, Method.class ); //contains caching
+		addDefaultImmutablePreassessment( assessor, Constructor.class ); //contains caching
+		addDefaultImmutablePreassessment( assessor, URI.class ); //has mutable fields, although it is guaranteed to remain constant.
+		addDefaultImmutablePreassessment( assessor, URL.class ); //has mutable fields, although it is guaranteed to remain constant.
+		addDefaultImmutablePreassessment( assessor, Locale.class ); //has mutable fields, although it is guaranteed to remain constant.
+		addDefaultExtensiblePreassessment( assessor, BigInteger.class ); //is extensible, contains mutable fields.
+		addDefaultImmutablePreassessment( assessor, StackTraceElement.class );
+		addDefaultImmutablePreassessment( assessor, File.class );
+		addDefaultExtensiblePreassessment( assessor, InetAddress.class ); //is extensible, contains mutable fields.
+		addDefaultImmutablePreassessment( assessor, Inet4Address.class );
+		addDefaultImmutablePreassessment( assessor, Inet6Address.class );
+		addDefaultImmutablePreassessment( assessor, InetSocketAddress.class );
+		addDefaultIterablePreassessment( assessor, MyKit.getClass( List.of() ) );
+		addDefaultIterablePreassessment( assessor, MyKit.getClass( List.of( 1 ) ) );
+		addDefaultIterablePreassessment( assessor, MyKit.uncheckedClassCast( ConvertingIterable.class ) );
+		addSupperficiallyImmutableJdkMap( assessor, Map.of() );
+		addSupperficiallyImmutableJdkMap( assessor, Map.of( "", "" ) );
+		addDefaultCompositePreassessment( assessor, MyKit.uncheckedClassCast( Optional.class ), OptionalDecomposer.instance );
+	}
+
+	private static void addDefaultExtensiblePreassessment( TypeImmutabilityAssessor assessor, Class<?> jvmClass )
+	{
+		assert !(new TypeImmutabilityAssessor( assessor.stringizer ).assess( jvmClass ) instanceof ExtensibleAssessment);
+		ExtensibleAssessment assessment = new ExtensibleAssessment( assessor.stringizer, TypeAssessment.Mode.PreassessedByDefault, jvmClass );
+		assessor.addDefaultPreassessment( jvmClass, assessment );
+	}
+
+	private static void addDefaultImmutablePreassessment( TypeImmutabilityAssessor assessor, Class<?> jvmClass )
+	{
+		assert !(new TypeImmutabilityAssessor( assessor.stringizer ).assess( jvmClass ) instanceof ImmutableTypeAssessment);
+		assessor.addDefaultPreassessment( jvmClass, assessor.immutableClassAssessmentInstance );
+	}
+
+	private static void addDefaultIterablePreassessment( TypeImmutabilityAssessor assessor, Class<? extends Iterable<?>> jvmClass )
+	{
+		assert !(new TypeImmutabilityAssessor( assessor.stringizer ).assess( jvmClass ) instanceof IterableAssessment);
+		IterableAssessment assessment = new IterableAssessment( assessor.stringizer, TypeAssessment.Mode.PreassessedByDefault, jvmClass );
+		assessor.addDefaultPreassessment( jvmClass, assessment );
+	}
+
+	private static <T, E> void addDefaultCompositePreassessment( TypeImmutabilityAssessor assessor, Class<T> compositeType, Decomposer<T,E> decomposer )
+	{
+		ProvisoryCompositeAssessment<T,E> assessment = new ProvisoryCompositeAssessment<>( assessor.stringizer, TypeAssessment.Mode.PreassessedByDefault, compositeType, decomposer );
+		assessor.addDefaultPreassessment( compositeType, assessment );
+	}
+
+	/**
+	 * PEARL: by default, the assessment of superficially-immutable jdk map is actually very mutable, because it extends {@link java.util.AbstractMap} which is
+	 *        mutable, because (get a load of this!) its 'keySet' and 'values' fields are non-final!
+	 */
+	private static <K, V> void addSupperficiallyImmutableJdkMap( TypeImmutabilityAssessor assessor, Map<K,V> superficiallyImmutableJdkMap )
+	{
+		Class<Map<K,V>> mapClass = MyKit.getClass( superficiallyImmutableJdkMap );
+		Decomposer<Map<K,V>,ConcreteMapEntry<K,V>> decomposer = getSuperficiallyImmutableJdkMapDecomposer();
+		addDefaultCompositePreassessment( assessor, mapClass, decomposer );
+	}
+
+	private static class SuperficiallyImmutableJdkMapDecomposer<K, V> implements Decomposer<Map<K,V>,ConcreteMapEntry<K,V>>
+	{
+		@Override public Iterable<ConcreteMapEntry<K,V>> decompose( Map<K,V> map )
+		{
+			/**
+			 * PEARL: the decomposer for the superficially-immutable jdk map cannot just return {@link Map#entrySet()} because the entry-set is a nested class,
+			 * so it has a 'this$0' field, which points back to the map, which is mutable, and therefore makes the entry-set mutable!
+			 * So, the decomposer has to iterate the entry-set and yield each element in it.
+			 * PEARL: the decomposer cannot just yield each element yielded by the entry-set, because these are instances of {@link java.util.KeyValueHolder}
+			 * which cannot be reflected because it is inaccessible! Therefore, the decomposer has to convert each element to a proximal key-value class which
+			 * is accessible.
+			 */
+			Iterable<Map.Entry<K,V>> entrySet = map.entrySet();
+			return new ConvertingIterable<>( entrySet, DefaultPreassessments::mapEntryConverter );
+		}
+	}
+
+	private static final SuperficiallyImmutableJdkMapDecomposer<Object,Object> superficiallyImmutableJdkMapDeconstructorInstance = new SuperficiallyImmutableJdkMapDecomposer<>();
+
+	private static <K, V> Decomposer<Map<K,V>,ConcreteMapEntry<K,V>> getSuperficiallyImmutableJdkMapDecomposer()
+	{
+		@SuppressWarnings( "unchecked" ) Decomposer<Map<K,V>,ConcreteMapEntry<K,V>> result = (SuperficiallyImmutableJdkMapDecomposer<K,V>)superficiallyImmutableJdkMapDeconstructorInstance;
+		return result;
+	}
+
+	private static <K, V> ConcreteMapEntry<K,V> mapEntryConverter( Map.Entry<K,V> mapEntry )
+	{
+		return new ConcreteMapEntry<>( mapEntry.getKey(), mapEntry.getValue() );
+	}
+
+	private static class OptionalDecomposer implements Decomposer<Optional<?>,Object>
+	{
+		public static Decomposer<Optional<?>,Object> instance = new OptionalDecomposer();
+
+		private OptionalDecomposer()
+		{
+		}
+
+		@Override public Iterable<Object> decompose( Optional<?> optional )
+		{
+			if( optional.isEmpty() )
+				return List.of();
+			return List.of( optional.get() );
+		}
+	}
+}

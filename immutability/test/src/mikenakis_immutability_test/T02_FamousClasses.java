@@ -7,6 +7,7 @@ import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
+import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
 import org.junit.Test;
 
@@ -85,11 +86,21 @@ public class T02_FamousClasses
 
 	@Test public void famous_content_provisory_classes()
 	{
-		List<Class<?>> classes = List.of( Optional.class, ZonedDateTime.class );
+		List<Class<?>> classes = List.of( ZonedDateTime.class );
 		for( Class<?> jvmClass : classes )
 		{
 			TypeAssessment assessment = assess( assessor, jvmClass );
 			assert assessment instanceof ProvisoryContentAssessment;
+		}
+	}
+
+	@Test public void famous_composite_provisory_classes()
+	{
+		List<Class<?>> classes = List.of( Optional.class );
+		for( Class<?> jvmClass : classes )
+		{
+			TypeAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof ProvisoryCompositeAssessment;
 		}
 	}
 

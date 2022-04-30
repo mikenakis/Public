@@ -205,7 +205,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 
 	private static Object getFieldValue( Object object, Field field )
 	{
-		if( !field.canAccess( object ) )
+		if( !field.canAccess( object ) ) //TODO: assess whether performing this check saves any time (as opposed to always invoking setAccessible without the check.)
 			field.setAccessible( true );
 		assert field.canAccess( object );
 		Object fieldValue;
