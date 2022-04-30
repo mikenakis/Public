@@ -1,18 +1,29 @@
-# mikenakis:debug
+# mikenakis:buffer
 
-#### Memory allocation
+#### Immutable arrays of bytes.
 
 <p align="center">
-<img title="mikenakis:allocation logo" src="mikenakis-allocation.svg" width="256"/><br/>
-The mikenakis:allocation logo<br/>
+<img title="mikenakis:buffer logo" src="mikenakis-buffer.svg" width="256"/><br/>
+The mikenakis:buffer logo<br/>
 by Mike Nakis<br/>
 based on original work by <a href="https://thenounproject.com/">TODO</a> and <a href="https://thenounproject.com/">TODO</a> from <a href="https://thenounproject.com/">the Noun Project</a><br/>
 used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY</a> license.<br/>
 </p>
 
 ## Description
+                                                                                                                  
+A java library which provides class `Buffer` and a few surrogates.
 
-There be experimental stuff.
+A `Buffer` encapsulates an immutable array of bytes.
+
+A `Buffer` can be thought of as the equivalent of `java.lang.String`, but for bytes instead of characters. 
+
+A `Buffer` can also be thought of as an "ANSI String". (A string of ANSI characters instead of Unicode characters.)
+
+Surrogates provided:
+ - `BufferBuilder`, which is the equivalent of `java.lang.StringBuilder`
+ - `BufferBuilderOutputStream` which roughly corresponds to `java.io.ByteArrayOutputStream`.
+ - etc.
 
 ## License
 
