@@ -32,6 +32,6 @@ public final class MutableFieldValueAssessment extends Assessment
 		Field field = provisoryFieldAssessment.field;
 		stringBuilder.append( "value of field " ).append( Stringizer.stringizeFieldName( field ) );
 		stringBuilder.append( " (of provisory advertised type " ).append( stringizer.stringizeClassName( field.getType() ) ).append( ")" );
-		stringBuilder.append( " is of mutable type " ).append( stringizer.stringizeClassName( fieldValue.getClass() ) );
+		stringBuilder.append( " is mutable object " ).append( stringizer.stringizeObjectIdentity( fieldValue ) );
 	}
 }

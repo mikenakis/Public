@@ -1,5 +1,6 @@
 package mikenakis.tyraki;
 
+import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author michael.gr
  */
 @ExcludeFromJacocoGeneratedReport
-public final class DebugView extends AbstractList<Object>
+public final class DebugView extends AbstractList<Object> implements ImmutabilitySelfAssessable
 {
 	public static <E> DebugView create( Function0<UnmodifiableEnumerable<E>> enumerableSupplier )
 	{
@@ -52,5 +53,10 @@ public final class DebugView extends AbstractList<Object>
 			enumerable.iterator().forEachRemaining( values::add );
 		}
 		return values.get( index );
+	}
+
+	@Override public boolean isImmutable()
+	{
+		return true; //we are not really immutable, but we are for all practical purposes.
 	}
 }
