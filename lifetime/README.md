@@ -10,7 +10,7 @@ The mikenakis:lifetime logo<br/>
 
 ## Description
 
-TODO
+For an explanation of what this module does and why it is necessary, please refer to https://blog.michael.gr/2021/01/object-lifetime-awareness.html 
 
 ## License
 
