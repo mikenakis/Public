@@ -37,8 +37,7 @@ class.
                   
 TODO: fix some TODOs in the code.
 
-TODO: start making use of `mikenakis.immutability.object.ObjectImmutabilityAssessor.instance` in existing places in the 
-codebase, for example in all hashmaps and hashsets.
+TODO: make use of `ObjectImmutabilityAssessor` in places where objects are passed to other threads.
 
 TODO: Add sealed class analysis -- This may allow an otherwise provisory field to be assessed as immutable, if 
 it is of extensible type when that extensible type belongs to a sealed group of which all member-classes have been
@@ -58,6 +57,8 @@ cached hashcode in `java.lang.String`.)
 
 TODO: possible bug: how will assessment go if an object has provisory fields and is also iterable?
 
-TODO: add @Pure method annotation and use bytecode analysis to make sure it is truthful.  (However, it will not buy us
-much, because purity does not imply thread-safety: a pure function may read memory that is concurrently written by
-another function.)
+TODO: add @Pure method annotation and use bytecode analysis to make sure it is truthful. (However, it will not buy us
+much, because purity does not imply thread-safety: a pure function may attempt to read memory that is concurrently 
+written by another function, with disastrous consequences. What might buy us more is asserting a combination of purity 
+and co-coherence, but I still need to think about that. In any case, this should probably be the subject of another
+module.)
