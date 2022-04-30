@@ -6,7 +6,7 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.UnknownCoherence;
-import mikenakis.kit.coherence.implementation.MustBeFrozenException;
+import mikenakis.kit.coherence.exceptions.MustBeFrozenException;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;

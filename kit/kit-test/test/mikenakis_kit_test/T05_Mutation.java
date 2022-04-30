@@ -5,10 +5,8 @@ import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
 import mikenakis.kit.coherence.FreezableCoherence;
 import mikenakis.kit.coherence.implementation.ConcreteFreezableCoherence;
-import mikenakis.kit.coherence.implementation.MustBeFrozenException;
 import mikenakis.kit.coherence.implementation.MustBeReadableException;
 import mikenakis.kit.coherence.implementation.MustBeWritableException;
-import mikenakis.kit.coherence.implementation.MustNotBeFrozenException;
 import mikenakis.kit.coherence.implementation.TemporaryCoherence;
 import mikenakis.kit.coherence.implementation.ThreadLocalCoherence;
 import mikenakis.lifetime.Mortal;
@@ -69,16 +67,9 @@ public class T05_Mutation
 			return true;
 		}
 
-		@Override public boolean mustBeFrozenAssertion()
+		@Override public boolean isFrozen()
 		{
-			assert isFrozen : new MustBeFrozenException( this );
-			return true;
-		}
-
-		@Override public boolean mustNotBeFrozenAssertion()
-		{
-			assert !isFrozen : new MustNotBeFrozenException( this );
-			return true;
+			return isFrozen;
 		}
 
 		@Override public String toString()

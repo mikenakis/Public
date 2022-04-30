@@ -1,7 +1,7 @@
 package mikenakis.tyraki.legacy;
 
 import mikenakis.kit.DefaultEqualityComparator;
-import mikenakis.kit.coherence.implementation.MustBeFrozenException;
+import mikenakis.kit.coherence.exceptions.MustBeFrozenException;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.MutableList;
 import mikenakis.tyraki.UnmodifiableEnumerator;

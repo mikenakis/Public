@@ -31,21 +31,9 @@ public final class ConcreteFreezableCoherence extends AbstractMortalCoherent imp
 		return "parent: " + coherence + "; isFrozen: " + isFrozen();
 	}
 
-	private boolean isFrozen()
+	@Override public boolean isFrozen()
 	{
 		return isFrozen;
-	}
-
-	@Override public boolean mustBeFrozenAssertion()
-	{
-		assert isFrozen() : new MustBeFrozenException( this );
-		return true;
-	}
-
-	@Override public boolean mustNotBeFrozenAssertion()
-	{
-		assert !isFrozen() : new MustNotBeFrozenException( this );
-		return true;
 	}
 
 	@Override public boolean mustBeAliveAssertion()

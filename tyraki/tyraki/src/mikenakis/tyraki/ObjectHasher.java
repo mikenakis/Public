@@ -21,9 +21,8 @@ public final class ObjectHasher implements Hasher<Object>
 
 	@Override public int getHashCode( Object object )
 	{
-//XXX TODO
-//		assert mustOverrideIdentityMethodsAssertion( object );
-//		assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
+		assert mustOverrideIdentityMethodsAssertion( object );
+		assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
 		return object.hashCode();
 	}
 

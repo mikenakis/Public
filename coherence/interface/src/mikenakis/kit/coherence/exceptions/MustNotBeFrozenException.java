@@ -1,9 +1,8 @@
-package mikenakis.kit.coherence.implementation;
+package mikenakis.kit.coherence.exceptions;
 
-import mikenakis.kit.UncheckedException;
 import mikenakis.kit.coherence.Coherence;
 
-public class MustNotBeFrozenException extends UncheckedException
+public class MustNotBeFrozenException extends RuntimeException
 {
 	public final Coherence coherence;
 

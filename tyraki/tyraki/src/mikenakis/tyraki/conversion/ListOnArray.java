@@ -1,7 +1,7 @@
 package mikenakis.tyraki.conversion;
 
 import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.coherence.implementation.MustBeFrozenException;
+import mikenakis.kit.coherence.exceptions.MustBeFrozenException;
 import mikenakis.tyraki.UnmodifiableEnumerator;
 import mikenakis.tyraki.UnmodifiableList;
 
