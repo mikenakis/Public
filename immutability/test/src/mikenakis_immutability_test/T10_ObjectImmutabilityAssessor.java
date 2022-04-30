@@ -9,15 +9,14 @@ import mikenakis.immutability.object.assessments.ObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableFieldValuesAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableSelfAssessment;
 import mikenakis.immutability.object.assessments.mutable.OfMutableTypeAssessment;
-import mikenakis.immutability.object.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.object.fieldvalue.MutableFieldValueAssessment;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.field.annotations.InvariableArray;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.InterfaceAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
 import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldTypeAssessment;
 import org.junit.Test;
@@ -184,34 +183,6 @@ public class T10_ObjectImmutabilityAssessor
 		}.run();
 	}
 
-	@Test public void immutability_assertion_on_java_lang_Class_passes()
-	{
-		Class<?> object = Object[].class;
-		assert assessor.mustBeImmutableAssertion( object );
-	}
-
-	@Test public void immutability_assertion_on_immutable_object_passes()
-	{
-		new Runnable()
-		{
-			static final class ImmutableClass
-			{ }
-
-			@Override public void run()
-			{
-				Object object = new ImmutableClass();
-				assert assessor.mustBeImmutableAssertion( object );
-			}
-		}.run();
-	}
-
-	@Test public void immutability_assertion_on_mutable_object_fails()
-	{
-		Object object = new ArrayList<>();
-		ObjectMustBeImmutableException exception = MyTestKit.expect( ObjectMustBeImmutableException.class, () -> assessor.mustBeImmutableAssertion( object ) );
-		assert exception.mutableObjectAssessment.object == object;
-	}
-
 	@Test public void positively_self_assessing_object_is_immutable()
 	{
 		new Runnable()
@@ -228,25 +199,6 @@ public class T10_ObjectImmutabilityAssessor
 				var object = new ProvisorySelfAssessableClassWhichSelfAssessesPositively();
 				ObjectAssessment assessment = assess( assessor, object );
 				assert assessment instanceof ImmutableObjectAssessment;
-			}
-		}.run();
-	}
-
-	@Test public void immutability_assertion_on_positively_self_assessing_object_passes()
-	{
-		new Runnable()
-		{
-			static final class ProvisorySelfAssessableClassWhichSelfAssessesPositively implements ImmutabilitySelfAssessable
-			{
-				private final Object provisoryMember = null;
-				@Override public boolean isImmutable() { return true; }
-			}
-
-			@Override public void run()
-			{
-				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesPositively.class ) instanceof SelfAssessableAssessment;
-				Object object = new ProvisorySelfAssessableClassWhichSelfAssessesPositively();
-				assert assessor.mustBeImmutableAssertion( object );
 			}
 		}.run();
 	}
@@ -270,27 +222,6 @@ public class T10_ObjectImmutabilityAssessor
 				MutableSelfAssessment mutableSelfAssessment = (MutableSelfAssessment)assessment;
 				assert mutableSelfAssessment.object == object;
 				assert mutableSelfAssessment.typeAssessment.type == ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class;
-			}
-		}.run();
-	}
-
-	@Test public void immutability_assertion_on_negatively_self_assessing_object_fails()
-	{
-		new Runnable()
-		{
-			static final class ProvisorySelfAssessableClassWhichSelfAssessesNegatively implements ImmutabilitySelfAssessable
-			{
-				private final Object provisoryMember = null;
-				@Override public boolean isImmutable() { return false; }
-			}
-
-			@Override public void run()
-			{
-				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class ) instanceof SelfAssessableAssessment;
-				Object object = new ProvisorySelfAssessableClassWhichSelfAssessesNegatively();
-				var exception = MyTestKit.expect( ObjectMustBeImmutableException.class, () -> //
-					assessor.mustBeImmutableAssertion( object ) );
-				assert exception.mutableObjectAssessment.object == object;
 			}
 		}.run();
 	}
