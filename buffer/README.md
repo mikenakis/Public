@@ -6,8 +6,6 @@
 <img title="mikenakis:buffer logo" src="mikenakis-buffer.svg" width="256"/><br/>
 The mikenakis:buffer logo<br/>
 by Mike Nakis<br/>
-based on original work by <a href="https://thenounproject.com/">TODO</a> and <a href="https://thenounproject.com/">TODO</a> from <a href="https://thenounproject.com/">the Noun Project</a><br/>
-used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY</a> license.<br/>
 </p>
 
 ## Description
