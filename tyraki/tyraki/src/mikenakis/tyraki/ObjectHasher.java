@@ -21,7 +21,7 @@ public final class ObjectHasher implements Hasher<Object>
 
 	@Override public int getHashCode( Object object )
 	{
-//TODO
+//XXX TODO
 //		assert mustOverrideIdentityMethodsAssertion( object );
 //		assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
 		return object.hashCode();
@@ -29,8 +29,6 @@ public final class ObjectHasher implements Hasher<Object>
 
 	private static boolean mustOverrideIdentityMethodsAssertion( Object object )
 	{
-		if( object instanceof Boolean )
-			Kit.get( false );
 		assert isOverriding( object, Object.class, "hashCode", (Class<?>[])null );
 		assert isOverriding( object, Object.class, "equals", Object.class );
 		return true;

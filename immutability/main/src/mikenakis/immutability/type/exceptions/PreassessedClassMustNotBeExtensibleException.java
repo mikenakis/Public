@@ -1,6 +1,6 @@
 package mikenakis.immutability.type.exceptions;
 
-import mikenakis.immutability.mykit.UncheckedException;
+import mikenakis.immutability.internal.mykit.UncheckedException;
 
 /**
  * Thrown when an attempt is made to preassess a class as immutable, but the class is found to be extensible.

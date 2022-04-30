@@ -1,7 +1,7 @@
 package mikenakis.immutability.type.exceptions;
 
-import mikenakis.immutability.helpers.Helpers;
-import mikenakis.immutability.mykit.UncheckedException;
+import mikenakis.immutability.internal.helpers.Helpers;
+import mikenakis.immutability.internal.mykit.UncheckedException;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 
 /**

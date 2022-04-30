@@ -1,15 +1,15 @@
 package mikenakis.immutability.type.assessments;
 
 import mikenakis.immutability.Assessment;
-import mikenakis.immutability.helpers.Stringizer;
+import mikenakis.immutability.internal.helpers.Stringizer;
 
 public abstract class TypeAssessment extends Assessment
 {
 	public enum Mode
 	{
-		Assessed( "assessed" ),
-		Preassessed( "preassessed" ),
-		PreassessedByDefault( "preassessed by default" );
+		Assessed( "is" ),
+		Preassessed( "is preassessed as" ),
+		PreassessedByDefault( "is preassessed by default as" );
 
 		public final String text;
 

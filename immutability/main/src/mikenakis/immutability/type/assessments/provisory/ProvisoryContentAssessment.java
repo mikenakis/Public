@@ -1,9 +1,9 @@
 package mikenakis.immutability.type.assessments.provisory;
 
 import mikenakis.immutability.Assessment;
-import mikenakis.immutability.helpers.Helpers;
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Helpers;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 

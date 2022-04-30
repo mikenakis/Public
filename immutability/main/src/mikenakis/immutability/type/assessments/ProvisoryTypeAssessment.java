@@ -1,7 +1,7 @@
 package mikenakis.immutability.type.assessments;
 
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
  * Signifies that a class cannot be conclusively classified as either mutable or immutable, so further runtime checks are necessary on instances of this class.

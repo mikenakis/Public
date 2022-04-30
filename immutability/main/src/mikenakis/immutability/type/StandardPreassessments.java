@@ -1,8 +1,8 @@
 package mikenakis.immutability.type;
 
-import mikenakis.immutability.helpers.ConcreteMapEntry;
-import mikenakis.immutability.helpers.ConvertingIterable;
-import mikenakis.immutability.mykit.MyKit;
+import mikenakis.immutability.internal.helpers.ConcreteMapEntry;
+import mikenakis.immutability.internal.helpers.ConvertingIterable;
+import mikenakis.immutability.internal.mykit.MyKit;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

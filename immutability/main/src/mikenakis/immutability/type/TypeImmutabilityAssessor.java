@@ -1,9 +1,9 @@
 package mikenakis.immutability.type;
 
-import mikenakis.immutability.helpers.Helpers;
-import mikenakis.immutability.helpers.Stringizable;
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.MyKit;
+import mikenakis.immutability.internal.helpers.Helpers;
+import mikenakis.immutability.internal.helpers.Stringizable;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;

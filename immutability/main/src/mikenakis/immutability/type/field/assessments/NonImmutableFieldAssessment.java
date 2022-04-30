@@ -1,7 +1,7 @@
 package mikenakis.immutability.type.field.assessments;
 
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.lang.reflect.Field;
 
@@ -17,6 +17,6 @@ public abstract class NonImmutableFieldAssessment extends FieldAssessment
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
-		stringBuilder.append( "field " ).append( stringizer.stringizeFieldName( field) );
+		stringBuilder.append( "field " ).append( Stringizer.stringizeFieldName( field) );
 	}
 }

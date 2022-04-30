@@ -1,8 +1,8 @@
 package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
-import mikenakis.immutability.mykit.MyKit;
-import mikenakis.immutability.mykit.functional.Function0;
+import mikenakis.immutability.internal.mykit.MyKit;
+import mikenakis.immutability.internal.mykit.functional.Function0;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.type.field.annotations.InvariableArray;

@@ -1,7 +1,7 @@
 package mikenakis.immutability.type.assessments.provisory;
 
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.type.Decomposer;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 
@@ -31,6 +31,6 @@ public final class ProvisoryCompositeAssessment<T,E> extends ProvisoryTypeAssess
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is " ).append( mode.text ).append( " as composite" );
+		stringBuilder.append( " because it " ).append( mode.text ).append( " composite" );
 	}
 }

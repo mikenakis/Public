@@ -1,8 +1,8 @@
 package mikenakis.immutability.object.assessments.mutable;
 
 import mikenakis.immutability.Assessment;
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
 

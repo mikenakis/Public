@@ -1,8 +1,8 @@
 package mikenakis.immutability.type.assessments.provisory;
 
-import mikenakis.immutability.helpers.Helpers;
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Helpers;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 
 /**
@@ -31,6 +31,6 @@ public final class ExtensibleAssessment extends ProvisoryTypeAssessment
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
 		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is " ).append( mode.text ).append( " as an extensible class" );
+		stringBuilder.append( " because it " ).append( mode.text ).append( " an extensible class" );
 	}
 }

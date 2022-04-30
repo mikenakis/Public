@@ -1,17 +1,18 @@
 package mikenakis.immutability.object;
 
-import mikenakis.immutability.helpers.Stringizable;
-import mikenakis.immutability.mykit.MyKit;
-import mikenakis.immutability.mykit.collections.IdentityLinkedHashSet;
+import mikenakis.immutability.internal.helpers.IterableOnArrayObject;
+import mikenakis.immutability.internal.helpers.Stringizable;
+import mikenakis.immutability.internal.mykit.MyKit;
+import mikenakis.immutability.internal.mykit.collections.IdentityLinkedHashSet;
 import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 import mikenakis.immutability.object.assessments.ObjectAssessment;
-import mikenakis.immutability.object.assessments.mutable.NonEmptyMutableArrayAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableArrayElementAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableComponentElementAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableIterableElementAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableFieldValuesAssessment;
+import mikenakis.immutability.object.assessments.mutable.MutableIterableElementAssessment;
 import mikenakis.immutability.object.assessments.mutable.MutableSelfAssessment;
+import mikenakis.immutability.object.assessments.mutable.NonEmptyMutableArrayAssessment;
 import mikenakis.immutability.object.assessments.mutable.OfMutableTypeAssessment;
 import mikenakis.immutability.object.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.object.fieldvalue.MutableFieldValueAssessment;
@@ -26,14 +27,13 @@ import mikenakis.immutability.type.assessments.provisory.IterableAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
 import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
 import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.InvariableArrayFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldTypeAssessment;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -86,25 +86,16 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		TypeAssessment typeAssessment = typeImmutabilityAssessor.assess( declaredClass );
 		return switch( typeAssessment )
 			{
-				case ImmutableTypeAssessment ignore -> //
-					immutableObjectAssessmentInstance;
-				case ExtensibleAssessment ignore -> //
-					//Class is extensible but otherwise immutable, and object is of this exact class and not of a further derived class, so object is immutable.
-					immutableObjectAssessmentInstance;
-				case ProvisoryCompositeAssessment<?,?> provisoryCompositeAssessment -> //
-					assessComposite( object, provisoryCompositeAssessment );
-				case IterableAssessment iterableAssessment -> //
-					assessIterable( (Iterable<?>)object, iterableAssessment );
-				case SelfAssessableAssessment selfAssessableAssessment -> //
-					assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
-				case ProvisoryContentAssessment provisoryContentAssessment -> //
-					assessProvisoryContent( object, provisoryContentAssessment, visitedValues );
-				case MutableArrayAssessment arrayAssessment -> //
-					assessMutableArray( object, arrayAssessment );
-				case MutableTypeAssessment mutableTypeAssessment -> //
-					new OfMutableTypeAssessment( stringizer, object, mutableTypeAssessment );
-				default -> //
-					throw new AssertionError( typeAssessment );
+				case ImmutableTypeAssessment ignore -> immutableObjectAssessmentInstance;
+				//Class is extensible but otherwise immutable, and object is of this exact class and not of a further derived class, so object is immutable.
+				case ExtensibleAssessment ignore -> immutableObjectAssessmentInstance;
+				case ProvisoryCompositeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment );
+				case IterableAssessment iterableAssessment -> assessIterable( (Iterable<?>)object, iterableAssessment );
+				case SelfAssessableAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
+				case ProvisoryContentAssessment provisoryContentAssessment -> assessProvisoryContent( object, provisoryContentAssessment, visitedValues );
+				case MutableArrayAssessment arrayAssessment -> assessMutableArray( object, arrayAssessment );
+				case MutableTypeAssessment mutableTypeAssessment -> new OfMutableTypeAssessment( stringizer, object, mutableTypeAssessment );
+				default -> throw new AssertionError( typeAssessment );
 			};
 	}
 
@@ -129,14 +120,9 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		return immutableObjectAssessmentInstance;
 	}
 
-	private <T, E> ObjectAssessment assessComposite( T compositeObject, ProvisoryCompositeAssessment<?,?> typeAssessment )
+	private <T, E> ObjectAssessment assessComposite( T compositeObject, ProvisoryCompositeAssessment<?,?> wildcardTypeAssessment )
 	{
-		@SuppressWarnings( "unchecked" ) ProvisoryCompositeAssessment<T,E> castAssessment = (ProvisoryCompositeAssessment<T,E>)typeAssessment;
-		return assessComposite0( compositeObject, castAssessment );
-	}
-
-	private <T, E> ObjectAssessment assessComposite0( T compositeObject, ProvisoryCompositeAssessment<T,E> typeAssessment )
-	{
+		@SuppressWarnings( "unchecked" ) ProvisoryCompositeAssessment<T,E> typeAssessment = (ProvisoryCompositeAssessment<T,E>)wildcardTypeAssessment;
 		Iterable<E> iterableObject = typeAssessment.decomposer.decompose( compositeObject );
 		int index = 0;
 		for( var element : iterableObject )
@@ -150,7 +136,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		return immutableObjectAssessmentInstance;
 	}
 
-	private ObjectAssessment assessInvariableArray( Object array, InvariableArrayFieldAssessment arrayAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessInvariableArray( Object array, Set<Object> visitedValues, InvariableArrayFieldAssessment arrayAssessment )
 	{
 		Iterable<Object> arrayAsIterable = new IterableOnArrayObject( array );
 		int index = 0;
@@ -164,37 +150,6 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		return immutableObjectAssessmentInstance;
 	}
 
-	private static class IterableOnArrayObject implements Iterable<Object>
-	{
-		private final Object array;
-		private final int length;
-
-		public IterableOnArrayObject( Object array )
-		{
-			assert array.getClass().isArray();
-			this.array = array;
-			length = Array.getLength( array );
-		}
-
-		@Override public Iterator<Object> iterator()
-		{
-			return new Iterator<>()
-			{
-				private int index = 0;
-
-				@Override public boolean hasNext()
-				{
-					return index < length;
-				}
-
-				@Override public Object next()
-				{
-					return Array.get( array, index++ );
-				}
-			};
-		}
-	}
-
 	private ObjectAssessment assessSelfAssessable( SelfAssessableAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
 	{
 		if( selfAssessableObject.isImmutable() )
@@ -205,13 +160,13 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	private ObjectAssessment assessProvisoryContent( Object object, ProvisoryContentAssessment typeAssessment, Set<Object> visitedValues )
 	{
 		List<MutableFieldValueAssessment> mutableFieldValueAssessments = new ArrayList<>();
-		collectMutableFieldValueAssessmentsRecursively( mutableFieldValueAssessments, object, typeAssessment, visitedValues );
+		collectFieldValueAssessmentsRecursively( mutableFieldValueAssessments, object, typeAssessment, visitedValues );
 		if( !mutableFieldValueAssessments.isEmpty() )
 			return new MutableFieldValuesAssessment( stringizer, object, typeAssessment, mutableFieldValueAssessments );
 		return immutableObjectAssessmentInstance;
 	}
 
-	private void collectMutableFieldValueAssessmentsRecursively( List<MutableFieldValueAssessment> fieldValueAssessments, Object object, //
+	private void collectFieldValueAssessmentsRecursively( List<MutableFieldValueAssessment> fieldValueAssessments, Object object, //
 		ProvisoryContentAssessment typeAssessment, Set<Object> visitedValues )
 	{
 		for( ProvisoryFieldAssessment provisoryFieldAssessment : typeAssessment.fieldAssessments )
@@ -220,7 +175,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 			Object fieldValue = getFieldValue( object, field );
 			ObjectAssessment objectAssessment = switch( provisoryFieldAssessment )
 			{
-				case InvariableArrayFieldAssessment invariableArrayFieldAssessment -> assessInvariableArray( fieldValue, invariableArrayFieldAssessment, visitedValues );
+				case InvariableArrayFieldAssessment invariableArrayFieldAssessment -> assessInvariableArray( fieldValue, visitedValues, invariableArrayFieldAssessment );
 				case ProvisoryFieldTypeAssessment provisoryFieldTypeAssessment -> assessRecursively( fieldValue, visitedValues );
 				default -> throw new AssertionError(); //TODO: make assessments sealed, so that we do not need default clauses!
 			};
@@ -237,7 +192,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 			switch( ancestorAssessment )
 			{
 				case ProvisoryContentAssessment provisoryContentAssessment: //
-					collectMutableFieldValueAssessmentsRecursively( fieldValueAssessments, object, provisoryContentAssessment, visitedValues );
+					collectFieldValueAssessmentsRecursively( fieldValueAssessments, object, provisoryContentAssessment, visitedValues );
 					break;
 				case SelfAssessableAssessment selfAssessableAssessment:
 					assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
@@ -250,7 +205,9 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 
 	private static Object getFieldValue( Object object, Field field )
 	{
-		field.setAccessible( true );
+		if( !field.canAccess( object ) )
+			field.setAccessible( true );
+		assert field.canAccess( object );
 		Object fieldValue;
 		try
 		{

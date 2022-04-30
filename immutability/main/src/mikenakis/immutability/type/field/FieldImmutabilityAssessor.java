@@ -1,6 +1,6 @@
 package mikenakis.immutability.type.field;
 
-import mikenakis.immutability.helpers.Stringizable;
+import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.type.field.annotations.InvariableArray;
 import mikenakis.immutability.type.field.annotations.InvariableField;

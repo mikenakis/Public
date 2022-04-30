@@ -1,8 +1,8 @@
 package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
-import mikenakis.immutability.helpers.ConcreteMapEntry;
-import mikenakis.immutability.mykit.MyKit;
+import mikenakis.immutability.internal.helpers.ConcreteMapEntry;
+import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.object.ObjectImmutabilityAssessor;
 import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;

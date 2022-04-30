@@ -1,6 +1,6 @@
 package mikenakis.immutability.object.exceptions;
 
-import mikenakis.immutability.mykit.UncheckedException;
+import mikenakis.immutability.internal.mykit.UncheckedException;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
 
 /**

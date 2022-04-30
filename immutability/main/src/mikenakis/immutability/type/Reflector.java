@@ -1,7 +1,7 @@
 package mikenakis.immutability.type;
 
-import mikenakis.immutability.helpers.Helpers;
-import mikenakis.immutability.helpers.Stringizable;
+import mikenakis.immutability.internal.helpers.Helpers;
+import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.NonImmutableTypeAssessment;

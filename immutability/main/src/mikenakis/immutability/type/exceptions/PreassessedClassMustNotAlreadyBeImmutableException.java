@@ -1,6 +1,6 @@
 package mikenakis.immutability.type.exceptions;
 
-import mikenakis.immutability.mykit.UncheckedException;
+import mikenakis.immutability.internal.mykit.UncheckedException;
 
 /**
  * Thrown when a class is preassessed as immutable, but it is found to already be immutable.

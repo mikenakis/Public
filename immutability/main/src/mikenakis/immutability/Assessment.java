@@ -1,9 +1,9 @@
 package mikenakis.immutability;
 
-import mikenakis.immutability.helpers.Stringizable;
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.MyKit;
-import mikenakis.immutability.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.helpers.Stringizable;
+import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.internal.mykit.MyKit;
+import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;
 import java.util.List;

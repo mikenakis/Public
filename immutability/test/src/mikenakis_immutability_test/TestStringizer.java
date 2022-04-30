@@ -1,8 +1,7 @@
 package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
-import mikenakis.immutability.helpers.Stringizer;
-import mikenakis.immutability.mykit.MyKit;
+import mikenakis.immutability.internal.helpers.Stringizer;
 
 public final class TestStringizer extends Stringizer
 {
