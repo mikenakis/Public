@@ -69,7 +69,7 @@ I do not yet have a description of this library, because it will be a lot of wor
     - Freezing is useful for performance:
       - Populating a mutable collection and then freezing it (which essentially consists of simply marking it as frozen) performs much better than populating the mutable collection and then making a copy of its contents into a new immutable collection. 
         - The `unmodifiableCollection()` wrapper does not help much, (even if we ignore for a moment the fact that it is secretly immutable,) because it wraps each incoming call, so although it may save us from the initial copy, it will represent unnecessary extra overhead throughout the remaining lifetime of the immutable collection.
-    - Freezing can be used to achieve certain things that are otherwise hard, or impossible:
+    - Freezing can be used to achieve certain things that are otherwise hard or impossible:
       - The creation of cyclic graphs of immutable collections is impossible using collections that are immutable upon construction, because immutable-upon-construction collections require all of their members to be present at construction time, which cannot happen when the graph has cycles. So, to construct such a graph, the collections that participate in the graph must begin their life as mutable, so that the graph can be constructed, and must become immutable in-place once construction is complete.
 
 #### No guards against concurrency-related bugs
@@ -78,4 +78,4 @@ I do not yet have a description of this library, because it will be a lot of wor
                                                 
 #### No guards against immutability-related bugs
 
-  - The built-in mutable collections of Java will happily accept any object as a member of a hash-set or as a key of a hash-map, requiring it to be immutable but not doing anything to ensure that it is in fact immutable. (Essentially, _praying_ "please be immutable".) Thus, it is possible to add keys to a hash-map which are inadvertently mutable, and to then mutate them, (with catastrophic consequences,) and the hash-map will not complain at all. This is very error-prone.
+  - The Java built-in non-identity hash-map will happily accept any object as key, regardless of whether it is mutable or immutable. Similarly, the Java built-in non-identity hash-set will accept any object as member. According to the documentation of these collection classes, the members should be immutable, but the collections do nothing to ensure that the members are in fact immutable. (Essentially, _praying_ "please be immutable".) Thus, it is possible to add keys to a hash-map which are inadvertently mutable, and to proceed to mutate them, (with catastrophic consequences,) and the hash-map will not complain at all. This is very error-prone.
