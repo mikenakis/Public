@@ -4,10 +4,10 @@ import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.functional.Procedure1;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.exceptions.KeyNotFoundException;
-import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Optional;
@@ -21,25 +21,7 @@ import java.util.function.Predicate;
 public interface UnmodifiableMap<K, V>
 {
 	/**
-	 * Gets the empty {@link UnmodifiableMap}.
-	 *
-	 * @param <K> the type of the keys of the {@link UnmodifiableMap}.
-	 * @param <V> the type of the values of the {@link UnmodifiableMap}.
-	 *
-	 * @return the empty Unmodifiable {@link UnmodifiableMap}.
-	 */
-	static <K, V> UnmodifiableMap<K,V> of()
-	{
-		return ImmutableCollections.emptyArrayHashMap();
-	}
-
-	static <K, V> UnmodifiableMap<K,V> of( UnmodifiableMap<K,V> map )
-	{
-		return UnmodifiableHashMap.from( map );
-	}
-
-	/**
-	 * Casts keys to a supertype.
+	 * Returns this same map with the keys cast to a supertype.
 	 */
 	static <K extends TK, V, TK> UnmodifiableMap<TK,V> downCastKeys( UnmodifiableMap<K,V> map )
 	{
@@ -48,7 +30,7 @@ public interface UnmodifiableMap<K, V>
 	}
 
 	/**
-	 * Casts values to a supertype.
+	 * Returns this same map with the values cast to a supertype.
 	 */
 	static <K, V extends TV, TV> UnmodifiableMap<K,TV> downCastValues( UnmodifiableMap<K,V> map )
 	{
@@ -56,72 +38,85 @@ public interface UnmodifiableMap<K, V>
 		return result;
 	}
 
-	static <T, K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
+	private static <K, V, M extends UnmodifiableMap<K,V>> M newUnmodifiableMap( Function1<M,MutableCollections> factory, Procedure1<M> populator )
 	{
 		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
 		{
 			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
-			for( T item : items )
-			{
-				K key = keyFromItemConverter.invoke( item );
-				V value = valueFromItemConverter.invoke( item );
-				freezableMap.add( key, value );
-			}
-			return freezableMap;
+			M map = factory.invoke( mutableCollections );
+			populator.invoke( map );
+			return map;
 		} );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
+	static <K, V> UnmodifiableHashMap<K,V> newHashMap( Procedure1<MutableHashMap<K,V>> populator )
 	{
-		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
-		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
-			for( K key : keys )
-			{
-				V value = valueFromKeyConverter.invoke( key );
-				freezableMap.add( key, value );
-			}
-			return freezableMap;
-		} );
+		return newUnmodifiableMap( MutableCollections::newHashMap, populator );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1 )
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newHashMap( Binding<K,V>... bindings )
 	{
-		return newLinkedHashMap( MapEntry.of( key1, value1 ) );
+		return newHashMap( map -> map.addAll( UnmodifiableList.of( bindings ) ) );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2 )
+	static <K, V> UnmodifiableArrayMap<K,V> newArrayMap( Procedure1<MutableArrayMap<K,V>> populator )
 	{
-		return UnmodifiableMap.<K,V>newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ) );
+		return newUnmodifiableMap( MutableCollections::newArrayMap, populator  );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2, K key3, V value3 )
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayMap<K,V> newArrayMap( Binding<K,V>... bindings )
 	{
-		return newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ) );
+		return newArrayMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4 )
+	static <K, V> UnmodifiableArrayHashMap<K,V> newArrayHashMap( Procedure1<MutableArrayHashMap<K,V>> populator )
 	{
-		return UnmodifiableMap.<K,V>newLinkedHashMap( MapEntry.of( key1, value1 ), MapEntry.of( key2, value2 ), MapEntry.of( key3, value3 ), MapEntry.of( key4, value4 ) );
+		return newUnmodifiableMap( MutableCollections::newArrayHashMap, populator );
+	}
+
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayHashMap<K,V> newArrayHashMap( Binding<K,V>... bindings )
+	{
+		return newArrayHashMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Procedure1<MutableHashMap<K,V>> populator )
+	{
+		return newUnmodifiableMap( MutableCollections::newLinkedHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Binding<K,V>... bindings )
 	{
-		return newLinkedHashMap( UnmodifiableList.of( bindings ) );
+		return newHashMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
 	}
 
-	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableEnumerable<Binding<K,V>> bindings )
+	static <K, V> UnmodifiableArrayHashMap<K,V> newIdentityArrayHashMap( Procedure1<MutableArrayHashMap<K,V>> populator )
 	{
-		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
-		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableHashMap<K,V> freezableMap = mutableCollections.newLinkedHashMap();
-			for( var binding : bindings )
-				freezableMap.add( binding.getKey(), binding.getValue() );
-			return freezableMap;
-		} );
+		return newUnmodifiableMap( MutableCollections::newIdentityArrayHashMap, populator );
+	}
+
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayMap<K,V> newIdentityArrayHashMap( Binding<K,V>... bindings )
+	{
+		return newIdentityArrayHashMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newIdentityHashMap( Procedure1<MutableHashMap<K,V>> populator )
+	{
+		return newUnmodifiableMap( MutableCollections::newIdentityHashMap, populator );
+	}
+
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newIdentityHashMap( Binding<K,V>... bindings )
+	{
+		return newIdentityHashMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newIdentityLinkedHashMap( Procedure1<MutableHashMap<K,V>> populator )
+	{
+		return newUnmodifiableMap( MutableCollections::newIdentityLinkedHashMap, populator );
+	}
+
+	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newIdentityLinkedHashMap( Binding<K,V>... bindings )
+	{
+		return newIdentityLinkedHashMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
 	}
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -223,11 +218,6 @@ public interface UnmodifiableMap<K, V>
 	boolean containsValue( V value );
 
 	/**
-	 * Gets an {@link UnmodifiableMap} which is the reverse of this map.  Fails if this map is not one-to-one.
-	 */
-	UnmodifiableMap<V,K> transposed();
-
-	/**
 	 * Creates a new {@link UnmodifiableMap} with keys converted using given converter.
 	 */
 	<T> UnmodifiableMap<T,V> convertedKeys( Function1<T,K> converter );
@@ -249,8 +239,6 @@ public interface UnmodifiableMap<K, V>
 	 * @return a new {@link UnmodifiableMap}.
 	 */
 	UnmodifiableMap<K,V> filter( Predicate<Binding<K,V>> predicate );
-
-	UnmodifiableMap<V,K> transposedMap();
 
 	@SuppressWarnings( "MethodOverloadsMethodOfSuperclass" ) boolean equals( UnmodifiableMap<?,?> other );
 
@@ -310,11 +298,6 @@ public interface UnmodifiableMap<K, V>
 			return false;
 		}
 
-		@Override default UnmodifiableMap<V,K> transposed()
-		{
-			return UnmodifiableHashMap.fromValues( keys(), this::get );
-		}
-
 		@Override default <T> UnmodifiableMap<T,V> convertedKeys( Function1<T,K> converter )
 		{
 			return ConversionCollections.newKeyConvertingAndFilteringMap( this, converter );
@@ -349,11 +332,6 @@ public interface UnmodifiableMap<K, V>
 		@Override default UnmodifiableMap<K,V> filter( Predicate<Binding<K,V>> predicate )
 		{
 			return ConversionCollections.newFilteringMap( this, predicate );
-		}
-
-		@Override default UnmodifiableMap<V,K> transposedMap()
-		{
-			return UnmodifiableHashMap.from( this::get, keys() );
 		}
 
 		@Override default boolean equals( UnmodifiableMap<?,?> other )

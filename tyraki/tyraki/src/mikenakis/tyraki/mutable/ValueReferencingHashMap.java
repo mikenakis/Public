@@ -49,16 +49,16 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( k -> k != null );
 		}
 
-		private final Function1<Binding<K,V>,Item> converter = item ->
+		private final Function1<Binding<K,V>,Node> converter = node ->
 		{
-			V value = item.valueReference.get();
+			V value = node.valueReference.get();
 			if( value == null )
 				return null;
-			return MapEntry.of( item.key, value );
+			return MapEntry.of( node.key, value );
 		};
 	}
 
-	private final HashTable<K,Item> hashTable;
+	private final HashTable<K,Node> hashTable;
 	private int modificationCount = 0;
 	final Hasher<? super K> keyHasher;
 	final ReferencingMethod referencingMethod;
@@ -109,32 +109,32 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	{
 		assert key != null;
 		assert mustBeReadableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return Optional.empty();
-		V value = item.valueReference.get();
+		V value = node.valueReference.get();
 		if( value == null )
 			return Optional.empty();
-		return Optional.of( MapEntry.of( item.key, value ) );
+		return Optional.of( MapEntry.of( node.key, value ) );
 	}
 
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item1 = hashTable.tryFindByKey( key );
-		if( item1 != null )
+		Node node1 = hashTable.tryFindByKey( key );
+		if( node1 != null )
 		{
-			V existing = item1.valueReference.get();
+			V existing = node1.valueReference.get();
 			if( existing != null )
 				return Optional.of( existing ); //key already exists and has a value.
-			item1.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
+			node1.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
 			modificationCount++;
 		}
 		else
 		{
-			Item item2 = new Item( key, value );
-			Optional<Item> existing = hashTable.tryAdd( item2 );
+			Node node2 = new Node( key, value );
+			Optional<Node> existing = hashTable.tryAdd( node2 );
 			assert existing.isEmpty();
 		}
 		return Optional.empty();
@@ -144,10 +144,10 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		item.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
+		node.valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
 		modificationCount++;
 		return true;
 	}
@@ -156,10 +156,10 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		hashTable.remove( item );
+		hashTable.remove( node );
 		return true;
 	}
 
@@ -222,23 +222,23 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 //        }
 //    }
 
-	private class Item extends HashNode<K,Item> //implements Binding<K,V>
+	private class Node extends HashNode<K,Node> //implements Binding<K,V>
 	{
 		final K key;
 		Reference<V> valueReference;
 
-		Item( K key, V value )
+		Node( K key, V value )
 		{
 			assert key != null;
 			this.key = key;
 			valueReference = Helpers.newReference( referencingMethod, value, referenceQueue );
 		}
 
-		public boolean equals( Item other )
+		public boolean equals( Node otherNode )
 		{
-			if( !keys().getEqualityComparator().equals( key, other.key ) )
+			if( !keys().getEqualityComparator().equals( key, otherNode.key ) )
 				return false;
-			if( !values().getEqualityComparator().equals( valueReference.get(), other.valueReference.get() ) )
+			if( !values().getEqualityComparator().equals( valueReference.get(), otherNode.valueReference.get() ) )
 				return false;
 			return true;
 		}
@@ -254,11 +254,10 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 
 		@Override public boolean equals( Object other )
 		{
-			if( other instanceof ValueReferencingHashMap<?,?>.Item )
+			if( other instanceof ValueReferencingHashMap<?,?>.Node )
 			{
-				@SuppressWarnings( "unchecked" )
-				Item otherItem = (Item)other;
-				return equals( otherItem );
+				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)other;
+				return equals( otherNode );
 			}
 			if( other instanceof Binding<?,?> )
 			{

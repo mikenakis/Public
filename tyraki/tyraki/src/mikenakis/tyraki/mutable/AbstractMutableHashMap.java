@@ -73,18 +73,18 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Node<K,V> item = newItem( key, value );
-		return hashTable.tryAdd( item ).map( existing -> existing.value );
+		Node<K,V> node = newItem( key, value );
+		return hashTable.tryAdd( node ).map( existing -> existing.value );
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Node<K,V> item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node<K,V> node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		item.value = value;
+		node.value = value;
 		hashTable.incrementModificationCount();
 		return true;
 	}
@@ -93,10 +93,10 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Node<K,V> item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node<K,V> node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		hashTable.remove( item );
+		hashTable.remove( node );
 		return true;
 	}
 
@@ -146,8 +146,8 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 
 		@Override public boolean equals( Object other )
 		{
-			if( other instanceof Node<?,?> otherItem )
-				return equals( otherItem );
+			if( other instanceof Node<?,?> otherNode )
+				return equals( otherNode );
 			if( other instanceof Binding<?,?> )
 			{
 				@SuppressWarnings( "unchecked" )

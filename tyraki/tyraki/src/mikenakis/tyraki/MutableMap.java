@@ -175,15 +175,17 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 	 */
 	void add( K key, V value );
 
+	void add( K key1, V value1, K key2, V value2 );
+
+	void add( K key1, V value1, K key2, V value2, K key3, V value3 );
+
+	void add( K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4 );
+
 	/**
 	 * Adds or replaces a key-value pair.  If the key does not already exist in the map, a new key-value pair is added.  If the key already exists in the map, the associated value
 	 * is replaced with the given value.
 	 */
 	void addOrReplace( K key, V value );
-
-	void addAll( UnmodifiableMap<K,V> other );
-
-	void addAll( UnmodifiableEnumerable<Binding<K,V>> other );
 
 	V computeIfAbsent( K key, Function1<? extends V,? super K> mappingFunction );
 
@@ -196,6 +198,16 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 	 * Gets and removes a key; the key must exist.
 	 */
 	V getAndRemove( K key );
+
+	void addAll( UnmodifiableMap<K,V> other );
+
+	void addAll( UnmodifiableEnumerable<Binding<K,V>> bindings );
+
+	void addAll( UnmodifiableCollection<Binding<K,V>> bindings );
+
+	<T> void addAll( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter );
+
+	void addAll( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter );
 
 	/**
 	 * Default methods for {@link MutableMap}.
@@ -238,22 +250,33 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 			assert previous.isEmpty() : new DuplicateKeyException( key, value, previous.get() );
 		}
 
+		@Override default void add( K key1, V value1, K key2, V value2 )
+		{
+			add( key1, value1 );
+			add( key2, value2 );
+		}
+
+		@Override default void add( K key1, V value1, K key2, V value2, K key3, V value3 )
+		{
+			add( key1, value1 );
+			add( key2, value2 );
+			add( key3, value3 );
+		}
+
+		@Override default void add( K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4 )
+		{
+			add( key1, value1 );
+			add( key2, value2 );
+			add( key3, value3 );
+			add( key4, value4 );
+		}
+
 		@Override default void addOrReplace( K key, V value )
 		{
 			assert key != null;
 			if( tryAdd( key, value ).isEmpty() )
 				return;
 			replaceValue( key, value );
-		}
-
-		@Override default void addAll( UnmodifiableMap<K,V> other )
-		{
-			mutableEntries().addAll( other.entries() );
-		}
-
-		@Override default void addAll( UnmodifiableEnumerable<Binding<K,V>> other )
-		{
-			mutableEntries().addAll( other );
 		}
 
 		@Override default V computeIfAbsent( K key, Function1<? extends V,? super K> mappingFunction )
@@ -284,6 +307,40 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 			V value = get( key );
 			removeKey( key );
 			return value;
+		}
+
+		@Override default void addAll( UnmodifiableMap<K,V> other )
+		{
+			mutableEntries().addAll( other.entries() );
+		}
+
+		@Override default void addAll( UnmodifiableEnumerable<Binding<K,V>> bindings )
+		{
+			mutableEntries().addAll( bindings );
+		}
+
+		@Override default void addAll( UnmodifiableCollection<Binding<K,V>> bindings )
+		{
+			mutableEntries().addAll( bindings );
+		}
+
+		@Override default <T> void addAll( UnmodifiableCollection<T> items, Function1<K,T> keyFromItemConverter, Function1<V,T> valueFromItemConverter )
+		{
+			for( T item : items )
+			{
+				K key = keyFromItemConverter.invoke( item );
+				V value = valueFromItemConverter.invoke( item );
+				add( key, value );
+			}
+		}
+
+		@Override default void addAll( UnmodifiableCollection<K> keys, Function1<V,K> valueFromKeyConverter )
+		{
+			for( K key : keys )
+			{
+				V value = valueFromKeyConverter.invoke( key );
+				add( key, value );
+			}
 		}
 	}
 }

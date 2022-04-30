@@ -18,9 +18,9 @@ import java.util.Optional;
  */
 final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
 {
-	private final HashTable<E,Item> hashTable;
-	private Item head;
-	private Item tail;
+	private final HashTable<E,Node> hashTable;
+	private Node head;
+	private Node tail;
 
 	ConcreteMutableLinkedHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
 	{
@@ -60,54 +60,54 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 	{
 		assert element != null;
 		assert mustBeReadableAssertion();
-		Item item = hashTable.tryFindByKey( element );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( element );
+		if( node == null )
 			return Optional.empty();
-		assert mustBeValidAssertion( item );
-		return Optional.of( item.element );
+		assert mustBeValidAssertion( node );
+		return Optional.of( node.element );
 	}
 
 	@Override public Optional<E> tryAdd( E element )
 	{
 		assert mustBeWritableAssertion();
-		Item item = new Item( element );
-		Optional<Item> existing = hashTable.tryAdd( item );
+		Node node = new Node( element );
+		Optional<Node> existing = hashTable.tryAdd( node );
 		if( existing.isPresent() )
 			return Optional.of( existing.get().element );
 		if( tail == null )
 		{
 			assert head == null;
-			head = tail = item;
-			item.prevInSet = item.nextInSet = null;
+			head = tail = node;
+			node.prevInSet = node.nextInSet = null;
 		}
 		else
 		{
 			assert tail.nextInSet == null;
-			tail.nextInSet = item;
-			item.nextInSet = null;
-			item.prevInSet = tail;
-			tail = item;
+			tail.nextInSet = node;
+			node.nextInSet = null;
+			node.prevInSet = tail;
+			tail = node;
 		}
-		assert mustBeValidAssertion( item );
+		assert mustBeValidAssertion( node );
 		return Optional.empty();
 	}
 
 	@Override public boolean tryRemove( E element )
 	{
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( element );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( element );
+		if( node == null )
 			return false;
-		hashTable.remove( item );
-		assert mustBeValidAssertion( item );
-		if( item.prevInSet == null )
-			head = item.nextInSet;
+		hashTable.remove( node );
+		assert mustBeValidAssertion( node );
+		if( node.prevInSet == null )
+			head = node.nextInSet;
 		else
-			item.prevInSet.nextInSet = item.nextInSet;
-		if( item.nextInSet == null )
-			tail = item.prevInSet;
+			node.prevInSet.nextInSet = node.nextInSet;
+		if( node.nextInSet == null )
+			tail = node.prevInSet;
 		else
-			item.nextInSet.prevInSet = item.prevInSet;
+			node.nextInSet.prevInSet = node.prevInSet;
 		return true;
 	}
 
@@ -131,38 +131,37 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 		return false;
 	}
 
-	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Item item )
+	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Node node )
 	{
-		assert item.prevInSet == null? head == item : item.prevInSet.nextInSet == item;
-		assert item.nextInSet == null? tail == item : item.nextInSet.prevInSet == item;
+		assert node.prevInSet == null? head == node : node.prevInSet.nextInSet == node;
+		assert node.nextInSet == null? tail == node : node.nextInSet.prevInSet == node;
 		return true;
 	}
 
-	private final class Item extends HashNode<E,Item>
+	private final class Node extends HashNode<E,Node>
 	{
 		final E element;
 		int hashCode = 0;
-		Item prevInSet;
-		Item nextInSet;
+		Node prevInSet;
+		Node nextInSet;
 
-		Item( E element )
+		Node( E element )
 		{
 			assert element != null;
 			this.element = element;
 		}
 
-		public boolean equals( Item other )
+		public boolean equals( Node otherNode )
 		{
-			return equalityComparator.equals( element, other.element );
+			return equalityComparator.equals( element, otherNode.element );
 		}
 
-		@Override public boolean equals( Object o )
+		@Override public boolean equals( Object other )
 		{
-			if( o instanceof ConcreteMutableLinkedHashSet<?>.Item )
+			if( other instanceof ConcreteMutableLinkedHashSet<?>.Node )
 			{
-				@SuppressWarnings( "unchecked" )
-				Item otherItem = (Item)o;
-				return equals( otherItem );
+				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)other;
+				return equals( otherNode );
 			}
 			assert false;
 			return false;
@@ -193,9 +192,9 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 		}
 	}
 
-	private class MyEnumerator implements MutableEnumerator.Defaults<Item>
+	private class MyEnumerator implements MutableEnumerator.Defaults<Node>
 	{
-		Item currentNode;
+		Node currentNode;
 		boolean deleted = false;
 		int modificationCount = hashTable.getModificationCount();
 
@@ -211,7 +210,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			return currentNode == null;
 		}
 
-		@Override public Item current()
+		@Override public Node current()
 		{
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
@@ -220,7 +219,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			return currentNode;
 		}
 
-		@Override public UnmodifiableEnumerator<Item> moveNext()
+		@Override public UnmodifiableEnumerator<Node> moveNext()
 		{
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();

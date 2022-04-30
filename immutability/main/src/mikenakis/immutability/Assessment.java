@@ -26,7 +26,7 @@ public abstract class Assessment extends Stringizable
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " (" ).append( getClass().getSimpleName() ).append( ")" );
+		stringBuilder.append( ". (" ).append( getClass().getSimpleName() ).append( ")" );
 		return stringBuilder.toString();
 	}
 

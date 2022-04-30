@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> implements MutableHashSet.Defaults<E>
 {
-	private final HashTable<E,Item> hashTable;
+	private final HashTable<E,Node> hashTable;
 
 	ConcreteMutableHashSet( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
 	{
@@ -39,30 +39,30 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 	{
 		assert element != null;
 		assert mustBeReadableAssertion();
-		Item item = hashTable.tryFindByKey( element );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( element );
+		if( node == null )
 			return Optional.empty();
-		return Optional.of( item.element );
+		return Optional.of( node.element );
 	}
 
 	@Override public Optional<E> tryAdd( E element )
 	{
 		assert mustBeWritableAssertion();
-		Item myItem = new Item( element );
-		return hashTable.tryAdd( myItem ).map( existing -> existing.element );
+		Node node = new Node( element );
+		return hashTable.tryAdd( node ).map( existing -> existing.element );
 	}
 
 	@Override public boolean tryReplace( E oldElement, E newElement )
 	{
 		assert mustBeWritableAssertion();
-		Item oldItem = hashTable.tryFindByKey( oldElement );
-		if( oldItem == null )
+		Node oldNode = hashTable.tryFindByKey( oldElement );
+		if( oldNode == null )
 			return false;
 		if( hashTable.tryFindByKey( newElement ) != null )
 			return false;
-		hashTable.remove( oldItem );
-		Item newItem = new Item( newElement );
-		Optional<Item> existing = hashTable.tryAdd( newItem );
+		hashTable.remove( oldNode );
+		Node newNode = new Node( newElement );
+		Optional<Node> existing = hashTable.tryAdd( newNode );
 		assert existing.isEmpty();
 		return true;
 	}
@@ -70,10 +70,10 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 	@Override public boolean tryRemove( E element )
 	{
 		assert mustBeWritableAssertion();
-		Item oldItem = hashTable.tryFindByKey( element );
-		if( oldItem == null )
+		Node oldNode = hashTable.tryFindByKey( element );
+		if( oldNode == null )
 			return false;
-		hashTable.remove( oldItem );
+		hashTable.remove( oldNode );
 		return true;
 	}
 
@@ -106,29 +106,28 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 		return hashTable.getModificationCount();
 	}
 
-	private final class Item extends HashNode<E,Item>
+	private final class Node extends HashNode<E,Node>
 	{
 		final E element;
 		int hashCode = 0;
 
-		Item( E element )
+		Node( E element )
 		{
 			assert element != null;
 			this.element = element;
 		}
 
-		public boolean equals( Item other )
+		public boolean equals( Node other )
 		{
 			return equalityComparator.equals( element, other.element );
 		}
 
 		@Override public boolean equals( Object o )
 		{
-			if( o instanceof ConcreteMutableHashSet<?>.Item )
+			if( o instanceof ConcreteMutableHashSet<?>.Node )
 			{
-				@SuppressWarnings( "unchecked" )
-				Item otherItem = (Item)o;
-				return equals( otherItem );
+				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)o;
+				return equals( otherNode );
 			}
 			assert false;
 			return false;

@@ -20,7 +20,6 @@ import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessm
 import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldTypeAssessment;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;

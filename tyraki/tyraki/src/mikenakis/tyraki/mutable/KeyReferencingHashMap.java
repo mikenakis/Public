@@ -50,16 +50,16 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( obj -> Objects.nonNull( obj ) );
 		}
 
-		private final Function1<Binding<K,V>,Item> converter = item ->
+		private final Function1<Binding<K,V>,Node> converter = node ->
 		{
-			K key = item.keyReference.get();
+			K key = node.keyReference.get();
 			if( key == null )
 				return null;
-			return MapEntry.of( key, item.value );
+			return MapEntry.of( key, node.value );
 		};
 	}
 
-	private final HashTable<K,Item> hashTable;
+	private final HashTable<K,Node> hashTable;
 	private int modificationCount = 0;
 	final Hasher<? super K> keyHasher;
 	final ReferencingMethod referencingMethod;
@@ -117,33 +117,33 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	{
 		assert key != null;
 		assert mustBeReadableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return Optional.empty();
-		K newKey = item.keyReference.get();
+		K newKey = node.keyReference.get();
 		if( newKey == null )
 			return Optional.empty();
-		return Optional.of( MapEntry.of( newKey, item.value ) );
+		return Optional.of( MapEntry.of( newKey, node.value ) );
 	}
 
 	@Override public Optional<V> tryAdd( K key, V value )
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = new Item( key, value );
-		return hashTable.tryAdd( item ).map( previous -> previous.value );
+		Node node = new Node( key, value );
+		return hashTable.tryAdd( node ).map( previous -> previous.value );
 	}
 
 	@Override public boolean tryReplaceValue( K key, V value )
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		if( values.getEqualityComparator().equals( item.value, value ) )
+		if( values.getEqualityComparator().equals( node.value, value ) )
 			return false;
-		item.value = value;
+		node.value = value;
 		modificationCount++;
 		return true;
 	}
@@ -152,10 +152,10 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		hashTable.remove( item );
+		hashTable.remove( node );
 		return true;
 	}
 
@@ -218,13 +218,13 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 //        }
 //    }
 
-	private class Item extends HashNode<K,Item>
+	private class Node extends HashNode<K,Node>
 	{
 		final Reference<K> keyReference;
 		final int hashCode;
 		V value;
 
-		Item( K key, V value )
+		Node( K key, V value )
 		{
 			assert key != null;
 			keyReference = Helpers.newReference( referencingMethod, key, referenceQueue );
@@ -232,22 +232,22 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 			this.value = value;
 		}
 
-		boolean equals( Item other )
+		boolean equals( Node other )
 		{
 			K otherKey = other.keyReference.get();
 			return keyEquals( otherKey );
 		}
 
-		@Override public boolean equals( Object o )
+		@Override public boolean equals( Object other )
 		{
-			if( o == this )
+			if( other == this )
 				return true;
-			if( o == null )
+			if( other == null )
 				return false;
-			if( o instanceof KeyReferencingHashMap<?,?>.Item )
+			if( other instanceof KeyReferencingHashMap<?,?>.Node )
 			{
-				@SuppressWarnings( "unchecked" ) Item otherItem = (Item)o;
-				return equals( otherItem );
+				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)other;
+				return equals( otherNode );
 			}
 			assert false;
 			return false;

@@ -47,16 +47,16 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return newMutableEnumerator();
 		}
 
-		private final Function1<Binding<K,V>,Item> converter = item -> MapEntry.of( item.key, item.value );
+		private final Function1<Binding<K,V>,Node> converter = node -> MapEntry.of( node.key, node.value );
 	}
 
-	private final HashTable<K,Item> hashTable;
+	private final HashTable<K,Node> hashTable;
 	private final Hasher<? super K> keyHasher;
 	private final MutableCollection<K> keys;
 	private final MutableCollection<V> values;
 	private final MyEntries entries;
-	private Item head = null;
-	private Item tail = null;
+	private Node head = null;
+	private Node tail = null;
 
 	ConcreteMutableLinkedHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
 		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
@@ -99,11 +99,11 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	{
 		assert key != null;
 		assert mustBeReadableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return Optional.empty();
-		assert mustBeValidAssertion( item );
-		return Optional.of( MapEntry.of( item.key, item.value ) );
+		assert mustBeValidAssertion( node );
+		return Optional.of( MapEntry.of( node.key, node.value ) );
 	}
 
 	@Override public Optional<V> tryAdd( K key, V value )
@@ -117,30 +117,30 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 //
 //	private Optional<V> tryAdd0( K key, V value )
 //	{
-		Item item1 = hashTable.tryFindByKey( key );
-		if( item1 != null )
+		Node node1 = hashTable.tryFindByKey( key );
+		if( node1 != null )
 		{
-			assert mustBeValidAssertion( item1 );
-			return Optional.of( item1.value ); //key already exists.
+			assert mustBeValidAssertion( node1 );
+			return Optional.of( node1.value ); //key already exists.
 		}
-		Item item2 = new Item( key, value );
-		Optional<Item> existing = hashTable.tryAdd( item2 );
+		Node node2 = new Node( key, value );
+		Optional<Node> existing = hashTable.tryAdd( node2 );
 		assert existing.isEmpty();
 		if( tail == null )
 		{
 			assert head == null;
-			head = tail = item2;
-			item2.prevInMap = item2.nextInMap = null;
+			head = tail = node2;
+			node2.prevInMap = node2.nextInMap = null;
 		}
 		else
 		{
 			assert tail.nextInMap == null;
-			tail.nextInMap = item2;
-			item2.nextInMap = null;
-			item2.prevInMap = tail;
-			tail = item2;
+			tail.nextInMap = node2;
+			node2.nextInMap = null;
+			node2.prevInMap = tail;
+			tail = node2;
 		}
-		assert mustBeValidAssertion( item2 );
+		assert mustBeValidAssertion( node2 );
 		return Optional.empty();
 	}
 
@@ -148,11 +148,11 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		assert mustBeValidAssertion( item );
-		item.value = value;
+		assert mustBeValidAssertion( node );
+		node.value = value;
 		return true;
 	}
 
@@ -160,19 +160,19 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 	{
 		assert key != null;
 		assert mustBeWritableAssertion();
-		Item item = hashTable.tryFindByKey( key );
-		if( item == null )
+		Node node = hashTable.tryFindByKey( key );
+		if( node == null )
 			return false;
-		hashTable.remove( item );
-		assert mustBeValidAssertion( item );
-		if( item.prevInMap == null )
-			head = item.nextInMap;
+		hashTable.remove( node );
+		assert mustBeValidAssertion( node );
+		if( node.prevInMap == null )
+			head = node.nextInMap;
 		else
-			item.prevInMap.nextInMap = item.nextInMap;
-		if( item.nextInMap == null )
-			tail = item.prevInMap;
+			node.prevInMap.nextInMap = node.nextInMap;
+		if( node.nextInMap == null )
+			tail = node.prevInMap;
 		else
-			item.nextInMap.prevInMap = item.prevInMap;
+			node.nextInMap.prevInMap = node.prevInMap;
 		return true;
 	}
 
@@ -200,32 +200,32 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		return values;
 	}
 
-	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Item item )
+	@SuppressWarnings( "SameReturnValue" ) private boolean mustBeValidAssertion( Node node )
 	{
-		assert item.prevInMap == null? head == item : item.prevInMap.nextInMap == item;
-		assert item.nextInMap == null? tail == item : item.nextInMap.prevInMap == item;
+		assert node.prevInMap == null? head == node : node.prevInMap.nextInMap == node;
+		assert node.nextInMap == null? tail == node : node.nextInMap.prevInMap == node;
 		return true;
 	}
 
-	private class Item extends HashNode<K,Item> //implements Binding<K,V>
+	private class Node extends HashNode<K,Node> //implements Binding<K,V>
 	{
 		final K key;
 		V value;
-		Item prevInMap;
-		Item nextInMap;
+		Node prevInMap;
+		Node nextInMap;
 
-		Item( K key, V value )
+		Node( K key, V value )
 		{
 			assert key != null;
 			this.key = key;
 			this.value = value;
 		}
 
-		public boolean equals( Item other )
+		public boolean equals( Node otherNode )
 		{
-			if( !keys().getEqualityComparator().equals( key, other.key ) )
+			if( !keys().getEqualityComparator().equals( key, otherNode.key ) )
 				return false;
-			if( !values().getEqualityComparator().equals( value, other.value ) )
+			if( !values().getEqualityComparator().equals( value, otherNode.value ) )
 				return false;
 			return true;
 		}
@@ -241,11 +241,10 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 
 		@Override public boolean equals( Object other )
 		{
-			if( other instanceof ConcreteMutableLinkedHashMap<?,?>.Item )
+			if( other instanceof ConcreteMutableLinkedHashMap<?,?>.Node )
 			{
-				@SuppressWarnings( "unchecked" )
-				Item otherItem = (Item)other;
-				return equals( otherItem );
+				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)other;
+				return equals( otherNode );
 			}
 			if( other instanceof Binding<?,?> )
 			{
@@ -278,9 +277,9 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		}
 	}
 
-	private class MyEnumerator implements MutableEnumerator.Defaults<Item>
+	private class MyEnumerator implements MutableEnumerator.Defaults<Node>
 	{
-		Item currentNode;
+		Node currentNode;
 		boolean deleted = false;
 		int modificationCount = hashTable.getModificationCount();
 
@@ -296,7 +295,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return currentNode == null;
 		}
 
-		@Override public Item current()
+		@Override public Node current()
 		{
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
@@ -305,7 +304,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return currentNode;
 		}
 
-		@Override public UnmodifiableEnumerator<Item> moveNext()
+		@Override public UnmodifiableEnumerator<Node> moveNext()
 		{
 			assert modificationCount == hashTable.getModificationCount() : new ConcurrentModificationException();
 			assert currentNode != null : new IllegalStateException();
