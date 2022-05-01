@@ -15,9 +15,6 @@ import java.util.List;
  * NOTE: the {@code new Runnable().run()} business is a trick for creating multiple local namespaces within a single java source file.
  * Each test function needs its own local namespace because it needs to declare multiple test interfaces which must all be public.
  * Without local namespaces all these interfaces would have to be given unique names manually, which would be not only cumbersome but also error-prone.
- * <p>
- * NOTE: due to a bug either in testana or in the intellij idea debugger, breakpoints inside these runnables do not hit when running from within testana.
- * See Stackoverflow: "Intellij Idea breakpoints do not hit in anonymous inner class" https://stackoverflow.com/q/70949498/773113
  */
 public final class T01_CompilingIntertwine
 {

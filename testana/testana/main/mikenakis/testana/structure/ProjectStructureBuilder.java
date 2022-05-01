@@ -35,8 +35,8 @@ public final class ProjectStructureBuilder
 	{
 	}
 
-	public static ProjectStructure build( Path sourceDirectory, Iterable<Discoverer> discoverers, //
-		StructureSettings settings, Cache cache, Iterable<TestEngine> testEngines )
+	public static ProjectStructure build( Path sourceDirectory, Iterable<Discoverer> discoverers, StructureSettings settings, Cache cache, //
+		Iterable<TestEngine> testEngines )
 	{
 		assert Kit.path.isAbsoluteNormalizedDirectory( sourceDirectory ) : sourceDirectory;
 		Collection<DiscoveryModule> rootDiscoveryModules = collectRootDiscoveryModules( sourceDirectory, discoverers, settings );
@@ -68,7 +68,7 @@ public final class ProjectStructureBuilder
 				Kit.map.add( projectModuleMap, discoveryModule, projectModule );
 				for( OutputDirectory outputDirectory : discoveryModule.outputDirectories() )
 				{
-					for( OutputFile outputFile : outputDirectory.files() )
+					for( OutputFile outputFile : outputDirectory.files().stream().sorted( ProjectStructureBuilder::compareOutputFiles ).toList() )
 					{
 						String extension = Kit.path.getFileNameExtension( outputFile.relativePath );
 						if( !extension.equals( classExtension ) )
@@ -88,6 +88,15 @@ public final class ProjectStructureBuilder
 		return projectStructure;
 	}
 
+	//NOTE: this is necessary in order to overcome this problem: https://youtrack.jetbrains.com/issue/IDEA-287858
+	//      (also mentioned here: https://stackoverflow.com/q/70949498/773113)
+	private static int compareOutputFiles( OutputFile a, OutputFile b )
+	{
+		if( a.type == OutputFile.Type.Class && b.type == OutputFile.Type.Class )
+			return a.className().compareTo( b.className() );
+		return a.relativePath.compareTo( b.relativePath );
+	}
+
 	private static Optional<ProjectType> fromClass( ClassLoader classLoader, OutputFile outputFile, Map<String,TestEngine> testEngineMap, ProjectModule projectModule )
 	{
 		return tryLoadClass( classLoader, outputFile.className() ).map( jvmClass -> //
@@ -101,7 +110,8 @@ public final class ProjectStructureBuilder
 	{
 		try
 		{
-			return Optional.of( classLoader.loadClass( className ) );
+			Class<?> jvmClass = classLoader.loadClass( className );
+			return Optional.of( jvmClass );
 		}
 		catch( Throwable e )
 		{

@@ -51,9 +51,6 @@ import java.util.Map;
  * Test.
  * <p>
  * NOTE: the {@code new Runnable().run()} business is a trick for creating multiple local namespaces within a single java source file.
- * <p>
- * NOTE: due to a bug either in testana or in the intellij idea debugger, breakpoints inside these runnables do not hit when running from within testana.
- * See Stackoverflow: "Intellij Idea breakpoints do not hit in anonymous inner class" https://stackoverflow.com/q/70949498/773113
  */
 @SuppressWarnings( { "FieldMayBeStatic", "FieldMayBeFinal", "InstanceVariableMayNotBeInitialized" } )
 public class T01_TypeImmutabilityAssessor
