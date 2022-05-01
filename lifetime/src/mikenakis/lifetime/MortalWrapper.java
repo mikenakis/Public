@@ -1,5 +1,6 @@
 package mikenakis.lifetime;
 
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure1;
 
@@ -21,4 +22,41 @@ public interface MortalWrapper<T> extends Mortal.Defaults
 	}
 
 	T getTarget();
+
+	interface Defaults<T> extends MortalWrapper<T>
+	{
+	}
+
+	interface Decorator<T> extends Defaults<T>, Mortal.Decorator
+	{
+		MortalWrapper<T> decoratedMortalWrapper();
+
+		@Override default Mortal getDecoratedMortal()
+		{
+			return decoratedMortalWrapper();
+		}
+
+		@Override default T getTarget()
+		{
+			return decoratedMortalWrapper().getTarget();
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Canary class.
+	 * <p>
+	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
+	 * earliest point possible, and not when compiling some derived class.
+	 */
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
+	final class Canary<T> implements Decorator<T>
+	{
+		@Override public MortalWrapper<T> decoratedMortalWrapper()
+		{
+			return null;
+		}
+	}
 }

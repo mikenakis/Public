@@ -1,6 +1,7 @@
 package mikenakis.lifetime;
 
 import mikenakis.kit.Kit;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.coherence.Coherent;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
@@ -170,13 +171,52 @@ public interface Mortal extends AutoCloseable, Coherent
 			}
 		}
 	}
+
 	boolean mustBeAliveAssertion();
 
 	@Override void close(); //overriding the close() method without any checked exceptions.
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	interface Defaults extends Mortal
+	interface Defaults extends Mortal, Coherent.Defaults
 	{
+	}
+
+	interface Decorator extends Defaults, Coherent.Decorator
+	{
+		Mortal getDecoratedMortal();
+
+		@Override default Coherent decoratedCoherent()
+		{
+			return getDecoratedMortal();
+		}
+
+		@Override default boolean mustBeAliveAssertion()
+		{
+			return getDecoratedMortal().mustBeAliveAssertion();
+		}
+
+		@Override default void close()
+		{
+			getDecoratedMortal().close();
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Canary class.
+	 * <p>
+	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
+	 * earliest point possible, and not when compiling some derived class.
+	 */
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
+	final class Canary<K, V> implements Decorator
+	{
+		@Override public Mortal getDecoratedMortal()
+		{
+			return this;
+		}
 	}
 }
