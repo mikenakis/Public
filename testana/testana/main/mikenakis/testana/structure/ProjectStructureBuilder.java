@@ -62,7 +62,6 @@ public final class ProjectStructureBuilder
 			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
 			{
 				ClassLoader classLoader = createClassLoader( discoveryModule.outputPaths(), classLoaderForDependencies );
-				//ClassLoader classLoader = createClassLoader( discoveryModule.allOutputPaths(), null ); // ProjectStructureBuilder.class.getClassLoader() );
 				ByteCodeLoader classAndByteCodeLoader = new ByteCodeLoader( classLoader );
 				Map<String,ProjectType> projectTypeFromNameMap = new LinkedHashMap<>();
 				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classLoader, classAndByteCodeLoader, projectTypeFromNameMap );
@@ -94,7 +93,7 @@ public final class ProjectStructureBuilder
 		return tryLoadClass( classLoader, outputFile.className() ).map( jvmClass -> //
 		{
 			Optional<TestEngine> testEngine = findTestEngine( jvmClass, testEngineMap.values() );
-			return ProjectType.of( projectModule, outputFile, testEngine );
+			return new ProjectType( projectModule, outputFile, testEngine, Optional.empty() );
 		} );
 	}
 
@@ -233,7 +232,7 @@ public final class ProjectStructureBuilder
 		return cache.tryGetType( projectModule.name(), outputDirectory, outputFile.className(), outputFile.lastModifiedTime ).map( c -> //
 		{
 			Optional<TestEngine> testEngine = c.testEngineName.map( name -> Kit.map.get( testEngines, name ) );
-			return ProjectType.of( projectModule, outputFile, testEngine, c.dependencyNames );
+			return new ProjectType( projectModule, outputFile, testEngine, Optional.of( c.dependencyNames ) );
 		} );
 	}
 

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Runner.
  * <p>
- * FIXME find out why modifying this class fails to cause the tests of Testana to be re-run.
+ * TODO: add tests for this class!
  *
  * @author michael.gr
  */

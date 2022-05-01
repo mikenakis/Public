@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  *
  * @author michael.gr
  */
-public class T01_TestanaTest
+public class T01_TestPlanBuilder
 {
 	private static class Node
 	{
@@ -90,7 +90,7 @@ public class T01_TestanaTest
 	private static final Instant T1 = T0.plus( Duration.ofSeconds( 1 ) );
 	private static final Instant T2 = T1.plus( Duration.ofSeconds( 1 ) );
 
-	public T01_TestanaTest()
+	public T01_TestPlanBuilder()
 	{
 		if( !Kit.areAssertionsEnabled() )
 			throw new AssertionError();
@@ -281,7 +281,8 @@ public class T01_TestanaTest
 	{
 		Path path = Kit.path.getWorkingDirectory();
 		Log.debug( "Working directory: " + path );
-		assert path.resolve( "test/mikenakis/testana/test/T01_TestanaTest.java" ).toFile().exists(); //Current directory is not ${project.basedir}
+		String sourceFile = "test/" + T01_TestPlanBuilder.class.getName().replace( ".", "/" ) + ".java";
+		assert path.resolve( sourceFile ).toFile().exists(); //Current directory is not ${project.basedir}
 		return path;
 	}
 }

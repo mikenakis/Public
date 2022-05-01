@@ -20,16 +20,6 @@ import java.util.stream.Collectors;
  */
 public class ProjectType
 {
-	public static ProjectType of( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine, Collection<String> dependencyNames )
-	{
-		return new ProjectType( projectModule, outputFile, testEngine, Optional.of( dependencyNames ) );
-	}
-
-	public static ProjectType of( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine )
-	{
-		return new ProjectType( projectModule, outputFile, testEngine, Optional.empty() );
-	}
-
 	public final ProjectModule projectModule;
 	private final OutputFile outputFile;
 	private Instant lastModifiedTime;
@@ -38,7 +28,7 @@ public class ProjectType
 	@SuppressWarnings( "FieldNamingConvention" ) private Optional<ByteCodeInfo> _byteCodeInfo = Optional.empty();
 	private final Optional<TestEngine> testEngine;
 
-	private ProjectType( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine, Optional<Collection<String>> lazyDependencyNames )
+	public ProjectType( ProjectModule projectModule, OutputFile outputFile, Optional<TestEngine> testEngine, Optional<Collection<String>> lazyDependencyNames )
 	{
 		this.projectModule = projectModule;
 		this.outputFile = outputFile;
