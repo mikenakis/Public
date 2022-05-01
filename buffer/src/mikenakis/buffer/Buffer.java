@@ -46,7 +46,6 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( String content )
 	{
-		assert content != null : new NullPointerException();
 		if( content.isEmpty() )
 			return EMPTY;
 		byte[] bytes = content.getBytes( StandardCharsets.UTF_8 );
@@ -55,7 +54,6 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( String content, Charset charset )
 	{
-		assert content != null : new NullPointerException();
 		if( content.isEmpty() )
 			return EMPTY;
 		byte[] bytes = content.getBytes( charset );
@@ -64,7 +62,6 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( char[] content )
 	{
-		assert content != null : new NullPointerException();
 		if( content.length == 0 )
 			return EMPTY;
 		byte[] bytes = new String( content ).getBytes( StandardCharsets.UTF_8 );
@@ -73,7 +70,6 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( char[] content, Charset charset )
 	{
-		assert content != null : new NullPointerException();
 		if( content.length == 0 )
 			return EMPTY;
 		byte[] bytes = new String( content ).getBytes( charset );
@@ -82,7 +78,6 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( byte[] content )
 	{
-		assert content != null : new NullPointerException();
 		if( content.length == 0 )
 			return EMPTY;
 		byte[] ownBytes = new byte[content.length];
@@ -92,7 +87,6 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( byte[] content, int offset, int length )
 	{
-		assert content != null : new NullPointerException();
 		assert offset >= 0;
 		assert length >= 0;
 		assert offset + length <= content.length;
@@ -127,13 +121,13 @@ public final class Buffer implements Comparable<Buffer>
 		return Kit.bytes.compare( bytes, bytes.length - buffer.size(), buffer.bytes, 0, buffer.size() ) == 0;
 	}
 
-	@Override public int compareTo( Buffer o )
+	@Override public int compareTo( Buffer other )
 	{
-		int commonLength = Math.min( bytes.length, o.bytes.length );
-		int d = Kit.bytes.compare( bytes, 0, o.bytes, 0, commonLength );
+		int commonLength = Math.min( bytes.length, other.bytes.length );
+		int d = Kit.bytes.compare( bytes, 0, other.bytes, 0, commonLength );
 		if( d != 0 )
 			return d;
-		return Integer.compare( bytes.length, o.bytes.length );
+		return Integer.compare( bytes.length, other.bytes.length );
 	}
 
 	@Deprecated @Override public boolean equals( Object other )
@@ -206,12 +200,6 @@ public final class Buffer implements Comparable<Buffer>
 		return new String( bytes, charset );
 	}
 
-//    public int indexOf(int ch)
-//    public int indexOf(int ch, int fromIndex)
-//    public int indexOf(String str)
-//    public int indexOf(String str, int fromIndex)
-//    int i = new String().lastIndexOf();
-
 	public int indexOf( byte value )
 	{
 		return Kit.bytes.indexOf( bytes, 0, size(), value );
@@ -272,7 +260,7 @@ public final class Buffer implements Comparable<Buffer>
 		return Kit.bytes.lastIndexOf( bytes, index, count, pattern.bytes );
 	}
 
-	public int getCaseInsensitiveHashCode()
+	public int caseInsensitiveHashCode()
 	{
 		int h = 0;
 		for( byte v : bytes )
@@ -320,7 +308,7 @@ public final class Buffer implements Comparable<Buffer>
 	 * @param delimiter the delimiter to split on.
 	 * @param trim      whether to trim whitespace from the generated strings.
 	 *
-	 * @return an Iterable which yields the parts.
+	 * @return an array of {@link Buffer} containing one {@link Buffer} for each part.
 	 */
 	public Buffer[] split( Buffer delimiter, boolean trim )
 	{
@@ -356,7 +344,7 @@ public final class Buffer implements Comparable<Buffer>
 	 *
 	 * @param delimiter the delimiter to split on.
 	 *
-	 * @return an Iterable which yields the parts.
+	 * @return an array of {@link Buffer} containing one {@link Buffer} for each part.
 	 */
 	public Buffer[] split( Buffer delimiter )
 	{
@@ -369,7 +357,7 @@ public final class Buffer implements Comparable<Buffer>
 	 * @param delimiter the delimiter to split on.
 	 * @param trim      whether to trim whitespace from the generated strings.
 	 *
-	 * @return an Iterable which yields the parts of the String.
+	 * @return an array of {@link Buffer} containing one {@link Buffer} for each part.
 	 */
 	public Buffer[] split( byte delimiter, boolean trim )
 	{
@@ -382,7 +370,7 @@ public final class Buffer implements Comparable<Buffer>
 	 *
 	 * @param delimiter the delimiter to split on.
 	 *
-	 * @return an Iterable which yields the parts of the String.
+	 * @return an array of {@link Buffer} containing one {@link Buffer} for each part.
 	 */
 	public Buffer[] split( byte delimiter )
 	{

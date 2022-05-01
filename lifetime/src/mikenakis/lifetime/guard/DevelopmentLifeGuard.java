@@ -3,6 +3,7 @@ package mikenakis.lifetime.guard;
 import mikenakis.debug.Debug;
 import mikenakis.kit.coherence.AbstractCoherent;
 import mikenakis.kit.coherence.Coherence;
+import mikenakis.kit.logging.Log;
 import mikenakis.lifetime.Mortal;
 
 import java.util.Optional;
@@ -43,7 +44,8 @@ public abstract class DevelopmentLifeGuard extends AbstractCoherent implements L
 	private static void defaultLifetimeErrorHandler( Class<?> mortalClass, Optional<StackWalker.StackFrame[]> allocationStackTrace )
 	{
 		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuard::stackFramesToString ).orElse( "Collection of allocation stack trace is not enabled for this class." );
-		Debug.breakPoint( "Mortal is still alive: " + mortalClass + "\n" + stackTraceText );
+		Log.debug( "Mortal is still alive: " + mortalClass + "\n" + stackTraceText );
+		Debug.breakPoint();
 	}
 
 	private static String stackFramesToString( StackWalker.StackFrame[] stackFrames )

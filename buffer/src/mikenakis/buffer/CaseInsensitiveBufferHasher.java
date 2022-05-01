@@ -12,7 +12,7 @@ public final class CaseInsensitiveBufferHasher implements Hasher<Buffer>
 
 	@Override public int getHashCode( Buffer buffer )
 	{
-		return buffer.getCaseInsensitiveHashCode();
+		return buffer.caseInsensitiveHashCode();
 	}
 
 	@Override public String toString()

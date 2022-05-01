@@ -3067,46 +3067,27 @@ public final class Kit
 
 		public static void lock( Lock lock, Procedure0 procedure )
 		{
-			if( debugging() )
+			lock.lock();
+			try
 			{
-				lock.lock();
-				procedure.invoke();
-				lock.unlock();
+				Debug.boundary( () -> procedure.invoke() );
 			}
-			else
+			finally
 			{
-				lock.lock();
-				try
-				{
-					procedure.invoke();
-				}
-				finally
-				{
-					lock.unlock();
-				}
+				lock.unlock();
 			}
 		}
 
 		public static <T> T lock( Lock lock, Function0<T> function )
 		{
-			if( debugging() )
+			lock.lock();
+			try
 			{
-				lock.lock();
-				T result = function.invoke();
-				lock.unlock();
-				return result;
+				return Debug.boundary( () -> function.invoke() );
 			}
-			else
+			finally
 			{
-				lock.lock();
-				try
-				{
-					return function.invoke();
-				}
-				finally
-				{
-					lock.unlock();
-				}
+				lock.unlock();
 			}
 		}
 	}

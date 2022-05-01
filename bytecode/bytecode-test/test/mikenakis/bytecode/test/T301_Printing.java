@@ -56,7 +56,10 @@ public class T301_Printing
 		// We use an assertion to signal that a mismatch has been detected because we have no other means of alerting the programmer
 		// from within a test. (Nobody looks at the log. Testana even hides the log.)
 		if( mismatchCount != 0 ) //this is not an error! It just means that the output of the printer has changed since the last run of the test.
-			Debug.breakPoint( "files changed in " +  printsPath );
+		{
+			Log.debug( "files changed in " +  printsPath );
+			Debug.breakPoint();
+		}
 	}
 
 	private static boolean printAndCompareAgainstExpected( Path classFilePathName, Path printFilePathName, Path sourcesPath )
