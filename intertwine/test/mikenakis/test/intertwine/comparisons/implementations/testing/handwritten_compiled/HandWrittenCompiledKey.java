@@ -29,7 +29,7 @@ public class HandWrittenCompiledKey implements MethodKey<FooInterface>
 		this.methodIndex = methodIndex;
 	}
 
-	@Deprecated @Override public final Intertwine<FooInterface> getIntertwine() { return intertwine; }
+	@Deprecated @Override public final Intertwine<FooInterface> intertwine() { return intertwine; }
 	@Deprecated @Override public int methodIndex() { return methodIndex; }
 	@Deprecated @Override public MethodPrototype methodPrototype() { return methodPrototype; }
 	@Override public String toString() { return "[" + methodIndex + "]: " + methodPrototype.asString(); }

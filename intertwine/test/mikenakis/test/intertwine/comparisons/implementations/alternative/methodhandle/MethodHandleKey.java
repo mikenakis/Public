@@ -30,7 +30,7 @@ class MethodHandleKey<T> implements MethodKey<T>
 		this.index = index;
 	}
 
-	@Override public final Intertwine<T> getIntertwine()
+	@Override public final Intertwine<T> intertwine()
 	{
 		return intertwine;
 	}

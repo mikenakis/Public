@@ -12,7 +12,7 @@ public interface MethodKey<T>
 	/**
 	 * Gets the {@link Intertwine} that created this {@link MethodKey}.
 	 */
-	Intertwine<T> getIntertwine();
+	Intertwine<T> intertwine();
 
 	/**
 	 * Gets the index of this {@link MethodKey}.

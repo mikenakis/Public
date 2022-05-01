@@ -71,7 +71,7 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 			return 0;
 		}
 
-		@Override public Intertwine<Procedure2<Object,Object>> getIntertwine()
+		@Override public Intertwine<Procedure2<Object,Object>> intertwine()
 		{
 			return Procedure2Intertwine.this;
 		}

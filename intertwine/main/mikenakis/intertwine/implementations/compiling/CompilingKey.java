@@ -24,7 +24,7 @@ public class CompilingKey<T> implements MethodKey<T>
 		this.index = index;
 	}
 
-	@Override public final Intertwine<T> getIntertwine() { return intertwine; }
+	@Override public final Intertwine<T> intertwine() { return intertwine; }
 	@Override public int methodIndex() { return index; }
 	@Override public MethodPrototype methodPrototype() { return methodPrototype; }
 	@Override public String toString() { return "#" + index + ": " + methodPrototype; }

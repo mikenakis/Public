@@ -23,7 +23,7 @@ class HandwrittenKey implements MethodKey<FooInterface>
 		this.methodPrototype = methodPrototype;
 	}
 
-	@Override public final Intertwine<FooInterface> getIntertwine()
+	@Override public final Intertwine<FooInterface> intertwine()
 	{
 		return intertwine;
 	}

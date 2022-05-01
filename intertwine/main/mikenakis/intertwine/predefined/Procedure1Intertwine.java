@@ -72,7 +72,7 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 			return 0;
 		}
 
-		@Override public Intertwine<Procedure1<Object>> getIntertwine()
+		@Override public Intertwine<Procedure1<Object>> intertwine()
 		{
 			return Procedure1Intertwine.this;
 		}
