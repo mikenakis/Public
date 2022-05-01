@@ -17,7 +17,6 @@ import mikenakis.bytecode.model.descriptors.FieldReference;
 import mikenakis.bytecode.model.descriptors.MethodPrototype;
 import mikenakis.bytecode.model.descriptors.MethodReference;
 import mikenakis.bytecode.model.descriptors.MethodReferenceKind;
-import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.Intertwine;
 import mikenakis.intertwine.MethodKey;
@@ -180,8 +179,6 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
 			save( className, entwinerByteCodeType );
-		if( Kit.get( false ) )
-			System.out.println( ByteCodePrinter.printByteCodeType( entwinerByteCodeType, Optional.empty() ) );
 
 		Class<T> entwinerClass = ByteCodeClassLoader.load( classLoader, entwinerByteCodeType );
 		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, Anycall.class ) );
@@ -284,8 +281,6 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
 			save( className, untwinerByteCodeType );
-		if( Kit.get( false ) )
-			System.out.println( ByteCodePrinter.printByteCodeType( untwinerByteCodeType, Optional.empty() ) );
 
 		Class<T> untwinerClass = ByteCodeClassLoader.load( getClass().getClassLoader(), untwinerByteCodeType );
 		@SuppressWarnings( "unchecked" ) Constructor<Anycall<T>> result = (Constructor<Anycall<T>>)Kit.unchecked( () -> untwinerClass.getDeclaredConstructor( interfaceType ) );

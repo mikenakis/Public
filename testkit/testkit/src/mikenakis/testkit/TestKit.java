@@ -32,15 +32,8 @@ public final class TestKit
 
 	private static Throwable unwrap( Throwable throwable )
 	{
-		for( ; ; )
-		{
-			if( throwable instanceof AssertionError && throwable.getCause() != null )
-			{
-				throwable = throwable.getCause();
-				continue;
-			}
-			break;
-		}
+		while( throwable instanceof AssertionError && throwable.getCause() != null )
+			throwable = throwable.getCause();
 		return throwable;
 	}
 
@@ -62,11 +55,6 @@ public final class TestKit
 			assert Debug.expectingException;
 			Debug.expectingException = false;
 		}
-	}
-
-	public static PrintStream nullPrintStream()
-	{
-		return new PrintStream( OutputStream.nullOutputStream() );
 	}
 
 	public static String withCapturedOutputStream( Procedure0 procedure )

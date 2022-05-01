@@ -90,6 +90,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class SelfReferencingProvisoryClass
 			{
+				@SuppressWarnings( "unused" )
 				private final Object selfReference = this;
 			}
 
@@ -109,11 +110,13 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static class SelfReferencingProvisoryClass
 			{
+				@SuppressWarnings( "unused" )
 				private final Object selfReference = this;
 			}
 
 			static final class ClassExtendingSelfReferencingProvisoryClass extends SelfReferencingProvisoryClass
 			{
+				@SuppressWarnings( "unused" )
 				private final Object selfReference = this;
 			}
 
@@ -134,6 +137,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfInterfaceTypeWithValueOfImmutableType
 			{
+				@SuppressWarnings( "unused" )
 				private final Comparable<String> invariableFieldOfInterfaceType = "";
 			}
 
@@ -189,6 +193,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class ProvisorySelfAssessableClassWhichSelfAssessesPositively implements ImmutabilitySelfAssessable
 			{
+				@SuppressWarnings( "unused" )
 				private final Object provisoryMember = null;
 				@Override public boolean isImmutable() { return true; }
 			}
@@ -209,6 +214,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class ProvisorySelfAssessableClassWhichSelfAssessesNegatively implements ImmutabilitySelfAssessable
 			{
+				@SuppressWarnings( "unused" )
 				private final Object provisoryMember = null;
 				@Override public boolean isImmutable() { return false; }
 			}
@@ -232,6 +238,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static class ClassWithInvariableArrayOfProvisoryType
 			{
+				@SuppressWarnings( "unused" )
 				@InvariableArray private final Object[] arrayField = { 1 };
 			}
 

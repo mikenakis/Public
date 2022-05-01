@@ -5,8 +5,6 @@ import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.functional.Function0;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.field.annotations.InvariableArray;
-import mikenakis.immutability.type.field.annotations.InvariableField;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
@@ -27,6 +25,8 @@ import mikenakis.immutability.type.exceptions.PreassessedClassMustNotBePreviousl
 import mikenakis.immutability.type.exceptions.PreassessedTypeMustBeClassException;
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
+import mikenakis.immutability.type.field.annotations.InvariableArray;
+import mikenakis.immutability.type.field.annotations.InvariableField;
 import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.MutableFieldTypeMutableFieldAssessment;
 import org.junit.Test;
@@ -43,7 +43,6 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -82,7 +81,7 @@ public class T01_TypeImmutabilityAssessor
 
 	@Test public void primitive_classes_are_immutable()
 	{
-		for( Class<?> primitiveClass : getAllPrimitives() )
+		for( Class<?> primitiveClass : MyTestKit.getAllPrimitives() )
 		{
 			TypeAssessment assessment = assess( assessor, primitiveClass );
 			assert assessment instanceof ImmutableTypeAssessment : assessment;
@@ -91,7 +90,7 @@ public class T01_TypeImmutabilityAssessor
 
 	@Test public void primitive_wrapper_classes_are_immutable()
 	{
-		for( Class<?> primitiveWrapperClass : getAllPrimitiveWrappers() )
+		for( Class<?> primitiveWrapperClass : MyTestKit.getAllPrimitiveWrappers() )
 		{
 			TypeAssessment assessment = assess( assessor, primitiveWrapperClass );
 			assert assessment instanceof ImmutableTypeAssessment : assessment;
@@ -168,7 +167,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ImmutableClassWithInvariableCircularReference
 			{
-				public final ImmutableClassWithInvariableCircularReference circularReference = null;
+				@SuppressWarnings( "unused" ) public final ImmutableClassWithInvariableCircularReference circularReference = null;
 			}
 
 			@Override public void run()
@@ -185,7 +184,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ExtensibleClassWithInvariableCircularReference
 			{
-				public final ExtensibleClassWithInvariableCircularReference circularReference = null;
+				@SuppressWarnings( "unused" ) public final ExtensibleClassWithInvariableCircularReference circularReference = null;
 			}
 
 			@Override public void run()
@@ -202,7 +201,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ImmutableClassWithStaticMutableField
 			{
-				private static int staticMutableField = 0;
+				@SuppressWarnings( "unused" ) private static int staticMutableField = 0;
 			}
 
 			@Override public void run()
@@ -219,7 +218,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfMutableType
 			{
-				private final ArrayList<String> invariableFieldOfMutableType = null;
+				@SuppressWarnings( "unused" ) private final ArrayList<String> invariableFieldOfMutableType = null;
 			}
 
 			@Override public void run()
@@ -244,7 +243,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfImmutableType
 			{
-				private final String invariableFieldOfImmutableType = "";
+				@SuppressWarnings( "unused" ) private final String invariableFieldOfImmutableType = "";
 			}
 
 			@Override public void run()
@@ -280,7 +279,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class MutableClass
 			{
-				private final ArrayList<String> mutableField = null;
+				@SuppressWarnings( "unused" ) private final ArrayList<String> mutableField = null;
 			}
 
 			static final class ClassExtendingMutableClass extends MutableClass
@@ -301,7 +300,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithVariableFieldOfImmutableType
 			{
-				private int variableFieldOfPrimitiveType = 0;
+				@SuppressWarnings( "unused" ) private int variableFieldOfPrimitiveType = 0;
 			}
 
 			@Override public void run()
@@ -318,7 +317,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfInterfaceType
 			{
-				private final List<String> invariableFieldOfInterfaceType = null;
+				@SuppressWarnings( "unused" ) private final List<String> invariableFieldOfInterfaceType = null;
 			}
 
 			@Override public void run()
@@ -335,7 +334,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfProvisoryType
 			{
-				private final Object invariableFieldOfProvisoryType = null;
+				@SuppressWarnings( "unused" ) private final Object invariableFieldOfProvisoryType = null;
 			}
 
 			@Override public void run()
@@ -352,7 +351,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithAnnotatedInvariableFieldOfImmutableType
 			{
-				@InvariableField private int annotatedInvariableFieldOfImmutableType = 0;
+				@SuppressWarnings( "unused" ) @InvariableField private int annotatedInvariableFieldOfImmutableType = 0;
 			}
 
 			@Override public void run()
@@ -369,7 +368,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithAnnotatedInvariableFieldOfProvisoryType
 			{
-				@InvariableField private List<Integer> stableField = null;
+				@SuppressWarnings( "unused" ) @InvariableField private List<Integer> stableField = null;
 			}
 
 			@Override public void run()
@@ -386,7 +385,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithPublicFieldAnnotatedInvariable
 			{
-				@InvariableField public Integer publicFieldAnnotatedInvariable;
+				@SuppressWarnings( "unused" ) @InvariableField public Integer publicFieldAnnotatedInvariable;
 			}
 
 			@Override public void run()
@@ -404,7 +403,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithProtectedFieldAnnotatedInvariable
 			{
-				@InvariableField protected Integer protectedFieldAnnotatedInvariable;
+				@SuppressWarnings( "unused" ) @InvariableField protected Integer protectedFieldAnnotatedInvariable;
 			}
 
 			@Override public void run()
@@ -422,7 +421,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithPublicFieldAnnotatedInvariable
 			{
-				@InvariableField Integer packagePrivateFieldAnnotatedInvariable;
+				@SuppressWarnings( "unused" ) @InvariableField Integer packagePrivateFieldAnnotatedInvariable;
 			}
 
 			@Override public void run()
@@ -440,7 +439,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithAnnotatedInvariableSelfReference
 			{
-				@InvariableField private ClassWithAnnotatedInvariableSelfReference annotatedInvariableSelfReference = null;
+				@SuppressWarnings( "unused" ) @InvariableField private ClassWithAnnotatedInvariableSelfReference annotatedInvariableSelfReference = null;
 			}
 
 			@Override public void run()
@@ -457,7 +456,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithInvariableFieldAnnotatedInvariable
 			{
-				@InvariableField private final Integer invariableFieldAnnotatedInvariable = Integer.MAX_VALUE;
+				@SuppressWarnings( "unused" ) @InvariableField private final Integer invariableFieldAnnotatedInvariable = Integer.MAX_VALUE;
 			}
 
 			@Override public void run()
@@ -475,7 +474,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithMutableFieldAnnotatedInvariable
 			{
-				@InvariableField private ArrayList<Integer> mutableFieldAnnotatedInvariable = null;
+				@SuppressWarnings( "unused" ) @InvariableField private ArrayList<Integer> mutableFieldAnnotatedInvariable = null;
 			}
 
 			@Override public void run()
@@ -492,7 +491,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableArrayFieldOfProvisoryElementType
 			{
-				@InvariableArray private final Object[] array = null;
+				@SuppressWarnings( "unused" ) @InvariableArray private final Object[] array = null;
 			}
 
 			@Override public void run()
@@ -509,7 +508,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableArrayFieldOfImmutableElementType
 			{
-				@InvariableArray private final int[] array = null;
+				@SuppressWarnings( "unused" ) @InvariableArray private final int[] array = null;
 			}
 
 			@Override public void run()
@@ -526,7 +525,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableArrayInvariableFieldOfImmutableElementType
 			{
-				@InvariableField @InvariableArray private int[] array = null;
+				@SuppressWarnings( "unused" ) @InvariableField @InvariableArray private int[] array = null;
 			}
 
 			@Override public void run()
@@ -543,7 +542,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithPublicFieldAnnotatedInvariableArray
 			{
-				@InvariableArray public final int[] publicFieldAnnotatedInvariableArray = null;
+				@SuppressWarnings( "unused" ) @InvariableArray public final int[] publicFieldAnnotatedInvariableArray = null;
 			}
 
 			@Override public void run()
@@ -561,7 +560,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithProtectedFieldAnnotatedInvariableArray
 			{
-				@InvariableArray protected final int[] protectedFieldAnnotatedInvariableArray = null;
+				@SuppressWarnings( "unused" ) @InvariableArray protected final int[] protectedFieldAnnotatedInvariableArray = null;
 			}
 
 			@Override public void run()
@@ -579,7 +578,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithPackagePrivateFieldAnnotatedInvariableArray
 			{
-				@InvariableArray final int[] packagePrivateFieldAnnotatedInvariableArray = null;
+				@SuppressWarnings( "unused" ) @InvariableArray final int[] packagePrivateFieldAnnotatedInvariableArray = null;
 			}
 
 			@Override public void run()
@@ -597,7 +596,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithNonArrayField
 			{
-				@InvariableArray private Object nonArrayField = null;
+				@SuppressWarnings( "unused" ) @InvariableArray private Object nonArrayField = null;
 			}
 
 			@Override public void run()
@@ -615,7 +614,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithVariableFieldAnnotatedAsInvariableArray
 			{
-				@InvariableArray private Object[] variableField = null;
+				@SuppressWarnings( "unused" ) @InvariableArray private Object[] variableField = null;
 			}
 
 			@Override public void run()
@@ -633,7 +632,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfImmutableType
 			{
-				private final String immutableField = "";
+				@SuppressWarnings( "unused" ) private final String immutableField = "";
 			}
 
 			@Override public void run()
@@ -693,7 +692,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithMutableField
 			{
-				private final ArrayList<String> mutableField = null;
+				@SuppressWarnings( "unused" ) private final ArrayList<String> mutableField = null;
 			}
 
 			@Override public void run()
@@ -715,7 +714,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class MutableClass
 			{
-				private int mutableField;
+				@SuppressWarnings( "unused" ) private int mutableField;
 			}
 
 			@Override public void run()
@@ -734,7 +733,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ProvisoryClass
 			{
-				private final Function0<Integer> provisoryField = null;
+				@SuppressWarnings( "unused" ) private final Function0<Integer> provisoryField = null;
 			}
 
 			@Override public void run()
@@ -753,7 +752,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithReferenceToDescendant
 			{
-				private final ClassExtendingClassWithReferenceToDescendant descendant = null;
+				@SuppressWarnings( "unused" ) private final ClassExtendingClassWithReferenceToDescendant descendant = null;
 			}
 
 			static final class ClassExtendingClassWithReferenceToDescendant extends ClassWithReferenceToDescendant
@@ -776,7 +775,7 @@ public class T01_TypeImmutabilityAssessor
 
 			static class ClassWithInterfaceMember
 			{
-				private final SomeInterface someInterface = null;
+				@SuppressWarnings( "unused" ) private final SomeInterface someInterface = null;
 			}
 
 			@Override public void run()
@@ -798,7 +797,7 @@ public class T01_TypeImmutabilityAssessor
 
 			static class ProvisoryClass
 			{
-				private final SomeInterface someInterface = null;
+				@SuppressWarnings( "unused" ) private final SomeInterface someInterface = null;
 			}
 
 			static final class ClassExtendingProvisoryClass extends ProvisoryClass
@@ -821,7 +820,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			enum E
 			{
-				A //this is essentially a static field, so it does not affect the assessment.
+				@SuppressWarnings( "unused" ) A //this is essentially a static field, so it does not affect the assessment.
 			}
 
 			@Override public void run()
@@ -838,8 +837,8 @@ public class T01_TypeImmutabilityAssessor
 		{
 			enum EnumWithVariableField
 			{
-				A;
-				int a;
+				@SuppressWarnings( "unused" ) A;
+				@SuppressWarnings( "unused" ) int a;
 			}
 
 			@Override public void run()
@@ -856,7 +855,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithArrayField
 			{
-				public final int[] array = null;
+				@SuppressWarnings( "unused" ) public final int[] array = null;
 			}
 
 			@Override public void run()
@@ -873,6 +872,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableArrayFieldOfCircularReferenceElementType
 			{
+				@SuppressWarnings( "unused" )
 				@InvariableArray private final ClassWithInvariableArrayFieldOfCircularReferenceElementType[] array = null;
 			}
 
@@ -891,6 +891,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableArrayInvariableFieldOfMutableElementType
 			{
+				@SuppressWarnings( "unused" )
 				@InvariableArray private final ArrayList<Integer>[] arrayOfMutableElements = null;
 			}
 
@@ -908,6 +909,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class MutableSelfAssessableClass implements ImmutabilitySelfAssessable
 			{
+				@SuppressWarnings( "unused" )
 				public int mutableField;
 				@Override public boolean isImmutable() { throw new AssertionError(); /* we do not expect this to be invoked. */ }
 			}
@@ -947,6 +949,7 @@ public class T01_TypeImmutabilityAssessor
 
 			static class SuperClass
 			{
+				@SuppressWarnings( "unused" )
 				public final DerivedClass derivedClassField = null;
 			}
 
@@ -956,44 +959,5 @@ public class T01_TypeImmutabilityAssessor
 				assert assessment instanceof ExtensibleAssessment;
 			}
 		}.run();
-	}
-
-	private static final class PrimitiveInfo<T>
-	{
-		final Class<T> primitiveClass;
-		final Class<T> wrapperClass;
-
-		private PrimitiveInfo( Class<T> primitiveClass, Class<T> wrapperClass )
-		{
-			this.primitiveClass = primitiveClass;
-			this.wrapperClass = wrapperClass;
-		}
-	}
-
-	private static final List<PrimitiveInfo<?>> primitiveTypeInfo = List.of( //
-		new PrimitiveInfo<>( boolean.class /**/, Boolean.class ), //
-		new PrimitiveInfo<>( char.class    /**/, Character.class ), //
-		new PrimitiveInfo<>( byte.class    /**/, Byte.class ), //
-		new PrimitiveInfo<>( short.class   /**/, Short.class ), //
-		new PrimitiveInfo<>( int.class     /**/, Integer.class ), //
-		new PrimitiveInfo<>( long.class    /**/, Long.class ), //
-		new PrimitiveInfo<>( float.class   /**/, Float.class ), //
-		new PrimitiveInfo<>( double.class  /**/, Double.class ), //
-		new PrimitiveInfo<>( void.class    /**/, Void.class ) );
-
-	/**
-	 * Gets all java primitive types.
-	 */
-	public static Collection<Class<?>> getAllPrimitives()
-	{
-		return primitiveTypeInfo.stream().<Class<?>>map( i -> i.primitiveClass ).toList();
-	}
-
-	/**
-	 * Gets all java primitive wrappers.
-	 */
-	public static Collection<Class<?>> getAllPrimitiveWrappers()
-	{
-		return primitiveTypeInfo.stream().<Class<?>>map( i -> i.wrapperClass ).toList();
 	}
 }

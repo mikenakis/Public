@@ -58,11 +58,6 @@ public class T02_FamousClasses
 			throw new AssertionError();
 	}
 
-	private static TypeImmutabilityAssessor newAssessor()
-	{
-		return TypeImmutabilityAssessor.create( TestStringizer.instance );
-	}
-
 	private static TypeAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
 	{
 		TypeAssessment assessment = assessor.assess( type );
@@ -71,9 +66,9 @@ public class T02_FamousClasses
 		return assessment;
 	}
 
-	private final TypeImmutabilityAssessor assessor = newAssessor();
+	private final TypeImmutabilityAssessor assessor = TypeImmutabilityAssessor.create( TestStringizer.instance );
 
-	@Test public void famous_immutable_classes()
+	@Test public void famous_immutable_classes_are_immutable()
 	{
 		List<Class<?>> classes = List.of( Instant.class, Duration.class, UUID.class, LocalDate.class, LocalDateTime.class, LocalTime.class, //
 			MonthDay.class, OffsetDateTime.class, OffsetTime.class, Period.class, Year.class, YearMonth.class, ZoneOffset.class );
@@ -84,7 +79,7 @@ public class T02_FamousClasses
 		}
 	}
 
-	@Test public void famous_content_provisory_classes()
+	@Test public void famous_content_provisory_classes_are_content_provisory()
 	{
 		List<Class<?>> classes = List.of( ZonedDateTime.class );
 		for( Class<?> jvmClass : classes )
@@ -94,7 +89,7 @@ public class T02_FamousClasses
 		}
 	}
 
-	@Test public void famous_composite_provisory_classes()
+	@Test public void famous_composite_provisory_classes_are_composite_provisory()
 	{
 		List<Class<?>> classes = List.of( Optional.class );
 		for( Class<?> jvmClass : classes )
@@ -104,7 +99,7 @@ public class T02_FamousClasses
 		}
 	}
 
-	@Test public void famous_extensible_provisory_classes()
+	@Test public void famous_extensible_provisory_classes_are_extensible_provisory()
 	{
 		List<Class<?>> classes = List.of( Collections.class, Clock.class, ZoneId.class, MouseInfo.class, DriverManager.class );
 		for( Class<?> jvmClass : classes )
@@ -114,7 +109,7 @@ public class T02_FamousClasses
 		}
 	}
 
-	@Test public void famous_mutable_classes()
+	@Test public void famous_mutable_classes_are_mutable()
 	{
 		List<Class<?>> classes = List.of( ArrayList.class, HashMap.class, Date.class, HashSet.class, LinkedList.class, Properties.class, //
 			Random.class, Matcher.class, StringBuilder.class, LinkedHashMap.class, LinkedHashSet.class, SimpleDateFormat.class, StringTokenizer.class, //

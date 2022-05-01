@@ -64,7 +64,7 @@ public class T13_ObjectImmutabilityAssertions
 		{
 			static final class ProvisorySelfAssessableClassWhichSelfAssessesPositively implements ImmutabilitySelfAssessable
 			{
-				private final Object provisoryMember = null;
+				@SuppressWarnings( "unused" ) private final Object provisoryMember = null;
 				@Override public boolean isImmutable() { return true; }
 			}
 
@@ -83,7 +83,7 @@ public class T13_ObjectImmutabilityAssertions
 		{
 			static final class ProvisorySelfAssessableClassWhichSelfAssessesNegatively implements ImmutabilitySelfAssessable
 			{
-				private final Object provisoryMember = null;
+				@SuppressWarnings( "unused" ) private final Object provisoryMember = null;
 				@Override public boolean isImmutable() { return false; }
 			}
 

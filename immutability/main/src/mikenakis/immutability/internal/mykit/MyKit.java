@@ -9,13 +9,9 @@ import mikenakis.immutability.internal.mykit.functional.Procedure1;
 
 import java.util.Iterator;
 
-@SuppressWarnings( { "unused", "NewClassNamingConvention" } )
+@SuppressWarnings( "NewClassNamingConvention" )
 public final class MyKit
 {
-	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
-	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
-	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
-
 	private MyKit() { }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,20 +27,13 @@ public final class MyKit
 		return b;
 	}
 
-	public static boolean debugging()
-	{
-		if( Debug.expectingException )
-			return false;
-		return areAssertionsEnabled();
-	}
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Object-related and miscellaneous.
 
 	@SuppressWarnings( "CanBeFinal" ) private static final String neverNull = "";
 
 	/**
-	 * Gets the value passed as a parameter.
+	 * Returns the value passed as a parameter.
 	 * <p>
 	 * Useful for setting breakpoints, for avoiding warnings such as 'unused parameter', 'condition is always true', 'result of method call ignored', etc.
 	 *
@@ -153,16 +142,20 @@ public final class MyKit
 
 		/**
 		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}.
-		 * The difference between this function and {@link StringBuilder#append(Object)} is that this function treats {@link String}
-		 * differently: strings are output escaped and surrounded with quotes.
+		 * The difference between this function and {@link StringBuilder#append(Object)} is that this function treats {@link String} and {@link Character}
+		 * differently: they are escaped and surrounded with quotes.
 		 *
 		 * @param stringBuilder the StringBuilder to append to.
 		 * @param object        the object whose string representation is to be appended to the StringBuilder.
 		 */
 		public static void append( StringBuilder stringBuilder, Object object )
 		{
-			String s = string.of( object );
-			stringBuilder.append( s );
+			switch( object )
+			{
+				case String s -> appendEscapedForJava( stringBuilder, s, '"' );
+				case Character c -> appendEscapedForJava( stringBuilder, String.valueOf( c ), '\'' );
+				default -> stringBuilder.append( object );
+			}
 		}
 	}
 
@@ -171,22 +164,6 @@ public final class MyKit
 
 	public static class string
 	{
-		public static String of( Object object )
-		{
-			if( object == null )
-				return "null";
-			if( object instanceof String s )
-				return escapeForJava( s );
-			return object.toString();
-		}
-
-		public static String escapeForJava( String s )
-		{
-			var builder = new StringBuilder();
-			stringBuilder.appendEscapedForJava( builder, s, '"' );
-			return builder.toString();
-		}
-
 		/**
 		 * Gets the string representation of an {@link Object}.
 		 * see {@link stringBuilder#append(StringBuilder, Object)}
@@ -196,6 +173,7 @@ public final class MyKit
 		public static String from( Object object )
 		{
 			StringBuilder stringBuilder = new StringBuilder();
+			//IntellijIdea blooper: 'UnnecessarilyQualifiedInnerClassAccess' warning on most definitely necessary qualified inner class access.
 			//noinspection UnnecessarilyQualifiedInnerClassAccess
 			MyKit.stringBuilder.append( stringBuilder, object );
 			return stringBuilder.toString();
@@ -225,6 +203,9 @@ public final class MyKit
 			}
 		}
 	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Tree
 
 	private static final String midLeaf = "├─";
 	private static final String endLeaf = "└─";
