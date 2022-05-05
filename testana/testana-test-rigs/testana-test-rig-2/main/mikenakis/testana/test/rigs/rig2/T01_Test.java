@@ -8,9 +8,9 @@ import org.junit.Test;
  *
  * @author michael.gr
  */
-public class T01 extends T02
+public class T01_Test extends T02_Test
 {
-	public static String testMethodName = T01.class.getSimpleName() + ".ClaireTest()";
+	public static String testMethodName = T01_Test.class.getSimpleName() + ".ClaireTest()";
 
 	@Test public void ClaireTest()
 	{

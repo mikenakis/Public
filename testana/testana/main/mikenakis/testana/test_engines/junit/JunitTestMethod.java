@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.file.Path;
 import java.util.Optional;
 
 /**
@@ -79,6 +80,7 @@ class JunitTestMethod extends TestMethod
 		assert returnValue == null; //a method handle of a method with return type void is always expected to return null.
 	}
 
+	//TODO: this functionality is not junit-specific, it belongs to testana, so move it out of here and put it higher up the call tree, in the test runner.
 	private static <T> T withRedirectedOutput( Function0<T> procedure )
 	{
 		PrintStream oldSystemOut = System.out;

@@ -8,9 +8,9 @@ import org.junit.Test;
  *
  * @author michael.gr
  */
-public class T02
+public class T02_Test
 {
-	public static String testMethodName = T02.class.getSimpleName() + ".ZAliceTest()";
+	public static String testMethodName = T02_Test.class.getSimpleName() + ".ZAliceTest()";
 
 	@Test public void ZAliceTest()
 	{
