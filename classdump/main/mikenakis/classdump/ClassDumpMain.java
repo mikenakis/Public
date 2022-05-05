@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * Testana Launcher.
+ * ClassDump Launcher.
  *
  * @author michael.gr
  */

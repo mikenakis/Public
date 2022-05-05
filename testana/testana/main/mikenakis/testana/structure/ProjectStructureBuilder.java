@@ -1,5 +1,6 @@
 package mikenakis.testana.structure;
 
+import mikenakis.debug.Debug;
 import mikenakis.kit.GenericException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
@@ -48,23 +49,13 @@ public final class ProjectStructureBuilder
 		ProjectStructure projectStructure = new ProjectStructure( rootDiscoveryModules, projectModuleMap );
 		TimeMeasurement.run( "Parsing types", "%d types (cache: %d hits, %d misses)", timeMeasurement -> //
 		{
-			// First create a parent ClassLoader with all dependencies.
-			// If we do not do this, then each module will load all of its dependent classes anew via its own classloader, and then
-			// we get errors due to classes attempting to do their static initialization twice.
-			// (A class may, during static initialization, add its full name to a globally visible map, so the 2nd addition will fail.)
-			// Unfortunately, doing this has another disadvantage: two different modules cannot contain two classes with the exact same full name.
-			// I do not know the solution to this yet.
-			Collection<Path> dependencyMutablePaths = new LinkedHashSet<>();
-			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
-				dependencyMutablePaths.addAll( discoveryModule.allDependencyAndExternalPaths() );
-			ClassLoader classLoaderForDependencies = createClassLoader( dependencyMutablePaths, ProjectStructureBuilder.class.getClassLoader() );
-
+			ClassLoader parentClassLoader = ClassLoader.getSystemClassLoader(); //ClassLoader.getPlatformClassLoader();
 			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
 			{
-				ClassLoader classLoader = createClassLoader( discoveryModule.outputPaths(), classLoaderForDependencies );
-				ByteCodeLoader classAndByteCodeLoader = new ByteCodeLoader( classLoader );
+				ClassLoader classLoader = createClassLoader( discoveryModule.allDependencyAndExternalPaths(), parentClassLoader );
+				ByteCodeLoader byteCodeLoader = new ByteCodeLoader( classLoader ); //TODO: get rid of.
 				Map<String,ProjectType> projectTypeFromNameMap = new LinkedHashMap<>();
-				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classLoader, classAndByteCodeLoader, projectTypeFromNameMap );
+				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classLoader, byteCodeLoader, projectTypeFromNameMap );
 				Kit.map.add( projectModuleMap, discoveryModule, projectModule );
 				for( OutputDirectory outputDirectory : discoveryModule.outputDirectories() )
 				{
@@ -116,6 +107,7 @@ public final class ProjectStructureBuilder
 		catch( Throwable e )
 		{
 			Log.warning( "could not load class '" + className + "': " + e.getClass() + ": " + e.getMessage() );
+			Debug.breakPoint();
 			return Optional.empty();
 		}
 	}

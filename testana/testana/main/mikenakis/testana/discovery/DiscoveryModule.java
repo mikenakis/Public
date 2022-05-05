@@ -274,22 +274,9 @@ public abstract class DiscoveryModule
 
 	public final Collection<Path> allDependencyAndExternalPaths()
 	{
-		if( Kit.get( true ) )
-		{
-			Collection<Path> mutablePaths = new LinkedHashSet<>();
-			mutablePaths.addAll( externalDependencyPaths() );
-			for( DiscoveryModule dependency : projectDependencies() )
-				dependencyAndExternalPathsRecursive( dependency, mutablePaths );
-			return mutablePaths;
-		}
-		else
-		{
-			Collection<Path> mutablePaths = new LinkedHashSet<>();
-			mutablePaths.addAll( externalDependencyPaths() );
-			for( DiscoveryModule dependency : allProjectDependencies() )
-				mutablePaths.addAll( dependency.externalDependencyPaths() );
-			return mutablePaths;
-		}
+		Collection<Path> mutablePaths = new LinkedHashSet<>();
+		dependencyAndExternalPathsRecursive( this, mutablePaths );
+		return mutablePaths;
 	}
 
 	private static void dependencyAndExternalPathsRecursive( DiscoveryModule discoveryModule, Collection<Path> mutableDependencyPaths )
