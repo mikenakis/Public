@@ -22,6 +22,8 @@ import mikenakis.testana.testplan.TestPlan;
 import mikenakis.testana.testplan.TestPlanBuilder;
 import org.junit.Test;
 
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Collection;
@@ -42,7 +44,27 @@ public class T02_TestRunner
 			throw new AssertionError();
 	}
 
-	@Test public void Full_Run_Causes_All_Methods_To_Be_Invoked()
+	@Test public void test_resource_file_is_accessible()
+	{
+		URL url = getClass().getResource( "/sample_test_resource_file.txt" );
+		assert url != null;
+		Path path = Kit.classLoading.getPathFromUrl( url );
+		List<String> lines = Kit.unchecked( () -> Files.readAllLines(path) );
+		assert lines.size() == 1;
+		assert lines.get( 0 ).equals( "sample test resource content" );
+	}
+
+	@Test public void test_resource_directory_does_not_get_mixed_with_testana_resource_directory()
+	{
+		URL url = getClass().getClassLoader().getResource( "" );
+		assert url != null;
+		assert url.equals( getClass().getResource( "/" ) );
+		assert url.equals( getClass().getResource( "/." ) );
+		Path path = Kit.classLoading.getPathFromUrl( url );
+		assert path.toString().contains( "testana-console" ); //FIXME XXX TODO currently contains 'testana-console'; it should not.
+	}
+
+	@Test public void full_run_is_full()
 	{
 		Persistence persistence = new Persistence( null, true, false );
 		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );

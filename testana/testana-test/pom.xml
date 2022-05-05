@@ -13,6 +13,17 @@
 
 	<build>
 		<testSourceDirectory>test</testSourceDirectory>
+
+<!--		<resources>-->
+<!--			<resource>-->
+<!--				<directory>resources</directory>-->
+<!--			</resource>-->
+<!--		</resources>-->
+		<testResources>
+			<testResource>
+				<directory>resources</directory>
+			</testResource>
+		</testResources>
 	</build>
 
 	<dependencies>
