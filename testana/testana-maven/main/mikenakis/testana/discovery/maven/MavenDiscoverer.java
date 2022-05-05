@@ -25,14 +25,12 @@ import java.util.Optional;
  */
 public final class MavenDiscoverer implements Discoverer
 {
-	private final Path localRepositoryPath;
 	private final MavenHelper mavenHelper;
 
 	public MavenDiscoverer()
 	{
-		localRepositoryPath = getLocalRepositoryPath();
-		TestanaLog.report( "Maven Local Repository Path: " + localRepositoryPath );
-		mavenHelper = new MavenHelper( localRepositoryPath );
+		mavenHelper = new MavenHelper();
+		TestanaLog.report( "Maven Local Repository Path: " + mavenHelper.localRepositoryPath );
 	}
 
 	@Override public Optional<DiscoveryModule> discover( Path sourceDirectory )
@@ -47,7 +45,7 @@ public final class MavenDiscoverer implements Discoverer
 	private MavenDiscoveryModule discoverRecursively( File pomFile )
 	{
 		Model mavenModel = mavenHelper.loadMavenModel( pomFile );
-		MavenDiscoveryModule discoveryModule = new MavenDiscoveryModule( localRepositoryPath, mavenModel );
+		MavenDiscoveryModule discoveryModule = new MavenDiscoveryModule( mavenHelper, mavenModel );
 		boolean haveMain = mavenModel.getBuild() != null && addOutputDirectory( discoveryModule, mavenModel.getBuild().getOutputDirectory() );
 		boolean haveTest = mavenModel.getBuild() != null && addOutputDirectory( discoveryModule, mavenModel.getBuild().getTestOutputDirectory() );
 		if( !haveMain && !haveTest && !mavenModel.getPackaging().equals( "pom" ) )
@@ -89,14 +87,5 @@ public final class MavenDiscoverer implements Discoverer
 		OutputDirectory outputDirectory = new OutputDirectory( outputPath, projectFiles );
 		discoveryModule.addOutputDirectory( outputDirectory );
 		return true;
-	}
-
-	private static Path getLocalRepositoryPath()
-	{
-		Path m2Path = Paths.get( System.getProperty( "user.home" ), ".m2" );
-		// XXX See MVN-TODO-1
-		//		Path mavenSettingsPath = m2Path.resolve( "settings.xml" );
-		//      extract <localRepository>...</localRepository> from settings.xml
-		return m2Path.resolve( "repository" );
 	}
 }

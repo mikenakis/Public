@@ -49,10 +49,9 @@ public final class ProjectStructureBuilder
 		ProjectStructure projectStructure = new ProjectStructure( rootDiscoveryModules, projectModuleMap );
 		TimeMeasurement.run( "Parsing types", "%d types (cache: %d hits, %d misses)", timeMeasurement -> //
 		{
-			ClassLoader parentClassLoader = ClassLoader.getSystemClassLoader(); //ClassLoader.getPlatformClassLoader();
 			for( DiscoveryModule discoveryModule : allDiscoveryModules( rootDiscoveryModules ) )
 			{
-				ClassLoader classLoader = createClassLoader( discoveryModule.allDependencyAndExternalPaths(), parentClassLoader );
+				ClassLoader classLoader = createClassLoader( discoveryModule.allDependencyAndExternalPaths() );
 				ByteCodeLoader byteCodeLoader = new ByteCodeLoader( classLoader ); //TODO: get rid of.
 				Map<String,ProjectType> projectTypeFromNameMap = new LinkedHashMap<>();
 				ProjectModule projectModule = new ProjectModule( projectStructure, discoveryModule, classLoader, byteCodeLoader, projectTypeFromNameMap );
@@ -112,10 +111,10 @@ public final class ProjectStructureBuilder
 		}
 	}
 
-	private static ClassLoader createClassLoader( Collection<Path> classPath, ClassLoader parentClassLoader )
+	private static ClassLoader createClassLoader( Collection<Path> classPath )
 	{
 		URL[] urls = classPath.stream().map( path -> Kit.unchecked( () -> path.toUri().toURL() ) ).toArray( URL[]::new );
-		return new URLClassLoader( urls, parentClassLoader );
+		return new URLClassLoader( urls, ClassLoader.getPlatformClassLoader() );
 	}
 
 	private static Collection<DiscoveryModule> allDiscoveryModules( Iterable<DiscoveryModule> rootDiscoveryModules )

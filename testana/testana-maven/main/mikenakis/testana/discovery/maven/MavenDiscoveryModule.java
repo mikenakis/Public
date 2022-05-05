@@ -7,6 +7,7 @@ import mikenakis.testana.discovery.OutputDirectory;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,16 +22,16 @@ import java.util.Map;
  */
 final class MavenDiscoveryModule extends DiscoveryModule
 {
-	private final Path localRepositoryPath;
+	private final MavenHelper mavenHelper;
 	private final Collection<OutputDirectory> outputDirectories = new LinkedHashSet<>();
 	private final Collection<MavenDiscoveryModule> nestedModules = new LinkedHashSet<>();
 	private final Model mavenModel;
 	private final Collection<DiscoveryModule> projectDependencies = new LinkedHashSet<>();
 	private final Collection<Path> externalDependencies = new LinkedHashSet<>();
 
-	MavenDiscoveryModule( Path localRepositoryPath, Model mavenModel )
+	MavenDiscoveryModule( MavenHelper mavenHelper, Model mavenModel )
 	{
-		this.localRepositoryPath = localRepositoryPath;
+		this.mavenHelper = mavenHelper;
 		this.mavenModel = mavenModel;
 	}
 
@@ -98,7 +99,7 @@ final class MavenDiscoveryModule extends DiscoveryModule
 	{
 		for( Dependency mavenDependency : mavenModel.getDependencies() )
 		{
-			if( !isMavenDependencyOfInterest( mavenDependency ) )
+			if( !isScopeOfInterest( mavenDependency ) )
 			{
 				assert false; //does this happen?
 				continue;
@@ -116,7 +117,7 @@ final class MavenDiscoveryModule extends DiscoveryModule
 					}
 					else
 					{
-						Path dependencyModulePathInLocalRepository = buildModulePathInLocalRepository( localRepositoryPath, mavenDependency );
+						Path dependencyModulePathInLocalRepository = buildModulePathInLocalRepository( mavenHelper.localRepositoryPath, mavenDependency );
 						if( !Files.isDirectory( dependencyModulePathInLocalRepository ) )
 						{
 							Log.warning( "Directory " + dependencyModulePathInLocalRepository + " does not exist." );
@@ -129,7 +130,14 @@ final class MavenDiscoveryModule extends DiscoveryModule
 							continue; //this has been observed, for example, with commons-logging:commons-logging:1.0.4 depending on logkit:logkit:1.0.1 which consists of nothing but a pom.
 						}
 						assert jarPathName != null;
-						Kit.collection.add( externalDependencies, jarPathName );
+						if( externalDependencies.contains( jarPathName ) )
+							Log.warning( "Dependency already exists: " + jarPathName );
+						else
+						{
+							//Kit.collection.add( externalDependencies, jarPathName ); unnecessary because it is included in the list of all external dependencies
+							Collection<File> allExternalDependencies = mavenHelper.getAllExternalDependencies( mavenDependency.getGroupId(), mavenDependency.getArtifactId(), mavenDependency.getVersion() );
+							externalDependencies.addAll( allExternalDependencies.stream().map( f -> f.toPath() ).toList() );
+						}
 					}
 					break;
 				default:
@@ -146,7 +154,7 @@ final class MavenDiscoveryModule extends DiscoveryModule
 		return mavenDependency.getGroupId() + ":" + mavenDependency.getArtifactId() + ":" + mavenDependency.getType() + ":" + mavenDependency.getVersion();
 	}
 
-	private static boolean isMavenDependencyOfInterest( Dependency mavenDependency )
+	private static boolean isScopeOfInterest( Dependency mavenDependency )
 	{
 		String mavenDependencyScope = mavenDependency.getScope();
 		if( mavenDependencyScope == null )

@@ -61,7 +61,7 @@ public class T02_TestRunner
 		assert url.equals( getClass().getResource( "/" ) );
 		assert url.equals( getClass().getResource( "/." ) );
 		Path path = Kit.classLoading.getPathFromUrl( url );
-		assert path.toString().contains( "testana-console" ); //FIXME XXX TODO currently contains 'testana-console'; it should not.
+		assert !path.toString().contains( "testana-console" ); //Note: this used to fail, then it was fixed, but we keep it as a regression test.
 	}
 
 	@Test public void full_run_is_full()

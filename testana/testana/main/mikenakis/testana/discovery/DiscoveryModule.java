@@ -283,8 +283,10 @@ public abstract class DiscoveryModule
 	{
 		mutableDependencyPaths.addAll( discoveryModule.outputPaths() );
 		mutableDependencyPaths.addAll( discoveryModule.externalDependencyPaths() );
-		for( DiscoveryModule dependency : discoveryModule.projectDependencies() )
-			dependencyAndExternalPathsRecursive( dependency, mutableDependencyPaths );
+		for( DiscoveryModule dependencyModule : discoveryModule.projectDependencies() )
+			dependencyAndExternalPathsRecursive( dependencyModule, mutableDependencyPaths );
+		for( DiscoveryModule nestedModule : discoveryModule.nestedModules() )
+			dependencyAndExternalPathsRecursive( nestedModule, mutableDependencyPaths );
 	}
 
 	public final Collection<DiscoveryModule> allProjectDependencies()
