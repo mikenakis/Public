@@ -69,7 +69,7 @@ public abstract class Client
 	public void Use_of_Non_Public_Interface_Fails()
 	{
 		IntertwineFactory intertwineFactory = getIntertwineFactory();
-		TestKit.expect( IllegalAccessException.class, () -> intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ MyNonPublicInterface.class ) );
+		TestKit.expect( IllegalAccessException.class, () -> intertwineFactory.getIntertwine( MyNonPublicInterface.class ) );
 	}
 
 	private FooInterface createFooServer( AnycallFromUntwiner<FooInterface> anycallFromUntwiner )
@@ -82,13 +82,13 @@ public abstract class Client
 
 	private Anycall<FooInterface> newUntwiner( FooInterface interfaceServer )
 	{
-		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( /*getClass().getClassLoader(),*/ FooInterface.class );
+		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( FooInterface.class );
 		return intertwine.newUntwiner( interfaceServer );
 	}
 
 	private FooInterface newEntwiner( Anycall<FooInterface> anycall )
 	{
-		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( /*getClass().getClassLoader(),*/ FooInterface.class );
+		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( FooInterface.class );
 		return intertwine.newEntwiner( anycall );
 	}
 
@@ -98,7 +98,7 @@ public abstract class Client
 	private final AnycallFromUntwiner<FooInterface> anycallFromUntwinerViaObjectExchange = //
 		( Anycall<FooInterface> untwiner ) ->
 	{
-		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( /*getClass().getClassLoader(),*/ FooInterface.class );
+		Intertwine<FooInterface> intertwine = getIntertwineFactory().getIntertwine( FooInterface.class );
 		ObjectExchange<AnycallResponse,AnycallRequest> objectExchange = new ObjectExchangeToAnycall<>( intertwine, untwiner );
 		return new AnycallToObjectExchange<>( objectExchange );
 	};

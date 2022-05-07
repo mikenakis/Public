@@ -30,14 +30,14 @@ public abstract class Assessment extends Stringizable
 		return stringBuilder.toString();
 	}
 
-	public List<String> assessmentTextLines()
+	public final List<String> assessmentTextLines()
 	{
 		ArrayList<String> lines = new ArrayList<>();
 		MyKit.tree( this, a -> a.children(), a -> a.toString(), s -> lines.add( s ) );
 		return lines;
 	}
 
-	public String assessmentTextInFull()
+	public final String assessmentTextInFull()
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		assessmentTextLines().forEach( s -> stringBuilder.append( "    " ).append( s ).append( "\r\n" ) );

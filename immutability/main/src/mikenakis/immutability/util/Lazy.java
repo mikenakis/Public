@@ -18,7 +18,7 @@ public final class Lazy<T>
 	}
 
 	@InvariableField private Function0<T> factory; //nullable
-	@InvariableField private T instance = null; //nullable
+	@InvariableField private T instance; //nullable
 
 	private Lazy( Function0<T> factory )
 	{

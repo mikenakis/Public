@@ -2,27 +2,27 @@ package mikenakis.immutability.type;
 
 import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.helpers.Stringizable;
-import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.type.assessments.NonImmutableTypeAssessment;
-import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableArrayAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableFieldsAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableSuperclassAssessment;
-import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
-import mikenakis.immutability.type.assessments.provisory.InterfaceAssessment;
-import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
-import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
+import mikenakis.immutability.type.assessments.ImmutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.MutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.NonImmutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.ProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.UnderAssessmentTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.HasMutableFieldsMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.HasMutableSuperclassMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.field.FieldImmutabilityAssessor;
-import mikenakis.immutability.type.field.assessments.FieldAssessment;
-import mikenakis.immutability.type.field.assessments.ImmutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.UnderAssessmentFieldAssessment;
-import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.FieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.ImmutableFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.UnderAssessmentFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.MutableFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldImmutabilityAssessment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,52 +46,52 @@ final class Reflector extends Stringizable
 		fieldImmutabilityAssessor = new FieldImmutabilityAssessor( typeImmutabilityAssessor );
 	}
 
-	TypeAssessment assess( Class<?> type )
+	TypeImmutabilityAssessment assess( Class<?> type )
 	{
-		TypeAssessment assessment = assess0( type );
+		TypeImmutabilityAssessment assessment = assess0( type );
 		if( ImmutabilitySelfAssessable.class.isAssignableFrom( type ) )
 		{
 			assert Helpers.isClass( type ) : new SelfAssessableAnnotationIsOnlyApplicableToClassException( type );
 			//FIXME XXX TODO assert !Helpers.isExtensible( type  ) : new SelfAssessableClassMustBeInextensibleException( type );
-			assert assessment instanceof NonImmutableTypeAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
-			return new SelfAssessableAssessment( stringizer, type );
+			assert assessment instanceof NonImmutableTypeImmutabilityAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
+			return new IsSelfAssessableProvisoryTypeImmutabilityAssessment( stringizer, type );
 		}
 		return assessment;
 	}
 
-	private TypeAssessment assess0( Class<?> type )
+	private TypeImmutabilityAssessment assess0( Class<?> type )
 	{
 		if( type.isArray() )
-			return new MutableArrayAssessment( stringizer, type );
+			return new IsArrayMutableTypeImmutabilityAssessment( stringizer, type );
 		if( type.isInterface() )
-			return new InterfaceAssessment( stringizer, type );
+			return new IsInterfaceProvisoryTypeImmutabilityAssessment( stringizer, type );
 
-		Optional<ProvisoryTypeAssessment> provisorySuperclassAssessment = Optional.empty();
+		Optional<ProvisoryTypeImmutabilityAssessment> provisorySuperclassAssessment = Optional.empty();
 		Class<?> superclass = type.getSuperclass();
 		if( superclass != null )
 		{
-			TypeAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
+			TypeImmutabilityAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
 			switch( superclassAssessment )
 			{
-				case MutableTypeAssessment mutableTypeAssessment:
-					return new MutableSuperclassAssessment( stringizer, type, mutableTypeAssessment );
-				case ExtensibleAssessment ignore:
+				case MutableTypeImmutabilityAssessment mutableTypeAssessment:
+					return new HasMutableSuperclassMutableTypeImmutabilityAssessment( stringizer, type, mutableTypeAssessment );
+				case IsExtensibleProvisoryTypeImmutabilityAssessment ignore:
 					//This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
 					break;
-				case ProvisoryContentAssessment provisoryContentAssessment:
+				case HasProvisoryContentProvisoryTypeImmutabilityAssessment provisoryContentAssessment:
 					provisorySuperclassAssessment = Optional.of( provisoryContentAssessment );
 					break;
-				case UnderAssessmentTypeAssessment ignore:
+				case UnderAssessmentTypeImmutabilityAssessment ignore:
 					break;
-				case ImmutableTypeAssessment immutableTypeAssessment:
+				case ImmutableTypeImmutabilityAssessment immutableTypeAssessment:
 					//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can be either provisory or mutable, but not immutable.
 					//DoNotCover
 					throw new AssertionError( immutableTypeAssessment );
-				case InterfaceAssessment interfaceAssessment:
+				case IsInterfaceProvisoryTypeImmutabilityAssessment interfaceAssessment:
 					//Cannot happen, because the supertype of a class cannot be an interface.
 					//DoNotCover
 					throw new AssertionError( interfaceAssessment );
-				case SelfAssessableAssessment selfAssessableAssessment:
+				case IsSelfAssessableProvisoryTypeImmutabilityAssessment selfAssessableAssessment:
 					provisorySuperclassAssessment = Optional.of( selfAssessableAssessment );
 					break;
 //					//Cannot happen, because self-assessable objects are required to be inextensible, so there can be no self-assessable superclass.
@@ -103,25 +103,25 @@ final class Reflector extends Stringizable
 			}
 		}
 
-		List<ProvisoryFieldAssessment> provisoryFieldAssessments = new ArrayList<>();
-		List<MutableFieldAssessment> mutableFieldAssessments = new ArrayList<>();
+		List<ProvisoryFieldImmutabilityAssessment> provisoryFieldAssessments = new ArrayList<>();
+		List<MutableFieldImmutabilityAssessment> mutableFieldAssessments = new ArrayList<>();
 		for( Field field : type.getDeclaredFields() )
 		{
-			FieldAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
+			FieldImmutabilityAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
 			switch( fieldAssessment )
 			{
 				case null:
 					break;
-				case UnderAssessmentFieldAssessment ignore:
+				case UnderAssessmentFieldImmutabilityAssessment ignore:
 					break;
-				case ImmutableFieldAssessment ignore:
+				case ImmutableFieldImmutabilityAssessment ignore:
 					break;
-				case ProvisoryFieldAssessment provisoryFieldAssessment:
+				case ProvisoryFieldImmutabilityAssessment provisoryFieldAssessment:
 				{
 					provisoryFieldAssessments.add( provisoryFieldAssessment );
 					break;
 				}
-				case MutableFieldAssessment mutableFieldAssessment:
+				case MutableFieldImmutabilityAssessment mutableFieldAssessment:
 				{
 					mutableFieldAssessments.add( mutableFieldAssessment );
 					break;
@@ -133,13 +133,13 @@ final class Reflector extends Stringizable
 		}
 
 		if( !mutableFieldAssessments.isEmpty() )
-			return new MutableFieldsAssessment( stringizer, type, mutableFieldAssessments );
+			return new HasMutableFieldsMutableTypeImmutabilityAssessment( stringizer, type, mutableFieldAssessments );
 
 		if( provisorySuperclassAssessment.isPresent() || !provisoryFieldAssessments.isEmpty() )
-			return new ProvisoryContentAssessment( stringizer, type, provisorySuperclassAssessment, provisoryFieldAssessments );
+			return new HasProvisoryContentProvisoryTypeImmutabilityAssessment( stringizer, type, provisorySuperclassAssessment, provisoryFieldAssessments );
 
 		if( Helpers.isExtensible( type ) )
-			return new ExtensibleAssessment( stringizer, TypeAssessment.Mode.Assessed, type );
+			return new IsExtensibleProvisoryTypeImmutabilityAssessment( stringizer, TypeImmutabilityAssessment.Mode.Assessed, type );
 
 		return typeImmutabilityAssessor.immutableClassAssessmentInstance;
 	}

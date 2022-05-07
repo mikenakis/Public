@@ -5,17 +5,17 @@ import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.functional.Function0;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableArrayAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableFieldsAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableSuperclassAssessment;
-import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
-import mikenakis.immutability.type.assessments.provisory.InterfaceAssessment;
-import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
-import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
+import mikenakis.immutability.type.assessments.ImmutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.MutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.ProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.HasMutableFieldsMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.HasMutableSuperclassMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.exceptions.AnnotatedInvariableArrayFieldMustBePrivateException;
 import mikenakis.immutability.type.exceptions.AnnotatedInvariableFieldMayNotAlreadyBeInvariableException;
 import mikenakis.immutability.type.exceptions.AnnotatedInvariableFieldMustBePrivateException;
@@ -27,8 +27,8 @@ import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmuta
 import mikenakis.immutability.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
 import mikenakis.immutability.type.field.annotations.InvariableArray;
 import mikenakis.immutability.type.field.annotations.InvariableField;
-import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.mutable.MutableFieldTypeMutableFieldAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.MutableFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.OfMutableFieldTypeMutableFieldImmutabilityAssessment;
 import org.junit.Test;
 
 import java.io.File;
@@ -66,9 +66,9 @@ public class T01_TypeImmutabilityAssessor
 		return TypeImmutabilityAssessor.create( TestStringizer.instance );
 	}
 
-	private static TypeAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
+	private static TypeImmutabilityAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
 	{
-		TypeAssessment assessment = assessor.assess( type );
+		TypeImmutabilityAssessment assessment = assessor.assess( type );
 		System.out.println( "assessment for type " + TestStringizer.instance.stringizeClassName( type ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
@@ -80,8 +80,8 @@ public class T01_TypeImmutabilityAssessor
 	{
 		for( Class<?> primitiveClass : MyTestKit.getAllPrimitives() )
 		{
-			TypeAssessment assessment = assess( assessor, primitiveClass );
-			assert assessment instanceof ImmutableTypeAssessment : assessment;
+			TypeImmutabilityAssessment assessment = assess( assessor, primitiveClass );
+			assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 		}
 	}
 
@@ -89,21 +89,21 @@ public class T01_TypeImmutabilityAssessor
 	{
 		for( Class<?> primitiveWrapperClass : MyTestKit.getAllPrimitiveWrappers() )
 		{
-			TypeAssessment assessment = assess( assessor, primitiveWrapperClass );
-			assert assessment instanceof ImmutableTypeAssessment : assessment;
+			TypeImmutabilityAssessment assessment = assess( assessor, primitiveWrapperClass );
+			assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 		}
 	}
 
 	@Test public void array_class_is_mutable()
 	{
-		TypeAssessment assessment = assess( assessor, Integer[].class );
-		assert assessment instanceof MutableArrayAssessment : assessment;
+		TypeImmutabilityAssessment assessment = assess( assessor, Integer[].class );
+		assert assessment instanceof IsArrayMutableTypeImmutabilityAssessment : assessment;
 	}
 
 	@Test public void java_lang_object_is_extensible()
 	{
-		TypeAssessment assessment = assess( assessor, Object.class );
-		assert assessment instanceof ExtensibleAssessment : assessment;
+		TypeImmutabilityAssessment assessment = assess( assessor, Object.class );
+		assert assessment instanceof IsExtensibleProvisoryTypeImmutabilityAssessment : assessment;
 	}
 
 	@Test public void preassessed_provisory_classes_are_provisory()
@@ -112,8 +112,8 @@ public class T01_TypeImmutabilityAssessor
 			List.of().getClass(), List.of( 1 ).getClass(), List.of( 2 ).getClass(), Map.of().getClass(), Map.of( 1, 0 ).getClass(), Map.of( 2, 0 ).getClass() );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof ProvisoryTypeAssessment : assessment;
+			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof ProvisoryTypeImmutabilityAssessment : assessment;
 		}
 	}
 
@@ -123,8 +123,8 @@ public class T01_TypeImmutabilityAssessor
 			StackTraceElement.class, File.class, Inet4Address.class, Inet6Address.class, InetSocketAddress.class );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof ImmutableTypeAssessment : assessment;
+			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 		}
 	}
 
@@ -137,8 +137,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, EmptyInterface.class );
-				assert assessment instanceof InterfaceAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, EmptyInterface.class );
+				assert assessment instanceof IsInterfaceProvisoryTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -152,8 +152,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, EmptyInextensibleClass.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, EmptyInextensibleClass.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -169,8 +169,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ImmutableClassWithInvariableCircularReference.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ImmutableClassWithInvariableCircularReference.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -186,8 +186,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ExtensibleClassWithInvariableCircularReference.class );
-				assert assessment instanceof ExtensibleAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ExtensibleClassWithInvariableCircularReference.class );
+				assert assessment instanceof IsExtensibleProvisoryTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -203,8 +203,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ImmutableClassWithStaticMutableField.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ImmutableClassWithStaticMutableField.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -220,15 +220,15 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableFieldOfMutableType.class );
-				assert assessment instanceof MutableFieldsAssessment : assessment;
-				MutableFieldsAssessment mutableFieldsAssessment = (MutableFieldsAssessment)assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableFieldOfMutableType.class );
+				assert assessment instanceof HasMutableFieldsMutableTypeImmutabilityAssessment : assessment;
+				HasMutableFieldsMutableTypeImmutabilityAssessment mutableFieldsAssessment = (HasMutableFieldsMutableTypeImmutabilityAssessment)assessment;
 				assert mutableFieldsAssessment.type == ClassWithInvariableFieldOfMutableType.class;
 				assert mutableFieldsAssessment.mutableFieldAssessments.size() == 1;
-				MutableFieldAssessment mutableFieldAssessment = mutableFieldsAssessment.mutableFieldAssessments.get( 0 );
+				MutableFieldImmutabilityAssessment mutableFieldAssessment = mutableFieldsAssessment.mutableFieldAssessments.get( 0 );
 				assert mutableFieldAssessment.field.getName().equals( "invariableFieldOfMutableType" );
-				assert mutableFieldAssessment instanceof MutableFieldTypeMutableFieldAssessment;
-				MutableFieldTypeMutableFieldAssessment finalButOfMutableTypeMutableFieldAssessment = (MutableFieldTypeMutableFieldAssessment)mutableFieldAssessment;
+				assert mutableFieldAssessment instanceof OfMutableFieldTypeMutableFieldImmutabilityAssessment;
+				OfMutableFieldTypeMutableFieldImmutabilityAssessment finalButOfMutableTypeMutableFieldAssessment = (OfMutableFieldTypeMutableFieldImmutabilityAssessment)mutableFieldAssessment;
 				assert finalButOfMutableTypeMutableFieldAssessment.fieldTypeAssessment.type == ArrayList.class;
 			}
 		}.run();
@@ -245,8 +245,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableFieldOfImmutableType.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableFieldOfImmutableType.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -263,9 +263,9 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert assess( newAssessor(), ExtensibleProvisoryClass.class ) instanceof ExtensibleAssessment;
-				TypeAssessment assessment = assess( assessor, InextensibleProvisoryClass.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				assert assess( newAssessor(), ExtensibleProvisoryClass.class ) instanceof IsExtensibleProvisoryTypeImmutabilityAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, InextensibleProvisoryClass.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -284,9 +284,9 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert assess( newAssessor(), MutableClass.class ) instanceof MutableFieldsAssessment;
-				TypeAssessment assessment = assess( assessor, ClassExtendingMutableClass.class );
-				assert assessment instanceof MutableSuperclassAssessment : assessment;
+				assert assess( newAssessor(), MutableClass.class ) instanceof HasMutableFieldsMutableTypeImmutabilityAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassExtendingMutableClass.class );
+				assert assessment instanceof HasMutableSuperclassMutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -302,8 +302,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithVariableFieldOfImmutableType.class );
-				assert assessment instanceof MutableFieldsAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithVariableFieldOfImmutableType.class );
+				assert assessment instanceof HasMutableFieldsMutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -319,8 +319,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableFieldOfInterfaceType.class );
-				assert assessment instanceof ProvisoryContentAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableFieldOfInterfaceType.class );
+				assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -336,8 +336,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableFieldOfProvisoryType.class );
-				assert assessment instanceof ProvisoryContentAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableFieldOfProvisoryType.class );
+				assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -353,8 +353,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableFieldOfImmutableType.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableFieldOfImmutableType.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -370,8 +370,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableFieldOfProvisoryType.class );
-				assert assessment instanceof ProvisoryContentAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableFieldOfProvisoryType.class );
+				assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -441,8 +441,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableSelfReference.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableSelfReference.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -476,8 +476,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithMutableFieldAnnotatedInvariable.class );
-				assert assessment instanceof MutableTypeAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithMutableFieldAnnotatedInvariable.class );
+				assert assessment instanceof MutableTypeImmutabilityAssessment;
 			}
 		}.run();
 	}
@@ -493,8 +493,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfProvisoryElementType.class );
-				assert assessment instanceof ProvisoryContentAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfProvisoryElementType.class );
+				assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -510,8 +510,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfImmutableElementType.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfImmutableElementType.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -527,8 +527,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableArrayInvariableFieldOfImmutableElementType.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableArrayInvariableFieldOfImmutableElementType.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -674,8 +674,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ImmutableClass.class );
-				assert assessment instanceof ImmutableTypeAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ImmutableClass.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment;
 				var exception = MyTestKit.expect( PreassessedClassMustNotBePreviouslyAssessedException.class, () -> //
 					assessor.addImmutablePreassessment( ImmutableClass.class ) );
 				assert exception.previousTypeAssessment == assessment;
@@ -694,9 +694,9 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithMutableField.class );
-				assert assessment instanceof MutableFieldsAssessment;
-				MutableFieldsAssessment mutableFieldsAssessment = (MutableFieldsAssessment)assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithMutableField.class );
+				assert assessment instanceof HasMutableFieldsMutableTypeImmutabilityAssessment;
+				HasMutableFieldsMutableTypeImmutabilityAssessment mutableFieldsAssessment = (HasMutableFieldsMutableTypeImmutabilityAssessment)assessment;
 				assert mutableFieldsAssessment.type == ClassWithMutableField.class;
 				var exception = MyTestKit.expect( PreassessedClassMustNotBePreviouslyAssessedException.class, () -> //
 					assessor.addImmutablePreassessment( ClassWithMutableField.class ) );
@@ -716,10 +716,10 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert newAssessor().assess( MutableClass.class ) instanceof MutableTypeAssessment;
+				assert newAssessor().assess( MutableClass.class ) instanceof MutableTypeImmutabilityAssessment;
 				assessor.addImmutablePreassessment( MutableClass.class );
-				TypeAssessment assessment = assess( assessor, MutableClass.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, MutableClass.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -735,10 +735,10 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert newAssessor().assess( ProvisoryClass.class ) instanceof ProvisoryTypeAssessment;
+				assert newAssessor().assess( ProvisoryClass.class ) instanceof ProvisoryTypeImmutabilityAssessment;
 				assessor.addImmutablePreassessment( ProvisoryClass.class );
-				TypeAssessment assessment = assess( assessor, ProvisoryClass.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ProvisoryClass.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -757,8 +757,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassExtendingClassWithReferenceToDescendant.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassExtendingClassWithReferenceToDescendant.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -777,9 +777,9 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInterfaceMember.class );
-				assert assessment instanceof ProvisoryContentAssessment : assessment;
-				ProvisoryContentAssessment provisoryContentAssessment = (ProvisoryContentAssessment)assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInterfaceMember.class );
+				assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment : assessment;
+				HasProvisoryContentProvisoryTypeImmutabilityAssessment provisoryContentAssessment = (HasProvisoryContentProvisoryTypeImmutabilityAssessment)assessment;
 				assert provisoryContentAssessment.ancestorAssessment.isEmpty();
 			}
 		}.run();
@@ -802,10 +802,10 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert assess( newAssessor(), ProvisoryClass.class ) instanceof ProvisoryContentAssessment;
-				TypeAssessment assessment = assess( assessor, ClassExtendingProvisoryClass.class );
-				assert assessment instanceof ProvisoryContentAssessment : assessment;
-				ProvisoryContentAssessment provisoryContentAssessment = (ProvisoryContentAssessment)assessment;
+				assert assess( newAssessor(), ProvisoryClass.class ) instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassExtendingProvisoryClass.class );
+				assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment : assessment;
+				HasProvisoryContentProvisoryTypeImmutabilityAssessment provisoryContentAssessment = (HasProvisoryContentProvisoryTypeImmutabilityAssessment)assessment;
 				assert provisoryContentAssessment.ancestorAssessment.isPresent();
 			}
 		}.run();
@@ -822,8 +822,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, E.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, E.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -840,8 +840,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, EnumWithVariableField.class );
-				assert assessment instanceof MutableFieldsAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, EnumWithVariableField.class );
+				assert assessment instanceof HasMutableFieldsMutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -857,8 +857,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithArrayField.class );
-				assert assessment instanceof MutableFieldsAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithArrayField.class );
+				assert assessment instanceof HasMutableFieldsMutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -875,8 +875,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfCircularReferenceElementType.class );
-				assert assessment instanceof ImmutableTypeAssessment : assessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfCircularReferenceElementType.class );
+				assert assessment instanceof ImmutableTypeImmutabilityAssessment : assessment;
 			}
 		}.run();
 	}
@@ -894,8 +894,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, ClassWithInvariableArrayInvariableFieldOfMutableElementType.class );
-				assert assessment instanceof MutableTypeAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, ClassWithInvariableArrayInvariableFieldOfMutableElementType.class );
+				assert assessment instanceof MutableTypeImmutabilityAssessment;
 			}
 		}.run();
 	}
@@ -913,8 +913,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, MutableSelfAssessableClass.class );
-				assert assessment instanceof SelfAssessableAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, MutableSelfAssessableClass.class );
+				assert assessment instanceof IsSelfAssessableProvisoryTypeImmutabilityAssessment;
 			}
 		}.run();
 	}
@@ -952,8 +952,8 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				TypeAssessment assessment = assess( assessor, SuperClass.class );
-				assert assessment instanceof ExtensibleAssessment;
+				TypeImmutabilityAssessment assessment = assess( assessor, SuperClass.class );
+				assert assessment instanceof IsExtensibleProvisoryTypeImmutabilityAssessment;
 			}
 		}.run();
 	}

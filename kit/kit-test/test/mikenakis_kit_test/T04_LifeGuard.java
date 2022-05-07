@@ -1,8 +1,8 @@
 package mikenakis_kit_test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.coherence.Coherence;
-import mikenakis.kit.coherence.implementation.ThreadLocalCoherence;
+import mikenakis.coherence.Coherence;
+import mikenakis.coherence.implementation.ThreadLocalCoherence;
 import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.lifetime.Mortal;
 import mikenakis.lifetime.guard.DevelopmentLifeGuard;

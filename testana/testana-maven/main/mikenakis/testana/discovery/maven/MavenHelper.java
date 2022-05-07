@@ -26,7 +26,6 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
 import org.eclipse.aether.graph.Dependency;
-import org.eclipse.aether.graph.DependencyFilter;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.impl.DefaultServiceLocator;
 import org.eclipse.aether.impl.RemoteRepositoryManager;
@@ -44,7 +43,6 @@ import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.transport.wagon.WagonTransporterFactory;
 import org.eclipse.aether.util.artifact.JavaScopes;
-import org.eclipse.aether.util.filter.DependencyFilterUtils;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -96,9 +94,9 @@ final class MavenHelper
 		 * PEARL: `ModelBuildingResult.getEffectiveModel()` may return null, even though its documentation explicitly states that it never returns null!
 		 * The documentation of `ModelBuildingResult.getEffectiveModel()` makes the following statement:
 		 *   "Returns: The assembled model, never null."
-		 * Now, if you look at the documentation of the vast majority of methods out there, (e.g. Object.getClass(), Thread.currentThread(), etc.) they
-		 * never say that a method never returns null; it is taken for granted. In general, mentioning null is warranted when a function may return null, not
-		 * when it may not. So, it is kind of strange that for ModelBuildingResult.getEffectiveModel() they explicitly state that it never returns null, right?
+		 * Now, the documentation of the vast majority of methods out there (e.g. Object.getClass(), Thread.currentThread(), etc.) never says that a method
+		 * does not return null; it is taken for granted. In general, null is mentioned only when it may be returned, not when it may not be returned.
+		 * So, it is kind of strange that in the case of `ModelBuildingResult.getEffectiveModel()` they explicitly state that it never returns null, right?
 		 * It sounds kind of suspicious, doesn't it? It is almost as if they are insecure about it, right? Well, indeed, IT HAS BEEN OBSERVED TO RETURN NULL.
 		 * Specifically, it will return null if something is wrong with the pom file preventing the model from being assembled, for example referring to a
 		 * non-existent parent pom.
@@ -109,6 +107,7 @@ final class MavenHelper
 
 	Collection<File> getAllExternalDependencies( String groupId, String artifactId, String version )
 	{
+		//code adapted from https://stackoverflow.com/a/40820480/773113
 		DefaultArtifact artifact = new DefaultArtifact( groupId, artifactId, "jar", version );
 		Dependency dependency = new Dependency( artifact, JavaScopes.COMPILE );
 		CollectRequest collectRequest = new CollectRequest( dependency, remoteRepositories );

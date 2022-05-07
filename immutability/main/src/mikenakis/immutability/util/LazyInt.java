@@ -1,5 +1,7 @@
 package mikenakis.immutability.util;
 
+import mikenakis.immutability.type.field.annotations.InvariableField;
+
 /**
  * Implements a lazily computed int.
  *
@@ -17,8 +19,8 @@ public final class LazyInt
 		return new LazyInt( factory );
 	}
 
-	private IntFunction0 factory; //nullable
-	private int instance; //nullable
+	@InvariableField private IntFunction0 factory; //nullable
+	@InvariableField private int instance; //nullable
 
 	private LazyInt( IntFunction0 factory )
 	{

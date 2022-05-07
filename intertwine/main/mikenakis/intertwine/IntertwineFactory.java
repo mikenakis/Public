@@ -13,7 +13,7 @@ public interface IntertwineFactory
 	/**
 	 * The global instance of intertwine.
 	 */
-	IntertwineFactory instance = new CachingIntertwineFactory( new CompilingIntertwineFactory( IntertwineFactory.class.getClassLoader() ) );
+	IntertwineFactory instance = new CachingIntertwineFactory( new CompilingIntertwineFactory() );
 
 	/**
 	 * Gets an {@link Intertwine} for a given interface.

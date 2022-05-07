@@ -4,8 +4,9 @@ import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.coherence.implementation.ConcreteFreezableCoherence;
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.Function1;
+import mikenakis.kit.functional.Procedure1;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
 import mikenakis.tyraki.immutable.ImmutableCollections;
@@ -127,6 +128,22 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	{
 		Integer[] arrayOfInteger = ConversionCollections.newArray( arrayOfInt );
 		return ConversionCollections.newArrayWrapper( arrayOfInteger );
+	}
+
+	private static <E, L extends UnmodifiableList<E>> L newUnmodifiableList( Function1<L,MutableCollections> factory, Procedure1<L> populator )
+	{
+		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
+		{
+			MutableCollections mutableCollections = MutableCollections.of( coherence );
+			L list = factory.invoke( mutableCollections );
+			populator.invoke( list );
+			return list;
+		} );
+	}
+
+	static <E> UnmodifiableList<E> newList( Procedure1<MutableList<E>> populator )
+	{
+		return newUnmodifiableList( MutableCollections::newArrayList, populator );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -2,7 +2,7 @@ package mikenakis.publishing.bespoke;
 
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.kit.coherence.Coherence;
+import mikenakis.coherence.Coherence;
 import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.publishing.anycall.AnycallPublisher;
 import mikenakis.publishing.anycall.AnycallSubscription;

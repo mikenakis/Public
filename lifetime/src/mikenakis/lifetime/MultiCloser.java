@@ -1,6 +1,6 @@
 package mikenakis.lifetime;
 
-import mikenakis.kit.coherence.Coherence;
+import mikenakis.coherence.Coherence;
 
 import java.util.ArrayList;
 import java.util.Arrays;

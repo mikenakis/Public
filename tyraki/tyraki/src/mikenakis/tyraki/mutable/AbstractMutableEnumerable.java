@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.coherence.FreezableCoherence;
 import mikenakis.tyraki.DebugView;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.UnmodifiableCollection;

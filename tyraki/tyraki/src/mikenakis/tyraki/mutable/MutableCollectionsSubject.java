@@ -1,8 +1,8 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
-import mikenakis.kit.coherence.AbstractCoherent;
-import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.coherence.AbstractCoherent;
+import mikenakis.coherence.FreezableCoherence;
 
 /**
  * A subject of {@link MutableCollections}.

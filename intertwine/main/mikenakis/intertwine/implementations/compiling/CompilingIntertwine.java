@@ -55,7 +55,6 @@ class CompilingIntertwine<T> implements Intertwine<T>
 {
 	private static final String dummySourceFileName = "DummySourceFile.java";
 
-	private final ClassLoader classLoader;
 	private final Class<? super T> interfaceType;
 	private final TerminalTypeDescriptor interfaceTypeDescriptor;
 	private final List<MethodPrototype> interfaceMethodPrototypes;
@@ -64,15 +63,15 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private Optional<Constructor<T>> entwinerConstructor = Optional.empty();
 	private Optional<Constructor<Anycall<T>>> untwinerConstructor = Optional.empty();
 
-	CompilingIntertwine( ClassLoader classLoader, Class<? super T> interfaceType )
+	CompilingIntertwine( Class<? super T> interfaceType )
 	{
 		assert interfaceType.isInterface();
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
-		this.classLoader = classLoader;
+		//this.classLoader = classLoader;
 		this.interfaceType = interfaceType;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		interfaceTypeDescriptor = interfaceByteCodeType.typeDescriptor();
-		interfaceMethodPrototypes = getInterfaceMethodPrototypes( classLoader, interfaceByteCodeType );
+		interfaceMethodPrototypes = getInterfaceMethodPrototypes( interfaceType.getClassLoader(), interfaceByteCodeType );
 		keys = buildArrayOfKey( interfaceMethodPrototypes );
 		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 	}
@@ -180,7 +179,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
 			save( className, entwinerByteCodeType );
 
-		Class<T> entwinerClass = ByteCodeClassLoader.load( classLoader, entwinerByteCodeType );
+		Class<T> entwinerClass = ByteCodeClassLoader.load( interfaceType.getClassLoader(), entwinerByteCodeType );
 		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, Anycall.class ) );
 	}
 
@@ -282,7 +281,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
 			save( className, untwinerByteCodeType );
 
-		Class<T> untwinerClass = ByteCodeClassLoader.load( getClass().getClassLoader(), untwinerByteCodeType );
+		Class<T> untwinerClass = ByteCodeClassLoader.load( interfaceType.getClassLoader(), untwinerByteCodeType );
 		@SuppressWarnings( "unchecked" ) Constructor<Anycall<T>> result = (Constructor<Anycall<T>>)Kit.unchecked( () -> untwinerClass.getDeclaredConstructor( interfaceType ) );
 		return result;
 	}

@@ -4,9 +4,9 @@ import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;
+import mikenakis.immutability.type.assessments.ImmutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.UnderAssessmentTypeImmutabilityAssessment;
 import mikenakis.immutability.type.exceptions.PreassessedClassMustNotAlreadyBeImmutableException;
 import mikenakis.immutability.type.exceptions.PreassessedClassMustNotBeExtensibleException;
 import mikenakis.immutability.type.exceptions.PreassessedClassMustNotBePreviouslyAssessedException;
@@ -36,9 +36,9 @@ public final class TypeImmutabilityAssessor extends Stringizable
 		return assessor;
 	}
 
-	public final ImmutableTypeAssessment immutableClassAssessmentInstance = new ImmutableTypeAssessment( stringizer );
-	private final UnderAssessmentTypeAssessment underAssessmentInstance = new UnderAssessmentTypeAssessment( stringizer );
-	private final Map<Class<?>,TypeAssessment> assessmentsByType = new HashMap<>();
+	public final ImmutableTypeImmutabilityAssessment immutableClassAssessmentInstance = new ImmutableTypeImmutabilityAssessment( stringizer );
+	private final UnderAssessmentTypeImmutabilityAssessment underAssessmentInstance = new UnderAssessmentTypeImmutabilityAssessment( stringizer );
+	private final Map<Class<?>,TypeImmutabilityAssessment> assessmentsByType = new HashMap<>();
 	private final Reflector reflector = new Reflector( this );
 
 	TypeImmutabilityAssessor( Stringizer stringizer )
@@ -58,30 +58,30 @@ public final class TypeImmutabilityAssessor extends Stringizable
 		} );
 	}
 
-	public TypeAssessment assess( Class<?> type )
+	public TypeImmutabilityAssessment assess( Class<?> type )
 	{
 		return MyKit.sync.synchronize( assessmentsByType, () -> //
 		{
-			TypeAssessment existingAssessment = assessmentsByType.get( type );
+			TypeImmutabilityAssessment existingAssessment = assessmentsByType.get( type );
 			if( existingAssessment != null )
 				return existingAssessment;
 			assessmentsByType.put( type, underAssessmentInstance );
-			TypeAssessment newAssessment = reflector.assess( type );
-			TypeAssessment oldAssessment = assessmentsByType.put( type, newAssessment );
+			TypeImmutabilityAssessment newAssessment = reflector.assess( type );
+			TypeImmutabilityAssessment oldAssessment = assessmentsByType.put( type, newAssessment );
 			assert oldAssessment == underAssessmentInstance;
-			assert !(newAssessment instanceof UnderAssessmentTypeAssessment);
+			assert !(newAssessment instanceof UnderAssessmentTypeImmutabilityAssessment);
 			return newAssessment;
 		} );
 	}
 
-	void addDefaultPreassessment( Class<?> jvmClass, TypeAssessment classAssessment )
+	void addDefaultPreassessment( Class<?> jvmClass, TypeImmutabilityAssessment classAssessment )
 	{
 		assessmentsByType.put( jvmClass, classAssessment );
 	}
 
 	private boolean addedClassMustNotBePreviouslyAssessedAssertion( Class<?> jvmClass )
 	{
-		TypeAssessment previousClassAssessment = assessmentsByType.get( jvmClass );
+		TypeImmutabilityAssessment previousClassAssessment = assessmentsByType.get( jvmClass );
 		assert previousClassAssessment == null : new PreassessedClassMustNotBePreviouslyAssessedException( previousClassAssessment );
 		return true;
 	}
@@ -102,8 +102,8 @@ public final class TypeImmutabilityAssessor extends Stringizable
 
 	private boolean addedClassMustNotAlreadyBeImmutableAssertion( Class<?> jvmClass )
 	{
-		TypeAssessment assessment = reflector.assess( jvmClass );
-		if( assessment instanceof ImmutableTypeAssessment ignore )
+		TypeImmutabilityAssessment assessment = reflector.assess( jvmClass );
+		if( assessment instanceof ImmutableTypeImmutabilityAssessment ignore )
 			throw new PreassessedClassMustNotAlreadyBeImmutableException( jvmClass );
 		return true;
 	}

@@ -2,9 +2,9 @@ package mikenakis.tyraki;
 
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
-import mikenakis.kit.coherence.AbstractCoherent;
-import mikenakis.kit.coherence.Coherence;
-import mikenakis.kit.coherence.implementation.ConcreteFreezableCoherence;
+import mikenakis.coherence.AbstractCoherent;
+import mikenakis.coherence.Coherence;
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.BooleanFunction2;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.mutable.MutableCollections;

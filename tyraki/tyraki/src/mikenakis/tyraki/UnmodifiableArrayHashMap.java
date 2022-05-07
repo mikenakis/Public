@@ -3,7 +3,7 @@ package mikenakis.tyraki;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
-import mikenakis.kit.coherence.implementation.ConcreteFreezableCoherence;
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.Function1;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;
@@ -230,11 +230,10 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 		if( keys.isEmpty() )
 			return of();
 		UnmodifiableList<Binding<K,V>> entries = keys.map( key -> MapEntry.of( key, valueFromKeyConverter.invoke( key ) ) );
-		//UnmodifiableArrayMap<K,V> temporaryMap = ConversionCollections.newArrayMapOnKeyList( keys, valueFromKeyConverter );
 		Hasher<? super K> keyHasher = ObjectHasher.INSTANCE;
 		EqualityComparator<? super K> keyEqualityComparator = keys.getEqualityComparator();
 		EqualityComparator<? super V> valueEqualityComparator = DefaultEqualityComparator.getInstance();
-		return from( entries/*temporaryMap.getEntries()*/, ImmutableCollections.DEFAULT_FILL_FACTOR, keyHasher, keyEqualityComparator, valueEqualityComparator );
+		return from( entries, ImmutableCollections.DEFAULT_FILL_FACTOR, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
 	/**
@@ -245,11 +244,10 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 		if( values.isEmpty() )
 			return of();
 		UnmodifiableList<Binding<K,V>> entries = values.map( value -> MapEntry.of( keyFromValueConverter.invoke( value ), value ) );
-		//UnmodifiableArrayMap<K,V> temporaryMap = ConversionCollections.newArrayMapOnValueList( values, keyFromValueConverter );
 		Hasher<? super K> keyHasher = ObjectHasher.INSTANCE;
 		EqualityComparator<? super K> keyEqualityComparator = DefaultEqualityComparator.getInstance();
 		EqualityComparator<? super V> valueEqualityComparator = values.getEqualityComparator();
-		return from( entries/*temporaryMap.getEntries()*/, ImmutableCollections.DEFAULT_FILL_FACTOR, keyHasher, keyEqualityComparator, valueEqualityComparator );
+		return from( entries, ImmutableCollections.DEFAULT_FILL_FACTOR, keyHasher, keyEqualityComparator, valueEqualityComparator );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

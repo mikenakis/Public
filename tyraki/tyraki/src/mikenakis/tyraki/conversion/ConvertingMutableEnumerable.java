@@ -1,6 +1,6 @@
 package mikenakis.tyraki.conversion;
 
-import mikenakis.kit.coherence.Coherence;
+import mikenakis.coherence.Coherence;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.MutableEnumerable;
 import mikenakis.tyraki.MutableEnumerator;

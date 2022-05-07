@@ -47,3 +47,35 @@ public class ByteCodeClassLoader extends ClassLoader
 		return super.findClass( name ); // will throw ClassNotFoundException
 	}
 }
+
+//This does not work:
+//
+//public class ByteCodeClassLoader extends ClassLoader
+//{
+//	public static <T> Class<T> load( ClassLoader parentClassLoader, ByteCodeType byteCodeType )
+//	{
+//		ByteCodeClassLoader byteCodeClassLoader = new ByteCodeClassLoader( parentClassLoader, byteCodeType.typeDescriptor().typeName, byteCodeType.write() );
+//		String name = byteCodeType.typeDescriptor().typeName;
+//		Class<?> javaClass = Kit.unchecked( () -> byteCodeClassLoader.loadClass( name ) );
+//		@SuppressWarnings( "unchecked" ) Class<T> result = (Class<T>)javaClass;
+//		return result;
+//	}
+//
+//	private final String name;
+//	private final byte[] bytes;
+//
+//	private ByteCodeClassLoader( ClassLoader parentClassLoader, String name, byte[] bytes )
+//	{
+//		super( ByteCodeClassLoader.class.getName(), parentClassLoader );
+//		this.name = name;
+//		this.bytes = bytes;
+//	}
+//
+//	@Override protected Class<?> findClass( String name ) throws ClassNotFoundException
+//	{
+//		if( name.equals( this.name ) )
+//			return defineClass( name, bytes, 0, bytes.length );
+//		Debug.breakPoint();
+//		return super.findClass( name ); // will throw ClassNotFoundException
+//	}
+//}

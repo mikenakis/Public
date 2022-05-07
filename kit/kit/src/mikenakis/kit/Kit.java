@@ -66,6 +66,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
@@ -76,6 +77,8 @@ import java.util.stream.StreamSupport;
 @SuppressWarnings( { "unused", "NewClassNamingConvention" } )
 public final class Kit
 {
+	private static final Duration postAndWaitTimeout = Duration.ofSeconds( 1 );
+
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
 	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
@@ -93,13 +96,6 @@ public final class Kit
 		assert b = true;
 		//noinspection ConstantConditions
 		return b;
-	}
-
-	public static boolean debugging()
-	{
-		if( Debug.expectingException )
-			return false;
-		return areAssertionsEnabled();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,8 +217,8 @@ public final class Kit
 	}
 
 	/**
-	 * Obtains a string of the form type-name@hex-number which "for the most part" uniquely identifies an object.
-	 * NOTE: there are no guarantees that the returned string will be truly unique.
+	 * Obtains a string of the form type-name@hex-number which "for the most part" uniquely identifies an object. NOTE: there are no guarantees that the
+	 * returned string will be truly unique.
 	 *
 	 * @param object the {@link Object} whose identity string is requested.
 	 *
@@ -257,7 +253,7 @@ public final class Kit
 	{
 		StackWalker.StackFrame stackFrame = getStackFrame( numberOfFramesToSkip + 1 );
 		SourceLocation sourceLocation = SourceLocation.fromStackFrame( stackFrame );
-		assert sourceLocation.stringRepresentation().equals( stackFrame.toString() );
+		//assert sourceLocation.stringRepresentation().equals( stackFrame.toString() ); //TODO: why did this have to be disabled?
 		return sourceLocation;
 	}
 
@@ -784,9 +780,8 @@ public final class Kit
 		}
 
 		/**
-		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}.
-		 * The difference between this function and {@link StringBuilder#append(Object)} is that this function treats {@link String}
-		 * differently: strings are output escaped and surrounded with quotes.
+		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}. The difference between this function and {@link
+		 * StringBuilder#append(Object)} is that this function treats {@link String} differently: strings are output escaped and surrounded with quotes.
 		 *
 		 * @param stringBuilder the StringBuilder to append to.
 		 * @param object        the object whose string representation is to be appended to the StringBuilder.
@@ -820,8 +815,8 @@ public final class Kit
 		}
 
 		/**
-		 * Splits a string in parts using a given character as delimiter.
-		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 * Splits a string in parts using a given character as delimiter. Corrects Java's insanity of only offering versions of this function that work with
+		 * regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
@@ -834,9 +829,8 @@ public final class Kit
 		}
 
 		/**
-		 * Splits a string in parts using a given character as delimiter.
-		 * Optionally includes the delimiter as a separate element in the results.
-		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 * Splits a string in parts using a given character as delimiter. Optionally includes the delimiter as a separate element in the results. Corrects
+		 * Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
@@ -893,9 +887,8 @@ public final class Kit
 		}
 
 		/**
-		 * Unescape a Java string.
-		 * Takes a string enclosed in either in single or double quotes and possibly containing Java escape sequences, and returns the content of the string
-		 * with the quotes removed and the escape sequences replaced with the actual characters that they represent.
+		 * Unescape a Java string. Takes a string enclosed in either in single or double quotes and possibly containing Java escape sequences, and returns the
+		 * content of the string with the quotes removed and the escape sequences replaced with the actual characters that they represent.
 		 *
 		 * @param value a quoted string.
 		 *
@@ -991,8 +984,7 @@ public final class Kit
 		}
 
 		/**
-		 * Checks whether a string is empty or consists of only whitespace.
-		 * NOTE: the only characters considered as whitespace are ' ', '\t', '\n', and '\r'.
+		 * Checks whether a string is empty or consists of only whitespace. NOTE: the only characters considered as whitespace are ' ', '\t', '\n', and '\r'.
 		 */
 		public static boolean isEmptyOrWhitespace( String s )
 		{
@@ -1003,8 +995,7 @@ public final class Kit
 		}
 
 		/**
-		 * Checks whether a character is whitespace.
-		 * NOTE: the only characters considered as whitespace are ' ', '\t', '\n', and '\r'.
+		 * Checks whether a character is whitespace. NOTE: the only characters considered as whitespace are ' ', '\t', '\n', and '\r'.
 		 */
 		public static boolean isWhitespace( char c )
 		{
@@ -1016,8 +1007,7 @@ public final class Kit
 		}
 
 		/**
-		 * Gets the string representation of an {@link Object}.
-		 * see {@link stringBuilder#append(StringBuilder, Object)}
+		 * Gets the string representation of an {@link Object}. see {@link stringBuilder#append(StringBuilder, Object)}
 		 *
 		 * @param object the object whose string representation is requested.
 		 */
@@ -1223,9 +1213,9 @@ public final class Kit
 		/**
 		 * QuickSort.
 		 * <p>
-		 * The advantage of using this algorithm over java's built-in sorting algorithm is that this one will not throw IllegalArgumentException
-		 * ("Comparison method violates its general contract!") alternatively, we can issue System.setProperty( "java.util.Arrays.useLegacyMergeSort", "true" );
-		 * and then go ahead and make use of List.sort(), but modifying the state of the JVM is a lame thing to do.
+		 * The advantage of using this algorithm over java's built-in sorting algorithm is that this one will not throw IllegalArgumentException ("Comparison
+		 * method violates its general contract!") alternatively, we can issue System.setProperty( "java.util.Arrays.useLegacyMergeSort", "true" ); and then go
+		 * ahead and make use of List.sort(), but modifying the state of the JVM is a lame thing to do.
 		 */
 		public static <T> void quickSort( List<T> values, Comparator<T> comparator )
 		{
@@ -1488,9 +1478,8 @@ public final class Kit
 		}
 
 		/**
-		 * Adds an item to a {@link Collection}. The item must not already exist.
-		 * Corresponds to Java's {@link Collection#add(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
-		 * already exists.
+		 * Adds an item to a {@link Collection}. The item must not already exist. Corresponds to Java's {@link Collection#add(T)}, except that it corrects
+		 * Java's deplorable dumbfuckery of not throwing an exception when the item already exists.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <T> void add( Collection<T> collection, T item )
@@ -1501,8 +1490,7 @@ public final class Kit
 		}
 
 		/**
-		 * Tries to add an item to a {@link Collection}.
-		 * Corresponds to Java's {@link Collection#add(T)}.
+		 * Tries to add an item to a {@link Collection}. Corresponds to Java's {@link Collection#add(T)}.
 		 *
 		 * @return {@code true} if the item was added; {@code false} if the item was not added because it already existed.
 		 */
@@ -1514,8 +1502,7 @@ public final class Kit
 		}
 
 		/**
-		 * Adds an item in a {@link Collection} or replaces it if it already exists.
-		 * Corresponds to Java's {@link Collection#add(T)}.
+		 * Adds an item in a {@link Collection} or replaces it if it already exists. Corresponds to Java's {@link Collection#add(T)}.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <T> void addOrReplace( Collection<T> collection, T item )
@@ -1525,9 +1512,8 @@ public final class Kit
 		}
 
 		/**
-		 * Removes an item from a {@link Collection}. The item must already exist.
-		 * Corresponds to Java's {@link Collection#remove(T)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the item
-		 * does not exist.
+		 * Removes an item from a {@link Collection}. The item must already exist. Corresponds to Java's {@link Collection#remove(T)}, except that it corrects
+		 * Java's deplorable dumbfuckery of not throwing an exception when the item does not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <T> void remove( Collection<T> collection, T item )
@@ -1537,8 +1523,7 @@ public final class Kit
 		}
 
 		/**
-		 * Removes an item from a {@link Collection} if it exists.
-		 * Corresponds to Java's {@link Collection#remove(T)}.
+		 * Removes an item from a {@link Collection} if it exists. Corresponds to Java's {@link Collection#remove(T)}.
 		 *
 		 * @return {@code true} if the item was removed; {@code false} if the item was not removed because it did not exist.
 		 */
@@ -1596,8 +1581,8 @@ public final class Kit
 		}
 
 		/**
-		 * Returns a new {@link ArrayList} containing the elements of the given {@link Collection} in reverse order.
-		 * Important note: the returned list is a new mutable {@link ArrayList}, it is not just a reverse mapping onto the original collection.
+		 * Returns a new {@link ArrayList} containing the elements of the given {@link Collection} in reverse order. Important note: the returned list is a new
+		 * mutable {@link ArrayList}, it is not just a reverse mapping onto the original collection.
 		 */
 		public static <T> ArrayList<T> reversed( Collection<T> list )
 		{
@@ -1663,9 +1648,8 @@ public final class Kit
 	public static final class map
 	{
 		/**
-		 * Gets a value by key from a {@link Map}. The key must exist.
-		 * Corresponds to Java's {@link Map#get(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
-		 * exist.
+		 * Gets a value by key from a {@link Map}. The key must exist. Corresponds to Java's {@link Map#get(K)}, except that it corrects Java's deplorable
+		 * dumbfuckery of not throwing an exception when the key does not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> V get( Map<K,V> map, K key )
@@ -1677,9 +1661,9 @@ public final class Kit
 		}
 
 		/**
-		 * Tries to get a value by key from a {@link Map}. The key may and may not exist.
-		 * Corresponds to Java's {@link Map#get(K)}, the difference being that by using this method we are documenting the fact that we are intentionally
-		 * allowing the key to potentially not exist and that {@code null} may be returned.
+		 * Tries to get a value by key from a {@link Map}. The key may and may not exist. Corresponds to Java's {@link Map#get(K)}, the difference being that by
+		 * using this method we are documenting the fact that we are intentionally allowing the key to potentially not exist and that {@code null} may be
+		 * returned.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> V tryGet( Map<K,V> map, K key )
@@ -1697,8 +1681,7 @@ public final class Kit
 		}
 
 		/**
-		 * Checks whether a {@link Map} contains a given key.
-		 * Corresponds to Java's {@link Map#containsKey(K)}.
+		 * Checks whether a {@link Map} contains a given key. Corresponds to Java's {@link Map#containsKey(K)}.
 		 *
 		 * @return {@code true} if the {@link Map} contains the key; {@code false} otherwise.
 		 */
@@ -1710,9 +1693,8 @@ public final class Kit
 		}
 
 		/**
-		 * Adds a key-value pair to a {@link Map}. The key must not already exist.
-		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key already
-		 * exists.
+		 * Adds a key-value pair to a {@link Map}. The key must not already exist. Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's
+		 * deplorable dumbfuckery of not throwing an exception when the key already exists.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> void add( Map<K,V> map, K key, V value )
@@ -1724,9 +1706,8 @@ public final class Kit
 		}
 
 		/**
-		 * Removes a key-value pair from a {@link Map}. The key must already exist.
-		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
-		 * exist.
+		 * Removes a key-value pair from a {@link Map}. The key must already exist. Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's
+		 * deplorable dumbfuckery of not throwing an exception when the key does not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> V remove( Map<K,V> map, K key )
@@ -1737,9 +1718,9 @@ public final class Kit
 		}
 
 		/**
-		 * Removes a key-value pair from a {@link Map}. The key must already exist and must map to the given value.
-		 * Corresponds to Java's {@link Map#remove(K)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
-		 * exist or when the key is not mapped to the expected value.
+		 * Removes a key-value pair from a {@link Map}. The key must already exist and must map to the given value. Corresponds to Java's {@link Map#remove(K)},
+		 * except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not exist or when the key is not mapped to the
+		 * expected value.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> void remove( Map<K,V> map, K key, V value )
@@ -1749,8 +1730,8 @@ public final class Kit
 		}
 
 		/**
-		 * Tries to remove a key-value pair from a {@link Map}.
-		 * Corresponds to Java's {@link Map#remove(K)}, but with a name that documents exactly what it does.
+		 * Tries to remove a key-value pair from a {@link Map}. Corresponds to Java's {@link Map#remove(K)}, but with a name that documents exactly what it
+		 * does.
 		 *
 		 * @return the value that was previously associated with the given key, or {@code null} if the key was not in the map.
 		 */
@@ -1761,9 +1742,8 @@ public final class Kit
 		}
 
 		/**
-		 * Removes a key from a {@link Map}, if the key is present. The key may and may not already exist.
-		 * Corresponds to Java's {@link Map#remove(K)}, the difference being that by using this method we are documenting the fact that we are intentionally
-		 * allowing the key to potentially not exist.
+		 * Removes a key from a {@link Map}, if the key is present. The key may and may not already exist. Corresponds to Java's {@link Map#remove(K)}, the
+		 * difference being that by using this method we are documenting the fact that we are intentionally allowing the key to potentially not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> void removeIfPresent( Map<K,V> map, K key )
@@ -1772,9 +1752,8 @@ public final class Kit
 		}
 
 		/**
-		 * Tries to add a key-value pair to a {@link Map}.
-		 * Corresponds to Java's {@link Map#put(K, V)}, the difference being that by using this method we are documenting the fact that we are intentionally
-		 * allowing the key to already exist, potentially.
+		 * Tries to add a key-value pair to a {@link Map}. Corresponds to Java's {@link Map#put(K, V)}, the difference being that by using this method we are
+		 * documenting the fact that we are intentionally allowing the key to already exist, potentially.
 		 *
 		 * @return {@link true} if the pair was successfully added; {@link false} if the key was already present.
 		 */
@@ -1791,9 +1770,8 @@ public final class Kit
 		}
 
 		/**
-		 * Tries to replace the value associated with a given key.
-		 * If the key already exists, then the value associated with it is replaced and {@code true} is returned.
-		 * If the key does not already exist, then the map is not modified and {@code false} is returned.
+		 * Tries to replace the value associated with a given key. If the key already exists, then the value associated with it is replaced and {@code true} is
+		 * returned. If the key does not already exist, then the map is not modified and {@code false} is returned.
 		 *
 		 * @param map   the map.
 		 * @param key   the key.
@@ -1815,9 +1793,8 @@ public final class Kit
 		}
 
 		/**
-		 * Replaces the value associated with a given key. The key must already exist.
-		 * Corresponds to Java's {@link Map#put(K, V)}, except that it corrects Java's deplorable dumbfuckery of not throwing an exception when the key does not
-		 * exist.
+		 * Replaces the value associated with a given key. The key must already exist. Corresponds to Java's {@link Map#put(K, V)}, except that it corrects
+		 * Java's deplorable dumbfuckery of not throwing an exception when the key does not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> V replace( Map<K,V> map, K key, V value )
@@ -1830,9 +1807,9 @@ public final class Kit
 		}
 
 		/**
-		 * Adds or replaces a key-value pair in a {@link Map}. The key may and may not already exist.
-		 * Corresponds to Java's {@link Map#put}, the difference being that by using this method we are documenting the fact that we are intentionally
-		 * performing this very odd and rarely used operation, allowing the key to either exist or not exist.
+		 * Adds or replaces a key-value pair in a {@link Map}. The key may and may not already exist. Corresponds to Java's {@link Map#put}, the difference
+		 * being that by using this method we are documenting the fact that we are intentionally performing this very odd and rarely used operation, allowing
+		 * the key to either exist or not exist.
 		 */
 		/*@SuppressWarnings( "deprecation" )*/
 		public static <K, V> V addOrReplace( Map<K,V> map, K key, V value )
@@ -1904,8 +1881,8 @@ public final class Kit
 		}
 
 		/**
-		 * Obtains the string representation of a given {@link Instant} (presumed to be in UTC) as a local time,
-		 * in a format similar to ISO 8601 but without the ISO 8601 weirdness.
+		 * Obtains the string representation of a given {@link Instant} (presumed to be in UTC) as a local time, in a format similar to ISO 8601 but without the
+		 * ISO 8601 weirdness.
 		 *
 		 * @param instant the {@link Instant} to convert.
 		 *
@@ -1917,8 +1894,8 @@ public final class Kit
 		}
 
 		/**
-		 * Creates an instant at a specific year, month, day, hour, minute, second, and millisecond UTC.
-		 * PEARL: Java makes it surprisingly difficult to create an {@link Instant} at a specific point in time. This function does it.
+		 * Creates an instant at a specific year, month, day, hour, minute, second, and millisecond UTC. PEARL: Java makes it surprisingly difficult to create
+		 * an {@link Instant} at a specific point in time. This function does it.
 		 */
 		public static Instant createInstant( int year, int month, int day, int hour, int minute, int second, int millisecond )
 		{
@@ -1957,22 +1934,7 @@ public final class Kit
 	}
 
 	/**
-	 * <p>Performs a debugger-friendly {@code try-catch} which returns a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-catch} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-function and returns its result.</p></li>
-	 *             <li><p>In the {@code catch} part, it passes any caught exception to the catch-function and returns its result.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-function and returns its result, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-catch} to use curly braces
-	 *     even when the code blocks consist of single statements.
-	 *     (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
+	 * Performs a debugger-friendly {@code try-catch} which returns a result.
 	 *
 	 * @param tryFunction   the function to be invoked in the 'try' block.
 	 * @param catchFunction the function to handle any throwable thrown.
@@ -1982,122 +1944,55 @@ public final class Kit
 	 */
 	public static <R> R tryGetCatch( Function0<R> tryFunction, ThrowingFunction1<R,Throwable,Throwable> catchFunction )
 	{
-		if( debugging() )
-			return tryFunction.invoke();
-		else
+		try
 		{
-			try
-			{
-				return tryFunction.invoke();
-			}
-			catch( Throwable throwable )
-			{
-				uncheckedThrowable( () -> catchFunction.invoke( throwable ) );
-				return null;
-			}
+			return Debug.boundary( () -> tryFunction.invoke() );
+		}
+		catch( Throwable throwable )
+		{
+			uncheckedThrowable( () -> catchFunction.invoke( throwable ) );
+			return null;
 		}
 	}
 
 	/**
-	 * <p>Performs a debugger-friendly {@code try-catch} which does not return a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-catch} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-procedure.</p></li>
-	 *             <li><p>In the {@code catch} part, it passes any caught exception to the catch-procedure.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-procedure, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-catch} to use curly braces
-	 *     even when the code blocks consist of single statements.
-	 *     (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
+	 * Performs a debugger-friendly {@code try-catch} which does not return a result.
 	 *
 	 * @param tryProcedure   the procedure to be invoked in the 'try' block.
 	 * @param catchProcedure the handler to receive any throwable thrown.
 	 */
 	public static void tryCatch( Procedure0 tryProcedure, ThrowingProcedure1<Throwable,Throwable> catchProcedure )
 	{
-		if( debugging() )
-			tryProcedure.invoke();
-		else
+		try
 		{
-			try
-			{
-				tryProcedure.invoke();
-			}
-			catch( Throwable throwable )
-			{
-				uncheckedThrowable( () -> catchProcedure.invoke( throwable ) );
-			}
+			Debug.boundary( () -> tryProcedure.invoke() );
+		}
+		catch( Throwable throwable )
+		{
+			uncheckedThrowable( () -> catchProcedure.invoke( throwable ) );
 		}
 	}
 
 	/**
-	 * <p>Performs a debugger-friendly {@code try-catch} and returns any caught {@link Throwable}.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-catch} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-procedure and returns an empty {@link Optional}.</p></li>
-	 *             <li><p>In the {@code catch} part, it returns the caught exception wrapped in an {@link Optional}.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-procedure and returns an empty {@link Optional}, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you in the case of {@code try-catch} to use curly braces
-	 *     even when the code blocks consist of single statements.
-	 *     (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
+	 * Performs a debugger-friendly {@code try-catch} and returns any caught {@link Throwable}.
 	 *
 	 * @param tryProcedure the procedure to be invoked in the 'try' block.
 	 */
 	public static Optional<Throwable> tryCatch( Procedure0 tryProcedure )
 	{
-		if( debugging() )
+		try
 		{
-			tryProcedure.invoke();
+			Debug.boundary( () -> tryProcedure.invoke() );
 			return Optional.empty();
 		}
-		else
+		catch( Throwable throwable1 )
 		{
-			try
-			{
-				tryProcedure.invoke();
-				return Optional.empty();
-			}
-			catch( Throwable throwable1 )
-			{
-				return Optional.of( throwable1 );
-			}
+			return Optional.of( throwable1 );
 		}
 	}
 
 	/**
-	 * <p>Performs a debugger-friendly {@code try-finally} that returns a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-function and returns its result.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes the finally-procedure.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-function and returns its result, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *             <li><p>If no exception is thrown:
-	 *                  <ul>
-	 *                      <li><p>It invokes the finally-procedure.</p></li>
-	 *                  </ul></p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you to use curly braces even when the code blocks consist of single
-	 *     statements. (You supply lambdas for the {@code try} block and the {@code finally} block, so you get to decide whether your lambdas will use curly
-	 *     braces or not.)</p></li>
+	 * Performs a debugger-friendly {@code try-finally} that returns a result.
 	 *
 	 * @param tryFunction    the function to be invoked in the 'try' block.
 	 * @param finallyHandler the handler to be invoked after the try-function.
@@ -2107,68 +2002,31 @@ public final class Kit
 	 */
 	public static <R> R tryFinally( Function0<R> tryFunction, Procedure0 finallyHandler )
 	{
-		if( debugging() )
+		try
 		{
-			R result = tryFunction.invoke();
-			finallyHandler.invoke();
-			return result;
+			return Debug.boundary( () -> tryFunction.invoke() );
 		}
-		else
+		finally
 		{
-			try
-			{
-				return tryFunction.invoke();
-			}
-			finally
-			{
-				finallyHandler.invoke();
-			}
+			finallyHandler.invoke();
 		}
 	}
 
 	/**
-	 * <p>Performs a debugger-friendly {@code try-finally} that does not return a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-procedure.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes the finally-procedure.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-procedure, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *             <li><p>If no exception is thrown:
-	 *                  <ul>
-	 *                      <li><p>It invokes the finally-procedure.</p></li>
-	 *                  </ul></p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids Java's deplorable dumbfuckery of forcing you to use curly braces even when the code blocks consist of single
-	 *     statements. (You supply lambdas for the {@code try} block and the {@code finally} block, so you get to decide whether your lambdas will use curly
-	 *     braces or not.)</p></li>
-	 * </ul>
+	 * Performs a debugger-friendly {@code try-finally} that does not return a result.
 	 *
 	 * @param tryProcedure   the procedure to be invoked in the 'try' part.
 	 * @param finallyHandler the handler to be invoked in the 'finally' part.
 	 */
 	public static void tryFinally( Procedure0 tryProcedure, Procedure0 finallyHandler )
 	{
-		if( debugging() )
+		try
 		{
-			tryProcedure.invoke();
-			finallyHandler.invoke();
+			Debug.boundary( () -> tryProcedure.invoke() );
 		}
-		else
+		finally
 		{
-			try
-			{
-				tryProcedure.invoke();
-			}
-			finally
-			{
-				finallyHandler.invoke();
-			}
+			finallyHandler.invoke();
 		}
 	}
 
@@ -2176,8 +2034,8 @@ public final class Kit
 	 * Performs a debugger-friendly try-catch-and-transform that does not return a value.
 	 *
 	 * @param tryProcedure the {@link Procedure0} to invoke as the try-block.
-	 * @param transformer a function to transform the caught {@link Throwable} into another {@link Throwable}.
-	 * @param <T> the type of the transformed {@link Throwable}
+	 * @param transformer  a function to transform the caught {@link Throwable} into another {@link Throwable}.
+	 * @param <T>          the type of the transformed {@link Throwable}
 	 */
 	public static <T extends Throwable> void tryTransform( Procedure0 tryProcedure, Function1<T,Throwable> transformer )
 	{
@@ -2197,9 +2055,9 @@ public final class Kit
 	 *
 	 * @param tryFunction the {@link Function0} to invoke as the try-block and return its result.
 	 * @param transformer a function to transform the caught {@link Throwable} into another {@link Throwable}.
-	 * @param <T> the type of the transformed {@link Throwable}
+	 * @param <T>         the type of the transformed {@link Throwable}
 	 */
-	public static <R,T extends Throwable> R tryGetTransform( Function0<R> tryFunction, Function1<T,Throwable> transformer )
+	public static <R, T extends Throwable> R tryGetTransform( Function0<R> tryFunction, Function1<T,Throwable> transformer )
 	{
 		try
 		{
@@ -2247,7 +2105,7 @@ public final class Kit
 		p.invoke();
 	}
 
-	public static <E extends Throwable> void uncheckedThrowable( ThrowingProcedure0<E> throwingProcedure )
+	private static <E extends Throwable> void uncheckedThrowable( ThrowingProcedure0<E> throwingProcedure )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingProcedure0<RuntimeException> p = (ThrowingProcedure0<RuntimeException>)throwingProcedure;
 		p.invoke();
@@ -2261,13 +2119,11 @@ public final class Kit
 	/**
 	 * Invokes a given function declared with {@code throws Throwable}.
 	 * <p>
-	 * PEARL: just to keep things interesting, Java does not only support checked exceptions, it even allows a method to be declared with
-	 * {@code throws Throwable}, in which case the caller is forced to somehow do something about the declared {@code Throwable}, despite the fact
-	 * that {@link Throwable} is not a checked exception.
-	 * And sure enough, the JDK makes use of this weird feature in at least a few places that I am aware of, e.g. in {@code MethodHandle.invoke()}
-	 * and {@code MethodHandle.invokeExact()}.
-	 * The following method allows us to invoke methods declared with {@code throws Throwable} without having to handle or in any other way deal
-	 * with the {@code Throwable}.
+	 * PEARL: just to keep things interesting, Java does not only support checked exceptions, it even allows a method to be declared with {@code throws
+	 * Throwable}, in which case the caller is forced to somehow do something about the declared {@code Throwable}, despite the fact that {@link Throwable} is
+	 * not a checked exception. And sure enough, the JDK makes use of this weird feature in at least a few places that I am aware of, e.g. in {@code
+	 * MethodHandle.invoke()} and {@code MethodHandle.invokeExact()}. The following method allows us to invoke methods declared with {@code throws Throwable}
+	 * without having to handle or in any other way deal with the {@code Throwable}.
 	 *
 	 * @param function the {@link ThrowableThrowingFunction} to invoke.
 	 * @param <R>      the type of result returned by the function.
@@ -2291,15 +2147,9 @@ public final class Kit
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
 		C autoCloseable = f.invoke();
 		assert autoCloseable != null;
-		if( debugging() )
-		{
-			R result = unchecked( () -> tryFunction.invoke( autoCloseable ) );
-			unchecked( autoCloseable::close );
-			return result;
-		}
 		try
 		{
-			return unchecked( () -> tryFunction.invoke( autoCloseable ) );
+			return Debug.boundary( () -> unchecked( () -> tryFunction.invoke( autoCloseable ) ) );
 		}
 		finally
 		{
@@ -2317,21 +2167,13 @@ public final class Kit
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
 		C autoCloseable = f.invoke();
 		assert autoCloseable != null;
-		if( debugging() )
+		try
 		{
-			unchecked( () -> tryProcedure.invoke( autoCloseable ) );
-			unchecked( autoCloseable::close );
+			Debug.boundary( () -> unchecked( () -> tryProcedure.invoke( autoCloseable ) ) );
 		}
-		else
+		finally
 		{
-			try
-			{
-				unchecked( () -> tryProcedure.invoke( autoCloseable ) );
-			}
-			finally
-			{
-				unchecked( autoCloseable::close );
-			}
+			unchecked( autoCloseable::close );
 		}
 	}
 
@@ -2401,8 +2243,7 @@ public final class Kit
 		}
 
 		/**
-		 * Naive Linear interpolation.
-		 * (See std::lerp of C++20 for how much more complicated this could be)
+		 * Naive Linear interpolation. (See std::lerp of C++20 for how much more complicated this could be)
 		 */
 		public static double interpolate( double a, double b, double t )
 		{
@@ -2410,8 +2251,7 @@ public final class Kit
 		}
 
 		/**
-		 * Cubic interpolation.
-		 * from https://www.paulinternet.nl/?page=bicubic
+		 * Cubic interpolation. from https://www.paulinternet.nl/?page=bicubic
 		 */
 		public static double interpolate( double[] p, double x )
 		{
@@ -2437,8 +2277,7 @@ public final class Kit
 		}
 
 		/**
-		 * Computes the remainder of a number according to IEEE 754.
-		 * Essentially, this is supposed to be the same as the fmod() function of C++.
+		 * Computes the remainder of a number according to IEEE 754. Essentially, this is supposed to be the same as the fmod() function of C++.
 		 */
 		public static double mod( double n, double d )
 		{
@@ -2462,11 +2301,8 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of sin(x).
-		 * Milian's version
-		 * see https://stackoverflow.com/a/28050328/773113
-		 * this is FASTER than Math.sin() by a factor of more than 2
-		 * this is accurate to about 1%
+		 * Computes an approximation of sin(x). Milian's version see https://stackoverflow.com/a/28050328/773113 this is FASTER than Math.sin() by a factor of
+		 * more than 2 this is accurate to about 1%
 		 */
 		public static double sin/*_milian*/( double x )
 		{
@@ -2479,11 +2315,8 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of cos(x).
-		 * Milian's version
-		 * see https://stackoverflow.com/a/28050328/773113
-		 * this is FASTER than Math.cos() by a factor of more than 2
-		 * this is accurate to about 1%
+		 * Computes an approximation of cos(x). Milian's version see https://stackoverflow.com/a/28050328/773113 this is FASTER than Math.cos() by a factor of
+		 * more than 2 this is accurate to about 1%
 		 */
 		public static double cos/*_milian*/( double x )
 		{
@@ -2495,10 +2328,7 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of sin( x * 2π )
-		 * in other words:
-		 * sin( x ) = sin2pi( x / 2π )
-		 * sin2pi( x ) = sin( x * 2π )
+		 * Computes an approximation of sin( x * 2π ) in other words: sin( x ) = sin2pi( x / 2π ) sin2pi( x ) = sin( x * 2π )
 		 */
 		public static double sin2pi/*_milian*/( double x )
 		{
@@ -2510,10 +2340,7 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of cos( x * 2π )
-		 * in other words:
-		 * cos( x ) = cos2pi( x / 2π )
-		 * cos2pi( x ) = cos( x * 2π )
+		 * Computes an approximation of cos( x * 2π ) in other words: cos( x ) = cos2pi( x / 2π ) cos2pi( x ) = cos( x * 2π )
 		 */
 		public static double cos2pi/*_milian*/( double x )
 		{
@@ -2801,11 +2628,14 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * For information about this method, google "Sneaky throw".
+	 * Allows throwing checked exceptions without having to declare them using the 'throws' keyword.  Incidentally, this also allows throwing instances of
+	 * {@link Throwable}, which is a checked exception in java.
 	 * <p>
-	 * Note: even though the method throws an exception, it is declared to also return an exception.
-	 * This allows the caller to use one more `throw` statement, which, although unreachable,
-	 * lets the compiler know that that execution will never proceed past that point.
+	 * For more information, google "Sneaky throw".
+	 * <p>
+	 * Note: even though the method throws an exception, it is declared to also return an exception, which will never actually be returned. This allows the
+	 * caller to invoke this method from within a {@code throw} statement, which, although unreachable, lets the compiler know that that execution will never
+	 * proceed past that point.
 	 */
 	@SuppressWarnings( "unchecked" ) public static <T extends Throwable> RuntimeException sneakyException( Throwable t ) throws T
 	{
@@ -2873,8 +2703,8 @@ public final class Kit
 	/**
 	 * Note: the documentation of Class.newInstance() gives the following justification for its deprecation:
 	 * <p>
-	 * "This method propagates any exception thrown by the nullary constructor, including a checked exception.
-	 * Use of this method effectively bypasses the compile-time exception checking that would otherwise be performed by the compiler."
+	 * "This method propagates any exception thrown by the nullary constructor, including a checked exception. Use of this method effectively bypasses the
+	 * compile-time exception checking that would otherwise be performed by the compiler."
 	 * <p>
 	 * Yes, yes, that is precisely what we want!
 	 */
@@ -3090,6 +2920,24 @@ public final class Kit
 				lock.unlock();
 			}
 		}
+
+		public static <R> R postAndWait( Procedure1<Procedure0> poster, Function0<R> function0 )
+		{
+			Ref<R> resultRef = Ref.of( null );
+			CountDownLatch countDownLatch = new CountDownLatch( 1 );
+			poster.invoke( () -> //
+			{
+				resultRef.value = function0.invoke();
+				countDownLatch.countDown();
+			} );
+			while( !unchecked( () -> countDownLatch.await( postAndWaitTimeout.toMillis(), TimeUnit.MILLISECONDS ) ) )
+			{
+				Log.debug( "function did not complete within " + time.secondsFromDuration( postAndWaitTimeout ) + " s." );
+				Debug.breakPoint();
+			}
+			assert countDownLatch.getCount() == 0;
+			return resultRef.value;
+		}
 	}
 
 	public static <R> R invoke( Function0<R> function )
@@ -3114,14 +2962,14 @@ public final class Kit
 	/**
 	 * Checks whether two objects are equal by value.
 	 * <p>
-	 * Unlike the {@link Objects#equals(Object, Object)} method, this method uses generics to make sure at compile time that the objects being compared are indeed of compatible
-	 * types.  Also, at runtime, it asserts the same thing.
+	 * Unlike the {@link Objects#equals(Object, Object)} method, this method uses generics to make sure at compile time that the objects being compared are
+	 * indeed of compatible types.  Also, at runtime, it asserts the same thing.
 	 * <p>
-	 * An example of a case where this is useful is when comparing a java.util.Date and a {@link java.sql.Timestamp}: Objects.equals( utilDate, sqlTimestamp ) will work,
-	 * but Objects.equals( sqlTimestamp, utilDate ) will silently yield false negatives. (A nasty bug to track down.)
+	 * An example of a case where this is useful is when comparing a java.util.Date and a {@link java.sql.Timestamp}: Objects.equals( utilDate, sqlTimestamp )
+	 * will work, but Objects.equals( sqlTimestamp, utilDate ) will silently yield false negatives. (A nasty bug to track down.)
 	 * <p>
-	 * With this method, equalByValue( utilDate, sqlTimestamp ) will work, equalByValue( sqlTimestamp, utilDate ) will not compile, and equalByValue( (java.util.Date)sqlTimestamp,
-	 * utilDate ) will result in an assertion failure instead of silently yielding false negatives.
+	 * With this method, equalByValue( utilDate, sqlTimestamp ) will work, equalByValue( sqlTimestamp, utilDate ) will not compile, and equalByValue(
+	 * (java.util.Date)sqlTimestamp, utilDate ) will result in an assertion failure instead of silently yielding false negatives.
 	 *
 	 * @param a   an object.
 	 * @param b   another object of same or derived class.
@@ -3149,13 +2997,13 @@ public final class Kit
 
 	private static class PrimitiveInfo<T>
 	{
-		final Class<T> primitiveClass;
+		final Class<T> type;
 		final Class<T> wrapperClass;
 		final T defaultInstance;
 
-		private PrimitiveInfo( Class<T> primitiveClass, Class<T> wrapperClass, T defaultInstance )
+		private PrimitiveInfo( Class<T> type, Class<T> wrapperClass, T defaultInstance )
 		{
-			this.primitiveClass = primitiveClass;
+			this.type = type;
 			this.wrapperClass = wrapperClass;
 			this.defaultInstance = defaultInstance;
 		}
@@ -3172,23 +3020,54 @@ public final class Kit
 		new PrimitiveInfo<>( double.class  /**/, Double.class    /**/, 0d ), //
 		new PrimitiveInfo<>( void.class    /**/, Void.class      /**/, null ) );
 
-	private static int indexOfPrimitiveType( Class<?> clazz )
+	private static <T> PrimitiveInfo<T> findPrimitiveInfo( Predicate<PrimitiveInfo<?>> predicate )
 	{
-		int n = primitiveTypeInfo.size();
-		for( int i = 0; i < n; i++ )
-			if( clazz == primitiveTypeInfo.get( i ).primitiveClass )
-				return i;
-		return -1;
+		for( PrimitiveInfo<?> primitiveInfo : primitiveTypeInfo )
+			if( predicate.test( primitiveInfo ) )
+			{
+				@SuppressWarnings( "unchecked" ) PrimitiveInfo<T> result = (PrimitiveInfo<T>)primitiveInfo;
+				return result;
+			}
+		return null;
 	}
 
-	private static int indexOfPrimitiveWrapperClass( Class<?> clazz )
+	private static <T> PrimitiveInfo<T> findPrimitiveInfoByPrimitiveType( Class<?> primitiveType )
 	{
-		int n = primitiveTypeInfo.size();
-		for( int i = 0; i < n; i++ )
-			if( clazz == primitiveTypeInfo.get( i ).wrapperClass )
-				return i;
-		return -1;
+		return findPrimitiveInfo( primitiveInfo -> primitiveInfo.type == primitiveType );
 	}
+
+	private static <T> PrimitiveInfo<T> findPrimitiveInfoByPrimitiveWrapperClass( Class<?> primitiveWrapperClass )
+	{
+		return findPrimitiveInfo( primitiveInfo -> primitiveInfo.wrapperClass == primitiveWrapperClass );
+	}
+
+	private static <T> PrimitiveInfo<T> findPrimitiveInfoByPrimitiveName( String primitiveName )
+	{
+		return findPrimitiveInfo( primitiveInfo -> primitiveInfo.type.getName().equals( primitiveName ) );
+	}
+
+	private static <T> PrimitiveInfo<T> findPrimitiveInfoByPrimitiveWrapperClassName( String primitiveWrapperClassName )
+	{
+		return findPrimitiveInfo( primitiveInfo -> primitiveInfo.wrapperClass.getName().equals( primitiveWrapperClassName ) );
+	}
+
+//	private static int indexOfPrimitiveType( Class<?> clazz )
+//	{
+//		int n = primitiveTypeInfo.size();
+//		for( int i = 0; i < n; i++ )
+//			if( clazz == primitiveTypeInfo.get( i ).primitiveClass )
+//				return i;
+//		return -1;
+//	}
+//
+//	private static int indexOfPrimitiveWrapperClass( Class<?> clazz )
+//	{
+//		int n = primitiveTypeInfo.size();
+//		for( int i = 0; i < n; i++ )
+//			if( clazz == primitiveTypeInfo.get( i ).wrapperClass )
+//				return i;
+//		return -1;
+//	}
 
 	/**
 	 * Checks whether a class is a primitive wrapper type.
@@ -3199,7 +3078,7 @@ public final class Kit
 	 */
 	public static boolean isPrimitiveWrapperClass( Class<?> clazz )
 	{
-		return indexOfPrimitiveWrapperClass( clazz ) != -1;
+		return findPrimitiveInfoByPrimitiveWrapperClass( clazz ) != null;
 	}
 
 	/**
@@ -3207,7 +3086,7 @@ public final class Kit
 	 */
 	public static Collection<Class<?>> getAllPrimitives()
 	{
-		return primitiveTypeInfo.stream().<Class<?>>map( i -> i.primitiveClass ).toList();
+		return primitiveTypeInfo.stream().<Class<?>>map( i -> i.type ).toList();
 	}
 
 	/**
@@ -3221,57 +3100,28 @@ public final class Kit
 	/**
 	 * Gets the wrapper type of the given primitive type.
 	 *
-	 * @param primitiveClass the primitive class whose wrapper is requested.
+	 * @param primitiveType the primitive type whose wrapper is requested.
 	 *
-	 * @return the class of the wrapper type for the given type, or null if the given type was not a primitive type.
+	 * @return the class of the wrapper for the given primitive type.
 	 */
-	public static <T> Class<T> getPrimitiveWrapperType( Class<T> primitiveClass )
+	public static <T> Class<T> getPrimitiveWrapperClassByPrimitiveType( Class<T> primitiveType )
 	{
-		PrimitiveInfo<T> primitiveInfo = getPrimitiveTypeInfoByPrimitiveClass( primitiveClass );
+		PrimitiveInfo<T> primitiveInfo = findPrimitiveInfoByPrimitiveType( primitiveType );
+		assert primitiveInfo != null;
 		return primitiveInfo.wrapperClass;
 	}
 
 	public static <T> T getDefaultPrimitiveWrapperInstance( Class<T> primitiveWrapperClass )
 	{
-		PrimitiveInfo<T> primitiveInfo = getPrimitiveTypeInfoByPrimitiveWrapperClass( primitiveWrapperClass );
+		PrimitiveInfo<T> primitiveInfo = findPrimitiveInfoByPrimitiveWrapperClass( primitiveWrapperClass );
 		return primitiveInfo.defaultInstance;
 	}
 
-	private static <T> PrimitiveInfo<T> getPrimitiveTypeInfoByPrimitiveClass( Class<T> primitiveClass )
+	public static Class<?> getPrimitiveTypeByName( String name )
 	{
-		assert primitiveClass.isPrimitive();
-		int i = indexOfPrimitiveType( primitiveClass );
-		assert i != -1;
-		@SuppressWarnings( "unchecked" ) PrimitiveInfo<T> primitiveInfo = (PrimitiveInfo<T>)primitiveTypeInfo.get( i );
-		return primitiveInfo;
-	}
-
-	private static <T> PrimitiveInfo<T> getPrimitiveTypeInfoByPrimitiveWrapperClass( Class<T> primitiveWrapperClass )
-	{
-		assert isPrimitiveWrapperClass( primitiveWrapperClass );
-		int i = indexOfPrimitiveWrapperClass( primitiveWrapperClass );
-		assert i != -1;
-		@SuppressWarnings( "unchecked" ) PrimitiveInfo<T> primitiveInfo = (PrimitiveInfo<T>)primitiveTypeInfo.get( i );
-		return primitiveInfo;
-	}
-
-	public record RunnableAndThread<T extends Runnable>( T runnable, Thread thread ) { }
-
-	public static <T extends Runnable> RunnableAndThread<T> createAndRunInNewThread( Function0<T> factory )
-	{
-		Ref<T> runnableRef = Ref.of( null );
-		CountDownLatch latch = new CountDownLatch( 1 );
-		Thread thread = new Thread( () -> //
-		{
-			T myThread = factory.invoke();
-			runnableRef.value = myThread;
-			latch.countDown();
-			myThread.run();
-		} );
-		thread.start();
-		unchecked( () -> latch.await() );
-		assert runnableRef.value != null;
-		return new RunnableAndThread<>( runnableRef.value, thread );
+		PrimitiveInfo<?> primitiveInfo = findPrimitiveInfoByPrimitiveName( name );
+		assert primitiveInfo != null;
+		return primitiveInfo.type;
 	}
 
 	public static boolean assertion( Function0<Boolean> nestedAssertion, Function1<Throwable,Throwable> throwableFactory )

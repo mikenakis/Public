@@ -4,32 +4,32 @@ import mikenakis.immutability.internal.helpers.IterableOnArrayObject;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.collections.IdentityLinkedHashSet;
-import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
-import mikenakis.immutability.object.assessments.MutableObjectAssessment;
-import mikenakis.immutability.object.assessments.ObjectAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableArrayElementAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableComponentElementAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableFieldValuesAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableIterableElementAssessment;
-import mikenakis.immutability.object.assessments.mutable.MutableSelfAssessment;
-import mikenakis.immutability.object.assessments.mutable.NonEmptyMutableArrayAssessment;
-import mikenakis.immutability.object.assessments.mutable.OfMutableTypeAssessment;
+import mikenakis.immutability.object.assessments.ImmutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.MutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.ObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.HasMutableArrayElementMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.HasMutableComponentMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.HasMutableFieldValuesObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.HasMutableIterableElementMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.SelfAssessedMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.IsNonEmptyArrayMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.OfMutableTypeMutableObjectImmutabilityAssessment;
 import mikenakis.immutability.object.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.object.fieldvalue.MutableFieldValueAssessment;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.mutable.MutableArrayAssessment;
-import mikenakis.immutability.type.assessments.provisory.ExtensibleAssessment;
-import mikenakis.immutability.type.assessments.provisory.IterableAssessment;
-import mikenakis.immutability.type.assessments.provisory.ProvisoryCompositeAssessment;
-import mikenakis.immutability.type.assessments.provisory.ProvisoryContentAssessment;
-import mikenakis.immutability.type.assessments.provisory.SelfAssessableAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.InvariableArrayFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldTypeAssessment;
+import mikenakis.immutability.type.assessments.ImmutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.MutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsIterableProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayProvisoryFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldImmutabilityAssessment;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -47,7 +47,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	public static final ObjectImmutabilityAssessor instance = new ObjectImmutabilityAssessor( TypeImmutabilityAssessor.instance );
 
 	public final TypeImmutabilityAssessor typeImmutabilityAssessor;
-	public final ImmutableObjectAssessment immutableObjectAssessmentInstance = new ImmutableObjectAssessment( stringizer );
+	public final ImmutableObjectImmutabilityAssessment immutableObjectAssessmentInstance = new ImmutableObjectImmutabilityAssessment( stringizer );
 
 	public ObjectImmutabilityAssessor( TypeImmutabilityAssessor typeImmutabilityAssessor )
 	{
@@ -57,25 +57,25 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 
 	public boolean mustBeImmutableAssertion( Object object )
 	{
-		ObjectAssessment assessment = assess( object );
-		if( assessment instanceof MutableObjectAssessment mutableObjectAssessment )
+		ObjectImmutabilityAssessment assessment = assess( object );
+		if( assessment instanceof MutableObjectImmutabilityAssessment mutableObjectAssessment )
 		{
 			mutableObjectAssessment.assessmentTextLines().forEach( line -> System.out.println( line ) );
 			throw new ObjectMustBeImmutableException( mutableObjectAssessment );
 		}
-		assert assessment instanceof ImmutableObjectAssessment;
+		assert assessment instanceof ImmutableObjectImmutabilityAssessment;
 		return true;
 	}
 
-	public ObjectAssessment assess( Object object )
+	public ObjectImmutabilityAssessment assess( Object object )
 	{
 		Set<Object> visitedValues = new IdentityLinkedHashSet<>();
-		ObjectAssessment result = assessRecursively( object, visitedValues );
+		ObjectImmutabilityAssessment result = assessRecursively( object, visitedValues );
 		assert result != null;
 		return result;
 	}
 
-	private <T> ObjectAssessment assessRecursively( T object, Set<Object> visitedValues )
+	private <T> ObjectImmutabilityAssessment assessRecursively( T object, Set<Object> visitedValues )
 	{
 		if( object == null )
 			return immutableObjectAssessmentInstance;
@@ -83,118 +83,118 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 			return null;
 		visitedValues.add( object );
 		Class<T> declaredClass = MyKit.getClass( object );
-		TypeAssessment typeAssessment = typeImmutabilityAssessor.assess( declaredClass );
+		TypeImmutabilityAssessment typeAssessment = typeImmutabilityAssessor.assess( declaredClass );
 		return switch( typeAssessment )
 			{
-				case ImmutableTypeAssessment ignore -> immutableObjectAssessmentInstance;
+				case ImmutableTypeImmutabilityAssessment ignore -> immutableObjectAssessmentInstance;
 				//Class is extensible but otherwise immutable, and object is of this exact class and not of a further derived class, so object is immutable.
-				case ExtensibleAssessment ignore -> immutableObjectAssessmentInstance;
-				case ProvisoryCompositeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment );
-				case IterableAssessment iterableAssessment -> assessIterable( (Iterable<?>)object, iterableAssessment );
-				case SelfAssessableAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
-				case ProvisoryContentAssessment provisoryContentAssessment -> assessProvisoryContent( object, provisoryContentAssessment, visitedValues );
-				case MutableArrayAssessment arrayAssessment -> assessMutableArray( object, arrayAssessment );
-				case MutableTypeAssessment mutableTypeAssessment -> new OfMutableTypeAssessment( stringizer, object, mutableTypeAssessment );
+				case IsExtensibleProvisoryTypeImmutabilityAssessment ignore -> immutableObjectAssessmentInstance;
+				case IsCompositeProvisoryTypeImmutabilityAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment );
+				case IsIterableProvisoryTypeImmutabilityAssessment iterableAssessment -> assessIterable( (Iterable<?>)object, iterableAssessment );
+				case IsSelfAssessableProvisoryTypeImmutabilityAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
+				case HasProvisoryContentProvisoryTypeImmutabilityAssessment provisoryContentAssessment -> assessProvisoryContent( object, provisoryContentAssessment, visitedValues );
+				case IsArrayMutableTypeImmutabilityAssessment arrayAssessment -> assessMutableArray( object, arrayAssessment );
+				case MutableTypeImmutabilityAssessment mutableTypeAssessment -> new OfMutableTypeMutableObjectImmutabilityAssessment( stringizer, object, mutableTypeAssessment );
 				default -> throw new AssertionError( typeAssessment );
 			};
 	}
 
-	private ObjectAssessment assessMutableArray( Object arrayObject, MutableArrayAssessment mutableArrayAssessment )
+	private ObjectImmutabilityAssessment assessMutableArray( Object arrayObject, IsArrayMutableTypeImmutabilityAssessment mutableArrayAssessment )
 	{
 		if( Array.getLength( arrayObject ) == 0 )
 			return immutableObjectAssessmentInstance;
-		return new NonEmptyMutableArrayAssessment( stringizer, arrayObject, mutableArrayAssessment );
+		return new IsNonEmptyArrayMutableObjectImmutabilityAssessment( stringizer, arrayObject, mutableArrayAssessment );
 	}
 
-	private <C> ObjectAssessment assessIterable( Iterable<C> iterableObject, IterableAssessment typeAssessment )
+	private <C> ObjectImmutabilityAssessment assessIterable( Iterable<C> iterableObject, IsIterableProvisoryTypeImmutabilityAssessment typeAssessment )
 	{
 		int index = 0;
 		for( var element : iterableObject )
 		{
-			ObjectAssessment elementAssessment = assess( element );
-			if( elementAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
-				return new MutableIterableElementAssessment<>( stringizer, iterableObject, typeAssessment, index, element, mutableObjectAssessment );
-			assert elementAssessment instanceof ImmutableObjectAssessment;
+			ObjectImmutabilityAssessment elementAssessment = assess( element );
+			if( elementAssessment instanceof MutableObjectImmutabilityAssessment mutableObjectAssessment )
+				return new HasMutableIterableElementMutableObjectImmutabilityAssessment<>( stringizer, iterableObject, typeAssessment, index, element, mutableObjectAssessment );
+			assert elementAssessment instanceof ImmutableObjectImmutabilityAssessment;
 			index++;
 		}
 		return immutableObjectAssessmentInstance;
 	}
 
-	private <T, E> ObjectAssessment assessComposite( T compositeObject, ProvisoryCompositeAssessment<?,?> wildcardTypeAssessment )
+	private <T, E> ObjectImmutabilityAssessment assessComposite( T compositeObject, IsCompositeProvisoryTypeImmutabilityAssessment<?,?> wildcardTypeAssessment )
 	{
-		@SuppressWarnings( "unchecked" ) ProvisoryCompositeAssessment<T,E> typeAssessment = (ProvisoryCompositeAssessment<T,E>)wildcardTypeAssessment;
+		@SuppressWarnings( "unchecked" ) IsCompositeProvisoryTypeImmutabilityAssessment<T,E> typeAssessment = (IsCompositeProvisoryTypeImmutabilityAssessment<T,E>)wildcardTypeAssessment;
 		Iterable<E> iterableObject = typeAssessment.decomposer.decompose( compositeObject );
 		int index = 0;
 		for( var element : iterableObject )
 		{
-			ObjectAssessment elementAssessment = assess( element );
-			if( elementAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
-				return new MutableComponentElementAssessment<>( stringizer, compositeObject, typeAssessment, index, element, mutableObjectAssessment );
-			assert elementAssessment instanceof ImmutableObjectAssessment;
+			ObjectImmutabilityAssessment elementAssessment = assess( element );
+			if( elementAssessment instanceof MutableObjectImmutabilityAssessment mutableObjectAssessment )
+				return new HasMutableComponentMutableObjectImmutabilityAssessment<>( stringizer, compositeObject, typeAssessment, index, element, mutableObjectAssessment );
+			assert elementAssessment instanceof ImmutableObjectImmutabilityAssessment;
 			index++;
 		}
 		return immutableObjectAssessmentInstance;
 	}
 
-	private ObjectAssessment assessInvariableArray( Object array, Set<Object> visitedValues, InvariableArrayFieldAssessment arrayAssessment )
+	private ObjectImmutabilityAssessment assessInvariableArray( Object array, Set<Object> visitedValues, IsInvariableArrayProvisoryFieldImmutabilityAssessment arrayAssessment )
 	{
 		Iterable<Object> arrayAsIterable = new IterableOnArrayObject( array );
 		int index = 0;
 		for( Object element : arrayAsIterable )
 		{
-			ObjectAssessment elementAssessment = assessRecursively( element, visitedValues );
-			if( elementAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
-				return new MutableArrayElementAssessment<>( stringizer, arrayAsIterable, arrayAssessment, index, element, mutableObjectAssessment );
+			ObjectImmutabilityAssessment elementAssessment = assessRecursively( element, visitedValues );
+			if( elementAssessment instanceof MutableObjectImmutabilityAssessment mutableObjectAssessment )
+				return new HasMutableArrayElementMutableObjectImmutabilityAssessment<>( stringizer, arrayAsIterable, arrayAssessment, index, element, mutableObjectAssessment );
 			index++;
 		}
 		return immutableObjectAssessmentInstance;
 	}
 
-	private ObjectAssessment assessSelfAssessable( SelfAssessableAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
+	private ObjectImmutabilityAssessment assessSelfAssessable( IsSelfAssessableProvisoryTypeImmutabilityAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
 	{
 		if( selfAssessableObject.isImmutable() )
 			return immutableObjectAssessmentInstance;
-		return new MutableSelfAssessment( stringizer, typeAssessment, selfAssessableObject );
+		return new SelfAssessedMutableObjectImmutabilityAssessment( stringizer, typeAssessment, selfAssessableObject );
 	}
 
-	private ObjectAssessment assessProvisoryContent( Object object, ProvisoryContentAssessment typeAssessment, Set<Object> visitedValues )
+	private ObjectImmutabilityAssessment assessProvisoryContent( Object object, HasProvisoryContentProvisoryTypeImmutabilityAssessment typeAssessment, Set<Object> visitedValues )
 	{
 		List<MutableFieldValueAssessment> mutableFieldValueAssessments = new ArrayList<>();
 		collectFieldValueAssessmentsRecursively( mutableFieldValueAssessments, object, typeAssessment, visitedValues );
 		if( !mutableFieldValueAssessments.isEmpty() )
-			return new MutableFieldValuesAssessment( stringizer, object, typeAssessment, mutableFieldValueAssessments );
+			return new HasMutableFieldValuesObjectImmutabilityAssessment( stringizer, object, typeAssessment, mutableFieldValueAssessments );
 		return immutableObjectAssessmentInstance;
 	}
 
 	private void collectFieldValueAssessmentsRecursively( List<MutableFieldValueAssessment> fieldValueAssessments, Object object, //
-		ProvisoryContentAssessment typeAssessment, Set<Object> visitedValues )
+		HasProvisoryContentProvisoryTypeImmutabilityAssessment typeAssessment, Set<Object> visitedValues )
 	{
-		for( ProvisoryFieldAssessment provisoryFieldAssessment : typeAssessment.fieldAssessments )
+		for( ProvisoryFieldImmutabilityAssessment provisoryFieldAssessment : typeAssessment.fieldAssessments )
 		{
 			Field field = provisoryFieldAssessment.field;
 			Object fieldValue = getFieldValue( object, field );
-			ObjectAssessment objectAssessment = switch( provisoryFieldAssessment )
+			ObjectImmutabilityAssessment objectAssessment = switch( provisoryFieldAssessment )
 			{
-				case InvariableArrayFieldAssessment invariableArrayFieldAssessment -> assessInvariableArray( fieldValue, visitedValues, invariableArrayFieldAssessment );
-				case ProvisoryFieldTypeAssessment provisoryFieldTypeAssessment -> assessRecursively( fieldValue, visitedValues );
+				case IsInvariableArrayProvisoryFieldImmutabilityAssessment invariableArrayFieldAssessment -> assessInvariableArray( fieldValue, visitedValues, invariableArrayFieldAssessment );
+				case OfProvisoryTypeProvisoryFieldImmutabilityAssessment provisoryFieldTypeAssessment -> assessRecursively( fieldValue, visitedValues );
 				default -> throw new AssertionError(); //TODO: make assessments sealed, so that we do not need default clauses!
 			};
-			if( objectAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
+			if( objectAssessment instanceof MutableObjectImmutabilityAssessment mutableObjectAssessment )
 			{
 				MutableFieldValueAssessment fieldValueAssessment = new MutableFieldValueAssessment( stringizer, provisoryFieldAssessment, fieldValue, mutableObjectAssessment );
 				fieldValueAssessments.add( fieldValueAssessment );
 				continue;
 			}
-			assert objectAssessment == null || objectAssessment instanceof ImmutableObjectAssessment;
+			assert objectAssessment == null || objectAssessment instanceof ImmutableObjectImmutabilityAssessment;
 		}
 		typeAssessment.ancestorAssessment.ifPresent( ancestorAssessment -> //
 		{
 			switch( ancestorAssessment )
 			{
-				case ProvisoryContentAssessment provisoryContentAssessment: //
+				case HasProvisoryContentProvisoryTypeImmutabilityAssessment provisoryContentAssessment: //
 					collectFieldValueAssessmentsRecursively( fieldValueAssessments, object, provisoryContentAssessment, visitedValues );
 					break;
-				case SelfAssessableAssessment selfAssessableAssessment:
+				case IsSelfAssessableProvisoryTypeImmutabilityAssessment selfAssessableAssessment:
 					assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
 					break;
 				default:

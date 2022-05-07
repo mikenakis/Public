@@ -2,8 +2,7 @@ package mikenakis.publishing.anycall;
 
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
-import mikenakis.kit.Kit;
-import mikenakis.kit.coherence.Coherence;
+import mikenakis.coherence.Coherence;
 import mikenakis.kit.logging.Log;
 import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.tyraki.MutableCollection;
@@ -68,11 +67,11 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 	private Optional<Object> anycall( MethodKey<T> key, Object[] arguments )
 	{
 		for( Anycall<T> subscriber : subscriptions.map( subscription -> subscription.subscriber ).toList() )
-			Kit.trySwallow( () -> //
+			//Kit.trySwallow( () -> // TODO: revise the purposefulness of trySwallow() here. (Or everywhere, for that matter.)
 			{
 				Object result = subscriber.anycall( key, arguments );
 				assert result == null;
-			} );
+			} //);
 		return Optional.empty();
 	}
 

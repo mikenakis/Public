@@ -18,7 +18,7 @@ import java.util.List;
  */
 public final class T01_CompilingIntertwine
 {
-	private final IntertwineFactory intertwineFactory = new CachingIntertwineFactory( new CompilingIntertwineFactory( getClass().getClassLoader() ) );
+	private final IntertwineFactory intertwineFactory = new CachingIntertwineFactory( new CompilingIntertwineFactory() );
 
 	public T01_CompilingIntertwine()
 	{
@@ -50,7 +50,7 @@ public final class T01_CompilingIntertwine
 
 			@Override public void run()
 			{
-				Intertwine<Alpha> intertwine = intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ Alpha.class );
+				Intertwine<Alpha> intertwine = intertwineFactory.getIntertwine( Alpha.class );
 				Anycall<Alpha> untwiner = intertwine.newUntwiner( implementation );
 				Alpha entwiner = intertwine.newEntwiner( untwiner );
 				assert entwiner.intReturningMethod() == 0;
@@ -93,7 +93,7 @@ public final class T01_CompilingIntertwine
 
 			@Override public void run()
 			{
-				Intertwine<Bravo> intertwine = intertwineFactory.getIntertwine( /*getClass().getClassLoader(),*/ Bravo.class );
+				Intertwine<Bravo> intertwine = intertwineFactory.getIntertwine( Bravo.class );
 				Anycall<Bravo> untwiner = intertwine.newUntwiner( implementation );
 				Bravo entwiner = intertwine.newEntwiner( untwiner );
 				assert entwiner.intReturningMethod() == 0;

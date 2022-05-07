@@ -1,7 +1,7 @@
 package mikenakis.tyraki.mutable;
 
 import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.coherence.FreezableCoherence;
+import mikenakis.coherence.FreezableCoherence;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;
 import mikenakis.tyraki.DebugView;

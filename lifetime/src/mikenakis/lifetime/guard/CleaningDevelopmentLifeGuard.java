@@ -24,12 +24,12 @@ public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 	private boolean closed;
 	private final Cleaner.Cleanable cleanable;
 
-	private CleaningDevelopmentLifeGuard( Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
+	private CleaningDevelopmentLifeGuard( @SuppressWarnings( "TypeMayBeWeakened" ) Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
 	{
 		super( mortal.coherence() );
 		this.stackTrace = stackTrace;
 		mortalClass = mortal.getClass();
-		cleanable = cleaner.register( mortal, () -> clean() );
+		cleanable = cleaner.register( mortal, this::clean );
 	}
 
 	@Override public void close()

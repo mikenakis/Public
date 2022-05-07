@@ -1,8 +1,8 @@
 package mikenakis.lifetime;
 
-import mikenakis.kit.Kit;
+import mikenakis.coherence.Coherent;
+import mikenakis.debug.Debug;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.kit.coherence.Coherent;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure0;
@@ -10,41 +10,45 @@ import mikenakis.kit.functional.Procedure1;
 
 /**
  * An object which is aware of its own lifetime.
- * See https://blog.michael.gr/2021/01/object-lifetime-awareness.html
- * In other words, this is an {@link AutoCloseable} which does not throw checked exceptions, and is capable of asserting its own 'alive' state.
- * Normally this should be called 'LifetimeAware', but that's too long.
+ * <p>
+ * This is essentially an {@link AutoCloseable} which:
+ * <p>
+ * - Has a {@link #close()} method which does not throw checked exceptions.
+ * <p>
+ * - Is capable of asserting that it is still 'alive' (not closed.)
+ * <p>
+ * Normally this should be called {@code LifetimeAware}, but that's too long, so we just call it {@code Mortal}.
+ * <p>
+ * See <a href="https://blog.michael.gr/2021/01/object-lifetime-awareness.html">michael.gr - Object Lifetime Awareness</a>
+ * <p>
+ * PEARL: the {@code try-with-resources} clause of Java has several problems:
+ * <p>
+ * - It prevents exceptions thrown within the {@code try{...}} block from being considered as uncaught. So, if the debugger is configured to stop on any
+ * uncaught exception, (as it should,) and an exception is thrown within the {@code try{...}} block, the debugger will not stop at the throwing statement;
+ * instead, the debugger will stop at the closing curly brace of the {@code try{...}} block, which is entirely useless, counter-productive, and annoying.
+ * <p>
+ * - It forces you to use curly braces even when the code block consists of a single-statement.
+ * <p>
+ * - It forces you to declare a variable, complete with its type, for the {@link Mortal} object, even if you have no use for the {@link Mortal} object inside
+ * the {@code try{...}} block.
  *
  * @author michael.gr
  */
 public interface Mortal extends AutoCloseable, Coherent
 {
 	/**
-	 * <p>Performs a debugger-friendly {@code try-with-resources} that returns a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-function, passing it the {@link Mortal} object, and returns its result.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-function, passing it the {@link Mortal} object, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *             <li><p>If no exception is thrown:
-	 *                  <ul>
-	 *                      <li><p>It invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *                      <li><p>It returns the result of invoking try-function.</p></li>
-	 *                  </ul></p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
-	 *         <ul>
-	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
-	 *              (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
-	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
-	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
-	 *        </ul></p></li>
-	 * </ul>
+	 * Performs a {@code try-with-resources} that returns a result.
+	 * <p>
+	 * Provides the following benefits over Java's {@code try-with-resources} statement:
+	 * <p>
+	 * - If an uncaught exception occurs within the {@code try{...}} block, the debugger will stop at the throwing statement instead of the closing curly brace
+	 * of the {@code try{...}} block. (Duh!)
+	 * <p>
+	 * - You do not have to use curly braces if your block consists of a single-statement. (By supplying your code in a lambda, you get to decide whether to use
+	 * curly braces or not.)
+	 * <p>
+	 * - You do not have to declare the type of the {@link Mortal}, since the type of the lambda parameter is inferred.  (Alternatively, if you have no use for
+	 * the {@link Mortal} within the lambda, you can use the other form of this method which accepts a parameterless lambda.)
 	 *
 	 * @param mortal      the {@link Mortal} to close when done.
 	 * @param tryFunction a function which receives the {@link Mortal} object and produces a result.
@@ -55,27 +59,17 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function1<R,? super C> tryFunction )
 	{
-		assert mortal != null;
-		if( Kit.debugging() )
+		try( mortal )
 		{
-			R result = tryFunction.invoke( mortal );
-			mortal.close();
-			return result;
-		}
-		else
-		{
-			try( mortal )
-			{
-				return tryFunction.invoke( mortal );
-			}
+			return Debug.boundary( () -> //
+				tryFunction.invoke( mortal ) );
 		}
 	}
+
 	/**
-	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Mortal}, execute some code,
-	 * and then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
+	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Mortal}, execute some code, and
+	 * then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
 	 * <p>
-	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the mortal.
-	 *
 	 * @param mortal      the {@link Mortal} to close when done.
 	 * @param tryFunction a function which produces a result.
 	 * @param <C>         the type of the {@link Mortal}. (Must extend {@link Mortal}.)
@@ -85,47 +79,14 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function0<R> tryFunction )
 	{
-		assert mortal != null;
-		if( Kit.debugging() )
+		try( mortal )
 		{
-			R result = tryFunction.invoke();
-			mortal.close();
-			return result;
-		}
-		else
-		{
-			try( mortal )
-			{
-				return tryFunction.invoke();
-			}
+			return Debug.boundary( () -> tryFunction.invoke() );
 		}
 	}
+
 	/**
 	 * <p>Performs a debugger-friendly {@code try-with-resources} that does not return a result.</p>
-	 * <ul>
-	 *     <li><p>If assertions <b>are not</b> enabled:
-	 *         <ul>
-	 *             <li><p>It opens a {@code try-finally} block.</p></li>
-	 *             <li><p>In the {@code try} part, it invokes the try-procedure, passing it the {@link Mortal} object.</p></li>
-	 *             <li><p>In the {@code finally} part, it invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *         </ul></p></li>
-	 *     <li><p>If assertions <b>are</b> enabled:
-	 *         <ul>
-	 *             <li><p>It invokes the try-procedure, passing it the {@link Mortal} object, but it does so without using a {@code try-catch} block,
-	 *             so that if an exception occurs, the debugger will stop at the throwing statement.</p></li>
-	 *             <li><p>If no exception is thrown:
-	 *                  <ul>
-	 *                      <li><p>It invokes {@link Mortal#close()} on the {@link Mortal} object.</p></li>
-	 *                  </ul></p></li>
-	 *         </ul></p></li>
-	 *     <li><p>As a bonus, it also avoids the deplorable dumbfuckery of Java's {@code try-with-resources} where:
-	 *         <ul>
-	 *             <li><p>it forces you to use curly braces even when the code block consists of a single-statement
-	 *              (By supplying your code in a lambda, you get to decide whether to use curly braces or not.)</p></li>
-	 *             <li><p>it forces you to declare a variable, complete with its type, for the {@link Mortal} object
-	 *              (You only have to declare the parameter to the lambda, without the type.)</p></li>
-	 *        </ul></p></li>
-	 * </ul>
 	 *
 	 * @param mortal       the {@link Mortal} to close when done.
 	 * @param tryProcedure a {@link Procedure1} which receives the {@link Mortal} object and does something with it.
@@ -133,24 +94,16 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure1<? super C> tryProcedure )
 	{
-		if( Kit.debugging() )
+		try( mortal )
 		{
-			tryProcedure.invoke( mortal );
-			mortal.close();
-		}
-		else
-		{
-			try( mortal )
-			{
-				tryProcedure.invoke( mortal );
-			}
+			Debug.boundary( () -> //
+				tryProcedure.invoke( mortal ) );
 		}
 	}
+
 	/**
-	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Mortal}, execute some code,
-	 * and then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
-	 * <p>
-	 * As an added bonus, avoids Java's deplorable dumbfuckery of forcing you to declare the type of the variable for the mortal.
+	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Mortal}, execute some code, and
+	 * then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
 	 *
 	 * @param mortal       the {@link Mortal} to close when done.
 	 * @param tryProcedure the {@link Procedure0} to execute.
@@ -158,17 +111,10 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure0 tryProcedure )
 	{
-		if( Kit.debugging() )
+		try( mortal )
 		{
-			tryProcedure.invoke();
-			mortal.close();
-		}
-		else
-		{
-			try( mortal )
-			{
-				tryProcedure.invoke();
-			}
+			Debug.boundary( () -> //
+				tryProcedure.invoke() );
 		}
 	}
 
@@ -179,8 +125,7 @@ public interface Mortal extends AutoCloseable, Coherent
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	interface Defaults extends Mortal, Coherent.Defaults
-	{
-	}
+	{ }
 
 	interface Decorator extends Defaults, Coherent.Decorator
 	{
@@ -207,8 +152,8 @@ public interface Mortal extends AutoCloseable, Coherent
 	/**
 	 * Canary class.
 	 * <p>
-	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
-	 * earliest point possible, and not when compiling some derived class.
+	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the
+	 * compiler at the earliest point possible, and not when compiling some derived class.
 	 */
 	@ExcludeFromJacocoGeneratedReport
 	@SuppressWarnings( "unused" )

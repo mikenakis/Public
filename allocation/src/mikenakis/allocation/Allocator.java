@@ -1,9 +1,9 @@
 package mikenakis.allocation;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.coherence.AbstractCoherent;
-import mikenakis.kit.coherence.Coherence;
-import mikenakis.kit.coherence.implementation.ThreadLocalCoherence;
+import mikenakis.coherence.AbstractCoherent;
+import mikenakis.coherence.Coherence;
+import mikenakis.coherence.implementation.ThreadLocalCoherence;
 import mikenakis.kit.logging.Log;
 
 import java.util.Map;

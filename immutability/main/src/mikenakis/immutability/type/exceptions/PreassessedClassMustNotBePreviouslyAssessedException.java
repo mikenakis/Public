@@ -1,7 +1,7 @@
 package mikenakis.immutability.type.exceptions;
 
 import mikenakis.immutability.internal.mykit.UncheckedException;
-import mikenakis.immutability.type.assessments.TypeAssessment;
+import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
 
 /**
  * Thrown when an attempt is made to preassess a class, but there has already been a request to assess the immutability of this class, and the answer
@@ -12,9 +12,9 @@ import mikenakis.immutability.type.assessments.TypeAssessment;
  */
 public class PreassessedClassMustNotBePreviouslyAssessedException extends UncheckedException
 {
-	public final TypeAssessment previousTypeAssessment;
+	public final TypeImmutabilityAssessment previousTypeAssessment;
 
-	public PreassessedClassMustNotBePreviouslyAssessedException( TypeAssessment previousTypeAssessment )
+	public PreassessedClassMustNotBePreviouslyAssessedException( TypeImmutabilityAssessment previousTypeAssessment )
 	{
 		this.previousTypeAssessment = previousTypeAssessment;
 	}

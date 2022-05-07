@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.kit.coherence.implementation.ConcreteFreezableCoherence;
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.Function1;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;

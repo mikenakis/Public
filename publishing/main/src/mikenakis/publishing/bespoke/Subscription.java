@@ -1,6 +1,7 @@
 package mikenakis.publishing.bespoke;
 
-import mikenakis.lifetime.AbstractMortalCoherent;
+import mikenakis.coherence.AbstractCoherent;
+import mikenakis.lifetime.Mortal;
 import mikenakis.publishing.anycall.AnycallSubscription;
 
 /**
@@ -8,7 +9,7 @@ import mikenakis.publishing.anycall.AnycallSubscription;
  *
  * @author michael.gr
  */
-public class Subscription<T> extends AbstractMortalCoherent
+public class Subscription<T> extends AbstractCoherent implements Mortal.Defaults
 {
 	private final Publisher<T> publisher;
 	private final T subscriber;
@@ -22,14 +23,18 @@ public class Subscription<T> extends AbstractMortalCoherent
 		this.anycallSubscription = anycallSubscription;
 	}
 
-	@Override protected void onClose()
-	{
-		anycallSubscription.close();
-		super.onClose();
-	}
-
 	@Override public String toString()
 	{
 		return super.toString() + " publisher: " + publisher + " subscriber: " + subscriber;
+	}
+
+	@Override public boolean mustBeAliveAssertion()
+	{
+		return anycallSubscription.mustBeAliveAssertion();
+	}
+
+	@Override public void close()
+	{
+		anycallSubscription.close();
 	}
 }

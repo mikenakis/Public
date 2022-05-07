@@ -1,6 +1,6 @@
 package mikenakis.allocation;
 
-import mikenakis.kit.coherence.Coherence;
+import mikenakis.coherence.Coherence;
 import mikenakis.lifetime.AbstractMortalCoherent;
 
 /**

@@ -1,8 +1,8 @@
 package mikenakis.publishing.test;
 
 import mikenakis.kit.Kit;
-import mikenakis.kit.coherence.Coherence;
-import mikenakis.kit.coherence.implementation.ThreadLocalCoherence;
+import mikenakis.coherence.Coherence;
+import mikenakis.coherence.implementation.ThreadLocalCoherence;
 import mikenakis.kit.functional.Procedure0;
 import mikenakis.kit.ref.Ref;
 import mikenakis.lifetime.Mortal;

@@ -1,7 +1,7 @@
 package mikenakis.immutability.object.exceptions;
 
 import mikenakis.immutability.internal.mykit.UncheckedException;
-import mikenakis.immutability.object.assessments.MutableObjectAssessment;
+import mikenakis.immutability.object.assessments.MutableObjectImmutabilityAssessment;
 
 /**
  * Thrown when an object is expected to be immutable, but it is not.
@@ -10,9 +10,9 @@ import mikenakis.immutability.object.assessments.MutableObjectAssessment;
  */
 public final class ObjectMustBeImmutableException extends UncheckedException
 {
-	public final MutableObjectAssessment mutableObjectAssessment;
+	public final MutableObjectImmutabilityAssessment mutableObjectAssessment;
 
-	public ObjectMustBeImmutableException( MutableObjectAssessment mutableObjectAssessment )
+	public ObjectMustBeImmutableException( MutableObjectImmutabilityAssessment mutableObjectAssessment )
 	{
 		this.mutableObjectAssessment = mutableObjectAssessment;
 	}

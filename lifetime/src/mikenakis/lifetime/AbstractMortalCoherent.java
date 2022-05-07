@@ -1,7 +1,7 @@
 package mikenakis.lifetime;
 
-import mikenakis.kit.coherence.AbstractCoherent;
-import mikenakis.kit.coherence.Coherence;
+import mikenakis.coherence.AbstractCoherent;
+import mikenakis.coherence.Coherence;
 import mikenakis.lifetime.guard.LifeGuard;
 
 /**
