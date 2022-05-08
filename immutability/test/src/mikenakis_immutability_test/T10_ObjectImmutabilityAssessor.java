@@ -1,6 +1,8 @@
 package mikenakis_immutability_test;
 
+import mikenakis.debug.Debug;
 import mikenakis.immutability.Assessment;
+import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.immutability.assessments.ImmutableObjectAssessment;
@@ -46,8 +48,17 @@ public class T10_ObjectImmutabilityAssessor
 
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
-		ObjectAssessment assessment = assessor.assess( object );
 		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
+		ObjectAssessment assessment;
+		try
+		{
+			assert assessor.mustBeImmutableAssertion( object );
+			assessment = ObjectImmutabilityAssessor.instance.immutableObjectAssessmentInstance;
+		}
+		catch( ObjectMustBeImmutableException exception )
+		{
+			assessment = exception.mutableObjectAssessment;
+		}
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
 	}

@@ -47,7 +47,14 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 {
 	public static final ObjectImmutabilityAssessor instance = new ObjectImmutabilityAssessor( TypeImmutabilityAssessor.instance );
 
+	/**
+	 * DO NOT USE; FOR INTERNAL USE ONLY. This field is public only so that it can be used by the tests.
+	 */
 	public final TypeImmutabilityAssessor typeImmutabilityAssessor;
+
+	/**
+	 * DO NOT USE; FOR INTERNAL USE ONLY. This field is public only so that it can be used by the tests.
+	 */
 	public final ImmutableObjectAssessment immutableObjectAssessmentInstance = new ImmutableObjectAssessment( stringizer );
 
 	/**
@@ -71,7 +78,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		return true;
 	}
 
-	public ObjectAssessment assess( Object object )
+	private ObjectAssessment assess( Object object )
 	{
 		Set<Object> visitedValues = new IdentityLinkedHashSet<>();
 		ObjectAssessment result = assessRecursively( object, visitedValues );
