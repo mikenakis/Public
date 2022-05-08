@@ -6,7 +6,6 @@ import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsIterableProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
 
 import java.io.File;
@@ -70,11 +69,26 @@ final class DefaultPreassessments
 		assessor.addDefaultPreassessment( jvmClass, assessor.immutableClassAssessmentInstance );
 	}
 
-	private static void addDefaultIterablePreassessment( TypeImmutabilityAssessor assessor, Class<? extends Iterable<?>> jvmClass )
+	private static <T extends Iterable<E>,E> void addDefaultIterablePreassessment( TypeImmutabilityAssessor assessor, Class<T> jvmClass )
 	{
-		assert !(new TypeImmutabilityAssessor( assessor.stringizer ).assess( jvmClass ) instanceof IsIterableProvisoryTypeAssessment);
-		IsIterableProvisoryTypeAssessment assessment = new IsIterableProvisoryTypeAssessment( assessor.stringizer, TypeAssessment.Mode.PreassessedByDefault, jvmClass );
+		assert !(new TypeImmutabilityAssessor( assessor.stringizer ).assess( jvmClass ) instanceof IsCompositeProvisoryTypeAssessment);
+		Decomposer<T,E> decomposer = getIterableDecomposer();
+		IsCompositeProvisoryTypeAssessment<? extends Iterable<E>,E> assessment = new IsCompositeProvisoryTypeAssessment<>( assessor.stringizer, TypeAssessment.Mode.PreassessedByDefault, jvmClass, decomposer );
 		assessor.addDefaultPreassessment( jvmClass, assessment );
+	}
+
+	private static final Decomposer<? extends Iterable<Object>,Object> iterableDecomposer = new Decomposer<>()
+	{
+		@Override public Iterable<Object> decompose( Iterable<Object> object )
+		{
+			return object;
+		}
+	};
+
+	private static <T extends Iterable<E>,E> Decomposer<T,E> getIterableDecomposer()
+	{
+		@SuppressWarnings( "unchecked" ) Decomposer<T,E> result = (Decomposer<T,E>)iterableDecomposer;
+		return result;
 	}
 
 	private static <T, E> void addDefaultCompositePreassessment( TypeImmutabilityAssessor assessor, Class<T> compositeType, Decomposer<T,E> decomposer )

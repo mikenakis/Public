@@ -10,7 +10,6 @@ import mikenakis.immutability.object.assessments.ObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.HasMutableArrayElementMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.HasMutableComponentMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.MultiReasonMutableObjectAssessment;
-import mikenakis.immutability.object.assessments.mutable.HasMutableIterableElementMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.IsNonEmptyArrayMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.OfMutableTypeMutableObjectAssessment;
@@ -24,7 +23,6 @@ import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
 import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsIterableProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
@@ -99,7 +97,6 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 				//Class is extensible but otherwise immutable, and object is of this exact class and not of a further derived class, so object is immutable.
 				case IsExtensibleProvisoryTypeAssessment ignore -> immutableObjectAssessmentInstance;
 				case IsCompositeProvisoryTypeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment );
-				case IsIterableProvisoryTypeAssessment iterableAssessment -> assessIterable( (Iterable<?>)object, iterableAssessment );
 				case IsSelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
 				case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> assessMultiReasonProvisoryType( object, multiReasonAssessment, visitedValues );
 				case IsArrayMutableTypeAssessment arrayAssessment -> assessMutableArray( object, arrayAssessment );
@@ -113,20 +110,6 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		if( Array.getLength( arrayObject ) == 0 )
 			return immutableObjectAssessmentInstance;
 		return new IsNonEmptyArrayMutableObjectAssessment( stringizer, arrayObject, mutableArrayAssessment );
-	}
-
-	private <C> ObjectAssessment assessIterable( Iterable<C> iterableObject, IsIterableProvisoryTypeAssessment typeAssessment )
-	{
-		int index = 0;
-		for( var element : iterableObject )
-		{
-			ObjectAssessment elementAssessment = assess( element );
-			if( elementAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
-				return new HasMutableIterableElementMutableObjectAssessment<>( stringizer, iterableObject, typeAssessment, index, element, mutableObjectAssessment );
-			assert elementAssessment instanceof ImmutableObjectAssessment;
-			index++;
-		}
-		return immutableObjectAssessmentInstance;
 	}
 
 	private <T, E> ObjectAssessment assessComposite( T compositeObject, IsCompositeProvisoryTypeAssessment<?,?> wildcardTypeAssessment )
