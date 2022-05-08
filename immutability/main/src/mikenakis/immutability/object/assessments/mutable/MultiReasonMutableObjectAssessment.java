@@ -15,14 +15,14 @@ import java.util.stream.Stream;
 public final class MultiReasonMutableObjectAssessment extends MutableObjectAssessment
 {
 	public final MultiReasonProvisoryTypeAssessment typeAssessment;
-	public final List<MutableObjectAssessment> reasons;
+	public final List<MutableObjectAssessment> mutableReasons;
 
 	public MultiReasonMutableObjectAssessment( Stringizer stringizer, Object object, MultiReasonProvisoryTypeAssessment typeAssessment, //
-		List<MutableObjectAssessment> reasons )
+		List<MutableObjectAssessment> mutableReasons )
 	{
 		super( stringizer, object );
 		this.typeAssessment = typeAssessment;
-		this.reasons = reasons;
+		this.mutableReasons = mutableReasons;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
@@ -33,6 +33,6 @@ public final class MultiReasonMutableObjectAssessment extends MutableObjectAsses
 
 	@Override public List<? extends Assessment> children()
 	{
-		return Stream.concat( Stream.of( typeAssessment ), reasons.stream() ).toList();
+		return Stream.concat( Stream.of( typeAssessment ), mutableReasons.stream() ).toList();
 	}
 }

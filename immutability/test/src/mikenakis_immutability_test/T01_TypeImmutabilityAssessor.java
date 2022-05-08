@@ -29,9 +29,9 @@ import mikenakis.immutability.type.exceptions.VariableFieldMayNotBeAnnotatedInva
 import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.annotations.InvariableField;
 import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.mutable.OfMutableFieldTypeMutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayProvisoryFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.IsOfMutableFieldTypeMutableFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsOfProvisoryTypeProvisoryFieldAssessment;
 import org.junit.Test;
 
 import java.io.File;
@@ -230,8 +230,8 @@ public class T01_TypeImmutabilityAssessor
 				assert mutableFieldsAssessment.mutableFieldAssessments.size() == 1;
 				MutableFieldAssessment mutableFieldAssessment = mutableFieldsAssessment.mutableFieldAssessments.get( 0 );
 				assert mutableFieldAssessment.field.getName().equals( "invariableFieldOfMutableType" );
-				assert mutableFieldAssessment instanceof OfMutableFieldTypeMutableFieldAssessment;
-				OfMutableFieldTypeMutableFieldAssessment finalButOfMutableTypeMutableFieldAssessment = (OfMutableFieldTypeMutableFieldAssessment)mutableFieldAssessment;
+				assert mutableFieldAssessment instanceof IsOfMutableFieldTypeMutableFieldAssessment;
+				IsOfMutableFieldTypeMutableFieldAssessment finalButOfMutableTypeMutableFieldAssessment = (IsOfMutableFieldTypeMutableFieldAssessment)mutableFieldAssessment;
 				assert finalButOfMutableTypeMutableFieldAssessment.fieldTypeAssessment.type == ArrayList.class;
 			}
 		}.run();
@@ -324,9 +324,9 @@ public class T01_TypeImmutabilityAssessor
 			{
 				TypeAssessment assessment = assess( assessor, ClassWithInvariableFieldOfInterfaceType.class );
 				MultiReasonProvisoryTypeAssessment multiReasonAssessment = (MultiReasonProvisoryTypeAssessment)assessment;
-				assert multiReasonAssessment.reasons.size() == 1;
-				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.reasons.get( 0 );
-				OfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (OfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
+				assert multiReasonAssessment.provisoryReasons.size() == 1;
+				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.provisoryReasons.get( 0 );
+				IsOfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (IsOfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "invariableFieldOfInterfaceType" );
 				IsInterfaceProvisoryTypeAssessment fieldTypeAssessment = (IsInterfaceProvisoryTypeAssessment)fieldAssessment.provisoryTypeAssessment;
 				assert fieldTypeAssessment.type == List.class;
@@ -347,9 +347,9 @@ public class T01_TypeImmutabilityAssessor
 			{
 				TypeAssessment assessment = assess( assessor, ClassWithInvariableFieldOfProvisoryType.class );
 				MultiReasonProvisoryTypeAssessment multiReasonAssessment = (MultiReasonProvisoryTypeAssessment)assessment;
-				assert multiReasonAssessment.reasons.size() == 1;
-				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.reasons.get( 0 );
-				OfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (OfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
+				assert multiReasonAssessment.provisoryReasons.size() == 1;
+				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.provisoryReasons.get( 0 );
+				IsOfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (IsOfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "invariableFieldOfProvisoryType" );
 				IsExtensibleProvisoryTypeAssessment fieldTypeAssessment = (IsExtensibleProvisoryTypeAssessment)fieldAssessment.provisoryTypeAssessment;
 				assert fieldTypeAssessment.type == Object.class;
@@ -387,9 +387,9 @@ public class T01_TypeImmutabilityAssessor
 			{
 				TypeAssessment assessment = assess( assessor, ClassWithAnnotatedInvariableFieldOfProvisoryType.class );
 				MultiReasonProvisoryTypeAssessment multiReasonAssessment = (MultiReasonProvisoryTypeAssessment)assessment;
-				assert multiReasonAssessment.reasons.size() == 1;
-				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.reasons.get( 0 );
-				OfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (OfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
+				assert multiReasonAssessment.provisoryReasons.size() == 1;
+				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.provisoryReasons.get( 0 );
+				IsOfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (IsOfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "stableField" );
 				IsInterfaceProvisoryTypeAssessment fieldTypeAssessment = (IsInterfaceProvisoryTypeAssessment)fieldAssessment.provisoryTypeAssessment;
 				assert fieldTypeAssessment.type == List.class;
@@ -516,10 +516,10 @@ public class T01_TypeImmutabilityAssessor
 			{
 				TypeAssessment assessment = assess( assessor, ClassWithInvariableArrayFieldOfProvisoryElementType.class );
 				MultiReasonProvisoryTypeAssessment multiReasonAssessment = (MultiReasonProvisoryTypeAssessment)assessment;
-				assert multiReasonAssessment.reasons.size() == 1;
-				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.reasons.get( 0 );
+				assert multiReasonAssessment.provisoryReasons.size() == 1;
+				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.provisoryReasons.get( 0 );
 				assert reason.fieldAssessment.field.getName().equals( "array" );
-				IsInvariableArrayProvisoryFieldAssessment fieldAssessment = (IsInvariableArrayProvisoryFieldAssessment)reason.fieldAssessment;
+				IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment fieldAssessment = (IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment)reason.fieldAssessment;
 				assert fieldAssessment.arrayElementTypeAssessment.type == Object.class;
 			}
 		}.run();
@@ -805,9 +805,9 @@ public class T01_TypeImmutabilityAssessor
 			{
 				TypeAssessment assessment = assess( assessor, ClassWithInterfaceMember.class );
 				MultiReasonProvisoryTypeAssessment multiReasonAssessment = (MultiReasonProvisoryTypeAssessment)assessment;
-				assert multiReasonAssessment.reasons.size() == 1;
-				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.reasons.get( 0 );
-				OfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (OfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
+				assert multiReasonAssessment.provisoryReasons.size() == 1;
+				HasProvisoryFieldProvisoryTypeAssessment reason = (HasProvisoryFieldProvisoryTypeAssessment)multiReasonAssessment.provisoryReasons.get( 0 );
+				IsOfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (IsOfProvisoryTypeProvisoryFieldAssessment)reason.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "someInterface" );
 				IsInterfaceProvisoryTypeAssessment fieldTypeAssessment = (IsInterfaceProvisoryTypeAssessment)fieldAssessment.provisoryTypeAssessment;
 				assert fieldTypeAssessment.type == SomeInterface.class;
@@ -836,13 +836,13 @@ public class T01_TypeImmutabilityAssessor
 				TypeAssessment assessment = assess( assessor, ClassExtendingProvisoryClass.class );
 				assert assessment instanceof MultiReasonProvisoryTypeAssessment : assessment;
 				MultiReasonProvisoryTypeAssessment provisoryContentAssessment = (MultiReasonProvisoryTypeAssessment)assessment;
-				assert provisoryContentAssessment.reasons.size() == 1;
-				HasProvisoryAncestorProvisoryTypeAssessment reason = (HasProvisoryAncestorProvisoryTypeAssessment)provisoryContentAssessment.reasons.get( 0 );
+				assert provisoryContentAssessment.provisoryReasons.size() == 1;
+				HasProvisoryAncestorProvisoryTypeAssessment reason = (HasProvisoryAncestorProvisoryTypeAssessment)provisoryContentAssessment.provisoryReasons.get( 0 );
 				MultiReasonProvisoryTypeAssessment ancestorAssessment = (MultiReasonProvisoryTypeAssessment)reason.ancestorAssessment;
 				assert ancestorAssessment.type == ProvisoryClass.class;
-				assert ancestorAssessment.reasons.size() == 1;
-				HasProvisoryFieldProvisoryTypeAssessment ancestorReason = (HasProvisoryFieldProvisoryTypeAssessment)ancestorAssessment.reasons.get( 0 );
-				OfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (OfProvisoryTypeProvisoryFieldAssessment)ancestorReason.fieldAssessment;
+				assert ancestorAssessment.provisoryReasons.size() == 1;
+				HasProvisoryFieldProvisoryTypeAssessment ancestorReason = (HasProvisoryFieldProvisoryTypeAssessment)ancestorAssessment.provisoryReasons.get( 0 );
+				IsOfProvisoryTypeProvisoryFieldAssessment fieldAssessment = (IsOfProvisoryTypeProvisoryFieldAssessment)ancestorReason.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "someInterface" );
 				IsInterfaceProvisoryTypeAssessment fieldTypeAssessment = (IsInterfaceProvisoryTypeAssessment)fieldAssessment.provisoryTypeAssessment;
 				assert fieldTypeAssessment.type == SomeInterface.class;

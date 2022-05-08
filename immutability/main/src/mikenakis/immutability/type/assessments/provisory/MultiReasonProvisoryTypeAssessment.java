@@ -13,18 +13,18 @@ import java.util.List;
  */
 public final class MultiReasonProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
-	public final List<ProvisoryTypeAssessment> reasons;
+	public final List<ProvisoryTypeAssessment> provisoryReasons;
 
-	public MultiReasonProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, List<ProvisoryTypeAssessment> reasonAssessments )
+	public MultiReasonProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, List<ProvisoryTypeAssessment> provisoryReasons )
 	{
 		super( stringizer, jvmClass );
 		assert Helpers.isClass( jvmClass ); //the type must be a class; there is a different assessment for interfaces.
-		reasons = reasonAssessments;
+		this.provisoryReasons = provisoryReasons;
 	}
 
 	@Override public List<? extends Assessment> children()
 	{
-		return reasons;
+		return provisoryReasons;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )

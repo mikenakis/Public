@@ -4,7 +4,7 @@ import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import java.util.List;
 public final class HasMutableArrayElementMutableObjectAssessment<E> extends MutableObjectAssessment
 {
 	public final Iterable<E> iterableArrayWrapper;
-	public final IsInvariableArrayProvisoryFieldAssessment typeAssessment;
+	public final IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment typeAssessment;
 	public final int mutableElementIndex;
 	public final E mutableElement;
 	public final MutableObjectAssessment elementAssessment;
 
-	public HasMutableArrayElementMutableObjectAssessment( Stringizer stringizer, Iterable<E> iterableArrayWrapper, IsInvariableArrayProvisoryFieldAssessment typeAssessment, //
+	public HasMutableArrayElementMutableObjectAssessment( Stringizer stringizer, Iterable<E> iterableArrayWrapper, IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment typeAssessment, //
 		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
 	{
 		super( stringizer, iterableArrayWrapper );

@@ -28,9 +28,9 @@ import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTyp
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.HasProvisoryFieldProvisoryTypeAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsOfProvisoryTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -128,7 +128,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		return immutableObjectAssessmentInstance;
 	}
 
-	private ObjectAssessment assessInvariableArray( Object array, IsInvariableArrayProvisoryFieldAssessment arrayAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessInvariableArray( Object array, IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment arrayAssessment, Set<Object> visitedValues )
 	{
 		Iterable<Object> arrayAsIterable = new IterableOnArrayObject( array );
 		int index = 0;
@@ -152,13 +152,13 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	private ObjectAssessment assessMultiReasonProvisoryType( Object object, MultiReasonProvisoryTypeAssessment multiReasonProvisoryTypeAssessment, Set<Object> visitedValues )
 	{
 		List<MutableObjectAssessment> assessments = new ArrayList<>();
-		for( ProvisoryTypeAssessment reason : multiReasonProvisoryTypeAssessment.reasons )
+		for( ProvisoryTypeAssessment provisoryReason : multiReasonProvisoryTypeAssessment.provisoryReasons )
 		{
-			Optional<MutableObjectAssessment> reasonMutableObjectAssessment = switch( reason )
+			Optional<MutableObjectAssessment> reasonMutableObjectAssessment = switch( provisoryReason )
 			{
 				case HasProvisoryAncestorProvisoryTypeAssessment hasProvisoryAncestorReasonAssessment -> assessAncestor( object, hasProvisoryAncestorReasonAssessment.ancestorAssessment, visitedValues );
 				case HasProvisoryFieldProvisoryTypeAssessment hasProvisoryFieldReasonAssessment -> assessField( object, hasProvisoryFieldReasonAssessment.fieldAssessment, visitedValues );
-				default -> throw new IllegalStateException( "Unexpected value: " + reason );
+				default -> throw new AssertionError( provisoryReason );
 			};
 			reasonMutableObjectAssessment.ifPresent( r -> assessments.add( r ) );
 		}
@@ -183,8 +183,8 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		Object fieldValue = getFieldValue( object, provisoryFieldAssessment.field );
 		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment )
 		{
-			case IsInvariableArrayProvisoryFieldAssessment invariableArrayFieldAssessment -> assessInvariableArray( fieldValue, invariableArrayFieldAssessment, visitedValues );
-			case OfProvisoryTypeProvisoryFieldAssessment ignore -> assessRecursively( fieldValue, visitedValues );
+			case IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment invariableArrayFieldAssessment -> assessInvariableArray( fieldValue, invariableArrayFieldAssessment, visitedValues );
+			case IsOfProvisoryTypeProvisoryFieldAssessment ignore -> assessRecursively( fieldValue, visitedValues );
 			default -> throw new AssertionError(); //TODO: make assessments sealed, so that we do not need default clauses!
 		};
 		if( fieldValueAssessment instanceof MutableObjectAssessment mutableFieldValueAssessment )

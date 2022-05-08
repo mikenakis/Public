@@ -28,6 +28,7 @@ import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessm
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +69,7 @@ final class Reflector extends Stringizable
 		if( type.isInterface() )
 			return new IsInterfaceProvisoryTypeAssessment( stringizer, type );
 
-		List<ProvisoryTypeAssessment> reasons = new ArrayList<>();
+		List<ProvisoryTypeAssessment> provisoryReasons = new ArrayList<>();
 		Class<?> superclass = type.getSuperclass();
 		if( superclass != null )
 		{
@@ -78,7 +79,7 @@ final class Reflector extends Stringizable
 				case MutableTypeAssessment mutableTypeAssessment:
 					return mutableTypeAssessment;
 				case ProvisoryTypeAssessment provisoryTypeAssessment:
-					reasons.add( provisoryTypeAssessment );
+					provisoryReasons.add( provisoryTypeAssessment );
 					break;
 				default:
 					assert superclassAssessment instanceof ImmutableTypeAssessment || superclassAssessment instanceof UnderAssessmentTypeAssessment;
@@ -88,12 +89,14 @@ final class Reflector extends Stringizable
 		List<MutableFieldAssessment> mutableFieldAssessments = new ArrayList<>();
 		for( Field field : type.getDeclaredFields() )
 		{
+			if( Modifier.isStatic( field.getModifiers() ) )
+				continue;
 			FieldAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
 			switch( fieldAssessment )
 			{
 				case ProvisoryFieldAssessment provisoryFieldAssessment:
 				{
-					reasons.add( new HasProvisoryFieldProvisoryTypeAssessment( stringizer, type, provisoryFieldAssessment ) );
+					provisoryReasons.add( new HasProvisoryFieldProvisoryTypeAssessment( stringizer, type, provisoryFieldAssessment ) );
 					break;
 				}
 				case MutableFieldAssessment mutableFieldAssessment:
@@ -109,8 +112,8 @@ final class Reflector extends Stringizable
 		if( !mutableFieldAssessments.isEmpty() )
 			return new HasMutableFieldsMutableTypeAssessment( stringizer, type, mutableFieldAssessments );
 
-		if( !reasons.isEmpty() )
-			return new MultiReasonProvisoryTypeAssessment( stringizer, type, reasons );
+		if( !provisoryReasons.isEmpty() )
+			return new MultiReasonProvisoryTypeAssessment( stringizer, type, provisoryReasons );
 
 		if( Helpers.isExtensible( type ) )
 			return new IsExtensibleProvisoryTypeAssessment( stringizer, TypeAssessment.Mode.Assessed, type );

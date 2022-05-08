@@ -17,7 +17,7 @@ import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTyp
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsOfProvisoryTypeProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import org.junit.Test;
 
@@ -165,11 +165,11 @@ public class T10_ObjectImmutabilityAssessor
 				MultiReasonMutableObjectAssessment multiReasonAssessment = (MultiReasonMutableObjectAssessment)assessment;
 				assert multiReasonAssessment.object == object;
 				assert multiReasonAssessment.typeAssessment.type == ClassWithInvariableFieldOfInterfaceTypeWithMutableValue.class;
-				assert multiReasonAssessment.reasons.size() == 1;
-				HasMutableFieldValueMutableObjectAssessment mutableFieldValueAssessment = (HasMutableFieldValueMutableObjectAssessment)multiReasonAssessment.reasons.get( 0 );
+				assert multiReasonAssessment.mutableReasons.size() == 1;
+				HasMutableFieldValueMutableObjectAssessment mutableFieldValueAssessment = (HasMutableFieldValueMutableObjectAssessment)multiReasonAssessment.mutableReasons.get( 0 );
 				ProvisoryFieldAssessment provisoryFieldAssessment = mutableFieldValueAssessment.provisoryFieldAssessment;
 				assert provisoryFieldAssessment.field.getName().equals( "mutableField" );
-				OfProvisoryTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (OfProvisoryTypeProvisoryFieldAssessment)provisoryFieldAssessment;
+				IsOfProvisoryTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (IsOfProvisoryTypeProvisoryFieldAssessment)provisoryFieldAssessment;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment.type == List.class;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment instanceof IsInterfaceProvisoryTypeAssessment;
 				OfMutableTypeMutableObjectAssessment fieldValueAssessment = (OfMutableTypeMutableObjectAssessment)mutableFieldValueAssessment.fieldValueAssessment;

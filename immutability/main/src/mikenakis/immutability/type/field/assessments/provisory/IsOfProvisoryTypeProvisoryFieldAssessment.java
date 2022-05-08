@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Signifies that a field is provisory because it is of a field type which is provisory.
  */
-public final class OfProvisoryTypeProvisoryFieldAssessment extends ProvisoryFieldAssessment
+public final class IsOfProvisoryTypeProvisoryFieldAssessment extends ProvisoryFieldAssessment
 {
 	public final ProvisoryTypeAssessment provisoryTypeAssessment;
 
-	public OfProvisoryTypeProvisoryFieldAssessment( Stringizer stringizer, Field field, ProvisoryTypeAssessment provisoryTypeAssessment )
+	public IsOfProvisoryTypeProvisoryFieldAssessment( Stringizer stringizer, Field field, ProvisoryTypeAssessment provisoryTypeAssessment )
 	{
 		super( stringizer, field );
 		this.provisoryTypeAssessment = provisoryTypeAssessment;

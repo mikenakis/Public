@@ -18,10 +18,11 @@ import mikenakis.immutability.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.type.field.assessments.ImmutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.UnderAssessmentFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.ArrayMutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.mutable.OfMutableFieldTypeMutableFieldAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.IsInvariableArrayOfMutableElementTypeMutableFieldAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.IsOfMutableFieldTypeMutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.VariableMutableFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayProvisoryFieldAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.IsOfProvisoryTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -40,57 +41,43 @@ public class FieldImmutabilityAssessor extends Stringizable
 
 	public FieldAssessment assessField( Field field )
 	{
-		if( Modifier.isStatic( field.getModifiers() ) )
-			return immutableFieldAssessment;
+		assert !Modifier.isStatic( field.getModifiers() );
 		boolean isInvariableField = isInvariableField( field );
 		boolean isArray = field.getType().isArray();
 		boolean isInvariableArray = field.isAnnotationPresent( InvariableArray.class );
-		if( isInvariableField && isArray )
-		{
-			if( isInvariableArray )
-			{
-				if( !Modifier.isPrivate( field.getModifiers() ) )
-					throw new AnnotatedInvariableArrayFieldMustBePrivateException( field );
-				//TODO: merge this block of code with the very similar block of code further down this method.
-				TypeAssessment arrayElementTypeAssessment = typeImmutabilityAssessor.assess( field.getType().getComponentType() );
-				return switch( arrayElementTypeAssessment )
-					{
-						case UnderAssessmentTypeAssessment ignore -> //
-							underAssessmentFieldAssessment;
-						case ProvisoryTypeAssessment provisoryTypeAssessment -> //
-							new IsInvariableArrayProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
-						case ImmutableTypeAssessment ignore -> //
-							immutableFieldAssessment;
-						case MutableTypeAssessment mutableTypeAssessment -> //
-							new OfMutableFieldTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
-						default -> //
-							//DoNotCover
-							throw new AssertionError( arrayElementTypeAssessment );
-					};
-			}
-			else
-				return new ArrayMutableFieldAssessment( stringizer, field );
-		}
-		else if( !isArray && isInvariableArray )
+		if( !isArray && isInvariableArray )
 			throw new NonArrayFieldMayNotBeAnnotatedInvariableArrayException( field );
 		else if( !isInvariableField && isInvariableArray )
 			throw new VariableFieldMayNotBeAnnotatedInvariableArrayException( field );
 		else if( !isInvariableField )
 			return new VariableMutableFieldAssessment( stringizer, field );
+		else if( isArray && !isInvariableArray )
+			return new ArrayMutableFieldAssessment( stringizer, field );
+		else if( isArray )
+		{
+			assert isArray && isInvariableArray;
+			if( !Modifier.isPrivate( field.getModifiers() ) )
+				throw new AnnotatedInvariableArrayFieldMustBePrivateException( field );
+			TypeAssessment arrayElementTypeAssessment = typeImmutabilityAssessor.assess( field.getType().getComponentType() );
+			return switch( arrayElementTypeAssessment )
+				{
+					case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
+					case ProvisoryTypeAssessment provisoryTypeAssessment -> new IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
+					case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
+					case MutableTypeAssessment mutableTypeAssessment -> new IsInvariableArrayOfMutableElementTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
+					//DoNotCover
+					default -> throw new AssertionError( arrayElementTypeAssessment );
+				};
+		}
 		TypeAssessment fieldTypeAssessment = typeImmutabilityAssessor.assess( field.getType() );
 		return switch( fieldTypeAssessment )
 			{
-				case UnderAssessmentTypeAssessment ignore -> //
-					underAssessmentFieldAssessment;
-				case ProvisoryTypeAssessment provisoryTypeAssessment -> //
-					new OfProvisoryTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
-				case ImmutableTypeAssessment ignore -> //
-					immutableFieldAssessment;
-				case MutableTypeAssessment mutableTypeAssessment -> //
-					new OfMutableFieldTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
-				default -> //
-					//DoNotCover
-					throw new AssertionError( fieldTypeAssessment );
+				case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
+				case ProvisoryTypeAssessment provisoryTypeAssessment -> new IsOfProvisoryTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
+				case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
+				case MutableTypeAssessment mutableTypeAssessment -> new IsOfMutableFieldTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
+				//DoNotCover
+				default -> throw new AssertionError( fieldTypeAssessment );
 			};
 	}
 
