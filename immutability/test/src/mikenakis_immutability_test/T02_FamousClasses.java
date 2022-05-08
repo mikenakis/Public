@@ -3,12 +3,12 @@ package mikenakis_immutability_test;
 import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.assessments.ImmutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.MutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
+import mikenakis.immutability.type.assessments.MutableTypeAssessment;
+import mikenakis.immutability.type.assessments.TypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import org.junit.Test;
 
 import javax.swing.KeyStroke;
@@ -58,9 +58,9 @@ public class T02_FamousClasses
 			throw new AssertionError();
 	}
 
-	private static TypeImmutabilityAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
+	private static TypeAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
 	{
-		TypeImmutabilityAssessment assessment = assessor.assess( type );
+		TypeAssessment assessment = assessor.assess( type );
 		System.out.println( "assessment for type " + TestStringizer.instance.stringizeClassName( type ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
@@ -74,8 +74,8 @@ public class T02_FamousClasses
 			MonthDay.class, OffsetDateTime.class, OffsetTime.class, Period.class, Year.class, YearMonth.class, ZoneOffset.class );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof ImmutableTypeImmutabilityAssessment;
+			TypeAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof ImmutableTypeAssessment;
 		}
 	}
 
@@ -84,8 +84,8 @@ public class T02_FamousClasses
 		List<Class<?>> classes = List.of( ZonedDateTime.class );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof MultiReasonProvisoryTypeImmutabilityAssessment;
+			TypeAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof MultiReasonProvisoryTypeAssessment;
 		}
 	}
 
@@ -94,8 +94,8 @@ public class T02_FamousClasses
 		List<Class<?>> classes = List.of( Optional.class );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof IsCompositeProvisoryTypeImmutabilityAssessment;
+			TypeAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof IsCompositeProvisoryTypeAssessment;
 		}
 	}
 
@@ -104,8 +104,8 @@ public class T02_FamousClasses
 		List<Class<?>> classes = List.of( Collections.class, Clock.class, ZoneId.class, MouseInfo.class, DriverManager.class );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof IsExtensibleProvisoryTypeImmutabilityAssessment;
+			TypeAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof IsExtensibleProvisoryTypeAssessment;
 		}
 	}
 
@@ -116,8 +116,8 @@ public class T02_FamousClasses
 			ConcurrentHashMap.class, KeyStroke.class );
 		for( Class<?> jvmClass : classes )
 		{
-			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof MutableTypeImmutabilityAssessment;
+			TypeAssessment assessment = assess( assessor, jvmClass );
+			assert assessment instanceof MutableTypeAssessment;
 		}
 	}
 }

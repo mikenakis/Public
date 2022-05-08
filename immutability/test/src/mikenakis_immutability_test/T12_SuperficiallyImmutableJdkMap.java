@@ -4,10 +4,10 @@ import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.helpers.ConcreteMapEntry;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.object.ObjectImmutabilityAssessor;
-import mikenakis.immutability.object.assessments.ImmutableObjectImmutabilityAssessment;
-import mikenakis.immutability.object.assessments.MutableObjectImmutabilityAssessment;
-import mikenakis.immutability.object.assessments.ObjectImmutabilityAssessment;
-import mikenakis.immutability.object.assessments.mutable.HasMutableComponentMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
+import mikenakis.immutability.object.assessments.MutableObjectAssessment;
+import mikenakis.immutability.object.assessments.ObjectAssessment;
+import mikenakis.immutability.object.assessments.mutable.HasMutableComponentMutableObjectAssessment;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
@@ -32,9 +32,9 @@ public class T12_SuperficiallyImmutableJdkMap
 		return new ObjectImmutabilityAssessor( classImmutabilityAssessor );
 	}
 
-	private static ObjectImmutabilityAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
+	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
-		ObjectImmutabilityAssessment assessment = assessor.assess( object );
+		ObjectAssessment assessment = assessor.assess( object );
 		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
 		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
@@ -75,29 +75,29 @@ public class T12_SuperficiallyImmutableJdkMap
 	@Test public void superficially_immutable_jdk_map_of_size_0_is_actually_immutable()
 	{
 		Map<?,?> mapObject = Map.of();
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
-		assert assessment instanceof ImmutableObjectImmutabilityAssessment;
+		ObjectAssessment assessment = assess( assessor, mapObject );
+		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
 	@Test public void superficially_immutable_jdk_map_of_size_1_with_immutable_keys_and_values_is_immutable()
 	{
 		Map<?,?> mapObject = Map.of( 1, "", 2, "" );
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
-		assert assessment instanceof ImmutableObjectImmutabilityAssessment;
+		ObjectAssessment assessment = assess( assessor, mapObject );
+		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
 	@Test public void superficially_immutable_jdk_map_of_size_2_with_immutable_keys_and_values_is_immutable()
 	{
 		Map<?,?> mapObject = Map.of( 1, "", 2, "", 3, "" );
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
-		assert assessment instanceof ImmutableObjectImmutabilityAssessment;
+		ObjectAssessment assessment = assess( assessor, mapObject );
+		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
 	@Test public void superficially_immutable_jdk_map_of_size_1_with_a_mutable_key_is_actually_mutable()
 	{
 		ConcreteMapEntry<ArrayList<?>,String> mutableEntry = new ConcreteMapEntry<>( new ArrayList<>(), "" );
 		Map<?,?> mapObject = Map.of( mutableEntry.key(), mutableEntry.value() );
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
+		ObjectAssessment assessment = assess( assessor, mapObject );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkMap( mapObject, mutableEntry, assessment, 1 );
 	}
 
@@ -105,7 +105,7 @@ public class T12_SuperficiallyImmutableJdkMap
 	{
 		ConcreteMapEntry<ArrayList<?>,String> mutableEntry = new ConcreteMapEntry<>( new ArrayList<>(), "" );
 		Map<?,?> mapObject = Map.of( 1, "", mutableEntry.key(), mutableEntry.value() );
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
+		ObjectAssessment assessment = assess( assessor, mapObject );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkMap( mapObject, mutableEntry, assessment, 2 );
 	}
 
@@ -113,7 +113,7 @@ public class T12_SuperficiallyImmutableJdkMap
 	{
 		ConcreteMapEntry<String,ArrayList<?>> mutableEntry = new ConcreteMapEntry<>( "1", new ArrayList<>() );
 		Map<?,?> mapObject = Map.of( mutableEntry.key(), mutableEntry.value() );
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
+		ObjectAssessment assessment = assess( assessor, mapObject );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkMap( mapObject, mutableEntry, assessment, 1 );
 	}
 
@@ -121,17 +121,17 @@ public class T12_SuperficiallyImmutableJdkMap
 	{
 		ConcreteMapEntry<String,ArrayList<?>> mutableEntry = new ConcreteMapEntry<>( "2", new ArrayList<>() );
 		Map<?,?> mapObject = Map.of( "1", 0, mutableEntry.key(), mutableEntry.value() );
-		ObjectImmutabilityAssessment assessment = assess( assessor, mapObject );
+		ObjectAssessment assessment = assess( assessor, mapObject );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkMap( mapObject, mutableEntry, assessment, 2 );
 	}
 
-	private static void checkMutableAssessmentOfSuperficiallyImmutableJdkMap( Map<?,?> mapObject, Object mutableEntry, ObjectImmutabilityAssessment assessment, int size )
+	private static void checkMutableAssessmentOfSuperficiallyImmutableJdkMap( Map<?,?> mapObject, Object mutableEntry, ObjectAssessment assessment, int size )
 	{
-		assert assessment instanceof MutableObjectImmutabilityAssessment;
-		MutableObjectImmutabilityAssessment mutableObjectAssessment = (MutableObjectImmutabilityAssessment)assessment;
+		assert assessment instanceof MutableObjectAssessment;
+		MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
 		assert mutableObjectAssessment.object == mapObject;
-		assert mutableObjectAssessment instanceof HasMutableComponentMutableObjectImmutabilityAssessment;
-		HasMutableComponentMutableObjectImmutabilityAssessment<?,?> mutableElementAssessment = (HasMutableComponentMutableObjectImmutabilityAssessment<?,?>)mutableObjectAssessment;
+		assert mutableObjectAssessment instanceof HasMutableComponentMutableObjectAssessment;
+		HasMutableComponentMutableObjectAssessment<?,?> mutableElementAssessment = (HasMutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
 		assert mutableElementAssessment.compositeObject == mapObject;
 		assert mutableElementAssessment.typeAssessment.type == mapObject.getClass();
 		assert mutableElementAssessment.mutableElementIndex >= 0 && mutableElementAssessment.mutableElementIndex < size; //cannot assert precise index because hashmaps garble the order of items

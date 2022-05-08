@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for all assessments.
+ * Common base class for all assessments. Exists just so that we can create trees of assessments.
  */
 public abstract class Assessment extends Stringizable
 {

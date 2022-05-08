@@ -2,29 +2,29 @@ package mikenakis.immutability.type;
 
 import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.helpers.Stringizable;
-import mikenakis.immutability.type.assessments.ImmutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.MutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.NonImmutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.ProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.UnderAssessmentTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.mutable.HasMutableFieldsMutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.mutable.HasMutableSuperclassMutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.HasProvisoryFieldProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
+import mikenakis.immutability.type.assessments.MutableTypeAssessment;
+import mikenakis.immutability.type.assessments.NonImmutableTypeAssessment;
+import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.TypeAssessment;
+import mikenakis.immutability.type.assessments.UnderAssessmentTypeAssessment;
+import mikenakis.immutability.type.assessments.mutable.HasMutableFieldsMutableTypeAssessment;
+import mikenakis.immutability.type.assessments.mutable.HasMutableSuperclassMutableTypeAssessment;
+import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.field.FieldImmutabilityAssessor;
-import mikenakis.immutability.type.field.assessments.FieldImmutabilityAssessment;
-import mikenakis.immutability.type.field.assessments.ImmutableFieldImmutabilityAssessment;
-import mikenakis.immutability.type.field.assessments.UnderAssessmentFieldImmutabilityAssessment;
-import mikenakis.immutability.type.field.assessments.mutable.MutableFieldImmutabilityAssessment;
-import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.FieldAssessment;
+import mikenakis.immutability.type.field.assessments.ImmutableFieldAssessment;
+import mikenakis.immutability.type.field.assessments.UnderAssessmentFieldAssessment;
+import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -47,94 +47,94 @@ final class Reflector extends Stringizable
 		fieldImmutabilityAssessor = new FieldImmutabilityAssessor( typeImmutabilityAssessor );
 	}
 
-	TypeImmutabilityAssessment assess( Class<?> type )
+	TypeAssessment assess( Class<?> type )
 	{
-		TypeImmutabilityAssessment assessment = assess0( type );
+		TypeAssessment assessment = assess0( type );
 		if( ImmutabilitySelfAssessable.class.isAssignableFrom( type ) )
 		{
 			assert Helpers.isClass( type ) : new SelfAssessableAnnotationIsOnlyApplicableToClassException( type );
 			//FIXME XXX TODO assert !Helpers.isExtensible( type  ) : new SelfAssessableClassMustBeInextensibleException( type );
-			assert assessment instanceof NonImmutableTypeImmutabilityAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
-			return new IsSelfAssessableProvisoryTypeImmutabilityAssessment( stringizer, type );
+			assert assessment instanceof NonImmutableTypeAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
+			return new IsSelfAssessableProvisoryTypeAssessment( stringizer, type );
 		}
 		return assessment;
 	}
 
-	private TypeImmutabilityAssessment assess0( Class<?> type )
+	private TypeAssessment assess0( Class<?> type )
 	{
 		if( type.isArray() )
-			return new IsArrayMutableTypeImmutabilityAssessment( stringizer, type );
+			return new IsArrayMutableTypeAssessment( stringizer, type );
 		if( type.isInterface() )
-			return new IsInterfaceProvisoryTypeImmutabilityAssessment( stringizer, type );
+			return new IsInterfaceProvisoryTypeAssessment( stringizer, type );
 
-		List<ProvisoryTypeImmutabilityAssessment> reasons = new ArrayList<>();
+		List<ProvisoryTypeAssessment> reasons = new ArrayList<>();
 		Class<?> superclass = type.getSuperclass();
 		if( superclass != null )
 		{
-			TypeImmutabilityAssessment superclassAssessment = assessSuperclass( type, superclass );
+			TypeAssessment superclassAssessment = assessSuperclass( type, superclass );
 			switch( superclassAssessment )
 			{
-				case MutableTypeImmutabilityAssessment mutableTypeImmutabilityAssessment:
-					return mutableTypeImmutabilityAssessment;
-				case ProvisoryTypeImmutabilityAssessment provisoryTypeImmutabilityAssessment:
-					reasons.add( provisoryTypeImmutabilityAssessment );
+				case MutableTypeAssessment mutableTypeAssessment:
+					return mutableTypeAssessment;
+				case ProvisoryTypeAssessment provisoryTypeAssessment:
+					reasons.add( provisoryTypeAssessment );
 					break;
 				default:
-					assert superclassAssessment instanceof ImmutableTypeImmutabilityAssessment || superclassAssessment instanceof UnderAssessmentTypeImmutabilityAssessment;
+					assert superclassAssessment instanceof ImmutableTypeAssessment || superclassAssessment instanceof UnderAssessmentTypeAssessment;
 			}
 		}
 
-		List<MutableFieldImmutabilityAssessment> mutableFieldAssessments = new ArrayList<>();
+		List<MutableFieldAssessment> mutableFieldAssessments = new ArrayList<>();
 		for( Field field : type.getDeclaredFields() )
 		{
-			FieldImmutabilityAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
+			FieldAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
 			switch( fieldAssessment )
 			{
-				case ProvisoryFieldImmutabilityAssessment provisoryFieldAssessment:
+				case ProvisoryFieldAssessment provisoryFieldAssessment:
 				{
-					reasons.add( new HasProvisoryFieldProvisoryTypeImmutabilityAssessment( stringizer, type, provisoryFieldAssessment ) );
+					reasons.add( new HasProvisoryFieldProvisoryTypeAssessment( stringizer, type, provisoryFieldAssessment ) );
 					break;
 				}
-				case MutableFieldImmutabilityAssessment mutableFieldAssessment:
+				case MutableFieldAssessment mutableFieldAssessment:
 				{
 					mutableFieldAssessments.add( mutableFieldAssessment );
 					break;
 				}
 				default:
-					assert fieldAssessment instanceof UnderAssessmentFieldImmutabilityAssessment || fieldAssessment instanceof ImmutableFieldImmutabilityAssessment;
+					assert fieldAssessment instanceof UnderAssessmentFieldAssessment || fieldAssessment instanceof ImmutableFieldAssessment;
 			}
 		}
 
 		if( !mutableFieldAssessments.isEmpty() )
-			return new HasMutableFieldsMutableTypeImmutabilityAssessment( stringizer, type, mutableFieldAssessments );
+			return new HasMutableFieldsMutableTypeAssessment( stringizer, type, mutableFieldAssessments );
 
 		if( !reasons.isEmpty() )
-			return new MultiReasonProvisoryTypeImmutabilityAssessment( stringizer, type, reasons );
+			return new MultiReasonProvisoryTypeAssessment( stringizer, type, reasons );
 
 		if( Helpers.isExtensible( type ) )
-			return new IsExtensibleProvisoryTypeImmutabilityAssessment( stringizer, TypeImmutabilityAssessment.Mode.Assessed, type );
+			return new IsExtensibleProvisoryTypeAssessment( stringizer, TypeAssessment.Mode.Assessed, type );
 
 		return typeImmutabilityAssessor.immutableClassAssessmentInstance;
 	}
 
-	private TypeImmutabilityAssessment assessSuperclass( Class<?> type, Class<?> superclass )
+	private TypeAssessment assessSuperclass( Class<?> type, Class<?> superclass )
 	{
-		TypeImmutabilityAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
+		TypeAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
 		return switch( superclassAssessment )
 		{
-			case MutableTypeImmutabilityAssessment mutableTypeAssessment -> new HasMutableSuperclassMutableTypeImmutabilityAssessment( stringizer, type, mutableTypeAssessment );
-			case IsExtensibleProvisoryTypeImmutabilityAssessment ignore -> typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
-			case MultiReasonProvisoryTypeImmutabilityAssessment multiReasonAssessment -> new HasProvisoryAncestorProvisoryTypeImmutabilityAssessment( stringizer, type, multiReasonAssessment );
-			case UnderAssessmentTypeImmutabilityAssessment ignore -> ignore;
-			case ImmutableTypeImmutabilityAssessment immutableTypeAssessment ->
+			case MutableTypeAssessment mutableTypeAssessment -> new HasMutableSuperclassMutableTypeAssessment( stringizer, type, mutableTypeAssessment );
+			case IsExtensibleProvisoryTypeAssessment ignore -> typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
+			case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> new HasProvisoryAncestorProvisoryTypeAssessment( stringizer, type, multiReasonAssessment );
+			case UnderAssessmentTypeAssessment ignore -> ignore;
+			case ImmutableTypeAssessment immutableTypeAssessment ->
 				//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
 				//DoNotCover
 				throw new AssertionError( immutableTypeAssessment );
-			case IsInterfaceProvisoryTypeImmutabilityAssessment interfaceAssessment ->
+			case IsInterfaceProvisoryTypeAssessment interfaceAssessment ->
 				//Cannot happen, because the supertype of a class cannot be an interface.
 				//DoNotCover
 				throw new AssertionError( interfaceAssessment );
-			case IsSelfAssessableProvisoryTypeImmutabilityAssessment selfAssessableAssessment -> new HasProvisoryAncestorProvisoryTypeImmutabilityAssessment( stringizer, type, selfAssessableAssessment );
+			case IsSelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> new HasProvisoryAncestorProvisoryTypeAssessment( stringizer, type, selfAssessableAssessment );
 			default ->
 				//DoNotCover
 				throw new AssertionError( superclassAssessment );
