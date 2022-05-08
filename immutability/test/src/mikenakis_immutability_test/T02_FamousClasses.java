@@ -8,7 +8,7 @@ import mikenakis.immutability.type.assessments.MutableTypeImmutabilityAssessment
 import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeImmutabilityAssessment;
 import org.junit.Test;
 
 import javax.swing.KeyStroke;
@@ -79,13 +79,13 @@ public class T02_FamousClasses
 		}
 	}
 
-	@Test public void famous_content_provisory_classes_are_content_provisory()
+	@Test public void famous_multi_reason_provisory_classes_are_multi_reason_provisory()
 	{
 		List<Class<?>> classes = List.of( ZonedDateTime.class );
 		for( Class<?> jvmClass : classes )
 		{
 			TypeImmutabilityAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+			assert assessment instanceof MultiReasonProvisoryTypeImmutabilityAssessment;
 		}
 	}
 

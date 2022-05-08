@@ -8,13 +8,15 @@ import mikenakis.immutability.type.assessments.NonImmutableTypeImmutabilityAsses
 import mikenakis.immutability.type.assessments.ProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.TypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.UnderAssessmentTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.mutable.HasMutableFieldsMutableTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.mutable.HasMutableSuperclassMutableTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.HasProvisoryContentProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.HasProvisoryFieldProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.field.FieldImmutabilityAssessor;
@@ -27,7 +29,6 @@ import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldImm
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Assesses immutability using reflection.
@@ -66,59 +67,32 @@ final class Reflector extends Stringizable
 		if( type.isInterface() )
 			return new IsInterfaceProvisoryTypeImmutabilityAssessment( stringizer, type );
 
-		Optional<ProvisoryTypeImmutabilityAssessment> provisorySuperclassAssessment = Optional.empty();
+		List<ProvisoryTypeImmutabilityAssessment> reasons = new ArrayList<>();
 		Class<?> superclass = type.getSuperclass();
 		if( superclass != null )
 		{
-			TypeImmutabilityAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
+			TypeImmutabilityAssessment superclassAssessment = assessSuperclass( type, superclass );
 			switch( superclassAssessment )
 			{
-				case MutableTypeImmutabilityAssessment mutableTypeAssessment:
-					return new HasMutableSuperclassMutableTypeImmutabilityAssessment( stringizer, type, mutableTypeAssessment );
-				case IsExtensibleProvisoryTypeImmutabilityAssessment ignore:
-					//This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
+				case MutableTypeImmutabilityAssessment mutableTypeImmutabilityAssessment:
+					return mutableTypeImmutabilityAssessment;
+				case ProvisoryTypeImmutabilityAssessment provisoryTypeImmutabilityAssessment:
+					reasons.add( provisoryTypeImmutabilityAssessment );
 					break;
-				case HasProvisoryContentProvisoryTypeImmutabilityAssessment provisoryContentAssessment:
-					provisorySuperclassAssessment = Optional.of( provisoryContentAssessment );
-					break;
-				case UnderAssessmentTypeImmutabilityAssessment ignore:
-					break;
-				case ImmutableTypeImmutabilityAssessment immutableTypeAssessment:
-					//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can be either provisory or mutable, but not immutable.
-					//DoNotCover
-					throw new AssertionError( immutableTypeAssessment );
-				case IsInterfaceProvisoryTypeImmutabilityAssessment interfaceAssessment:
-					//Cannot happen, because the supertype of a class cannot be an interface.
-					//DoNotCover
-					throw new AssertionError( interfaceAssessment );
-				case IsSelfAssessableProvisoryTypeImmutabilityAssessment selfAssessableAssessment:
-					provisorySuperclassAssessment = Optional.of( selfAssessableAssessment );
-					break;
-//					//Cannot happen, because self-assessable objects are required to be inextensible, so there can be no self-assessable superclass.
-//					//DoNotCover
-//					throw new AssertionError( selfAssessableAssessment );
 				default:
-					//DoNotCover
-					throw new AssertionError( superclassAssessment );
+					assert superclassAssessment instanceof ImmutableTypeImmutabilityAssessment || superclassAssessment instanceof UnderAssessmentTypeImmutabilityAssessment;
 			}
 		}
 
-		List<ProvisoryFieldImmutabilityAssessment> provisoryFieldAssessments = new ArrayList<>();
 		List<MutableFieldImmutabilityAssessment> mutableFieldAssessments = new ArrayList<>();
 		for( Field field : type.getDeclaredFields() )
 		{
 			FieldImmutabilityAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
 			switch( fieldAssessment )
 			{
-				case null:
-					break;
-				case UnderAssessmentFieldImmutabilityAssessment ignore:
-					break;
-				case ImmutableFieldImmutabilityAssessment ignore:
-					break;
 				case ProvisoryFieldImmutabilityAssessment provisoryFieldAssessment:
 				{
-					provisoryFieldAssessments.add( provisoryFieldAssessment );
+					reasons.add( new HasProvisoryFieldProvisoryTypeImmutabilityAssessment( stringizer, type, provisoryFieldAssessment ) );
 					break;
 				}
 				case MutableFieldImmutabilityAssessment mutableFieldAssessment:
@@ -127,20 +101,43 @@ final class Reflector extends Stringizable
 					break;
 				}
 				default:
-					//DoNotCover
-					throw new AssertionError( fieldAssessment );
+					assert fieldAssessment instanceof UnderAssessmentFieldImmutabilityAssessment || fieldAssessment instanceof ImmutableFieldImmutabilityAssessment;
 			}
 		}
 
 		if( !mutableFieldAssessments.isEmpty() )
 			return new HasMutableFieldsMutableTypeImmutabilityAssessment( stringizer, type, mutableFieldAssessments );
 
-		if( provisorySuperclassAssessment.isPresent() || !provisoryFieldAssessments.isEmpty() )
-			return new HasProvisoryContentProvisoryTypeImmutabilityAssessment( stringizer, type, provisorySuperclassAssessment, provisoryFieldAssessments );
+		if( !reasons.isEmpty() )
+			return new MultiReasonProvisoryTypeImmutabilityAssessment( stringizer, type, reasons );
 
 		if( Helpers.isExtensible( type ) )
 			return new IsExtensibleProvisoryTypeImmutabilityAssessment( stringizer, TypeImmutabilityAssessment.Mode.Assessed, type );
 
 		return typeImmutabilityAssessor.immutableClassAssessmentInstance;
+	}
+
+	private TypeImmutabilityAssessment assessSuperclass( Class<?> type, Class<?> superclass )
+	{
+		TypeImmutabilityAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
+		return switch( superclassAssessment )
+		{
+			case MutableTypeImmutabilityAssessment mutableTypeAssessment -> new HasMutableSuperclassMutableTypeImmutabilityAssessment( stringizer, type, mutableTypeAssessment );
+			case IsExtensibleProvisoryTypeImmutabilityAssessment ignore -> typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
+			case MultiReasonProvisoryTypeImmutabilityAssessment multiReasonAssessment -> new HasProvisoryAncestorProvisoryTypeImmutabilityAssessment( stringizer, type, multiReasonAssessment );
+			case UnderAssessmentTypeImmutabilityAssessment ignore -> ignore;
+			case ImmutableTypeImmutabilityAssessment immutableTypeAssessment ->
+				//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
+				//DoNotCover
+				throw new AssertionError( immutableTypeAssessment );
+			case IsInterfaceProvisoryTypeImmutabilityAssessment interfaceAssessment ->
+				//Cannot happen, because the supertype of a class cannot be an interface.
+				//DoNotCover
+				throw new AssertionError( interfaceAssessment );
+			case IsSelfAssessableProvisoryTypeImmutabilityAssessment selfAssessableAssessment -> new HasProvisoryAncestorProvisoryTypeImmutabilityAssessment( stringizer, type, selfAssessableAssessment );
+			default ->
+				//DoNotCover
+				throw new AssertionError( superclassAssessment );
+		};
 	}
 }

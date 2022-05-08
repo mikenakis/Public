@@ -41,7 +41,7 @@ public class FieldImmutabilityAssessor extends Stringizable
 	public FieldImmutabilityAssessment assessField( Field field )
 	{
 		if( Modifier.isStatic( field.getModifiers() ) )
-			return null;
+			return immutableFieldAssessment;
 		boolean isInvariableField = isInvariableField( field );
 		boolean isArray = field.getType().isArray();
 		boolean isInvariableArray = field.isAnnotationPresent( InvariableArray.class );

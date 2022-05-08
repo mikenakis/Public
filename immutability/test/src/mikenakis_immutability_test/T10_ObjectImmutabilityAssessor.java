@@ -6,19 +6,19 @@ import mikenakis.immutability.object.ObjectImmutabilityAssessor;
 import mikenakis.immutability.object.assessments.ImmutableObjectImmutabilityAssessment;
 import mikenakis.immutability.object.assessments.MutableObjectImmutabilityAssessment;
 import mikenakis.immutability.object.assessments.ObjectImmutabilityAssessment;
-import mikenakis.immutability.object.assessments.mutable.HasMutableFieldValuesObjectImmutabilityAssessment;
-import mikenakis.immutability.object.assessments.mutable.SelfAssessedMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.MultiReasonMutableObjectImmutabilityAssessment;
 import mikenakis.immutability.object.assessments.mutable.OfMutableTypeMutableObjectImmutabilityAssessment;
-import mikenakis.immutability.object.fieldvalue.MutableFieldValueAssessment;
+import mikenakis.immutability.object.assessments.mutable.SelfAssessedMutableObjectImmutabilityAssessment;
+import mikenakis.immutability.object.assessments.mutable.HasMutableFieldValueMutableObjectImmutabilityAssessment;
 import mikenakis.immutability.type.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.type.assessments.ProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeImmutabilityAssessment;
-import mikenakis.immutability.type.assessments.provisory.HasProvisoryContentProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeImmutabilityAssessment;
+import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeImmutabilityAssessment;
 import mikenakis.immutability.type.field.annotations.InvariableArray;
-import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldImmutabilityAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldImmutabilityAssessment;
+import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldImmutabilityAssessment;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -119,8 +119,8 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert assessor.typeImmutabilityAssessor.assess( SelfReferencingProvisoryClass.class ) instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment;
-				assert assessor.typeImmutabilityAssessor.assess( ClassExtendingSelfReferencingProvisoryClass.class ) instanceof HasProvisoryContentProvisoryTypeImmutabilityAssessment;
+				assert assessor.typeImmutabilityAssessor.assess( SelfReferencingProvisoryClass.class ) instanceof MultiReasonProvisoryTypeImmutabilityAssessment;
+				assert assessor.typeImmutabilityAssessor.assess( ClassExtendingSelfReferencingProvisoryClass.class ) instanceof MultiReasonProvisoryTypeImmutabilityAssessment;
 				var object = new ClassExtendingSelfReferencingProvisoryClass();
 				ObjectImmutabilityAssessment assessment = assess( assessor, object );
 				assert assessment instanceof ImmutableObjectImmutabilityAssessment;
@@ -161,25 +161,20 @@ public class T10_ObjectImmutabilityAssessor
 			{
 				var object = new ClassWithInvariableFieldOfInterfaceTypeWithMutableValue();
 				ObjectImmutabilityAssessment assessment = assess( assessor, object );
-				assert assessment instanceof HasMutableFieldValuesObjectImmutabilityAssessment;
-				HasMutableFieldValuesObjectImmutabilityAssessment mutableFieldValuesAssessment = (HasMutableFieldValuesObjectImmutabilityAssessment)assessment;
-				assert mutableFieldValuesAssessment.object == object;
-				assert mutableFieldValuesAssessment.typeAssessment.type == ClassWithInvariableFieldOfInterfaceTypeWithMutableValue.class;
-				assert mutableFieldValuesAssessment.typeAssessment.fieldAssessments.size() == 1;
-				ProvisoryFieldImmutabilityAssessment provisoryFieldAssessment = mutableFieldValuesAssessment.typeAssessment.fieldAssessments.get( 0 );
+				assert assessment instanceof MultiReasonMutableObjectImmutabilityAssessment;
+				MultiReasonMutableObjectImmutabilityAssessment multiReasonAssessment = (MultiReasonMutableObjectImmutabilityAssessment)assessment;
+				assert multiReasonAssessment.object == object;
+				assert multiReasonAssessment.typeAssessment.type == ClassWithInvariableFieldOfInterfaceTypeWithMutableValue.class;
+				assert multiReasonAssessment.reasons.size() == 1;
+				HasMutableFieldValueMutableObjectImmutabilityAssessment mutableFieldValueAssessment = (HasMutableFieldValueMutableObjectImmutabilityAssessment)multiReasonAssessment.reasons.get( 0 );
+				ProvisoryFieldImmutabilityAssessment provisoryFieldAssessment = mutableFieldValueAssessment.provisoryFieldAssessment;
 				assert provisoryFieldAssessment.field.getName().equals( "mutableField" );
-				assert provisoryFieldAssessment instanceof OfProvisoryTypeProvisoryFieldImmutabilityAssessment;
 				OfProvisoryTypeProvisoryFieldImmutabilityAssessment provisoryFieldTypeAssessment = (OfProvisoryTypeProvisoryFieldImmutabilityAssessment)provisoryFieldAssessment;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment.type == List.class;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment instanceof IsInterfaceProvisoryTypeImmutabilityAssessment;
-				assert mutableFieldValuesAssessment.fieldValueAssessments.size() == 1;
-				MutableFieldValueAssessment fieldValueAssessment = mutableFieldValuesAssessment.fieldValueAssessments.get( 0 );
-				assert fieldValueAssessment.provisoryFieldAssessment == provisoryFieldAssessment;
-				assert fieldValueAssessment.fieldValue.equals( object.mutableField );
-				assert fieldValueAssessment.mutableObjectAssessment.object == object.mutableField;
-				assert fieldValueAssessment.mutableObjectAssessment instanceof OfMutableTypeMutableObjectImmutabilityAssessment;
-				OfMutableTypeMutableObjectImmutabilityAssessment ofMutableTypeAssessment = (OfMutableTypeMutableObjectImmutabilityAssessment)fieldValueAssessment.mutableObjectAssessment;
-				assert ofMutableTypeAssessment.typeAssessment.type == ArrayList.class;
+				OfMutableTypeMutableObjectImmutabilityAssessment fieldValueAssessment = (OfMutableTypeMutableObjectImmutabilityAssessment)mutableFieldValueAssessment.fieldValueAssessment;
+				assert fieldValueAssessment.object == object.mutableField;
+				assert fieldValueAssessment.typeAssessment.type == ArrayList.class;
 			}
 		}.run();
 	}

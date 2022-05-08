@@ -18,8 +18,6 @@ public abstract class MutableObjectImmutabilityAssessment extends ObjectImmutabi
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
 	{
-		stringBuilder.append( "object " );
-		stringBuilder.append( stringizer.stringizeObjectIdentity( object ) ).append( " " );
-		stringBuilder.append( "is mutable" );
+		stringBuilder.append( "object " ).append( stringizer.stringizeObjectIdentity( object ) ).append( " is mutable" );
 	}
 }
