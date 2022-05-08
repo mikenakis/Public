@@ -55,7 +55,6 @@ final class Reflector extends Stringizable
 		if( ImmutabilitySelfAssessable.class.isAssignableFrom( type ) )
 		{
 			assert Helpers.isClass( type ) : new SelfAssessableAnnotationIsOnlyApplicableToClassException( type );
-			//FIXME XXX TODO assert !Helpers.isExtensible( type  ) : new SelfAssessableClassMustBeInextensibleException( type );
 			assert assessment instanceof NonImmutableTypeAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
 			return new IsSelfAssessableProvisoryTypeAssessment( stringizer, type );
 		}
