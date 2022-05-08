@@ -1,9 +1,11 @@
 package mikenakis.kit.lazy;
 
-import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.immutability.annotations.Invariable;
 
 /**
  * Implements a lazily computed int.
+ *
+ * TODO: add equals() and hashCode()
  *
  * @author michael.gr
  */
@@ -14,13 +16,13 @@ public final class LazyInt
 		int invoke();
 	}
 
-	public static  LazyInt of( IntFunction0 factory )
+	public static LazyInt of( IntFunction0 factory )
 	{
 		return new LazyInt( factory );
 	}
 
-	@InvariableField private IntFunction0 factory; //nullable
-	@InvariableField private int instance; //nullable
+	@Invariable private IntFunction0 factory; //nullable
+	@Invariable private int instance; //nullable
 
 	private LazyInt( IntFunction0 factory )
 	{

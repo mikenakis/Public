@@ -4,7 +4,7 @@ import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 
 import java.lang.reflect.Field;
@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  * Signifies that a field is provisory because it is an invariable array field.
- * (It has already been established that the array field is invariable, meaning that the field is either {@code final} or annotated
- * with @{@link InvariableField} and that it has also been annotated with @{@link InvariableArray}.)
+ * <p>
+ * (It has already been established that the array field is invariable, meaning that the field is either {@code final} or annotated with @{@link Invariable} and
+ * that it has also been annotated with @{@link InvariableArray}.)
  */
 public final class IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment extends ProvisoryFieldAssessment
 {

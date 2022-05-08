@@ -3,7 +3,7 @@ package mikenakis.immutability.type.field;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
@@ -85,7 +85,7 @@ public class FieldImmutabilityAssessor extends Stringizable
 	{
 		int fieldModifiers = field.getModifiers();
 		assert !Modifier.isStatic( fieldModifiers );
-		boolean isAnnotatedInvariable = field.isAnnotationPresent( InvariableField.class );
+		boolean isAnnotatedInvariable = field.isAnnotationPresent( Invariable.class );
 		boolean isPrivate = Modifier.isPrivate( fieldModifiers );
 		if( isAnnotatedInvariable && !isPrivate )
 			throw new AnnotatedInvariableFieldMustBePrivateException( field );

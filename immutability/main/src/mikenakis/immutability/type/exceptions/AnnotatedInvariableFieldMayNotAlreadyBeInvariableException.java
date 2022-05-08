@@ -1,13 +1,13 @@
 package mikenakis.immutability.type.exceptions;
 
 import mikenakis.immutability.internal.mykit.UncheckedException;
-import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.immutability.annotations.Invariable;
 
 import java.lang.reflect.Field;
 
 /**
- * Thrown when an invariable field is annotated with @{@link InvariableField}.
- * An invariable final need not, and should not, be annotated with @{@link InvariableField}.
+ * Thrown when a {@code final} field is annotated with @{@link Invariable}.
+ * A {@code final} final need not, and should not, be annotated with @{@link Invariable}.
  *
  * @author michael.gr
  */

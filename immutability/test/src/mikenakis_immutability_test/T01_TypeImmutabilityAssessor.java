@@ -27,7 +27,7 @@ import mikenakis.immutability.type.exceptions.PreassessedTypeMustBeClassExceptio
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
 import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.IsOfMutableFieldTypeMutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
@@ -363,7 +363,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithAnnotatedInvariableFieldOfImmutableType
 			{
-				@SuppressWarnings( "unused" ) @InvariableField private int annotatedInvariableFieldOfImmutableType = 0;
+				@SuppressWarnings( "unused" ) @Invariable private int annotatedInvariableFieldOfImmutableType = 0;
 			}
 
 			@Override public void run()
@@ -380,7 +380,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithAnnotatedInvariableFieldOfProvisoryType
 			{
-				@SuppressWarnings( "unused" ) @InvariableField private List<Integer> stableField = null;
+				@SuppressWarnings( "unused" ) @Invariable private List<Integer> stableField = null;
 			}
 
 			@Override public void run()
@@ -403,7 +403,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithPublicFieldAnnotatedInvariable
 			{
-				@SuppressWarnings( "unused" ) @InvariableField public Integer publicFieldAnnotatedInvariable;
+				@SuppressWarnings( "unused" ) @Invariable public Integer publicFieldAnnotatedInvariable;
 			}
 
 			@Override public void run()
@@ -421,7 +421,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithProtectedFieldAnnotatedInvariable
 			{
-				@SuppressWarnings( "unused" ) @InvariableField protected Integer protectedFieldAnnotatedInvariable;
+				@SuppressWarnings( "unused" ) @Invariable protected Integer protectedFieldAnnotatedInvariable;
 			}
 
 			@Override public void run()
@@ -439,7 +439,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithPublicFieldAnnotatedInvariable
 			{
-				@SuppressWarnings( "unused" ) @InvariableField Integer packagePrivateFieldAnnotatedInvariable;
+				@SuppressWarnings( "unused" ) @Invariable Integer packagePrivateFieldAnnotatedInvariable;
 			}
 
 			@Override public void run()
@@ -457,7 +457,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithAnnotatedInvariableSelfReference
 			{
-				@SuppressWarnings( "unused" ) @InvariableField private ClassWithAnnotatedInvariableSelfReference annotatedInvariableSelfReference = null;
+				@SuppressWarnings( "unused" ) @Invariable private ClassWithAnnotatedInvariableSelfReference annotatedInvariableSelfReference = null;
 			}
 
 			@Override public void run()
@@ -474,7 +474,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithInvariableFieldAnnotatedInvariable
 			{
-				@SuppressWarnings( "unused" ) @InvariableField private final Integer invariableFieldAnnotatedInvariable = Integer.MAX_VALUE;
+				@SuppressWarnings( "unused" ) @Invariable private final Integer invariableFieldAnnotatedInvariable = Integer.MAX_VALUE;
 			}
 
 			@Override public void run()
@@ -492,7 +492,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static class ClassWithMutableFieldAnnotatedInvariable
 			{
-				@SuppressWarnings( "unused" ) @InvariableField private ArrayList<Integer> mutableFieldAnnotatedInvariable = null;
+				@SuppressWarnings( "unused" ) @Invariable private ArrayList<Integer> mutableFieldAnnotatedInvariable = null;
 			}
 
 			@Override public void run()
@@ -548,7 +548,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ClassWithInvariableArrayInvariableFieldOfImmutableElementType
 			{
-				@SuppressWarnings( "unused" ) @InvariableField @InvariableArray private int[] array = null;
+				@SuppressWarnings( "unused" ) @Invariable @InvariableArray private int[] array = null;
 			}
 
 			@Override public void run()

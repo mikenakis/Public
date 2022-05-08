@@ -1,12 +1,14 @@
 package mikenakis.kit.lazy;
 
-import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.immutability.annotations.Invariable;
 import mikenakis.kit.functional.Function0;
 
 import java.util.Optional;
 
 /**
  * Implements a lazily created value.
+ *
+ * TODO: add equals() and hashCode()
  *
  * @author michael.gr
  */
@@ -17,8 +19,8 @@ public final class Lazy<T>
 		return new Lazy<>( factory );
 	}
 
-	@InvariableField private Function0<T> factory; //nullable
-	@InvariableField private T instance; //nullable
+	@Invariable private Function0<T> factory; //nullable
+	@Invariable private T instance; //nullable
 
 	private Lazy( Function0<T> factory )
 	{
