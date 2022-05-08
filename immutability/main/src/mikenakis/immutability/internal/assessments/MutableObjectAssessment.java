@@ -1,4 +1,4 @@
-package mikenakis.immutability.assessments;
+package mikenakis.immutability.internal.assessments;
 
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;

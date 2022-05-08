@@ -1,6 +1,6 @@
 package mikenakis.immutability.internal.type.assessments;
 
-import mikenakis.immutability.Assessment;
+import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 
 public abstract class TypeAssessment extends Assessment

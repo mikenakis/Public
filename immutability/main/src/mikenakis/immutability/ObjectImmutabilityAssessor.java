@@ -4,17 +4,17 @@ import mikenakis.immutability.internal.helpers.IterableOnArrayObject;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.collections.IdentityLinkedHashSet;
-import mikenakis.immutability.assessments.ImmutableObjectAssessment;
-import mikenakis.immutability.assessments.MutableObjectAssessment;
-import mikenakis.immutability.assessments.ObjectAssessment;
-import mikenakis.immutability.assessments.mutable.HasMutableArrayElementMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.HasMutableComponentMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.MultiReasonMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.SelfAssessedMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.IsNonEmptyArrayMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.OfMutableTypeMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.ObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.HasMutableArrayElementMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.HasMutableComponentMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MultiReasonMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.IsNonEmptyArrayMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
-import mikenakis.immutability.assessments.mutable.HasMutableFieldValueMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.HasMutableFieldValueMutableObjectAssessment;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
@@ -70,10 +70,8 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	{
 		ObjectAssessment assessment = assess( object );
 		if( assessment instanceof MutableObjectAssessment mutableObjectAssessment )
-		{
-			mutableObjectAssessment.assessmentTextLines().forEach( line -> System.out.println( line ) );
+			//mutableObjectAssessment.assessmentTextLines().forEach( line -> System.out.println( line ) );
 			throw new ObjectMustBeImmutableException( mutableObjectAssessment );
-		}
 		assert assessment instanceof ImmutableObjectAssessment;
 		return true;
 	}

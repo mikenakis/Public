@@ -1,6 +1,5 @@
-package mikenakis.immutability.assessments;
+package mikenakis.immutability.internal.assessments;
 
-import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 
 public abstract class ObjectAssessment extends Assessment

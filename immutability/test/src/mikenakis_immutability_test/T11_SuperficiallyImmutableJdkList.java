@@ -1,13 +1,13 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.Assessment;
+import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
-import mikenakis.immutability.assessments.ImmutableObjectAssessment;
-import mikenakis.immutability.assessments.MutableObjectAssessment;
-import mikenakis.immutability.assessments.ObjectAssessment;
-import mikenakis.immutability.assessments.mutable.HasMutableComponentMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.ObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.HasMutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 

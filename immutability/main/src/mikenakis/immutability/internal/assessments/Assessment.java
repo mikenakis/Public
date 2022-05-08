@@ -1,4 +1,4 @@
-package mikenakis.immutability;
+package mikenakis.immutability.internal.assessments;
 
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.helpers.Stringizer;

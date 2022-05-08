@@ -1,17 +1,16 @@
 package mikenakis_immutability_test;
 
-import mikenakis.debug.Debug;
-import mikenakis.immutability.Assessment;
+import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
-import mikenakis.immutability.assessments.ImmutableObjectAssessment;
-import mikenakis.immutability.assessments.MutableObjectAssessment;
-import mikenakis.immutability.assessments.ObjectAssessment;
-import mikenakis.immutability.assessments.mutable.MultiReasonMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.OfMutableTypeMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.SelfAssessedMutableObjectAssessment;
-import mikenakis.immutability.assessments.mutable.HasMutableFieldValueMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.ObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MultiReasonMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.HasMutableFieldValueMutableObjectAssessment;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;

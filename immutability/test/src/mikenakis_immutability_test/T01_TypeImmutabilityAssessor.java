@@ -1,6 +1,6 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.Assessment;
+import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;

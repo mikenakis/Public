@@ -1,14 +1,14 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.Assessment;
+import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.immutability.internal.helpers.Stringizer;
 
-public final class TestStringizer extends Stringizer
+final class TestStringizer extends Stringizer
 {
 	private static final String testPackageName = TestStringizer.class.getPackageName();
-	private static final String immutabilityPackageName = Assessment.class.getPackageName();
+	private static final String immutabilityPackageName = ObjectImmutabilityAssessor.class.getPackageName();
 
-	public static Stringizer instance = new TestStringizer();
+	static Stringizer instance = new TestStringizer();
 
 	private TestStringizer()
 	{
