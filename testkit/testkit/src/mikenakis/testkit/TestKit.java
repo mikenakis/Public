@@ -5,7 +5,6 @@ import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

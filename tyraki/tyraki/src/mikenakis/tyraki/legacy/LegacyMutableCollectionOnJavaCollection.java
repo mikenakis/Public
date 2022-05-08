@@ -1,9 +1,9 @@
 package mikenakis.tyraki.legacy;
 
+import mikenakis.coherence.exceptions.MustBeFrozenException;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.coherence.exceptions.MustBeFrozenException;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;
 import mikenakis.tyraki.UnmodifiableEnumerator;

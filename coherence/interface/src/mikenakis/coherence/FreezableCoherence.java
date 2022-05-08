@@ -1,7 +1,7 @@
 package mikenakis.coherence;
 
-import mikenakis.coherence.exceptions.MustNotBeFrozenException;
 import mikenakis.coherence.exceptions.MustBeFrozenException;
+import mikenakis.coherence.exceptions.MustNotBeFrozenException;
 
 public interface FreezableCoherence extends Coherence.Defaults
 {

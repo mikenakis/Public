@@ -1,19 +1,19 @@
 package mikenakis.immutability.internal.type.field;
 
+import mikenakis.immutability.annotations.Invariable;
+import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.helpers.Stringizable;
+import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.TypeAssessment;
+import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableArrayFieldMustBePrivateException;
 import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableFieldMayNotAlreadyBeInvariableException;
 import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableFieldMustBePrivateException;
 import mikenakis.immutability.internal.type.exceptions.NonArrayFieldMayNotBeAnnotatedInvariableArrayException;
 import mikenakis.immutability.internal.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
-import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.annotations.Invariable;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.ImmutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.UnderAssessmentFieldAssessment;

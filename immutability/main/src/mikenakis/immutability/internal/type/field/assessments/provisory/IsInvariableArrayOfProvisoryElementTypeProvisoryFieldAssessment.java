@@ -1,10 +1,10 @@
 package mikenakis.immutability.internal.type.field.assessments.provisory;
 
+import mikenakis.immutability.annotations.Invariable;
+import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.lang.reflect.Field;

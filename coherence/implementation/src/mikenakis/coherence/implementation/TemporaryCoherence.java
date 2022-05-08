@@ -1,10 +1,10 @@
 package mikenakis.coherence.implementation;
 
 import mikenakis.coherence.AbstractCoherent;
-import mikenakis.coherence.implementation.exceptions.MustBeWritableException;
-import mikenakis.kit.Kit;
 import mikenakis.coherence.Coherence;
 import mikenakis.coherence.implementation.exceptions.MustBeReadableException;
+import mikenakis.coherence.implementation.exceptions.MustBeWritableException;
+import mikenakis.kit.Kit;
 import mikenakis.lifetime.Mortal;
 import mikenakis.lifetime.guard.LifeGuard;
 

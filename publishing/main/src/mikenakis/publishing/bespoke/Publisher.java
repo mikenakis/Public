@@ -1,8 +1,8 @@
 package mikenakis.publishing.bespoke;
 
+import mikenakis.coherence.Coherence;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.IntertwineFactory;
-import mikenakis.coherence.Coherence;
 import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.publishing.anycall.AnycallPublisher;
 import mikenakis.publishing.anycall.AnycallSubscription;

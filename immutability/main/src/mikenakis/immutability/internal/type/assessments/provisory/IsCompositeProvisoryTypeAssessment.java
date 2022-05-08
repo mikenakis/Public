@@ -2,9 +2,9 @@ package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
+import mikenakis.immutability.internal.type.Decomposer;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.Decomposer;
 
 /**
  * Signifies that a class is provisory because it is composite, with components whose immutability will need to be assessed.

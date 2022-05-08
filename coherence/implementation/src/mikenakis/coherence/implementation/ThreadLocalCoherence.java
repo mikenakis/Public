@@ -1,8 +1,8 @@
 package mikenakis.coherence.implementation;
 
+import mikenakis.coherence.Coherence;
 import mikenakis.coherence.NullaryCoherence;
 import mikenakis.kit.Kit;
-import mikenakis.coherence.Coherence;
 
 /**
  * Thread-local {@link Coherence}.

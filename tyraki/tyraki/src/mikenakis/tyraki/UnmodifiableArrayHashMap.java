@@ -1,9 +1,9 @@
 package mikenakis.tyraki;
 
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
-import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.Function1;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.conversion.ConversionCollections;

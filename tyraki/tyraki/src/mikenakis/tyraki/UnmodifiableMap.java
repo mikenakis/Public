@@ -1,8 +1,8 @@
 package mikenakis.tyraki;
 
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.functional.Function1;
 import mikenakis.kit.functional.Procedure1;
 import mikenakis.lifetime.Mortal;

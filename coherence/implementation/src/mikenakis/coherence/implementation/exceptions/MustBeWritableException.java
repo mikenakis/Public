@@ -1,7 +1,7 @@
 package mikenakis.coherence.implementation.exceptions;
 
-import mikenakis.kit.UncheckedException;
 import mikenakis.coherence.Coherence;
+import mikenakis.kit.UncheckedException;
 
 public class MustBeWritableException extends UncheckedException
 {

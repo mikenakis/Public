@@ -1,9 +1,9 @@
 package mikenakis.tyraki.legacy;
 
-import mikenakis.kit.EqualityComparator;
-import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.coherence.Coherence;
 import mikenakis.coherence.NullaryCoherence;
+import mikenakis.kit.EqualityComparator;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.UnmodifiableCollection;
 

@@ -1,12 +1,12 @@
 package mikenakis.tyraki.legacy;
 
+import mikenakis.coherence.Coherence;
+import mikenakis.coherence.NullaryCoherence;
+import mikenakis.coherence.exceptions.MustBeFrozenException;
 import mikenakis.kit.DefaultEqualityComparator;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.coherence.Coherence;
-import mikenakis.coherence.NullaryCoherence;
-import mikenakis.coherence.exceptions.MustBeFrozenException;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.Binding;
 import mikenakis.tyraki.BindingEqualityComparator;

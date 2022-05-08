@@ -1,8 +1,8 @@
 package mikenakis.immutability.internal.type.exceptions;
 
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.mykit.UncheckedException;
-import mikenakis.immutability.ImmutabilitySelfAssessable;
 
 /**
  * Thrown if the {@link ImmutabilitySelfAssessable} annotation is placed on an interface.

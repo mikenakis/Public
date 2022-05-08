@@ -1,8 +1,8 @@
 package mikenakis.publishing.anycall;
 
+import mikenakis.coherence.Coherence;
 import mikenakis.intertwine.Anycall;
 import mikenakis.intertwine.MethodKey;
-import mikenakis.coherence.Coherence;
 import mikenakis.kit.logging.Log;
 import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.tyraki.MutableCollection;

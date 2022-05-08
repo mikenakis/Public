@@ -6,10 +6,10 @@ import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
+import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotAlreadyBeImmutableException;
 import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotBeExtensibleException;
 import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotBePreviouslyAssessedException;
-import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.PreassessedTypeMustBeClassException;
 
 import java.lang.reflect.Modifier;

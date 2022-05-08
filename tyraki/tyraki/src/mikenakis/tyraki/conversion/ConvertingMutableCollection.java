@@ -1,7 +1,7 @@
 package mikenakis.tyraki.conversion;
 
-import mikenakis.kit.EqualityComparator;
 import mikenakis.coherence.Coherence;
+import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.MutableCollection;
 import mikenakis.tyraki.MutableEnumerator;

@@ -1,8 +1,8 @@
 package mikenakis.tyraki;
 
-import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.coherence.Coherence;
 import mikenakis.coherence.Coherent;
+import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function1;
 import mikenakis.tyraki.conversion.ConversionCollections;
 

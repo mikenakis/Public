@@ -5,27 +5,26 @@ import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.NonImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
+import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.HasMutableFieldsMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.HasMutableSuperclassMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.IsArrayMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.HasProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.IsInterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
-import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
+import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustNotBeImmutableException;
 import mikenakis.immutability.internal.type.field.FieldImmutabilityAssessor;
 import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.ImmutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.UnderAssessmentFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
-import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.HasProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -55,7 +54,7 @@ final class Reflector extends Stringizable
 		if( ImmutabilitySelfAssessable.class.isAssignableFrom( type ) )
 		{
 			assert Helpers.isClass( type ) : new SelfAssessableAnnotationIsOnlyApplicableToClassException( type );
-			assert assessment instanceof NonImmutableTypeAssessment : new SelfAssessableClassMustBeNonImmutableException( type );
+			assert !(assessment instanceof ImmutableTypeAssessment) : new SelfAssessableClassMustNotBeImmutableException( type );
 			return new IsSelfAssessableProvisoryTypeAssessment( stringizer, type );
 		}
 		return assessment;

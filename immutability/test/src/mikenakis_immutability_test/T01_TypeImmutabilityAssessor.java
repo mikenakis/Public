@@ -1,8 +1,10 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.ImmutabilitySelfAssessable;
+import mikenakis.immutability.annotations.Invariable;
+import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
@@ -24,12 +26,10 @@ import mikenakis.immutability.internal.type.exceptions.NonArrayFieldMayNotBeAnno
 import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotAlreadyBeImmutableException;
 import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotBePreviouslyAssessedException;
 import mikenakis.immutability.internal.type.exceptions.PreassessedTypeMustBeClassException;
-import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
+import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustNotBeImmutableException;
 import mikenakis.immutability.internal.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
-import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.annotations.Invariable;
-import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.IsOfMutableFieldTypeMutableFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.IsOfProvisoryTypeProvisoryFieldAssessment;
 import org.junit.Test;
@@ -966,7 +966,7 @@ public class T01_TypeImmutabilityAssessor
 
 			@Override public void run()
 			{
-				var exception = MyTestKit.expect( SelfAssessableClassMustBeNonImmutableException.class, () -> //
+				var exception = MyTestKit.expect( SelfAssessableClassMustNotBeImmutableException.class, () -> //
 					assess( assessor, ImmutableSelfAssessableClass.class ) );
 				assert exception.jvmClass == ImmutableSelfAssessableClass.class;
 			}

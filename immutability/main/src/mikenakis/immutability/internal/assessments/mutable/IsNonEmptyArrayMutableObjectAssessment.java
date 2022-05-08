@@ -1,9 +1,9 @@
 package mikenakis.immutability.internal.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
+import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.IsArrayMutableTypeAssessment;
 
 import java.lang.reflect.Array;

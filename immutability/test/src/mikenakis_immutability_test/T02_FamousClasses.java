@@ -6,8 +6,8 @@ import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import org.junit.Test;
 

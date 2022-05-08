@@ -1,10 +1,10 @@
 package mikenakis.immutability.internal.assessments.mutable;
 
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.assessments.Assessment;
+import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
-import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 
 import java.util.List;

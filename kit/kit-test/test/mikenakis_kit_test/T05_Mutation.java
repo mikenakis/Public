@@ -1,14 +1,14 @@
 package mikenakis_kit_test;
 
-import mikenakis.kit.Kit;
 import mikenakis.coherence.AbstractCoherent;
 import mikenakis.coherence.Coherence;
 import mikenakis.coherence.FreezableCoherence;
 import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
-import mikenakis.coherence.implementation.exceptions.MustBeReadableException;
-import mikenakis.coherence.implementation.exceptions.MustBeWritableException;
 import mikenakis.coherence.implementation.TemporaryCoherence;
 import mikenakis.coherence.implementation.ThreadLocalCoherence;
+import mikenakis.coherence.implementation.exceptions.MustBeReadableException;
+import mikenakis.coherence.implementation.exceptions.MustBeWritableException;
+import mikenakis.kit.Kit;
 import mikenakis.lifetime.Mortal;
 import mikenakis.testkit.TestKit;
 import mikenakis.tyraki.MutableList;

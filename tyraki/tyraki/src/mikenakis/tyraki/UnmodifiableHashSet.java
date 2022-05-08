@@ -1,8 +1,8 @@
 package mikenakis.tyraki;
 
+import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.kit.EqualityComparator;
 import mikenakis.kit.Hasher;
-import mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import mikenakis.lifetime.Mortal;
 import mikenakis.tyraki.immutable.ImmutableCollections;
 import mikenakis.tyraki.mutable.MutableCollections;
