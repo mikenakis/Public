@@ -2,8 +2,8 @@ package mikenakis.immutability.type.field;
 
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.field.annotations.InvariableArray;
-import mikenakis.immutability.type.field.annotations.InvariableField;
+import mikenakis.immutability.annotations.InvariableArray;
+import mikenakis.immutability.annotations.InvariableField;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;

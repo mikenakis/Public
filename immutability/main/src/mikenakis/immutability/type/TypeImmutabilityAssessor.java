@@ -1,5 +1,6 @@
 package mikenakis.immutability.type;
 
+import mikenakis.debug.Debug;
 import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.helpers.Stringizer;
@@ -52,26 +53,29 @@ public final class TypeImmutabilityAssessor extends Stringizable
 		assert addedClassMustBeClassTypeAssertion( jvmClass );
 		assert addedClassMustNotBeExtensibleClassTypeAssertion( jvmClass );
 		assert addedClassMustNotAlreadyBeImmutableAssertion( jvmClass );
-		MyKit.sync.synchronize( assessmentsByType, () -> //
+		synchronized( assessmentsByType )
 		{
 			assessmentsByType.put( jvmClass, immutableClassAssessmentInstance );
-		} );
+		}
 	}
 
 	public TypeAssessment assess( Class<?> type )
 	{
-		return MyKit.sync.synchronize( assessmentsByType, () -> //
+		synchronized( assessmentsByType )
 		{
-			TypeAssessment existingAssessment = assessmentsByType.get( type );
-			if( existingAssessment != null )
-				return existingAssessment;
-			assessmentsByType.put( type, underAssessmentInstance );
-			TypeAssessment newAssessment = reflector.assess( type );
-			TypeAssessment oldAssessment = assessmentsByType.put( type, newAssessment );
-			assert oldAssessment == underAssessmentInstance;
-			assert !(newAssessment instanceof UnderAssessmentTypeAssessment);
-			return newAssessment;
-		} );
+			return Debug.boundary( () ->
+			{
+				TypeAssessment existingAssessment = assessmentsByType.get( type );
+				if( existingAssessment != null )
+					return existingAssessment;
+				assessmentsByType.put( type, underAssessmentInstance );
+				TypeAssessment newAssessment = reflector.assess( type );
+				TypeAssessment oldAssessment = assessmentsByType.put( type, newAssessment );
+				assert oldAssessment == underAssessmentInstance;
+				assert !(newAssessment instanceof UnderAssessmentTypeAssessment);
+				return newAssessment;
+			} );
+		}
 	}
 
 	void addDefaultPreassessment( Class<?> jvmClass, TypeAssessment classAssessment )

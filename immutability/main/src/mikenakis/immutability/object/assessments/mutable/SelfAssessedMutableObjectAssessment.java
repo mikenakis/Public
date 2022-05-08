@@ -4,7 +4,7 @@ import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.object.assessments.MutableObjectAssessment;
-import mikenakis.immutability.type.ImmutabilitySelfAssessable;
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 
 import java.util.List;

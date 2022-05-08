@@ -2,7 +2,7 @@ package mikenakis.immutability.type.assessments.provisory;
 
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.type.ImmutabilitySelfAssessable;
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 
 /**

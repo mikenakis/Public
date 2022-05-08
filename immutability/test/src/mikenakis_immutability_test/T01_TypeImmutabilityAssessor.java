@@ -2,22 +2,21 @@ package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.mykit.functional.Function0;
-import mikenakis.immutability.type.ImmutabilitySelfAssessable;
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeAssessment;
 import mikenakis.immutability.type.assessments.mutable.HasMutableFieldsMutableTypeAssessment;
 import mikenakis.immutability.type.assessments.mutable.HasMutableSuperclassMutableTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.mutable.IsArrayMutableTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.HasProvisoryAncestorProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.HasProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import mikenakis.immutability.type.exceptions.AnnotatedInvariableArrayFieldMustBePrivateException;
 import mikenakis.immutability.type.exceptions.AnnotatedInvariableFieldMayNotAlreadyBeInvariableException;
 import mikenakis.immutability.type.exceptions.AnnotatedInvariableFieldMustBePrivateException;
@@ -27,8 +26,8 @@ import mikenakis.immutability.type.exceptions.PreassessedClassMustNotBePreviousl
 import mikenakis.immutability.type.exceptions.PreassessedTypeMustBeClassException;
 import mikenakis.immutability.type.exceptions.SelfAssessableClassMustBeNonImmutableException;
 import mikenakis.immutability.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
-import mikenakis.immutability.type.field.annotations.InvariableArray;
-import mikenakis.immutability.type.field.annotations.InvariableField;
+import mikenakis.immutability.annotations.InvariableArray;
+import mikenakis.immutability.annotations.InvariableField;
 import mikenakis.immutability.type.field.assessments.mutable.MutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.mutable.OfMutableFieldTypeMutableFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.IsInvariableArrayProvisoryFieldAssessment;
@@ -757,7 +756,7 @@ public class T01_TypeImmutabilityAssessor
 		{
 			static final class ProvisoryClass
 			{
-				@SuppressWarnings( "unused" ) private final Function0<Integer> provisoryField = null;
+				@SuppressWarnings( "unused" ) private final List<Object> provisoryField = null;
 			}
 
 			@Override public void run()

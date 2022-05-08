@@ -1,7 +1,7 @@
-package mikenakis.immutability.util;
+package mikenakis.kit.lazy;
 
-import mikenakis.immutability.internal.mykit.functional.Function0;
-import mikenakis.immutability.type.field.annotations.InvariableField;
+import mikenakis.immutability.annotations.InvariableField;
+import mikenakis.kit.functional.Function0;
 
 import java.util.Optional;
 

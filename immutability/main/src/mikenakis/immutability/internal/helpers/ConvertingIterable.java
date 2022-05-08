@@ -1,15 +1,14 @@
 package mikenakis.immutability.internal.helpers;
 
-import mikenakis.immutability.internal.mykit.functional.Function1;
-
 import java.util.Iterator;
+import java.util.function.Function;
 
 public class ConvertingIterable<T, F> implements Iterable<T>
 {
 	public final Iterable<F> sourceIterable;
-	public final Function1<T,F> converter;
+	public final Function<F,T> converter;
 
-	public ConvertingIterable( Iterable<F> sourceIterable, Function1<T,F> converter )
+	public ConvertingIterable( Iterable<F> sourceIterable, Function<F,T> converter )
 	{
 		this.sourceIterable = sourceIterable;
 		this.converter = converter;
@@ -27,7 +26,7 @@ public class ConvertingIterable<T, F> implements Iterable<T>
 			@Override public T next()
 			{
 				F sourceElement = sourceIterator.next();
-				return converter.invoke( sourceElement );
+				return converter.apply( sourceElement );
 			}
 		};
 	}

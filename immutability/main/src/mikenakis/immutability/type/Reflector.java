@@ -1,5 +1,6 @@
 package mikenakis.immutability.type;
 
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;

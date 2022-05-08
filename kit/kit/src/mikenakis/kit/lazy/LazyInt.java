@@ -1,6 +1,6 @@
-package mikenakis.immutability.util;
+package mikenakis.kit.lazy;
 
-import mikenakis.immutability.type.field.annotations.InvariableField;
+import mikenakis.immutability.annotations.InvariableField;
 
 /**
  * Implements a lazily computed int.

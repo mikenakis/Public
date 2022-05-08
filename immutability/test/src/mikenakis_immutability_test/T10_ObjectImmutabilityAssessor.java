@@ -10,13 +10,13 @@ import mikenakis.immutability.object.assessments.mutable.MultiReasonMutableObjec
 import mikenakis.immutability.object.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.object.assessments.mutable.HasMutableFieldValueMutableObjectAssessment;
-import mikenakis.immutability.type.ImmutabilitySelfAssessable;
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsInterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.type.field.annotations.InvariableArray;
+import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.type.field.assessments.provisory.OfProvisoryTypeProvisoryFieldAssessment;
 import mikenakis.immutability.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package mikenakis.tyraki.mutable;
 
-import mikenakis.immutability.type.ImmutabilitySelfAssessable;
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.coherence.AbstractCoherent;
 import mikenakis.coherence.FreezableCoherence;
 

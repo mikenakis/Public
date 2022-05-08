@@ -1,13 +1,10 @@
 package mikenakis.immutability.internal.mykit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import mikenakis.debug.Debug;
-import mikenakis.immutability.internal.mykit.functional.Function0;
-import mikenakis.immutability.internal.mykit.functional.Function1;
-import mikenakis.immutability.internal.mykit.functional.Procedure0;
-import mikenakis.immutability.internal.mykit.functional.Procedure1;
 
 import java.util.Iterator;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @SuppressWarnings( "NewClassNamingConvention" )
 public final class MyKit
@@ -84,8 +81,8 @@ public final class MyKit
 	}
 
 	/**
-	 * Obtains a string of the form type-name@hex-number which "for the most part" uniquely identifies an object.
-	 * NOTE: there are no guarantees that the returned string will be truly unique.
+	 * Obtains a string of the form type-name@hex-number which "for the most part" uniquely identifies an object. NOTE: there are no guarantees that the
+	 * returned string will be truly unique.
 	 *
 	 * @param object the {@link Object} whose identity string is requested.
 	 *
@@ -141,9 +138,9 @@ public final class MyKit
 		}
 
 		/**
-		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}.
-		 * The difference between this function and {@link StringBuilder#append(Object)} is that this function treats {@link String} and {@link Character}
-		 * differently: they are escaped and surrounded with quotes.
+		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}. The difference between this function and {@link
+		 * StringBuilder#append(Object)} is that this function treats {@link String} and {@link Character} differently: they are escaped and surrounded with
+		 * quotes.
 		 *
 		 * @param stringBuilder the StringBuilder to append to.
 		 * @param object        the object whose string representation is to be appended to the StringBuilder.
@@ -165,42 +162,17 @@ public final class MyKit
 	public static class string
 	{
 		/**
-		 * Gets the string representation of an {@link Object}.
-		 * see {@link stringBuilder#append(StringBuilder, Object)}
+		 * Gets the string representation of an {@link Object}. see {@link stringBuilder#append(StringBuilder, Object)}
 		 *
 		 * @param object the object whose string representation is requested.
 		 */
 		public static String from( Object object )
 		{
 			StringBuilder stringBuilder = new StringBuilder();
-			//IntellijIdea blooper: 'UnnecessarilyQualifiedInnerClassAccess' warning on most definitely necessary qualified inner class access.
+			//IntellijIdea blooper: 'UnnecessarilyQualifiedInnerClassAccess' warning on qualified inner class access which is necessary.
 			//noinspection UnnecessarilyQualifiedInnerClassAccess
 			MyKit.stringBuilder.append( stringBuilder, object );
 			return stringBuilder.toString();
-		}
-	}
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Synchronization
-
-	public static final class sync
-	{
-		public static void synchronize( Object lock, Procedure0 procedure )
-		{
-			//noinspection SynchronizationOnLocalVariableOrMethodParameter
-			synchronized( lock )
-			{
-				Debug.boundary( () -> procedure.invoke() );
-			}
-		}
-
-		public static <T> T synchronize( Object lock, Function0<T> function )
-		{
-			//noinspection SynchronizationOnLocalVariableOrMethodParameter
-			synchronized( lock )
-			{
-				return Debug.boundary( () -> function.invoke() );
-			}
 		}
 	}
 
@@ -213,22 +185,22 @@ public final class MyKit
 	private static final String endNode = "  ";
 	private static final String terminal = "■ ";
 
-	public static <T> void tree( T rootNode, Function1<Iterable<? extends T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
+	public static <T> void tree( T rootNode, Function<T,Iterable<? extends T>> breeder, Function<T,String> stringizer, Consumer<String> emitter )
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		printTreeRecursive( stringBuilder, "", rootNode, "", breeder, stringizer, emitter );
 	}
 
 	private static <T> void printTreeRecursive( StringBuilder stringBuilder, String parentPrefix, T node, String childPrefix, //
-		Function1<Iterable<? extends T>,T> breeder, Function1<String,T> stringizer, Procedure1<String> emitter )
+		Function<T,Iterable<? extends T>> breeder, Function<T,String> stringizer, Consumer<String> emitter )
 	{
 		int position = stringBuilder.length();
 		stringBuilder.append( parentPrefix ).append( terminal );
-		stringBuilder.append( stringizer.invoke( node ) );
-		emitter.invoke( stringBuilder.toString() );
+		stringBuilder.append( stringizer.apply( node ) );
+		emitter.accept( stringBuilder.toString() );
 		stringBuilder.setLength( position );
 		stringBuilder.append( childPrefix );
-		Iterator<? extends T> iterator = breeder.invoke( node ).iterator();
+		Iterator<? extends T> iterator = breeder.apply( node ).iterator();
 		while( iterator.hasNext() )
 		{
 			T childNode = iterator.next();

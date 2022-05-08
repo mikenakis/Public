@@ -1,4 +1,4 @@
-package mikenakis.immutability.type.field.annotations;
+package mikenakis.immutability.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

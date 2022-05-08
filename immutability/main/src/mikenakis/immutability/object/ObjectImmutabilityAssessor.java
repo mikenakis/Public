@@ -16,7 +16,7 @@ import mikenakis.immutability.object.assessments.mutable.IsNonEmptyArrayMutableO
 import mikenakis.immutability.object.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.object.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.object.assessments.mutable.HasMutableFieldValueMutableObjectAssessment;
-import mikenakis.immutability.type.ImmutabilitySelfAssessable;
+import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.type.assessments.MutableTypeAssessment;

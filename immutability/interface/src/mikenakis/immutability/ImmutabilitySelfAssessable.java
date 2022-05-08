@@ -1,4 +1,4 @@
-package mikenakis.immutability.type;
+package mikenakis.immutability;
 
 /**
  * Represents an object that is capable of assessing by itself whether it is immutable or not.
