@@ -1,11 +1,11 @@
 package mikenakis_immutability_test;
 
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.object.ObjectImmutabilityAssessor;
-import mikenakis.immutability.object.exceptions.ObjectMustBeImmutableException;
+import mikenakis.immutability.ObjectImmutabilityAssessor;
+import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
-import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
+import mikenakis.immutability.internal.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
 import org.junit.Test;
 
 import java.util.ArrayList;

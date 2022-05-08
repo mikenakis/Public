@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.immutability.object.ObjectImmutabilityAssessor;
+import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 

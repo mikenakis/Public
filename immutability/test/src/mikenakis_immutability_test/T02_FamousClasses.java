@@ -2,13 +2,13 @@ package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.type.assessments.TypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
-import mikenakis.immutability.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
+import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.TypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import org.junit.Test;
 
 import javax.swing.KeyStroke;

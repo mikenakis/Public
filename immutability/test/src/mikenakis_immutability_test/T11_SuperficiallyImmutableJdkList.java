@@ -2,12 +2,12 @@ package mikenakis_immutability_test;
 
 import mikenakis.immutability.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.object.ObjectImmutabilityAssessor;
-import mikenakis.immutability.object.assessments.ImmutableObjectAssessment;
-import mikenakis.immutability.object.assessments.MutableObjectAssessment;
-import mikenakis.immutability.object.assessments.ObjectAssessment;
-import mikenakis.immutability.object.assessments.mutable.HasMutableComponentMutableObjectAssessment;
-import mikenakis.immutability.type.TypeImmutabilityAssessor;
+import mikenakis.immutability.ObjectImmutabilityAssessor;
+import mikenakis.immutability.assessments.ImmutableObjectAssessment;
+import mikenakis.immutability.assessments.MutableObjectAssessment;
+import mikenakis.immutability.assessments.ObjectAssessment;
+import mikenakis.immutability.assessments.mutable.HasMutableComponentMutableObjectAssessment;
+import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
 import java.util.ArrayList;
