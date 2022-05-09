@@ -9,6 +9,7 @@ import mikenakis.immutability.internal.assessments.ObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.HasMutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.ConcreteMapEntry;
 import mikenakis.immutability.internal.mykit.MyKit;
+import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class T12_SuperficiallyImmutableJdkMap
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		MyKit.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
+		TextTree.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 

@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * (So each array element is still variable, regardless of the immutability assessment of the element itself.)
  * Note: we could turn this into a provisory assessment because the array may still turn out to be immutable if it is of zero length,
  * (if the array has no elements, then there are no elements to vary,) but this would complicate things, and it would not help much, because
- * it would not save us from any runtime checks.
+ * it would not save us from having to perform runtime checks, because we would still have to discover that the array has zero elements.
  */
 public final class ArrayMutableFieldAssessment extends MutableFieldAssessment
 {

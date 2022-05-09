@@ -70,7 +70,6 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	{
 		ObjectAssessment assessment = assess( object );
 		if( assessment instanceof MutableObjectAssessment mutableObjectAssessment )
-			//mutableObjectAssessment.assessmentTextLines().forEach( line -> System.out.println( line ) );
 			throw new ObjectMustBeImmutableException( mutableObjectAssessment );
 		assert assessment instanceof ImmutableObjectAssessment;
 		return true;
