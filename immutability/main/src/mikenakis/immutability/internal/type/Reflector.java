@@ -8,7 +8,8 @@ import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldsMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MultiReasonMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableSuperclassMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
@@ -66,23 +67,24 @@ final class Reflector
 			return new InterfaceProvisoryTypeAssessment( type );
 
 		List<ProvisoryTypeAssessment> provisoryReasons = new ArrayList<>();
+		List<MutableTypeAssessment> mutableReasons = new ArrayList<>();
 		Class<?> superclass = type.getSuperclass();
 		if( superclass != null )
 		{
-			TypeAssessment superclassAssessment = assessSuperclass( type, superclass );
+			TypeAssessment superclassAssessment = assessSuperclass( superclass );
 			switch( superclassAssessment )
 			{
 				case MutableTypeAssessment mutableTypeAssessment:
-					return mutableTypeAssessment;
+					mutableReasons.add( new MutableSuperclassMutableTypeAssessment( type, mutableTypeAssessment ) );
+					break;
 				case ProvisoryTypeAssessment provisoryTypeAssessment:
-					provisoryReasons.add( provisoryTypeAssessment );
+					provisoryReasons.add( new ProvisoryAncestorProvisoryTypeAssessment( type, provisoryTypeAssessment ) );
 					break;
 				default:
 					assert superclassAssessment instanceof ImmutableTypeAssessment || superclassAssessment instanceof UnderAssessmentTypeAssessment;
 			}
 		}
 
-		List<MutableFieldAssessment> mutableFieldAssessments = new ArrayList<>();
 		for( Field field : type.getDeclaredFields() )
 		{
 			if( Modifier.isStatic( field.getModifiers() ) )
@@ -91,25 +93,21 @@ final class Reflector
 			switch( fieldAssessment )
 			{
 				case ProvisoryFieldAssessment provisoryFieldAssessment:
-				{
 					provisoryReasons.add( new ProvisoryFieldProvisoryTypeAssessment( type, provisoryFieldAssessment ) );
 					break;
-				}
 				case MutableFieldAssessment mutableFieldAssessment:
-				{
-					mutableFieldAssessments.add( mutableFieldAssessment );
+					mutableReasons.add( new MutableFieldMutableTypeAssessment( type, mutableFieldAssessment ) );
 					break;
-				}
 				default:
-					assert fieldAssessment instanceof UnderAssessmentFieldAssessment || fieldAssessment instanceof ImmutableFieldAssessment;
+					assert fieldAssessment instanceof ImmutableFieldAssessment || fieldAssessment instanceof UnderAssessmentFieldAssessment;
 			}
 		}
 
-		if( !mutableFieldAssessments.isEmpty() )
-			return new MutableFieldsMutableTypeAssessment( type, mutableFieldAssessments );
+		if( !mutableReasons.isEmpty() )
+			return mutableReasons.size() == 1 ? mutableReasons.get( 0 ) : new MultiReasonMutableTypeAssessment( type, mutableReasons );
 
 		if( !provisoryReasons.isEmpty() )
-			return new MultiReasonProvisoryTypeAssessment( type, provisoryReasons );
+			return provisoryReasons.size() == 1 ? provisoryReasons.get( 0 ) : new MultiReasonProvisoryTypeAssessment( type, provisoryReasons );
 
 		if( Helpers.isExtensible( type ) )
 			return new ExtensibleProvisoryTypeAssessment( TypeAssessment.Mode.Assessed, type );
@@ -117,27 +115,25 @@ final class Reflector
 		return typeImmutabilityAssessor.immutableClassAssessmentInstance;
 	}
 
-	private TypeAssessment assessSuperclass( Class<?> type, Class<?> superclass )
+	private TypeAssessment assessSuperclass( Class<?> superclass )
 	{
 		TypeAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
 		return switch( superclassAssessment )
-		{
-			case MutableTypeAssessment mutableTypeAssessment -> new MutableSuperclassMutableTypeAssessment( type, mutableTypeAssessment );
-			case ExtensibleProvisoryTypeAssessment ignore -> typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
-			case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> new ProvisoryAncestorProvisoryTypeAssessment( type, multiReasonAssessment );
-			case UnderAssessmentTypeAssessment ignore -> ignore;
-			case ImmutableTypeAssessment immutableTypeAssessment ->
-				//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
+			{
 				//DoNotCover
-				throw new AssertionError( immutableTypeAssessment );
-			case InterfaceProvisoryTypeAssessment interfaceAssessment ->
-				//Cannot happen, because the supertype of a class cannot be an interface.
+				case ImmutableTypeAssessment immutableTypeAssessment ->
+					throw new AssertionError( immutableTypeAssessment ); //Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
 				//DoNotCover
-				throw new AssertionError( interfaceAssessment );
-			case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> new ProvisoryAncestorProvisoryTypeAssessment( type, selfAssessableAssessment );
-			default ->
-				//DoNotCover
-				throw new AssertionError( superclassAssessment );
-		};
+				case InterfaceProvisoryTypeAssessment interfaceAssessment ->
+					throw new AssertionError( interfaceAssessment ); //Cannot happen, because the supertype of a class cannot be an interface.
+				case UnderAssessmentTypeAssessment underAssessmentTypeAssessment -> underAssessmentTypeAssessment;
+				case MutableTypeAssessment mutableTypeAssessment -> mutableTypeAssessment;
+				case ExtensibleProvisoryTypeAssessment ignore ->
+					typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
+				case ProvisoryTypeAssessment provisoryTypeAssessment -> provisoryTypeAssessment;
+				default ->
+					//DoNotCover
+					throw new AssertionError( superclassAssessment );
+			};
 	}
 }

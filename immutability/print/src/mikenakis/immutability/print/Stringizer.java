@@ -27,7 +27,7 @@ public abstract class Stringizer
 		return "'" + stringizeClassName0( jvmClass ) + "'";
 	}
 
-	public static String stringizeFieldName( Field field )
+	public final String stringizeFieldName( Field field )
 	{
 		return "'" + field.getName() + "'";
 	}

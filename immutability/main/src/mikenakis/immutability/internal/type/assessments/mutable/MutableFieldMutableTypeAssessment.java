@@ -9,15 +9,15 @@ import java.util.List;
 /**
  * Signifies that a class is mutable because it has mutable fields.
  */
-public class MutableFieldsMutableTypeAssessment extends MutableTypeAssessment
+public class MutableFieldMutableTypeAssessment extends MutableTypeAssessment
 {
-	public final List<MutableFieldAssessment> mutableFieldAssessments;
+	public final MutableFieldAssessment mutableFieldAssessment;
 
-	public MutableFieldsMutableTypeAssessment( Class<?> jvmClass, List<MutableFieldAssessment> mutableFieldAssessments )
+	public MutableFieldMutableTypeAssessment( Class<?> jvmClass, MutableFieldAssessment mutableFieldAssessment )
 	{
 		super( jvmClass );
-		this.mutableFieldAssessments = mutableFieldAssessments;
+		this.mutableFieldAssessment = mutableFieldAssessment;
 	}
 
-	@Override public Iterable<? extends Assessment> children() { return mutableFieldAssessments; }
+	@Override public Iterable<? extends Assessment> children() { return List.of( mutableFieldAssessment ); }
 }

@@ -1,5 +1,6 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
@@ -128,7 +129,7 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert assessor.typeImmutabilityAssessor.assess( SelfReferencingProvisoryClass.class ) instanceof MultiReasonProvisoryTypeAssessment;
+				assert assessor.typeImmutabilityAssessor.assess( SelfReferencingProvisoryClass.class ) instanceof ProvisoryFieldProvisoryTypeAssessment;
 				assert assessor.typeImmutabilityAssessor.assess( ClassExtendingSelfReferencingProvisoryClass.class ) instanceof MultiReasonProvisoryTypeAssessment;
 				var object = new ClassExtendingSelfReferencingProvisoryClass();
 				ObjectAssessment assessment = assess( assessor, object );

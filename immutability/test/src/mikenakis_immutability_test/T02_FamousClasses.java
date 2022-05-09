@@ -1,5 +1,6 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
@@ -79,13 +80,13 @@ public class T02_FamousClasses
 		}
 	}
 
-	@Test public void famous_multi_reason_provisory_classes_are_multi_reason_provisory()
+	@Test public void famous_provisory_classes_are_provisory()
 	{
 		List<Class<?>> classes = List.of( ZonedDateTime.class );
 		for( Class<?> jvmClass : classes )
 		{
 			TypeAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof MultiReasonProvisoryTypeAssessment;
+			assert assessment instanceof ProvisoryTypeAssessment;
 		}
 	}
 

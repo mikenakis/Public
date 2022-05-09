@@ -92,6 +92,8 @@ public final class ObjectImmutabilityAssessor
 				case CompositeProvisoryTypeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment, visitedValues );
 				case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
 				case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> assessMultiReason( object, multiReasonAssessment, visitedValues );
+				case ProvisoryAncestorProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, provisoryAncestorAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
+				case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, provisoryFieldAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 				case ArrayMutableTypeAssessment arrayAssessment -> assessArray( object, arrayAssessment );
 				case MutableTypeAssessment mutableTypeAssessment -> new OfMutableTypeMutableObjectAssessment( object, mutableTypeAssessment );
 				default -> throw new AssertionError( typeAssessment );
@@ -135,7 +137,7 @@ public final class ObjectImmutabilityAssessor
 		return ImmutableObjectAssessment.instance;
 	}
 
-	private ObjectAssessment assessSelfAssessable( SelfAssessableProvisoryTypeAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
+	private static ObjectAssessment assessSelfAssessable( SelfAssessableProvisoryTypeAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
 	{
 		if( selfAssessableObject.isImmutable() )
 			return ImmutableObjectAssessment.instance;
