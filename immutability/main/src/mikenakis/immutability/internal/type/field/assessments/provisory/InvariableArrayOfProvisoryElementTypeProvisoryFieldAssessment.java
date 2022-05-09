@@ -21,6 +21,8 @@ public final class InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment
 	public InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( Field field, ProvisoryTypeAssessment arrayElementTypeAssessment )
 	{
 		super( field );
+		assert field.getType().isArray();
+		assert field.getType().getComponentType() == arrayElementTypeAssessment.type;
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;
 	}
 

@@ -14,6 +14,7 @@ public final class ProvisorySuperclassProvisoryTypeAssessment extends ProvisoryT
 	public ProvisorySuperclassProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
 	{
 		super( jvmClass );
+		assert jvmClass.getSuperclass() == ancestorAssessment.type;
 		this.ancestorAssessment = ancestorAssessment;
 	}
 

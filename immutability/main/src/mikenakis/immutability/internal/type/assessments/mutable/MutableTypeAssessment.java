@@ -1,11 +1,13 @@
 package mikenakis.immutability.internal.type.assessments.mutable;
 
-import mikenakis.immutability.internal.type.assessments.NonImmutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 
 /**
  * Signifies that a class is mutable.
  */
-public abstract class MutableTypeAssessment extends NonImmutableTypeAssessment
+public abstract class MutableTypeAssessment extends TypeAssessment
 {
-	protected MutableTypeAssessment( Class<?> type ) { super( type ); }
+	public final Class<?> type;
+
+	protected MutableTypeAssessment( Class<?> type ) { this.type = type; }
 }
