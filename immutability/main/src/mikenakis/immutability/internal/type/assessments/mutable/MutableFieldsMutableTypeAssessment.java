@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Signifies that a class is mutable because it has mutable fields.
  */
-public class HasMutableFieldsMutableTypeAssessment extends MutableTypeAssessment
+public class MutableFieldsMutableTypeAssessment extends MutableTypeAssessment
 {
 	public final List<MutableFieldAssessment> mutableFieldAssessments;
 
-	public HasMutableFieldsMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass, List<MutableFieldAssessment> mutableFieldAssessments )
+	public MutableFieldsMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass, List<MutableFieldAssessment> mutableFieldAssessments )
 	{
 		super( stringizer, jvmClass );
 		this.mutableFieldAssessments = mutableFieldAssessments;

@@ -17,12 +17,12 @@ import mikenakis.immutability.internal.type.assessments.TypeAssessment;
  * If the mode is {@link TypeAssessment.Mode#Preassessed} then this assessment overrules an assessment that would normally come out as mutable, and promises that this class
  * will behave as immutable, with the caveat that it is iterable.
  */
-public final class IsCompositeProvisoryTypeAssessment<T,E> extends ProvisoryTypeAssessment
+public final class CompositeProvisoryTypeAssessment<T,E> extends ProvisoryTypeAssessment
 {
 	public final Mode mode;
 	public final Decomposer<T,E> decomposer;
 
-	public IsCompositeProvisoryTypeAssessment( Stringizer stringizer, Mode mode, Class<T> type, Decomposer<T,E> decomposer )
+	public CompositeProvisoryTypeAssessment( Stringizer stringizer, Mode mode, Class<T> type, Decomposer<T,E> decomposer )
 	{
 		super( stringizer, type );
 		this.mode = mode;

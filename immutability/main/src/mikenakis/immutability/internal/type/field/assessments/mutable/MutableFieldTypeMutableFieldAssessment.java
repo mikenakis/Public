@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Signifies that a field is mutable because even though it is invariable, it is of a mutable type.
  */
-public final class IsOfMutableFieldTypeMutableFieldAssessment extends MutableFieldAssessment
+public final class MutableFieldTypeMutableFieldAssessment extends MutableFieldAssessment
 {
 	public final MutableTypeAssessment fieldTypeAssessment;
 
-	public IsOfMutableFieldTypeMutableFieldAssessment( Stringizer stringizer, Field field, MutableTypeAssessment fieldTypeAssessment )
+	public MutableFieldTypeMutableFieldAssessment( Stringizer stringizer, Field field, MutableTypeAssessment fieldTypeAssessment )
 	{
 		super( stringizer, field );
 		this.fieldTypeAssessment = fieldTypeAssessment;

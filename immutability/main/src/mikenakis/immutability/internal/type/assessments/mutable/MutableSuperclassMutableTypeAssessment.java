@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Signifies that a class is mutable because its superclass is mutable.
  */
-public class HasMutableSuperclassMutableTypeAssessment extends MutableTypeAssessment
+public class MutableSuperclassMutableTypeAssessment extends MutableTypeAssessment
 {
 	public final MutableTypeAssessment superclassAssessment;
 
-	public HasMutableSuperclassMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass, MutableTypeAssessment superclassAssessment )
+	public MutableSuperclassMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass, MutableTypeAssessment superclassAssessment )
 	{
 		super( stringizer, jvmClass );
 		this.superclassAssessment = superclassAssessment;

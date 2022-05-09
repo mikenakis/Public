@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Signifies that a field is mutable because it is an invariable array field of mutable element type.
  */
-public final class IsInvariableArrayOfMutableElementTypeMutableFieldAssessment extends MutableFieldAssessment
+public final class InvariableArrayOfMutableElementTypeMutableFieldAssessment extends MutableFieldAssessment
 {
 	public final MutableTypeAssessment arrayElementTypeAssessment;
 
-	public IsInvariableArrayOfMutableElementTypeMutableFieldAssessment( Stringizer stringizer, Field field, MutableTypeAssessment arrayElementTypeAssessment )
+	public InvariableArrayOfMutableElementTypeMutableFieldAssessment( Stringizer stringizer, Field field, MutableTypeAssessment arrayElementTypeAssessment )
 	{
 		super( stringizer, field );
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;

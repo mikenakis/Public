@@ -6,7 +6,7 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.HasMutableComponentMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.ConcreteMapEntry;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.TextTree;
@@ -141,12 +141,11 @@ public class T12_SuperficiallyImmutableJdkMap
 		assert assessment instanceof MutableObjectAssessment;
 		MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
 		assert mutableObjectAssessment.object == mapObject;
-		assert mutableObjectAssessment instanceof HasMutableComponentMutableObjectAssessment;
-		HasMutableComponentMutableObjectAssessment<?,?> mutableElementAssessment = (HasMutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
-		assert mutableElementAssessment.compositeObject == mapObject;
-		assert mutableElementAssessment.typeAssessment.type == mapObject.getClass();
-		assert mutableElementAssessment.mutableElementIndex >= 0 && mutableElementAssessment.mutableElementIndex < size; //cannot assert precise index because hashmaps garble the order of items
-		assert mutableElementAssessment.elementAssessment.object == mutableElementAssessment.mutableElement;
-		assert mutableElementAssessment.mutableElement.equals( mutableEntry );
+		assert mutableObjectAssessment instanceof MutableComponentMutableObjectAssessment;
+		MutableComponentMutableObjectAssessment<?,?> mutableComponentAssessment = (MutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
+		assert mutableComponentAssessment.typeAssessment.type == mapObject.getClass();
+		assert mutableComponentAssessment.mutableElementIndex >= 0 && mutableComponentAssessment.mutableElementIndex < size; //cannot assert precise index because hashmaps garble the order of items
+		assert mutableComponentAssessment.elementAssessment.object == mutableComponentAssessment.mutableElement;
+		assert mutableComponentAssessment.mutableElement.equals( mutableEntry );
 	}
 }

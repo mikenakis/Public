@@ -9,9 +9,9 @@ import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
  * Signifies that a type is provisory because it is self-assessable.
  * (Instances implement the {@link ImmutabilitySelfAssessable} interface.)
  */
-public final class IsSelfAssessableProvisoryTypeAssessment extends ProvisoryTypeAssessment
+public final class SelfAssessableProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
-	public IsSelfAssessableProvisoryTypeAssessment( Stringizer stringizer, Class<?> type )
+	public SelfAssessableProvisoryTypeAssessment( Stringizer stringizer, Class<?> type )
 	{
 		super( stringizer, type );
 		assert ImmutabilitySelfAssessable.class.isAssignableFrom( type );

@@ -7,9 +7,9 @@ import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 /**
  * Signifies that a type is mutable because it is an array.
  */
-public final class IsArrayMutableTypeAssessment extends MutableTypeAssessment
+public final class ArrayMutableTypeAssessment extends MutableTypeAssessment
 {
-	public IsArrayMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass )
+	public ArrayMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass )
 	{
 		super( stringizer, jvmClass );
 		assert jvmClass.isArray();

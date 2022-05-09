@@ -6,7 +6,7 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.HasMutableComponentMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
@@ -118,10 +118,9 @@ public class T11_SuperficiallyImmutableJdkList
 		assert assessment instanceof MutableObjectAssessment;
 		MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
 		assert mutableObjectAssessment.object == superficiallyImmutableJdkList;
-		HasMutableComponentMutableObjectAssessment<?,?> mutableElementAssessment = (HasMutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
-		assert mutableElementAssessment.compositeObject == superficiallyImmutableJdkList;
-		assert mutableElementAssessment.typeAssessment.type == superficiallyImmutableJdkList.getClass();
-		assert mutableElementAssessment.mutableElementIndex == size - 1;
-		assert mutableElementAssessment.elementAssessment.object == mutableElement;
+		MutableComponentMutableObjectAssessment<?,?> mutableComponentAssessment = (MutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
+		assert mutableComponentAssessment.typeAssessment.type == superficiallyImmutableJdkList.getClass();
+		assert mutableComponentAssessment.mutableElementIndex == size - 1;
+		assert mutableComponentAssessment.elementAssessment.object == mutableElement;
 	}
 }

@@ -4,26 +4,24 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.internal.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
 
 import java.util.List;
 
 /**
  * Signifies that an object is mutable because it is a composite of which at least one component is mutable.
  */
-public final class HasMutableComponentMutableObjectAssessment<T, E> extends MutableObjectAssessment
+public final class MutableComponentMutableObjectAssessment<T, E> extends MutableObjectAssessment
 {
-	public final T compositeObject;
-	public final IsCompositeProvisoryTypeAssessment<T,E> typeAssessment;
+	public final CompositeProvisoryTypeAssessment<T,E> typeAssessment;
 	public final int mutableElementIndex;
 	public final E mutableElement;
 	public final MutableObjectAssessment elementAssessment;
 
-	public HasMutableComponentMutableObjectAssessment( Stringizer stringizer, T compositeObject, IsCompositeProvisoryTypeAssessment<T,E> typeAssessment, //
+	public MutableComponentMutableObjectAssessment( Stringizer stringizer, T compositeObject, CompositeProvisoryTypeAssessment<T,E> typeAssessment, //
 		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
 	{
 		super( stringizer, compositeObject );
-		this.compositeObject = compositeObject;
 		this.typeAssessment = typeAssessment;
 		this.mutableElementIndex = mutableElementIndex;
 		this.mutableElement = mutableElement;

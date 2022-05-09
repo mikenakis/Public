@@ -7,8 +7,8 @@ import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.IsCompositeProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.IsExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import org.junit.Test;
 
@@ -96,7 +96,7 @@ public class T02_FamousClasses
 		for( Class<?> jvmClass : classes )
 		{
 			TypeAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof IsCompositeProvisoryTypeAssessment;
+			assert assessment instanceof CompositeProvisoryTypeAssessment;
 		}
 	}
 
@@ -106,7 +106,7 @@ public class T02_FamousClasses
 		for( Class<?> jvmClass : classes )
 		{
 			TypeAssessment assessment = assess( assessor, jvmClass );
-			assert assessment instanceof IsExtensibleProvisoryTypeAssessment;
+			assert assessment instanceof ExtensibleProvisoryTypeAssessment;
 		}
 	}
 

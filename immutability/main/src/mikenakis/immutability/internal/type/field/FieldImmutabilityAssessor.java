@@ -18,11 +18,11 @@ import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.ImmutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.UnderAssessmentFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.ArrayMutableFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.mutable.IsInvariableArrayOfMutableElementTypeMutableFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.mutable.IsOfMutableFieldTypeMutableFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.mutable.InvariableArrayOfMutableElementTypeMutableFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldTypeMutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.VariableMutableFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.IsOfProvisoryTypeProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -62,9 +62,9 @@ public class FieldImmutabilityAssessor extends Stringizable
 			return switch( arrayElementTypeAssessment )
 				{
 					case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
-					case ProvisoryTypeAssessment provisoryTypeAssessment -> new IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
+					case ProvisoryTypeAssessment provisoryTypeAssessment -> new InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
 					case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
-					case MutableTypeAssessment mutableTypeAssessment -> new IsInvariableArrayOfMutableElementTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
+					case MutableTypeAssessment mutableTypeAssessment -> new InvariableArrayOfMutableElementTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
 					//DoNotCover
 					default -> throw new AssertionError( arrayElementTypeAssessment );
 				};
@@ -73,9 +73,9 @@ public class FieldImmutabilityAssessor extends Stringizable
 		return switch( fieldTypeAssessment )
 			{
 				case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
-				case ProvisoryTypeAssessment provisoryTypeAssessment -> new IsOfProvisoryTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
+				case ProvisoryTypeAssessment provisoryTypeAssessment -> new ProvisoryFieldTypeProvisoryFieldAssessment( stringizer, field, provisoryTypeAssessment );
 				case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
-				case MutableTypeAssessment mutableTypeAssessment -> new IsOfMutableFieldTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
+				case MutableTypeAssessment mutableTypeAssessment -> new MutableFieldTypeMutableFieldAssessment( stringizer, field, mutableTypeAssessment );
 				//DoNotCover
 				default -> throw new AssertionError( fieldTypeAssessment );
 			};

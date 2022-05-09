@@ -16,11 +16,11 @@ import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
  * If the mode is {@link Mode#Preassessed} then the class would have normally been assessed as mutable, but this preassessment promises that the class
  * will behave as immutable, with the caveat that it is extensible.
  */
-public final class IsExtensibleProvisoryTypeAssessment extends ProvisoryTypeAssessment
+public final class ExtensibleProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
 	public final Mode mode;
 
-	public IsExtensibleProvisoryTypeAssessment( Stringizer stringizer, Mode mode, Class<?> jvmClass )
+	public ExtensibleProvisoryTypeAssessment( Stringizer stringizer, Mode mode, Class<?> jvmClass )
 	{
 		super( stringizer, jvmClass );
 		assert Helpers.isClass( jvmClass );

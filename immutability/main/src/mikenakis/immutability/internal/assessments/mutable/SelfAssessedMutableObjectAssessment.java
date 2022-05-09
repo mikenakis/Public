@@ -5,7 +5,7 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.internal.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 
 import java.util.List;
 
@@ -14,10 +14,10 @@ import java.util.List;
  */
 public final class SelfAssessedMutableObjectAssessment extends MutableObjectAssessment
 {
-	public final IsSelfAssessableProvisoryTypeAssessment typeAssessment;
+	public final SelfAssessableProvisoryTypeAssessment typeAssessment;
 	public final ImmutabilitySelfAssessable object;
 
-	public SelfAssessedMutableObjectAssessment( Stringizer stringizer, IsSelfAssessableProvisoryTypeAssessment typeAssessment, //
+	public SelfAssessedMutableObjectAssessment( Stringizer stringizer, SelfAssessableProvisoryTypeAssessment typeAssessment, //
 		ImmutabilitySelfAssessable object )
 	{
 		super( stringizer, object );

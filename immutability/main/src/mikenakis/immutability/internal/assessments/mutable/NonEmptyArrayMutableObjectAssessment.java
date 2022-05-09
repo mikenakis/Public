@@ -4,7 +4,7 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.internal.type.assessments.mutable.IsArrayMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
 
 import java.lang.reflect.Array;
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
 /**
  * Signifies that an object is mutable because it is a non-empty array.
  */
-public final class IsNonEmptyArrayMutableObjectAssessment extends MutableObjectAssessment
+public final class NonEmptyArrayMutableObjectAssessment extends MutableObjectAssessment
 {
-	public final IsArrayMutableTypeAssessment typeAssessment;
+	public final ArrayMutableTypeAssessment typeAssessment;
 
-	public IsNonEmptyArrayMutableObjectAssessment( Stringizer stringizer, Object object, IsArrayMutableTypeAssessment typeAssessment )
+	public NonEmptyArrayMutableObjectAssessment( Stringizer stringizer, Object object, ArrayMutableTypeAssessment typeAssessment )
 	{
 		super( stringizer, object );
 		assert object.getClass().isArray();

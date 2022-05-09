@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * Signifies that a class is provisory because it contains a provisory field.
  */
-public final class HasProvisoryFieldProvisoryTypeAssessment extends ProvisoryTypeAssessment
+public final class ProvisoryFieldProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
 	public final ProvisoryFieldAssessment fieldAssessment;
 
-	public HasProvisoryFieldProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, ProvisoryFieldAssessment fieldAssessment )
+	public ProvisoryFieldProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, ProvisoryFieldAssessment fieldAssessment )
 	{
 		super( stringizer, jvmClass );
 		this.fieldAssessment = fieldAssessment;

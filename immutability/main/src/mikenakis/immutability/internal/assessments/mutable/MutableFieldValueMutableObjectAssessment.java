@@ -11,12 +11,12 @@ import java.util.List;
 /**
  * Signifies that an object is mutable because it contains a provisory field which has mutable value.
  */
-public final class HasMutableFieldValueMutableObjectAssessment extends MutableObjectAssessment
+public final class MutableFieldValueMutableObjectAssessment extends MutableObjectAssessment
 {
 	public final ProvisoryFieldAssessment provisoryFieldAssessment;
 	public final MutableObjectAssessment fieldValueAssessment;
 
-	public HasMutableFieldValueMutableObjectAssessment( Stringizer stringizer, Object object, ProvisoryFieldAssessment provisoryFieldAssessment, MutableObjectAssessment fieldValueAssessment )
+	public MutableFieldValueMutableObjectAssessment( Stringizer stringizer, Object object, ProvisoryFieldAssessment provisoryFieldAssessment, MutableObjectAssessment fieldValueAssessment )
 	{
 		super( stringizer, object );
 		this.provisoryFieldAssessment = provisoryFieldAssessment;

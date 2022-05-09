@@ -10,11 +10,11 @@ import java.util.List;
 /**
  * Signifies that a class has a provisory ancestor.
  */
-public final class HasProvisoryAncestorProvisoryTypeAssessment extends ProvisoryTypeAssessment
+public final class ProvisoryAncestorProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
 	public final ProvisoryTypeAssessment ancestorAssessment;
 
-	public HasProvisoryAncestorProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
+	public ProvisoryAncestorProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
 	{
 		super( stringizer, jvmClass );
 		this.ancestorAssessment = ancestorAssessment;

@@ -7,9 +7,9 @@ import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 /**
  * Signifies that a type is provisory because it is an interface.
  */
-public final class IsInterfaceProvisoryTypeAssessment extends ProvisoryTypeAssessment
+public final class InterfaceProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
-	public IsInterfaceProvisoryTypeAssessment( Stringizer stringizer, Class<?> type )
+	public InterfaceProvisoryTypeAssessment( Stringizer stringizer, Class<?> type )
 	{
 		super( stringizer, type );
 		assert type.isInterface();

@@ -16,11 +16,11 @@ import java.util.List;
  * (It has already been established that the array field is invariable, meaning that the field is either {@code final} or annotated with @{@link Invariable} and
  * that it has also been annotated with @{@link InvariableArray}.)
  */
-public final class IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment extends ProvisoryFieldAssessment
+public final class InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment extends ProvisoryFieldAssessment
 {
 	public final ProvisoryTypeAssessment arrayElementTypeAssessment;
 
-	public IsInvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( Stringizer stringizer, Field field, ProvisoryTypeAssessment arrayElementTypeAssessment )
+	public InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( Stringizer stringizer, Field field, ProvisoryTypeAssessment arrayElementTypeAssessment )
 	{
 		super( stringizer, field );
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;

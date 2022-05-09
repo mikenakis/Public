@@ -5,7 +5,7 @@ import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.internal.type.assessments.provisory.IsSelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class T13_ObjectImmutabilityAssertions
 
 			@Override public void run()
 			{
-				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesPositively.class ) instanceof IsSelfAssessableProvisoryTypeAssessment;
+				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesPositively.class ) instanceof SelfAssessableProvisoryTypeAssessment;
 				Object object = new ProvisorySelfAssessableClassWhichSelfAssessesPositively();
 				assert assessor.mustBeImmutableAssertion( object );
 			}
@@ -86,7 +86,7 @@ public class T13_ObjectImmutabilityAssertions
 
 			@Override public void run()
 			{
-				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class ) instanceof IsSelfAssessableProvisoryTypeAssessment;
+				assert assessor.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class ) instanceof SelfAssessableProvisoryTypeAssessment;
 				Object object = new ProvisorySelfAssessableClassWhichSelfAssessesNegatively();
 				var exception = MyTestKit.expect( ObjectMustBeImmutableException.class, () -> //
 					assessor.mustBeImmutableAssertion( object ) );
