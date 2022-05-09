@@ -34,7 +34,7 @@ public class T11_SuperficiallyImmutableJdkList
 
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
-		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
+		System.out.println( "assessment for object " + AssessmentPrinter.stringFromObjectIdentity( object ) + ":" );
 		ObjectAssessment assessment;
 		try
 		{
@@ -45,7 +45,7 @@ public class T11_SuperficiallyImmutableJdkList
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
+		AssessmentPrinter.getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 

@@ -9,7 +9,7 @@ import mikenakis.immutability.internal.assessments.mutable.MutableArrayElementMu
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.NonEmptyArrayMutableObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableClassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.IterableOnArrayObject;
 import mikenakis.immutability.internal.mykit.MyKit;
@@ -95,7 +95,7 @@ public final class ObjectImmutabilityAssessor
 				case ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, provisoryAncestorAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
 				case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, provisoryFieldAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 				case ArrayMutableTypeAssessment arrayAssessment -> assessArray( object, arrayAssessment );
-				case MutableTypeAssessment mutableTypeAssessment -> new OfMutableTypeMutableObjectAssessment( object, mutableTypeAssessment );
+				case MutableTypeAssessment mutableTypeAssessment -> new MutableClassMutableObjectAssessment( object, mutableTypeAssessment );
 				default -> throw new AssertionError( typeAssessment );
 			};
 	}

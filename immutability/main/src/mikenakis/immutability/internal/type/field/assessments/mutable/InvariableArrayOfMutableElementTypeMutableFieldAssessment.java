@@ -16,6 +16,8 @@ public final class InvariableArrayOfMutableElementTypeMutableFieldAssessment ext
 	public InvariableArrayOfMutableElementTypeMutableFieldAssessment( Field field, MutableTypeAssessment arrayElementTypeAssessment )
 	{
 		super( field );
+		assert field.getType().isArray();
+		assert field.getType().getComponentType() == arrayElementTypeAssessment.type;
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;
 	}
 

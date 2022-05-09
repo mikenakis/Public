@@ -35,7 +35,7 @@ public class T12_SuperficiallyImmutableJdkMap
 
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
-		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
+		System.out.println( "assessment for object " + AssessmentPrinter.stringFromObjectIdentity( object ) + ":" );
 		ObjectAssessment assessment;
 		try
 		{
@@ -46,7 +46,7 @@ public class T12_SuperficiallyImmutableJdkMap
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
+		AssessmentPrinter.getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 

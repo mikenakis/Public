@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * Signifies that an object is mutable because its class is mutable.
  */
-public final class OfMutableTypeMutableObjectAssessment extends MutableObjectAssessment
+public final class MutableClassMutableObjectAssessment extends MutableObjectAssessment
 {
 	public final MutableTypeAssessment typeAssessment;
 
-	public OfMutableTypeMutableObjectAssessment( Object object, MutableTypeAssessment typeAssessment )
+	public MutableClassMutableObjectAssessment( Object object, MutableTypeAssessment typeAssessment )
 	{
 		super( object );
 		assert object.getClass() == typeAssessment.type;

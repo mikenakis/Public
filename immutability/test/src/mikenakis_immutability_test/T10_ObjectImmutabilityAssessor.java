@@ -10,7 +10,7 @@ import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableClassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
@@ -47,7 +47,7 @@ public class T10_ObjectImmutabilityAssessor
 
 	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
 	{
-		System.out.println( "assessment for object " + TestStringizer.instance.stringizeObjectIdentity( object ) + ":" );
+		System.out.println( "assessment for object " + AssessmentPrinter.stringFromObjectIdentity( object ) + ":" );
 		ObjectAssessment assessment;
 		try
 		{
@@ -58,7 +58,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
+		AssessmentPrinter.getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 
@@ -179,7 +179,7 @@ public class T10_ObjectImmutabilityAssessor
 				ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)provisoryFieldAssessment;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment.type == List.class;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment instanceof InterfaceProvisoryTypeAssessment;
-				OfMutableTypeMutableObjectAssessment fieldValueAssessment = (OfMutableTypeMutableObjectAssessment)mutableFieldValueAssessment.fieldValueAssessment;
+				MutableClassMutableObjectAssessment fieldValueAssessment = (MutableClassMutableObjectAssessment)mutableFieldValueAssessment.fieldValueAssessment;
 				assert fieldValueAssessment.object == object.mutableField;
 				assert fieldValueAssessment.typeAssessment.type == ArrayList.class;
 			}

@@ -11,22 +11,23 @@ import mikenakis.immutability.internal.assessments.mutable.MutableArrayElementMu
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.NonEmptyArrayMutableObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableClassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
+import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MultiReasonMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableSuperclassMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.ArrayMutableFieldAssessment;
@@ -38,6 +39,7 @@ import mikenakis.immutability.internal.type.field.assessments.provisory.Invariab
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,148 +50,147 @@ import java.util.List;
  */
 public final class AssessmentPrinter
 {
-	public static final AssessmentPrinter instance = new AssessmentPrinter( Stringizer.defaultInstance );
-
-	private final Stringizer stringizer;
-
-	/**
-	 * This constructor is public only for use by the tests. For regular usage, invoke the static {@link #instance}.
-	 */
-	public AssessmentPrinter( Stringizer stringizer )
-	{
-		this.stringizer = stringizer;
-	}
-
-	public List<String> getAssessmentTextTree( Assessment assessment )
+	public static List<String> getAssessmentTextTree( Assessment assessment )
 	{
 		List<String> lines = new ArrayList<>();
-		TextTree.tree( assessment, this::getAssessmentChildren, this::getAssessmentText, s -> lines.add( s ) );
+		TextTree.tree( assessment, Assessment::children, AssessmentPrinter::getAssessmentText, s -> lines.add( s ) );
 		return lines;
 	}
 
-	private Iterable<? extends Assessment> getAssessmentChildren( Assessment assessment )
+	private static String getAssessmentText( Assessment unknownAssessment )
 	{
-		return switch( assessment )
-			{
-				default -> assessment.children();
-			};
-	}
-
-	private String getAssessmentText( Assessment unknownAssessment )
-	{
-		StringBuilder stringBuilder = new StringBuilder();
+		AssessmentPrinter assessmentPrinter = new AssessmentPrinter();
 		switch( unknownAssessment )
 		{
-			case FieldAssessment assessment -> getFieldAssessmentText( stringBuilder, assessment );
-			case TypeAssessment assessment -> getTypeAssessmentText( stringBuilder, assessment );
-			case ObjectAssessment assessment -> getObjectAssessmentText( stringBuilder, assessment );
+			case FieldAssessment assessment -> assessmentPrinter.getFieldAssessmentText( assessment );
+			case TypeAssessment assessment -> assessmentPrinter.getTypeAssessmentText( assessment );
+			case ObjectAssessment assessment -> assessmentPrinter.getObjectAssessmentText( assessment );
 			default -> throw new AssertionError( unknownAssessment );
 		}
-		return stringBuilder.toString();
+		return assessmentPrinter.stringBuilder.toString();
 	}
 
-	private void getFieldAssessmentText( StringBuilder stringBuilder, FieldAssessment fieldAssessment )
+	private final StringBuilder stringBuilder = new StringBuilder();
+
+	private AssessmentPrinter()
+	{
+	}
+
+	private void append( String text )
+	{
+		stringBuilder.append( text );
+	}
+
+	private void getFieldAssessmentText( FieldAssessment fieldAssessment )
 	{
 		switch( fieldAssessment )
 		{
-			case MutableFieldAssessment assessment -> getMutableFieldAssessmentText( stringBuilder, assessment );
-			case ProvisoryFieldAssessment assessment -> getProvisoryFieldAssessmentText( stringBuilder, assessment );
+			case MutableFieldAssessment assessment -> getMutableFieldAssessmentText( assessment );
+			case ProvisoryFieldAssessment assessment -> getProvisoryFieldAssessmentText( assessment );
 			default -> throw new AssertionError( fieldAssessment );
 		}
 	}
 
-	private void getMutableFieldAssessmentText( StringBuilder stringBuilder, MutableFieldAssessment mutableFieldAssessment )
+	private void getMutableFieldAssessmentText( MutableFieldAssessment mutableFieldAssessment )
 	{
-		stringBuilder.append( "field " ).append( stringizer.stringizeFieldName( mutableFieldAssessment.field ) ).append( " is mutable" );
+		append( "field " + stringFromFieldName( mutableFieldAssessment.field ) + " is mutable" );
 		switch( mutableFieldAssessment )
 		{
 			case ArrayMutableFieldAssessment ignored -> //
-				stringBuilder.append( " because is an array and it has not been annotated with @" ).append( InvariableArray.class.getSimpleName() );
+				append( " because is an array and it has not been annotated with @" + InvariableArray.class.getSimpleName() );
 			case InvariableArrayOfMutableElementTypeMutableFieldAssessment assessment -> //
-				stringBuilder.append( " because it is an invariable array of mutable element type " ).append( stringizer.stringizeClassName( assessment.arrayElementTypeAssessment.type ) );
+				append( " because it is an invariable array of mutable element type " + stringFromClassName( assessment.arrayElementTypeAssessment.type ) );
 			case MutableFieldTypeMutableFieldAssessment assessment -> //
-				stringBuilder.append( " because it is of mutable type " ).append( stringizer.stringizeClassName( assessment.fieldTypeAssessment.type ) );
+				append( " because it is of mutable type " + stringFromClassName( assessment.fieldTypeAssessment.type ) );
 			case VariableMutableFieldAssessment ignored -> //
-				stringBuilder.append( " because it is not final and it has not been annotated with @" ).append( Invariable.class.getSimpleName() );
+				append( " because it is not final and it has not been annotated with @" + Invariable.class.getSimpleName() );
 			default -> throw new AssertionError( mutableFieldAssessment );
 		}
 	}
 
-	private void getProvisoryFieldAssessmentText( StringBuilder stringBuilder, ProvisoryFieldAssessment provisoryFieldAssessment )
+	private void getProvisoryFieldAssessmentText( ProvisoryFieldAssessment provisoryFieldAssessment )
 	{
-		stringBuilder.append( "field " ).append( stringizer.stringizeFieldName( provisoryFieldAssessment.field ) ).append( " is provisory" );
+		append( "field " + stringFromFieldName( provisoryFieldAssessment.field ) + " is provisory" );
 		switch( provisoryFieldAssessment )
 		{
 			case InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment assessment -> //
-				stringBuilder.append( " because it is an invariable array of provisory element type " ).append( stringizer.stringizeClassName( assessment.arrayElementTypeAssessment.type ) );
+				append( " because it is an invariable array of provisory element type " + stringFromClassName( assessment.arrayElementTypeAssessment.type ) );
 			case ProvisoryFieldTypeProvisoryFieldAssessment assessment -> //
-				stringBuilder.append( " because it is of provisory type " ).append( stringizer.stringizeClassName( assessment.field.getType() ) );
+				append( " because it is of provisory type " + stringFromClassName( assessment.field.getType() ) );
 			default -> throw new AssertionError( provisoryFieldAssessment );
 		}
 	}
 
-	private void getTypeAssessmentText( StringBuilder stringBuilder, TypeAssessment typeAssessment )
+	private void getTypeAssessmentText( TypeAssessment typeAssessment )
 	{
 		switch( typeAssessment )
 		{
-			case MutableTypeAssessment assessment -> getMutableTypeAssessmentText( stringBuilder, assessment );
-			case ProvisoryTypeAssessment assessment -> getProvisoryTypeAssessmentText( stringBuilder, assessment );
-			case ImmutableTypeAssessment ignore -> stringBuilder.append( "immutable" );
+			case MutableTypeAssessment assessment -> getMutableTypeAssessmentText( assessment );
+			case ProvisoryTypeAssessment assessment -> getProvisoryTypeAssessmentText( assessment );
+			case ImmutableTypeAssessment ignore -> append( "immutable" );
 			default -> throw new AssertionError( typeAssessment );
 		}
 	}
 
-	private void getMutableTypeAssessmentText( StringBuilder stringBuilder, MutableTypeAssessment mutableTypeAssessment )
+	private void getMutableTypeAssessmentText( MutableTypeAssessment mutableTypeAssessment )
 	{
-		stringBuilder.append( "class " ).append( stringizer.stringizeClassName( mutableTypeAssessment.type ) ).append( " is mutable" );
+		append( "class " + stringFromClassName( mutableTypeAssessment.type ) + " is mutable" );
 		switch( mutableTypeAssessment )
 		{
-			case ArrayMutableTypeAssessment ignore -> stringBuilder.append( " because it is an array class" );
-			case MultiReasonMutableTypeAssessment ignore -> stringBuilder.append( " due to multiple reasons" );
-			case MutableFieldMutableTypeAssessment mutableFieldMutableTypeAssessment -> stringBuilder.append( " because field " ).append( stringizer.stringizeFieldName( mutableFieldMutableTypeAssessment.mutableFieldAssessment.field ) ).append( " is mutable" );
-			case MutableSuperclassMutableTypeAssessment assessment -> stringBuilder.append( " because it extends mutable class " ).append( stringizer.stringizeClassName( assessment.superclassAssessment.type ) );
+			case ArrayMutableTypeAssessment ignore -> append( " because it is an array class" );
+			case MultiReasonMutableTypeAssessment ignore -> append( " due to multiple reasons" );
+			case MutableFieldMutableTypeAssessment mutableFieldMutableTypeAssessment ->
+				append( " because field " + stringFromFieldName( mutableFieldMutableTypeAssessment.mutableFieldAssessment.field ) + " is mutable" );
+			case MutableSuperclassMutableTypeAssessment assessment ->
+				append( " because it extends mutable class " + stringFromClassName( assessment.superclassAssessment.type ) );
 			default -> throw new AssertionError( mutableTypeAssessment );
 		}
 	}
 
-	private void getProvisoryTypeAssessmentText( StringBuilder stringBuilder, ProvisoryTypeAssessment provisoryTypeAssessment )
+	private void getProvisoryTypeAssessmentText( ProvisoryTypeAssessment provisoryTypeAssessment )
 	{
-		stringBuilder.append( "class " ).append( stringizer.stringizeClassName( provisoryTypeAssessment.type ) ).append( " is provisory" );
+		append( "class " + stringFromClassName( provisoryTypeAssessment.type ) + " is provisory" );
 		switch( provisoryTypeAssessment )
 		{
-			case CompositeProvisoryTypeAssessment<?,?> assessment -> stringBuilder.append( " because it " ).append( getTypeAssessmentModeName( assessment.mode ) ).append( " composite" );
-			case ExtensibleProvisoryTypeAssessment assessment -> stringBuilder.append( " because it " ).append( getTypeAssessmentModeName( assessment.mode ) ).append( " an extensible class" );
-			case InterfaceProvisoryTypeAssessment ignore -> stringBuilder.append( " because it is an interface" );
-			case MultiReasonProvisoryTypeAssessment ignore -> stringBuilder.append( " due to multiple reasons" );
-			case ProvisorySuperclassProvisoryTypeAssessment assessment -> stringBuilder.append( " because it extends provisory type " ).append( stringizer.stringizeClassName( assessment.ancestorAssessment.type ) );
-			case ProvisoryFieldProvisoryTypeAssessment assessment -> stringBuilder.append( " because field " ).append( stringizer.stringizeFieldName( assessment.fieldAssessment.field ) ).append( " is provisory" );
-			case SelfAssessableProvisoryTypeAssessment ignore -> stringBuilder.append( " because instances of this type are self-assessable" );
+			case CompositeProvisoryTypeAssessment<?,?> assessment -> append( " because it " + getTypeAssessmentModeName( assessment.mode ) + " composite" );
+			case ExtensibleProvisoryTypeAssessment assessment ->
+				append( " because it " + getTypeAssessmentModeName( assessment.mode ) + " an extensible class" );
+			case InterfaceProvisoryTypeAssessment ignore -> append( " because it is an interface" );
+			case MultiReasonProvisoryTypeAssessment ignore -> append( " due to multiple reasons" );
+			case ProvisorySuperclassProvisoryTypeAssessment assessment ->
+				append( " because it extends provisory type " + stringFromClassName( assessment.ancestorAssessment.type ) );
+			case ProvisoryFieldProvisoryTypeAssessment assessment ->
+				append( " because field " + stringFromFieldName( assessment.fieldAssessment.field ) + " is provisory" );
+			case SelfAssessableProvisoryTypeAssessment ignore -> append( " because instances of this type are self-assessable" );
 			default -> throw new AssertionError( provisoryTypeAssessment );
 		}
 	}
 
-	private void getObjectAssessmentText( StringBuilder stringBuilder, ObjectAssessment objectAssessment )
+	private void getObjectAssessmentText( ObjectAssessment objectAssessment )
 	{
 		switch( objectAssessment )
 		{
-			case MutableObjectAssessment assessment -> getMutableObjectAssessmentText( stringBuilder, assessment );
-			case ImmutableObjectAssessment ignore -> stringBuilder.append( "immutable" );
+			case MutableObjectAssessment assessment -> getMutableObjectAssessmentText( assessment );
+			case ImmutableObjectAssessment ignore -> append( "immutable" );
 			default -> throw new AssertionError( objectAssessment );
 		}
 	}
 
-	private void getMutableObjectAssessmentText( StringBuilder stringBuilder, MutableObjectAssessment mutableObjectAssessment )
+	private void getMutableObjectAssessmentText( MutableObjectAssessment mutableObjectAssessment )
 	{
-		stringBuilder.append( "object " ).append( stringizer.stringizeObjectIdentity( mutableObjectAssessment.object ) ).append( " is mutable" );
+		append( "object " + stringFromObjectIdentity( mutableObjectAssessment.object ) + " is mutable" );
 		switch( mutableObjectAssessment )
 		{
-			case MutableAncestorMutableObjectAssessment ignore -> stringBuilder.append( " because it has a mutable ancestor" );
-			case MutableArrayElementMutableObjectAssessment<?> assessment -> stringBuilder.append( " because it is an invariable array, and element " ).append( stringizer.stringizeObjectIdentity( assessment.mutableElement ) ).append( " at index " ).append( assessment.mutableElementIndex ).append( " is mutable" );
-			case MutableComponentMutableObjectAssessment<?,?> assessment -> stringBuilder.append( " because it is a composite, and element " ).append( stringizer.stringizeObjectIdentity( assessment.mutableElement ) ).append( " at index " ).append( assessment.mutableElementIndex ).append( " is mutable" );
-			case MutableFieldValueMutableObjectAssessment assessment -> stringBuilder.append( " because it is of provisory type " ).append( stringizer.stringizeClassName( assessment.declaringTypeAssessment.type ) ).append( " and field " ).append( stringizer.stringizeFieldName( assessment.provisoryFieldAssessment.field ) ).append( " has mutable value." );
-			case NonEmptyArrayMutableObjectAssessment ignore -> stringBuilder.append( " because it is a non-empty array" );
-			case OfMutableTypeMutableObjectAssessment ignore -> stringBuilder.append( " because it is of mutable type" );
-			case SelfAssessedMutableObjectAssessment ignore -> stringBuilder.append( " because it self-assessed itself as mutable" );
+			case MutableAncestorMutableObjectAssessment ignore -> append( " because it has a mutable ancestor" );
+			case MutableArrayElementMutableObjectAssessment<?> assessment ->
+				append( " because it is an invariable array, and element " + stringFromObjectIdentity( assessment.mutableElement ) + " at index " + assessment.mutableElementIndex + " is mutable" );
+			case MutableComponentMutableObjectAssessment<?,?> assessment ->
+				append( " because it is a composite, and element " + stringFromObjectIdentity( assessment.mutableElement ) + " at index " + assessment.mutableElementIndex + " is mutable" );
+			case MutableFieldValueMutableObjectAssessment assessment ->
+				append( " because it is of provisory type " + stringFromClassName( assessment.declaringTypeAssessment.type ) + " and field " + stringFromFieldName( assessment.provisoryFieldAssessment.field ) + " has mutable value." );
+			case NonEmptyArrayMutableObjectAssessment ignore -> append( " because it is a non-empty array" );
+			case MutableClassMutableObjectAssessment ignore -> append( " because it is of a mutable class" );
+			case SelfAssessedMutableObjectAssessment ignore -> append( " because it self-assessed itself as mutable" );
 			default -> throw new AssertionError( mutableObjectAssessment );
 		}
 	}
@@ -202,5 +203,21 @@ public final class AssessmentPrinter
 				case Preassessed -> "is preassessed as";
 				case PreassessedByDefault -> "is preassessed by default as";
 			};
+	}
+
+	public static String stringFromClassName( Class<?> jvmClass )
+	{
+		return "'" + MyKit.getClassName( jvmClass ) + "'";
+	}
+
+	private static String stringFromFieldName( Field field )
+	{
+		return "'" + field.getName() + "'";
+	}
+
+	public static String stringFromObjectIdentity( Object object )
+	{
+		assert !(object instanceof Class<?>);
+		return MyKit.identityString( object );
 	}
 }

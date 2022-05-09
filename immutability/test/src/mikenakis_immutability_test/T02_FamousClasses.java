@@ -61,8 +61,8 @@ public class T02_FamousClasses
 	private static TypeAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )
 	{
 		TypeAssessment assessment = assessor.assess( type );
-		System.out.println( "assessment for type " + TestStringizer.instance.stringizeClassName( type ) + ":" );
-		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
+		System.out.println( "assessment for type " + AssessmentPrinter.stringFromClassName( type ) + ":" );
+		AssessmentPrinter.getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 
