@@ -54,13 +54,6 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	/**
 	 * DO NOT USE; FOR INTERNAL USE ONLY.
 	 *
-	 * This field is public only so that it can be used by the tests.
-	 */
-	public final ImmutableObjectAssessment immutableObjectAssessmentInstance = new ImmutableObjectAssessment( stringizer );
-
-	/**
-	 * DO NOT USE; FOR INTERNAL USE ONLY.
-	 *
 	 * This constructor is public only so that it can be used by the tests. For regular use, please use the {@link #instance} field.
 	 */
 	public ObjectImmutabilityAssessor( TypeImmutabilityAssessor typeImmutabilityAssessor )
@@ -82,9 +75,9 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	private <T> ObjectAssessment assessRecursively( T object, Set<Object> visitedValues )
 	{
 		if( object == null )
-			return immutableObjectAssessmentInstance;
+			return ImmutableObjectAssessment.instance;
 		if( visitedValues.contains( object ) )
-			return immutableObjectAssessmentInstance;
+			return ImmutableObjectAssessment.instance;
 		visitedValues.add( object );
 		Class<T> declaredClass = MyKit.getClass( object );
 		TypeAssessment typeAssessment = typeImmutabilityAssessor.assess( declaredClass );
@@ -95,9 +88,9 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	{
 		return switch( typeAssessment )
 			{
-				case ImmutableTypeAssessment ignore -> immutableObjectAssessmentInstance;
+				case ImmutableTypeAssessment ignore -> ImmutableObjectAssessment.instance;
 				//Class is extensible but otherwise immutable, and object is of this exact class and not of a further derived class, so object is immutable.
-				case ExtensibleProvisoryTypeAssessment ignore -> immutableObjectAssessmentInstance;
+				case ExtensibleProvisoryTypeAssessment ignore -> ImmutableObjectAssessment.instance;
 				case CompositeProvisoryTypeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment, visitedValues );
 				case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
 				case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> assessMultiReason( object, multiReasonAssessment, visitedValues );
@@ -110,7 +103,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 	private ObjectAssessment assessArray( Object arrayObject, ArrayMutableTypeAssessment mutableArrayAssessment )
 	{
 		if( Array.getLength( arrayObject ) == 0 )
-			return immutableObjectAssessmentInstance;
+			return ImmutableObjectAssessment.instance;
 		return new NonEmptyArrayMutableObjectAssessment( stringizer, arrayObject, mutableArrayAssessment );
 	}
 
@@ -127,7 +120,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 			assert elementAssessment instanceof ImmutableObjectAssessment;
 			index++;
 		}
-		return immutableObjectAssessmentInstance;
+		return ImmutableObjectAssessment.instance;
 	}
 
 	private ObjectAssessment assessInvariableArray( Object array, InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment arrayAssessment, Set<Object> visitedValues )
@@ -141,13 +134,13 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 				return new MutableArrayElementMutableObjectAssessment<>( stringizer, arrayAsIterable, arrayAssessment, index, element, mutableObjectAssessment );
 			index++;
 		}
-		return immutableObjectAssessmentInstance;
+		return ImmutableObjectAssessment.instance;
 	}
 
 	private ObjectAssessment assessSelfAssessable( SelfAssessableProvisoryTypeAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
 	{
 		if( selfAssessableObject.isImmutable() )
-			return immutableObjectAssessmentInstance;
+			return ImmutableObjectAssessment.instance;
 		return new SelfAssessedMutableObjectAssessment( stringizer, typeAssessment, selfAssessableObject );
 	}
 
@@ -164,7 +157,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 			if( !(objectAssessment instanceof ImmutableObjectAssessment) )
 				return objectAssessment;
 		}
-		return immutableObjectAssessmentInstance;
+		return ImmutableObjectAssessment.instance;
 	}
 
 	private ObjectAssessment assessAncestor( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryTypeAssessment ancestorTypeAssessment, Set<Object> visitedValues )
@@ -188,7 +181,7 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 		if( fieldValueAssessment instanceof MutableObjectAssessment mutableFieldValueAssessment )
 			return new MutableFieldValueMutableObjectAssessment( stringizer, object, provisoryTypeAssessment, provisoryFieldAssessment, mutableFieldValueAssessment );
 		assert fieldValueAssessment instanceof ImmutableObjectAssessment;
-		return immutableObjectAssessmentInstance;
+		return ImmutableObjectAssessment.instance;
 	}
 
 	private static Object getFieldValue( Object object, Field field )

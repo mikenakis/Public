@@ -41,7 +41,7 @@ public class T12_SuperficiallyImmutableJdkMap
 		try
 		{
 			assert assessor.mustBeImmutableAssertion( object );
-			assessment = ObjectImmutabilityAssessor.instance.immutableObjectAssessmentInstance;
+			assessment = ImmutableObjectAssessment.instance;
 		}
 		catch( ObjectMustBeImmutableException exception )
 		{

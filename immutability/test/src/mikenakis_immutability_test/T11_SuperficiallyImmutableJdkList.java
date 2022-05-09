@@ -40,7 +40,7 @@ public class T11_SuperficiallyImmutableJdkList
 		try
 		{
 			assert assessor.mustBeImmutableAssertion( object );
-			assessment = ObjectImmutabilityAssessor.instance.immutableObjectAssessmentInstance;
+			assessment = ImmutableObjectAssessment.instance;
 		}
 		catch( ObjectMustBeImmutableException exception )
 		{

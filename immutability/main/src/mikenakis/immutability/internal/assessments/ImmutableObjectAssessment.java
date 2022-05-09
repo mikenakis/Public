@@ -8,6 +8,8 @@ import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGenera
  */
 public final class ImmutableObjectAssessment extends ObjectAssessment
 {
+	public static final ImmutableObjectAssessment instance = new ImmutableObjectAssessment( Stringizer.defaultInstance );
+
 	public ImmutableObjectAssessment( Stringizer stringizer )
 	{
 		super( stringizer );
