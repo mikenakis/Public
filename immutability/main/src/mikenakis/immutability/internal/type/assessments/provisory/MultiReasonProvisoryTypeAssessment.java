@@ -2,7 +2,6 @@ package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.helpers.Helpers;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.util.List;
 

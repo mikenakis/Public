@@ -16,14 +16,14 @@ import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.mykit.collections.IdentityLinkedHashSet;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
@@ -92,7 +92,7 @@ public final class ObjectImmutabilityAssessor
 				case CompositeProvisoryTypeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment, visitedValues );
 				case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
 				case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> assessMultiReason( object, multiReasonAssessment, visitedValues );
-				case ProvisoryAncestorProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, provisoryAncestorAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
+				case ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, provisoryAncestorAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
 				case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, provisoryFieldAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 				case ArrayMutableTypeAssessment arrayAssessment -> assessArray( object, arrayAssessment );
 				case MutableTypeAssessment mutableTypeAssessment -> new OfMutableTypeMutableObjectAssessment( object, mutableTypeAssessment );
@@ -150,7 +150,7 @@ public final class ObjectImmutabilityAssessor
 		{
 			ObjectAssessment objectAssessment = switch( provisoryReason )
 				{
-					case ProvisoryAncestorProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, multiReasonProvisoryTypeAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
+					case ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, multiReasonProvisoryTypeAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
 					case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, multiReasonProvisoryTypeAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 					default -> throw new AssertionError( provisoryReason );
 				};

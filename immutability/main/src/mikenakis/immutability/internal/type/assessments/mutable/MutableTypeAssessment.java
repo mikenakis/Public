@@ -1,4 +1,6 @@
-package mikenakis.immutability.internal.type.assessments;
+package mikenakis.immutability.internal.type.assessments.mutable;
+
+import mikenakis.immutability.internal.type.assessments.NonImmutableTypeAssessment;
 
 /**
  * Signifies that a class is mutable.

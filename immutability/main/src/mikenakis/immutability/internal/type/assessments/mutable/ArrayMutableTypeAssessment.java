@@ -1,7 +1,5 @@
 package mikenakis.immutability.internal.type.assessments.mutable;
 
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
-
 /**
  * Signifies that a type is mutable because it is an array.
  */

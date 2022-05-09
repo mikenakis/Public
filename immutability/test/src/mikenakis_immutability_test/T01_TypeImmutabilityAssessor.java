@@ -8,13 +8,13 @@ import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableSuperclassMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
@@ -862,7 +862,7 @@ public class T01_TypeImmutabilityAssessor
 			{
 				assert assess( newAssessor(), ProvisoryClass.class ) instanceof ProvisoryFieldProvisoryTypeAssessment;
 				TypeAssessment assessment = assess( assessor, ClassExtendingProvisoryClass.class );
-				ProvisoryAncestorProvisoryTypeAssessment provisoryAncestorProvisoryTypeAssessment = (ProvisoryAncestorProvisoryTypeAssessment)assessment;
+				ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorProvisoryTypeAssessment = (ProvisorySuperclassProvisoryTypeAssessment)assessment;
 				ProvisoryFieldProvisoryTypeAssessment provisoryFieldProvisoryTypeAssessment = (ProvisoryFieldProvisoryTypeAssessment)provisoryAncestorProvisoryTypeAssessment.ancestorAssessment;
 				ProvisoryFieldTypeProvisoryFieldAssessment fieldAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)provisoryFieldProvisoryTypeAssessment.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "someInterface" );

@@ -1,7 +1,6 @@
 package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.type.Decomposer;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 
 /**

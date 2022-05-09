@@ -1,7 +1,6 @@
 package mikenakis.immutability.internal.type.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldAssessment;
 
 import java.util.List;

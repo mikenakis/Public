@@ -1,7 +1,6 @@
 package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.helpers.Helpers;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 /**
  * Signifies that a class is immutable in all regards except that it is extensible.

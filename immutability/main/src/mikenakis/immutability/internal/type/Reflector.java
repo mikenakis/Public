@@ -3,8 +3,8 @@ package mikenakis.immutability.internal.type;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.helpers.Helpers;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
@@ -14,7 +14,7 @@ import mikenakis.immutability.internal.type.assessments.mutable.MutableSuperclas
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
@@ -78,7 +78,7 @@ final class Reflector
 					mutableReasons.add( new MutableSuperclassMutableTypeAssessment( type, mutableTypeAssessment ) );
 					break;
 				case ProvisoryTypeAssessment provisoryTypeAssessment:
-					provisoryReasons.add( new ProvisoryAncestorProvisoryTypeAssessment( type, provisoryTypeAssessment ) );
+					provisoryReasons.add( new ProvisorySuperclassProvisoryTypeAssessment( type, provisoryTypeAssessment ) );
 					break;
 				default:
 					assert superclassAssessment instanceof ImmutableTypeAssessment || superclassAssessment instanceof UnderAssessmentTypeAssessment;

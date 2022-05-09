@@ -1,18 +1,17 @@
 package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.util.List;
 
 /**
- * Signifies that a class has a provisory ancestor.
+ * Signifies that a class has a provisory superclass.
  */
-public final class ProvisoryAncestorProvisoryTypeAssessment extends ProvisoryTypeAssessment
+public final class ProvisorySuperclassProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
 	public final ProvisoryTypeAssessment ancestorAssessment;
 
-	public ProvisoryAncestorProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
+	public ProvisorySuperclassProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
 	{
 		super( jvmClass );
 		this.ancestorAssessment = ancestorAssessment;

@@ -1,4 +1,6 @@
-package mikenakis.immutability.internal.type.assessments;
+package mikenakis.immutability.internal.type.assessments.provisory;
+
+import mikenakis.immutability.internal.type.assessments.NonImmutableTypeAssessment;
 
 /**
  * Signifies that a class cannot be conclusively classified as either mutable or immutable, so further runtime checks are necessary on instances of this class.

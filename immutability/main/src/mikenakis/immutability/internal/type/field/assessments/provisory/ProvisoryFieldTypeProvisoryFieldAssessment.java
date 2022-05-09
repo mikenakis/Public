@@ -1,7 +1,7 @@
 package mikenakis.immutability.internal.type.field.assessments.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 
 import java.lang.reflect.Field;
 import java.util.List;

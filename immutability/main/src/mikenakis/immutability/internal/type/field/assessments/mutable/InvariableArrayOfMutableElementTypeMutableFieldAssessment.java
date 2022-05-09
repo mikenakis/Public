@@ -1,7 +1,7 @@
 package mikenakis.immutability.internal.type.field.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
 
 import java.lang.reflect.Field;
 import java.util.List;

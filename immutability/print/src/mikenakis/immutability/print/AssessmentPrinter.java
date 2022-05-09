@@ -14,8 +14,8 @@ import mikenakis.immutability.internal.assessments.mutable.NonEmptyArrayMutableO
 import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MultiReasonMutableTypeAssessment;
@@ -25,7 +25,7 @@ import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvi
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
@@ -161,7 +161,7 @@ public final class AssessmentPrinter
 			case ExtensibleProvisoryTypeAssessment assessment -> stringBuilder.append( " because it " ).append( getTypeAssessmentModeName( assessment.mode ) ).append( " an extensible class" );
 			case InterfaceProvisoryTypeAssessment ignore -> stringBuilder.append( " because it is an interface" );
 			case MultiReasonProvisoryTypeAssessment ignore -> stringBuilder.append( " due to multiple reasons" );
-			case ProvisoryAncestorProvisoryTypeAssessment assessment -> stringBuilder.append( " because it extends provisory type " ).append( stringizer.stringizeClassName( assessment.ancestorAssessment.type ) );
+			case ProvisorySuperclassProvisoryTypeAssessment assessment -> stringBuilder.append( " because it extends provisory type " ).append( stringizer.stringizeClassName( assessment.ancestorAssessment.type ) );
 			case ProvisoryFieldProvisoryTypeAssessment assessment -> stringBuilder.append( " because field " ).append( stringizer.stringizeFieldName( assessment.fieldAssessment.field ) ).append( " is provisory" );
 			case SelfAssessableProvisoryTypeAssessment ignore -> stringBuilder.append( " because instances of this type are self-assessable" );
 			default -> throw new AssertionError( provisoryTypeAssessment );

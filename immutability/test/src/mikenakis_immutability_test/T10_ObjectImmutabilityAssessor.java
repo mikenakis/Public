@@ -14,7 +14,7 @@ import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableO
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
-import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
