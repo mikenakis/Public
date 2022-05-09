@@ -1,11 +1,10 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.AssessmentPrinter;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.annotations.InvariableArray;
-import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
@@ -74,7 +73,7 @@ public class T01_TypeImmutabilityAssessor
 	{
 		TypeAssessment assessment = assessor.assess( type );
 		System.out.println( "assessment for type " + TestStringizer.instance.stringizeClassName( type ) + ":" );
-		TextTree.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
+		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 

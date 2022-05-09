@@ -1,10 +1,10 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.AssessmentPrinter;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
-import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
@@ -12,7 +12,6 @@ import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMuta
 import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
@@ -58,7 +57,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		TextTree.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
+		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 

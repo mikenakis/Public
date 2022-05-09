@@ -1,8 +1,7 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.internal.assessments.Assessment;
+import mikenakis.immutability.AssessmentPrinter;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
@@ -63,7 +62,7 @@ public class T02_FamousClasses
 	{
 		TypeAssessment assessment = assessor.assess( type );
 		System.out.println( "assessment for type " + TestStringizer.instance.stringizeClassName( type ) + ":" );
-		TextTree.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
+		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 

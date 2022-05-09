@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.mykit;
+package mikenakis.immutability;
 
 import java.util.Iterator;
 import java.util.function.Consumer;

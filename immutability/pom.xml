@@ -13,6 +13,7 @@
 	<modules>
 		<module>interface</module>
 		<module>main</module>
+		<module>print</module>
 		<module>test</module>
 	</modules>
 

@@ -1,14 +1,13 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.AssessmentPrinter;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
-import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
@@ -46,7 +45,7 @@ public class T11_SuperficiallyImmutableJdkList
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		TextTree.<Assessment>tree( assessment, a -> a.children(), a -> a.toString(), s -> System.out.println( "    " + s ) );
+		new AssessmentPrinter( TestStringizer.instance ).getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
 
