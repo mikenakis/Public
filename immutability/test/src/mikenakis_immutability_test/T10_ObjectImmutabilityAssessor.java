@@ -9,7 +9,6 @@ import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.MultiReasonMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
@@ -17,10 +16,10 @@ import mikenakis.immutability.internal.mykit.TextTree;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -172,12 +171,9 @@ public class T10_ObjectImmutabilityAssessor
 			{
 				var object = new ClassWithInvariableFieldOfInterfaceTypeWithMutableValue();
 				ObjectAssessment assessment = assess( assessor, object );
-				assert assessment instanceof MultiReasonMutableObjectAssessment;
-				MultiReasonMutableObjectAssessment multiReasonAssessment = (MultiReasonMutableObjectAssessment)assessment;
-				assert multiReasonAssessment.object == object;
-				assert multiReasonAssessment.typeAssessment.type == ClassWithInvariableFieldOfInterfaceTypeWithMutableValue.class;
-				assert multiReasonAssessment.mutableReasons.size() == 1;
-				MutableFieldValueMutableObjectAssessment mutableFieldValueAssessment = (MutableFieldValueMutableObjectAssessment)multiReasonAssessment.mutableReasons.get( 0 );
+				assert assessment instanceof MutableFieldValueMutableObjectAssessment;
+				MutableFieldValueMutableObjectAssessment mutableFieldValueAssessment = (MutableFieldValueMutableObjectAssessment)assessment;
+				assert mutableFieldValueAssessment.object == object;
 				ProvisoryFieldAssessment provisoryFieldAssessment = mutableFieldValueAssessment.provisoryFieldAssessment;
 				assert provisoryFieldAssessment.field.getName().equals( "mutableField" );
 				ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)provisoryFieldAssessment;

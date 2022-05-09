@@ -4,25 +4,24 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
-import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
- * Signifies that an object is mutable due to multiple reasons.
+ * Signifies that an object is mutable because its ancestor is mutable.
  */
-public final class MultiReasonMutableObjectAssessment extends MutableObjectAssessment
+public final class MutableAncestorMutableObjectAssessment extends MutableObjectAssessment
 {
-	public final MultiReasonProvisoryTypeAssessment typeAssessment;
-	public final List<MutableObjectAssessment> mutableReasons;
+	public final ProvisoryTypeAssessment typeAssessment;
+	public final MutableObjectAssessment ancestorAssessment;
 
-	public MultiReasonMutableObjectAssessment( Stringizer stringizer, Object object, MultiReasonProvisoryTypeAssessment typeAssessment, //
-		List<MutableObjectAssessment> mutableReasons )
+	public MutableAncestorMutableObjectAssessment( Stringizer stringizer, Object object, ProvisoryTypeAssessment typeAssessment, //
+		MutableObjectAssessment ancestorAssessment )
 	{
 		super( stringizer, object );
 		this.typeAssessment = typeAssessment;
-		this.mutableReasons = mutableReasons;
+		this.ancestorAssessment = ancestorAssessment;
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
@@ -33,6 +32,6 @@ public final class MultiReasonMutableObjectAssessment extends MutableObjectAsses
 
 	@Override public List<? extends Assessment> children()
 	{
-		return Stream.concat( Stream.of( typeAssessment ), mutableReasons.stream() ).toList();
+		return List.of( typeAssessment, ancestorAssessment );
 	}
 }

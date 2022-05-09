@@ -4,11 +4,11 @@ import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableAncestorMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableArrayElementMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.NonEmptyArrayMutableObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.MultiReasonMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.OfMutableTypeMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.helpers.IterableOnArrayObject;
@@ -21,21 +21,18 @@ import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -156,32 +153,30 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 
 	private ObjectAssessment assessMultiReason( Object object, MultiReasonProvisoryTypeAssessment multiReasonProvisoryTypeAssessment, Set<Object> visitedValues )
 	{
-		List<MutableObjectAssessment> assessments = new ArrayList<>();
 		for( ProvisoryTypeAssessment provisoryReason : multiReasonProvisoryTypeAssessment.provisoryReasons )
 		{
-			Optional<MutableObjectAssessment> reasonMutableObjectAssessment = switch( provisoryReason )
+			ObjectAssessment objectAssessment = switch( provisoryReason )
 				{
-					case ProvisoryAncestorProvisoryTypeAssessment hasProvisoryAncestorReasonAssessment -> assessAncestor( object, hasProvisoryAncestorReasonAssessment.ancestorAssessment, visitedValues );
-					case ProvisoryFieldProvisoryTypeAssessment hasProvisoryFieldReasonAssessment -> assessField( object, hasProvisoryFieldReasonAssessment.fieldAssessment, visitedValues );
+					case ProvisoryAncestorProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, multiReasonProvisoryTypeAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
+					case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, multiReasonProvisoryTypeAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 					default -> throw new AssertionError( provisoryReason );
 				};
-			reasonMutableObjectAssessment.ifPresent( r -> assessments.add( r ) );
+			if( !(objectAssessment instanceof ImmutableObjectAssessment) )
+				return objectAssessment;
 		}
-		if( !assessments.isEmpty() )
-			return new MultiReasonMutableObjectAssessment( stringizer, object, multiReasonProvisoryTypeAssessment, assessments );
 		return immutableObjectAssessmentInstance;
 	}
 
-	private Optional<MutableObjectAssessment> assessAncestor( Object object, ProvisoryTypeAssessment ancestorTypeAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessAncestor( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryTypeAssessment ancestorTypeAssessment, Set<Object> visitedValues )
 	{
 		ObjectAssessment ancestorObjectAssessment = assessRecursively( object, ancestorTypeAssessment, visitedValues );
 		if( ancestorObjectAssessment instanceof MutableObjectAssessment mutableAncestorAssessment )
-			return Optional.of( mutableAncestorAssessment );
+			return new MutableAncestorMutableObjectAssessment( stringizer, object, provisoryTypeAssessment, mutableAncestorAssessment );
 		assert ancestorObjectAssessment instanceof ImmutableObjectAssessment;
-		return Optional.empty();
+		return ancestorObjectAssessment;
 	}
 
-	private Optional<MutableObjectAssessment> assessField( Object object, ProvisoryFieldAssessment provisoryFieldAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessField( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryFieldAssessment provisoryFieldAssessment, Set<Object> visitedValues )
 	{
 		Object fieldValue = getFieldValue( object, provisoryFieldAssessment.field );
 		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment )
@@ -191,9 +186,9 @@ public final class ObjectImmutabilityAssessor extends Stringizable
 				default -> throw new AssertionError(); //TODO: make assessments sealed, so that we do not need default clauses!
 			};
 		if( fieldValueAssessment instanceof MutableObjectAssessment mutableFieldValueAssessment )
-			return Optional.of( new MutableFieldValueMutableObjectAssessment( stringizer, object, provisoryFieldAssessment, mutableFieldValueAssessment ) );
-		assert fieldValueAssessment == null || fieldValueAssessment instanceof ImmutableObjectAssessment;
-		return Optional.empty();
+			return new MutableFieldValueMutableObjectAssessment( stringizer, object, provisoryTypeAssessment, provisoryFieldAssessment, mutableFieldValueAssessment );
+		assert fieldValueAssessment instanceof ImmutableObjectAssessment;
+		return immutableObjectAssessmentInstance;
 	}
 
 	private static Object getFieldValue( Object object, Field field )
