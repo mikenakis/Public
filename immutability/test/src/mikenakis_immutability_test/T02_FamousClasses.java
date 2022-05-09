@@ -1,6 +1,6 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.AssessmentPrinter;
+import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
@@ -66,7 +66,7 @@ public class T02_FamousClasses
 		return assessment;
 	}
 
-	private final TypeImmutabilityAssessor assessor = TypeImmutabilityAssessor.create( TestStringizer.instance );
+	private final TypeImmutabilityAssessor assessor = TypeImmutabilityAssessor.create();
 
 	@Test public void famous_immutable_classes_are_immutable()
 	{

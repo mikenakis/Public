@@ -1,8 +1,6 @@
 package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 
@@ -15,17 +13,11 @@ public final class ProvisoryFieldProvisoryTypeAssessment extends ProvisoryTypeAs
 {
 	public final ProvisoryFieldAssessment fieldAssessment;
 
-	public ProvisoryFieldProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, ProvisoryFieldAssessment fieldAssessment )
+	public ProvisoryFieldProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryFieldAssessment fieldAssessment )
 	{
-		super( stringizer, jvmClass );
+		super( jvmClass );
 		this.fieldAssessment = fieldAssessment;
 	}
 
 	@Override public List<? extends Assessment> children() { return List.of( fieldAssessment ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because field " ).append( Stringizer.stringizeFieldName( fieldAssessment.field ) ).append( " is provisory" );
-	}
 }

@@ -2,8 +2,6 @@ package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.helpers.Helpers;
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.util.List;
@@ -15,9 +13,9 @@ public final class MultiReasonProvisoryTypeAssessment extends ProvisoryTypeAsses
 {
 	public final List<ProvisoryTypeAssessment> provisoryReasons;
 
-	public MultiReasonProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, List<ProvisoryTypeAssessment> provisoryReasons )
+	public MultiReasonProvisoryTypeAssessment( Class<?> jvmClass, List<ProvisoryTypeAssessment> provisoryReasons )
 	{
-		super( stringizer, jvmClass );
+		super( jvmClass );
 		assert Helpers.isClass( jvmClass ); //the type must be a class; there is a different assessment for interfaces.
 		this.provisoryReasons = provisoryReasons;
 	}
@@ -25,11 +23,5 @@ public final class MultiReasonProvisoryTypeAssessment extends ProvisoryTypeAsses
 	@Override public List<? extends Assessment> children()
 	{
 		return provisoryReasons;
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " due to multiple reasons" );
 	}
 }

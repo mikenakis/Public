@@ -3,8 +3,6 @@ package mikenakis.immutability.internal.type.field.assessments.provisory;
 import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.lang.reflect.Field;
@@ -20,17 +18,11 @@ public final class InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment
 {
 	public final ProvisoryTypeAssessment arrayElementTypeAssessment;
 
-	public InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( Stringizer stringizer, Field field, ProvisoryTypeAssessment arrayElementTypeAssessment )
+	public InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( Field field, ProvisoryTypeAssessment arrayElementTypeAssessment )
 	{
-		super( stringizer, field );
+		super( field );
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;
 	}
 
 	@Override public List<? extends Assessment> children() { return List.of( arrayElementTypeAssessment ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is an invariable array of provisory element type " ).append( stringizer.stringizeClassName( arrayElementTypeAssessment.type ) );
-	}
 }

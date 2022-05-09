@@ -1,8 +1,6 @@
 package mikenakis.immutability.internal.type.assessments.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 
 import java.util.List;
@@ -14,17 +12,11 @@ public final class ProvisoryAncestorProvisoryTypeAssessment extends ProvisoryTyp
 {
 	public final ProvisoryTypeAssessment ancestorAssessment;
 
-	public ProvisoryAncestorProvisoryTypeAssessment( Stringizer stringizer, Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
+	public ProvisoryAncestorProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
 	{
-		super( stringizer, jvmClass );
+		super( jvmClass );
 		this.ancestorAssessment = ancestorAssessment;
 	}
 
 	@Override public List<? extends Assessment> children() { return List.of( ancestorAssessment ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it extends provisory type " ).append( stringizer.stringizeClassName( ancestorAssessment.type ) );
-	}
 }

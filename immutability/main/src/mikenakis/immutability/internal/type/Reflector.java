@@ -2,21 +2,20 @@ package mikenakis.immutability.internal.type;
 
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.internal.helpers.Helpers;
-import mikenakis.immutability.internal.helpers.Stringizable;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldsMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.mutable.MutableSuperclassMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryAncestorProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.SelfAssessableAnnotationIsOnlyApplicableToClassException;
 import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustNotBeImmutableException;
 import mikenakis.immutability.internal.type.field.FieldImmutabilityAssessor;
@@ -36,14 +35,13 @@ import java.util.List;
  *
  * @author michael.gr
  */
-final class Reflector extends Stringizable
+final class Reflector
 {
 	private final TypeImmutabilityAssessor typeImmutabilityAssessor;
 	private final FieldImmutabilityAssessor fieldImmutabilityAssessor;
 
 	Reflector( TypeImmutabilityAssessor typeImmutabilityAssessor )
 	{
-		super( typeImmutabilityAssessor.stringizer );
 		this.typeImmutabilityAssessor = typeImmutabilityAssessor;
 		fieldImmutabilityAssessor = new FieldImmutabilityAssessor( typeImmutabilityAssessor );
 	}
@@ -55,7 +53,7 @@ final class Reflector extends Stringizable
 		{
 			assert Helpers.isClass( type ) : new SelfAssessableAnnotationIsOnlyApplicableToClassException( type );
 			assert !(assessment instanceof ImmutableTypeAssessment) : new SelfAssessableClassMustNotBeImmutableException( type );
-			return new SelfAssessableProvisoryTypeAssessment( stringizer, type );
+			return new SelfAssessableProvisoryTypeAssessment( type );
 		}
 		return assessment;
 	}
@@ -63,9 +61,9 @@ final class Reflector extends Stringizable
 	private TypeAssessment assess0( Class<?> type )
 	{
 		if( type.isArray() )
-			return new ArrayMutableTypeAssessment( stringizer, type );
+			return new ArrayMutableTypeAssessment( type );
 		if( type.isInterface() )
-			return new InterfaceProvisoryTypeAssessment( stringizer, type );
+			return new InterfaceProvisoryTypeAssessment( type );
 
 		List<ProvisoryTypeAssessment> provisoryReasons = new ArrayList<>();
 		Class<?> superclass = type.getSuperclass();
@@ -94,7 +92,7 @@ final class Reflector extends Stringizable
 			{
 				case ProvisoryFieldAssessment provisoryFieldAssessment:
 				{
-					provisoryReasons.add( new ProvisoryFieldProvisoryTypeAssessment( stringizer, type, provisoryFieldAssessment ) );
+					provisoryReasons.add( new ProvisoryFieldProvisoryTypeAssessment( type, provisoryFieldAssessment ) );
 					break;
 				}
 				case MutableFieldAssessment mutableFieldAssessment:
@@ -108,13 +106,13 @@ final class Reflector extends Stringizable
 		}
 
 		if( !mutableFieldAssessments.isEmpty() )
-			return new MutableFieldsMutableTypeAssessment( stringizer, type, mutableFieldAssessments );
+			return new MutableFieldsMutableTypeAssessment( type, mutableFieldAssessments );
 
 		if( !provisoryReasons.isEmpty() )
-			return new MultiReasonProvisoryTypeAssessment( stringizer, type, provisoryReasons );
+			return new MultiReasonProvisoryTypeAssessment( type, provisoryReasons );
 
 		if( Helpers.isExtensible( type ) )
-			return new ExtensibleProvisoryTypeAssessment( stringizer, TypeAssessment.Mode.Assessed, type );
+			return new ExtensibleProvisoryTypeAssessment( TypeAssessment.Mode.Assessed, type );
 
 		return typeImmutabilityAssessor.immutableClassAssessmentInstance;
 	}
@@ -124,9 +122,9 @@ final class Reflector extends Stringizable
 		TypeAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
 		return switch( superclassAssessment )
 		{
-			case MutableTypeAssessment mutableTypeAssessment -> new MutableSuperclassMutableTypeAssessment( stringizer, type, mutableTypeAssessment );
+			case MutableTypeAssessment mutableTypeAssessment -> new MutableSuperclassMutableTypeAssessment( type, mutableTypeAssessment );
 			case ExtensibleProvisoryTypeAssessment ignore -> typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
-			case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> new ProvisoryAncestorProvisoryTypeAssessment( stringizer, type, multiReasonAssessment );
+			case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> new ProvisoryAncestorProvisoryTypeAssessment( type, multiReasonAssessment );
 			case UnderAssessmentTypeAssessment ignore -> ignore;
 			case ImmutableTypeAssessment immutableTypeAssessment ->
 				//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
@@ -136,7 +134,7 @@ final class Reflector extends Stringizable
 				//Cannot happen, because the supertype of a class cannot be an interface.
 				//DoNotCover
 				throw new AssertionError( interfaceAssessment );
-			case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> new ProvisoryAncestorProvisoryTypeAssessment( stringizer, type, selfAssessableAssessment );
+			case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> new ProvisoryAncestorProvisoryTypeAssessment( type, selfAssessableAssessment );
 			default ->
 				//DoNotCover
 				throw new AssertionError( superclassAssessment );

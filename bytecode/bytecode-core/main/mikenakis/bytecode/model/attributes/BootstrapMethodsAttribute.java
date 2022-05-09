@@ -36,7 +36,7 @@ public final class BootstrapMethodsAttribute extends KnownAttribute
 		{
 			MethodHandleConstant methodHandleConstant = constantPool.getConstant( bufferReader.readUnsignedShort() ).asMethodHandleConstant();
 			int argumentConstantCount = bufferReader.readUnsignedShort();
-			assert argumentConstantCount > 0;
+			//assert argumentConstantCount > 0; has been observed to be zero in the case of a 'typeSwitch' that contained only a default clause.
 			List<Constant> argumentConstants = new ArrayList<>( argumentConstantCount );
 			for( int j = 0; j < argumentConstantCount; j++ )
 			{

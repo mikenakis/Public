@@ -2,8 +2,6 @@ package mikenakis.immutability.internal.type;
 
 import mikenakis.debug.Debug;
 import mikenakis.immutability.internal.helpers.Helpers;
-import mikenakis.immutability.internal.helpers.Stringizable;
-import mikenakis.immutability.internal.helpers.Stringizer;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
@@ -21,29 +19,30 @@ import java.util.Map;
  *
  * @author michael.gr
  */
-public final class TypeImmutabilityAssessor extends Stringizable
+public final class TypeImmutabilityAssessor
 {
-	public static final TypeImmutabilityAssessor instance = create( Stringizer.defaultInstance );
+	public static final TypeImmutabilityAssessor instance = create();
 
 	/**
-	 * Note: normally, you want to use the instance field instead of this static factory method.
+	 * DO NOT USE; FOR INTERNAL USE ONLY.
+	 *
+	 * Note: normally, you want to use the {@link #instance} field instead of this static factory method.
 	 * This static factory method is public only so as to allow the tests to create their own instances for testing purposes.
 	 */
-	public static TypeImmutabilityAssessor create( Stringizer stringizer )
+	public static TypeImmutabilityAssessor create()
 	{
-		TypeImmutabilityAssessor assessor = new TypeImmutabilityAssessor( stringizer );
+		TypeImmutabilityAssessor assessor = new TypeImmutabilityAssessor();
 		DefaultPreassessments.apply( assessor );
 		return assessor;
 	}
 
-	public final ImmutableTypeAssessment immutableClassAssessmentInstance = new ImmutableTypeAssessment( stringizer );
-	private final UnderAssessmentTypeAssessment underAssessmentInstance = new UnderAssessmentTypeAssessment( stringizer );
+	public final ImmutableTypeAssessment immutableClassAssessmentInstance = new ImmutableTypeAssessment();
+	private final UnderAssessmentTypeAssessment underAssessmentInstance = new UnderAssessmentTypeAssessment();
 	private final Map<Class<?>,TypeAssessment> assessmentsByType = new HashMap<>();
 	private final Reflector reflector = new Reflector( this );
 
-	TypeImmutabilityAssessor( Stringizer stringizer )
+	TypeImmutabilityAssessor()
 	{
-		super( stringizer );
 	}
 
 	public void addImmutablePreassessment( Class<?> jvmClass )

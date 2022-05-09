@@ -1,7 +1,5 @@
 package mikenakis.immutability.internal.type.assessments.mutable;
 
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 
 /**
@@ -9,15 +7,9 @@ import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
  */
 public final class ArrayMutableTypeAssessment extends MutableTypeAssessment
 {
-	public ArrayMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass )
+	public ArrayMutableTypeAssessment( Class<?> jvmClass )
 	{
-		super( stringizer, jvmClass );
+		super( jvmClass );
 		assert jvmClass.isArray();
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is an array class" );
 	}
 }

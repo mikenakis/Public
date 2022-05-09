@@ -1,7 +1,7 @@
 package mikenakis_immutability_test;
 
 import mikenakis.immutability.ObjectImmutabilityAssessor;
-import mikenakis.immutability.internal.helpers.Stringizer;
+import mikenakis.immutability.print.Stringizer;
 
 final class TestStringizer extends Stringizer
 {

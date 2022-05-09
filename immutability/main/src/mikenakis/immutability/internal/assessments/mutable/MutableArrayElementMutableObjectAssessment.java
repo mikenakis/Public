@@ -2,8 +2,6 @@ package mikenakis.immutability.internal.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
 
 import java.util.List;
@@ -19,10 +17,10 @@ public final class MutableArrayElementMutableObjectAssessment<E> extends Mutable
 	public final E mutableElement;
 	public final MutableObjectAssessment elementAssessment;
 
-	public MutableArrayElementMutableObjectAssessment( Stringizer stringizer, Iterable<E> iterableArrayWrapper, InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment typeAssessment, //
+	public MutableArrayElementMutableObjectAssessment( Iterable<E> iterableArrayWrapper, InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment typeAssessment, //
 		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
 	{
-		super( stringizer, iterableArrayWrapper );
+		super( iterableArrayWrapper );
 		this.iterableArrayWrapper = iterableArrayWrapper;
 		this.typeAssessment = typeAssessment;
 		this.mutableElementIndex = mutableElementIndex;
@@ -31,12 +29,4 @@ public final class MutableArrayElementMutableObjectAssessment<E> extends Mutable
 	}
 
 	@Override public Iterable<Assessment> children() { return List.of( typeAssessment, elementAssessment ); }
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it is an invariable array" );
-		stringBuilder.append( " and element " ).append( stringizer.stringizeObjectIdentity( mutableElement ) ).append( " at index " ).append( mutableElementIndex );
-		stringBuilder.append( " is mutable" );
-	}
 }

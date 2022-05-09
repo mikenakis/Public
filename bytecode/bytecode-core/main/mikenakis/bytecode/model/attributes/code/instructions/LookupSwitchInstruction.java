@@ -21,7 +21,7 @@ public final class LookupSwitchInstruction extends Instruction
 		bufferReader.skip( Helpers.padding( bufferReader.getPosition() ) );
 		int defaultInstructionOffset = bufferReader.readInt();
 		int count = bufferReader.readInt();
-		assert count > 0;
+		//assert count > 0; it can actually be zero, if a 'typeSwitch' (and possibly other types of switch) only has a default statement!
 		LookupSwitchInstruction instruction = of( count );
 		locationMap.setRelativeTargetInstruction( instruction, defaultInstructionOffset, instruction::setDefaultInstruction );
 		for( int index = 0; index < count; index++ )

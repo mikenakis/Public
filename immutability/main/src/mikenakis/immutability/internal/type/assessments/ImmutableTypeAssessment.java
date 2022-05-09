@@ -1,7 +1,5 @@
 package mikenakis.immutability.internal.type.assessments;
 
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 
 /**
@@ -14,13 +12,7 @@ import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
  */
 public final class ImmutableTypeAssessment extends TypeAssessment
 {
-	public ImmutableTypeAssessment( Stringizer stringizer )
+	public ImmutableTypeAssessment()
 	{
-		super( stringizer );
-	}
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		stringBuilder.append( "immutable" );
 	}
 }

@@ -1,6 +1,6 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.AssessmentPrinter;
+import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
@@ -28,7 +28,7 @@ public class T11_SuperficiallyImmutableJdkList
 
 	private static ObjectImmutabilityAssessor newAssessor()
 	{
-		TypeImmutabilityAssessor classImmutabilityAssessor = TypeImmutabilityAssessor.create( TestStringizer.instance );
+		TypeImmutabilityAssessor classImmutabilityAssessor = TypeImmutabilityAssessor.create();
 		return new ObjectImmutabilityAssessor( classImmutabilityAssessor );
 	}
 

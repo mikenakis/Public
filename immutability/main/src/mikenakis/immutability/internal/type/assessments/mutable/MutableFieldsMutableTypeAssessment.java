@@ -1,8 +1,6 @@
 package mikenakis.immutability.internal.type.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.helpers.Stringizer;
-import mikenakis.immutability.internal.mykit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.immutability.internal.type.assessments.MutableTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldAssessment;
 
@@ -15,17 +13,11 @@ public class MutableFieldsMutableTypeAssessment extends MutableTypeAssessment
 {
 	public final List<MutableFieldAssessment> mutableFieldAssessments;
 
-	public MutableFieldsMutableTypeAssessment( Stringizer stringizer, Class<?> jvmClass, List<MutableFieldAssessment> mutableFieldAssessments )
+	public MutableFieldsMutableTypeAssessment( Class<?> jvmClass, List<MutableFieldAssessment> mutableFieldAssessments )
 	{
-		super( stringizer, jvmClass );
+		super( jvmClass );
 		this.mutableFieldAssessments = mutableFieldAssessments;
 	}
 
 	@Override public Iterable<? extends Assessment> children() { return mutableFieldAssessments; }
-
-	@ExcludeFromJacocoGeneratedReport @Override protected void appendToStringBuilder( StringBuilder stringBuilder )
-	{
-		super.appendToStringBuilder( stringBuilder );
-		stringBuilder.append( " because it has mutable fields" );
-	}
 }

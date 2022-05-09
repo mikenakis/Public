@@ -1,6 +1,6 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.AssessmentPrinter;
+import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.annotations.InvariableArray;
@@ -66,7 +66,7 @@ public class T01_TypeImmutabilityAssessor
 
 	private static TypeImmutabilityAssessor newAssessor()
 	{
-		return TypeImmutabilityAssessor.create( TestStringizer.instance );
+		return TypeImmutabilityAssessor.create();
 	}
 
 	private static TypeAssessment assess( TypeImmutabilityAssessor assessor, Class<?> type )

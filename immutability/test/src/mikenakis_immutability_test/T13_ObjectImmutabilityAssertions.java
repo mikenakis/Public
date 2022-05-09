@@ -24,7 +24,7 @@ public class T13_ObjectImmutabilityAssertions
 			throw new AssertionError();
 	}
 
-	private final ObjectImmutabilityAssessor assessor = new ObjectImmutabilityAssessor( TypeImmutabilityAssessor.create( TestStringizer.instance ) );
+	private final ObjectImmutabilityAssessor assessor = new ObjectImmutabilityAssessor( TypeImmutabilityAssessor.create() );
 
 	@Test public void immutability_assertion_on_java_lang_Class_passes()
 	{
