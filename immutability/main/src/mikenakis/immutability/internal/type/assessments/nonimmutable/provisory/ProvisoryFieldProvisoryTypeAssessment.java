@@ -1,7 +1,7 @@
 package mikenakis.immutability.internal.type.assessments.nonimmutable.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import java.util.List;
  */
 public final class ProvisoryFieldProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
-	public final ProvisoryFieldAssessment fieldAssessment;
+	public final ProvisoryFieldTypeProvisoryFieldAssessment fieldAssessment;
 
-	public ProvisoryFieldProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryFieldAssessment fieldAssessment )
+	public ProvisoryFieldProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryFieldTypeProvisoryFieldAssessment fieldAssessment )
 	{
 		super( jvmClass );
 		this.fieldAssessment = fieldAssessment;

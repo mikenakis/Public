@@ -26,7 +26,6 @@ import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotBe
 import mikenakis.immutability.internal.type.exceptions.PreassessedTypeMustBeClassException;
 import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustNotBeImmutableException;
 import mikenakis.immutability.internal.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 import mikenakis.immutability.print.AssessmentPrinter;
 import org.junit.Test;
 
@@ -138,7 +137,6 @@ public class T10_ObjectImmutabilityAssessor
 				var mutableFieldValueMutableObjectAssessment = (MutableFieldValueMutableObjectAssessment)mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment;
 				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment instanceof MutableClassMutableObjectAssessment;
 				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment.object() == object.provisoryFieldAssessedAsMutable;
-				assert mutableFieldValueMutableObjectAssessment.provisoryFieldAssessment instanceof ProvisoryFieldTypeProvisoryFieldAssessment;
 			}
 		}.run();
 	}
@@ -216,9 +214,8 @@ public class T10_ObjectImmutabilityAssessor
 				assert mutableFieldValueAssessment.fieldValueAssessment.typeAssessment().type == ArrayList.class;
 				assert mutableFieldValueAssessment.fieldValueAssessment instanceof MutableClassMutableObjectAssessment;
 				assert mutableFieldValueAssessment.provisoryFieldAssessment.field.getName().equals( "mutableField" );
-				ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)mutableFieldValueAssessment.provisoryFieldAssessment;
-				assert provisoryFieldTypeAssessment.provisoryTypeAssessment.type == List.class;
-				assert provisoryFieldTypeAssessment.provisoryTypeAssessment instanceof InterfaceProvisoryTypeAssessment;
+				assert mutableFieldValueAssessment.provisoryFieldAssessment.provisoryTypeAssessment.type == List.class;
+				assert mutableFieldValueAssessment.provisoryFieldAssessment.provisoryTypeAssessment instanceof InterfaceProvisoryTypeAssessment;
 			}
 		}.run();
 	}

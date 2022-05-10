@@ -24,7 +24,7 @@ import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.ImmutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.UnderAssessmentFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -92,7 +92,7 @@ final class Reflector
 			FieldAssessment fieldAssessment = fieldImmutabilityAssessor.assessField( field );
 			switch( fieldAssessment )
 			{
-				case ProvisoryFieldAssessment provisoryFieldAssessment:
+				case ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldAssessment:
 					provisoryReasons.add( new ProvisoryFieldProvisoryTypeAssessment( type, provisoryFieldAssessment ) );
 					break;
 				case MutableFieldAssessment mutableFieldAssessment:

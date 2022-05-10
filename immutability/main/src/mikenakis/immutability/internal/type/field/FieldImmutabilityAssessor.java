@@ -4,7 +4,9 @@ import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.ArrayOfMutableElementTypeMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ArrayOfProvisoryElementTypeProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.UnderAssessmentTypeAssessment;
@@ -17,10 +19,8 @@ import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.ImmutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.UnderAssessmentFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.ArrayMutableFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.mutable.InvariableArrayOfMutableElementTypeMutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.MutableFieldTypeMutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.VariableMutableFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Field;
@@ -41,7 +41,8 @@ public class FieldImmutabilityAssessor
 	{
 		assert !Modifier.isStatic( field.getModifiers() );
 		boolean isInvariableField = isInvariableField( field );
-		boolean isArray = field.getType().isArray();
+		Class<?> fieldType = field.getType();
+		boolean isArray = fieldType.isArray();
 		boolean isInvariableArray = field.isAnnotationPresent( InvariableArray.class );
 		if( !isArray && isInvariableArray )
 			throw new NonArrayFieldMayNotBeAnnotatedInvariableArrayException( field );
@@ -56,18 +57,18 @@ public class FieldImmutabilityAssessor
 			assert isArray && isInvariableArray;
 			if( !Modifier.isPrivate( field.getModifiers() ) )
 				throw new AnnotatedInvariableArrayFieldMustBePrivateException( field );
-			TypeAssessment arrayElementTypeAssessment = typeImmutabilityAssessor.assess( field.getType().getComponentType() );
+			TypeAssessment arrayElementTypeAssessment = typeImmutabilityAssessor.assess( fieldType.getComponentType() );
 			return switch( arrayElementTypeAssessment )
 				{
 					case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
-					case ProvisoryTypeAssessment provisoryTypeAssessment -> new InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment( field, provisoryTypeAssessment );
+					case ProvisoryTypeAssessment provisoryTypeAssessment -> new ProvisoryFieldTypeProvisoryFieldAssessment( field, new ArrayOfProvisoryElementTypeProvisoryTypeAssessment( fieldType, provisoryTypeAssessment ) );
 					case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
-					case MutableTypeAssessment mutableTypeAssessment -> new InvariableArrayOfMutableElementTypeMutableFieldAssessment( field, mutableTypeAssessment );
+					case MutableTypeAssessment mutableTypeAssessment -> new MutableFieldTypeMutableFieldAssessment( field, new ArrayOfMutableElementTypeMutableTypeAssessment( fieldType, mutableTypeAssessment ) );
 					//DoNotCover
 					default -> throw new AssertionError( arrayElementTypeAssessment );
 				};
 		}
-		TypeAssessment fieldTypeAssessment = typeImmutabilityAssessor.assess( field.getType() );
+		TypeAssessment fieldTypeAssessment = typeImmutabilityAssessor.assess( fieldType );
 		return switch( fieldTypeAssessment )
 			{
 				case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;

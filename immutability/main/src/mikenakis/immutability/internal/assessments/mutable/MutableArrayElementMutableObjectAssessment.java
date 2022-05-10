@@ -22,7 +22,7 @@ public final class MutableArrayElementMutableObjectAssessment extends MutableObj
 	{
 		assert object.getClass().isArray();
 		assert Array.get( object, mutableElementIndex ) == elementAssessment.object();
-		//assert typeAssessment.type == object.getClass(); TODO: this does not work because the wrong object is being passed in 'typeAssessment'.
+		assert typeAssessment.type == object.getClass();
 		this.object = object;
 		this.typeAssessment = typeAssessment;
 		this.mutableElementIndex = mutableElementIndex;

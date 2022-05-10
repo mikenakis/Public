@@ -5,7 +5,7 @@ import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.NonImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ public final class MutableFieldValueMutableObjectAssessment extends MutableObjec
 {
 	public final Object object;
 	public final ProvisoryTypeAssessment declaringTypeAssessment;
-	public final ProvisoryFieldAssessment provisoryFieldAssessment;
+	public final ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldAssessment;
 	public final MutableObjectAssessment fieldValueAssessment;
 
-	public MutableFieldValueMutableObjectAssessment( Object object, ProvisoryTypeAssessment declaringTypeAssessment, ProvisoryFieldAssessment provisoryFieldAssessment, //
+	public MutableFieldValueMutableObjectAssessment( Object object, ProvisoryTypeAssessment declaringTypeAssessment, ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldAssessment, //
 		MutableObjectAssessment fieldValueAssessment )
 	{
 		assert declaringTypeAssessment.type.isAssignableFrom( object.getClass() );

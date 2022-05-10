@@ -19,6 +19,7 @@ import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.ArrayMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ArrayOfProvisoryElementTypeProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.CompositeProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ExtensibleProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.MultiReasonProvisoryTypeAssessment;
@@ -26,8 +27,6 @@ import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.P
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.SelfAssessableProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Array;
@@ -120,19 +119,6 @@ public final class ObjectImmutabilityAssessor
 		return ImmutableObjectAssessment.instance;
 	}
 
-	private ObjectAssessment assessInvariableArrayField( Object array, ProvisoryTypeAssessment arrayTypeAssessment, Set<Object> visitedValues )
-	{
-		int index = 0;
-		for( Object element : new IterableOnArrayObject( array ) )
-		{
-			ObjectAssessment elementAssessment = assessRecursively( element, visitedValues );
-			if( elementAssessment instanceof MutableObjectAssessment mutableElementAssessment )
-				return new MutableArrayElementMutableObjectAssessment( array, arrayTypeAssessment, index, mutableElementAssessment );
-			index++;
-		}
-		return ImmutableObjectAssessment.instance;
-	}
-
 	private static ObjectAssessment assessSelfAssessable( SelfAssessableProvisoryTypeAssessment typeAssessment, ImmutabilitySelfAssessable selfAssessableObject )
 	{
 		if( selfAssessableObject.isImmutable() )
@@ -167,20 +153,31 @@ public final class ObjectImmutabilityAssessor
 		return superObjectAssessment;
 	}
 
-	private ObjectAssessment assessField( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryFieldAssessment provisoryFieldAssessment, //
+	private ObjectAssessment assessField( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldAssessment, //
 		Set<Object> visitedValues )
 	{
 		Object fieldValue = MyKit.getFieldValue( object, provisoryFieldAssessment.field );
-		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment )
-			{
-				case InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment ignore ->
-					assessInvariableArrayField( fieldValue, ignore.arrayElementTypeAssessment /* this is wrong! */, visitedValues );
-				case ProvisoryFieldTypeProvisoryFieldAssessment ignore -> assessRecursively( fieldValue, visitedValues );
-				default -> throw new AssertionError(); //TODO: make assessments sealed, so that we do not need default clauses!
-			};
+		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment.provisoryTypeAssessment )
+		{
+			case ArrayOfProvisoryElementTypeProvisoryTypeAssessment assessment -> assessInvariableArrayField( fieldValue, assessment, visitedValues );
+			default -> assessRecursively( fieldValue, visitedValues );
+		};
 		if( fieldValueAssessment instanceof MutableObjectAssessment mutableFieldValueAssessment )
 			return new MutableFieldValueMutableObjectAssessment( object, provisoryTypeAssessment, provisoryFieldAssessment, mutableFieldValueAssessment );
 		assert fieldValueAssessment instanceof ImmutableObjectAssessment;
+		return ImmutableObjectAssessment.instance;
+	}
+
+	private ObjectAssessment assessInvariableArrayField( Object array, ProvisoryTypeAssessment arrayTypeAssessment, Set<Object> visitedValues )
+	{
+		int index = 0;
+		for( Object element : new IterableOnArrayObject( array ) )
+		{
+			ObjectAssessment elementAssessment = assessRecursively( element, visitedValues );
+			if( elementAssessment instanceof MutableObjectAssessment mutableElementAssessment )
+				return new MutableArrayElementMutableObjectAssessment( array, arrayTypeAssessment, index, mutableElementAssessment );
+			index++;
+		}
 		return ImmutableObjectAssessment.instance;
 	}
 }
