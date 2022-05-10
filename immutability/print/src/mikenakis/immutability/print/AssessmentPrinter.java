@@ -16,19 +16,19 @@ import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableOb
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MultiReasonMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableSuperclassMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.ArrayMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MultiReasonMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableFieldMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableSuperclassMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.CompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.InterfaceProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisorySuperclassProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.FieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.ArrayMutableFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.mutable.InvariableArrayOfMutableElementTypeMutableFieldAssessment;
@@ -179,16 +179,16 @@ public final class AssessmentPrinter
 
 	private void getMutableObjectAssessmentText( MutableObjectAssessment mutableObjectAssessment )
 	{
-		append( "object " + stringFromObjectIdentity( mutableObjectAssessment.object ) + " is mutable" );
+		append( "object " + stringFromObjectIdentity( mutableObjectAssessment.object() ) + " is mutable" );
 		switch( mutableObjectAssessment )
 		{
 			case MutableSuperclassMutableObjectAssessment ignore -> append( " because its superclass is mutable" );
-			case MutableArrayElementMutableObjectAssessment<?> assessment ->
-				append( " because it is an invariable array, and element " + stringFromObjectIdentity( assessment.mutableElement ) + " at index " + assessment.mutableElementIndex + " is mutable" );
+			case MutableArrayElementMutableObjectAssessment assessment ->
+				append( " because it is an invariable array, and element " + stringFromObjectIdentity( assessment.elementAssessment.object() ) + " at index " + assessment.mutableElementIndex + " is mutable" );
 			case MutableComponentMutableObjectAssessment<?,?> assessment ->
 				append( " because it is a composite, and element " + stringFromObjectIdentity( assessment.mutableElement ) + " at index " + assessment.mutableElementIndex + " is mutable" );
 			case MutableFieldValueMutableObjectAssessment assessment ->
-				append( " because it is of provisory type " + stringFromClassName( assessment.declaringTypeAssessment.type ) + " and field " + stringFromFieldName( assessment.provisoryFieldAssessment.field ) + " has mutable value." );
+				append( " because it is of provisory type " + stringFromClassName( assessment.typeAssessment().type ) + " and field " + stringFromFieldName( assessment.provisoryFieldAssessment.field ) + " has mutable value." );
 			case NonEmptyArrayMutableObjectAssessment ignore -> append( " because it is a non-empty array" );
 			case MutableClassMutableObjectAssessment ignore -> append( " because it is of a mutable class" );
 			case SelfAssessedMutableObjectAssessment ignore -> append( " because it assessed itself as mutable" );

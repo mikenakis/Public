@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.mutable;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 
@@ -17,5 +17,5 @@ public class MultiReasonMutableTypeAssessment extends MutableTypeAssessment
 		this.mutableTypeAssessments = mutableTypeAssessments;
 	}
 
-	@Override public Iterable<? extends Assessment> children() { return mutableTypeAssessments; }
+	@Override public List<Assessment> children() { return List.copyOf( mutableTypeAssessments ); }
 }

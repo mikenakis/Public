@@ -5,8 +5,8 @@ import mikenakis.immutability.internal.helpers.ConvertingIterable;
 import mikenakis.immutability.internal.mykit.MyKit;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.CompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ExtensibleProvisoryTypeAssessment;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

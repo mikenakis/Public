@@ -107,10 +107,10 @@ public class T21_SuperficiallyImmutableJdkList
 	{
 		assert assessment instanceof MutableObjectAssessment;
 		MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
-		assert mutableObjectAssessment.object == superficiallyImmutableJdkList;
+		assert mutableObjectAssessment.object() == superficiallyImmutableJdkList;
+		assert mutableObjectAssessment.typeAssessment().type == superficiallyImmutableJdkList.getClass();
 		MutableComponentMutableObjectAssessment<?,?> mutableComponentAssessment = (MutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
-		assert mutableComponentAssessment.typeAssessment.type == superficiallyImmutableJdkList.getClass();
 		assert mutableComponentAssessment.mutableElementIndex == size - 1;
-		assert mutableComponentAssessment.elementAssessment.object == mutableElement;
+		assert mutableComponentAssessment.elementAssessment.object() == mutableElement;
 	}
 }

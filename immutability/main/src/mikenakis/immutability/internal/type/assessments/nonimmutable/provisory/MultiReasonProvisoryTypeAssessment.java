@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.provisory;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.helpers.Helpers;
@@ -19,8 +19,5 @@ public final class MultiReasonProvisoryTypeAssessment extends ProvisoryTypeAsses
 		this.provisoryReasons = provisoryReasons;
 	}
 
-	@Override public List<? extends Assessment> children()
-	{
-		return provisoryReasons;
-	}
+	@Override public List<Assessment> children() { return List.copyOf( provisoryReasons ); }
 }

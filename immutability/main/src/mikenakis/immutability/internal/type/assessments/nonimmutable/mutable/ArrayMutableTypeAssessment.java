@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.mutable;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.mutable;
 
 /**
  * Signifies that a type is mutable because it is an array.

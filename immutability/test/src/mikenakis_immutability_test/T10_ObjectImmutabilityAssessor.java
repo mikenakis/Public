@@ -13,13 +13,10 @@ import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMuta
 import mikenakis.immutability.internal.assessments.mutable.MutableSuperclassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableFieldMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.InterfaceProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableArrayFieldMustBePrivateException;
 import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableFieldMayNotAlreadyBeInvariableException;
 import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableFieldMustBePrivateException;
@@ -29,7 +26,6 @@ import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotBe
 import mikenakis.immutability.internal.type.exceptions.PreassessedTypeMustBeClassException;
 import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustNotBeImmutableException;
 import mikenakis.immutability.internal.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
-import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 import mikenakis.immutability.print.AssessmentPrinter;
 import org.junit.Test;
@@ -133,17 +129,15 @@ public class T10_ObjectImmutabilityAssessor
 			{
 				var object = new Derived();
 				ObjectAssessment assessment = assess( object );
-				assert assessment instanceof MutableSuperclassMutableObjectAssessment;
-				var mutableSuperclassMutableObjectAssessment = (MutableSuperclassMutableObjectAssessment)assessment;
-				assert mutableSuperclassMutableObjectAssessment.object == object;
-				assert mutableSuperclassMutableObjectAssessment.typeAssessment instanceof ProvisorySuperclassProvisoryTypeAssessment;
-				assert mutableSuperclassMutableObjectAssessment.object == object;
-				assert mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment instanceof MutableFieldValueMutableObjectAssessment;
+				var mutableObjectAssessment = (MutableObjectAssessment)assessment;
+				assert mutableObjectAssessment.object() == object;
+				assert mutableObjectAssessment.typeAssessment() instanceof ProvisorySuperclassProvisoryTypeAssessment;
+				var mutableSuperclassMutableObjectAssessment = (MutableSuperclassMutableObjectAssessment)mutableObjectAssessment;
+				assert mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment.object() == object;
+				assert mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment.typeAssessment() instanceof ProvisoryFieldProvisoryTypeAssessment;
 				var mutableFieldValueMutableObjectAssessment = (MutableFieldValueMutableObjectAssessment)mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment;
-				assert mutableFieldValueMutableObjectAssessment.object == object;
-				assert mutableFieldValueMutableObjectAssessment.declaringTypeAssessment instanceof ProvisoryFieldProvisoryTypeAssessment;
 				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment instanceof MutableClassMutableObjectAssessment;
-				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment.object == object.provisoryFieldAssessedAsMutable;
+				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment.object() == object.provisoryFieldAssessedAsMutable;
 				assert mutableFieldValueMutableObjectAssessment.provisoryFieldAssessment instanceof ProvisoryFieldTypeProvisoryFieldAssessment;
 			}
 		}.run();
@@ -218,14 +212,13 @@ public class T10_ObjectImmutabilityAssessor
 				assert assessment instanceof MutableFieldValueMutableObjectAssessment;
 				MutableFieldValueMutableObjectAssessment mutableFieldValueAssessment = (MutableFieldValueMutableObjectAssessment)assessment;
 				assert mutableFieldValueAssessment.object == object;
-				ProvisoryFieldAssessment provisoryFieldAssessment = mutableFieldValueAssessment.provisoryFieldAssessment;
-				assert provisoryFieldAssessment.field.getName().equals( "mutableField" );
-				ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)provisoryFieldAssessment;
+				assert mutableFieldValueAssessment.fieldValueAssessment.object() == object.mutableField;
+				assert mutableFieldValueAssessment.fieldValueAssessment.typeAssessment().type == ArrayList.class;
+				assert mutableFieldValueAssessment.fieldValueAssessment instanceof MutableClassMutableObjectAssessment;
+				assert mutableFieldValueAssessment.provisoryFieldAssessment.field.getName().equals( "mutableField" );
+				ProvisoryFieldTypeProvisoryFieldAssessment provisoryFieldTypeAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)mutableFieldValueAssessment.provisoryFieldAssessment;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment.type == List.class;
 				assert provisoryFieldTypeAssessment.provisoryTypeAssessment instanceof InterfaceProvisoryTypeAssessment;
-				MutableClassMutableObjectAssessment fieldValueAssessment = (MutableClassMutableObjectAssessment)mutableFieldValueAssessment.fieldValueAssessment;
-				assert fieldValueAssessment.object == object.mutableField;
-				assert fieldValueAssessment.typeAssessment.type == ArrayList.class;
 			}
 		}.run();
 	}
@@ -261,10 +254,10 @@ public class T10_ObjectImmutabilityAssessor
 			{
 				var object = new ProvisorySelfAssessableClassWhichSelfAssessesNegatively();
 				ObjectAssessment assessment = assess( object );
-				assert assessment instanceof SelfAssessedMutableObjectAssessment;
-				SelfAssessedMutableObjectAssessment mutableSelfAssessment = (SelfAssessedMutableObjectAssessment)assessment;
-				assert mutableSelfAssessment.object == object;
-				assert mutableSelfAssessment.typeAssessment.type == ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class;
+				MutableObjectAssessment mutableObjectAssessment = (MutableObjectAssessment)assessment;
+				assert mutableObjectAssessment.object() == object;
+				assert mutableObjectAssessment.typeAssessment().type == ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class;
+				assert mutableObjectAssessment instanceof SelfAssessedMutableObjectAssessment;
 			}
 		}.run();
 	}

@@ -11,5 +11,5 @@ public abstract class Assessment
 	{
 	}
 
-	public Iterable<? extends Assessment> children() { return List.of(); }
+	public List<Assessment> children() { return List.of(); }
 }

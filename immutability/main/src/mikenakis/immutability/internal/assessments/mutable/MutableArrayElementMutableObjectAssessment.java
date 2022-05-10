@@ -2,31 +2,34 @@ package mikenakis.immutability.internal.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
-import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.NonImmutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 /**
  * Signifies that an array is mutable because it has at least one element which is mutable.
  */
-public final class MutableArrayElementMutableObjectAssessment<E> extends MutableObjectAssessment
+public final class MutableArrayElementMutableObjectAssessment extends MutableObjectAssessment
 {
-	public final Iterable<E> iterableArrayWrapper;
-	public final InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment typeAssessment;
+	public final Object object;
+	public final ProvisoryTypeAssessment typeAssessment;
 	public final int mutableElementIndex;
-	public final E mutableElement;
 	public final MutableObjectAssessment elementAssessment;
 
-	public MutableArrayElementMutableObjectAssessment( Iterable<E> iterableArrayWrapper, InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment typeAssessment, //
-		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
+	public MutableArrayElementMutableObjectAssessment( Object object, ProvisoryTypeAssessment typeAssessment, int mutableElementIndex, MutableObjectAssessment elementAssessment )
 	{
-		super( iterableArrayWrapper );
-		this.iterableArrayWrapper = iterableArrayWrapper;
+		assert object.getClass().isArray();
+		assert Array.get( object, mutableElementIndex ) == elementAssessment.object();
+		//assert typeAssessment.type == object.getClass(); TODO: this does not work because the wrong object is being passed in 'typeAssessment'.
+		this.object = object;
 		this.typeAssessment = typeAssessment;
 		this.mutableElementIndex = mutableElementIndex;
-		this.mutableElement = mutableElement;
 		this.elementAssessment = elementAssessment;
 	}
 
-	@Override public Iterable<Assessment> children() { return List.of( typeAssessment, elementAssessment ); }
+	@Override public Object object() { return object; }
+	@Override public NonImmutableTypeAssessment typeAssessment() { return typeAssessment; }
+	@Override public List<Assessment> children() { return List.of( elementAssessment ); }
 }

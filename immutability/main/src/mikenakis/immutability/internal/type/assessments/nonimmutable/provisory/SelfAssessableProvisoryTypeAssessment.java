@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.provisory;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.provisory;
 
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 

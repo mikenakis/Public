@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.mutable;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 
@@ -17,5 +17,5 @@ public class MutableSuperclassMutableTypeAssessment extends MutableTypeAssessmen
 		this.superclassAssessment = superclassAssessment;
 	}
 
-	@Override public Iterable<Assessment> children() { return List.of( superclassAssessment ); }
+	@Override public List<Assessment> children() { return List.of( superclassAssessment ); }
 }

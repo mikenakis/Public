@@ -2,6 +2,8 @@ package mikenakis.immutability.internal.mykit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 
+import java.lang.reflect.Field;
+
 @SuppressWarnings( "NewClassNamingConvention" )
 public final class MyKit
 {
@@ -98,6 +100,25 @@ public final class MyKit
 		if( text == null )
 			return jvmClass.getName();
 		return text;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Reflection stuff
+
+	public static Object getFieldValue( Object object, Field field )
+	{
+		if( !field.canAccess( object ) ) //TODO: assess whether performing this check saves any time (as opposed to always invoking setAccessible without the check.)
+			field.setAccessible( true );
+		Object fieldValue;
+		try
+		{
+			fieldValue = field.get( object );
+		}
+		catch( IllegalAccessException e )
+		{
+			throw new RuntimeException( e );
+		}
+		return fieldValue;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

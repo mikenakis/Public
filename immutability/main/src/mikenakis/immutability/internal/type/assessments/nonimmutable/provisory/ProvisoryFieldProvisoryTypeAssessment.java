@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.provisory;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
@@ -18,5 +18,5 @@ public final class ProvisoryFieldProvisoryTypeAssessment extends ProvisoryTypeAs
 		this.fieldAssessment = fieldAssessment;
 	}
 
-	@Override public List<? extends Assessment> children() { return List.of( fieldAssessment ); }
+	@Override public List<Assessment> children() { return List.of( fieldAssessment ); }
 }

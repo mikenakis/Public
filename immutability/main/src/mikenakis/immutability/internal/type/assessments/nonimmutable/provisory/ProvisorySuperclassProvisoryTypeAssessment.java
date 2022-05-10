@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.provisory;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.provisory;
 
 import mikenakis.immutability.internal.assessments.Assessment;
 
@@ -18,5 +18,5 @@ public final class ProvisorySuperclassProvisoryTypeAssessment extends ProvisoryT
 		this.superclassAssessment = superclassAssessment;
 	}
 
-	@Override public List<? extends Assessment> children() { return List.of( superclassAssessment ); }
+	@Override public List<Assessment> children() { return List.of( superclassAssessment ); }
 }

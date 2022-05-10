@@ -1,4 +1,4 @@
-package mikenakis.immutability.internal.type.assessments.provisory;
+package mikenakis.immutability.internal.type.assessments.nonimmutable.provisory;
 
 /**
  * Signifies that a type is provisory because it is an interface.

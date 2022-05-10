@@ -3,7 +3,7 @@ package mikenakis.immutability.internal.type.field.assessments.provisory;
 import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -26,5 +26,5 @@ public final class InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;
 	}
 
-	@Override public List<? extends Assessment> children() { return List.of( arrayElementTypeAssessment ); }
+	@Override public List<Assessment> children() { return List.of( arrayElementTypeAssessment ); }
 }

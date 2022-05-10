@@ -1,7 +1,7 @@
 package mikenakis.immutability.internal.type.field.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableTypeAssessment;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -21,5 +21,5 @@ public final class InvariableArrayOfMutableElementTypeMutableFieldAssessment ext
 		this.arrayElementTypeAssessment = arrayElementTypeAssessment;
 	}
 
-	@Override public List<? extends Assessment> children() { return List.of( arrayElementTypeAssessment ); }
+	@Override public List<Assessment> children() { return List.of( arrayElementTypeAssessment ); }
 }

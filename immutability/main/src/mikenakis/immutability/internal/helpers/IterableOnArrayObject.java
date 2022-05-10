@@ -3,6 +3,7 @@ package mikenakis.immutability.internal.helpers;
 import java.lang.reflect.Array;
 import java.util.Iterator;
 
+@SuppressWarnings( "overrides" )
 public class IterableOnArrayObject implements Iterable<Object>
 {
 	private final Object array;
@@ -31,5 +32,10 @@ public class IterableOnArrayObject implements Iterable<Object>
 				return Array.get( array, index++ );
 			}
 		};
+	}
+
+	@Override public boolean equals( Object other )
+	{
+		return other == array || super.equals( other );
 	}
 }

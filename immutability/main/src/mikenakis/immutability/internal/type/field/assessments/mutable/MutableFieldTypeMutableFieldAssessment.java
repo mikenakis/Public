@@ -1,7 +1,7 @@
 package mikenakis.immutability.internal.type.field.assessments.mutable;
 
 import mikenakis.immutability.internal.assessments.Assessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableTypeAssessment;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -20,5 +20,5 @@ public final class MutableFieldTypeMutableFieldAssessment extends MutableFieldAs
 		this.fieldTypeAssessment = fieldTypeAssessment;
 	}
 
-	@Override public Iterable<Assessment> children() { return List.of( fieldTypeAssessment ); }
+	@Override public List<Assessment> children() { return List.of( fieldTypeAssessment ); }
 }

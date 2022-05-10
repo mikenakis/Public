@@ -1,14 +1,16 @@
 package mikenakis.immutability.internal.assessments;
 
+import mikenakis.immutability.internal.type.assessments.nonimmutable.NonImmutableTypeAssessment;
+
 /**
  * Signifies that an object is mutable.
  */
 public abstract class MutableObjectAssessment extends ObjectAssessment
 {
-	public final Object object;
-
-	protected MutableObjectAssessment( Object object )
+	protected MutableObjectAssessment()
 	{
-		this.object = object;
 	}
+
+	public abstract Object object();
+	public abstract NonImmutableTypeAssessment typeAssessment();
 }

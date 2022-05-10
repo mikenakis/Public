@@ -17,21 +17,20 @@ import mikenakis.immutability.internal.mykit.collections.IdentityLinkedHashSet;
 import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import mikenakis.immutability.internal.type.assessments.ImmutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.TypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.ArrayMutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.mutable.MutableTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.CompositeProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ExtensibleProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.ArrayMutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.mutable.MutableTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.CompositeProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ExtensibleProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisorySuperclassProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.nonimmutable.provisory.SelfAssessableProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.Set;
 
 /**
@@ -98,7 +97,7 @@ public final class ObjectImmutabilityAssessor
 			};
 	}
 
-	private ObjectAssessment assessArray( Object arrayObject, ArrayMutableTypeAssessment mutableArrayAssessment )
+	private static ObjectAssessment assessArray( Object arrayObject, ArrayMutableTypeAssessment mutableArrayAssessment )
 	{
 		if( Array.getLength( arrayObject ) == 0 )
 			return ImmutableObjectAssessment.instance;
@@ -121,15 +120,14 @@ public final class ObjectImmutabilityAssessor
 		return ImmutableObjectAssessment.instance;
 	}
 
-	private ObjectAssessment assessInvariableArray( Object array, InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment arrayAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessInvariableArrayField( Object array, ProvisoryTypeAssessment arrayTypeAssessment, Set<Object> visitedValues )
 	{
-		Iterable<Object> arrayAsIterable = new IterableOnArrayObject( array );
 		int index = 0;
-		for( Object element : arrayAsIterable )
+		for( Object element : new IterableOnArrayObject( array ) )
 		{
 			ObjectAssessment elementAssessment = assessRecursively( element, visitedValues );
-			if( elementAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
-				return new MutableArrayElementMutableObjectAssessment<>( arrayAsIterable, arrayAssessment, index, element, mutableObjectAssessment );
+			if( elementAssessment instanceof MutableObjectAssessment mutableElementAssessment )
+				return new MutableArrayElementMutableObjectAssessment( array, arrayTypeAssessment, index, mutableElementAssessment );
 			index++;
 		}
 		return ImmutableObjectAssessment.instance;
@@ -169,13 +167,14 @@ public final class ObjectImmutabilityAssessor
 		return superObjectAssessment;
 	}
 
-	private ObjectAssessment assessField( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryFieldAssessment provisoryFieldAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessField( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryFieldAssessment provisoryFieldAssessment, //
+		Set<Object> visitedValues )
 	{
-		Object fieldValue = getFieldValue( object, provisoryFieldAssessment.field );
+		Object fieldValue = MyKit.getFieldValue( object, provisoryFieldAssessment.field );
 		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment )
 			{
-				case InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment invariableArrayFieldAssessment ->
-					assessInvariableArray( fieldValue, invariableArrayFieldAssessment, visitedValues );
+				case InvariableArrayOfProvisoryElementTypeProvisoryFieldAssessment ignore ->
+					assessInvariableArrayField( fieldValue, ignore.arrayElementTypeAssessment /* this is wrong! */, visitedValues );
 				case ProvisoryFieldTypeProvisoryFieldAssessment ignore -> assessRecursively( fieldValue, visitedValues );
 				default -> throw new AssertionError(); //TODO: make assessments sealed, so that we do not need default clauses!
 			};
@@ -183,22 +182,5 @@ public final class ObjectImmutabilityAssessor
 			return new MutableFieldValueMutableObjectAssessment( object, provisoryTypeAssessment, provisoryFieldAssessment, mutableFieldValueAssessment );
 		assert fieldValueAssessment instanceof ImmutableObjectAssessment;
 		return ImmutableObjectAssessment.instance;
-	}
-
-	private static Object getFieldValue( Object object, Field field )
-	{
-		if( !field.canAccess( object ) ) //TODO: assess whether performing this check saves any time (as opposed to always invoking setAccessible without the check.)
-			field.setAccessible( true );
-		assert field.canAccess( object );
-		Object fieldValue;
-		try
-		{
-			fieldValue = field.get( object );
-		}
-		catch( IllegalAccessException e )
-		{
-			throw new RuntimeException( e );
-		}
-		return fieldValue;
 	}
 }
