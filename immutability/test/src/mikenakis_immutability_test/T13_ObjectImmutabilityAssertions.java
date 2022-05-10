@@ -12,6 +12,8 @@ import java.util.ArrayList;
 /**
  * Test.
  * <p>
+ * TODO: get rid of!
+ * <p>
  * NOTE: the {@code new Runnable().run()} business is a trick for creating multiple local namespaces within a single java source file.
  */
 @SuppressWarnings( { "FieldMayBeFinal", "InstanceVariableMayNotBeInitialized" } )

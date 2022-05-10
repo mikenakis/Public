@@ -9,14 +9,14 @@ import java.util.List;
  */
 public final class ProvisorySuperclassProvisoryTypeAssessment extends ProvisoryTypeAssessment
 {
-	public final ProvisoryTypeAssessment ancestorAssessment;
+	public final ProvisoryTypeAssessment superclassAssessment;
 
-	public ProvisorySuperclassProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryTypeAssessment ancestorAssessment )
+	public ProvisorySuperclassProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryTypeAssessment superclassAssessment )
 	{
 		super( jvmClass );
-		assert jvmClass.getSuperclass() == ancestorAssessment.type;
-		this.ancestorAssessment = ancestorAssessment;
+		assert jvmClass.getSuperclass() == superclassAssessment.type;
+		this.superclassAssessment = superclassAssessment;
 	}
 
-	@Override public List<? extends Assessment> children() { return List.of( ancestorAssessment ); }
+	@Override public List<? extends Assessment> children() { return List.of( superclassAssessment ); }
 }

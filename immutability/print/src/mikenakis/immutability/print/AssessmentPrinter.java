@@ -6,7 +6,7 @@ import mikenakis.immutability.internal.assessments.Assessment;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.MutableAncestorMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableSuperclassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableArrayElementMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
@@ -74,6 +74,7 @@ public final class AssessmentPrinter
 			case ObjectAssessment assessment -> assessmentPrinter.getObjectAssessmentText( assessment );
 			default -> throw new AssertionError( unknownAssessment );
 		}
+		assessmentPrinter.append( ". (" + unknownAssessment.getClass().getSimpleName() + ")" );
 		return assessmentPrinter.stringBuilder.toString();
 	}
 
@@ -165,7 +166,7 @@ public final class AssessmentPrinter
 			case InterfaceProvisoryTypeAssessment ignore -> append( " because it is an interface" );
 			case MultiReasonProvisoryTypeAssessment ignore -> append( " due to multiple reasons" );
 			case ProvisorySuperclassProvisoryTypeAssessment assessment ->
-				append( " because it extends provisory type " + stringFromClassName( assessment.ancestorAssessment.type ) );
+				append( " because it extends provisory type " + stringFromClassName( assessment.superclassAssessment.type ) );
 			case ProvisoryFieldProvisoryTypeAssessment assessment ->
 				append( " because field " + stringFromFieldName( assessment.fieldAssessment.field ) + " is provisory" );
 			case SelfAssessableProvisoryTypeAssessment ignore -> append( " because instances of this type are self-assessable" );
@@ -188,7 +189,7 @@ public final class AssessmentPrinter
 		append( "object " + stringFromObjectIdentity( mutableObjectAssessment.object ) + " is mutable" );
 		switch( mutableObjectAssessment )
 		{
-			case MutableAncestorMutableObjectAssessment ignore -> append( " because it has a mutable ancestor" );
+			case MutableSuperclassMutableObjectAssessment ignore -> append( " because its superclass is mutable" );
 			case MutableArrayElementMutableObjectAssessment<?> assessment ->
 				append( " because it is an invariable array, and element " + stringFromObjectIdentity( assessment.mutableElement ) + " at index " + assessment.mutableElementIndex + " is mutable" );
 			case MutableComponentMutableObjectAssessment<?,?> assessment ->
@@ -197,7 +198,7 @@ public final class AssessmentPrinter
 				append( " because it is of provisory type " + stringFromClassName( assessment.declaringTypeAssessment.type ) + " and field " + stringFromFieldName( assessment.provisoryFieldAssessment.field ) + " has mutable value." );
 			case NonEmptyArrayMutableObjectAssessment ignore -> append( " because it is a non-empty array" );
 			case MutableClassMutableObjectAssessment ignore -> append( " because it is of a mutable class" );
-			case SelfAssessedMutableObjectAssessment ignore -> append( " because it self-assessed itself as mutable" );
+			case SelfAssessedMutableObjectAssessment ignore -> append( " because it assessed itself as mutable" );
 			default -> throw new AssertionError( mutableObjectAssessment );
 		}
 	}

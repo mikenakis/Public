@@ -53,6 +53,8 @@ import java.util.Map;
 /**
  * Test.
  * <p>
+ * TODO: get rid of!
+ * <p>
  * NOTE: the {@code new Runnable().run()} business is a trick for creating multiple local namespaces within a single java source file.
  */
 @SuppressWarnings( { "FieldMayBeStatic", "FieldMayBeFinal", "InstanceVariableMayNotBeInitialized" } )
@@ -255,21 +257,21 @@ public class T01_TypeImmutabilityAssessor
 				assert multiReasonMutableTypeAssessment.mutableTypeAssessments.size() == 2;
 
 				{
-				MutableFieldMutableTypeAssessment mutableFieldMutableTypeAssessment1 = (MutableFieldMutableTypeAssessment)multiReasonMutableTypeAssessment.mutableTypeAssessments.get( 0 );
-				MutableFieldAssessment mutableFieldAssessment1 = mutableFieldMutableTypeAssessment1.mutableFieldAssessment;
-				assert mutableFieldAssessment1.field.getName().equals( "oneInvariableFieldOfMutableType" );
-				assert mutableFieldAssessment1 instanceof MutableFieldTypeMutableFieldAssessment;
-				MutableFieldTypeMutableFieldAssessment mutableFieldTypeMutableFieldAssessment1 = (MutableFieldTypeMutableFieldAssessment)mutableFieldAssessment1;
-				assert mutableFieldTypeMutableFieldAssessment1.fieldTypeAssessment.type == ArrayList.class;
+					MutableFieldMutableTypeAssessment mutableFieldMutableTypeAssessment1 = (MutableFieldMutableTypeAssessment)multiReasonMutableTypeAssessment.mutableTypeAssessments.get( 0 );
+					MutableFieldAssessment mutableFieldAssessment1 = mutableFieldMutableTypeAssessment1.mutableFieldAssessment;
+					assert mutableFieldAssessment1.field.getName().equals( "oneInvariableFieldOfMutableType" );
+					assert mutableFieldAssessment1 instanceof MutableFieldTypeMutableFieldAssessment;
+					MutableFieldTypeMutableFieldAssessment mutableFieldTypeMutableFieldAssessment1 = (MutableFieldTypeMutableFieldAssessment)mutableFieldAssessment1;
+					assert mutableFieldTypeMutableFieldAssessment1.fieldTypeAssessment.type == ArrayList.class;
 				}
 
 				{
-				MutableFieldMutableTypeAssessment mutableFieldMutableTypeAssessment2 = (MutableFieldMutableTypeAssessment)multiReasonMutableTypeAssessment.mutableTypeAssessments.get( 1 );
-				MutableFieldAssessment mutableFieldAssessment2 = mutableFieldMutableTypeAssessment2.mutableFieldAssessment;
-				assert mutableFieldAssessment2.field.getName().equals( "anotherInvariableFieldOfMutableType" );
-				assert mutableFieldAssessment2 instanceof MutableFieldTypeMutableFieldAssessment;
-				MutableFieldTypeMutableFieldAssessment mutableFieldTypeMutableFieldAssessment1 = (MutableFieldTypeMutableFieldAssessment)mutableFieldAssessment2;
-				assert mutableFieldTypeMutableFieldAssessment1.fieldTypeAssessment.type == ArrayList.class;
+					MutableFieldMutableTypeAssessment mutableFieldMutableTypeAssessment2 = (MutableFieldMutableTypeAssessment)multiReasonMutableTypeAssessment.mutableTypeAssessments.get( 1 );
+					MutableFieldAssessment mutableFieldAssessment2 = mutableFieldMutableTypeAssessment2.mutableFieldAssessment;
+					assert mutableFieldAssessment2.field.getName().equals( "anotherInvariableFieldOfMutableType" );
+					assert mutableFieldAssessment2 instanceof MutableFieldTypeMutableFieldAssessment;
+					MutableFieldTypeMutableFieldAssessment mutableFieldTypeMutableFieldAssessment1 = (MutableFieldTypeMutableFieldAssessment)mutableFieldAssessment2;
+					assert mutableFieldTypeMutableFieldAssessment1.fieldTypeAssessment.type == ArrayList.class;
 				}
 			}
 		}.run();
@@ -862,8 +864,8 @@ public class T01_TypeImmutabilityAssessor
 			{
 				assert assess( newAssessor(), ProvisoryClass.class ) instanceof ProvisoryFieldProvisoryTypeAssessment;
 				TypeAssessment assessment = assess( assessor, ClassExtendingProvisoryClass.class );
-				ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorProvisoryTypeAssessment = (ProvisorySuperclassProvisoryTypeAssessment)assessment;
-				ProvisoryFieldProvisoryTypeAssessment provisoryFieldProvisoryTypeAssessment = (ProvisoryFieldProvisoryTypeAssessment)provisoryAncestorProvisoryTypeAssessment.ancestorAssessment;
+				ProvisorySuperclassProvisoryTypeAssessment provisorySuperclassProvisoryTypeAssessment = (ProvisorySuperclassProvisoryTypeAssessment)assessment;
+				ProvisoryFieldProvisoryTypeAssessment provisoryFieldProvisoryTypeAssessment = (ProvisoryFieldProvisoryTypeAssessment)provisorySuperclassProvisoryTypeAssessment.superclassAssessment;
 				ProvisoryFieldTypeProvisoryFieldAssessment fieldAssessment = (ProvisoryFieldTypeProvisoryFieldAssessment)provisoryFieldProvisoryTypeAssessment.fieldAssessment;
 				assert fieldAssessment.field.getName().equals( "someInterface" );
 				InterfaceProvisoryTypeAssessment fieldTypeAssessment = (InterfaceProvisoryTypeAssessment)fieldAssessment.provisoryTypeAssessment;

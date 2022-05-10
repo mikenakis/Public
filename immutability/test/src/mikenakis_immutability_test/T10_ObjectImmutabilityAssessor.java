@@ -1,6 +1,8 @@
 package mikenakis_immutability_test;
 
+import mikenakis.immutability.internal.assessments.mutable.MutableSuperclassMutableObjectAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
 import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
@@ -75,11 +77,43 @@ public class T10_ObjectImmutabilityAssessor
 		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
-	@Test public void non_empty_array_is_mutable() //(even with immutable elements)
+	@Test public void array_of_immutable_elements_is_mutable()
 	{
-		Object object = new Integer[] { 0 };
+		Object object = new Integer[] { 1 };
 		ObjectAssessment assessment = assess( object );
 		assert assessment instanceof MutableObjectAssessment;
+	}
+
+	@Test public void immutable_object_with_mutable_super_is_mutable()
+	{
+		new Runnable()
+		{
+			static class Superclass
+			{
+				@SuppressWarnings( "unused" ) final Object provisoryFieldAssessedAsMutable = new StringBuilder();
+			}
+
+			static final class Derived extends Superclass
+			{ }
+
+			@Override public void run()
+			{
+				var object = new Derived();
+				ObjectAssessment assessment = assess( object );
+				assert assessment instanceof MutableSuperclassMutableObjectAssessment;
+				var mutableSuperclassMutableObjectAssessment = (MutableSuperclassMutableObjectAssessment)assessment;
+				assert mutableSuperclassMutableObjectAssessment.object == object;
+				assert mutableSuperclassMutableObjectAssessment.typeAssessment instanceof ProvisorySuperclassProvisoryTypeAssessment;
+				assert mutableSuperclassMutableObjectAssessment.object == object;
+				assert mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment instanceof MutableFieldValueMutableObjectAssessment;
+				var mutableFieldValueMutableObjectAssessment = (MutableFieldValueMutableObjectAssessment)mutableSuperclassMutableObjectAssessment.mutableSuperObjectAssessment;
+				assert mutableFieldValueMutableObjectAssessment.object == object;
+				assert mutableFieldValueMutableObjectAssessment.declaringTypeAssessment instanceof ProvisoryFieldProvisoryTypeAssessment;
+				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment instanceof MutableClassMutableObjectAssessment;
+				assert mutableFieldValueMutableObjectAssessment.fieldValueAssessment.object == object.provisoryFieldAssessedAsMutable;
+				assert mutableFieldValueMutableObjectAssessment.provisoryFieldAssessment instanceof ProvisoryFieldTypeProvisoryFieldAssessment;
+			}
+		}.run();
 	}
 
 	@Test public void circularly_self_referencing_immutable_object_is_immutable()
@@ -88,8 +122,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class SelfReferencingProvisoryClass
 			{
-				@SuppressWarnings( "unused" )
-				private final Object selfReference = this;
+				@SuppressWarnings( "unused" ) private final Object selfReference = this;
 			}
 
 			@Override public void run()
@@ -108,14 +141,12 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static class SelfReferencingProvisoryClass
 			{
-				@SuppressWarnings( "unused" )
-				private final Object selfReference = this;
+				@SuppressWarnings( "unused" ) private final Object selfReference = this;
 			}
 
 			static final class ClassExtendingSelfReferencingProvisoryClass extends SelfReferencingProvisoryClass
 			{
-				@SuppressWarnings( "unused" )
-				private final Object selfReference = this;
+				@SuppressWarnings( "unused" ) private final Object selfReference = this;
 			}
 
 			@Override public void run()
@@ -135,8 +166,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class ClassWithInvariableFieldOfInterfaceTypeWithValueOfImmutableType
 			{
-				@SuppressWarnings( "unused" )
-				private final Comparable<String> invariableFieldOfInterfaceType = "";
+				@SuppressWarnings( "unused" ) private final Comparable<String> invariableFieldOfInterfaceType = "";
 			}
 
 			@Override public void run()
@@ -183,8 +213,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class ProvisorySelfAssessableClassWhichSelfAssessesPositively implements ImmutabilitySelfAssessable
 			{
-				@SuppressWarnings( "unused" )
-				private final Object provisoryMember = null;
+				@SuppressWarnings( "unused" ) private final Object provisoryMember = null;
 				@Override public boolean isImmutable() { return true; }
 			}
 
@@ -204,8 +233,7 @@ public class T10_ObjectImmutabilityAssessor
 		{
 			static final class ProvisorySelfAssessableClassWhichSelfAssessesNegatively implements ImmutabilitySelfAssessable
 			{
-				@SuppressWarnings( "unused" )
-				private final Object provisoryMember = null;
+				@SuppressWarnings( "unused" ) private final Object provisoryMember = null;
 				@Override public boolean isImmutable() { return false; }
 			}
 
@@ -222,14 +250,31 @@ public class T10_ObjectImmutabilityAssessor
 		}.run();
 	}
 
+	@Test public void object_with_invariable_array_of_provisory_element_type_with_mutable_elements_is_mutable()
+	{
+		new Runnable()
+		{
+			static class ClassWithInvariableArrayOfProvisoryType
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray private final Object[] arrayField = { new StringBuilder() };
+			}
+
+			@Override public void run()
+			{
+				Object object = new ClassWithInvariableArrayOfProvisoryType();
+				ObjectAssessment assessment = assess( object );
+				assert assessment instanceof MutableObjectAssessment;
+			}
+		}.run();
+	}
+
 	@Test public void object_with_invariable_array_of_provisory_element_type_with_immutable_elements_is_immutable()
 	{
 		new Runnable()
 		{
 			static class ClassWithInvariableArrayOfProvisoryType
 			{
-				@SuppressWarnings( "unused" )
-				@InvariableArray private final Object[] arrayField = { 1 };
+				@SuppressWarnings( "unused" ) @InvariableArray private final Object[] arrayField = { 1 };
 			}
 
 			@Override public void run()

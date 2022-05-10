@@ -4,7 +4,7 @@ import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.MutableAncestorMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableSuperclassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableArrayElementMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
@@ -92,7 +92,7 @@ public final class ObjectImmutabilityAssessor
 				case CompositeProvisoryTypeAssessment<?,?> provisoryCompositeAssessment -> assessComposite( object, provisoryCompositeAssessment, visitedValues );
 				case SelfAssessableProvisoryTypeAssessment selfAssessableAssessment -> assessSelfAssessable( selfAssessableAssessment, (ImmutabilitySelfAssessable)object );
 				case MultiReasonProvisoryTypeAssessment multiReasonAssessment -> assessMultiReason( object, multiReasonAssessment, visitedValues );
-				case ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, provisoryAncestorAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
+				case ProvisorySuperclassProvisoryTypeAssessment provisorySuperclassAssessment -> assessSuperclass( object, provisorySuperclassAssessment, provisorySuperclassAssessment.superclassAssessment, visitedValues );
 				case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, provisoryFieldAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 				case ArrayMutableTypeAssessment arrayAssessment -> assessArray( object, arrayAssessment );
 				case MutableTypeAssessment mutableTypeAssessment -> new MutableClassMutableObjectAssessment( object, mutableTypeAssessment );
@@ -150,7 +150,7 @@ public final class ObjectImmutabilityAssessor
 		{
 			ObjectAssessment objectAssessment = switch( provisoryReason )
 				{
-					case ProvisorySuperclassProvisoryTypeAssessment provisoryAncestorAssessment -> assessAncestor( object, multiReasonProvisoryTypeAssessment, provisoryAncestorAssessment.ancestorAssessment, visitedValues );
+					case ProvisorySuperclassProvisoryTypeAssessment provisorySuperclassAssessment -> assessSuperclass( object, multiReasonProvisoryTypeAssessment, provisorySuperclassAssessment.superclassAssessment, visitedValues );
 					case ProvisoryFieldProvisoryTypeAssessment provisoryFieldAssessment -> assessField( object, multiReasonProvisoryTypeAssessment, provisoryFieldAssessment.fieldAssessment, visitedValues );
 					default -> throw new AssertionError( provisoryReason );
 				};
@@ -160,13 +160,13 @@ public final class ObjectImmutabilityAssessor
 		return ImmutableObjectAssessment.instance;
 	}
 
-	private ObjectAssessment assessAncestor( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryTypeAssessment ancestorTypeAssessment, Set<Object> visitedValues )
+	private ObjectAssessment assessSuperclass( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryTypeAssessment superTypeAssessment, Set<Object> visitedValues )
 	{
-		ObjectAssessment ancestorObjectAssessment = assessRecursively( object, ancestorTypeAssessment, visitedValues );
-		if( ancestorObjectAssessment instanceof MutableObjectAssessment mutableAncestorAssessment )
-			return new MutableAncestorMutableObjectAssessment( object, provisoryTypeAssessment, mutableAncestorAssessment );
-		assert ancestorObjectAssessment instanceof ImmutableObjectAssessment;
-		return ancestorObjectAssessment;
+		ObjectAssessment superObjectAssessment = assessRecursively( object, superTypeAssessment, visitedValues );
+		if( superObjectAssessment instanceof MutableObjectAssessment mutableSuperObjectAssessment )
+			return new MutableSuperclassMutableObjectAssessment( object, provisoryTypeAssessment, mutableSuperObjectAssessment );
+		assert superObjectAssessment instanceof ImmutableObjectAssessment;
+		return superObjectAssessment;
 	}
 
 	private ObjectAssessment assessField( Object object, ProvisoryTypeAssessment provisoryTypeAssessment, ProvisoryFieldAssessment provisoryFieldAssessment, Set<Object> visitedValues )
