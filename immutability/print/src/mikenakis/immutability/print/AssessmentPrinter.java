@@ -130,7 +130,7 @@ public final class AssessmentPrinter
 		{
 			case ArrayMutableTypeAssessment ignore -> append( " because it is an array class" );
 			case MultiReasonMutableTypeAssessment ignore -> append( " due to multiple reasons" );
-			case MutableFieldMutableTypeAssessment assessment -> append( " because field " + fieldName( assessment.mutableFieldAssessment.field ) + " is mutable" );
+			case MutableFieldMutableTypeAssessment assessment -> append( " because field " + fieldName( assessment.fieldAssessment.field ) + " is mutable" );
 			case MutableSuperclassMutableTypeAssessment assessment -> append( " because it extends mutable class " + className( assessment.superclassAssessment.type ) );
 			case ArrayOfMutableElementTypeMutableTypeAssessment ignore -> append( " because it is an array of mutable element type" );
 			//DoNotCover
@@ -173,8 +173,8 @@ public final class AssessmentPrinter
 		switch( mutableObjectAssessment )
 		{
 			case MutableSuperclassMutableObjectAssessment ignore -> append( " because its superclass is mutable" );
-			case MutableArrayElementMutableObjectAssessment assessment -> append( " because it is an invariable array, and element " + stringFromObjectIdentity( assessment.elementAssessment.object() ) + " at index " + assessment.mutableElementIndex + " is mutable" );
-			case MutableComponentMutableObjectAssessment<?,?> assessment -> append( " because it is a composite, and element " + stringFromObjectIdentity( assessment.mutableElement ) + " at index " + assessment.mutableElementIndex + " is mutable" );
+			case MutableArrayElementMutableObjectAssessment assessment -> append( " because it is an invariable array, and element " + stringFromObjectIdentity( assessment.elementAssessment.object() ) + " at index " + assessment.elementIndex + " is mutable" );
+			case MutableComponentMutableObjectAssessment<?,?> assessment -> append( " because it is a composite, and element " + stringFromObjectIdentity( assessment.elementAssessment.object() ) + " at index " + assessment.elementIndex + " is mutable" );
 			case MutableFieldValueMutableObjectAssessment assessment -> append( " because it is of provisory type " + className( assessment.typeAssessment().type ) + " and field " + fieldName( assessment.provisoryFieldAssessment.field ) + " has mutable value." );
 			case NonEmptyArrayMutableObjectAssessment ignore -> append( " because it is a non-empty array" );
 			case MutableClassMutableObjectAssessment ignore -> append( " because it is of a mutable class" );

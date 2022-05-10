@@ -15,17 +15,17 @@ public final class MutableArrayElementMutableObjectAssessment extends MutableObj
 {
 	public final Object object;
 	public final ProvisoryTypeAssessment typeAssessment;
-	public final int mutableElementIndex;
+	public final int elementIndex;
 	public final MutableObjectAssessment elementAssessment;
 
-	public MutableArrayElementMutableObjectAssessment( Object object, ProvisoryTypeAssessment typeAssessment, int mutableElementIndex, MutableObjectAssessment elementAssessment )
+	public MutableArrayElementMutableObjectAssessment( Object object, ProvisoryTypeAssessment typeAssessment, int elementIndex, MutableObjectAssessment elementAssessment )
 	{
 		assert object.getClass().isArray();
-		assert Array.get( object, mutableElementIndex ) == elementAssessment.object();
+		assert Array.get( object, elementIndex ) == elementAssessment.object();
 		assert typeAssessment.type == object.getClass();
 		this.object = object;
 		this.typeAssessment = typeAssessment;
-		this.mutableElementIndex = mutableElementIndex;
+		this.elementIndex = elementIndex;
 		this.elementAssessment = elementAssessment;
 	}
 

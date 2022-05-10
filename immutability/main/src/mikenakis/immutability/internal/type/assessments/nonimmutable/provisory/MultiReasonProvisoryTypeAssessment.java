@@ -15,7 +15,7 @@ public final class MultiReasonProvisoryTypeAssessment extends ProvisoryTypeAsses
 	public MultiReasonProvisoryTypeAssessment( Class<?> jvmClass, List<ProvisoryTypeAssessment> provisoryReasons )
 	{
 		super( jvmClass );
-		assert Helpers.isClass( jvmClass ); //the type must be a class; there is a different assessment for interfaces.
+		assert Helpers.isClass( jvmClass );
 		this.provisoryReasons = provisoryReasons;
 	}
 

@@ -14,6 +14,7 @@ public class MutableSuperclassMutableTypeAssessment extends MutableTypeAssessmen
 	public MutableSuperclassMutableTypeAssessment( Class<?> jvmClass, MutableTypeAssessment superclassAssessment )
 	{
 		super( jvmClass );
+		assert jvmClass.getSuperclass() == superclassAssessment.type;
 		this.superclassAssessment = superclassAssessment;
 	}
 

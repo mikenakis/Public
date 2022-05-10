@@ -15,6 +15,7 @@ public final class ProvisoryFieldProvisoryTypeAssessment extends ProvisoryTypeAs
 	public ProvisoryFieldProvisoryTypeAssessment( Class<?> jvmClass, ProvisoryFieldTypeProvisoryFieldAssessment fieldAssessment )
 	{
 		super( jvmClass );
+		assert fieldAssessment.field.getDeclaringClass() == jvmClass;
 		this.fieldAssessment = fieldAssessment;
 	}
 

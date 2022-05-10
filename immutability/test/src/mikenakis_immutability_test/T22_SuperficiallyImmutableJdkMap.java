@@ -134,8 +134,7 @@ public class T22_SuperficiallyImmutableJdkMap
 		assert mutableObjectAssessment.typeAssessment().type == mapObject.getClass();
 		assert mutableObjectAssessment instanceof MutableComponentMutableObjectAssessment;
 		MutableComponentMutableObjectAssessment<?,?> mutableComponentAssessment = (MutableComponentMutableObjectAssessment<?,?>)mutableObjectAssessment;
-		assert mutableComponentAssessment.mutableElementIndex >= 0 && mutableComponentAssessment.mutableElementIndex < size; //cannot assert precise index because hashmaps garble the order of items
-		assert mutableComponentAssessment.elementAssessment.object() == mutableComponentAssessment.mutableElement;
-		assert mutableComponentAssessment.mutableElement.equals( mutableEntry );
+		assert mutableComponentAssessment.elementIndex >= 0 && mutableComponentAssessment.elementIndex < size; //cannot assert precise index because hashmaps garble the order of items
+		assert mutableComponentAssessment.elementAssessment.object().equals( mutableEntry );
 	}
 }

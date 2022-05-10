@@ -10,13 +10,14 @@ import java.util.List;
  */
 public class MutableFieldMutableTypeAssessment extends MutableTypeAssessment
 {
-	public final MutableFieldAssessment mutableFieldAssessment;
+	public final MutableFieldAssessment fieldAssessment;
 
-	public MutableFieldMutableTypeAssessment( Class<?> jvmClass, MutableFieldAssessment mutableFieldAssessment )
+	public MutableFieldMutableTypeAssessment( Class<?> jvmClass, MutableFieldAssessment fieldAssessment )
 	{
 		super( jvmClass );
-		this.mutableFieldAssessment = mutableFieldAssessment;
+		assert fieldAssessment.field.getDeclaringClass() == jvmClass;
+		this.fieldAssessment = fieldAssessment;
 	}
 
-	@Override public List<Assessment> children() { return List.of( mutableFieldAssessment ); }
+	@Override public List<Assessment> children() { return List.of( fieldAssessment ); }
 }

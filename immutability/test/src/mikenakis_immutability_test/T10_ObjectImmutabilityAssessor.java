@@ -214,8 +214,8 @@ public class T10_ObjectImmutabilityAssessor
 				assert mutableFieldValueAssessment.fieldValueAssessment.typeAssessment().type == ArrayList.class;
 				assert mutableFieldValueAssessment.fieldValueAssessment instanceof MutableClassMutableObjectAssessment;
 				assert mutableFieldValueAssessment.provisoryFieldAssessment.field.getName().equals( "mutableField" );
-				assert mutableFieldValueAssessment.provisoryFieldAssessment.provisoryTypeAssessment.type == List.class;
-				assert mutableFieldValueAssessment.provisoryFieldAssessment.provisoryTypeAssessment instanceof InterfaceProvisoryTypeAssessment;
+				assert mutableFieldValueAssessment.provisoryFieldAssessment.fieldTypeAssessment.type == List.class;
+				assert mutableFieldValueAssessment.provisoryFieldAssessment.fieldTypeAssessment instanceof InterfaceProvisoryTypeAssessment;
 			}
 		}.run();
 	}

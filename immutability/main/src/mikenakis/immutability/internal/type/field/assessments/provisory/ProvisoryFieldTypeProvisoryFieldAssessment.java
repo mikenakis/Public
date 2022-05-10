@@ -12,13 +12,14 @@ import java.util.List;
  */
 public final class ProvisoryFieldTypeProvisoryFieldAssessment extends NonImmutableFieldAssessment
 {
-	public final ProvisoryTypeAssessment provisoryTypeAssessment;
+	public final ProvisoryTypeAssessment fieldTypeAssessment;
 
-	public ProvisoryFieldTypeProvisoryFieldAssessment( Field field, ProvisoryTypeAssessment provisoryTypeAssessment )
+	public ProvisoryFieldTypeProvisoryFieldAssessment( Field field, ProvisoryTypeAssessment fieldTypeAssessment )
 	{
 		super( field );
-		this.provisoryTypeAssessment = provisoryTypeAssessment;
+		assert fieldTypeAssessment.type == field.getType();
+		this.fieldTypeAssessment = fieldTypeAssessment;
 	}
 
-	@Override public List<Assessment> children() { return List.of( provisoryTypeAssessment ); }
+	@Override public List<Assessment> children() { return List.of( fieldTypeAssessment ); }
 }

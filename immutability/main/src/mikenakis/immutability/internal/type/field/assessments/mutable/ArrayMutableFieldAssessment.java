@@ -18,6 +18,7 @@ public final class ArrayMutableFieldAssessment extends MutableFieldAssessment
 	public ArrayMutableFieldAssessment( Field field )
 	{
 		super( field );
+		assert field.getType().isArray();
 		assert FieldImmutabilityAssessor.isInvariableField( field );
 	}
 }

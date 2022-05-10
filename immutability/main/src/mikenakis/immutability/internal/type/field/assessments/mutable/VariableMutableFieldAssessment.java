@@ -1,6 +1,7 @@
 package mikenakis.immutability.internal.type.field.assessments.mutable;
 
 import mikenakis.immutability.annotations.Invariable;
+import mikenakis.immutability.internal.type.field.FieldImmutabilityAssessor;
 
 import java.lang.reflect.Field;
 
@@ -10,5 +11,9 @@ import java.lang.reflect.Field;
  */
 public final class VariableMutableFieldAssessment extends MutableFieldAssessment
 {
-	public VariableMutableFieldAssessment( Field field ) { super( field ); }
+	public VariableMutableFieldAssessment( Field field )
+	{
+		super( field );
+		assert !FieldImmutabilityAssessor.isInvariableField( field );
+	}
 }

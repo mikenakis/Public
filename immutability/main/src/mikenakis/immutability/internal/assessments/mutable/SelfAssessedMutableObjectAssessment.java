@@ -19,6 +19,7 @@ public final class SelfAssessedMutableObjectAssessment extends MutableObjectAsse
 	public SelfAssessedMutableObjectAssessment( SelfAssessableProvisoryTypeAssessment typeAssessment, //
 		ImmutabilitySelfAssessable object )
 	{
+		assert object.getClass() == typeAssessment.type;
 		this.object = object;
 		this.typeAssessment = typeAssessment;
 	}

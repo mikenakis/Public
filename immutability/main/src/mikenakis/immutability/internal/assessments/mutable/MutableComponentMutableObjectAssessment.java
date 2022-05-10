@@ -14,17 +14,16 @@ public final class MutableComponentMutableObjectAssessment<T, E> extends Mutable
 {
 	public final T compositeObject;
 	public final CompositeProvisoryTypeAssessment<T,E> typeAssessment;
-	public final int mutableElementIndex;
-	public final E mutableElement;
+	public final int elementIndex;
 	public final MutableObjectAssessment elementAssessment;
 
 	public MutableComponentMutableObjectAssessment( T compositeObject, CompositeProvisoryTypeAssessment<T,E> typeAssessment, //
-		int mutableElementIndex, E mutableElement, MutableObjectAssessment elementAssessment )
+		int elementIndex, MutableObjectAssessment elementAssessment )
 	{
+		assert compositeObject.getClass() == typeAssessment.type;
 		this.compositeObject = compositeObject;
 		this.typeAssessment = typeAssessment;
-		this.mutableElementIndex = mutableElementIndex;
-		this.mutableElement = mutableElement;
+		this.elementIndex = elementIndex;
 		this.elementAssessment = elementAssessment;
 	}
 

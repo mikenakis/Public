@@ -112,7 +112,7 @@ public final class ObjectImmutabilityAssessor
 		{
 			ObjectAssessment elementAssessment = assessRecursively( element, visitedValues );
 			if( elementAssessment instanceof MutableObjectAssessment mutableObjectAssessment )
-				return new MutableComponentMutableObjectAssessment<>( compositeObject, typeAssessment, index, element, mutableObjectAssessment );
+				return new MutableComponentMutableObjectAssessment<>( compositeObject, typeAssessment, index, mutableObjectAssessment );
 			assert elementAssessment instanceof ImmutableObjectAssessment;
 			index++;
 		}
@@ -157,7 +157,7 @@ public final class ObjectImmutabilityAssessor
 		Set<Object> visitedValues )
 	{
 		Object fieldValue = MyKit.getFieldValue( object, provisoryFieldAssessment.field );
-		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment.provisoryTypeAssessment )
+		ObjectAssessment fieldValueAssessment = switch( provisoryFieldAssessment.fieldTypeAssessment )
 		{
 			case ArrayOfProvisoryElementTypeProvisoryTypeAssessment assessment -> assessInvariableArrayField( fieldValue, assessment, visitedValues );
 			default -> assessRecursively( fieldValue, visitedValues );
