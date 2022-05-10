@@ -8,7 +8,6 @@ import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableComponentMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.type.TypeImmutabilityAssessor;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -26,30 +25,22 @@ public class T11_SuperficiallyImmutableJdkList
 			throw new AssertionError();
 	}
 
-	private static ObjectImmutabilityAssessor newAssessor()
-	{
-		TypeImmutabilityAssessor classImmutabilityAssessor = TypeImmutabilityAssessor.create();
-		return new ObjectImmutabilityAssessor( classImmutabilityAssessor );
-	}
-
-	private static ObjectAssessment assess( ObjectImmutabilityAssessor assessor, Object object )
+	private static ObjectAssessment assess( Object object )
 	{
 		System.out.println( "assessment for object " + AssessmentPrinter.stringFromObjectIdentity( object ) + ":" );
 		ObjectAssessment assessment;
 		try
 		{
-			assert assessor.mustBeImmutableAssertion( object );
+			assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
 			assessment = ImmutableObjectAssessment.instance;
 		}
 		catch( ObjectMustBeImmutableException exception )
 		{
 			assessment = exception.mutableObjectAssessment;
 		}
-		AssessmentPrinter.getAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
+		AssessmentPrinter.getObjectAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
 	}
-
-	private final ObjectImmutabilityAssessor assessor = newAssessor();
 
 	/**
 	 * This checks to make sure that the JDK is using the same jdk-internal superficially-immutable list class for any number of elements above 3,
@@ -63,28 +54,28 @@ public class T11_SuperficiallyImmutableJdkList
 	@Test public void superficially_immutable_jdk_list_of_size_0_is_actually_immutable()
 	{
 		List<?> object = List.of();
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
 	@Test public void superficially_immutable_jdk_list_of_size_1_with_immutable_elements_is_actually_immutable()
 	{
 		List<?> object = List.of( 1 );
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
 	@Test public void superficially_immutable_jdk_list_of_size_2_with_immutable_elements_is_actually_immutable()
 	{
 		List<?> object = List.of( 1, 2 );
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
 	@Test public void superficially_immutable_jdk_list_of_size_3_with_immutable_elements_is_actually_immutable()
 	{
 		List<?> object = List.of( 1, 2, 3 );
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		assert assessment instanceof ImmutableObjectAssessment;
 	}
 
@@ -92,7 +83,7 @@ public class T11_SuperficiallyImmutableJdkList
 	{
 		Object mutableElement = new ArrayList<>();
 		List<?> object = List.of( mutableElement );
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkList( mutableElement, object, assessment, 1 );
 	}
 
@@ -100,7 +91,7 @@ public class T11_SuperficiallyImmutableJdkList
 	{
 		Object mutableElement = new ArrayList<>();
 		List<?> object = List.of( 1, mutableElement );
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkList( mutableElement, object, assessment, 2 );
 	}
 
@@ -108,7 +99,7 @@ public class T11_SuperficiallyImmutableJdkList
 	{
 		Object mutableElement = new ArrayList<>();
 		List<?> object = List.of( 1, 2, mutableElement );
-		ObjectAssessment assessment = assess( assessor, object );
+		ObjectAssessment assessment = assess( object );
 		checkMutableAssessmentOfSuperficiallyImmutableJdkList( mutableElement, object, assessment, 3 );
 	}
 

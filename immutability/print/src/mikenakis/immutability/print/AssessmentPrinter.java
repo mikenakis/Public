@@ -50,7 +50,14 @@ import java.util.List;
  */
 public final class AssessmentPrinter
 {
-	public static List<String> getAssessmentTextTree( Assessment assessment )
+	public static List<String> getObjectAssessmentTextTree( ObjectAssessment assessment )
+	{
+		List<String> lines = new ArrayList<>();
+		TextTree.tree( assessment, Assessment::children, AssessmentPrinter::getAssessmentText, s -> lines.add( s ) );
+		return lines;
+	}
+
+	public static List<String> getTypeAssessmentTextTree( TypeAssessment assessment )
 	{
 		List<String> lines = new ArrayList<>();
 		TextTree.tree( assessment, Assessment::children, AssessmentPrinter::getAssessmentText, s -> lines.add( s ) );
@@ -99,7 +106,7 @@ public final class AssessmentPrinter
 			case ArrayMutableFieldAssessment ignored -> //
 				append( " because is an array and it has not been annotated with @" + InvariableArray.class.getSimpleName() );
 			case InvariableArrayOfMutableElementTypeMutableFieldAssessment assessment -> //
-				append( " because it is an invariable array of mutable element type " + stringFromClassName( assessment.arrayElementTypeAssessment.type ) );
+				append( " because it is an array of mutable element type " + stringFromClassName( assessment.arrayElementTypeAssessment.type ) );
 			case MutableFieldTypeMutableFieldAssessment assessment -> //
 				append( " because it is of mutable type " + stringFromClassName( assessment.fieldTypeAssessment.type ) );
 			case VariableMutableFieldAssessment ignored -> //

@@ -16,6 +16,7 @@ public final class MutableFieldTypeMutableFieldAssessment extends MutableFieldAs
 	public MutableFieldTypeMutableFieldAssessment( Field field, MutableTypeAssessment fieldTypeAssessment )
 	{
 		super( field );
+		assert field.getType() == fieldTypeAssessment.type;
 		this.fieldTypeAssessment = fieldTypeAssessment;
 	}
 

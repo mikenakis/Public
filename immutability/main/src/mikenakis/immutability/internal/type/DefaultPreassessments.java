@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -54,6 +55,7 @@ final class DefaultPreassessments
 		addSupperficiallyImmutableJdkMap( assessor, Map.of() );
 		addSupperficiallyImmutableJdkMap( assessor, Map.of( "", "" ) );
 		addDefaultCompositePreassessment( assessor, MyKit.uncheckedClassCast( Optional.class ), OptionalDecomposer.instance );
+		addDefaultImmutablePreassessment( assessor, ZonedDateTime.class );
 	}
 
 	private static void addDefaultExtensiblePreassessment( TypeImmutabilityAssessor assessor, Class<?> jvmClass )
