@@ -18,9 +18,9 @@ import java.util.Map;
  * Test.
  */
 @SuppressWarnings( { "FieldMayBeFinal", "InstanceVariableMayNotBeInitialized" } )
-public class T12_SuperficiallyImmutableJdkMap
+public class T22_SuperficiallyImmutableJdkMap
 {
-	public T12_SuperficiallyImmutableJdkMap()
+	public T22_SuperficiallyImmutableJdkMap()
 	{
 		if( !MyKit.areAssertionsEnabled() )
 			throw new AssertionError();

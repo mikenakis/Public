@@ -6,7 +6,18 @@ import mikenakis.immutability.internal.mykit.MyKit;
 import org.junit.Test;
 
 import javax.swing.KeyStroke;
+import java.io.File;
 import java.lang.reflect.InaccessibleObjectException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Duration;
@@ -43,18 +54,70 @@ import java.util.regex.Pattern;
 /**
  * Test.
  */
-public class T02_FamousObjects
+public class T20_FamousObjects
 {
-	public T02_FamousObjects()
+	public T20_FamousObjects()
 	{
 		if( !MyKit.areAssertionsEnabled() )
 			throw new AssertionError();
 	}
 
+	private static Inet4Address getInet4Address()
+	{
+		try
+		{
+			return (Inet4Address)InetAddress.getByAddress( new byte[4] );
+		}
+		catch( UnknownHostException e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+	private static Inet6Address getInet6Address()
+	{
+		try
+		{
+			return (Inet6Address)InetAddress.getByAddress( new byte[16] );
+		}
+		catch( UnknownHostException e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+	private static URL getUrl()
+	{
+		try
+		{
+			return URI.create( "file:///" ).toURL();
+		}
+		catch( MalformedURLException e )
+		{
+			throw new RuntimeException( e );
+		}
+	}
+
+	private static StackTraceElement getStackTraceElement()
+	{
+		try
+		{
+			throw new RuntimeException();
+		}
+		catch( RuntimeException e )
+		{
+			return e.getStackTrace()[0];
+		}
+	}
+
 	@Test public void famous_immutable_objects_are_immutable()
 	{
-		List<Object> objects = List.of( Instant.EPOCH, Duration.ZERO, UUID.randomUUID(), LocalDate.EPOCH, LocalDateTime.now(), LocalTime.MIDNIGHT, //
-			MonthDay.now(), OffsetDateTime.now(), OffsetTime.now(), Period.ZERO, Year.now(), YearMonth.now(), ZoneOffset.UTC, ZonedDateTime.now() );
+		List<Object> objects = List.of( new Object(), getClass(), false, 'c', (byte)1, (short)1, 1, 1L, 1.0f, 1.0, "", //
+			Instant.EPOCH, Duration.ZERO, UUID.randomUUID(), LocalDate.EPOCH, LocalDateTime.now(), LocalTime.MIDNIGHT, MonthDay.now(), OffsetDateTime.now(), //
+			OffsetTime.now(), Period.ZERO, Year.now(), YearMonth.now(), ZoneOffset.UTC, ZonedDateTime.now(), //
+			new BigDecimal( 1 ), new BigInteger( "1" ), getInet4Address(), getInet6Address(), InetSocketAddress.createUnresolved( "", 0 ), //
+			getClass().getDeclaredMethods()[0], getClass().getConstructors()[0], URI.create( "file:///" ), getUrl(), Locale.ROOT, //
+			getStackTraceElement(), File.listRoots()[0] );
 		for( Object object : objects )
 			assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
 	}
@@ -78,7 +141,7 @@ public class T02_FamousObjects
 	@Test public void famous_mutable_objects_are_mutable()
 	{
 		List<Object> objects = List.of( new ArrayList<>(), new HashMap<>(), new Date(), new HashSet<>(), new LinkedList<>(), new Properties(), //
-			new Random(), Pattern.compile("" ).matcher( "" ), new StringBuilder(), new LinkedHashMap<>(), new LinkedHashSet<>(), //
+			new Random(), Pattern.compile( "" ).matcher( "" ), new StringBuilder(), new LinkedHashMap<>(), new LinkedHashSet<>(), //
 			new SimpleDateFormat( "", Locale.ROOT ), new StringTokenizer( "" ), new ConcurrentHashMap<>(), KeyStroke.getKeyStroke( 'c' ) );
 		for( Object object : objects )
 			MyTestKit.expect( ObjectMustBeImmutableException.class, () -> ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object ) );

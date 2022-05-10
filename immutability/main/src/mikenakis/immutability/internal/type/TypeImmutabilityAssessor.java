@@ -21,13 +21,8 @@ import java.util.Map;
  */
 public final class TypeImmutabilityAssessor
 {
-	public static final TypeImmutabilityAssessor instance = create();
-
 	/**
 	 * DO NOT USE; FOR INTERNAL USE ONLY.
-	 *
-	 * Note: normally, you want to use the {@link #instance} field instead of this static factory method.
-	 * This static factory method is public only so as to allow the tests to create their own instances for testing purposes.
 	 */
 	public static TypeImmutabilityAssessor create()
 	{

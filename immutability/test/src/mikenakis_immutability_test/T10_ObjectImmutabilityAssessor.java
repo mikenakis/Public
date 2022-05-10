@@ -1,26 +1,37 @@
 package mikenakis_immutability_test;
 
-import mikenakis.immutability.internal.assessments.mutable.MutableSuperclassMutableObjectAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
-import mikenakis.immutability.print.AssessmentPrinter;
 import mikenakis.immutability.ImmutabilitySelfAssessable;
 import mikenakis.immutability.ObjectImmutabilityAssessor;
+import mikenakis.immutability.annotations.Invariable;
 import mikenakis.immutability.annotations.InvariableArray;
 import mikenakis.immutability.exceptions.ObjectMustBeImmutableException;
 import mikenakis.immutability.internal.assessments.ImmutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.MutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.ObjectAssessment;
-import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.MutableClassMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableFieldValueMutableObjectAssessment;
+import mikenakis.immutability.internal.assessments.mutable.MutableSuperclassMutableObjectAssessment;
 import mikenakis.immutability.internal.assessments.mutable.SelfAssessedMutableObjectAssessment;
 import mikenakis.immutability.internal.mykit.MyKit;
-import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.mutable.MutableFieldMutableTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.InterfaceProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.MultiReasonProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryFieldProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisorySuperclassProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.assessments.provisory.ProvisoryTypeAssessment;
 import mikenakis.immutability.internal.type.assessments.provisory.SelfAssessableProvisoryTypeAssessment;
+import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableArrayFieldMustBePrivateException;
+import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableFieldMayNotAlreadyBeInvariableException;
+import mikenakis.immutability.internal.type.exceptions.AnnotatedInvariableFieldMustBePrivateException;
+import mikenakis.immutability.internal.type.exceptions.NonArrayFieldMayNotBeAnnotatedInvariableArrayException;
+import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotAlreadyBeImmutableException;
+import mikenakis.immutability.internal.type.exceptions.PreassessedClassMustNotBePreviouslyAssessedException;
+import mikenakis.immutability.internal.type.exceptions.PreassessedTypeMustBeClassException;
+import mikenakis.immutability.internal.type.exceptions.SelfAssessableClassMustNotBeImmutableException;
+import mikenakis.immutability.internal.type.exceptions.VariableFieldMayNotBeAnnotatedInvariableArrayException;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldAssessment;
 import mikenakis.immutability.internal.type.field.assessments.provisory.ProvisoryFieldTypeProvisoryFieldAssessment;
+import mikenakis.immutability.print.AssessmentPrinter;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -40,13 +51,13 @@ public class T10_ObjectImmutabilityAssessor
 			throw new AssertionError();
 	}
 
-	private static ObjectAssessment assess( Object object )
+	private static ObjectAssessment assess( ObjectImmutabilityAssessor objectImmutabilityAssessor, Object object )
 	{
 		System.out.println( "assessment for object " + AssessmentPrinter.stringFromObjectIdentity( object ) + ":" );
 		ObjectAssessment assessment;
 		try
 		{
-			assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
+			assert objectImmutabilityAssessor.mustBeImmutableAssertion( object );
 			assessment = ImmutableObjectAssessment.instance;
 		}
 		catch( ObjectMustBeImmutableException exception )
@@ -55,6 +66,11 @@ public class T10_ObjectImmutabilityAssessor
 		}
 		AssessmentPrinter.getObjectAssessmentTextTree( assessment ).forEach( s -> System.out.println( "    " + s ) );
 		return assessment;
+	}
+
+	private static ObjectAssessment assess( Object object )
+	{
+		return assess( ObjectImmutabilityAssessor.instance, object );
 	}
 
 	@Test public void null_is_immutable()
@@ -82,6 +98,23 @@ public class T10_ObjectImmutabilityAssessor
 		Object object = new Integer[] { 1 };
 		ObjectAssessment assessment = assess( object );
 		assert assessment instanceof MutableObjectAssessment;
+	}
+
+	@Test public void object_of_immutable_class_with_mutable_static_field_is_immutable()
+	{
+		new Runnable()
+		{
+			static final class ImmutableClassWithStaticMutableField
+			{
+				@SuppressWarnings( "unused" ) private static int staticMutableField = 0;
+			}
+
+			@Override public void run()
+			{
+				ObjectAssessment assessment = assess( new ImmutableClassWithStaticMutableField() );
+				assert assessment instanceof ImmutableObjectAssessment;
+			}
+		}.run();
 	}
 
 	@Test public void immutable_object_with_mutable_super_is_mutable()
@@ -127,10 +160,7 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert ObjectImmutabilityAssessor.instance.typeImmutabilityAssessor.assess( SelfReferencingProvisoryClass.class ) instanceof ProvisoryTypeAssessment;
-				var object = new SelfReferencingProvisoryClass();
-				ObjectAssessment assessment = assess( object );
-				assert assessment instanceof ImmutableObjectAssessment;
+				assert assess( new SelfReferencingProvisoryClass() ) instanceof ImmutableObjectAssessment;
 			}
 		}.run();
 	}
@@ -151,11 +181,7 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert ObjectImmutabilityAssessor.instance.typeImmutabilityAssessor.assess( SelfReferencingProvisoryClass.class ) instanceof ProvisoryFieldProvisoryTypeAssessment;
-				assert ObjectImmutabilityAssessor.instance.typeImmutabilityAssessor.assess( ClassExtendingSelfReferencingProvisoryClass.class ) instanceof MultiReasonProvisoryTypeAssessment;
-				var object = new ClassExtendingSelfReferencingProvisoryClass();
-				ObjectAssessment assessment = assess( object );
-				assert assessment instanceof ImmutableObjectAssessment;
+				assert assess( new ClassExtendingSelfReferencingProvisoryClass() ) instanceof ImmutableObjectAssessment;
 			}
 		}.run();
 	}
@@ -171,10 +197,7 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert ObjectImmutabilityAssessor.instance.typeImmutabilityAssessor.assess( ClassWithInvariableFieldOfInterfaceTypeWithValueOfImmutableType.class ) instanceof ProvisoryTypeAssessment;
-				var object = new ClassWithInvariableFieldOfInterfaceTypeWithValueOfImmutableType();
-				ObjectAssessment assessment = assess( object );
-				assert assessment instanceof ImmutableObjectAssessment;
+				assert assess( new ClassWithInvariableFieldOfInterfaceTypeWithValueOfImmutableType() ) instanceof ImmutableObjectAssessment;
 			}
 		}.run();
 	}
@@ -219,10 +242,7 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert ObjectImmutabilityAssessor.instance.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesPositively.class ) instanceof SelfAssessableProvisoryTypeAssessment;
-				var object = new ProvisorySelfAssessableClassWhichSelfAssessesPositively();
-				ObjectAssessment assessment = assess( object );
-				assert assessment instanceof ImmutableObjectAssessment;
+				assert assess( new ProvisorySelfAssessableClassWhichSelfAssessesPositively() ) instanceof ImmutableObjectAssessment;
 			}
 		}.run();
 	}
@@ -239,13 +259,46 @@ public class T10_ObjectImmutabilityAssessor
 
 			@Override public void run()
 			{
-				assert ObjectImmutabilityAssessor.instance.typeImmutabilityAssessor.assess( ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class ) instanceof SelfAssessableProvisoryTypeAssessment;
 				var object = new ProvisorySelfAssessableClassWhichSelfAssessesNegatively();
 				ObjectAssessment assessment = assess( object );
 				assert assessment instanceof SelfAssessedMutableObjectAssessment;
 				SelfAssessedMutableObjectAssessment mutableSelfAssessment = (SelfAssessedMutableObjectAssessment)assessment;
 				assert mutableSelfAssessment.object == object;
 				assert mutableSelfAssessment.typeAssessment.type == ProvisorySelfAssessableClassWhichSelfAssessesNegatively.class;
+			}
+		}.run();
+	}
+
+	@Test public void object_with_array_field_is_mutable()
+	{
+		new Runnable()
+		{
+			static final class ClassWithArrayField
+			{
+				@SuppressWarnings( "unused" ) public final int[] array = null;
+			}
+
+			@Override public void run()
+			{
+				var assessment = assess( new ClassWithArrayField() );
+				MutableClassMutableObjectAssessment mutableClassMutableObjectAssessment = (MutableClassMutableObjectAssessment)assessment;
+				assert mutableClassMutableObjectAssessment.typeAssessment instanceof MutableFieldMutableTypeAssessment;
+			}
+		}.run();
+	}
+
+	@Test public void object_with_invariable_array_field_of_circular_reference_element_type_is_immutable()
+	{
+		new Runnable()
+		{
+			static final class ClassWithInvariableArrayFieldOfCircularReferenceElementType
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray private final ClassWithInvariableArrayFieldOfCircularReferenceElementType[] array = null;
+			}
+
+			@Override public void run()
+			{
+				assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( new ClassWithInvariableArrayFieldOfCircularReferenceElementType() );
 			}
 		}.run();
 	}
@@ -289,5 +342,325 @@ public class T10_ObjectImmutabilityAssessor
 	@Test public void object_with_array_of_array_is_mutable()
 	{
 		//TODO
+	}
+
+	// TODO: revise the purposefulness of allowing this. Perhaps we should not allow it.
+	@Test public void invariable_array_annotation_on_array_field_of_mutable_element_type_is_ignored()
+	{
+		new Runnable()
+		{
+			static final class ClassWithInvariableArrayInvariableFieldOfMutableElementType
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray private final ArrayList<Integer>[] arrayOfMutableElements = null;
+			}
+
+			@Override public void run()
+			{
+				var assessment = assess( new ClassWithInvariableArrayInvariableFieldOfMutableElementType() );
+				assert assessment instanceof MutableObjectAssessment;
+			}
+		}.run();
+	}
+
+	@Test public void invariable_annotation_on_public_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithPublicFieldAnnotatedInvariable
+			{
+				@SuppressWarnings( "unused" ) @Invariable public Integer publicFieldAnnotatedInvariable;
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( AnnotatedInvariableFieldMustBePrivateException.class, () -> //
+					assess( new ClassWithPublicFieldAnnotatedInvariable() ) );
+				assert exception.field.getName().equals( "publicFieldAnnotatedInvariable" );
+			}
+		}.run();
+	}
+
+	@Test public void invariable_annotation_on_protected_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithProtectedFieldAnnotatedInvariable
+			{
+				@SuppressWarnings( "unused" ) @Invariable protected Integer protectedFieldAnnotatedInvariable;
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( AnnotatedInvariableFieldMustBePrivateException.class, () -> //
+					assess( new ClassWithProtectedFieldAnnotatedInvariable() ) );
+				assert exception.field.getName().equals( "protectedFieldAnnotatedInvariable" );
+			}
+		}.run();
+	}
+
+	@Test public void invariable_annotation_on_package_private_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithPublicFieldAnnotatedInvariable
+			{
+				@SuppressWarnings( "unused" ) @Invariable Integer packagePrivateFieldAnnotatedInvariable;
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( AnnotatedInvariableFieldMustBePrivateException.class, () -> //
+					assess( new ClassWithPublicFieldAnnotatedInvariable() ) );
+				assert exception.field.getName().equals( "packagePrivateFieldAnnotatedInvariable" );
+			}
+		}.run();
+	}
+
+	@Test public void invariable_annotation_on_already_invariable_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithInvariableFieldAnnotatedInvariable
+			{
+				@SuppressWarnings( "unused" ) @Invariable private final Integer invariableFieldAnnotatedInvariable = Integer.MAX_VALUE;
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( AnnotatedInvariableFieldMayNotAlreadyBeInvariableException.class, () -> //
+					assess( new ClassWithInvariableFieldAnnotatedInvariable() ) );
+				assert exception.field.getName().equals( "invariableFieldAnnotatedInvariable" );
+			}
+		}.run();
+	}
+
+	// TODO: revise the purposefulness of this. Perhaps we should throw an exception, because doing such a thing cannot possibly lead to any good.
+	@Test public void invariable_annotation_on_mutable_field_is_ignored()
+	{
+		new Runnable()
+		{
+			static class ClassWithMutableFieldAnnotatedInvariable
+			{
+				@SuppressWarnings( "unused" ) @Invariable private ArrayList<Integer> mutableFieldAnnotatedInvariable = null;
+			}
+
+			@Override public void run()
+			{
+				var assessment = assess( new ClassWithMutableFieldAnnotatedInvariable() );
+				assert assessment instanceof MutableObjectAssessment;
+			}
+		}.run();
+	}
+
+	@Test public void object_with_invariable_array_invariable_field_of_immutable_element_type_is_immutable()
+	{
+		new Runnable()
+		{
+			static final class ClassWithInvariableArrayInvariableFieldOfImmutableElementType
+			{
+				@SuppressWarnings( "unused" ) @Invariable @InvariableArray private int[] array = null;
+			}
+
+			@Override public void run()
+			{
+				var assessment = assess( new ClassWithInvariableArrayInvariableFieldOfImmutableElementType() );
+				assert assessment instanceof ImmutableObjectAssessment;
+			}
+		}.run();
+	}
+
+	@Test public void invariable_array_annotation_on_non_private_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithPublicFieldAnnotatedInvariableArray
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray public final int[] publicFieldAnnotatedInvariableArray = null;
+			}
+
+			static class ClassWithProtectedFieldAnnotatedInvariableArray
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray protected final int[] protectedFieldAnnotatedInvariableArray = null;
+			}
+
+			static class ClassWithPackagePrivateFieldAnnotatedInvariableArray
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray final int[] packagePrivateFieldAnnotatedInvariableArray = null;
+			}
+
+			@Override public void run()
+			{
+				MyTestKit.expect( AnnotatedInvariableArrayFieldMustBePrivateException.class, () -> //
+					assess( new ClassWithPublicFieldAnnotatedInvariableArray() ) );
+				MyTestKit.expect( AnnotatedInvariableArrayFieldMustBePrivateException.class, () -> //
+					assess( new ClassWithProtectedFieldAnnotatedInvariableArray() ) );
+				MyTestKit.expect( AnnotatedInvariableArrayFieldMustBePrivateException.class, () -> //
+					assess( new ClassWithPackagePrivateFieldAnnotatedInvariableArray() ) );
+			}
+		}.run();
+	}
+
+	@Test public void invariable_array_annotation_on_non_array_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithNonArrayField
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray private Object nonArrayField = null;
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( NonArrayFieldMayNotBeAnnotatedInvariableArrayException.class, () -> //
+					assess( new ClassWithNonArrayField() ) );
+				assert exception.field.getName().equals( "nonArrayField" );
+			}
+		}.run();
+	}
+
+	@Test public void invariable_array_annotation_on_variable_field_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithVariableFieldAnnotatedAsInvariableArray
+			{
+				@SuppressWarnings( "unused" ) @InvariableArray private Object[] variableField = null;
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( VariableFieldMayNotBeAnnotatedInvariableArrayException.class, () -> //
+					assess( new ClassWithVariableFieldAnnotatedAsInvariableArray() ) );
+				assert exception.field.getName().equals( "variableField" );
+			}
+		}.run();
+	}
+
+	@Test public void immutable_preassessment_on_already_immutable_class_is_caught()
+	{
+		new Runnable()
+		{
+			static final class AlreadyImmutableClass
+			{ }
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( PreassessedClassMustNotAlreadyBeImmutableException.class, () -> //
+					ObjectImmutabilityAssessor.instance.addImmutablePreassessment( AlreadyImmutableClass.class ) );
+				assert exception.jvmClass == AlreadyImmutableClass.class;
+			}
+		}.run();
+	}
+
+	@Test public void immutable_preassessment_on_interface_is_caught()
+	{
+		new Runnable()
+		{
+			interface Interface
+			{ }
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( PreassessedTypeMustBeClassException.class, () -> //
+					ObjectImmutabilityAssessor.instance.addImmutablePreassessment( Interface.class ) );
+				assert exception.type == Interface.class;
+			}
+		}.run();
+	}
+
+	@Test public void immutable_preassessment_on_array_is_caught()
+	{
+		Class<?> arrayClass = int[].class;
+		var exception = MyTestKit.expect( PreassessedTypeMustBeClassException.class, () -> //
+			ObjectImmutabilityAssessor.instance.addImmutablePreassessment( arrayClass ) );
+		assert exception.type == arrayClass;
+	}
+
+	@Test public void immutable_preassessment_on_previously_assessed_immutable_class_is_caught()
+	{
+		new Runnable()
+		{
+			static final class ImmutableClass
+			{ }
+
+			@Override public void run()
+			{
+				assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( new ImmutableClass() );
+				MyTestKit.expect( PreassessedClassMustNotBePreviouslyAssessedException.class, () -> //
+					ObjectImmutabilityAssessor.instance.addImmutablePreassessment( ImmutableClass.class ) );
+			}
+		}.run();
+	}
+
+	@Test public void immutable_preassessment_on_previously_assessed_mutable_class_is_caught()
+	{
+		new Runnable()
+		{
+			static class ClassWithMutableField
+			{
+				@SuppressWarnings( "unused" ) private final ArrayList<String> mutableField = null;
+			}
+
+			@Override public void run()
+			{
+				assert assess( new ClassWithMutableField() ) instanceof MutableObjectAssessment;
+				MyTestKit.expect( PreassessedClassMustNotBePreviouslyAssessedException.class, () -> //
+					ObjectImmutabilityAssessor.instance.addImmutablePreassessment( ClassWithMutableField.class ) );
+			}
+		}.run();
+	}
+
+	@Test public void object_of_mutable_class_preassessed_as_immutable_is_immutable()
+	{
+		new Runnable()
+		{
+			static final class ProvisoryClass
+			{
+				@SuppressWarnings( "unused" ) private final List<Object> provisoryField = new ArrayList<>();
+			}
+
+			@Override public void run()
+			{
+				ObjectImmutabilityAssessor.instance.addImmutablePreassessment( ProvisoryClass.class );
+				assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( new ProvisoryClass() );
+			}
+		}.run();
+	}
+
+	@Test public void self_assessable_class_that_is_already_immutable_is_caught()
+	{
+		new Runnable()
+		{
+			static final class ImmutableSelfAssessableClass implements ImmutabilitySelfAssessable
+			{
+				@Override public boolean isImmutable() { throw new AssertionError(); /* we do not expect this to be invoked. */ }
+			}
+
+			@Override public void run()
+			{
+				var exception = MyTestKit.expect( SelfAssessableClassMustNotBeImmutableException.class, () -> //
+					assess( new ImmutableSelfAssessableClass() ) );
+				assert exception.jvmClass == ImmutableSelfAssessableClass.class;
+			}
+		}.run();
+	}
+
+	@Test public void immutable_object_with_supertype_field_is_immutable()
+	{
+		new Runnable()
+		{
+			static class SuperClass
+			{
+				@SuppressWarnings( "unused" ) public final DerivedClass derivedClassField = null;
+			}
+
+			static final class DerivedClass extends SuperClass
+			{ }
+
+			@Override public void run()
+			{
+				assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( new SuperClass() );
+			}
+		}.run();
 	}
 }

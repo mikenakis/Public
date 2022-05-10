@@ -57,13 +57,6 @@ public final class AssessmentPrinter
 		return lines;
 	}
 
-	public static List<String> getTypeAssessmentTextTree( TypeAssessment assessment )
-	{
-		List<String> lines = new ArrayList<>();
-		TextTree.tree( assessment, Assessment::children, AssessmentPrinter::getAssessmentText, s -> lines.add( s ) );
-		return lines;
-	}
-
 	private static String getAssessmentText( Assessment unknownAssessment )
 	{
 		AssessmentPrinter assessmentPrinter = new AssessmentPrinter();
@@ -213,12 +206,12 @@ public final class AssessmentPrinter
 			};
 	}
 
-	public static String stringFromClassName( Class<?> jvmClass )
+	private static String stringFromClassName( Class<?> jvmClass )
 	{
 		return "'" + MyKit.getClassName( jvmClass ) + "'";
 	}
 
-	private static String stringFromFieldName( Field field )
+	private static String stringFromFieldName( @SuppressWarnings( "TypeMayBeWeakened" ) Field field )
 	{
 		return "'" + field.getName() + "'";
 	}

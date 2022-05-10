@@ -17,9 +17,9 @@ import java.util.List;
  * Test.
  */
 @SuppressWarnings( { "FieldMayBeFinal", "InstanceVariableMayNotBeInitialized" } )
-public class T11_SuperficiallyImmutableJdkList
+public class T21_SuperficiallyImmutableJdkList
 {
-	public T11_SuperficiallyImmutableJdkList()
+	public T21_SuperficiallyImmutableJdkList()
 	{
 		if( !MyKit.areAssertionsEnabled() )
 			throw new AssertionError();
