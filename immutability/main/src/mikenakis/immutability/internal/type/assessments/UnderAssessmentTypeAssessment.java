@@ -1,11 +1,11 @@
 package mikenakis.immutability.internal.type.assessments;
 
 /**
- * Signifies that a type is currently under immutability assessment.  Should never be seen by the user.
- * <p>
- * This class is used internally while assessing the immutability of types, so as to avoid infinite recursion when a class graph is cyclic.
+ * Signifies that a type is currently under assessment.  Used internally, should never be seen by the user.
  */
 public final class UnderAssessmentTypeAssessment extends TypeAssessment
 {
-	public UnderAssessmentTypeAssessment() { }
+	public static final UnderAssessmentTypeAssessment instance = new UnderAssessmentTypeAssessment();
+
+	private UnderAssessmentTypeAssessment() { }
 }

@@ -68,7 +68,7 @@ final class DefaultPreassessments
 	private static void addDefaultImmutablePreassessment( TypeImmutabilityAssessor assessor, Class<?> jvmClass )
 	{
 		assert !(new TypeImmutabilityAssessor().assess( jvmClass ) instanceof ImmutableTypeAssessment);
-		assessor.addDefaultPreassessment( jvmClass, assessor.immutableClassAssessmentInstance );
+		assessor.addDefaultPreassessment( jvmClass, ImmutableTypeAssessment.instance );
 	}
 
 	private static <T extends Iterable<E>,E> void addDefaultIterablePreassessment( TypeImmutabilityAssessor assessor, Class<T> jvmClass )

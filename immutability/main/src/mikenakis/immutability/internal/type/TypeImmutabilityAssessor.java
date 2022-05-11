@@ -31,8 +31,6 @@ public final class TypeImmutabilityAssessor
 		return assessor;
 	}
 
-	public final ImmutableTypeAssessment immutableClassAssessmentInstance = new ImmutableTypeAssessment();
-	private final UnderAssessmentTypeAssessment underAssessmentInstance = new UnderAssessmentTypeAssessment();
 	private final Map<Class<?>,TypeAssessment> assessmentsByType = new HashMap<>();
 	private final Reflector reflector = new Reflector( this );
 
@@ -48,7 +46,7 @@ public final class TypeImmutabilityAssessor
 		assert addedClassMustNotAlreadyBeImmutableAssertion( jvmClass );
 		synchronized( assessmentsByType )
 		{
-			assessmentsByType.put( jvmClass, immutableClassAssessmentInstance );
+			assessmentsByType.put( jvmClass, ImmutableTypeAssessment.instance );
 		}
 	}
 
@@ -61,10 +59,10 @@ public final class TypeImmutabilityAssessor
 				TypeAssessment existingAssessment = assessmentsByType.get( type );
 				if( existingAssessment != null )
 					return existingAssessment;
-				assessmentsByType.put( type, underAssessmentInstance );
+				assessmentsByType.put( type, UnderAssessmentTypeAssessment.instance );
 				TypeAssessment newAssessment = reflector.assess( type );
 				TypeAssessment oldAssessment = assessmentsByType.put( type, newAssessment );
-				assert oldAssessment == underAssessmentInstance;
+				assert oldAssessment == UnderAssessmentTypeAssessment.instance;
 				assert !(newAssessment instanceof UnderAssessmentTypeAssessment);
 				return newAssessment;
 			} );

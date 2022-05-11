@@ -5,5 +5,7 @@ package mikenakis.immutability.internal.type.field.assessments;
  */
 public final class ImmutableFieldAssessment extends FieldAssessment
 {
-	public ImmutableFieldAssessment() { }
+	public static final ImmutableFieldAssessment instance = new ImmutableFieldAssessment();
+
+	private ImmutableFieldAssessment() { }
 }

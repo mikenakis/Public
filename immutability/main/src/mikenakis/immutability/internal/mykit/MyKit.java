@@ -1,10 +1,7 @@
 package mikenakis.immutability.internal.mykit;
 
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
-
 import java.lang.reflect.Field;
 
-@SuppressWarnings( "NewClassNamingConvention" )
 public final class MyKit
 {
 	private MyKit() { }
@@ -24,29 +21,6 @@ public final class MyKit
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Object-related and miscellaneous.
-
-	@SuppressWarnings( "CanBeFinal" ) private static final String neverNull = "";
-
-	/**
-	 * Returns the value passed as a parameter.
-	 * <p>
-	 * Useful for setting breakpoints, for avoiding warnings such as 'unused parameter', 'condition is always true', 'result of method call ignored', etc.
-	 *
-	 * @param value the value to return.
-	 *
-	 * @return the same value.
-	 */
-	@CanIgnoreReturnValue public static <T> T get( T value )
-	{
-		//noinspection ConstantConditions
-		if( neverNull == null )
-		{
-			assert false;
-			@SuppressWarnings( "unchecked" ) T result = (T)neverNull;
-			return result;
-		}
-		return value;
-	}
 
 	/**
 	 * Casts a {@link Class} of any type to a {@link Class} of a given type
@@ -124,72 +98,60 @@ public final class MyKit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// StringBuilder stuff
 
-	public static class stringBuilder
+	public static void appendEscapedForJava( StringBuilder stringBuilder, String s, char quote )
 	{
-		public static void appendEscapedForJava( StringBuilder stringBuilder, String s, char quote )
+		if( s == null )
 		{
-			if( s == null )
-			{
-				stringBuilder.append( "null" );
-				return;
-			}
-			stringBuilder.append( quote );
-			for( char c : s.toCharArray() )
-			{
-				if( c == '"' )
-					stringBuilder.append( "\\\"" );
-				else if( c == '\r' )
-					stringBuilder.append( "\\r" );
-				else if( c == '\n' )
-					stringBuilder.append( "\\n" );
-				else if( c == '\t' )
-					stringBuilder.append( "\\t" );
-				else if( c < 32 )
-					stringBuilder.append( String.format( "\\x%02x", (int)c ) );
-				else if( !Character.isDefined( c ) )
-					stringBuilder.append( String.format( "\\u%04x", (int)c ) );
-				else
-					stringBuilder.append( c );
-			}
-			stringBuilder.append( quote );
+			stringBuilder.append( "null" );
+			return;
 		}
-
-		/**
-		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}. The difference between this function and {@link
-		 * StringBuilder#append(Object)} is that this function treats {@link String} and {@link Character} differently: they are escaped and surrounded with
-		 * quotes.
-		 *
-		 * @param stringBuilder the StringBuilder to append to.
-		 * @param object        the object whose string representation is to be appended to the StringBuilder.
-		 */
-		public static void append( StringBuilder stringBuilder, Object object )
+		stringBuilder.append( quote );
+		for( char c : s.toCharArray() )
 		{
-			switch( object )
-			{
-				case String s -> appendEscapedForJava( stringBuilder, s, '"' );
-				case Character c -> appendEscapedForJava( stringBuilder, String.valueOf( c ), '\'' );
-				default -> stringBuilder.append( object );
-			}
+			if( c == '"' )
+				stringBuilder.append( "\\\"" );
+			else if( c == '\r' )
+				stringBuilder.append( "\\r" );
+			else if( c == '\n' )
+				stringBuilder.append( "\\n" );
+			else if( c == '\t' )
+				stringBuilder.append( "\\t" );
+			else if( c < 32 )
+				stringBuilder.append( String.format( "\\x%02x", (int)c ) );
+			else if( !Character.isDefined( c ) )
+				stringBuilder.append( String.format( "\\u%04x", (int)c ) );
+			else
+				stringBuilder.append( c );
 		}
+		stringBuilder.append( quote );
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// String stuff
-
-	public static class string
+	/**
+	 * Appends the string representation of an {@link Object} to a {@link StringBuilder}. The difference between this function and {@link
+	 * StringBuilder#append(Object)} is that this function treats {@link String} and {@link Character} differently: they are escaped and surrounded with
+	 * quotes.
+	 *
+	 * @param stringBuilder the StringBuilder to append to.
+	 * @param object        the object whose string representation is to be appended to the StringBuilder.
+	 */
+	public static void append( StringBuilder stringBuilder, Object object )
 	{
-		/**
-		 * Gets the string representation of an {@link Object}. see {@link stringBuilder#append(StringBuilder, Object)}
-		 *
-		 * @param object the object whose string representation is requested.
-		 */
-		public static String from( Object object )
+		switch( object )
 		{
-			StringBuilder stringBuilder = new StringBuilder();
-			//IntellijIdea blooper: 'UnnecessarilyQualifiedInnerClassAccess' warning on qualified inner class access which is necessary.
-			//noinspection UnnecessarilyQualifiedInnerClassAccess
-			MyKit.stringBuilder.append( stringBuilder, object );
-			return stringBuilder.toString();
+			case String s -> appendEscapedForJava( stringBuilder, s, '"' );
+			case Character c -> appendEscapedForJava( stringBuilder, String.valueOf( c ), '\'' );
+			default -> stringBuilder.append( object );
 		}
+	}
+	/**
+	 * Gets the string representation of an {@link Object}.
+	 *
+	 * @param object the object whose string representation is requested.
+	 */
+	public static String stringFromObject( Object object )
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		append( stringBuilder, object );
+		return stringBuilder.toString();
 	}
 }

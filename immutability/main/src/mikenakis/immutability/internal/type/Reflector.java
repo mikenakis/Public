@@ -112,7 +112,7 @@ final class Reflector
 		if( Helpers.isExtensible( type ) )
 			return new ExtensibleProvisoryTypeAssessment( TypeAssessment.Mode.Assessed, type );
 
-		return typeImmutabilityAssessor.immutableClassAssessmentInstance;
+		return ImmutableTypeAssessment.instance;
 	}
 
 	private TypeAssessment assessSuperclass( Class<?> superclass )
@@ -120,20 +120,19 @@ final class Reflector
 		TypeAssessment superclassAssessment = typeImmutabilityAssessor.assess( superclass );
 		return switch( superclassAssessment )
 			{
+				//Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
 				//DoNotCover
-				case ImmutableTypeAssessment immutableTypeAssessment ->
-					throw new AssertionError( immutableTypeAssessment ); //Cannot happen, because the superclass has obviously been extended, so it is extensible, so it can not be immutable.
+				case ImmutableTypeAssessment immutableTypeAssessment -> throw new AssertionError( immutableTypeAssessment );
+				//Cannot happen, because the supertype of a class cannot be an interface.
 				//DoNotCover
-				case InterfaceProvisoryTypeAssessment interfaceAssessment ->
-					throw new AssertionError( interfaceAssessment ); //Cannot happen, because the supertype of a class cannot be an interface.
+				case InterfaceProvisoryTypeAssessment interfaceAssessment -> throw new AssertionError( interfaceAssessment );
 				case UnderAssessmentTypeAssessment underAssessmentTypeAssessment -> underAssessmentTypeAssessment;
 				case MutableTypeAssessment mutableTypeAssessment -> mutableTypeAssessment;
-				case ExtensibleProvisoryTypeAssessment ignore ->
-					typeImmutabilityAssessor.immutableClassAssessmentInstance; //This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
+				//This means that the supertype is immutable in all aspects except that it is extensible, so the supertype is not preventing us from being immutable.
+				case ExtensibleProvisoryTypeAssessment ignore -> ImmutableTypeAssessment.instance;
 				case ProvisoryTypeAssessment provisoryTypeAssessment -> provisoryTypeAssessment;
-				default ->
-					//DoNotCover
-					throw new AssertionError( superclassAssessment );
+				//DoNotCover
+				default -> throw new AssertionError( superclassAssessment );
 			};
 	}
 }

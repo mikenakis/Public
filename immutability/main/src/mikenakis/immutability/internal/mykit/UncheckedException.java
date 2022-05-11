@@ -34,14 +34,14 @@ public class UncheckedException extends RuntimeException
 		// cause exception, which is useless, since there will be a "caused by" message anyway.
 		return Arrays.stream( getClass().getFields() ) //
 			.filter( field -> UncheckedException.class.isAssignableFrom( field.getDeclaringClass() ) ) //
-			.map( field -> field.getName() + "=" + fieldValueToString( field ) ) //
+			.map( field -> field.getName() + "=" + stringFromFieldValue( field ) ) //
 			.collect( Collectors.joining( "; " ) );
 	}
 
-	private String fieldValueToString( Field field )
+	private String stringFromFieldValue( Field field )
 	{
 		Object value = fieldValue( field );
-		return MyKit.string.from( value );
+		return MyKit.stringFromObject( value );
 	}
 
 	private Object fieldValue( Field field )

@@ -29,8 +29,6 @@ import java.lang.reflect.Modifier;
 public class FieldImmutabilityAssessor
 {
 	private final TypeImmutabilityAssessor typeImmutabilityAssessor;
-	private final UnderAssessmentFieldAssessment underAssessmentFieldAssessment = new UnderAssessmentFieldAssessment();
-	private final ImmutableFieldAssessment immutableFieldAssessment = new ImmutableFieldAssessment();
 
 	public FieldImmutabilityAssessor( TypeImmutabilityAssessor typeImmutabilityAssessor )
 	{
@@ -60,9 +58,9 @@ public class FieldImmutabilityAssessor
 			TypeAssessment arrayElementTypeAssessment = typeImmutabilityAssessor.assess( fieldType.getComponentType() );
 			return switch( arrayElementTypeAssessment )
 				{
-					case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
+					case UnderAssessmentTypeAssessment ignore -> UnderAssessmentFieldAssessment.instance;
 					case ProvisoryTypeAssessment provisoryTypeAssessment -> new ProvisoryFieldTypeProvisoryFieldAssessment( field, new ArrayOfProvisoryElementTypeProvisoryTypeAssessment( fieldType, provisoryTypeAssessment ) );
-					case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
+					case ImmutableTypeAssessment ignore -> ImmutableFieldAssessment.instance;
 					case MutableTypeAssessment mutableTypeAssessment -> new MutableFieldTypeMutableFieldAssessment( field, new ArrayOfMutableElementTypeMutableTypeAssessment( fieldType, mutableTypeAssessment ) );
 					//DoNotCover
 					default -> throw new AssertionError( arrayElementTypeAssessment );
@@ -71,9 +69,9 @@ public class FieldImmutabilityAssessor
 		TypeAssessment fieldTypeAssessment = typeImmutabilityAssessor.assess( fieldType );
 		return switch( fieldTypeAssessment )
 			{
-				case UnderAssessmentTypeAssessment ignore -> underAssessmentFieldAssessment;
+				case UnderAssessmentTypeAssessment ignore -> UnderAssessmentFieldAssessment.instance;
 				case ProvisoryTypeAssessment provisoryTypeAssessment -> new ProvisoryFieldTypeProvisoryFieldAssessment( field, provisoryTypeAssessment );
-				case ImmutableTypeAssessment ignore -> immutableFieldAssessment;
+				case ImmutableTypeAssessment ignore -> ImmutableFieldAssessment.instance;
 				case MutableTypeAssessment mutableTypeAssessment -> new MutableFieldTypeMutableFieldAssessment( field, mutableTypeAssessment );
 				//DoNotCover
 				default -> throw new AssertionError( fieldTypeAssessment );
