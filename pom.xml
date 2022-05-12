@@ -142,9 +142,17 @@
 	</build>
 
 	<repositories>
+<!--		<repository>-->
+<!--			<id>repsy-mikenakis-public</id>-->
+<!--			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>-->
+<!--		</repository>-->
 		<repository>
-			<id>repsy-mikenakis-public</id>
-			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
+			<id>repsy-mikenakis-debug</id>
+			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-debug</url>
+		</repository>
+		<repository>
+			<id>repsy-mikenakis-assessment</id>
+			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-assessment</url>
 		</repository>
 	</repositories>
 
