@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.immutability.ImmutabilitySelfAssessable;
+import mikenakis.assessment.ImmutabilitySelfAssessable;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;

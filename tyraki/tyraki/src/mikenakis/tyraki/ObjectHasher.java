@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.immutability.ObjectImmutabilityAssessor;
+import mikenakis.assessment.ObjectAssessor;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 
@@ -22,7 +22,7 @@ public final class ObjectHasher implements Hasher<Object>
 	@Override public int getHashCode( Object object )
 	{
 		assert mustOverrideIdentityMethodsAssertion( object );
-		assert ObjectImmutabilityAssessor.instance.mustBeImmutableAssertion( object );
+		assert ObjectAssessor.instance.mustBeImmutableAssertion( object );
 		return object.hashCode();
 	}
 
