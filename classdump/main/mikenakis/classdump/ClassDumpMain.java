@@ -28,9 +28,9 @@ public class ClassDumpMain
 	{
 		Clio clio = new Clio( "classDump" );
 		Supplier<Boolean> loop = clio.addOptionalSwitchArgument( "--loop", "run in an endless loop (for profiling.)" );
-		Supplier<Optional<String>> output = clio.addOptionalStringNamedArgument( "--output | --out | -o", "output file, defaults to standard output. Useful for obtaining a class dump without classDump's own logging entries." );
-		Supplier<Optional<String>> sources = clio.addOptionalStringNamedArgument( "--sources | -s", "the root directory of sources (for locating .java files)." );
-		Supplier<Path> binaries = clio.addMandatoryPathPositionalArgument( "binaries-path", "root directory of binaries (for locating .class files) or path to single .class file to dump." );
+		Supplier<Optional<String>> outputFileName = clio.addOptionalStringNamedArgument( "--output | --out | -o", "output file, defaults to standard output. Useful for obtaining a class dump without classDump's own logging entries." );
+		Supplier<Optional<String>> sourcesDirectory = clio.addOptionalStringNamedArgument( "--sources | -s", "the root directory of sources (for locating .java files)." );
+		Supplier<Path> binariesDirectory = clio.addMandatoryPathPositionalArgument( "binaries-path", "root directory of binaries (for locating .class files) or path to single .class file to dump." );
 		Supplier<Optional<String>> className = clio.addOptionalStringPositionalArgument( "class-name", "fully qualified class name (or package name, or prefix thereof) of class(es) to dump. (Default is to dump everything.)" );
 		Supplier<Boolean> skipOptionalAttributes = clio.addOptionalSwitchArgument( "--skip-optional-attributes", "skip optional attributes" );
 		if( !clio.parse( commandLineArguments ) )
@@ -41,7 +41,7 @@ public class ClassDumpMain
 
 		Kit.tryCatch( () ->
 		{
-			run( loop.get(), output.get(), sources.get(), binaries.get(), className.get(), skipOptionalAttributes.get() );
+			run( loop.get(), outputFileName.get(), sourcesDirectory.get(), binariesDirectory.get(), className.get(), skipOptionalAttributes.get() );
 			System.exit( 0 );
 		}, throwable ->	handleThrowable( throwable, clio.programName ) );
 	}
@@ -61,12 +61,12 @@ public class ClassDumpMain
 	{
 	}
 
-	private static void run( boolean loop, Optional<String> output, Optional<String> sources, Path binaries, Optional<String> className, boolean skipOptionalAttributes )
+	private static void run( boolean loop, Optional<String> outputFileName, Optional<String> sourcesDirectory, Path binariesDirectory, Optional<String> className, boolean skipOptionalAttributes )
 	{
 		for( ; ; )
 		{
-			PrintStream printStream = getPrintStream( output );
-			run1( printStream, sources, binaries, className, skipOptionalAttributes );
+			PrintStream printStream = getPrintStream( outputFileName );
+			run1( printStream, sourcesDirectory, binariesDirectory, className, skipOptionalAttributes );
 			if( printStream != System.out )
 				printStream.close();
 			if( !loop )
@@ -99,14 +99,13 @@ public class ClassDumpMain
 				throw new ApplicationException( "Class file " + classFilePath + " does not exist." );
 			if( !classFilePath.toFile().isFile() )
 				throw new ApplicationException( "Class file " + classFilePath + " is not a file." );
-			Optional<Path> sourceFilePath = sourcesRootPath.map( p -> p.resolve( sourceFileName ) );
-			if( sourcesRootPath.isPresent() )
+			sourcesRootPath.map( p1 -> p1.resolve( sourceFileName ) ).ifPresent( sourceFilePath ->//
 			{
-				if( !sourceFilePath.get().toFile().exists() )
-					throw new ApplicationException( "Source file " + sourceFilePath.get() + " does not exist." );
-				if( !sourceFilePath.get().toFile().isFile() )
-					throw new ApplicationException( "Source file " + sourceFilePath.get() + " is not a file." );
-			}
+				if( !sourceFilePath.toFile().exists() )
+					throw new ApplicationException( "Source file '" + sourceFilePath + "' does not exist." );
+				if( !sourceFilePath.toFile().isFile() )
+					throw new ApplicationException( "Source file '" + sourceFilePath + "' is not a file." );
+			} );
 			for( ; ; )
 			{
 				int i = className.get().indexOf( '.' );
@@ -114,7 +113,7 @@ public class ClassDumpMain
 					break;
 				String packagePart = className.get().substring( 0, i );
 				binaries = binaries.resolve( packagePart );
-				sourcesRootPath = sourcesRootPath.isEmpty() ? Optional.empty() : Optional.of( sourcesRootPath.get().resolve( packagePart ) );
+				sourcesRootPath = sourcesRootPath.map( p -> p.resolve( packagePart ) );
 				className = Optional.of( className.get().substring( i + 1 ) );
 				assert binaries.resolve( className.get().replace( '.', '/' ) + ".class" ).toFile().isFile();
 				assert sourcesRootPath.isEmpty() || sourcesRootPath.get().resolve( className.get().replace( '.', '/' ) + ".java" ).toFile().isFile();
@@ -153,11 +152,11 @@ public class ClassDumpMain
 		printStream.println( text );
 	}
 
-	private static PrintStream getPrintStream( Optional<String> output )
+	private static PrintStream getPrintStream( Optional<String> outputFileName )
 	{
-		if( output.isEmpty() )
+		if( outputFileName.isEmpty() )
 			return System.out;
-		OutputStream outputStream = Kit.unchecked( () -> Files.newOutputStream( Paths.get( output.get() ) ) );
+		OutputStream outputStream = Kit.unchecked( () -> Files.newOutputStream( Paths.get( outputFileName.get() ) ) );
 		outputStream = new BufferedOutputStream( outputStream, 1024 * 1024 );
 		return new PrintStream( outputStream, true, StandardCharsets.UTF_8 );
 	}
