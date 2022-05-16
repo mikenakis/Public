@@ -152,8 +152,8 @@
 			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-debug</url>
 		</repository>
 		<repository>
-			<id>repsy-mikenakis-assessment</id>
-			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-assessment</url>
+			<id>repsy-mikenakis-bathyscaphe</id>
+			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-bathyscaphe</url>
 		</repository>
 	</repositories>
 
