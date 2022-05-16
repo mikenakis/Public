@@ -1,7 +1,7 @@
 package mikenakis.lifetime;
 
 import mikenakis.coherence.Coherent;
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
 import mikenakis.kit.functional.Function1;

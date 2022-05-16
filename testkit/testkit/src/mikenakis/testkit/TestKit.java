@@ -1,6 +1,6 @@
 package mikenakis.testkit;
 
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.functional.Procedure0;
 

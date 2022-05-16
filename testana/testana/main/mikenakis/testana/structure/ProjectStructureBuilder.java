@@ -1,6 +1,6 @@
 package mikenakis.testana.structure;
 
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.GenericException;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;

@@ -1,6 +1,6 @@
 package mikenakis.testana.discovery.maven;
 
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.logging.Log;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.building.DefaultModelBuilderFactory;

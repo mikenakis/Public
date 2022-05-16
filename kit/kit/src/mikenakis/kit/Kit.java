@@ -1,7 +1,7 @@
 package mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.collections.FilteringIterable;
 import mikenakis.kit.collections.MappingIterable;
 import mikenakis.kit.collections.OptionalsFlatMappingIterable;
@@ -253,7 +253,7 @@ public final class Kit
 	{
 		StackWalker.StackFrame stackFrame = getStackFrame( numberOfFramesToSkip + 1 );
 		SourceLocation sourceLocation = SourceLocation.fromStackFrame( stackFrame );
-		//assert sourceLocation.stringRepresentation().equals( stackFrame.toString() ); //TODO: why did this have to be disabled?
+		assert sourceLocation.stringRepresentation().equals( stackFrame.toString() ); //TODO: why did this have to be disabled?
 		return sourceLocation;
 	}
 
@@ -2146,7 +2146,6 @@ public final class Kit
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
 		C autoCloseable = f.invoke();
-		assert autoCloseable != null;
 		try
 		{
 			return Debug.boundary( () -> unchecked( () -> tryFunction.invoke( autoCloseable ) ) );
@@ -2251,7 +2250,7 @@ public final class Kit
 		}
 
 		/**
-		 * Cubic interpolation. from https://www.paulinternet.nl/?page=bicubic
+		 * Cubic interpolation. from <a href="https://www.paulinternet.nl/?page=bicubic">https://www.paulinternet.nl/?page=bicubic</a>
 		 */
 		public static double interpolate( double[] p, double x )
 		{
@@ -2290,9 +2289,11 @@ public final class Kit
 			return n % d - d * (Math.signum( n ) - 1) / 2.0;
 		}
 
-		// Bhaskara I's sine approximation formula
-		// see https://en.wikipedia.org/wiki/Bhaskara_I%27s_sine_approximation_formula
-		// this is SLOWER than Math.sin() by a factor of almost 2
+		/**
+		 * Bhaskara I's sine approximation formula.
+		 * see <a href="https://en.wikipedia.org/wiki/Bhaskara_I%27s_sine_approximation_formula">https://en.wikipedia.org/wiki/Bhaskara_I%27s_sine_approximation_formula</a>
+		 * this is SLOWER than Math.sin() by a factor of almost 2
+		 */
 		public static double sin_bhaskara1( double x )
 		{
 			double xx = x % π;
@@ -2301,8 +2302,9 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of sin(x). Milian's version see https://stackoverflow.com/a/28050328/773113 this is FASTER than Math.sin() by a factor of
-		 * more than 2 this is accurate to about 1%
+		 * Computes an approximation of sin(x) using Milian's method.
+		 * see <a href="https://stackoverflow.com/a/28050328/773113">https://stackoverflow.com/a/28050328/773113</a>
+		 * This version this is FASTER than Math.sin() by a factor of more than 2 and is accurate to about 1%.
 		 */
 		public static double sin/*_milian*/( double x )
 		{
@@ -2315,8 +2317,9 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of cos(x). Milian's version see https://stackoverflow.com/a/28050328/773113 this is FASTER than Math.cos() by a factor of
-		 * more than 2 this is accurate to about 1%
+		 * Computes an approximation of cos(x). using Milian's method.
+		 * see <a href="https://stackoverflow.com/a/28050328/773113">https://stackoverflow.com/a/28050328/773113</a>
+		 * this is FASTER than Math.cos() by a factor of more than 2 and is accurate to about 1%.
 		 */
 		public static double cos/*_milian*/( double x )
 		{

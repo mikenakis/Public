@@ -3,7 +3,7 @@ package mikenakis.bytecode.test;
 import mikenakis.bytecode.model.ByteCodeType;
 import mikenakis.bytecode.printing.ByteCodePrinter;
 import mikenakis.bytecode.test.model.Model;
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.Kit;
 import mikenakis.kit.logging.Log;
 import org.junit.Test;

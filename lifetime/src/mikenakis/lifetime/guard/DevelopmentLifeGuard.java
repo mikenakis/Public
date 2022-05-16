@@ -2,7 +2,7 @@ package mikenakis.lifetime.guard;
 
 import mikenakis.coherence.AbstractCoherent;
 import mikenakis.coherence.Coherence;
-import mikenakis.debug.Debug;
+import io.github.mikenakis.debug.Debug;
 import mikenakis.kit.logging.Log;
 import mikenakis.lifetime.Mortal;
 

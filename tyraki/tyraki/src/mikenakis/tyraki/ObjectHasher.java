@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.bathyscaphe.ObjectAssessor;
+import io.github.mikenakis.bathyscaphe.ObjectAssessor;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 

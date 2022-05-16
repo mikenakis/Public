@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
+import io.github.mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
 import mikenakis.kit.Kit;
 import mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import mikenakis.kit.functional.Function0;
