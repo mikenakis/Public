@@ -1,6 +1,6 @@
 package mikenakis.kit.lazy;
 
-import mikenakis.assessment.annotations.Invariable;
+import mikenakis.bathyscaphe.annotations.Invariable;
 import mikenakis.kit.functional.Function0;
 
 import java.util.Optional;

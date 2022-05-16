@@ -4,7 +4,7 @@ import mikenakis.coherence.Coherence;
 import mikenakis.coherence.FreezableCoherence;
 import mikenakis.coherence.implementation.exceptions.MustBeReadableException;
 import mikenakis.coherence.implementation.exceptions.MustBeWritableException;
-import mikenakis.assessment.ImmutabilitySelfAssessable;
+import mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
 import mikenakis.kit.Kit;
 import mikenakis.lifetime.AbstractMortalCoherent;
 import mikenakis.lifetime.guard.MustBeAliveException;

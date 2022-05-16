@@ -1,6 +1,6 @@
 package mikenakis.kit.lazy;
 
-import mikenakis.assessment.annotations.Invariable;
+import mikenakis.bathyscaphe.annotations.Invariable;
 
 /**
  * Implements a lazily computed int.
