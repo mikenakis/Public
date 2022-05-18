@@ -1,6 +1,6 @@
 package mikenakis.tyraki;
 
-import io.github.mikenakis.bathyscaphe.ObjectAssessor;
+import io.github.mikenakis.bathyscaphe.Bathyscaphe;
 import mikenakis.kit.Hasher;
 import mikenakis.kit.Kit;
 
@@ -22,7 +22,7 @@ public final class ObjectHasher implements Hasher<Object>
 	@Override public int getHashCode( Object object )
 	{
 		assert mustOverrideIdentityMethodsAssertion( object );
-		assert ObjectAssessor.instance.mustBeImmutableAssertion( object );
+		assert Bathyscaphe.objectMustBeImmutableAssertion( object );
 		return object.hashCode();
 	}
 
