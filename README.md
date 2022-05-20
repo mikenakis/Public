@@ -9,6 +9,8 @@ by Mike Nakis, based on original work by Chris Tucker from the Noun Project,<br>
 Used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
 </p>
 
+Each project has its own directory structure as if it was a standalone repository, including its own README.md and its own logo.
+
 Configuration necessary after a fresh clone:
   - Configure IntellijIdea
     - Configure breaking on unhandled exceptions
@@ -37,16 +39,9 @@ Configuration necessary after a fresh clone:
             these text boxes you can enter any random garbage, and IntelliJ IDEA will happily accept it, without the slightest
             hint that it is wrong. Then, when you expect it to break, it will silently fail to break. To avoid this, never type
             a class name in these text boxes, always use the navigation feature to locate a class which is guaranteed to exist.
-    - Configure breaking on programmatic breakpoints.
-      - PEARL: Java does not support programmatic breakpoints the way C# does with `System.Diagnostics.Debugger.Break()`. 
-        We emulate this behavior by throwing and immediately catching a special `BreakpointException`, but for this to work,
-        we have to manually place a breakpoint on the line that catches it.
-      - Navigate to `mikenakis.kit.debug.Debug` and add a breakpoint on the line which says "Place breakpoint here". 
-      - Note: since I introduced the "breaking on handled exceptions in foreign threads" item, the mechanism that accomplishes
-        it also takes care of breaking on `BreakpointException`, so strictly speaking it is unnecessary to place a breakpoint
-        on that line; however, these are two different things, so I am documenting them separately.
-  - Configure the "Grep Console" plugin:
-``` 
+  - Configure the "Grep Console" plugin
+    - As follows:
+```
     Expression                Bold        Background    Foreground
     [checked] ".* FATAL .*"   [checked  ] [unchecked]   [checked] DC7075
     [checked] ".* ERROR .*"   [unchecked] [unchecked]   [checked] F59B9D
