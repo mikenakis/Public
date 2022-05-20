@@ -101,7 +101,7 @@ final class MavenDiscoveryModule extends DiscoveryModule
 		{
 			if( !isScopeOfInterest( mavenDependency ) )
 			{
-				assert false; //does this happen?
+				//assert false; //does this happen? -- yes, it happens.
 				continue;
 			}
 			String dependencyType = mavenDependency.getType();
@@ -169,8 +169,8 @@ final class MavenDiscoveryModule extends DiscoveryModule
 				return true;
 			case "runtime":
 				return true; //TODO: try making this 'false'
-			case "system":
-				assert false; //does this ever happen?
+			case "system": //has been observed to happen with the javax.time:threeten dependency of ClientOfMutabilityDetector
+				//assert false; //does this ever happen?
 				return false;
 			case "import": //not implemented
 			default: //unknown dependency scope
