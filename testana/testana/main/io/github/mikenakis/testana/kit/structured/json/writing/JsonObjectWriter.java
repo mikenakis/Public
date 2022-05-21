@@ -1,8 +1,8 @@
 package io.github.mikenakis.testana.kit.structured.json.writing;
 
+import io.github.mikenakis.testana.kit.structured.json.JsonWriter;
 import io.github.mikenakis.testana.kit.structured.writing.ObjectWriter;
 import io.github.mikenakis.testana.kit.structured.writing.StructuredWriter;
-import io.github.mikenakis.testana.kit.structured.json.JsonWriter;
 
 import java.util.function.Consumer;
 

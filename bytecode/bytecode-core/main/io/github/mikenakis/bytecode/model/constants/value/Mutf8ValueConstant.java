@@ -3,13 +3,13 @@ package io.github.mikenakis.bytecode.model.constants.value;
 import io.github.mikenakis.bytecode.exceptions.IncompleteMutf8Exception;
 import io.github.mikenakis.bytecode.exceptions.MalformedMutf8Exception;
 import io.github.mikenakis.bytecode.exceptions.StringTooLongException;
-import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
-import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.kit.Buffer;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.constants.ValueConstant;
+import io.github.mikenakis.bytecode.writing.Interner;
+import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
+import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 

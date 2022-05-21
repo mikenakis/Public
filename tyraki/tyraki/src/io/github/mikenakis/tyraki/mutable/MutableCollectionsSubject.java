@@ -1,8 +1,8 @@
 package io.github.mikenakis.tyraki.mutable;
 
+import io.github.mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
 import io.github.mikenakis.coherence.AbstractCoherent;
 import io.github.mikenakis.coherence.FreezableCoherence;
-import io.github.mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
 
 /**
  * A subject of {@link MutableCollections}.

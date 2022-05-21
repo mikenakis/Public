@@ -1,8 +1,5 @@
 package io.github.mikenakis.bytecode.model.attributes.code.instructions;
 
-import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.writing.InstructionWriter;
-import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.Helpers;
 import io.github.mikenakis.bytecode.model.Constant;
@@ -15,6 +12,9 @@ import io.github.mikenakis.bytecode.model.constants.value.FloatValueConstant;
 import io.github.mikenakis.bytecode.model.constants.value.IntegerValueConstant;
 import io.github.mikenakis.bytecode.model.constants.value.LongValueConstant;
 import io.github.mikenakis.bytecode.model.constants.value.StringValueConstant;
+import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
+import io.github.mikenakis.bytecode.writing.InstructionWriter;
+import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.java_type_model.TypeDescriptor;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 

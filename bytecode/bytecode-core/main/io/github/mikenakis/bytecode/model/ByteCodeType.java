@@ -1,9 +1,5 @@
 package io.github.mikenakis.bytecode.model;
 
-import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
-import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
@@ -11,6 +7,10 @@ import io.github.mikenakis.bytecode.model.attributes.KnownAttribute;
 import io.github.mikenakis.bytecode.model.attributes.code.Instruction;
 import io.github.mikenakis.bytecode.model.constants.ClassConstant;
 import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
+import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
+import io.github.mikenakis.bytecode.writing.Interner;
+import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
+import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.java_type_model.TerminalTypeDescriptor;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;

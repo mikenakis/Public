@@ -2,8 +2,8 @@ package io.github.mikenakis.tyraki.conversion;
 
 import io.github.mikenakis.coherence.exceptions.MustBeFrozenException;
 import io.github.mikenakis.kit.EqualityComparator;
-import io.github.mikenakis.tyraki.UnmodifiableList;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
+import io.github.mikenakis.tyraki.UnmodifiableList;
 
 /**
  * An {@link UnmodifiableList} which wraps an array.

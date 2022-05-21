@@ -1,8 +1,6 @@
 package io.github.mikenakis.testana.runtime;
 
 import io.github.mikenakis.kit.Kit;
-import io.github.mikenakis.testana.testplan.TestMethod;
-import io.github.mikenakis.testana.testplan.TestModule;
 import io.github.mikenakis.testana.Persistence;
 import io.github.mikenakis.testana.kit.TestanaLog;
 import io.github.mikenakis.testana.kit.TimeMeasurement;
@@ -10,6 +8,8 @@ import io.github.mikenakis.testana.runtime.result.NonLeafTestResult;
 import io.github.mikenakis.testana.runtime.result.TestMethodResult;
 import io.github.mikenakis.testana.runtime.result.TestResult;
 import io.github.mikenakis.testana.testplan.TestClass;
+import io.github.mikenakis.testana.testplan.TestMethod;
+import io.github.mikenakis.testana.testplan.TestModule;
 import io.github.mikenakis.testana.testplan.TestPlan;
 import io.github.mikenakis.testana.testplan.intent.Intent;
 

@@ -1,11 +1,11 @@
 package io.github.mikenakis.bytecode.model.attributes.stackmap;
 
+import io.github.mikenakis.bytecode.kit.BufferWriter;
+import io.github.mikenakis.bytecode.model.attributes.code.Instruction;
 import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.writing.WritingLocationMap;
-import io.github.mikenakis.bytecode.kit.BufferWriter;
-import io.github.mikenakis.bytecode.model.attributes.code.Instruction;
 import io.github.mikenakis.kit.Kit;
 
 import java.util.Optional;

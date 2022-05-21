@@ -4,8 +4,8 @@ import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.intertwine.test.comparisons.rig.FooInterface;
+import io.github.mikenakis.kit.Kit;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

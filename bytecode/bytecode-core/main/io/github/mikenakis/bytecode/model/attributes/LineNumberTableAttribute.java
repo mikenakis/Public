@@ -1,12 +1,12 @@
 package io.github.mikenakis.bytecode.model.attributes;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
+import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.Attribute;
 import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.writing.WritingLocationMap;
-import io.github.mikenakis.bytecode.kit.BufferReader;
-import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;

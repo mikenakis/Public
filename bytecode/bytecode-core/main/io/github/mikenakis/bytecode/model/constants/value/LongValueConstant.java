@@ -1,11 +1,11 @@
 package io.github.mikenakis.bytecode.model.constants.value;
 
-import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
-import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.constants.ValueConstant;
+import io.github.mikenakis.bytecode.writing.Interner;
+import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
+import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Objects;

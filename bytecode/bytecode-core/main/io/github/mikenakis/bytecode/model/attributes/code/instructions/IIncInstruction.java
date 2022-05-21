@@ -1,11 +1,11 @@
 package io.github.mikenakis.bytecode.model.attributes.code.instructions;
 
-import io.github.mikenakis.bytecode.writing.InstructionWriter;
-import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.Helpers;
 import io.github.mikenakis.bytecode.model.attributes.code.Instruction;
 import io.github.mikenakis.bytecode.model.attributes.code.OpCode;
+import io.github.mikenakis.bytecode.writing.InstructionWriter;
+import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class IIncInstruction extends Instruction

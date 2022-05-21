@@ -3,9 +3,9 @@ package io.github.mikenakis.tyraki.test;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.testkit.TestKit;
 import io.github.mikenakis.tyraki.MutableCollection;
-import io.github.mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
+import io.github.mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import org.junit.Test;
 
 /**

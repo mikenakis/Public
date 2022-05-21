@@ -1,8 +1,8 @@
 package io.github.mikenakis.bytecode.test;
 
+import io.github.mikenakis.bytecode.ByteCodeClassLoader;
 import io.github.mikenakis.bytecode.model.ByteCodeType;
 import io.github.mikenakis.bytecode.printing.ByteCodePrinter;
-import io.github.mikenakis.bytecode.ByteCodeClassLoader;
 import io.github.mikenakis.bytecode.test.model.Class0HelloWorld;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.testkit.TestKit;

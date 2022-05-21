@@ -1,22 +1,21 @@
 package io.github.mikenakis.bytecode.dependencies;
 
-import io.github.mikenakis.bytecode.model.ByteCodeMethod;
-import io.github.mikenakis.bytecode.model.ByteCodeType;
-import io.github.mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
-import io.github.mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
-import io.github.mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
-import io.github.mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
-import io.github.mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
-import io.github.mikenakis.bytecode.model.descriptors.MethodReference;
 import io.github.mikenakis.bytecode.model.Annotation;
 import io.github.mikenakis.bytecode.model.AnnotationParameter;
 import io.github.mikenakis.bytecode.model.AnnotationValue;
 import io.github.mikenakis.bytecode.model.ByteCodeField;
+import io.github.mikenakis.bytecode.model.ByteCodeMethod;
+import io.github.mikenakis.bytecode.model.ByteCodeType;
 import io.github.mikenakis.bytecode.model.Constant;
 import io.github.mikenakis.bytecode.model.TypeAnnotation;
+import io.github.mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
+import io.github.mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
+import io.github.mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
+import io.github.mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
 import io.github.mikenakis.bytecode.model.attributes.AnnotationDefaultAttribute;
 import io.github.mikenakis.bytecode.model.attributes.AnnotationsAttribute;
 import io.github.mikenakis.bytecode.model.attributes.BootstrapMethod;
+import io.github.mikenakis.bytecode.model.attributes.BootstrapMethodsAttribute;
 import io.github.mikenakis.bytecode.model.attributes.CodeAttribute;
 import io.github.mikenakis.bytecode.model.attributes.ConstantValueAttribute;
 import io.github.mikenakis.bytecode.model.attributes.EnclosingMethodAttribute;
@@ -42,6 +41,7 @@ import io.github.mikenakis.bytecode.model.attributes.code.instructions.InvokeInt
 import io.github.mikenakis.bytecode.model.attributes.code.instructions.LoadConstantInstruction;
 import io.github.mikenakis.bytecode.model.attributes.code.instructions.MethodReferencingInstruction;
 import io.github.mikenakis.bytecode.model.attributes.code.instructions.MultiANewArrayInstruction;
+import io.github.mikenakis.bytecode.model.descriptors.MethodReference;
 import io.github.mikenakis.bytecode.model.signature.ArrayTypeSignature;
 import io.github.mikenakis.bytecode.model.signature.BooleanSignature;
 import io.github.mikenakis.bytecode.model.signature.ByteSignature;

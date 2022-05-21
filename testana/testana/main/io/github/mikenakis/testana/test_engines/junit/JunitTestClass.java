@@ -2,11 +2,11 @@ package io.github.mikenakis.testana.test_engines.junit;
 
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.logging.Log;
-import io.github.mikenakis.testana.testplan.TestMethod;
 import io.github.mikenakis.testana.AncestryOrdering;
 import io.github.mikenakis.testana.MethodOrdering;
 import io.github.mikenakis.testana.structure.ProjectType;
 import io.github.mikenakis.testana.testplan.TestClass;
+import io.github.mikenakis.testana.testplan.TestMethod;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

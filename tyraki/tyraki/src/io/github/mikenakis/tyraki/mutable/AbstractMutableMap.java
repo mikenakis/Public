@@ -3,10 +3,10 @@ package io.github.mikenakis.tyraki.mutable;
 import io.github.mikenakis.coherence.FreezableCoherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.Binding;
-import io.github.mikenakis.tyraki.DebugView;
-import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.BindingEqualityComparator;
+import io.github.mikenakis.tyraki.DebugView;
 import io.github.mikenakis.tyraki.MapEntry;
+import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.UnmodifiableMap;
 
 import java.util.Optional;

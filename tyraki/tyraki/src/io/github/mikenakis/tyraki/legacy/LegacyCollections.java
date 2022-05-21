@@ -4,9 +4,9 @@ import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.tyraki.MutableCollection;
-import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.MutableList;
+import io.github.mikenakis.tyraki.MutableMap;
 
 import java.util.Collection;
 import java.util.Iterator;

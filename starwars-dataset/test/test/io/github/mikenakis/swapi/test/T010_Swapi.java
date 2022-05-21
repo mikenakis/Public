@@ -2,10 +2,10 @@ package io.github.mikenakis.swapi.test;
 
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.swapi.Swapi;
+import io.github.mikenakis.swapi.SwapiFixer;
 import io.github.mikenakis.swapi.SwapiLoader;
 import io.github.mikenakis.swapi.modeling.TextRow;
 import io.github.mikenakis.swapi.modeling.TextTable;
-import io.github.mikenakis.swapi.SwapiFixer;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

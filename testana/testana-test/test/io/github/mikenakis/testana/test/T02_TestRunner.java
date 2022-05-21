@@ -9,6 +9,7 @@ import io.github.mikenakis.testana.Persistence;
 import io.github.mikenakis.testana.StructureSettings;
 import io.github.mikenakis.testana.TestEngine;
 import io.github.mikenakis.testana.discovery.Discoverer;
+import io.github.mikenakis.testana.discovery.maven.MavenDiscoverer;
 import io.github.mikenakis.testana.runtime.TestRunner;
 import io.github.mikenakis.testana.runtime.result.TestResult;
 import io.github.mikenakis.testana.structure.ProjectModule;
@@ -19,7 +20,6 @@ import io.github.mikenakis.testana.structure.cache.Cache;
 import io.github.mikenakis.testana.test_engines.junit.JunitTestEngine;
 import io.github.mikenakis.testana.testplan.TestPlan;
 import io.github.mikenakis.testana.testplan.TestPlanBuilder;
-import io.github.mikenakis.testana.discovery.maven.MavenDiscoverer;
 import org.junit.Test;
 
 import java.net.URL;

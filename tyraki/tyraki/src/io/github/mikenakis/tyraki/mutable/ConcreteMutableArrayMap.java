@@ -2,10 +2,10 @@ package io.github.mikenakis.tyraki.mutable;
 
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.Binding;
-import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.MutableArrayMap;
 import io.github.mikenakis.tyraki.MutableArraySet;
 import io.github.mikenakis.tyraki.MutableList;
+import io.github.mikenakis.tyraki.MutableMap;
 
 import java.util.Optional;
 

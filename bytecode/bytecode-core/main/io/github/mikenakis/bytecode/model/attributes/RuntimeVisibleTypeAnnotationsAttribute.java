@@ -1,13 +1,13 @@
 package io.github.mikenakis.bytecode.model.attributes;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.model.Attribute;
+import io.github.mikenakis.bytecode.model.ByteCodeField;
 import io.github.mikenakis.bytecode.model.ByteCodeMethod;
 import io.github.mikenakis.bytecode.model.ByteCodeType;
+import io.github.mikenakis.bytecode.model.TypeAnnotation;
 import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
 import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
-import io.github.mikenakis.bytecode.kit.BufferReader;
-import io.github.mikenakis.bytecode.model.ByteCodeField;
-import io.github.mikenakis.bytecode.model.TypeAnnotation;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,11 +2,11 @@ package io.github.mikenakis.testana.test_engines.junit;
 
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.Function0;
-import io.github.mikenakis.testana.testplan.TestMethod;
 import io.github.mikenakis.testana.runtime.result.FailedMethodTestResult;
 import io.github.mikenakis.testana.runtime.result.IgnoredMethodTestResult;
 import io.github.mikenakis.testana.runtime.result.SucceededMethodTestResult;
 import io.github.mikenakis.testana.runtime.result.TestMethodResult;
+import io.github.mikenakis.testana.testplan.TestMethod;
 
 import java.io.PrintStream;
 import java.lang.invoke.MethodHandle;

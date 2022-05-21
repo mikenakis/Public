@@ -2,6 +2,10 @@ package io.github.mikenakis.testana.testplan;
 
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.logging.Log;
+import io.github.mikenakis.testana.ClassOrdering;
+import io.github.mikenakis.testana.ModuleOrdering;
+import io.github.mikenakis.testana.Persistence;
+import io.github.mikenakis.testana.kit.TimeMeasurement;
 import io.github.mikenakis.testana.structure.ProjectModule;
 import io.github.mikenakis.testana.structure.ProjectStructure;
 import io.github.mikenakis.testana.structure.ProjectType;
@@ -11,10 +15,6 @@ import io.github.mikenakis.testana.testplan.intent.NoRunBecauseUpToDateIntent;
 import io.github.mikenakis.testana.testplan.intent.RunBecauseDependenciesModifiedIntent;
 import io.github.mikenakis.testana.testplan.intent.RunBecauseModifiedSinceLastRunIntent;
 import io.github.mikenakis.testana.testplan.intent.RunBecauseNeverRunBeforeIntent;
-import io.github.mikenakis.testana.ClassOrdering;
-import io.github.mikenakis.testana.ModuleOrdering;
-import io.github.mikenakis.testana.Persistence;
-import io.github.mikenakis.testana.kit.TimeMeasurement;
 
 import java.time.Instant;
 import java.util.ArrayDeque;

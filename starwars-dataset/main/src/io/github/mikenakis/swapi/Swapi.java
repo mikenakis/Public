@@ -1,7 +1,7 @@
 package io.github.mikenakis.swapi;
 
-import io.github.mikenakis.swapi.modeling.TextTable;
 import io.github.mikenakis.swapi.modeling.TextDomain;
+import io.github.mikenakis.swapi.modeling.TextTable;
 
 import java.util.Arrays;
 

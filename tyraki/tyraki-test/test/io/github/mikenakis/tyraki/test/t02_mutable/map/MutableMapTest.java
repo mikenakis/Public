@@ -2,9 +2,9 @@ package io.github.mikenakis.tyraki.test.t02_mutable.map;
 
 import io.github.mikenakis.testkit.TestKit;
 import io.github.mikenakis.tyraki.Binding;
+import io.github.mikenakis.tyraki.MapEntry;
 import io.github.mikenakis.tyraki.MutableCollection;
 import io.github.mikenakis.tyraki.MutableMap;
-import io.github.mikenakis.tyraki.MapEntry;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
 import io.github.mikenakis.tyraki.UnmodifiableMap;
 import io.github.mikenakis.tyraki.exceptions.DuplicateKeyException;

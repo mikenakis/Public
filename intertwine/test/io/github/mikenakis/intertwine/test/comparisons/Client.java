@@ -5,12 +5,12 @@ import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.IntertwineFactory;
 import io.github.mikenakis.intertwine.test.comparisons.rig.FooInterface;
 import io.github.mikenakis.intertwine.test.comparisons.rig.FooServer;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.intertwine.test.comparisons.rig.exchange.ObjectExchange;
 import io.github.mikenakis.intertwine.test.comparisons.rig.exchange.object.AnycallRequest;
 import io.github.mikenakis.intertwine.test.comparisons.rig.exchange.object.AnycallResponse;
 import io.github.mikenakis.intertwine.test.comparisons.rig.exchange.object.AnycallToObjectExchange;
 import io.github.mikenakis.intertwine.test.comparisons.rig.exchange.object.ObjectExchangeToAnycall;
+import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.testkit.TestKit;
 import org.junit.Test;
 

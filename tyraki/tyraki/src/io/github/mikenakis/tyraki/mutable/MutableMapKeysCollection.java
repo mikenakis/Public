@@ -2,8 +2,8 @@ package io.github.mikenakis.tyraki.mutable;
 
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.Binding;
-import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.MutableEnumerator;
+import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;

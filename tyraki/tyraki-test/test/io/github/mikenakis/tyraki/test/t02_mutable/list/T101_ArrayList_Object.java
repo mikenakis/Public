@@ -1,7 +1,7 @@
 package io.github.mikenakis.tyraki.test.t02_mutable.list;
 
-import io.github.mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import io.github.mikenakis.tyraki.MutableList;
+import io.github.mikenakis.tyraki.mutable.SingleThreadedMutableCollections;
 import io.github.mikenakis.tyraki.test.t02_mutable.ObjectSemanticsClass;
 
 /**

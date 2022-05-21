@@ -1,6 +1,8 @@
 package io.github.mikenakis.bytecode.model;
 
 import io.github.mikenakis.bytecode.exceptions.InvalidAnnotationValueTagException;
+import io.github.mikenakis.bytecode.kit.BufferReader;
+import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.annotationvalues.AnnotationAnnotationValue;
 import io.github.mikenakis.bytecode.model.annotationvalues.ArrayAnnotationValue;
 import io.github.mikenakis.bytecode.model.annotationvalues.ClassAnnotationValue;
@@ -9,8 +11,6 @@ import io.github.mikenakis.bytecode.model.annotationvalues.EnumAnnotationValue;
 import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
-import io.github.mikenakis.bytecode.kit.BufferReader;
-import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 

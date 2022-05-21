@@ -1,14 +1,14 @@
 package io.github.mikenakis.bytecode.model.constants;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
+import io.github.mikenakis.bytecode.kit.BufferWriter;
+import io.github.mikenakis.bytecode.model.ByteCodeHelpers;
+import io.github.mikenakis.bytecode.model.Constant;
 import io.github.mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
-import io.github.mikenakis.bytecode.kit.BufferReader;
-import io.github.mikenakis.bytecode.kit.BufferWriter;
-import io.github.mikenakis.bytecode.model.ByteCodeHelpers;
-import io.github.mikenakis.bytecode.model.Constant;
 import io.github.mikenakis.java_type_model.ArrayTypeDescriptor;
 import io.github.mikenakis.java_type_model.PrimitiveTypeDescriptor;
 import io.github.mikenakis.java_type_model.TerminalTypeDescriptor;

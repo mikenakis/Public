@@ -1,10 +1,10 @@
 package io.github.mikenakis.bytecode.model.constants;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
+import io.github.mikenakis.bytecode.model.ByteCodeHelpers;
 import io.github.mikenakis.bytecode.model.descriptors.MethodReference;
 import io.github.mikenakis.bytecode.model.descriptors.MethodReferenceKind;
 import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.kit.BufferReader;
-import io.github.mikenakis.bytecode.model.ByteCodeHelpers;
 
 /**
  * Represents the JVMS::CONSTANT_Methodref_info and JVMS::CONSTANT_InterfaceMethodref_info structures.

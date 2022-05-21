@@ -10,6 +10,7 @@ import io.github.mikenakis.testana.Persistence;
 import io.github.mikenakis.testana.StructureSettings;
 import io.github.mikenakis.testana.TestEngine;
 import io.github.mikenakis.testana.discovery.Discoverer;
+import io.github.mikenakis.testana.discovery.maven.MavenDiscoverer;
 import io.github.mikenakis.testana.structure.ProjectModule;
 import io.github.mikenakis.testana.structure.ProjectStructure;
 import io.github.mikenakis.testana.structure.ProjectStructureBuilder;
@@ -28,7 +29,6 @@ import io.github.mikenakis.testana.testplan.intent.NoRunBecauseUpToDateIntent;
 import io.github.mikenakis.testana.testplan.intent.RunBecauseDependenciesModifiedIntent;
 import io.github.mikenakis.testana.testplan.intent.RunBecauseModifiedSinceLastRunIntent;
 import io.github.mikenakis.testana.testplan.intent.RunBecauseNeverRunBeforeIntent;
-import io.github.mikenakis.testana.discovery.maven.MavenDiscoverer;
 import org.junit.Test;
 
 import java.nio.file.Path;

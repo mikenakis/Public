@@ -5,13 +5,13 @@ import io.github.mikenakis.kit.GenericException;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.testana.StructureSettings;
+import io.github.mikenakis.testana.TestEngine;
 import io.github.mikenakis.testana.discovery.Discoverer;
 import io.github.mikenakis.testana.discovery.DiscoveryModule;
 import io.github.mikenakis.testana.discovery.OutputDirectory;
 import io.github.mikenakis.testana.discovery.OutputFile;
-import io.github.mikenakis.testana.structure.cache.Cache;
-import io.github.mikenakis.testana.TestEngine;
 import io.github.mikenakis.testana.kit.TimeMeasurement;
+import io.github.mikenakis.testana.structure.cache.Cache;
 
 import java.net.URL;
 import java.net.URLClassLoader;

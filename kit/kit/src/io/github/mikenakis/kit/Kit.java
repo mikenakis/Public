@@ -2,11 +2,11 @@ package io.github.mikenakis.kit;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.github.mikenakis.debug.Debug;
-import io.github.mikenakis.kit.collections.MappingIterable;
-import io.github.mikenakis.kit.collections.UnmodifiableIterator;
 import io.github.mikenakis.kit.collections.FilteringIterable;
+import io.github.mikenakis.kit.collections.MappingIterable;
 import io.github.mikenakis.kit.collections.OptionalsFlatMappingIterable;
 import io.github.mikenakis.kit.collections.UnmodifiableIterable;
+import io.github.mikenakis.kit.collections.UnmodifiableIterator;
 import io.github.mikenakis.kit.functional.BooleanFunction1;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;

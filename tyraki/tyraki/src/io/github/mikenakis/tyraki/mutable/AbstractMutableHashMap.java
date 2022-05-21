@@ -4,10 +4,10 @@ import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.Binding;
-import io.github.mikenakis.tyraki.MutableHashMap;
-import io.github.mikenakis.tyraki.UnmodifiableHashMap;
 import io.github.mikenakis.tyraki.MutableEnumerator;
+import io.github.mikenakis.tyraki.MutableHashMap;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
+import io.github.mikenakis.tyraki.UnmodifiableHashMap;
 
 import java.util.Optional;
 

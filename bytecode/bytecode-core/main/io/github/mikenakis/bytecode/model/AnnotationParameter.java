@@ -1,11 +1,11 @@
 package io.github.mikenakis.bytecode.model;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
+import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
 import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
-import io.github.mikenakis.bytecode.kit.BufferReader;
-import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**

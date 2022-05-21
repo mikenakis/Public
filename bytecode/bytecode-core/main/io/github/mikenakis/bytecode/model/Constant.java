@@ -1,6 +1,7 @@
 package io.github.mikenakis.bytecode.model;
 
 import io.github.mikenakis.bytecode.exceptions.InvalidConstantTagException;
+import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.constants.ClassConstant;
 import io.github.mikenakis.bytecode.model.constants.FieldReferenceConstant;
 import io.github.mikenakis.bytecode.model.constants.InvokeDynamicConstant;
@@ -19,7 +20,6 @@ import io.github.mikenakis.bytecode.model.constants.value.StringValueConstant;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
-import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 

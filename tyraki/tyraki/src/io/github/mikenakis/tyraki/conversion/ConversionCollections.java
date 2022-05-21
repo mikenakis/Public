@@ -10,13 +10,13 @@ import io.github.mikenakis.tyraki.MutableEnumerable;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.PartiallyConvertingEqualityComparator;
 import io.github.mikenakis.tyraki.TotalConverterWithIndex;
+import io.github.mikenakis.tyraki.UnmodifiableArrayMap;
 import io.github.mikenakis.tyraki.UnmodifiableArraySet;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableList;
 import io.github.mikenakis.tyraki.UnmodifiableMap;
-import io.github.mikenakis.tyraki.UnmodifiableArrayMap;
 
 import java.util.Arrays;
 import java.util.Optional;

@@ -5,11 +5,11 @@ import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.tyraki.Binding;
+import io.github.mikenakis.tyraki.MapEntry;
 import io.github.mikenakis.tyraki.MutableCollection;
+import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.MutableHashMap;
 import io.github.mikenakis.tyraki.MutableMap;
-import io.github.mikenakis.tyraki.MapEntry;
-import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.ObjectHasher;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 

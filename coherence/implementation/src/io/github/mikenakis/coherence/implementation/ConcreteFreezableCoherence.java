@@ -1,10 +1,10 @@
 package io.github.mikenakis.coherence.implementation;
 
+import io.github.mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.FreezableCoherence;
 import io.github.mikenakis.coherence.implementation.exceptions.MustBeReadableException;
 import io.github.mikenakis.coherence.implementation.exceptions.MustBeWritableException;
-import io.github.mikenakis.bathyscaphe.ImmutabilitySelfAssessable;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.lifetime.AbstractMortalCoherent;
 import io.github.mikenakis.lifetime.guard.MustBeAliveException;

@@ -2,8 +2,8 @@ package io.github.mikenakis.intertwine.test.comparisons.rig.exchange.object;
 
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.MethodKey;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.intertwine.test.comparisons.rig.exchange.ObjectExchange;
+import io.github.mikenakis.kit.Kit;
 
 public class AnycallToObjectExchange<T> implements Anycall<T>
 {

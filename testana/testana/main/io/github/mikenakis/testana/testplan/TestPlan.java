@@ -2,8 +2,8 @@ package io.github.mikenakis.testana.testplan;
 
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.Function1;
-import io.github.mikenakis.testana.testplan.intent.Intent;
 import io.github.mikenakis.testana.kit.TestanaLog;
+import io.github.mikenakis.testana.testplan.intent.Intent;
 
 import java.util.Collection;
 import java.util.List;

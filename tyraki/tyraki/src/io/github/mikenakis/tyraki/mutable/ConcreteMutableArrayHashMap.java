@@ -4,12 +4,12 @@ import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.tyraki.AbstractEnumerator;
 import io.github.mikenakis.tyraki.Binding;
-import io.github.mikenakis.tyraki.MutableArrayHashMap;
-import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.MapEntry;
+import io.github.mikenakis.tyraki.MutableArrayHashMap;
 import io.github.mikenakis.tyraki.MutableArraySet;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.MutableList;
+import io.github.mikenakis.tyraki.MutableMap;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.Optional;

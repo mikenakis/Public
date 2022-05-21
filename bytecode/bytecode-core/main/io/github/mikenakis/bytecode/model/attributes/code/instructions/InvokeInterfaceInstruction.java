@@ -1,9 +1,5 @@
 package io.github.mikenakis.bytecode.model.attributes.code.instructions;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodReference;
-import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.writing.InstructionWriter;
-import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.model.Constant;
 import io.github.mikenakis.bytecode.model.attributes.code.Instruction;
@@ -11,6 +7,10 @@ import io.github.mikenakis.bytecode.model.attributes.code.OpCode;
 import io.github.mikenakis.bytecode.model.constants.ClassConstant;
 import io.github.mikenakis.bytecode.model.constants.MethodReferenceConstant;
 import io.github.mikenakis.bytecode.model.constants.NameAndDescriptorConstant;
+import io.github.mikenakis.bytecode.model.descriptors.MethodReference;
+import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
+import io.github.mikenakis.bytecode.writing.InstructionWriter;
+import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 public final class InvokeInterfaceInstruction extends Instruction

@@ -1,8 +1,8 @@
 package io.github.mikenakis.bytecode.model.attributes.target;
 
-import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.BufferWriter;
+import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.ArrayList;

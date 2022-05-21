@@ -1,11 +1,6 @@
 package io.github.mikenakis.bytecode.model;
 
 import io.github.mikenakis.bytecode.exceptions.InvalidKnownAttributeTagException;
-import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
-import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.bytecode.writing.WritingConstantPool;
-import io.github.mikenakis.bytecode.writing.WritingLocationMap;
 import io.github.mikenakis.bytecode.kit.Buffer;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.BufferWriter;
@@ -36,6 +31,11 @@ import io.github.mikenakis.bytecode.model.attributes.StackMapTableAttribute;
 import io.github.mikenakis.bytecode.model.attributes.SyntheticAttribute;
 import io.github.mikenakis.bytecode.model.attributes.UnknownAttribute;
 import io.github.mikenakis.bytecode.model.constants.value.Mutf8ValueConstant;
+import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
+import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
+import io.github.mikenakis.bytecode.writing.Interner;
+import io.github.mikenakis.bytecode.writing.WritingConstantPool;
+import io.github.mikenakis.bytecode.writing.WritingLocationMap;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 

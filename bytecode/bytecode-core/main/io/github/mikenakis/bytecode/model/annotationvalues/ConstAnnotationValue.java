@@ -1,15 +1,15 @@
 package io.github.mikenakis.bytecode.model.annotationvalues;
 
 import io.github.mikenakis.bytecode.exceptions.InvalidConstAnnotationValueTagException;
-import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.model.AnnotationValue;
 import io.github.mikenakis.bytecode.model.Constant;
 import io.github.mikenakis.bytecode.model.constants.ValueConstant;
 import io.github.mikenakis.bytecode.model.constants.value.IntegerValueConstant;
+import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
+import io.github.mikenakis.bytecode.writing.Interner;
+import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**

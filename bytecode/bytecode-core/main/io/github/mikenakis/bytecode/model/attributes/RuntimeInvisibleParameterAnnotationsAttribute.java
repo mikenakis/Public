@@ -1,8 +1,8 @@
 package io.github.mikenakis.bytecode.model.attributes;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.model.Attribute;
 import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
-import io.github.mikenakis.bytecode.kit.BufferReader;
 
 import java.util.ArrayList;
 import java.util.List;

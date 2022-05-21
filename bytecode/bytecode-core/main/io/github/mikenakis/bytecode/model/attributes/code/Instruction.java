@@ -1,5 +1,6 @@
 package io.github.mikenakis.bytecode.model.attributes.code;
 
+import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.bytecode.model.attributes.code.instructions.BranchInstruction;
 import io.github.mikenakis.bytecode.model.attributes.code.instructions.ClassReferencingInstruction;
 import io.github.mikenakis.bytecode.model.attributes.code.instructions.ConditionalBranchInstruction;
@@ -20,7 +21,6 @@ import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
 import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
 import io.github.mikenakis.bytecode.writing.InstructionWriter;
 import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.bytecode.kit.BufferReader;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
