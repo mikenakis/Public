@@ -1,8 +1,8 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class2WithTableswitch, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class2WithTableswitch, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 2 items
-│ ├─■ [0] mikenakis.bytecode.test.model.Class1WithFields
-│ └─■ [1] mikenakis.bytecode.test.model.Class3ImplementingInterface
+│ ├─■ [0] io.github.mikenakis.bytecode.test.model.Class1WithFields
+│ └─■ [1] io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface
 ├─■ fields: 0 items
 ├─■ methods: 2 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithTableSwitchInstruction( int )
@@ -79,7 +79,7 @@
 │ │   │   │ ├─■ [13] LineNumberTableEntry lineNumber = 42, start = L42
 │ │   │   │ └─■ [14] LineNumberTableEntry lineNumber = 45, start = L45
 │ │   │   ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L13, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithTableswitch this
+│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L13, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithTableswitch this
 │ │   │   │ └─■ [1] LocalVariableTableEntry index = 1, start = L13, end = @end, prototype = int i
 │ │   │   └─■ [2] StackMapTableAttribute; 8 items
 │ │   │     ├─■ [0] SameFrame target = L16
@@ -107,6 +107,6 @@
 │         │ ├─■ [0] LineNumberTableEntry lineNumber = 48, start = L48
 │         │ └─■ [1] LineNumberTableEntry lineNumber = 49, start = L49
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L48, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithTableswitch this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L48, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithTableswitch this
 └─■ attributeSet: 1 items
   └─■ [0] SourceFileAttribute "Class2WithTableswitch.java"

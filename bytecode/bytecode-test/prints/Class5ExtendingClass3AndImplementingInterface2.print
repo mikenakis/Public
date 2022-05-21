@@ -1,12 +1,12 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, final, super], this = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2, super = mikenakis.bytecode.test.model.Class3ImplementingInterface
+■ ByteCodeType version = 61.0, accessFlags = [public, final, super], this = io.github.mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2, super = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface
 ├─■ interfaces: 1 items
-│ └─■ [0] mikenakis.bytecode.test.model.Interface2
+│ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface2
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [private, final], prototype = mikenakis.bytecode.test.model.Interface1 interface1
+│ └─■ [0] ByteCodeField accessFlags = [private, final], prototype = io.github.mikenakis.bytecode.test.model.Interface1 interface1
 │   └─■ attributeSet: 1 items
 │     └─■ [0] RuntimeVisibleAnnotationsAttribute; 1 items
-│       └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 2 parameters
+│       └─■ [0] Annotation type = io.github.mikenakis.bytecode.test.model.RuntimeVisibleAnnotation1; 2 parameters
 │         ├─■ [0] AnnotationParameter name = "charParameter"
 │         │ └─■ value: ConstAnnotationValue tag = Character value = IntegerValueConstant( 120 (char 'x') )
 │         └─■ [1] AnnotationParameter name = "doubleParameter"
@@ -18,11 +18,11 @@
 │ │     ├─■ instructions: 6 entries
 │ │     │ ├─■ L14: // {
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
 │ │     │ ├─■ L10: // @RuntimeVisibleAnnotation1( charParameter = 'x', doubleParameter = 1.1 ) //
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
+│ │     │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Interface1 io.github.mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
 │ │     │ ├─■ L15: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -32,22 +32,22 @@
 │ │       │ ├─■ [1] LineNumberTableEntry lineNumber = 10, start = L10
 │ │       │ └─■ [2] LineNumberTableEntry lineNumber = 15, start = L15
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L14, end = @end, prototype = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this
-│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = mikenakis.bytecode.test.model.Interface1 getInterface1()
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L14, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this
+│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = io.github.mikenakis.bytecode.test.model.Interface1 getInterface1()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L19: // return interface1;
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
+│ │     │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Interface1 io.github.mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2.interface1
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 19, start = L19
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, prototype = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this
-│ └─■ [2] ByteCodeMethod accessFlags = [public], prototype = long getLong( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this
+│ └─■ [2] ByteCodeMethod accessFlags = [public], prototype = long getLong( io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface )
 │   └─■ attributes: 2 items
 │     ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 4
 │     │ ├─■ instructions: 5 entries
@@ -64,8 +64,8 @@
 │     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 25, start = L25
 │     │   │ └─■ [1] LineNumberTableEntry lineNumber = 26, start = L26
 │     │   └─■ [1] LocalVariableTableAttribute; 3 items
-│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L25, end = @end, prototype = mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this
-│     │     ├─■ [1] LocalVariableTableEntry index = 1, start = L25, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L25, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class5ExtendingClass3AndImplementingInterface2 this
+│     │     ├─■ [1] LocalVariableTableEntry index = 1, start = L25, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
 │     │     └─■ [2] LocalVariableTableEntry index = 2, start = L26, end = @end, prototype = long id
 │     └─■ [1] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"

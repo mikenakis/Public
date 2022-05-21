@@ -1,6 +1,6 @@
 package org.slf4j.impl;
 
-import mikenakis.kit.logging.Log;
+import io.github.mikenakis.kit.logging.Log;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.Marker;

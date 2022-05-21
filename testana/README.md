@@ -115,7 +115,7 @@ Without going into too much detail in this document, (because I want to have onl
   - That's necessary because normally, prior to running Testana, your IDE will only build the modules that Testana depends on; however, Testana does not depend on any of the modules of your project, and yet Testana will discover them at runtime, so they all need to be up to date when Testana runs. 
   - The way to achieve this with IntelliJ IDEA is to edit the run/debug configuration of Testana and under `Before launch:` specify `Build Project` instead of the default, which is `Build`. 
 - Make sure that when running something from within your IDE, the working directory is the root directory of the source code of your project. (It usually is.)
-- Find the class that contains `public static void main` in the Testana subtree, and run it. (It should be `mikenakis.testana.console.TestanaConsoleMain` unless I have refactored it into something different by the time you read this.)
+- Find the class that contains `public static void main` in the Testana subtree, and run it. (It should be `TestanaConsoleMain` unless I have refactored it into something different by the time you read this.)
 - If you run Testana without any arguments, its default behavior should be to do the right thing. (Note that the first time you run Testana, there may be a long delay while classes are being parsed; the information collected is cached, so this delay will not be there next time Testana is run.)
   - On the first run, it should run all tests. 
   - On the second run, it should not run any tests, because nothing will have changed. 

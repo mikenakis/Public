@@ -1,19 +1,19 @@
-■ ByteCodeType version = 61.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [super], this = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, super = java.lang.Object
 ├─■ interfaces: 1 items
-│ └─■ [0] mikenakis.bytecode.test.model.Interface1
+│ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface1
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
+│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 3 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+│ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 6 entries
 │ │   │ │ ├─■ L12: // {
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class8WithAnonymousClass mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
+│ │   │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ └─■         RETURN
@@ -22,11 +22,11 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 12, start = L12
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L12, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L12, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L12, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L12, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [final, mandated], name = "this$0"
-│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = mikenakis.bytecode.test.model.Enum1 getEnum1()
+│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = io.github.mikenakis.bytecode.test.model.Enum1 getEnum1()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 2 entries
@@ -38,8 +38,8 @@
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 15, start = L15
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
-│ └─■ [2] ByteCodeMethod accessFlags = [public], prototype = int getInteger( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
+│ └─■ [2] ByteCodeMethod accessFlags = [public], prototype = int getInteger( io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface )
 │   └─■ attributes: 2 items
 │     ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
 │     │ ├─■ instructions: 2 entries
@@ -51,13 +51,13 @@
 │     │   ├─■ [0] LineNumberTableAttribute; 1 items
 │     │   │ └─■ [0] LineNumberTableEntry lineNumber = 19, start = L19
 │     │   └─■ [1] LocalVariableTableAttribute; 2 items
-│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
-│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L19, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L19, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1 this
+│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L19, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
 │     └─■ [1] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
 └─■ attributeSet: 4 items
   ├─■ [0] SourceFileAttribute "Class8WithAnonymousClass.java"
-  ├─■ [1] EnclosingMethodAttribute enclosingClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass
-  ├─■ [2] NestHostAttribute mikenakis.bytecode.test.model.Class8WithAnonymousClass
+  ├─■ [1] EnclosingMethodAttribute enclosingClass = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass
+  ├─■ [2] NestHostAttribute io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass
   └─■ [3] InnerClassesAttribute; 1 items
-    └─■ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
+    └─■ [0] InnerClass accessFlags = [], innerClass = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1

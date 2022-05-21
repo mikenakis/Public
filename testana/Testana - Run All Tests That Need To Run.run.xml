@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Testana - Run All Tests That Need To Run" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="mikenakis.testana.console.TestanaConsoleMain" />
+    <option name="MAIN_CLASS_NAME" value="io.github.mikenakis.testana.console.TestanaConsoleMain" />
     <module name="testana-console" />
     <option name="PROGRAM_PARAMETERS" value="--show-structure Verbose --show-test-plan Normal" />
     <selectedOptions>
@@ -10,6 +10,10 @@
     <extension name="coverage" track_test_folders="true" runner="jacoco">
       <pattern>
         <option name="PATTERN" value="mikenakis.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+      <pattern>
+        <option name="PATTERN" value="io.github.mikenakis.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Testana - Clear History" type="Application" factoryName="Application">
-    <option name="MAIN_CLASS_NAME" value="mikenakis.testana.console.TestanaConsoleMain" />
+    <option name="MAIN_CLASS_NAME" value="io.github.mikenakis.testana.console.TestanaConsoleMain" />
     <module name="testana-console" />
     <option name="PROGRAM_PARAMETERS" value="--clear-history" />
     <option name="VM_PARAMETERS" value="-ea" />

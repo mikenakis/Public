@@ -1,12 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="ClassDumpMain" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="mikenakis.classdump.ClassDumpMain" />
+    <option name="MAIN_CLASS_NAME" value="io.github.mikenakis.classdump.ClassDumpMain" />
     <module name="classdump" />
     <option name="PROGRAM_PARAMETERS" value="--sources $SourcepathEntry$ $OutputPath$ $FileClass$" />
     <option name="VM_PARAMETERS" value="-ea" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="mikenakis.classdump.*" />
+        <option name="PATTERN" value="io.github.mikenakis.classdump.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

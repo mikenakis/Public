@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [final, super], this = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [final, super], this = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
@@ -15,7 +15,7 @@
 │       │ ├─■ L13: // private boolean foo = false;
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 0
-│       │ ├─■         PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
+│       │ ├─■         PUTFIELD boolean io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items
@@ -23,9 +23,9 @@
 │         │ ├─■ [0] LineNumberTableEntry lineNumber = 11, start = L11
 │         │ └─■ [1] LineNumberTableEntry lineNumber = 13, start = L13
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class4ExtendingClass3.java"
-  ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class4ExtendingClass3
+  ├─■ [1] NestHostAttribute io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3
   └─■ [2] InnerClassesAttribute; 1 items
-    └─■ [0] InnerClass accessFlags = [private, static, final], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = NestedClass
+    └─■ [0] InnerClass accessFlags = [private, static, final], innerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, outerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = NestedClass

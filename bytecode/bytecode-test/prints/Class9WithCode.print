@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super], this = mikenakis.bytecode.test.model.Class9WithCode, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super], this = io.github.mikenakis.bytecode.test.model.Class9WithCode, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 3 items
@@ -14,14 +14,14 @@
 │ │   ├─■ [0] CodeAttribute maxStack = 3, maxLocals = 2
 │ │   │ ├─■ instructions: 8 entries
 │ │   │ │ ├─■ L9: // Class9WithCode parser = new Class9WithCode( str );
-│ │   │ │ ├─■         NEW mikenakis.bytecode.test.model.Class9WithCode
+│ │   │ │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class9WithCode
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.<init>( java.lang.String )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class9WithCode.<init>( java.lang.String )
 │ │   │ │ ├─■         ASTORE 1
 │ │   │ │ ├─■ L10: // return parser.parse();
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parse()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parse()
 │ │   │ │ └─■         DRETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
@@ -30,7 +30,7 @@
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 10, start = L10
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
 │ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, prototype = java.lang.String str
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L10, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode parser
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L10, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode parser
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "str"
 │ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = void <init>( java.lang.String )
@@ -43,11 +43,11 @@
 │ │   │ │ ├─■ L14: // private int pos = -1;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC -1
-│ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│ │   │ │ ├─■         PUTFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │   │ │ ├─■ L19: // this.str = str;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+│ │   │ │ ├─■         PUTFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class9WithCode.str
 │ │   │ │ ├─■ L20: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -58,7 +58,7 @@
 │ │   │   │ ├─■ [2] LineNumberTableEntry lineNumber = 19, start = L19
 │ │   │   │ └─■ [3] LineNumberTableEntry lineNumber = 20, start = L20
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L18, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L18, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L18, end = @end, prototype = java.lang.String str
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "str"
@@ -70,23 +70,23 @@
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         DUP
-│ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│ │     │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │     │ ├─■         LDC 1
 │ │     │ ├─■         IADD
 │ │     │ ├─■         DUP_X1
-│ │     │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│ │     │ ├─■         PUTFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+│ │     │ ├─■         GETFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class9WithCode.str
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.length()
 │ │     │ ├─■         IF_ICMPGE T1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+│ │     │ ├─■         GETFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class9WithCode.str
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│ │     │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; char java.lang.String.charAt( int )
 │ │     │ ├─■         GOTO T2
 │ │     │ ├─■ T1:     LDC -1
-│ │     │ ├─■ T2:     PUTFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│ │     │ ├─■ T2:     PUTFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │     │ ├─■ L25: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -95,15 +95,15 @@
 │ │       │ ├─■ [0] LineNumberTableEntry lineNumber = 24, start = L24
 │ │       │ └─■ [1] LineNumberTableEntry lineNumber = 25, start = L25
 │ │       ├─■ [1] LocalVariableTableAttribute; 1 items
-│ │       │ └─■ [0] LocalVariableTableEntry index = 0, start = L24, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│ │       │ └─■ [0] LocalVariableTableEntry index = 0, start = L24, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │ │       └─■ [2] StackMapTableAttribute; 2 items
 │ │         ├─■ [0] SameLocals1StackItemFrame target = T1
-│ │         │ └─■ stackVerificationType: ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│ │         │ └─■ stackVerificationType: ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │ │         └─■ [1] FullFrame target = T2
 │ │           ├─■ localVerificationTypes: 1 items
-│ │           │ └─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│ │           │ └─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │ │           └─■ stackVerificationTypes: 2 items
-│ │             ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│ │             ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │ │             └─■ [1] SimpleVerificationType Integer
 │ ├─■ [3] ByteCodeMethod accessFlags = [private], prototype = boolean eat( int )
 │ │ └─■ attributes: 2 items
@@ -111,21 +111,21 @@
 │ │   │ ├─■ instructions: 17 entries
 │ │   │ │ ├─■ L30: // while( ch == ' ' )
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│ │   │ │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │   │ │ ├─■         LDC 32
 │ │   │ │ ├─■         IF_ICMPNE L32
 │ │   │ │ ├─■ L31: // nextChar();
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │ │   │ │ ├─■         GOTO L30
 │ │   │ │ ├─■ L32: // if( ch == charToEat )
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│ │   │ │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │   │ │ ├─■         ILOAD 1
 │ │   │ │ ├─■         IF_ICMPNE L37
 │ │   │ │ ├─■ L34: // nextChar();
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │ │   │ │ ├─■ L35: // return true;
 │ │   │ │ ├─■         LDC 1
 │ │   │ │ ├─■         IRETURN
@@ -142,7 +142,7 @@
 │ │   │   │ ├─■ [4] LineNumberTableEntry lineNumber = 35, start = L35
 │ │   │   │ └─■ [5] LineNumberTableEntry lineNumber = 37, start = L37
 │ │   │   ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L30, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L30, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │ │   │   │ └─■ [1] LocalVariableTableEntry index = 1, start = L30, end = @end, prototype = int charToEat
 │ │   │   └─■ [2] StackMapTableAttribute; 3 items
 │ │   │     ├─■ [0] SameFrame target = L30
@@ -156,23 +156,23 @@
 │ │     ├─■ instructions: 21 entries
 │ │     │ ├─■ L42: // nextChar();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │ │     │ ├─■ L43: // double x = parseExpression();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■ L44: // if( pos < str.length() )
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│ │     │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+│ │     │ ├─■         GETFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class9WithCode.str
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; int java.lang.String.length()
 │ │     │ ├─■         IF_ICMPGE L46
 │ │     │ ├─■ L45: // throw new RuntimeException( "Unexpected: " + (char)ch );
 │ │     │ ├─■         NEW java.lang.RuntimeException
 │ │     │ ├─■         DUP
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│ │     │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │ │     │ ├─■         I2C
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( char )
 │ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unexpected: \x01" )
@@ -190,7 +190,7 @@
 │ │       │ ├─■ [3] LineNumberTableEntry lineNumber = 45, start = L45
 │ │       │ └─■ [4] LineNumberTableEntry lineNumber = 46, start = L46
 │ │       ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │ │       │ └─■ [1] LocalVariableTableEntry index = 1, start = L44, end = @end, prototype = double x
 │ │       └─■ [2] StackMapTableAttribute; 1 items
 │ │         └─■ [0] AppendFrame target = L46
@@ -202,29 +202,29 @@
 │ │     ├─■ instructions: 25 entries
 │ │     │ ├─■ L57: // double x = parseTerm();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■ L60: // if( eat( '+' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 43
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L62
 │ │     │ ├─■ L61: // x += parseTerm(); // addition
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
 │ │     │ ├─■         DADD
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L60
 │ │     │ ├─■ L62: // else if( eat( '-' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 45
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L65
 │ │     │ ├─■ L63: // x -= parseTerm(); // subtraction
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseTerm()
 │ │     │ ├─■         DSUB
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L60
@@ -241,7 +241,7 @@
 │ │       │ ├─■ [4] LineNumberTableEntry lineNumber = 63, start = L63
 │ │       │ └─■ [5] LineNumberTableEntry lineNumber = 65, start = L65
 │ │       ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L57, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L57, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │ │       │ └─■ [1] LocalVariableTableEntry index = 1, start = L60, end = @end, prototype = double x
 │ │       └─■ [2] StackMapTableAttribute; 3 items
 │ │         ├─■ [0] AppendFrame target = L60
@@ -255,29 +255,29 @@
 │ │     ├─■ instructions: 25 entries
 │ │     │ ├─■ L71: // double x = parseFactor();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■ L74: // if( eat( '*' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 42
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L76
 │ │     │ ├─■ L75: // x *= parseFactor(); // multiplication
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │ │     │ ├─■         DMUL
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L74
 │ │     │ ├─■ L76: // else if( eat( '/' ) )
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         LDC 47
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │ │     │ ├─■         IFEQ L79
 │ │     │ ├─■ L77: // x /= parseFactor(); // division
 │ │     │ ├─■         DLOAD 1
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│ │     │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │ │     │ ├─■         DDIV
 │ │     │ ├─■         DSTORE 1
 │ │     │ ├─■         GOTO L74
@@ -294,7 +294,7 @@
 │ │       │ ├─■ [4] LineNumberTableEntry lineNumber = 77, start = L77
 │ │       │ └─■ [5] LineNumberTableEntry lineNumber = 79, start = L79
 │ │       ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L71, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L71, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │ │       │ └─■ [1] LocalVariableTableEntry index = 1, start = L74, end = @end, prototype = double x
 │ │       └─■ [2] StackMapTableAttribute; 3 items
 │ │         ├─■ [0] AppendFrame target = L74
@@ -309,114 +309,114 @@
 │       │ ├─■ L85: // if( eat( '+' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 43
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L87
 │       │ ├─■ L86: // return parseFactor(); // unary plus
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DRETURN
 │       │ ├─■ L87: // if( eat( '-' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 45
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L91
 │       │ ├─■ L88: // return -parseFactor(); // unary minus
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DNEG
 │       │ ├─■         DRETURN
 │       │ ├─■ L91: // int startPos = pos;
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │       │ ├─■         ISTORE 3
 │       │ ├─■ L92: // if( eat( '(' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 40
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L98
 │       │ ├─■ L95: // x = parseExpression();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseExpression()
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L96: // eat( ')' );
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 41
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         POP
 │       │ ├─■         GOTO L128
 │       │ ├─■ L98: // else if( (ch >= '0' && ch <= '9') || ch == '.' )
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 48
 │       │ ├─■         IF_ICMPLT T1
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 57
 │       │ ├─■         IF_ICMPLE L101
 │       │ ├─■ T1:     ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 46
 │       │ ├─■         IF_ICMPNE L105
 │       │ ├─■ L101: // while( (ch >= '0' && ch <= '9') || ch == '.' )
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 48
 │       │ ├─■         IF_ICMPLT T2
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 57
 │       │ ├─■         IF_ICMPLE L102
 │       │ ├─■ T2:     ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 46
 │       │ ├─■         IF_ICMPNE L103
 │       │ ├─■ L102: // nextChar();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │       │ ├─■         GOTO L101
 │       │ ├─■ L103: // x = Double.parseDouble( str.substring( startPos, pos ) );
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+│       │ ├─■         GETFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class9WithCode.str
 │       │ ├─■         ILOAD 3
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.String.substring( int, int )
 │       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Double.parseDouble( java.lang.String )
 │       │ ├─■         DSTORE 1
 │       │ ├─■ T3:     GOTO L128
 │       │ ├─■ L105: // else if( ch >= 'a' && ch <= 'z' )
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 97
 │       │ ├─■         IF_ICMPLT L125
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 122
 │       │ ├─■         IF_ICMPGT L125
 │       │ ├─■ L108: // while( ch >= 'a' && ch <= 'z' )
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 97
 │       │ ├─■         IF_ICMPLT L110
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         LDC 122
 │       │ ├─■         IF_ICMPGT L110
 │       │ ├─■ L109: // nextChar();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; void mikenakis.bytecode.test.model.Class9WithCode.nextChar()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class9WithCode.nextChar()
 │       │ ├─■         GOTO L108
 │       │ ├─■ L110: // String func = str.substring( startPos, pos );
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD java.lang.String mikenakis.bytecode.test.model.Class9WithCode.str
+│       │ ├─■         GETFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class9WithCode.str
 │       │ ├─■         ILOAD 3
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.pos
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.pos
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.String.substring( int, int )
 │       │ ├─■         ASTORE 4
 │       │ ├─■ L111: // x = parseFactor();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L112: // x = switch( func )
 │       │ ├─■         ALOAD 4
@@ -520,7 +520,7 @@
 │       │ ├─■         NEW java.lang.RuntimeException
 │       │ ├─■         DUP
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD int mikenakis.bytecode.test.model.Class9WithCode.ch
+│       │ ├─■         GETFIELD int io.github.mikenakis.bytecode.test.model.Class9WithCode.ch
 │       │ ├─■         I2C
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( char )
 │       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "Unexpected: \x01" )
@@ -529,12 +529,12 @@
 │       │ ├─■ L128: // if( eat( '^' ) )
 │       │ ├─■         ALOAD 0
 │       │ ├─■         LDC 94
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean mikenakis.bytecode.test.model.Class9WithCode.eat( int )
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; boolean io.github.mikenakis.bytecode.test.model.Class9WithCode.eat( int )
 │       │ ├─■         IFEQ L131
 │       │ ├─■ L129: // x = Math.pow( x, parseFactor() ); // exponentiation
 │       │ ├─■         DLOAD 1
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKEVIRTUAL reference = Plain; double mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
+│       │ ├─■         INVOKEVIRTUAL reference = Plain; double io.github.mikenakis.bytecode.test.model.Class9WithCode.parseFactor()
 │       │ ├─■         INVOKESTATIC reference = Plain; double java.lang.Math.pow( double, double )
 │       │ ├─■         DSTORE 1
 │       │ ├─■ L131: // return x;
@@ -578,7 +578,7 @@
 │         │ ├─■ [1] LocalVariableTableEntry index = 1, start = T3, end = L105, prototype = double x
 │         │ ├─■ [2] LocalVariableTableEntry index = 4, start = L111, end = L122, prototype = java.lang.String func
 │         │ ├─■ [3] LocalVariableTableEntry index = 1, start = L112, end = L125, prototype = double x
-│         │ ├─■ [4] LocalVariableTableEntry index = 0, start = L85, end = @end, prototype = mikenakis.bytecode.test.model.Class9WithCode this
+│         │ ├─■ [4] LocalVariableTableEntry index = 0, start = L85, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class9WithCode this
 │         │ ├─■ [5] LocalVariableTableEntry index = 1, start = L128, end = @end, prototype = double x
 │         │ └─■ [6] LocalVariableTableEntry index = 3, start = L92, end = @end, prototype = int startPos
 │         └─■ [2] StackMapTableAttribute; 29 items
@@ -599,7 +599,7 @@
 │           ├─■ [10] SameFrame target = L110
 │           ├─■ [11] FullFrame target = T4
 │           │ ├─■ localVerificationTypes: 6 items
-│           │ │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│           │ │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │           │ │ ├─■ [1] SimpleVerificationType Double
 │           │ │ ├─■ [2] SimpleVerificationType Integer
 │           │ │ ├─■ [3] ObjectVerificationType type = java.lang.String
@@ -621,7 +621,7 @@
 │           ├─■ [24] SameFrame target = L120
 │           ├─■ [25] FullFrame target = T11
 │           │ ├─■ localVerificationTypes: 4 items
-│           │ │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│           │ │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │           │ │ ├─■ [1] SimpleVerificationType Double
 │           │ │ ├─■ [2] SimpleVerificationType Integer
 │           │ │ └─■ [3] ObjectVerificationType type = java.lang.String
@@ -629,14 +629,14 @@
 │           │   └─■ [0] SimpleVerificationType Double
 │           ├─■ [26] FullFrame target = L125
 │           │ ├─■ localVerificationTypes: 4 items
-│           │ │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│           │ │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │           │ │ ├─■ [1] SimpleVerificationType Top
 │           │ │ ├─■ [2] SimpleVerificationType Top
 │           │ │ └─■ [3] SimpleVerificationType Integer
 │           │ └─■ stackVerificationTypes: 0 items
 │           ├─■ [27] FullFrame target = L128
 │           │ ├─■ localVerificationTypes: 3 items
-│           │ │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class9WithCode
+│           │ │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class9WithCode
 │           │ │ ├─■ [1] SimpleVerificationType Double
 │           │ │ └─■ [2] SimpleVerificationType Integer
 │           │ └─■ stackVerificationTypes: 0 items

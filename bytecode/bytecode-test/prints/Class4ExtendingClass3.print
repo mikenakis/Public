@@ -1,11 +1,11 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, final, super], this = mikenakis.bytecode.test.model.Class4ExtendingClass3, super = mikenakis.bytecode.test.model.Class3ImplementingInterface
+■ ByteCodeType version = 61.0, accessFlags = [public, final, super], this = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, super = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface
 ├─■ interfaces: 1 items
-│ └─■ [0] mikenakis.bytecode.test.model.Interface2
+│ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface2
 ├─■ extraTypes: 0 items
 ├─■ fields: 2 items
-│ ├─■ [0] ByteCodeField accessFlags = [private, final], prototype = mikenakis.bytecode.test.model.Interface1 interface1
+│ ├─■ [0] ByteCodeField accessFlags = [private, final], prototype = io.github.mikenakis.bytecode.test.model.Interface1 interface1
 │ │ └─■ attributeSet: 0 items
-│ └─■ [1] ByteCodeField accessFlags = [private, final], prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass nestedObject
+│ └─■ [1] ByteCodeField accessFlags = [private, final], prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass nestedObject
 │   └─■ attributeSet: 0 items
 ├─■ methods: 9 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>()
@@ -14,17 +14,17 @@
 │ │     ├─■ instructions: 11 entries
 │ │     │ ├─■ L20: // {
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>()
 │ │     │ ├─■ L16: // private final Interface1 interface1 = this;
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
+│ │     │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Interface1 io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
 │ │     │ ├─■ L17: // private final NestedClass nestedObject = new NestedClass();
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         NEW mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
+│ │     │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
 │ │     │ ├─■         DUP
-│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.<init>()
-│ │     │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.<init>()
+│ │     │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
 │ │     │ ├─■ L21: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -35,22 +35,22 @@
 │ │       │ ├─■ [2] LineNumberTableEntry lineNumber = 17, start = L17
 │ │       │ └─■ [3] LineNumberTableEntry lineNumber = 21, start = L21
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L20, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
-│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = mikenakis.bytecode.test.model.Interface1 getInterface1()
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L20, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ ├─■ [1] ByteCodeMethod accessFlags = [public], prototype = io.github.mikenakis.bytecode.test.model.Interface1 getInterface1()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L25: // return interface1;
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
+│ │     │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Interface1 io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.interface1
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 25, start = L25
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L25, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
-│ ├─■ [2] ByteCodeMethod accessFlags = [public], prototype = long getLong( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L25, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ ├─■ [2] ByteCodeMethod accessFlags = [public], prototype = long getLong( io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 3 entries
@@ -63,8 +63,8 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 30, start = L30
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L30, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L30, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L30, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L30, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
 │ ├─■ [3] ByteCodeMethod accessFlags = [public], prototype = void testMethodHandle()
@@ -73,7 +73,7 @@
 │ │     ├─■ instructions: 5 entries
 │ │     │ ├─■ L35: // Runnable runnable = () -> new Class4ExtendingClass3();
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.Runnable run()
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "()V" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; void mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testMethodHandle$0(), MethodTypeConstant Mutf8ValueConstant( "()V" )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "()V" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; void io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testMethodHandle$0(), MethodTypeConstant Mutf8ValueConstant( "()V" )
 │ │     │ ├─■         ASTORE 1
 │ │     │ ├─■ L36: // runnable.run();
 │ │     │ ├─■         ALOAD 1
@@ -87,20 +87,20 @@
 │ │       │ ├─■ [1] LineNumberTableEntry lineNumber = 36, start = L36
 │ │       │ └─■ [2] LineNumberTableEntry lineNumber = 37, start = L37
 │ │       └─■ [1] LocalVariableTableAttribute; 2 items
-│ │         ├─■ [0] LocalVariableTableEntry index = 0, start = L35, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ │         ├─■ [0] LocalVariableTableEntry index = 0, start = L35, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
 │ │         └─■ [1] LocalVariableTableEntry index = 1, start = L36, end = @end, prototype = java.lang.Runnable runnable
 │ ├─■ [4] ByteCodeMethod accessFlags = [public], prototype = void testInvokeDynamic()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │     ├─■ instructions: 7 entries
 │ │     │ ├─■ L46: // Foo foo = s -> s + "x";
-│ │     │ ├─■         INVOKEDYNAMIC prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo x()
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;)Ljava/lang/String;" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.String mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testInvokeDynamic$1( java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;)Ljava/lang/String;" )
+│ │     │ ├─■         INVOKEDYNAMIC prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo x()
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;)Ljava/lang/String;" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; java.lang.String io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.lambda$testInvokeDynamic$1( java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;)Ljava/lang/String;" )
 │ │     │ ├─■         ASTORE 1
 │ │     │ ├─■ L47: // foo.x( "aaa" );
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         LDC "aaa"
-│ │     │ ├─■         INVOKEINTERFACE reference = Interface; java.lang.String mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo.x( java.lang.String ), 2 arguments
+│ │     │ ├─■         INVOKEINTERFACE reference = Interface; java.lang.String io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo.x( java.lang.String ), 2 arguments
 │ │     │ ├─■         POP
 │ │     │ ├─■ L48: // }
 │ │     │ └─■         RETURN
@@ -111,32 +111,32 @@
 │ │       │ ├─■ [1] LineNumberTableEntry lineNumber = 47, start = L47
 │ │       │ └─■ [2] LineNumberTableEntry lineNumber = 48, start = L48
 │ │       └─■ [1] LocalVariableTableAttribute; 2 items
-│ │         ├─■ [0] LocalVariableTableEntry index = 0, start = L46, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
-│ │         └─■ [1] LocalVariableTableEntry index = 1, start = L47, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo foo
+│ │         ├─■ [0] LocalVariableTableEntry index = 0, start = L46, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ │         └─■ [1] LocalVariableTableEntry index = 1, start = L47, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo foo
 │ ├─■ [5] ByteCodeMethod accessFlags = [public], prototype = boolean testSyntheticMethod1()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 4 entries
 │ │     │ ├─■ L52: // return nestedObject.foo;
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
-│ │     │ ├─■         GETFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
+│ │     │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
+│ │     │ ├─■         GETFIELD boolean io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
 │ │     │ └─■         IRETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 52, start = L52
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L52, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L52, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
 │ ├─■ [6] ByteCodeMethod accessFlags = [public], prototype = void testSyntheticMethod2( boolean )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 5 entries
 │ │   │ │ ├─■ L57: // nestedObject.foo = foo;
 │ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         GETFIELD mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
+│ │   │ │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.nestedObject
 │ │   │ │ ├─■         ILOAD 1
-│ │   │ │ ├─■         PUTFIELD boolean mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
+│ │   │ │ ├─■         PUTFIELD boolean io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass.foo
 │ │   │ │ ├─■ L58: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -145,7 +145,7 @@
 │ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 57, start = L57
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 58, start = L58
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L57, end = @end, prototype = mikenakis.bytecode.test.model.Class4ExtendingClass3 this
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L57, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3 this
 │ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L57, end = @end, prototype = boolean foo
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "foo"
@@ -169,9 +169,9 @@
 │     └─■ [0] CodeAttribute maxStack = 2, maxLocals = 0
 │       ├─■ instructions: 5 entries
 │       │ ├─■ L35: // Runnable runnable = () -> new Class4ExtendingClass3();
-│       │ ├─■         NEW mikenakis.bytecode.test.model.Class4ExtendingClass3
+│       │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3
 │       │ ├─■         DUP
-│       │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class4ExtendingClass3.<init>()
+│       │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3.<init>()
 │       │ ├─■         POP
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
@@ -181,9 +181,9 @@
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class4ExtendingClass3.java"
   ├─■ [1] NestMembersAttribute; 2 items
-  │ ├─■ [0] mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo
-  │ └─■ [1] mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
+  │ ├─■ [0] io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo
+  │ └─■ [1] io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass
   └─■ [2] InnerClassesAttribute; 3 items
-    ├─■ [0] InnerClass accessFlags = [private, static, final], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = NestedClass
-    ├─■ [1] InnerClass accessFlags = [static, interface, abstract], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo
+    ├─■ [0] InnerClass accessFlags = [private, static, final], innerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$NestedClass, outerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = NestedClass
+    ├─■ [1] InnerClass accessFlags = [static, interface, abstract], innerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo
     └─■ [2] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

@@ -1,6 +1,6 @@
 package org.slf4j.impl;
 
-import mikenakis.saganaki.slf4j.Slf4jLoggerFactory;
+import io.github.mikenakis.slf4j.Slf4jLoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 

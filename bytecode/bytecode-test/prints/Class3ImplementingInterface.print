@@ -1,6 +1,6 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class3ImplementingInterface, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface, super = java.lang.Object
 ├─■ interfaces: 1 items
-│ └─■ [0] mikenakis.bytecode.test.model.Interface1
+│ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface1
 ├─■ extraTypes: 0 items
 ├─■ fields: 19 items
 │ ├─■ [0] ByteCodeField accessFlags = [public, static, final], prototype = java.lang.String stringLiteral
@@ -30,7 +30,7 @@
 │ ├─■ [8] ByteCodeField accessFlags = [public, static, final], prototype = short shortLiteral
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 4 )
-│ ├─■ [9] ByteCodeField accessFlags = [private, final], prototype = mikenakis.bytecode.test.model.Enum1 enum1
+│ ├─■ [9] ByteCodeField accessFlags = [private, final], prototype = io.github.mikenakis.bytecode.test.model.Enum1 enum1
 │ │ └─■ attributeSet: 0 items
 │ ├─■ [10] ByteCodeField accessFlags = [private, final], prototype = boolean booleanMember
 │ │ └─■ attributeSet: 1 items
@@ -65,8 +65,8 @@
 │ │     ├─■ instructions: 4 entries
 │ │     │ ├─■ L39: // this( Enum1.ENUM_CONSTANT_A );
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
-│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>( mikenakis.bytecode.test.model.Enum1 )
+│ │     │ ├─■         GETSTATIC io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.<init>( io.github.mikenakis.bytecode.test.model.Enum1 )
 │ │     │ ├─■ L40: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -75,8 +75,8 @@
 │ │       │ ├─■ [0] LineNumberTableEntry lineNumber = 39, start = L39
 │ │       │ └─■ [1] LineNumberTableEntry lineNumber = 40, start = L40
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L39, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
-│ ├─■ [1] ByteCodeMethod accessFlags = [protected], prototype = void <init>( mikenakis.bytecode.test.model.Enum1 )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L39, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ ├─■ [1] ByteCodeMethod accessFlags = [protected], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Enum1 )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 3, maxLocals = 2
 │ │   │ ├─■ instructions: 33 entries
@@ -86,43 +86,43 @@
 │ │   │ │ ├─■ L27: // private final boolean booleanMember = booleanLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         PUTFIELD boolean mikenakis.bytecode.test.model.Class3ImplementingInterface.booleanMember
+│ │   │ │ ├─■         PUTFIELD boolean io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.booleanMember
 │ │   │ │ ├─■ L28: // private final byte byteMember = byteLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         PUTFIELD byte mikenakis.bytecode.test.model.Class3ImplementingInterface.byteMember
+│ │   │ │ ├─■         PUTFIELD byte io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.byteMember
 │ │   │ │ ├─■ L29: // private final char charMember = charLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 99
-│ │   │ │ ├─■         PUTFIELD char mikenakis.bytecode.test.model.Class3ImplementingInterface.charMember
+│ │   │ │ ├─■         PUTFIELD char io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.charMember
 │ │   │ │ ├─■ L30: // private double doubleMember = doubleLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 0.5
-│ │   │ │ ├─■         PUTFIELD double mikenakis.bytecode.test.model.Class3ImplementingInterface.doubleMember
+│ │   │ │ ├─■         PUTFIELD double io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.doubleMember
 │ │   │ │ ├─■ L31: // private final float floatMember = floatLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 0.25
-│ │   │ │ ├─■         PUTFIELD float mikenakis.bytecode.test.model.Class3ImplementingInterface.floatMember
+│ │   │ │ ├─■         PUTFIELD float io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.floatMember
 │ │   │ │ ├─■ L32: // private final int intMember = intLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 2
-│ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class3ImplementingInterface.intMember
+│ │   │ │ ├─■         PUTFIELD int io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.intMember
 │ │   │ │ ├─■ L33: // private final long longMember = longLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 3
-│ │   │ │ ├─■         PUTFIELD long mikenakis.bytecode.test.model.Class3ImplementingInterface.longMember
+│ │   │ │ ├─■         PUTFIELD long io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.longMember
 │ │   │ │ ├─■ L34: // private final short shortMember = shortLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 4
-│ │   │ │ ├─■         PUTFIELD short mikenakis.bytecode.test.model.Class3ImplementingInterface.shortMember
+│ │   │ │ ├─■         PUTFIELD short io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.shortMember
 │ │   │ │ ├─■ L35: // private final String stringMember = stringLiteral;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC "aΦ됔b"
-│ │   │ │ ├─■         PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class3ImplementingInterface.stringMember
+│ │   │ │ ├─■         PUTFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.stringMember
 │ │   │ │ ├─■ L44: // this.enum1 = enum1;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
+│ │   │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
 │ │   │ │ ├─■ L45: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -141,25 +141,25 @@
 │ │   │   │ ├─■ [10] LineNumberTableEntry lineNumber = 44, start = L44
 │ │   │   │ └─■ [11] LineNumberTableEntry lineNumber = 45, start = L45
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L43, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L43, end = @end, prototype = mikenakis.bytecode.test.model.Enum1 enum1
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L43, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L43, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Enum1 enum1
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "enum1"
-│ ├─■ [2] ByteCodeMethod accessFlags = [public], prototype = mikenakis.bytecode.test.model.Enum1 getEnum1()
+│ ├─■ [2] ByteCodeMethod accessFlags = [public], prototype = io.github.mikenakis.bytecode.test.model.Enum1 getEnum1()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
 │ │     ├─■ instructions: 3 entries
 │ │     │ ├─■ L49: // return enum1;
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
+│ │     │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
 │ │     └─■ attributeSet: 2 items
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 49, start = L49
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L49, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
-│ ├─■ [3] ByteCodeMethod accessFlags = [public], prototype = int getInteger( mikenakis.bytecode.test.model.Class3ImplementingInterface )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L49, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ ├─■ [3] ByteCodeMethod accessFlags = [public], prototype = int getInteger( io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
 │ │   │ ├─■ instructions: 3 entries
@@ -172,8 +172,8 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 55, start = L55
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L55, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L55, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L55, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L55, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface class3ImplementingInterface
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "class3ImplementingInterface"
 │ ├─■ [4] ByteCodeMethod accessFlags = [public, final], prototype = void setDouble( double )
@@ -185,7 +185,7 @@
 │ │   │ │ ├─■         LDC 5.0
 │ │   │ │ ├─■         DLOAD 1
 │ │   │ │ ├─■         DMUL
-│ │   │ │ ├─■         PUTFIELD double mikenakis.bytecode.test.model.Class3ImplementingInterface.doubleMember
+│ │   │ │ ├─■         PUTFIELD double io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.doubleMember
 │ │   │ │ ├─■ L61: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -194,7 +194,7 @@
 │ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 60, start = L60
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 61, start = L61
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L60, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L60, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L60, end = @end, prototype = double d
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "d"
@@ -217,7 +217,7 @@
 │ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 65, start = L65
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 66, start = L66
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L65, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L65, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L66, end = @end, prototype = java.io.File tempFile
 │ │   └─■ [1] ExceptionsAttribute; 1 items
 │ │     └─■ [0] java.io.IOException
@@ -291,12 +291,12 @@
 │ │       │ └─■ [11] LineNumberTableEntry lineNumber = 86, start = L86
 │ │       ├─■ [1] LocalVariableTableAttribute; 3 items
 │ │       │ ├─■ [0] LocalVariableTableEntry index = 2, start = L78, end = L82, prototype = java.io.IOException ignore
-│ │       │ ├─■ [1] LocalVariableTableEntry index = 0, start = L71, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │       │ ├─■ [1] LocalVariableTableEntry index = 0, start = L71, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ │       │ └─■ [2] LocalVariableTableEntry index = 1, start = L74, end = @end, prototype = java.io.File tempFile
 │ │       └─■ [2] StackMapTableAttribute; 4 items
 │ │         ├─■ [0] FullFrame target = L76
 │ │         │ ├─■ localVerificationTypes: 2 items
-│ │         │ │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class3ImplementingInterface
+│ │         │ │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface
 │ │         │ │ └─■ [1] ObjectVerificationType type = java.io.File
 │ │         │ └─■ stackVerificationTypes: 1 items
 │ │         │   └─■ [0] ObjectVerificationType type = java.io.IOException
@@ -316,8 +316,8 @@
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Class java.lang.Object.getClass()
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Class.getName()
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
-│ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
+│ │     │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
+│ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, io.github.mikenakis.bytecode.test.model.Enum1 )
 │ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "\x01 \x01" )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -325,24 +325,24 @@
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 91, start = L91
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L91, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L91, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ ├─■ [8] ByteCodeMethod accessFlags = [public, final], prototype = java.util.function.Supplier methodWithInnerClass( int )
 │ │ └─■ attributes: 3 items
 │ │   ├─■ [0] CodeAttribute maxStack = 4, maxLocals = 2
 │ │   │ ├─■ instructions: 6 entries
 │ │   │ │ ├─■ L111: // return new Inner( i );
-│ │   │ │ ├─■         NEW mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
+│ │   │ │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ILOAD 1
-│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.<init>( mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.<init>( io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
 │ │   │ │ └─■         ARETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 111, start = L111
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L111, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L111, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L111, end = @end, prototype = int i
 │ │   ├─■ [1] MethodParametersAttribute; 1 items
 │ │   │ └─■ [0] MethodParameter accessFlags = [], name = "i"
@@ -363,7 +363,7 @@
 │ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 116, start = L116
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 117, start = L117
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L116, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L116, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 │ │   ├─■ [1] DeprecatedAttribute
 │ │   └─■ [2] RuntimeVisibleAnnotationsAttribute; 1 items
 │ │     └─■ [0] Annotation type = java.lang.Deprecated; 0 parameters
@@ -378,11 +378,11 @@
 │         ├─■ [0] LineNumberTableAttribute; 1 items
 │         │ └─■ [0] LineNumberTableEntry lineNumber = 122, start = L122
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L122, end = @end, prototype = mikenakis.bytecode.test.model.Class3ImplementingInterface this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L122, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class3ImplementingInterface.java"
   ├─■ [1] NestMembersAttribute; 1 items
-  │ └─■ [0] mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
+  │ └─■ [0] io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner
   └─■ [2] InnerClassesAttribute; 2 items
-    ├─■ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Inner
+    ├─■ [0] InnerClass accessFlags = [], innerClass = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, innerName = Inner
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

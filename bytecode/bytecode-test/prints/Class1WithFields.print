@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class1WithFields, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class1WithFields, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 17 items
@@ -17,7 +17,7 @@
 │ ├─■ [4] ByteCodeField accessFlags = [public, static, final], prototype = int PublicIntConstant
 │ │ └─■ attributeSet: 1 items
 │ │   └─■ [0] ConstantValueAttribute IntegerValueConstant( 4 )
-│ ├─■ [5] ByteCodeField accessFlags = [private, final], prototype = mikenakis.bytecode.test.model.Enum1 enumMember
+│ ├─■ [5] ByteCodeField accessFlags = [private, final], prototype = io.github.mikenakis.bytecode.test.model.Enum1 enumMember
 │ │ └─■ attributeSet: 0 items
 │ ├─■ [6] ByteCodeField accessFlags = [private, final], prototype = boolean booleanMember
 │ │ └─■ attributeSet: 1 items
@@ -57,8 +57,8 @@
 │ │     ├─■ instructions: 4 entries
 │ │     │ ├─■ L32: // this( Enum1.ENUM_CONSTANT_A );
 │ │     │ ├─■         ALOAD 0
-│ │     │ ├─■         GETSTATIC mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
-│ │     │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class1WithFields.<init>( mikenakis.bytecode.test.model.Enum1 )
+│ │     │ ├─■         GETSTATIC io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Enum1.ENUM_CONSTANT_A
+│ │     │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class1WithFields.<init>( io.github.mikenakis.bytecode.test.model.Enum1 )
 │ │     │ ├─■ L33: // }
 │ │     │ └─■         RETURN
 │ │     ├─■ exceptionInfos: 0 items
@@ -67,8 +67,8 @@
 │ │       │ ├─■ [0] LineNumberTableEntry lineNumber = 32, start = L32
 │ │       │ └─■ [1] LineNumberTableEntry lineNumber = 33, start = L33
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L32, end = @end, prototype = mikenakis.bytecode.test.model.Class1WithFields this
-│ ├─■ [1] ByteCodeMethod accessFlags = [protected], prototype = void <init>( mikenakis.bytecode.test.model.Enum1 )
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L32, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class1WithFields this
+│ ├─■ [1] ByteCodeMethod accessFlags = [protected], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Enum1 )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 5, maxLocals = 2
 │ │   │ ├─■ instructions: 49 entries
@@ -78,39 +78,39 @@
 │ │   │ │ ├─■ L18: // private final boolean booleanMember = true;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         PUTFIELD boolean mikenakis.bytecode.test.model.Class1WithFields.booleanMember
+│ │   │ │ ├─■         PUTFIELD boolean io.github.mikenakis.bytecode.test.model.Class1WithFields.booleanMember
 │ │   │ │ ├─■ L19: // private final byte byteMember = 1;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         PUTFIELD byte mikenakis.bytecode.test.model.Class1WithFields.byteMember
+│ │   │ │ ├─■         PUTFIELD byte io.github.mikenakis.bytecode.test.model.Class1WithFields.byteMember
 │ │   │ │ ├─■ L20: // private final char charMember = 'c';
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 99
-│ │   │ │ ├─■         PUTFIELD char mikenakis.bytecode.test.model.Class1WithFields.charMember
+│ │   │ │ ├─■         PUTFIELD char io.github.mikenakis.bytecode.test.model.Class1WithFields.charMember
 │ │   │ │ ├─■ L21: // private final double doubleMember = 0.5;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 0.5
-│ │   │ │ ├─■         PUTFIELD double mikenakis.bytecode.test.model.Class1WithFields.doubleMember
+│ │   │ │ ├─■         PUTFIELD double io.github.mikenakis.bytecode.test.model.Class1WithFields.doubleMember
 │ │   │ │ ├─■ L22: // private final float floatMember = 0.25f;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 0.25
-│ │   │ │ ├─■         PUTFIELD float mikenakis.bytecode.test.model.Class1WithFields.floatMember
+│ │   │ │ ├─■         PUTFIELD float io.github.mikenakis.bytecode.test.model.Class1WithFields.floatMember
 │ │   │ │ ├─■ L23: // private final int intMember = 2;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 2
-│ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class1WithFields.intMember
+│ │   │ │ ├─■         PUTFIELD int io.github.mikenakis.bytecode.test.model.Class1WithFields.intMember
 │ │   │ │ ├─■ L24: // private final long longMember = 3;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 3
-│ │   │ │ ├─■         PUTFIELD long mikenakis.bytecode.test.model.Class1WithFields.longMember
+│ │   │ │ ├─■         PUTFIELD long io.github.mikenakis.bytecode.test.model.Class1WithFields.longMember
 │ │   │ │ ├─■ L25: // private final short shortVar = 4;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 4
-│ │   │ │ ├─■         PUTFIELD short mikenakis.bytecode.test.model.Class1WithFields.shortVar
+│ │   │ │ ├─■         PUTFIELD short io.github.mikenakis.bytecode.test.model.Class1WithFields.shortVar
 │ │   │ │ ├─■ L26: // private final String stringMember = "x";
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC "x"
-│ │   │ │ ├─■         PUTFIELD java.lang.String mikenakis.bytecode.test.model.Class1WithFields.stringMember
+│ │   │ │ ├─■         PUTFIELD java.lang.String io.github.mikenakis.bytecode.test.model.Class1WithFields.stringMember
 │ │   │ │ ├─■ L27: // private final int[] arrayOfPrimitiveMember = { 0 };
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
@@ -119,7 +119,7 @@
 │ │   │ │ ├─■         LDC 0
 │ │   │ │ ├─■         LDC 0
 │ │   │ │ ├─■         IASTORE
-│ │   │ │ ├─■         PUTFIELD int[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfPrimitiveMember
+│ │   │ │ ├─■         PUTFIELD int[] io.github.mikenakis.bytecode.test.model.Class1WithFields.arrayOfPrimitiveMember
 │ │   │ │ ├─■ L28: // private final String[] arrayOfObjectMember = { "" };
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 1
@@ -128,11 +128,11 @@
 │ │   │ │ ├─■         LDC 0
 │ │   │ │ ├─■         LDC ""
 │ │   │ │ ├─■         AASTORE
-│ │   │ │ ├─■         PUTFIELD java.lang.String[] mikenakis.bytecode.test.model.Class1WithFields.arrayOfObjectMember
+│ │   │ │ ├─■         PUTFIELD java.lang.String[] io.github.mikenakis.bytecode.test.model.Class1WithFields.arrayOfObjectMember
 │ │   │ │ ├─■ L37: // this.enumMember = enumMember;
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
+│ │   │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Class1WithFields.enumMember
 │ │   │ │ ├─■ L38: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -153,8 +153,8 @@
 │ │   │   │ ├─■ [12] LineNumberTableEntry lineNumber = 37, start = L37
 │ │   │   │ └─■ [13] LineNumberTableEntry lineNumber = 38, start = L38
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L36, end = @end, prototype = mikenakis.bytecode.test.model.Class1WithFields this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L36, end = @end, prototype = mikenakis.bytecode.test.model.Enum1 enumMember
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L36, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class1WithFields this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L36, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Enum1 enumMember
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "enumMember"
 │ └─■ [2] ByteCodeMethod accessFlags = [public], prototype = java.lang.String toString()
@@ -166,8 +166,8 @@
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Class java.lang.Object.getClass()
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Class.getName()
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD mikenakis.bytecode.test.model.Enum1 mikenakis.bytecode.test.model.Class1WithFields.enumMember
-│       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, mikenakis.bytecode.test.model.Enum1 )
+│       │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Class1WithFields.enumMember
+│       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, io.github.mikenakis.bytecode.test.model.Enum1 )
 │       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "\x01 \x01" )
 │       │ └─■         ARETURN
 │       ├─■ exceptionInfos: 0 items
@@ -175,7 +175,7 @@
 │         ├─■ [0] LineNumberTableAttribute; 1 items
 │         │ └─■ [0] LineNumberTableEntry lineNumber = 42, start = L42
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = mikenakis.bytecode.test.model.Class1WithFields this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class1WithFields this
 └─■ attributeSet: 2 items
   ├─■ [0] SourceFileAttribute "Class1WithFields.java"
   └─■ [1] InnerClassesAttribute; 1 items

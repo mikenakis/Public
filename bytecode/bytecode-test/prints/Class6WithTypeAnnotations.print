@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class6WithTypeAnnotations, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
@@ -9,7 +9,7 @@
 │     │ └─■ [0] TypeAnnotation
 │     │   ├─■ target: Target tag = FieldType
 │     │   ├─■ typePath: TypePath; 0 items
-│     │   ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│     │   ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │     │   └─■ parameters: 1 items
 │     │     └─■ [0] AnnotationParameter name = "stringParameter"
 │     │       └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "b" )
@@ -17,7 +17,7 @@
 │       └─■ [0] TypeAnnotation
 │         ├─■ target: Target tag = FieldType
 │         ├─■ typePath: TypePath; 0 items
-│         ├─■ type: mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
+│         ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
 │         └─■ parameters: 1 items
 │           └─■ [0] AnnotationParameter name = "value"
 │             └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 7 )
@@ -32,7 +32,7 @@
 │ │   │ │ ├─■ L15: // @SuppressWarnings( "FieldMayBeStatic" ) //
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         LDC 5
-│ │   │ │ ├─■         PUTFIELD int mikenakis.bytecode.test.model.Class6WithTypeAnnotations.fieldWithAnnotation
+│ │   │ │ ├─■         PUTFIELD int io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations.fieldWithAnnotation
 │ │   │ │ ├─■ L24: // }
 │ │   │ │ └─■         RETURN
 │ │   │ ├─■ exceptionInfos: 0 items
@@ -42,12 +42,12 @@
 │ │   │   │ ├─■ [1] LineNumberTableEntry lineNumber = 15, start = L15
 │ │   │   │ └─■ [2] LineNumberTableEntry lineNumber = 24, start = L24
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L23, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L23, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   ├─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │   │ └─■ [0] TypeAnnotation
 │ │   │   ├─■ target: Target tag = ReturnType
 │ │   │   ├─■ typePath: TypePath; 0 items
-│ │   │   ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │   │   ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │   │   └─■ parameters: 1 items
 │ │   │     └─■ [0] AnnotationParameter name = "stringParameter"
 │ │   │       └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "c" )
@@ -55,7 +55,7 @@
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
 │ │       └─■ parameters: 1 items
 │ │         └─■ [0] AnnotationParameter name = "value"
 │ │           └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 8 )
@@ -71,12 +71,12 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 29, start = L29
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L29, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L29, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 1 items
 │ │         └─■ [0] AnnotationParameter name = "annotationParameter"
 │ │           └─■ value: AnnotationAnnotationValue type = java.lang.SuppressWarnings; 1 parameters
@@ -95,12 +95,12 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 35, start = L35
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L35, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L35, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 1 items
 │ │         └─■ [0] AnnotationParameter name = "arrayParameter"
 │ │           └─■ value: ArrayAnnotationValue; 2 values
@@ -118,12 +118,12 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 42, start = L42
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L42, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 8 items
 │ │         ├─■ [0] AnnotationParameter name = "booleanParameter"
 │ │         │ └─■ value: ConstAnnotationValue tag = Boolean value = IntegerValueConstant( 0 (boolean false) )
@@ -153,12 +153,12 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 48, start = L48
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L48, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L48, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 1 items
 │ │         └─■ [0] AnnotationParameter name = "stringParameter"
 │ │           └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "y" )
@@ -174,15 +174,15 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 54, start = L54
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L54, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L54, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 1 items
 │ │         └─■ [0] AnnotationParameter name = "classParameter"
-│ │           └─■ value: ClassAnnotationValue name = mikenakis.bytecode.test.model.Class6WithTypeAnnotations
+│ │           └─■ value: ClassAnnotationValue name = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations
 │ ├─■ [6] ByteCodeMethod accessFlags = [public, final], prototype = int methodWithAnnotationWithNoParameter()
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 1
@@ -195,12 +195,12 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 60, start = L60
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L60, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L60, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 0 items
 │ ├─■ [7] ByteCodeMethod accessFlags = [public, final], prototype = byte methodWithAnnotationWithDefaultParameter()
 │ │ └─■ attributes: 2 items
@@ -214,12 +214,12 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 66, start = L66
 │ │   │   └─■ [1] LocalVariableTableAttribute; 1 items
-│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L66, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│ │   │     └─■ [0] LocalVariableTableEntry index = 0, start = L66, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │ │   └─■ [1] RuntimeVisibleTypeAnnotationsAttribute; 1 items
 │ │     └─■ [0] TypeAnnotation
 │ │       ├─■ target: Target tag = ReturnType
 │ │       ├─■ typePath: TypePath; 0 items
-│ │       ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│ │       ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │ │       └─■ parameters: 1 items
 │ │         └─■ [0] AnnotationParameter name = "value"
 │ │           └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 6 )
@@ -243,7 +243,7 @@
 │     │   │ ├─■ [0] LineNumberTableEntry lineNumber = 73, start = L73
 │     │   │ └─■ [1] LineNumberTableEntry lineNumber = 74, start = L74
 │     │   └─■ [1] LocalVariableTableAttribute; 4 items
-│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L73, end = @end, prototype = mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L73, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class6WithTypeAnnotations this
 │     │     ├─■ [1] LocalVariableTableEntry index = 1, start = L73, end = @end, prototype = int a
 │     │     ├─■ [2] LocalVariableTableEntry index = 2, start = L73, end = @end, prototype = int b
 │     │     └─■ [3] LocalVariableTableEntry index = 3, start = L73, end = @end, prototype = int c
@@ -255,14 +255,14 @@
 │     │ ├─■ [0] TypeAnnotation
 │     │ │ ├─■ target: Target tag = FormalParameter formalParameterIndex = 1
 │     │ │ ├─■ typePath: TypePath; 0 items
-│     │ │ ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│     │ │ ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │     │ │ └─■ parameters: 1 items
 │     │ │   └─■ [0] AnnotationParameter name = "stringParameter"
 │     │ │     └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "g" )
 │     │ └─■ [1] TypeAnnotation
 │     │   ├─■ target: Target tag = FormalParameter formalParameterIndex = 2
 │     │   ├─■ typePath: TypePath; 0 items
-│     │   ├─■ type: mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
+│     │   ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1
 │     │   └─■ parameters: 1 items
 │     │     └─■ [0] AnnotationParameter name = "stringParameter"
 │     │       └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "h" )
@@ -270,18 +270,18 @@
 │       └─■ [0] TypeAnnotation
 │         ├─■ target: Target tag = FormalParameter formalParameterIndex = 2
 │         ├─■ typePath: TypePath; 0 items
-│         ├─■ type: mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
+│         ├─■ type: io.github.mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1
 │         └─■ parameters: 1 items
 │           └─■ [0] AnnotationParameter name = "value"
 │             └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 1 )
 └─■ attributeSet: 4 items
   ├─■ [0] SourceFileAttribute "Class6WithTypeAnnotations.java"
   ├─■ [1] RuntimeVisibleAnnotationsAttribute; 1 items
-  │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1; 1 parameters
+  │ └─■ [0] Annotation type = io.github.mikenakis.bytecode.test.model.RuntimeVisibleTypeAnnotation1; 1 parameters
   │   └─■ [0] AnnotationParameter name = "stringParameter"
   │     └─■ value: ConstAnnotationValue tag = String value = Mutf8ValueConstant( "a" )
   ├─■ [2] RuntimeInvisibleAnnotationsAttribute; 1 items
-  │ └─■ [0] Annotation type = mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1; 1 parameters
+  │ └─■ [0] Annotation type = io.github.mikenakis.bytecode.test.model.RuntimeInvisibleTypeAnnotation1; 1 parameters
   │   └─■ [0] AnnotationParameter name = "value"
   │     └─■ value: ConstAnnotationValue tag = Integer value = IntegerValueConstant( 6 )
   └─■ [3] InnerClassesAttribute; 1 items

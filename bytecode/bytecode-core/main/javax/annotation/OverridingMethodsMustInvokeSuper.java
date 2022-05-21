@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Overriding-Methods-Must-Invoke-Super annotation.
  * <p>
- * See JSR 305: Annotations for Software Defect Detection (https://jcp.org/en/jsr/detail?id=305)
+ * See JSR 305: Annotations for Software Defect Detection (<a href="https://jcp.org/en/jsr/detail?id=305">https://jcp.org/en/jsr/detail?id=305</a>)
  *
  * @author michael.gr
  */

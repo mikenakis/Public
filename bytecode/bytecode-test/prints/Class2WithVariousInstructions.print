@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class2WithVariousInstructions, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 0 items
@@ -16,7 +16,7 @@
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 12, start = L12
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L12, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L12, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ ├─■ [1] ByteCodeMethod accessFlags = [public, final], prototype = int methodWithIincInstruction( int )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
@@ -32,7 +32,7 @@
 │ │   │   │ ├─■ [0] LineNumberTableEntry lineNumber = 16, start = L16
 │ │   │   │ └─■ [1] LineNumberTableEntry lineNumber = 17, start = L17
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L16, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L16, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L16, end = @end, prototype = int a
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "a"
@@ -50,7 +50,7 @@
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 22, start = L22
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L22, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L22, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ ├─■ [3] ByteCodeMethod accessFlags = [public, final], prototype = void methodWithLookupSwitchInstruction( int )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
@@ -120,7 +120,7 @@
 │ │   │   │ ├─■ [12] LineNumberTableEntry lineNumber = 46, start = L46
 │ │   │   │ └─■ [13] LineNumberTableEntry lineNumber = 50, start = L50
 │ │   │   ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L27, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L27, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ │   │   │ └─■ [1] LocalVariableTableEntry index = 1, start = L27, end = @end, prototype = int i
 │ │   │   └─■ [2] StackMapTableAttribute; 7 items
 │ │   │     ├─■ [0] SameFrame target = L30
@@ -145,7 +145,7 @@
 │ │       ├─■ [0] LineNumberTableAttribute; 1 items
 │ │       │ └─■ [0] LineNumberTableEntry lineNumber = 54, start = L54
 │ │       └─■ [1] LocalVariableTableAttribute; 1 items
-│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L54, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │         └─■ [0] LocalVariableTableEntry index = 0, start = L54, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ ├─■ [5] ByteCodeMethod accessFlags = [public, final], prototype = java.lang.String methodWithLambda()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
@@ -163,7 +163,7 @@
 │ │     │ ├─■ L61: // list.sort( ( a, b ) -> -a.compareTo( b ) );
 │ │     │ ├─■         ALOAD 1
 │ │     │ ├─■         INVOKEDYNAMIC prototype = java.util.Comparator compare()
-│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;Ljava/lang/String;)I" )
+│ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/LambdaMetafactory::metafactory(MethodHandles$Lookup,String,MethodType,MethodType,MethodHandle,MethodType)CallSite] arguments: MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/Object;Ljava/lang/Object;)I" ), MethodHandleConstant referenceKind = InvokeStatic, referenceConstant = reference = Plain; int io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions.lambda$methodWithLambda$0( java.lang.String, java.lang.String ), MethodTypeConstant Mutf8ValueConstant( "(Ljava/lang/String;Ljava/lang/String;)I" )
 │ │     │ ├─■         INVOKEINTERFACE reference = Interface; void java.util.List.sort( java.util.Comparator ), 2 arguments
 │ │     │ ├─■ L62: // return list.get( 0 );
 │ │     │ ├─■         ALOAD 1
@@ -179,80 +179,80 @@
 │ │       │ ├─■ [2] LineNumberTableEntry lineNumber = 61, start = L61
 │ │       │ └─■ [3] LineNumberTableEntry lineNumber = 62, start = L62
 │ │       ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L59, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │       │ ├─■ [0] LocalVariableTableEntry index = 0, start = L59, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ │       │ └─■ [1] LocalVariableTableEntry index = 1, start = L60, end = @end, prototype = java.util.List list
 │ │       └─■ [2] LocalVariableTypeTableAttribute; 1 items
 │ │         └─■ [0] LocalVariableTypeTableEntry index = 1, start = L60, end = @end, name = list, signature = Ljava/util/List<Ljava/lang/String;>;
-│ ├─■ [6] ByteCodeMethod accessFlags = [public, final], prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo methodWithUninitializedVerificationType( boolean )
+│ ├─■ [6] ByteCodeMethod accessFlags = [public, final], prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo methodWithUninitializedVerificationType( boolean )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 13, maxLocals = 2
 │ │   │ ├─■ instructions: 26 entries
 │ │   │ │ ├─■ L77: // return new Foo( new Foo( b ? new Foo() : null ) );
-│ │   │ │ ├─■         NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │ │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │ │ ├─■         ANEWARRAY io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 0
-│ │   │ │ ├─■ T1:     NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │ │ ├─■ T1:     NEW io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 1
-│ │   │ │ ├─■         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │ │ ├─■         ANEWARRAY io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 0
 │ │   │ │ ├─■         ILOAD 1
 │ │   │ │ ├─■         IFEQ T2
-│ │   │ │ ├─■         NEW mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │ │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
 │ │   │ │ ├─■         DUP
 │ │   │ │ ├─■         LDC 0
-│ │   │ │ ├─■         ANEWARRAY mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
-│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ │   │ │ ├─■         ANEWARRAY io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │ │   │ │ ├─■         GOTO T3
 │ │   │ │ ├─■ T2:     ACONST_NULL
 │ │   │ │ ├─■ T3:     AASTORE
-│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │ │   │ │ ├─■         AASTORE
-│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.<init>( io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │ │   │ │ └─■         ARETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 3 items
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 77, start = L77
 │ │   │   ├─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L77, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions this
+│ │   │   │ ├─■ [0] LocalVariableTableEntry index = 0, start = L77, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions this
 │ │   │   │ └─■ [1] LocalVariableTableEntry index = 1, start = L77, end = @end, prototype = boolean b
 │ │   │   └─■ [2] StackMapTableAttribute; 2 items
 │ │   │     ├─■ [0] FullFrame target = T2
 │ │   │     │ ├─■ localVerificationTypes: 2 items
-│ │   │     │ │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+│ │   │     │ │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions
 │ │   │     │ │ └─■ [1] SimpleVerificationType Integer
 │ │   │     │ └─■ stackVerificationTypes: 10 items
 │ │   │     │   ├─■ [0] UninitializedVerificationType L77
 │ │   │     │   ├─■ [1] UninitializedVerificationType L77
-│ │   │     │   ├─■ [2] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
-│ │   │     │   ├─■ [3] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │     │   ├─■ [2] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │     │   ├─■ [3] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
 │ │   │     │   ├─■ [4] SimpleVerificationType Integer
 │ │   │     │   ├─■ [5] UninitializedVerificationType T1
 │ │   │     │   ├─■ [6] UninitializedVerificationType T1
-│ │   │     │   ├─■ [7] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
-│ │   │     │   ├─■ [8] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │     │   ├─■ [7] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │     │   ├─■ [8] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
 │ │   │     │   └─■ [9] SimpleVerificationType Integer
 │ │   │     └─■ [1] FullFrame target = T3
 │ │   │       ├─■ localVerificationTypes: 2 items
-│ │   │       │ ├─■ [0] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions
+│ │   │       │ ├─■ [0] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions
 │ │   │       │ └─■ [1] SimpleVerificationType Integer
 │ │   │       └─■ stackVerificationTypes: 11 items
 │ │   │         ├─■ [0] UninitializedVerificationType L77
 │ │   │         ├─■ [1] UninitializedVerificationType L77
-│ │   │         ├─■ [2] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
-│ │   │         ├─■ [3] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │         ├─■ [2] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │         ├─■ [3] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
 │ │   │         ├─■ [4] SimpleVerificationType Integer
 │ │   │         ├─■ [5] UninitializedVerificationType T1
 │ │   │         ├─■ [6] UninitializedVerificationType T1
-│ │   │         ├─■ [7] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
-│ │   │         ├─■ [8] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │         ├─■ [7] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
+│ │   │         ├─■ [8] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[]
 │ │   │         ├─■ [9] SimpleVerificationType Integer
-│ │   │         └─■ [10] ObjectVerificationType type = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+│ │   │         └─■ [10] ObjectVerificationType type = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [], name = "b"
 │ └─■ [7] ByteCodeMethod accessFlags = [private, static, synthetic], prototype = int lambda$methodWithLambda$0( java.lang.String, java.lang.String )
@@ -275,7 +275,7 @@
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class2WithVariousInstructions.java"
   ├─■ [1] NestMembersAttribute; 1 items
-  │ └─■ [0] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
+  │ └─■ [0] io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo
   └─■ [2] InnerClassesAttribute; 2 items
-    ├─■ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
+    ├─■ [0] InnerClass accessFlags = [static], innerClass = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

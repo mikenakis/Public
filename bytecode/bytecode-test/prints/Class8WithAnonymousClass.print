@@ -1,8 +1,8 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class8WithAnonymousClass, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [public, final], prototype = mikenakis.bytecode.test.model.Interface1 field
+│ └─■ [0] ByteCodeField accessFlags = [public, final], prototype = io.github.mikenakis.bytecode.test.model.Interface1 field
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
 │ └─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>()
@@ -14,11 +14,11 @@
 │       │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │       │ ├─■ L11: // public final Interface1 field = new Interface1()
 │       │ ├─■         ALOAD 0
-│       │ ├─■         NEW mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
+│       │ ├─■         NEW io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
 │       │ ├─■         DUP
 │       │ ├─■         ALOAD 0
-│       │ ├─■         INVOKESPECIAL reference = Plain; void mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.<init>( mikenakis.bytecode.test.model.Class8WithAnonymousClass )
-│       │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Interface1 mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
+│       │ ├─■         INVOKESPECIAL reference = Plain; void io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.<init>( io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass )
+│       │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Interface1 io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass.field
 │       │ └─■         RETURN
 │       ├─■ exceptionInfos: 0 items
 │       └─■ attributeSet: 2 items
@@ -26,10 +26,10 @@
 │         │ ├─■ [0] LineNumberTableEntry lineNumber = 9, start = L9
 │         │ └─■ [1] LineNumberTableEntry lineNumber = 11, start = L11
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, prototype = mikenakis.bytecode.test.model.Class8WithAnonymousClass this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class8WithAnonymousClass.java"
   ├─■ [1] NestMembersAttribute; 1 items
-  │ └─■ [0] mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
+  │ └─■ [0] io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
   └─■ [2] InnerClassesAttribute; 1 items
-    └─■ [0] InnerClass accessFlags = [], innerClass = mikenakis.bytecode.test.model.Class8WithAnonymousClass$1
+    └─■ [0] InnerClass accessFlags = [], innerClass = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1

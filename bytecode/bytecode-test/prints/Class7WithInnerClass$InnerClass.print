@@ -1,18 +1,18 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super], this = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super], this = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], prototype = mikenakis.bytecode.test.model.Class7WithInnerClass this$0
+│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], prototype = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass this$0
 │   └─■ attributeSet: 0 items
 ├─■ methods: 2 items
-│ ├─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>( mikenakis.bytecode.test.model.Class7WithInnerClass )
+│ ├─■ [0] ByteCodeMethod accessFlags = [public], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Class7WithInnerClass )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 6 entries
 │ │   │ │ ├─■ L11: // public class InnerClass
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
+│ │   │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Class7WithInnerClass io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ └─■         RETURN
@@ -21,8 +21,8 @@
 │ │   │   ├─■ [0] LineNumberTableAttribute; 1 items
 │ │   │   │ └─■ [0] LineNumberTableEntry lineNumber = 11, start = L11
 │ │   │   └─■ [1] LocalVariableTableAttribute; 2 items
-│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, prototype = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass this
-│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L11, end = @end, prototype = mikenakis.bytecode.test.model.Class7WithInnerClass this$0
+│ │   │     ├─■ [0] LocalVariableTableEntry index = 0, start = L11, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass this
+│ │   │     └─■ [1] LocalVariableTableEntry index = 1, start = L11, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass this$0
 │ │   └─■ [1] MethodParametersAttribute; 1 items
 │ │     └─■ [0] MethodParameter accessFlags = [final, mandated], name = "this$0"
 │ └─■ [1] ByteCodeMethod accessFlags = [public], prototype = java.lang.String toString()
@@ -31,7 +31,7 @@
 │       ├─■ instructions: 5 entries
 │       │ ├─■ L15: // return "inner class of " + Class7WithInnerClass.this.toString();
 │       │ ├─■         ALOAD 0
-│       │ ├─■         GETFIELD mikenakis.bytecode.test.model.Class7WithInnerClass mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
+│       │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Class7WithInnerClass io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass.this$0
 │       │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Object.toString()
 │       │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String )
 │       │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "inner class of \x01" )
@@ -41,10 +41,10 @@
 │         ├─■ [0] LineNumberTableAttribute; 1 items
 │         │ └─■ [0] LineNumberTableEntry lineNumber = 15, start = L15
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, prototype = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L15, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class7WithInnerClass.java"
-  ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class7WithInnerClass
+  ├─■ [1] NestHostAttribute io.github.mikenakis.bytecode.test.model.Class7WithInnerClass
   └─■ [2] InnerClassesAttribute; 2 items
-    ├─■ [0] InnerClass accessFlags = [public], innerClass = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, innerName = InnerClass
+    ├─■ [0] InnerClass accessFlags = [public], innerClass = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, outerClass = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass, innerName = InnerClass
     └─■ [1] InnerClass accessFlags = [public, static, final], innerClass = java.lang.invoke.MethodHandles$Lookup, outerClass = java.lang.invoke.MethodHandles, innerName = Lookup

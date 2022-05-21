@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = mikenakis.bytecode.test.model.Class7WithInnerClass, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 0 items
@@ -16,10 +16,10 @@
 │         ├─■ [0] LineNumberTableAttribute; 1 items
 │         │ └─■ [0] LineNumberTableEntry lineNumber = 9, start = L9
 │         └─■ [1] LocalVariableTableAttribute; 1 items
-│           └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, prototype = mikenakis.bytecode.test.model.Class7WithInnerClass this
+│           └─■ [0] LocalVariableTableEntry index = 0, start = L9, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass this
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class7WithInnerClass.java"
   ├─■ [1] NestMembersAttribute; 1 items
-  │ └─■ [0] mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
+  │ └─■ [0] io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass
   └─■ [2] InnerClassesAttribute; 1 items
-    └─■ [0] InnerClass accessFlags = [public], innerClass = mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, outerClass = mikenakis.bytecode.test.model.Class7WithInnerClass, innerName = InnerClass
+    └─■ [0] InnerClass accessFlags = [public], innerClass = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass$InnerClass, outerClass = io.github.mikenakis.bytecode.test.model.Class7WithInnerClass, innerName = InnerClass

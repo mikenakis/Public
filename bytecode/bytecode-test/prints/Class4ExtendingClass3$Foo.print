@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [interface, abstract], this = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [interface, abstract], this = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 0 items
@@ -9,6 +9,6 @@
 │       └─■ [0] MethodParameter accessFlags = [], name = "s"
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class4ExtendingClass3.java"
-  ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class4ExtendingClass3
+  ├─■ [1] NestHostAttribute io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3
   └─■ [2] InnerClassesAttribute; 1 items
-    └─■ [0] InnerClass accessFlags = [static, interface, abstract], innerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo
+    └─■ [0] InnerClass accessFlags = [static, interface, abstract], innerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3$Foo, outerClass = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, innerName = Foo

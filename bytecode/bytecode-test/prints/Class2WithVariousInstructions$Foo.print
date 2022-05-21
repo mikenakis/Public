@@ -1,11 +1,11 @@
-■ ByteCodeType version = 61.0, accessFlags = [super], this = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, super = java.lang.Object
+■ ByteCodeType version = 61.0, accessFlags = [super], this = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final], prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
+│ └─■ [0] ByteCodeField accessFlags = [final], prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
 │   └─■ attributeSet: 0 items
 ├─■ methods: 1 items
-│ └─■ [0] ByteCodeMethod accessFlags = [varargs], prototype = void <init>( mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
+│ └─■ [0] ByteCodeMethod accessFlags = [varargs], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] )
 │   └─■ attributes: 2 items
 │     ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │     │ ├─■ instructions: 6 entries
@@ -15,7 +15,7 @@
 │     │ │ ├─■ L71: // this.foos = foos;
 │     │ │ ├─■         ALOAD 0
 │     │ │ ├─■         ALOAD 1
-│     │ │ ├─■         PUTFIELD mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.foos
+│     │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo.foos
 │     │ │ ├─■ L72: // }
 │     │ │ └─■         RETURN
 │     │ ├─■ exceptionInfos: 0 items
@@ -25,12 +25,12 @@
 │     │   │ ├─■ [1] LineNumberTableEntry lineNumber = 71, start = L71
 │     │   │ └─■ [2] LineNumberTableEntry lineNumber = 72, start = L72
 │     │   └─■ [1] LocalVariableTableAttribute; 2 items
-│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L70, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo this
-│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L70, end = @end, prototype = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
+│     │     ├─■ [0] LocalVariableTableEntry index = 0, start = L70, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo this
+│     │     └─■ [1] LocalVariableTableEntry index = 1, start = L70, end = @end, prototype = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo[] foos
 │     └─■ [1] MethodParametersAttribute; 1 items
 │       └─■ [0] MethodParameter accessFlags = [], name = "foos"
 └─■ attributeSet: 3 items
   ├─■ [0] SourceFileAttribute "Class2WithVariousInstructions.java"
-  ├─■ [1] NestHostAttribute mikenakis.bytecode.test.model.Class2WithVariousInstructions
+  ├─■ [1] NestHostAttribute io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions
   └─■ [2] InnerClassesAttribute; 1 items
-    └─■ [0] InnerClass accessFlags = [static], innerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
+    └─■ [0] InnerClass accessFlags = [static], innerClass = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions$Foo, outerClass = io.github.mikenakis.bytecode.test.model.Class2WithVariousInstructions, innerName = Foo
