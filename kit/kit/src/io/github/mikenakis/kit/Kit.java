@@ -1271,6 +1271,22 @@ public final class Kit
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Java Stream<T>
+
+	public static final class stream
+	{
+		/***
+		 * Obtains a {@link Stream} from an {@link Iterable}.
+		 * Because Java makes it awfully difficult, whereas it should have been so easy as to not even require a cast. (Ideally, Stream would extend
+		 * Iterable. I know, it can't. But ideally, it would.)
+		 */
+		public static <T> Stream<T> fromIterable( Iterable<T> iterable )
+		{
+			return StreamSupport.stream( iterable.spliterator(), false );
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Java Iterable<T>
 
 	public static final class iterable
@@ -1311,7 +1327,7 @@ public final class Kit
 
 		public static <T> Iterable<T> concat( Iterable<T> iterable, Iterable<T> other )
 		{
-			return fromStream( Stream.concat( collection.stream.fromIterable( iterable ), collection.stream.fromIterable( other ) ) );
+			return fromStream( Stream.concat( stream.fromIterable( iterable ), stream.fromIterable( other ) ) );
 		}
 
 		public static <T> Iterable<T> fromStream( Stream<T> stream )
@@ -1354,7 +1370,7 @@ public final class Kit
 		public static <T> Iterable<T> reverse( Iterable<T> iterable )
 		{
 			//TODO: optimize
-			return collection.stream.fromIterable( iterable ) //
+			return stream.fromIterable( iterable ) //
 				.collect( Collectors.collectingAndThen( Collectors.toList(), l -> //
 				{
 					Collections.reverse( l );
@@ -1399,7 +1415,7 @@ public final class Kit
 
 		public static <K, V, T> Map<K,V> toMap( Iterable<T> iterable, Function1<K,T> keyExtractor, Function1<V,T> valueExtractor )
 		{
-			return collection.stream.fromIterable( iterable ).collect( Collectors.toMap( keyExtractor::invoke, valueExtractor::invoke, Kit::dummyMergeFunction, LinkedHashMap::new ) );
+			return stream.fromIterable( iterable ).collect( Collectors.toMap( keyExtractor::invoke, valueExtractor::invoke, Kit::dummyMergeFunction, LinkedHashMap::new ) );
 		}
 
 		public static <K, V> Map<K,V> keysToMap( Iterable<K> iterable, Function1<V,K> valueExtractor )
@@ -1414,7 +1430,7 @@ public final class Kit
 
 		public static <T> String makeString( Iterable<T> iterable, String delimiter )
 		{
-			return collection.stream.fromIterable( iterable ).map( Object::toString ).collect( Collectors.joining( delimiter ) );
+			return stream.fromIterable( iterable ).map( Object::toString ).collect( Collectors.joining( delimiter ) );
 		}
 	}
 
@@ -1450,19 +1466,6 @@ public final class Kit
 
 	public static final class collection
 	{
-		public static final class stream
-		{
-			/***
-			 * Obtains a {@link Stream} from an {@link Iterable}.
-			 * Because Java makes it awfully difficult, whereas it should have been so easy as to not even require a cast. (Ideally, Stream would extend
-			 * Iterable. I know, it can't. But ideally, it would.)
-			 */
-			public static <T> Stream<T> fromIterable( Iterable<T> iterable )
-			{
-				return StreamSupport.stream( iterable.spliterator(), false );
-			}
-		}
-
 		/**
 		 * Casts a {@link Collection} to a {@link Collection} of an ancestral element type.
 		 *

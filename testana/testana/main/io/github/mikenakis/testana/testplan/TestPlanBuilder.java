@@ -123,10 +123,6 @@ public final class TestPlanBuilder
 	 */
 	private static int compare( TestModule a, TestModule b, DependencyMatrix<ProjectModule> dependencyMatrix )
 	{
-		//		if( a.name().equals( "mikenakis:saganaki-essentia-reflector-test" ) && b.name().equals( "mikenakis:saganaki-essentia-core-test" ) )
-		//			Kit.get( true );
-		//		if( a.name().equals( "mikenakis:saganaki-core-test" ) && b.name().equals( "mikenakis:saganaki-markup-json-test" ) )
-		//			Kit.get( true );
 		if( a == b )
 			return 0;
 

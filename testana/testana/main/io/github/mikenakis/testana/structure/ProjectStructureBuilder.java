@@ -43,7 +43,7 @@ public final class ProjectStructureBuilder
 		Collection<DiscoveryModule> rootDiscoveryModules = collectRootDiscoveryModules( sourceDirectory, discoverers, settings );
 		resolveDependencies( rootDiscoveryModules );
 
-		Map<String,TestEngine> testEngineMap = Kit.collection.stream.fromIterable( testEngines ).collect( Collectors.toMap( testEngine -> testEngine.name(), testEngine -> testEngine ) );
+		Map<String,TestEngine> testEngineMap = Kit.stream.fromIterable( testEngines ).collect( Collectors.toMap( testEngine -> testEngine.name(), testEngine -> testEngine ) );
 
 		LinkedHashMap<DiscoveryModule,ProjectModule> projectModuleMap = new LinkedHashMap<>();
 		ProjectStructure projectStructure = new ProjectStructure( rootDiscoveryModules, projectModuleMap );

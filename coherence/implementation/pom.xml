@@ -30,9 +30,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>mikenakis</groupId>
+			<groupId>io.github.mikenakis</groupId>
 			<artifactId>bathyscaphe</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>1.4-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

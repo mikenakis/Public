@@ -36,7 +36,7 @@ public final class MethodDescriptor
 
 	public static MethodDescriptor of( TypeDescriptor returnTypeDescriptor, Iterable<TypeDescriptor> parameterTypeDescriptors )
 	{
-		return new MethodDescriptor( returnTypeDescriptor, Kit.collection.stream.fromIterable( parameterTypeDescriptors ).toList() );
+		return new MethodDescriptor( returnTypeDescriptor, Kit.stream.fromIterable( parameterTypeDescriptors ).toList() );
 	}
 
 	public static MethodDescriptor of( TypeDescriptor returnTypeDescriptor, List<TypeDescriptor> parameterTypeDescriptors )
