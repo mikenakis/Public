@@ -1,14 +1,13 @@
-# mikenakis-public
+# mikenakis:public
 ### Most of my public projects in one big repository. (Monorepo.)
 Because I have better things to do than curating a whole swarm of little repositories. 
 
 <p align="center">
-<img title="mikenakis-public logo" src="mikenakis-public-logo.svg" width="256"/><br/>
-The mikenakis-public logo<br>
-based on original work by Chris Tucker from the Noun Project, used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
+<img title="mikenakis:public logo" src="mikenakis-public-logo.svg" width="256"/><br/>
+Logo based on original work by Chris Tucker from the Noun Project, used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
 </p>
 
-Each project has its own directory structure as if it was a standalone repository, including its own README.md and its own logo.
+### Each project has its own directory structure as if it was a standalone repository, including its own README.md and its own logo.
 
 Configuration necessary after a fresh clone:
   - Configure IntellijIdea
