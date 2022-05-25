@@ -7,7 +7,7 @@ Because I have better things to do than curating a whole swarm of little reposit
 Logo based on original work by Chris Tucker from the Noun Project, used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
 </p>
 
-### Each project has its own directory structure as if it was a standalone repository, including its own README.md and its own logo.
+#### Each directory is a project with its own directory structure (as if it was a standalone repository) including its own README.md and its own logo.
 
 Configuration necessary after a fresh clone:
   - Configure IntellijIdea
