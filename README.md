@@ -5,8 +5,7 @@ Because I have better things to do than curating a whole swarm of little reposit
 <p align="center">
 <img title="mikenakis-public logo" src="mikenakis-public-logo.svg" width="256"/><br/>
 The mikenakis-public logo<br>
-by Mike Nakis, based on original work by Chris Tucker from the Noun Project,<br> 
-Used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
+based on original work by Chris Tucker from the Noun Project, used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
 </p>
 
 Each project has its own directory structure as if it was a standalone repository, including its own README.md and its own logo.
