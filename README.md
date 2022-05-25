@@ -6,12 +6,13 @@ Because I have better things to do than curating a whole swarm of little reposit
 <img title="mikenakis:public logo" src="mikenakis-public-logo.svg" width="256"/><br/>
 Logo based on original work by Chris Tucker from the Noun Project, used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
 </p>
-
+<hr/>
 <p align="center">
 Each directory is a project with its own directory structure<br/>
 including its own README.md and its own logo<br/>
 as if it was a standalone repository.<br/>
 </p>
+<hr/>
 
 Configuration necessary after a fresh clone:
   - Configure IntellijIdea
