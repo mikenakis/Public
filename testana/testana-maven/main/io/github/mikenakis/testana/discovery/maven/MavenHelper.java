@@ -18,6 +18,16 @@ import org.apache.maven.project.ProjectBuildingHelper;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.project.ProjectModelResolver;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
+import org.apache.maven.settings.Profile;
+import org.apache.maven.settings.Proxy;
+import org.apache.maven.settings.Repository;
+import org.apache.maven.settings.RepositoryPolicy;
+import org.apache.maven.settings.Server;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
+import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuilder;
+import org.apache.maven.settings.building.SettingsBuildingException;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -43,31 +53,159 @@ import org.eclipse.aether.transport.file.FileTransporterFactory;
 import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.transport.wagon.WagonTransporterFactory;
 import org.eclipse.aether.util.artifact.JavaScopes;
+import org.eclipse.aether.util.repository.AuthenticationBuilder;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 final class MavenHelper
 {
-	private static final List<RemoteRepository> remoteRepositories = List.of( new RemoteRepository.Builder("central", "default", "https://repo1.maven.org/maven2/").build() );
-
 	final Path localRepositoryPath;
 	private final ServiceLocator serviceLocator = newServiceLocator();
 	private final RepositorySystem repositorySystem = serviceLocator.getService( RepositorySystem.class );
 	private final RepositorySystemSession repositorySystemSession;
 	private final ModelResolver mavenModelResolver;
 	private final ModelBuilder mavenModelBuilder = new DefaultModelBuilderFactory().newInstance();
+	private final List<RemoteRepository> remoteRepositories;
 
 	MavenHelper()
 	{
 		localRepositoryPath = getLocalRepositoryPath();
 		repositorySystemSession = newMavenRepositorySystemSession( repositorySystem, localRepositoryPath );
-		mavenModelResolver = createMavenModelResolver( serviceLocator, repositorySystemSession );
+		remoteRepositories = getRemoteRepositories();
+		mavenModelResolver = createMavenModelResolver( serviceLocator, repositorySystemSession, remoteRepositories );
+	}
+
+	private static RemoteRepository getMavenCentral()
+	{
+		return new RemoteRepository.Builder( "central", "default", "https://repo1.maven.org/maven2/" ).build();
+	}
+
+	private static List<RemoteRepository> getRemoteRepositories()
+	{
+		Collection<RemoteRepository> repositories = new HashSet<>();
+		repositories.add( getMavenCentral() );
+		Settings settings = newSettings();
+		for( Profile profile : settings.getProfiles() )
+			if( isProfileActive( settings, profile ) )
+				for( Repository repository : profile.getRepositories() )
+					repositories.add( toRemoteRepository( settings, repository ) );
+		return repositories.stream().toList();
+	}
+
+	private static boolean isProfileActive( Settings settings, Profile profile )
+	{
+		return settings.getActiveProfiles().contains( profile.getId() ) || (profile.getActivation() != null && profile.getActivation().isActiveByDefault());
+	}
+
+	private static RemoteRepository toRemoteRepository( Settings settings, Repository repository )
+	{
+		RemoteRepository.Builder remoteBuilder = toRemoteRepositoryBuilder( settings, repository.getId(), repository.getLayout(), repository.getUrl() );
+		setPolicy( remoteBuilder, repository.getSnapshots(), true );
+		setPolicy( remoteBuilder, repository.getReleases(), false );
+		return remoteBuilder.build();
+	}
+
+	private static RemoteRepository.Builder toRemoteRepositoryBuilder( Settings settings, String id, String layout, String url )
+	{
+		Proxy activeProxy = settings.getActiveProxy();
+		RemoteRepository.Builder remoteBuilder = new RemoteRepository.Builder( id, layout, url );
+		Server server = settings.getServer( id );
+		if( server != null )
+			remoteBuilder.setAuthentication( new AuthenticationBuilder().addUsername( server.getUsername() ).addPassword( server.getPassword() ).build() );
+		if( activeProxy != null )
+			if( null == activeProxy.getNonProxyHosts() )
+				remoteBuilder.setProxy( getActiveAetherProxyFromSettings( settings ) );
+			else if( !repositoryUrlMatchNonProxyHosts( settings.getActiveProxy().getNonProxyHosts(), remoteBuilder.build().getUrl() ) )
+				remoteBuilder.setProxy( getActiveAetherProxyFromSettings( settings ) );
+		return remoteBuilder;
+	}
+
+	private static org.eclipse.aether.repository.Proxy getActiveAetherProxyFromSettings( Settings settings )
+	{
+		return new org.eclipse.aether.repository.Proxy( settings.getActiveProxy().getProtocol(), settings.getActiveProxy().getHost(), settings.getActiveProxy().getPort(), new AuthenticationBuilder().addUsername( settings.getActiveProxy().getUsername() ).addPassword( settings.getActiveProxy().getPassword() ).build() );
+	}
+
+	private static boolean repositoryUrlMatchNonProxyHosts( String nonProxyHosts, String artifactURL )
+	{
+		Optional<String> host = getHost( artifactURL );
+		if( host.isEmpty() )
+			return false;
+		String nonProxyHostsRegexp = nonProxyHosts.replace( "*", ".*" ); // Replace * with .* so that nonProxyHosts complies with pattern matching syntax
+		Pattern p = Pattern.compile( nonProxyHostsRegexp );
+		return p.matcher( host.get() ).find();
+	}
+
+	private static Optional<String> getHost( String artifactURL )
+	{
+		try
+		{
+			return Optional.of( new URL( artifactURL ).getHost() );
+		}
+		catch( MalformedURLException e )
+		{
+			Log.warning( "Failed to parse proxy URL '" + artifactURL + "', cause: " + e.getMessage() );
+			return Optional.empty();
+		}
+	}
+
+	private static void setPolicy( RemoteRepository.Builder builder, RepositoryPolicy policy, boolean snapshot )
+	{
+		if( policy != null )
+		{
+			org.eclipse.aether.repository.RepositoryPolicy repoPolicy = new org.eclipse.aether.repository.RepositoryPolicy( policy.isEnabled(), policy.getUpdatePolicy() != null ? policy.getUpdatePolicy() : org.eclipse.aether.repository.RepositoryPolicy.UPDATE_POLICY_NEVER, policy.getChecksumPolicy() != null ? policy.getChecksumPolicy() : org.eclipse.aether.repository.RepositoryPolicy.CHECKSUM_POLICY_WARN );
+			if( snapshot )
+				builder.setSnapshotPolicy( repoPolicy );
+			else
+				builder.setReleasePolicy( repoPolicy );
+		}
+	}
+
+	private static Settings newSettings()
+	{
+		SettingsBuilder settingsBuilder = new DefaultSettingsBuilderFactory().newInstance();
+		DefaultSettingsBuildingRequest request = new DefaultSettingsBuildingRequest();
+
+		String mavenHome = System.getenv( "M2_HOME" );
+		if( mavenHome != null )
+		{
+			File globalSettingsFile = new File( mavenHome + "/conf/settings.xml" );
+			if( globalSettingsFile.exists() )
+				request.setGlobalSettingsFile( globalSettingsFile );
+		}
+
+		request.setSystemProperties( System.getProperties() );
+
+		Settings settings;
+		try
+		{
+			settings = settingsBuilder.build( request ).getEffectiveSettings();
+		}
+		catch( SettingsBuildingException e )
+		{
+			throw new RuntimeException( e );
+		}
+
+		if( settings.getLocalRepository() == null )
+		{
+			String userHome = System.getProperty( "user.home" );
+			if( userHome != null )
+				settings.setLocalRepository( userHome + "/.m2/repository" );
+			else
+				throw new RuntimeException( "Cannot find local maven repository" );
+		}
+
+		return settings;
 	}
 
 	Model loadMavenModel( File pomFile )
@@ -140,7 +278,7 @@ final class MavenHelper
 			getExternalDependenciesRecursively( child, mutableFiles );
 	}
 
-	private static ModelResolver createMavenModelResolver( ServiceLocator serviceLocator, RepositorySystemSession repositorySystemSession )
+	private static ModelResolver createMavenModelResolver( ServiceLocator serviceLocator, RepositorySystemSession repositorySystemSession, List<RemoteRepository> remoteRepositories )
 	{
 		RemoteRepositoryManager remoteRepositoryManager = serviceLocator.getService( RemoteRepositoryManager.class );
 		RequestTrace requestTrace = new RequestTrace( null );
