@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>io.github.mikenakis</groupId>
 			<artifactId>bathyscaphe-claims</artifactId>
-			<version>1.4-SNAPSHOT</version>
+			<version>1.5-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
