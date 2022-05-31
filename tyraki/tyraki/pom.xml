@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>io.github.mikenakis</groupId>
 			<artifactId>bathyscaphe</artifactId>
-			<version>1.4-SNAPSHOT</version>
+			<version>1.12-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

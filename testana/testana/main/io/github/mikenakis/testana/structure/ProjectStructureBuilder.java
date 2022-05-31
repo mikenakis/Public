@@ -78,8 +78,10 @@ public final class ProjectStructureBuilder
 		return projectStructure;
 	}
 
-	//NOTE: this is necessary in order to overcome this problem: https://youtrack.jetbrains.com/issue/IDEA-287858
-	//      (also mentioned here: https://stackoverflow.com/q/70949498/773113)
+	//NOTE: this ensures that classes are loaded in the order in which the JVM would load them while executing them, that is, nested classes loaded _after_
+	// containing classes. This is necessary because the IntellijIdea debugger relies on this order of loading; without this, the IntellijIdea debugger
+	// gets confused, and breakpoints in nested classes do not hit. This was reported by me here: https://stackoverflow.com/q/70949498/773113 and became an
+	// IntellijIdea issue here: https://youtrack.jetbrains.com/issue/IDEA-287858
 	private static int compareOutputFiles( OutputFile a, OutputFile b )
 	{
 		if( a.type == OutputFile.Type.Class && b.type == OutputFile.Type.Class )
