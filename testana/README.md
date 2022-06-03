@@ -45,7 +45,7 @@ The failed tests require additional commits to fix, and each commit requires a m
 
 The commit history becomes bloated with commits that were done in vain and that should never be checked out because they contain bugs that are fixed in later commits.
 
-Worst of all, untested commits that contain bugs are regularly being made to the repository. These bugs then stay there, while the continuous build takes its time doing its thing, eventually the tests run and they fail, the developers take notice, troubleshoot the test failure, come up with a theory as to what went wrong, come up with a fix, and commit the fix. This whole process takes quite a long time, during which other unsuspecting developers inevitably pull from the repository, thus receiving the bugs. Kind of like Continuous Infection.
+Worst of all, untested commits that contain bugs are regularly being made to the repository. These bugs then stay there, while the continuous build takes its time doing its thing, eventually the tests run, and they fail, the developers take notice, troubleshoot the test failure, come up with a theory as to what went wrong, come up with a fix, and commit the fix. This whole process takes quite a long time, during which other unsuspecting developers inevitably pull from the repository, thus receiving the bugs. Kind of like Continuous Infection.
 
 Testana solves all of the above problems by figuring out which tests need to run based on what has changed, and only running those tests. This cuts down the time it takes to run tests to a tiny fraction of what it is when blindly running all tests, which means that running the tests now becomes piece of cake and can usually be done real quick before committing, as it should.
 
@@ -67,13 +67,13 @@ Under JUnit, the order of execution of packages and classes within a package app
 
 Alphabetic order of execution is not particularly useful. For example, in an alphabetic list of packages, `util` comes near the end, so it is usually tested last, and yet `util` tends to be a package that depends on no other packages, while most other packages depend on it, so if tests of other packages succeed, and yet tests of `util` fail, it can only be due to pure accident. It would be very nice to see `util` being tested first, so that if there is something wrong with it, then we know that we can stop testing: there is no point in testing packages that depend on a failing package.
 
-Testana addresses this problem by executing test classes in order of dependency, which means that classes with no dependencies will be tested first, classes that depend upon them will be tested next, and so on until everyting has been tested. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located. 
+Testana addresses this problem by executing test classes in order of dependency, which means that classes with no dependencies will be tested first, classes that depend upon them will be tested next, and so on until everything has been tested. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located. 
 
 ## Why should I care about running test methods in natural order? 
 
 By default, JUnit will run your test methods in random order, which is at best useless, and arguably treacherous. 
 
-One reason for wanting the test methods to run in the order in which they appear in the source file is because we usually test fundamental features of our software before we test features that depend upon them. (Note: it is the features under test that depend upon each other, not the tests themselves that depend upon each other.) So if a fundamental feature fails, we want that to be the very first error that will be reported. Tests of features that rely upon a feature whose test has failed might as well be skipped, because they can be expected to all fail, and as a matter of fact, reporting these failures before the failure of the more fundamental feature (due to a messed up order of test method execution) is an act of sabotage against the developer: it is sending us looking for problems in places where there are no problems to be found, and it is making it more difficult to locate the real problem, which usually lies in the test that failed first **_in the source file_**.
+One reason for wanting the test methods to run in the order in which they appear in the source file is because we usually test fundamental features of our software before we test features that depend upon them. (Note: it is the features under test that depend upon each other, not the tests themselves that depend upon each other.) So if a fundamental feature fails, we want that to be the very first error that will be reported. Tests of features that rely upon a feature whose test has failed might as well be skipped, because they can be expected to all fail, and as a matter of fact, reporting these failures before the failure of the more fundamental feature (due to a messed up order of test method execution) is an act of sabotage against the developer: it is sending us looking for problems in places where there are no problems to be found, and it is making it more difficult to locate the real problem, which typically lies in the test that failed first **_in the source file_**.
 
 To give an example, it is completely pointless to be told that my `search-for-item-in-collection` test failed, and only later to be told that my `insert-item-to-collection` test failed. If `insert-item-to-collection` fails, it is game over, there is no need to go any further, no need to try anything else with the collection, no point beating a dead horse. How hard is this to understand? 
 
@@ -98,11 +98,11 @@ Testana corrects it by executing ancestor methods first, descendant methods last
 - Testana only works with Java. Support for more languages may be added in the future. 
 - Testana only understands Maven modules. Support for other module formats may be added in the future. 
 - Testana only understands the following JUnit annotations: `@Test`, `@Before`, `@After`, and `@Ignore`. Support for more JUnit annotations might be added in the future. (But don't hold your breath for it.) 
-- Testana's dependency detection relies on absolutely strong static typing. Dependencies that have been disavowed by being encoded in configuration files, (e.g. swagger files, spring configuration files, etc) denatured by being encoded as strings, (stringly-typed,) obscured through hackery such as duck typing, or squandered by weak typing (euphemistically called dynamic typing) are not supported, and there is no plan to ever support them. Seriously, stop all this fuckery and use strong static typing **_only_**. 
+- Testana's dependency detection relies on absolutely strong static typing. Dependencies that have been disavowed by being encoded in configuration files, (e.g. swagger files, spring configuration files, etc.) denatured by being encoded as strings, (stringly-typed,) obscured through hackery such as duck typing, or squandered by weak typing (euphemistically called dynamic typing) are not supported, and there is no plan to ever support them. Seriously, stop all this fuckery and use strong static typing **_only_**. 
 - Testana only has a command-line interface. A GUI may be added in the future. (But don't hold your breath for it.)  
 - Testana assumes that your local maven repository is under `~/.m2/repository`. It does not check `~/.m2/settings.xml` to see whether you have configured your local repository to reside elsewhere. There are plans to fix this.
 - Testana currently does not consider resources when checking dependencies: a test may depend on a class which depends on a resource, and if the resource is modified, then the test should be re-run, but this does not currently happen. There are plans to fix this. 
-- Testana does not currently have a well defined strategy for handling dependency cycles. Nothing bad happens, but the order of test execution in those cases is kind of vague. There are plans to do something about this. 
+- Testana does not currently have a well-defined strategy for handling dependency cycles. Nothing bad happens, but the order of test execution in those cases is kind of vague. There are plans to do something about this. 
 - Testana is still in Beta. There will be bugs. There will be cases not covered. There will be usage scenarios not considered. There will be change. (What else is new?) 
 
 ## How can I see Testana in action? 
@@ -111,8 +111,8 @@ Without going into too much detail in this document, (because I want to have onl
 
 - Check out the repository.
 - Import the root pom.xml of testana into your project in your IDE.
-- Setup your IDE so that it builds your entire project before running Testana on it. 
-  - That's necessary because normally, prior to running Testana, your IDE will only build the modules that Testana depends on; however, Testana does not depend on any of the modules of your project, and yet Testana will discover them at runtime, so they all need to be up to date when Testana runs. 
+- Set up your IDE so that it builds your entire project before running Testana on it. 
+  - That's necessary because normally, prior to running Testana, your IDE will only build the modules that Testana depends on; however, Testana does not depend on any of the modules of your project, and yet Testana will discover them at runtime, so they all need to be up-to-date when Testana runs. 
   - The way to achieve this with IntelliJ IDEA is to edit the run/debug configuration of Testana and under `Before launch:` specify `Build Project` instead of the default, which is `Build`. 
 - Make sure that when running something from within your IDE, the working directory is the root directory of the source code of your project. (It usually is.)
 - Find the class that contains `public static void main` in the Testana subtree, and run it. (It should be `TestanaConsoleMain` unless I have refactored it into something different by the time you read this.)
@@ -156,11 +156,8 @@ The home page of the project is:
 ## Poor man's issue tracking
                            
 - TODO: troubleshoot and fix bugs:
-  - IntellijIdea does not stop on breakpoints inside anonymous inner classes loaded by Testana. This may be
-    a bug in testana, or it may be a bug in IntellijIdea; we do not know. 
-    See Stackoverflow: "Intellij Idea breakpoints do not hit in anonymous inner class" https://stackoverflow.com/q/70949498/773113
   - If two different modules contain a class with the exact same fully qualified name, testana will arbitrarily pick one 
-    of the two, resulting in miserable failure:
+    of the two, so:
     - A method may exist in both classes, but have a different implementation in each, resulting in malfunction.
     - A method may not exist in both classes, resulting in "no such method" exceptions.    
 
@@ -169,17 +166,17 @@ The home page of the project is:
   Besides modification of resources, we also need to account for creation and deletion of resources, because a resource locator may be engaging in resource discovery. Given a
   resource, its resource locator class can be found as follows:
     - Begin at the folder of the resource.
-    - If the folder contains one and only one class, then this is pesumed to be the resource locator class of the resource; done. Otherwise,
+    - If the folder contains one and only one class, then this is presumed to be the resource locator class of the resource; done. Otherwise,
     - If the folder contains a class called `ResourceLocator.class`, then this is the resource locator class of the resource; done. Otherwise,
     - If the folder contains multiple classes, then we have an error: the resource locator is unknown or ambiguous. Otherwise,
     - Move to the folder above and repeat the search, unless we are in the root output folder of the module, in which case we have an error: the resource locator could not be
       found.
 
-- TODO: expand the syntax of settings so that we can exclude folders in the source tree, like `.idea` and `.git`, which are now handled by hard-coded exlusion. Alternatively, parse `.gitignore`. (Uhm, probably not.)
+- TODO: expand the syntax of settings so that we can exclude folders in the source tree, like `.idea` and `.git`, which are now handled by hard-coded exclusion. Alternatively, parse `.gitignore`. (Uhm, probably not.)
 
 - TODO: further enhancements to the Testana test engine, that deviate from the JUnit standard:
 
-    - Avoid invoking the constructor of the test class for each test method.
+    - Avoid creating a new instance of the test class prior to invoking each test method.
 
     - Get rid of `@Before` and `@After`: initialization should be done in the constructor and cleanup should be done 
       in `close()` if the test class `implements AutoCloseable`.
@@ -203,8 +200,6 @@ The home page of the project is:
 
 - TODO: see if there is any way to optimize the process of determining what is a test class and what isn't.
 
-- TODO: optimize the saving of each test's "last successful run" time after it runs. As it stands right now, the entire timestamps file is written after each test class is run, which is somewhat wasteful.
-
 - TODO: add better handling of dependency cycles. Measures to consider:
 
     - Display warnings about cyclic dependencies so that the programmer may consider fixing them. Also introduce an annotation for suppressing those warnings, because circular dependencies are inevitable, there will always be some.
@@ -227,7 +222,7 @@ The home page of the project is:
 
 - TODO: Fix the cause of the NoClassDefFound warnings.
 
-  Currently testana is issuing warnings about java.lang.NoClassDefFoundError exceptions being thrown. These exceptions fall into the following categories:
+  Currently, testana is issuing warnings about java.lang.NoClassDefFoundError exceptions being thrown. These exceptions fall into the following categories:
     - Thrown while analyzing classes that are derived from external dependencies
         - Example: "Could not get constructors of 'mikenakis.testing0.NaturalMethodOrderJUnit4ClassRunner':
           java.lang.NoClassDefFoundError: org/hamcrest/SelfDescribing"
@@ -235,4 +230,12 @@ The home page of the project is:
       (And therefore should not be analyzed.)
         - Example: "could not get declared methods of 'org.scalatest.funsuite.AnyFunSuite':
           java.lang.NoClassDefFoundError: scala/Serializable"
-          (Might need to clear the cache and the persistence to see this problem) 
+          (Might need to clear the cache and the persistence to see this problem)
+
+- <strike>TODO:</strike> Optimize the saving of each test's "last successful run" time.
+  - As it stands right now, the entire timestamps file is written after each test class is run, which is somewhat wasteful.
+  - I tried using a binary file for the last-successful-run times; either there was no improvement, or the improvement was so small as to be completely lost in the noise.
+
+- <strike>TODO:</strike> DONE:
+  - IntellijIdea does not stop on breakpoints inside anonymous inner classes loaded by Testana. 
+    See Stackoverflow: "Intellij Idea breakpoints do not hit in anonymous inner class" https://stackoverflow.com/q/70949498/773113
