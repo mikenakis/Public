@@ -9,7 +9,9 @@ import io.github.mikenakis.testana.kit.structured.json.writing.JsonStructuredWri
 import io.github.mikenakis.testana.kit.structured.reading.StructuredReader;
 import io.github.mikenakis.testana.kit.structured.writing.StructuredWriter;
 
-import java.io.Writer;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -104,31 +106,42 @@ public final class Persistence
 
 	public void save()
 	{
-		Kit.uncheckedTryWith( () -> Files.newBufferedWriter( persistencePathName ), ( Writer writer ) -> //
-		{
-			JsonWriter jsonWriter = new JsonWriter( writer, true, true );
-			StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
-			rootWriter.writeArray( "elementName", arrayWriter -> //
+		/**
+		 * PEARL: Files.newBufferedWriter() disregards the fact that BufferedWriter's close() method does not close the contained OutputStreamWriter!
+		 *        Files.newBufferedWriter() returns a new BufferedWriter which writes to a new OutputStreamWriter which writes to a new OutputStream.
+		 *        The OutputStreamWriter's close() method contains a call to the contained OutputStream's close() method; however, BufferedWriter's close()
+		 *        method does not contain a call to the contained OutputStreamWriter's close() method!  Therefore, when the BufferedWriter gets closed, neither
+		 *        the contained OutputStreamWriter nor the contained OutputStream get closed, so the OutputStream remains open until it gets garbage-collected!
+		 *        (This has been observed in JDK 17.)
+		 *        Thus, we have to refrain from invoking Files.newBufferedWriter() and instead create the BufferedWriter and the OutputStreamWriter ourselves,
+		 *        so that we can make sure they both get closed.
+		 */
+		Kit.uncheckedTryWith( () -> new OutputStreamWriter( Files.newOutputStream( persistencePathName ), StandardCharsets.UTF_8 ), outputStreamWriter -> //
+			Kit.uncheckedTryWith( () -> new BufferedWriter( outputStreamWriter, 32 * 1024 ), writer -> //
 			{
-				List<String> names = new ArrayList<>( entryFromNameMap.keySet() );
-				names.sort( Comparator.naturalOrder() );
-				for( String name : names )
+				JsonWriter jsonWriter = new JsonWriter( writer, true, true );
+				StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
+				rootWriter.writeArray( "elementName", arrayWriter -> //
 				{
-					TestClassInfo entry = Kit.map.get( entryFromNameMap, name );
-					if( !entry.used )
+					List<String> names = new ArrayList<>( entryFromNameMap.keySet() );
+					names.sort( Comparator.naturalOrder() );
+					for( String name : names )
 					{
-						Log.info( "Persistence entry for " + name + " not used, forgetting..." );
-						Kit.map.remove( entryFromNameMap, name );
-						continue;
+						TestClassInfo entry = Kit.map.get( entryFromNameMap, name );
+						if( !entry.used )
+						{
+							Log.info( "Persistence entry for " + name + " not used, forgetting..." );
+							Kit.map.remove( entryFromNameMap, name );
+							continue;
+						}
+						arrayWriter.writeElement( elementWriter -> elementWriter.writeObject( elementObjectWriter -> //
+						{
+							elementObjectWriter.writeMember( "name", memberWriter -> memberWriter.writeValue( name ) );
+							elementObjectWriter.writeMember( "timeOfLastRun", memberWriter -> memberWriter.writeValue( entry.timeOfLastRun.toString() ) );
+						} ) );
 					}
-					arrayWriter.writeElement( elementWriter -> elementWriter.writeObject( elementObjectWriter -> //
-					{
-						elementObjectWriter.writeMember( "name", memberWriter -> memberWriter.writeValue( name ) );
-						elementObjectWriter.writeMember( "timeOfLastRun", memberWriter -> memberWriter.writeValue( entry.timeOfLastRun.toString() ) );
-					} ) );
-				}
-			} );
-		} );
+				} );
+			} ) );
 		dirty = false;
 	}
 
