@@ -21,14 +21,5 @@ jobs:
 
 
 
-      - run: mvn -s .circleci/mvn-settings.xml clean | grep -Ev "Download(ing|ed)"
-      - run: mvn -s .circleci/mvn-settings.xml install | grep -Ev "Download(ing|ed)"
-      - run: mvn -s .circleci/mvn-settings.xml deploy -DskipTests -Dmaven.install.skip=true
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
-      - store_test_results:
-          path: ~/test-results
+      - run: mvn --batch-mode --settings .circleci/mvn-settings.xml clean deploy
+        # | grep -Ev "Download(ing|ed)"
