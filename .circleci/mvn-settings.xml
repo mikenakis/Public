@@ -19,14 +19,14 @@
 			<id>github-bathyscaphe-claims</id>
 			<username>mikenakis</username>
 			<!-- GitHub Personal Access Token for "Public Package Read Access" -->
-			<password>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</password>
+			<password>${GITHUB_MIKENAKIS_PUBLIC_PACKAGE_TOKEN}</password>
 		</server>
 
 		<server>
 			<id>github-bathyscaphe</id>
 			<username>mikenakis</username>
 			<!-- GitHub Personal Access Token for "Public Package Read Access" -->
-			<password>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</password>
+			<password>${GITHUB_MIKENAKIS_PUBLIC_PACKAGE_TOKEN}</password>
 		</server>
 
 	</servers>
