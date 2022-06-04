@@ -14,6 +14,21 @@
 			<username>mikenakis</username>
 			<password>${REPSY_PASS}</password>
 		</server>
+
+		<server>
+			<id>github-bathyscaphe-claims</id>
+			<username>mikenakis</username>
+			<!-- GitHub Personal Access Token for "Public Package Read Access" -->
+			<password>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</password>
+		</server>
+
+		<server>
+			<id>github-bathyscaphe</id>
+			<username>mikenakis</username>
+			<!-- GitHub Personal Access Token for "Public Package Read Access" -->
+			<password>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</password>
+		</server>
+
 	</servers>
 
 </settings>
