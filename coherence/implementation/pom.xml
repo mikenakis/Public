@@ -15,6 +15,21 @@
 		<sourceDirectory>src</sourceDirectory>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>github-bathyscaphe</id>
+			<url>https://maven.pkg.github.com/mikenakis/Bathyscaphe</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+		<repository>
+			<id>github-bathyscaphe-claims</id>
+			<url>https://maven.pkg.github.com/mikenakis/BathyscapheClaims</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+	</repositories>
+
 	<dependencies>
 
 		<dependency>

@@ -7,8 +7,8 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>mikenakis</groupId>
@@ -61,7 +61,6 @@
 	</modules>
 
 	<build>
-		<directory>OUT</directory>
 		<plugins>
 
 			<plugin>
@@ -132,19 +131,23 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>
 				<configuration>
+					<!-- PEARL: maven-surefire-plugin stack trace trimming
+					            When an exception is thrown by the tests, the maven-surefire-plugin will only show the top frame from the exception stack trace, which is
+					            an entirely unwarranted and completely counter-productive thing to do. The following magical incantation reverses this behavior. -->
+					<trimStackTrace>false</trimStackTrace>
+					<!-- PEARL: maven-surefire-plugin "inclusions" and "exclusions"
+						        The maven-surefire-plugin has some entirely useless concepts of "inclusions" and "exclusions", and the defaults are such that absolutely none of
+						        your tests will run unless they adhere to a certain secret convention, which is that the class name must contain the word "Test".
+								We correct this problem here by annihilating the plugin's concept of inclusions. -->
 					<includes>
-						<!-- PEARL: maven-surefire-plugin "inclusions" and "exclusions".
-							1. The maven-surefire-plugin unnecessarily complicates things with a useless concept of "inclusions" and "exclusions".
-							   (Which I was not aware of this because IntellijIdea has no such concept: it always just runs all tests. Which was never a problem. Which proves
-							    that inclusions and exclusions are useless, and constitute over-engineering.)
-							2. The maven-surefire-plugin sabotages the developer with default inclusions that will not run tests unless their names adhere to a certain convention
-							   which is essentially secret, since you cannot possibly know what the convention is unless you go read documentation. Specifically, they require the
-							   class name to contain the word "Test".
-							   (That's what you often achieve when you unnecessarily complicate things: you sabotage people.)
-							We correct this problem here by annihilating the plugin's concept of inclusions.  -->
 						<include>**/*.java</include>
 					</includes>
-					<argLine>--enable-preview</argLine>
+					<!-- PEARL: maven-surefire-plugin file encoding
+								The maven-surefire-plugin for some reason has to be told what the encoding is separately, otherwise tests that contain unicode characters will fail
+								 despite the fact that the project.build.sourceEncoding property has been set to UTF8. See https://stackoverflow.com/a/17671104/773113 -->
+					<!-- PEARL: maven-surefire-plugin enable preview
+					            The maven-surefire-plugin must be told to enable-preview separately -->
+					<argLine>-Dfile.encoding=${project.build.sourceEncoding} --enable-preview</argLine>
 					<!-- magical incantation needed for the enable-preview option to work, from https://stackoverflow.com/a/69754577/773113 -->
 					<reuseForks>true</reuseForks>
 					<useFile>false</useFile>

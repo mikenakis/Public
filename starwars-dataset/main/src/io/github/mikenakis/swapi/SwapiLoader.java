@@ -34,26 +34,20 @@ import java.util.Optional;
 public final class SwapiLoader
 {
 	/**
-	 * The original source of information used to be swapi.co, but that one went belly-up.
-	 * Then someone created swapi.dev to replace swapi.co.
+	 * The original source of information used to be swapi.co, but that one went belly-up. Then someone created swapi.dev to replace swapi.co.
+	 * <p>
 	 * However, when I last checked (on 2021-05-18) I found that swapi.dev has at least a couple of serious issues:
-	 *   1. It has one less film, while it should have one more.
-	 *   2. It has lost the contents of the "species" field of several persons. (All these persons appear to be humans; however, the few additional persons
-	 *      do have their "species" set correctly, and they are humans.)
-	 * Note that I have not checked everything, so there may be more issues.
-	 * As a result, I am not downloading files anymore, and instead the files live with the project.
-	 * (If the code path that downloads files is reached, an exception will be thrown.)
+	 * <p>
+	 * 1. It has one less film, while it should have one more.
+	 * <p>
+	 * 2. It has lost the contents of the "species" field of several persons. (All these persons appear to be humans; however, the few additional persons do
+	 * have their "species" set correctly, and they are humans.)
+	 * <p>
+	 * Note that I have not checked everything, so there may be more issues. As a result, I am not downloading files anymore, and instead the files live with
+	 * the project. (If the code path that downloads files is reached, an exception will be thrown.)
 	 */
 	private static final String SOURCE_URL = "http://swapi.co/api/";
-	private static final Path filesPath = getFilesPath();
 	private final Swapi swapi;
-
-	private static Path getFilesPath()
-	{
-		Path result = Path.of( System.getProperty( "user.dir" ), "files" );
-		Log.debug( "files path: " + result );
-		return result;
-	}
 
 	/**
 	 * Constructor.
@@ -115,17 +109,19 @@ public final class SwapiLoader
 		if( Kit.get( true ) )
 		{
 			ClassLoader classloader = SwapiLoader.class.getClassLoader();
-			Kit.uncheckedTryWith( () -> classloader.getResourceAsStream(entityTypeName + ".txt" ), (InputStream inputStream) -> //
-				Kit.uncheckedTryWith( () -> new InputStreamReader( inputStream ), (InputStreamReader inputStreamReader) -> //
+			Kit.uncheckedTryWith( () -> Kit.classLoading.getResourceAsStream( classloader, entityTypeName + ".txt" ), ( InputStream inputStream ) -> //
+				Kit.uncheckedTryWith( () -> new InputStreamReader( inputStream ), ( InputStreamReader inputStreamReader ) -> //
 					readFromFile( inputStreamReader, mutableObjects ) ) );
 		}
 		else
 		{
+			Path filesPath = Path.of( System.getProperty( "user.dir" ), "files" );
+			Log.debug( "files path: " + filesPath );
 			Path path = filesPath.resolve( entityTypeName + ".txt" );
 			File file = path.toAbsolutePath().toFile();
 			if( file.exists() )
 			{
-				Kit.uncheckedTryWith( () -> new FileReader( file ), (InputStreamReader inputStreamReader) -> //
+				Kit.uncheckedTryWith( () -> new FileReader( file ), ( InputStreamReader inputStreamReader ) -> //
 					readFromFile( inputStreamReader, mutableObjects ) );
 			}
 			else

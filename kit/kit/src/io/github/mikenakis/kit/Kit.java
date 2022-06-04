@@ -19,6 +19,7 @@ import io.github.mikenakis.kit.functional.ThrowingProcedure1;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.kit.ref.Ref;
 
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
@@ -2748,6 +2749,19 @@ public final class Kit
 
 	public static final class classLoading
 	{
+		public static InputStream getResourceAsStream( ClassLoader classLoader, String resourceName )
+		{
+			URL url = classLoader.getResource( resourceName );
+			if( url == null )
+			{
+				Log.debug( "Could not load resource '" + resourceName + "' using classLoader " + classLoader );
+				for( var s : troubleshoot( classLoader ) )
+					Log.debug( "    " + s );
+				assert false;
+			}
+			return unchecked( () -> url.openStream() );
+		}
+
 		public static Path getPathFromClassLoaderAndTypeName( ClassLoader classLoader, String typeName )
 		{
 			URL url = classLoader.getResource( typeName.replace( '.', '/' ) + ".class" );
@@ -2808,15 +2822,15 @@ public final class Kit
 		public static Collection<String> troubleshoot( ClassLoader classLoader )
 		{
 			ArrayList<String> mutableContents = new ArrayList<>();
-			addContents( mutableContents, classLoader );
+			troubleshootRecursively( mutableContents, classLoader );
 			return mutableContents;
 		}
 
-		private static void addContents( ArrayList<String> mutableContents, ClassLoader classLoader )
+		private static void troubleshootRecursively( ArrayList<String> mutableContents, ClassLoader classLoader )
 		{
 			ClassLoader parentClassLoader = classLoader.getParent();
 			if( parentClassLoader != null )
-				addContents( mutableContents, parentClassLoader );
+				troubleshootRecursively( mutableContents, parentClassLoader );
 
 			if( classLoader instanceof URLClassLoader urlClassLoader )
 			{
