@@ -7,28 +7,11 @@
   -->
 
 <settings>
-
 	<servers>
 		<server>
 			<id>repsy-mikenakis-public</id>
-			<username>${env.REPSY_USER}</username>
+			<username>mikenakis</username>
 			<password>${env.REPSY_PASS}</password>
 		</server>
-
-		<server>
-			<id>github-bathyscaphe-claims</id>
-			<username>mikenakis</username>
-			<!-- GitHub Personal Access Token for "Public Package Read Access" -->
-			<password>${env.GITHUB_MIKENAKIS_PUBLIC_PACKAGE_TOKEN}</password>
-		</server>
-
-		<server>
-			<id>github-bathyscaphe</id>
-			<username>mikenakis</username>
-			<!-- GitHub Personal Access Token for "Public Package Read Access" -->
-			<password>${env.GITHUB_MIKENAKIS_PUBLIC_PACKAGE_TOKEN}</password>
-		</server>
-
 	</servers>
-
 </settings>
