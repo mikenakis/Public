@@ -28,10 +28,10 @@ import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
 import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
 import org.apache.maven.settings.building.SettingsBuilder;
 import org.apache.maven.settings.building.SettingsBuildingException;
+import org.apache.maven.settings.building.SettingsBuildingRequest;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.RequestTrace;
 import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.collection.CollectRequest;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
@@ -68,6 +68,12 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+/**
+ * TODO: remove maven central remote repository
+ *       - currently, the maven central repository needs to be included in the list of remote repositories, otherwise Testana fails to run, and I do not know
+ *         why. According to my understanding, all artifacts should have already been copied to the local repository, so no external lookups should be
+ *         necessary, and the fact that external lookups are being made unnecessarily slows down the tests. Need to figure out what is going on and fix this.
+ */
 final class MavenHelper
 {
 	final Path localRepositoryPath;
@@ -86,15 +92,12 @@ final class MavenHelper
 		mavenModelResolver = createMavenModelResolver( serviceLocator, repositorySystemSession, remoteRepositories );
 	}
 
-	private static RemoteRepository getMavenCentral()
-	{
-		return new RemoteRepository.Builder( "central", "default", "https://repo1.maven.org/maven2/" ).build();
-	}
-
 	private static List<RemoteRepository> getRemoteRepositories()
 	{
 		Collection<RemoteRepository> repositories = new HashSet<>();
-		repositories.add( getMavenCentral() );
+		//repositories.add( new RemoteRepository.Builder("local", "default", "file:C:/Users/MBV/.m2/repository").build() );
+		repositories.add( new RemoteRepository.Builder( "central", "default", "https://repo1.maven.org/maven2/" ).build() );
+		//repositories.add( new RemoteRepository.Builder( "repsy-mikenakis-public", "default", "https://repo.repsy.io/mvn/mikenakis/mikenakis-public" ).build() );
 		Settings settings = newSettings();
 		for( Profile profile : settings.getProfiles() )
 			if( isProfileActive( settings, profile ) )
@@ -174,7 +177,7 @@ final class MavenHelper
 	private static Settings newSettings()
 	{
 		SettingsBuilder settingsBuilder = new DefaultSettingsBuilderFactory().newInstance();
-		DefaultSettingsBuildingRequest request = new DefaultSettingsBuildingRequest();
+		SettingsBuildingRequest request = new DefaultSettingsBuildingRequest();
 
 		String mavenHome = System.getenv( "M2_HOME" );
 		if( mavenHome != null )
@@ -280,11 +283,10 @@ final class MavenHelper
 
 	private static ModelResolver createMavenModelResolver( ServiceLocator serviceLocator, RepositorySystemSession repositorySystemSession, List<RemoteRepository> remoteRepositories )
 	{
-		RemoteRepositoryManager remoteRepositoryManager = serviceLocator.getService( RemoteRepositoryManager.class );
-		RequestTrace requestTrace = new RequestTrace( null );
+		RemoteRepositoryManager remoteRepositoryManager = serviceLocator.getService( RemoteRepositoryManager.class ); //new DefaultRemoteRepositoryManager();
 		DefaultRepositorySystem repositorySystem = new DefaultRepositorySystem();
 		repositorySystem.initService( serviceLocator );
-		return new ProjectModelResolver( repositorySystemSession, requestTrace, repositorySystem, remoteRepositoryManager, remoteRepositories, ProjectBuildingRequest.RepositoryMerging.POM_DOMINANT, null );
+		return new ProjectModelResolver( repositorySystemSession, null/* new RequestTrace( null ) */, repositorySystem, remoteRepositoryManager, remoteRepositories, ProjectBuildingRequest.RepositoryMerging.POM_DOMINANT, null );
 	}
 
 	private static RepositorySystemSession newMavenRepositorySystemSession( RepositorySystem system, Path localRepositoryPath )

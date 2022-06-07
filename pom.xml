@@ -165,18 +165,12 @@
 		<repository>
 			<id>repsy-mikenakis-public</id>
 			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
-		</repository>
-		<repository>
-			<id>github-bathyscaphe</id>
-			<url>https://maven.pkg.github.com/mikenakis/Bathyscaphe</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
-		<repository>
-			<id>github-bathyscaphe-claims</id>
-			<url>https://maven.pkg.github.com/mikenakis/BathyscapheClaims</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</repository>
 	</repositories>
 
@@ -185,6 +179,10 @@
 			<id>repsy-mikenakis-public</id>
 			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
 		</repository>
+		<snapshotRepository>
+			<id>repsy-mikenakis-public</id>
+			<url>https://repo.repsy.io/mvn/mikenakis/mikenakis-public</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 </project>
