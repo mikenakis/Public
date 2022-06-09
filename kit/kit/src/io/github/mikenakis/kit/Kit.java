@@ -2950,8 +2950,10 @@ public final class Kit
 				resultRef.value = function0.invoke();
 				countDownLatch.countDown();
 			} );
-			while( !unchecked( () -> countDownLatch.await( postAndWaitTimeout.toMillis(), TimeUnit.MILLISECONDS ) ) )
+			for( ;; )
 			{
+				if( unchecked( () -> countDownLatch.await( postAndWaitTimeout.toMillis(), TimeUnit.MILLISECONDS ) ) )
+					break;
 				Log.debug( "function did not complete within " + time.secondsFromDuration( postAndWaitTimeout ) + " s." );
 				Debug.breakPoint();
 			}
