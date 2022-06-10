@@ -40,7 +40,7 @@ Let us consider the following tiny "Hello, world!" java program:
 
 The output of mikenakis-classdump for the classfile produced by compiling the above class looks like this:
 
-	ClassDumpMain.classDump(ClassDumpMain.java:149) | DEBUG | 1 | 18:52:17.843 | main | Dumping C:\Users\MBV\OUT\mikenakis\bytecode-test\test-classes\mikenakis\bytecode\test\model\Class0HelloWorld.class
+	ClassDumpMain.classDump(ClassDumpMain.java:149) | DEBUG | 1 | 18:52:17.843 | main | Dumping [...]\mikenakis\bytecode-test\test-classes\mikenakis\bytecode\test\model\Class0HelloWorld.class
 	■ ByteCodeType version = 60.0, accessFlags = [public, super, abstract], this = Class0HelloWorld, super = java.lang.Object
 	├─■ interfaces: 0 items
 	├─■ extraTypes: 0 items
