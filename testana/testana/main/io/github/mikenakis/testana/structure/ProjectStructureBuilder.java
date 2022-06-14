@@ -68,7 +68,9 @@ public final class ProjectStructureBuilder
 						}
 						Optional<ProjectType> optionalProjectType = fromCache( cache, projectModule, outputDirectory, outputFile, testEngineMap ) //
 							.or( () -> fromClass( classLoader, outputFile, testEngineMap, projectModule ) );
-						optionalProjectType.ifPresent( projectType -> Kit.map.add( projectTypeFromNameMap, projectType.className(), projectType ) );
+						//NOTE: addOrReplace is used here because I sometimes set both <sourcesDirectory> and <testSourcesDirectory> to the same value.
+						//      Ideally I would not have to be doing this.
+						optionalProjectType.ifPresent( projectType -> Kit.map.addOrReplace( projectTypeFromNameMap, projectType.className(), projectType ) );
 					}
 				}
 			}

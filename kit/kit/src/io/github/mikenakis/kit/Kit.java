@@ -1743,7 +1743,7 @@ public final class Kit
 			assert key != null;
 			assert value != null;
 			Object previous = map.put( key, value );
-			assert previous == null : "key = {" + key + "}; value = {" + value + "}";
+			assert previous == null : "key = {" + key + "}; value = {" + value + "}; existing value = " + previous;
 		}
 
 		/**

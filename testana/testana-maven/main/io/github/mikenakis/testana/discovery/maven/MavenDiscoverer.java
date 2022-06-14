@@ -49,7 +49,7 @@ public final class MavenDiscoverer implements Discoverer
 		boolean haveMain = mavenModel.getBuild() != null && addOutputDirectory( discoveryModule, mavenModel.getBuild().getOutputDirectory() );
 		boolean haveTest = mavenModel.getBuild() != null && addOutputDirectory( discoveryModule, mavenModel.getBuild().getTestOutputDirectory() );
 		if( !haveMain && !haveTest && !mavenModel.getPackaging().equals( "pom" ) )
-			Log.warning( "Neither output nor test-output directories exist in " + mavenModel );
+			Log.warning( "Neither output nor test-output files exist in " + mavenModel );
 		for( String childModuleName : mavenModel.getModules() )
 		{
 			File childModulePomFile = mavenModel.getProjectDirectory().toPath().resolve( childModuleName ).resolve( "pom.xml" ).toFile();
