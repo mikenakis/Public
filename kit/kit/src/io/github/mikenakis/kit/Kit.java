@@ -75,14 +75,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@SuppressWarnings( { "unused", "NewClassNamingConvention" } )
+@SuppressWarnings( "NewClassNamingConvention" )
 public final class Kit
 {
 	private static final Duration postAndWaitTimeout = Duration.ofSeconds( 1 );
 
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];
-	public static final String[] ARRAY_OF_ZERO_STRINGS = new String[0];
 
 	private Kit() { }
 
@@ -276,20 +275,15 @@ public final class Kit
 		return stringWriter.toString();
 	}
 
-	public static boolean assertWeakly( boolean value, Function0<String> messageBuilder )
+	public static boolean assertWeakly( boolean value )
 	{
 		if( areAssertionsEnabled() && !value )
 		{
-			String message = messageBuilder.invoke();
-			Log.message( Log.Level.ERROR, 1, "Assertion failure" + (message.isEmpty() ? "" : ": " + message) );
+			Log.message( Log.Level.ERROR, 1, "Assertion failure" );
+			Debug.breakPoint();
 			return false;
 		}
 		return true;
-	}
-
-	@SuppressWarnings( "UnusedReturnValue" ) public static boolean assertWeakly( boolean value )
-	{
-		return assertWeakly( value, () -> "" );
 	}
 
 	public static <T> Optional<T> filterOptional( T value, BooleanFunction1<T> predicate )
@@ -816,8 +810,9 @@ public final class Kit
 		}
 
 		/**
-		 * Splits a string in parts using a given character as delimiter. Corrects Java's insanity of only offering versions of this function that work with
-		 * regular expressions.
+		 * Splits a string in parts using a given character as delimiter.
+		 *
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
@@ -826,34 +821,79 @@ public final class Kit
 		 */
 		public static String[] splitAtCharacter( String stringToSplit, char delimiter )
 		{
-			return splitAtCharacter( stringToSplit, delimiter, false );
+			return splitAtCharacter( stringToSplit, delimiter, Integer.MAX_VALUE );
 		}
 
 		/**
-		 * Splits a string in parts using a given character as delimiter. Optionally includes the delimiter as a separate element in the results. Corrects
-		 * Java's insanity of only offering versions of this function that work with regular expressions.
+		 * Splits a string in parts using a given character as delimiter.
+		 *
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
 		 * @param delimiter     the delimiter.
+		 * @param maximum       the maximum number of parts to return. If this number is reached, the last returned part will be the remainder of the string.
 		 *
-		 * @return An array of {@link String}. If the delimiter is not found, the list will contain a single element, which will be the entire source string.
+		 * @return An array of {@link String} containing the parts of the string.
 		 */
-		public static String[] splitAtCharacter( String stringToSplit, char delimiter, boolean includeDelimiter )
+		public static String[] splitAtCharacter( String stringToSplit, char delimiter, int maximum )
 		{
+			return splitAtCharacter( stringToSplit, delimiter, maximum, false );
+		}
+
+		/**
+		 * Splits a string in parts using a given character as delimiter.
+		 *
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 *
+		 * @param stringToSplit the string to split.
+		 * @param delimiter     the delimiter.
+		 * @param trim          whether whitespace before and after each part should be trimmed.
+		 *
+		 * @return An array of {@link String} containing the parts of the string.
+		 */
+		public static String[] splitAtCharacter( String stringToSplit, char delimiter, boolean trim )
+		{
+			return splitAtCharacter( stringToSplit, delimiter, Integer.MAX_VALUE, trim );
+		}
+
+		/**
+		 * Splits a string in parts using a given character as delimiter.
+		 *
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 *
+		 * @param stringToSplit the string to split.
+		 * @param delimiter     the delimiter.
+		 * @param maximum       the maximum number of parts to return. If this number is reached, the last returned part will be the remainder of the string.
+		 * @param trim          whether whitespace before and after each part should be trimmed.
+		 *
+		 * @return An array of {@link String} containing the parts of the string.
+		 */
+		public static String[] splitAtCharacter( String stringToSplit, char delimiter, int maximum, boolean trim )
+		{
+			assert maximum >= 2;
 			Collection<String> result = new ArrayList<>();
 			for( int position = 0; position < stringToSplit.length(); )
 			{
-				int i = position;
-				position = stringToSplit.indexOf( delimiter, i );
-				if( position == -1 )
+				int start = position;
+				if( result.size() >= maximum - 1 )
 					position = stringToSplit.length();
-				else if( includeDelimiter )
-					position++;
-				int k = position;
-				String current = stringToSplit.substring( i, k );
+				else
+				{
+					position = stringToSplit.indexOf( delimiter, start );
+					if( position == -1 )
+						position = stringToSplit.length();
+				}
+				int end = position;
+				if( trim )
+				{
+					while( start < end && Character.isWhitespace( stringToSplit.charAt( start ) ) )
+						start++;
+					while( start < end && Character.isWhitespace( stringToSplit.charAt( end - 1 ) ) )
+						end--;
+				}
+				String current = stringToSplit.substring( start, end );
 				result.add( current );
-				if( !includeDelimiter )
-					position++;
+				position++;
 			}
 			return result.toArray( String[]::new );
 		}
@@ -1039,13 +1079,9 @@ public final class Kit
 			return replaceAll( original, subString, replacement, false );
 		}
 
-		public static String replaceAllIgnoreCase( String original, String subString, String replacement )
-		{
-			return replaceAll( original, subString, replacement, true );
-		}
-
 		public static String replaceAll( String original, String subString, String replacement, boolean ignoreCase )
 		{
+			assert !subString.isEmpty();
 			var builder = new StringBuilder();
 			for( int i = 0; i < original.length(); )
 			{
@@ -1069,16 +1105,17 @@ public final class Kit
 
 		private static int indexOf( String str, String stringToFind, int fromIndex, boolean ignoreCase )
 		{
-			int n = str.length();
-			if( n == 0 )
+			assert !stringToFind.isEmpty();
+			int end = str.length();
+			if( end == 0 )
 				return fromIndex;
-			n -= stringToFind.length();
-			if( n < 0 )
+			end -= stringToFind.length() - 1;
+			if( end < 0 )
 				return -1;
 			char c = stringToFind.charAt( 0 );
-			for( int i = fromIndex; i < n; i++ )
+			for( int i = fromIndex; i < end; i++ )
 			{
-				i = indexOf( str, c, i, n, ignoreCase );
+				i = indexOf( str, c, i, end, ignoreCase );
 				if( i == -1 )
 					return -1;
 				if( compare( str, i, stringToFind, 0, stringToFind.length(), ignoreCase ) == 0 )

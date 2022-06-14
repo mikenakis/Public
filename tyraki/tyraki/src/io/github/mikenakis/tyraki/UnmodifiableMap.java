@@ -20,6 +20,11 @@ import java.util.function.Predicate;
  */
 public interface UnmodifiableMap<K, V>
 {
+	static <K,V> UnmodifiableMap<K,V> of()
+	{
+		return UnmodifiableArrayMap.of();
+	}
+
 	/**
 	 * Returns this same map with the keys cast to a supertype.
 	 */

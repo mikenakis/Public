@@ -83,7 +83,7 @@ final class ConcreteMutableArraySet<E> extends AbstractMutableCollection<E> impl
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
 		assert mustBeReadableAssertion();
-		return newMutableEnumerator();
+		return list.newUnmodifiableEnumerator();
 	}
 
 	@Override public boolean containsDuplicates()

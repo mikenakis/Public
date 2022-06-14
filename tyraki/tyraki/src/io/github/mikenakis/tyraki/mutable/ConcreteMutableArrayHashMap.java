@@ -62,20 +62,36 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 
 		@Override public MutableEnumerator<Binding<K,V>> newMutableEnumerator()
 		{
-			MutableEnumerator<K> keyEnumerator = new MyEnumerator();
+			MutableEnumerator<K> keyEnumerator = new MyMutableEnumerator();
 			return keyEnumerator.map( k -> MapEntry.of( k, map.get( k ) ) );
 		}
 
 		@Override public UnmodifiableEnumerator<Binding<K,V>> newUnmodifiableEnumerator()
 		{
-			return newMutableEnumerator();
+			UnmodifiableEnumerator<K> keyEnumerator = new MyUnmodifiableEnumerator();
+			return keyEnumerator.map( k -> MapEntry.of( k, map.get( k ) ) );
 		}
 
-		private final class MyEnumerator extends AbstractEnumerator<K> implements MutableEnumerator.Decorator<K>
+		private final class MyUnmodifiableEnumerator extends AbstractEnumerator<K> implements UnmodifiableEnumerator.Decorator<K>
+		{
+			final UnmodifiableEnumerator<K> decoree;
+
+			MyUnmodifiableEnumerator()
+			{
+				decoree = keyList.newUnmodifiableEnumerator();
+			}
+
+			@Override public UnmodifiableEnumerator<K> getDecoratedUnmodifiableEnumerator()
+			{
+				return decoree;
+			}
+		}
+
+		private final class MyMutableEnumerator extends AbstractEnumerator<K> implements MutableEnumerator.Decorator<K>
 		{
 			final MutableEnumerator<K> decoree;
 
-			MyEnumerator()
+			MyMutableEnumerator()
 			{
 				decoree = keyList.newMutableEnumerator();
 			}
