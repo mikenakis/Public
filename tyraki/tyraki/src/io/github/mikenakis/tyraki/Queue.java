@@ -12,6 +12,7 @@ public interface Queue<E>
 	int getModificationCount();
 	int size();
 	boolean enqueue( E element );
+	Optional<E> peek();
 	Optional<E> tryDequeue();
 	boolean clear();
 

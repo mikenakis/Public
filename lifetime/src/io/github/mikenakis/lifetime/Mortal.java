@@ -23,14 +23,15 @@ import io.github.mikenakis.kit.functional.Procedure1;
  * <p>
  * PEARL: the {@code try-with-resources} clause of Java has several problems:
  * <p>
- * - It prevents exceptions thrown within the {@code try{...}} block from being considered as uncaught. So, if the debugger is configured to stop on any
- * uncaught exception, (as it should,) and an exception is thrown within the {@code try{...}} block, the debugger will not stop at the throwing statement;
- * instead, the debugger will stop at the closing curly brace of the {@code try{...}} block, which is entirely useless, counter-productive, and annoying.
+ * - The {@code try-with-resources} clause of Java prevents exceptions thrown within the {@code try{...}} block from being considered as uncaught. So, if the
+ * debugger is configured to stop on any uncaught exception, (as it should,) and an exception is thrown within the {@code try{...}} block, the debugger will not
+ * stop at the throwing statement; instead, it will stop at the closing curly brace of the {@code try{...}} block, which is entirely useless,
+ * counter-productive, and annoying.
  * <p>
- * - It forces you to use curly braces even when the code block consists of a single-statement.
+ * - The {@code try-with-resources} clause of Java forces you to use curly braces even when the code block consists of a single-statement.
  * <p>
- * - It forces you to declare a variable, complete with its type, for the {@link Mortal} object, even if you have no use for the {@link Mortal} object inside
- * the {@code try{...}} block.
+ * - The {@code try-with-resources} clause of Java forces you to declare a variable for the {@code Closeable} object, even if you have no use for that object
+ * inside the {@code try{...}} block.
  *
  * @author michael.gr
  */
@@ -44,11 +45,11 @@ public interface Mortal extends AutoCloseable, Coherent
 	 * - If an uncaught exception occurs within the {@code try{...}} block, the debugger will stop at the throwing statement instead of the closing curly brace
 	 * of the {@code try{...}} block. (Duh!)
 	 * <p>
-	 * - You do not have to use curly braces if your block consists of a single-statement. (By supplying your code in a lambda, you get to decide whether to use
-	 * curly braces or not.)
+	 * - You do not have to use curly braces if your block consists of a single-statement. (You supply your code in a lambda, so you get to decide whether to
+	 * use curly braces or not.)
 	 * <p>
-	 * - You do not have to declare the type of the {@link Mortal}, since the type of the lambda parameter is inferred.  (Alternatively, if you have no use for
-	 * the {@link Mortal} within the lambda, you can use the other form of this method which accepts a parameterless lambda.)
+	 * - You do not even have no declare a variable for the {@link Mortal} if you have no use for it within the lambda. In this case, use the other form of this
+	 * method which accepts a parameterless lambda.
 	 *
 	 * @param mortal      the {@link Mortal} to close when done.
 	 * @param tryFunction a function which receives the {@link Mortal} object and produces a result.
@@ -56,6 +57,8 @@ public interface Mortal extends AutoCloseable, Coherent
 	 * @param <R>         the type of the result.
 	 *
 	 * @return the result of the try-function.
+	 *
+	 * @see Debug#boundary(Runnable)
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function1<R,? super C> tryFunction )
 	{
@@ -67,9 +70,12 @@ public interface Mortal extends AutoCloseable, Coherent
 	}
 
 	/**
+	 * Performs a debugger-friendly {@code try-with-resources} which does not return a result and which does not make any use of the {@link Mortal} other than
+	 * destroying it at the end.
+	 * <p>
 	 * Same as {@link #tryGetWith(C, Function1)} but with a {@link Function0}, for situations where we want to create a {@link Mortal}, execute some code, and
 	 * then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
-	 * <p>
+	 *
 	 * @param mortal      the {@link Mortal} to close when done.
 	 * @param tryFunction a function which produces a result.
 	 * @param <C>         the type of the {@link Mortal}. (Must extend {@link Mortal}.)
@@ -86,11 +92,13 @@ public interface Mortal extends AutoCloseable, Coherent
 	}
 
 	/**
-	 * <p>Performs a debugger-friendly {@code try-with-resources} that does not return a result.</p>
+	 * Performs a debugger-friendly {@code try-with-resources} which does not return a result.
 	 *
 	 * @param mortal       the {@link Mortal} to close when done.
 	 * @param tryProcedure a {@link Procedure1} which receives the {@link Mortal} object and does something with it.
 	 * @param <C>          the type of the {@link Mortal}. (Must extend {@link Mortal}.)
+	 *
+	 * @see Debug#boundary(Runnable)
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure1<? super C> tryProcedure )
 	{
@@ -102,8 +110,11 @@ public interface Mortal extends AutoCloseable, Coherent
 	}
 
 	/**
-	 * Same as {@link #tryWith(C, Procedure1)} but with a {@link Procedure0}, for situations where we want to create a {@link Mortal}, execute some code, and
-	 * then destroy the {@link Mortal} but the code does not actually need to use the {@link Mortal}.
+	 * Performs a debugger-friendly {@code try-with-resources} which does not return a result and which does not make any use of the {@link Mortal} other than
+	 * destroying it at the end.
+	 * <p>
+	 * Same as {@link #tryWith(C, Procedure1)} except that it uses a {@link Procedure0}, for situations where we want to create a {@link Mortal}, execute some
+	 * code, and then destroy the {@link Mortal} but the code does not actually use the {@link Mortal}.
 	 *
 	 * @param mortal       the {@link Mortal} to close when done.
 	 * @param tryProcedure the {@link Procedure0} to execute.

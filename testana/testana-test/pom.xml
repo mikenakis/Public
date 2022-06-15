@@ -78,13 +78,6 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
-		<!-- See https://libraries.io/github/openCage/ListOfJavaNioFileSystems -->
-		<!--<dependency>-->
-		<!--<groupId>de.pfabulist.lindwurm</groupId>-->
-		<!--<artifactId>memoryfs</artifactId>-->
-		<!--<version>0.33.1</version>-->
-		<!--</dependency>-->
-
 	</dependencies>
 
 </project>

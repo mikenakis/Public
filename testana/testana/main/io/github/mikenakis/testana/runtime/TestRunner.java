@@ -59,13 +59,13 @@ public final class TestRunner
 		return testResult;
 	}
 
-	private static NonLeafTestResult runTestClass( TestClass testClass, Persistence persistence, Path userdir )
+	private static NonLeafTestResult runTestClass( TestClass testClass, Persistence persistence, Path userDir )
 	{
 		TestanaLog.report( indentation( 2 ) + "Test class " + testClass.projectType.getClassSourceLocation() );
 		List<TestMethodResult> childTestResults = new ArrayList<>();
 		for( TestMethod testMethod : testClass.testMethods() )
 		{
-			TestMethodResult testMethodResult = runTestMethod( testMethod, userdir );
+			TestMethodResult testMethodResult = runTestMethod( testMethod, userDir );
 			childTestResults.add( testMethodResult );
 		}
 		NonLeafTestResult result = new NonLeafTestResult( testClass.fullName(), childTestResults );

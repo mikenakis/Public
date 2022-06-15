@@ -6,6 +6,7 @@ import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.lifetime.AbstractMortalCoherent;
 import io.github.mikenakis.lifetime.Mortal;
 import io.github.mikenakis.lifetime.guard.DevelopmentLifeGuard;
+import io.github.mikenakis.lifetime.guard.LifeGuard;
 import io.github.mikenakis.lifetime.guard.MustBeAliveException;
 import io.github.mikenakis.testkit.TestKit;
 import org.junit.Test;
@@ -26,8 +27,11 @@ public class T04_LifeGuard
 			throw new AssertionError();
 	}
 
-	private static class TestClass extends AbstractMortalCoherent
+	private static final class TestClass extends AbstractMortalCoherent
 	{
+		private final LifeGuard lifeGuard = LifeGuard.of( this );
+		@Override protected LifeGuard lifeGuard() { return lifeGuard; }
+
 		TestClass( Coherence coherence )
 		{
 			super( coherence );

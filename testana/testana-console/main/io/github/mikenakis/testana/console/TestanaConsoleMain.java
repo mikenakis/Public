@@ -104,8 +104,8 @@ public class TestanaConsoleMain
 				showStructureOption.get(), showTestPlanOption.get(), noRunOption.get(), noSaveSwitch.get(), //
 				noModuleOrder.get() ? ModuleOrdering.None : ModuleOrdering.ByDependency, //
 				noClassOrder.get() ? ClassOrdering.None : ClassOrdering.ByDependency, //
-				noMethodOrder.get() ? MethodOrdering.None : MethodOrdering.ByNaturalOrder, //
-				noAncestryOrder.get() ? AncestryOrdering.None : AncestryOrdering.AncestorFirst );
+				noMethodOrder.get() ? MethodOrdering.Alphabetic : MethodOrdering.Natural, //
+				noAncestryOrder.get() ? AncestryOrdering.Backwards : AncestryOrdering.Normal );
 			if( !(boolean)loopOption.get() )
 				break;
 		}

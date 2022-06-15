@@ -12,9 +12,9 @@ import java.nio.file.Paths;
  */
 public class T03_Test
 {
-	public static String testMethodName = T03_Test.class.getSimpleName() + ".test()";
-
-	@Test public void test()
+	public static String deltaShortName = "delta()";
+	public static String deltaName = T03_Test.class.getSimpleName() + "." + deltaShortName;
+	@Test public void delta()
 	{
 		Path path = getWorkingDirectory();
 		String sourceFile = "main/" + T03_Test.class.getName().replace( ".", "/" ) + ".java";

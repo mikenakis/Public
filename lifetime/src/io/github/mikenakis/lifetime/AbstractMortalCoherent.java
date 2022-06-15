@@ -9,36 +9,36 @@ import io.github.mikenakis.lifetime.guard.LifeGuard;
  */
 public abstract class AbstractMortalCoherent extends AbstractCoherent implements Mortal.Defaults
 {
-	private final LifeGuard lifeGuard = LifeGuard.of( this );
-
 	protected AbstractMortalCoherent( Coherence coherence )
 	{
 		super( coherence );
 	}
 
-	@Override public boolean mustBeAliveAssertion()
-	{
-		assert mustBeReadableAssertion();
-		return lifeGuard.mustBeAliveAssertion();
-	}
+	protected abstract LifeGuard lifeGuard();
 
 	@Override public final void close()
 	{
 		assert mustBeAliveAssertion();
 		assert mustBeWritableAssertion();
 		onClose();
-		lifeGuard.close();
+		lifeGuard().close();
+	}
+
+	@Override public boolean mustBeAliveAssertion()
+	{
+		assert mustBeReadableAssertion();
+		return lifeGuard().mustBeAliveAssertion();
 	}
 
 	@Override protected boolean mustBeReadableAssertion()
 	{
-		assert lifeGuard.mustBeAliveAssertion();
+		assert lifeGuard().mustBeAliveAssertion();
 		return super.mustBeReadableAssertion();
 	}
 
 	@Override protected boolean mustBeWritableAssertion()
 	{
-		assert lifeGuard.mustBeAliveAssertion();
+		assert lifeGuard().mustBeAliveAssertion();
 		return super.mustBeWritableAssertion();
 	}
 
@@ -48,6 +48,6 @@ public abstract class AbstractMortalCoherent extends AbstractCoherent implements
 
 	@Override public String toString()
 	{
-		return lifeGuard.toString();
+		return lifeGuard().toString();
 	}
 }

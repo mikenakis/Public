@@ -9,21 +9,21 @@ import io.github.mikenakis.kit.functional.Procedure1;
  *
  * @author michael.gr
  */
-public interface MortalWrapper<T> extends Mortal.Defaults
+public interface MortalWrapper<T> extends Mortal
 {
 	static <C> void tryWith( MortalWrapper<C> mortalWrapper, Procedure1<? super C> procedure )
 	{
-		Mortal.tryWith( mortalWrapper, wrapper -> procedure.invoke( wrapper.getTarget() ) );
+		Mortal.tryWith( mortalWrapper, wrapper -> procedure.invoke( wrapper.target() ) );
 	}
 
 	static <R, C> R tryGetWith( MortalWrapper<C> mortalWrapper, Function1<R,? super C> function )
 	{
-		return Mortal.tryGetWith( mortalWrapper, wrapper -> function.invoke( wrapper.getTarget() ) );
+		return Mortal.tryGetWith( mortalWrapper, wrapper -> function.invoke( wrapper.target() ) );
 	}
 
-	T getTarget();
+	T target();
 
-	interface Defaults<T> extends MortalWrapper<T>
+	interface Defaults<T> extends MortalWrapper<T>, Mortal.Defaults
 	{
 	}
 
@@ -36,9 +36,9 @@ public interface MortalWrapper<T> extends Mortal.Defaults
 			return decoratedMortalWrapper();
 		}
 
-		@Override default T getTarget()
+		@Override default T target()
 		{
-			return decoratedMortalWrapper().getTarget();
+			return decoratedMortalWrapper().target();
 		}
 	}
 

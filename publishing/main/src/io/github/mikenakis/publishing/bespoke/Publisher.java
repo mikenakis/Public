@@ -4,6 +4,7 @@ import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.IntertwineFactory;
 import io.github.mikenakis.lifetime.AbstractMortalCoherent;
+import io.github.mikenakis.lifetime.guard.LifeGuard;
 import io.github.mikenakis.publishing.anycall.AnycallPublisher;
 import io.github.mikenakis.publishing.anycall.AnycallSubscription;
 
@@ -19,6 +20,8 @@ public final class Publisher<T> extends AbstractMortalCoherent
 		return new Publisher<>( coherence, interfaceType );
 	}
 
+	private final LifeGuard lifeGuard = LifeGuard.of( this, true );
+	@Override protected LifeGuard lifeGuard() { return lifeGuard; }
 	private final Class<T> interfaceType;
 	private final T entwiner;
 	private final AnycallPublisher<T> anycallPublisher = AnycallPublisher.of( coherence );

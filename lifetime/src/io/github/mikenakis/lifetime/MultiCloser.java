@@ -1,13 +1,16 @@
 package io.github.mikenakis.lifetime;
 
 import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.lifetime.guard.LifeGuard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MultiCloser extends AbstractMortalCoherent
+public final class MultiCloser extends AbstractMortalCoherent
 {
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
+	@Override protected LifeGuard lifeGuard() { return lifeGuard; }
 	private final List<Mortal> mortals = new ArrayList<>();
 
 	public MultiCloser( Coherence coherence, Mortal... mortals )

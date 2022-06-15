@@ -174,14 +174,11 @@ The home page of the project is:
 
 - TODO: expand the syntax of settings so that we can exclude folders in the source tree, like `.idea` and `.git`, which are now handled by hard-coded exclusion. Alternatively, parse `.gitignore`. (Uhm, probably not.)
 
-- TODO: further enhancements to the Testana test engine, that deviate from the JUnit standard:
+- TODO: introduce a `TestanaTestEngine`, which differs from JUnit:
 
     - Avoid creating a new instance of the test class prior to invoking each test method.
-
     - Get rid of `@Before` and `@After`: initialization should be done in the constructor and cleanup should be done 
       in `close()` if the test class `implements AutoCloseable`.
-
-- TODO: introduce a `TestanaTestEngine`, and make it have all the new functionality enabled by default. Then, make all of Testana's functionality optional in `JUnitTestEngine`, so that by default Testana's functionality is not applied to JUnit tests.
 
 - TODO: try determining the order of testing based on packages instead of individual classes, see if it makes any 
         interesting difference. For one thing, we will then be able to execute all classes within a package by 
@@ -211,6 +208,11 @@ The home page of the project is:
         - If A contains `new B()` but B does not contain `new A()` then the factory wins, so consider A as depending on B.
         - and so on.
 
+- <strike>TODO: Eliminate the test rig projects using an in-memory file system</strike> WILL-NOT-DO
+
+    - By using https://github.com/google/jimfs each testana test can create whatever test rig projects it needs in memory, so that the test rig projects do not have to exist in the source code repository as actual projects.
+    - We actually do not want this: the test rig projects must be regular projects so that we can use the IDE for editing them, with syntax coloring, code completion, error highlighting, refactoring, etc.
+
 - MVN-TODO-1: get the location of the local repository from the settings instead of assuming it is under .m2/repository!
 
       Path mavenSettingsPath = m2Path.resolve( "settings.xml" );
@@ -231,7 +233,7 @@ The home page of the project is:
         - Example: "could not get declared methods of 'org.scalatest.funsuite.AnyFunSuite':
           java.lang.NoClassDefFoundError: scala/Serializable"
           (Might need to clear the cache and the persistence to see this problem)
-
+          
 - <strike>TODO:</strike> Optimize the saving of each test's "last successful run" time.
   - As it stands right now, the entire timestamps file is written after each test class is run, which is somewhat wasteful.
   - I tried using a binary file for the last-successful-run times; either there was no improvement, or the improvement was so small as to be completely lost in the noise.

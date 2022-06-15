@@ -1,50 +1,44 @@
 package io.github.mikenakis.lifetime.guard;
 
 import io.github.mikenakis.coherence.AbstractCoherent;
-import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.lifetime.StatefulMortalCoherent;
 
 /**
  * A {@link LifeGuard} which contains an explicit open/closed state.
  *
  * @author michael.gr
  */
-public final class StatefulLifeGuard extends AbstractCoherent implements Mortal.Defaults
+public final class StatefulLifeGuard extends AbstractCoherent implements LifeGuard.Defaults, StatefulMortalCoherent.Defaults
 {
-	public static StatefulLifeGuard of( Coherence coherence, Mortal mortal )
+	public static StatefulLifeGuard of( Mortal mortal )
 	{
-		return of( coherence, 1, mortal, false );
+		return of( 1, mortal, false );
 	}
 
-	public static StatefulLifeGuard of( Coherence coherence, Mortal mortal, boolean collectStackTrace )
+	public static StatefulLifeGuard of(Mortal mortal, boolean collectStackTrace )
 	{
-		return of( coherence, 1, mortal, collectStackTrace );
+		return of( 1, mortal, collectStackTrace );
 	}
 
-	public static StatefulLifeGuard of( Coherence coherence, int framesToSkip, Mortal mortal, boolean collectStackTrace )
+	public static StatefulLifeGuard of( int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
-		return new StatefulLifeGuard( coherence, framesToSkip + 1, mortal, collectStackTrace );
+		return new StatefulLifeGuard( framesToSkip + 1, mortal, collectStackTrace );
 	}
 
 	private final LifeGuard lifeGuard;
 	private boolean closed;
 
-	private StatefulLifeGuard( Coherence coherence, int framesToSkip, Mortal mortal, boolean collectStackTrace )
+	private StatefulLifeGuard( int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
-		super( coherence );
+		super( mortal.coherence() );
 		lifeGuard = LifeGuard.of( framesToSkip + 1, mortal, collectStackTrace );
 	}
 
-	public boolean isClosed()
+	@Override public boolean isClosed()
 	{
 		assert mustBeReadableAssertion();
 		return closed;
-	}
-
-	public boolean isOpen()
-	{
-		assert mustBeReadableAssertion();
-		return !closed;
 	}
 
 	@Override public void close()

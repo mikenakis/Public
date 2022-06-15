@@ -10,12 +10,27 @@ import org.junit.Test;
  */
 public class T01_Test extends T02_Test
 {
-	public static String testMethodName = T01_Test.class.getSimpleName() + ".ClaireTest()";
+	public static String foxtrotName = T01_Test.class.getSimpleName() + "." + foxtrotShortName;
+	public static String echoName = T01_Test.class.getSimpleName() + "." + echoShortName;
 
-	@Test public void ClaireTest()
+	public static String alphaShortName = "alpha()";
+	public static String alphaName = T01_Test.class.getSimpleName() + "." + alphaShortName;
+	@Test public void alpha()
+	{
+	}
+
+	public static String charlieShortName = "charlie()";
+	public static String charlieName = T01_Test.class.getSimpleName() + "." + charlieShortName;
+	@Test public void charlie()
 	{
 		Claire claire = new Claire( " World!" );
 		String s = claire.doThatThing( "Hello," );
 		assert s.equals( "Hello, World!" );
+	}
+
+	public static String bravoShortName = "bravo()";
+	public static String bravoName = T01_Test.class.getSimpleName() + "." + bravoShortName;
+	@Test public void bravo()
+	{
 	}
 }

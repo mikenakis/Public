@@ -182,7 +182,7 @@ public final class P0InvocationBenchmark
 			MethodHandles.Lookup lookup = MethodHandles.lookup();
 			return lookup.unreflect( method );
 		} );
-		return ( arg1, arg2 ) -> Kit.invokeThrowableThrowingFunction( () -> (double)methodHandle.invokeExact( arg1, arg2 ) );
+		return ( arg1, arg2 ) -> Kit.invokeThrowingFunction( () -> (double)methodHandle.invokeExact( arg1, arg2 ) );
 	}
 
 	private static Invoker staticLambdaInvoker()
@@ -192,7 +192,7 @@ public final class P0InvocationBenchmark
 		MethodHandle targetMethod = Kit.unchecked( () -> lookup.findStatic( P0InvocationBenchmark.class, "invokableMethod", methodType ) );
 		CallSite callSite = Kit.unchecked( () -> LambdaMetafactory.metafactory( lookup, "invokeTheInvokable", MethodType.methodType( Invoker.class ), methodType, targetMethod, methodType ) );
 		MethodHandle methodHandle = callSite.getTarget();
-		return (Invoker)Kit.invokeThrowableThrowingFunction( () -> methodHandle.invoke() );
+		return (Invoker)Kit.invokeThrowingFunction( () -> methodHandle.invoke() );
 	}
 
 	private static Invoker instanceDirectInvoker( Invokable invokable )
@@ -214,7 +214,7 @@ public final class P0InvocationBenchmark
 			MethodHandles.Lookup lookup = MethodHandles.lookup();
 			return lookup.unreflect( method );
 		} );
-		return ( arg1, arg2 ) -> Kit.invokeThrowableThrowingFunction( () -> (double)methodHandle.invokeExact( invokable, arg1, arg2 ) );
+		return ( arg1, arg2 ) -> Kit.invokeThrowingFunction( () -> (double)methodHandle.invokeExact( invokable, arg1, arg2 ) );
 	}
 
 	private static Invoker instanceLambdaInvoker( Invokable invokable )
@@ -223,8 +223,9 @@ public final class P0InvocationBenchmark
 		MethodHandles.Lookup lookup = MethodHandles.lookup();
 		MethodType methodType = MethodType.methodType( double.class, int.class, double.class );
 		MethodHandle targetMethod = Kit.unchecked( () -> lookup.findVirtual( Invokable.class, "invoke", methodType ) );
-		CallSite callSite = Kit.unchecked( () -> LambdaMetafactory.metafactory( lookup, "invokeTheInvokable", MethodType.methodType( Invoker.class, Invokable.class ), methodType, targetMethod, methodType ) );
+		CallSite callSite = Kit.unchecked( () -> LambdaMetafactory.metafactory( lookup, "invokeTheInvokable", //
+			MethodType.methodType( Invoker.class, Invokable.class ), methodType, targetMethod, methodType ) );
 		MethodHandle methodHandle = callSite.getTarget().bindTo( invokable );
-		return (Invoker)Kit.invokeThrowableThrowingFunction( () -> methodHandle.invoke() );
+		return (Invoker)Kit.invokeThrowingFunction( () -> methodHandle.invoke() );
 	}
 }

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public final class ProjectModule
 {
-	private final ProjectStructure projectStructure;
+	public final ProjectStructure projectStructure;
 	private final DiscoveryModule discoveryModule;
 	private final ClassLoader classLoader;
 	private final ByteCodeLoader classAndByteCodeLoader;

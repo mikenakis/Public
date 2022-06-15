@@ -60,6 +60,16 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 		return true;
 	}
 
+	@Override public Optional<E> peek()
+	{
+		assert mustBeWritableAssertion();
+		if( size == 0 )
+			return Optional.empty();
+		Item item = head;
+		assert item != null;
+		return Optional.of( item.element );
+	}
+
 	@Override public Optional<E> tryDequeue()
 	{
 		assert mustBeWritableAssertion();

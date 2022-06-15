@@ -16,8 +16,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * JUnit {@link TestClass}.
@@ -38,62 +36,76 @@ class JunitTestClass extends TestClass
 		super( projectType );
 		this.junitTestEngine = junitTestEngine;
 		ignored = Kit.reflect.hasAnnotation( projectType.javaClass(), "org.junit.Ignore" );
-
 		Class<?> javaClass = projectType.javaClass();
 		assert !Modifier.isAbstract( javaClass.getModifiers() );
-		Optional<Constructor<?>> constructor = JunitTestEngine.tryGetPublicParameterlessConstructor( javaClass );
-		defaultConstructor = constructor.orElseThrow();
+		defaultConstructor = JunitTestEngine.tryGetPublicParameterlessConstructor( javaClass ).orElseThrow();
 		Collection<JunitTestMethod> mutableTestMethods = new HashSet<>();
 		Collection<Method> mutableBeforeMethods = new ArrayList<>();
 		Collection<Method> mutableAfterMethods = new ArrayList<>();
 		collectTestMethodsRecursive( javaClass, 0, mutableTestMethods, mutableBeforeMethods, mutableAfterMethods );
-		//assert !mutableTestMethods.isEmpty();
-		List<JunitTestMethod> sortableTestMethods = new ArrayList<>( mutableTestMethods );
+		assert !mutableTestMethods.isEmpty();
 		beforeJavaMethods = mutableBeforeMethods;
 		afterJavaMethods = mutableAfterMethods;
+		testMethods = sort( mutableTestMethods, methodOrdering, ancestryOrdering );
+	}
 
+	private List<JunitTestMethod> sort( Collection<JunitTestMethod> mutableTestMethods, MethodOrdering methodOrdering, AncestryOrdering ancestryOrdering )
+	{
+		List<JunitTestMethod> sortableTestMethods = new ArrayList<>( mutableTestMethods );
 		Comparator<JunitTestMethod> comparator = Comparator.comparing( method -> method.javaMethod.getName() );
+		comparator = applyAncestryOrdering( comparator, ancestryOrdering );
+		comparator = applyMethodOrdering( comparator, methodOrdering, projectType, sortableTestMethods );
+		sortableTestMethods.sort( comparator );
+		sortableTestMethods.sort( (a,b) -> //
+		{
+			int d = Integer.compare( a.derivationDepth, b.derivationDepth );
+			if( ancestryOrdering == AncestryOrdering.Normal )
+			    d = -d;
+			if( d != 0 )
+				return d;
+			if( methodOrdering == MethodOrdering.Natural )
+				d = Integer.compare( a.methodIndex, b.methodIndex );
+			else
+				d = a.javaMethod.getName().compareTo( b.javaMethod.getName() );
+			return d;
+		} );
+		return sortableTestMethods;
+	}
+
+	private static Comparator<JunitTestMethod> applyMethodOrdering( Comparator<JunitTestMethod> comparator, MethodOrdering methodOrdering, ProjectType projectType, List<JunitTestMethod> sortableTestMethods )
+	{
 		switch( methodOrdering )
 		{
-			case None:
-				break;
-			case ByNaturalOrder:
-				comparator = getNaturalMethodOrderComparator( projectType, mutableTestMethods.size(), sortableTestMethods ).thenComparing( comparator );
-				break;
+			case Alphabetic:
+				return comparator;
+			case Natural:
+				return new NaturalOrderMethodComparator( /*method -> //
+				{
+					int testMethodCount = junitTestMethods.size();
+					Class<?> declaringClass = method.javaMethod.getDeclaringClass();
+					Optional<ProjectType> declaringProjectType = projectType.projectModule.tryGetProjectTypeByName( declaringClass.getTypeName() );
+					int index = declaringProjectType.orElseThrow().getMethodIndex( method.javaMethod.getName() );
+					assert index >= 0 && index < testMethodCount;
+					return index;
+				}*/ ).thenComparing( comparator );
 			default:
 				assert false;
+				return null;
 		}
+	}
+
+	private static Comparator<JunitTestMethod> applyAncestryOrdering( Comparator<JunitTestMethod> comparator, AncestryOrdering ancestryOrdering )
+	{
 		switch( ancestryOrdering )
 		{
-			case None:
-				break;
-			case AncestorFirst:
-				comparator = Comparator.<JunitTestMethod>comparingInt( method -> -method.derivationDepth ).thenComparing( comparator );
-				break;
+			case Backwards:
+				return comparator;
+			case Normal:
+				return Comparator.<JunitTestMethod>comparingInt( method -> -method.derivationDepth ).thenComparing( comparator );
 			default:
 				assert false;
+				return null;
 		}
-		if( sortableTestMethods.size() > 1 )
-			Kit.get( true );
-		sortableTestMethods.sort( comparator );
-		testMethods = sortableTestMethods;
-	}
-
-	private Comparator<JunitTestMethod> getNaturalMethodOrderComparator( ProjectType projectType, int testMethodCount, Collection<JunitTestMethod> junitTestMethods )
-	{
-		return new NaturalOrderMethodComparator( /*method -> //
-		{
-			Class<?> declaringClass = method.javaMethod.getDeclaringClass();
-			Optional<ProjectType> declaringProjectType = projectType.projectModule.tryGetProjectTypeByName( declaringClass.getTypeName() );
-			int index = declaringProjectType.orElseThrow().getMethodIndex( method.javaMethod.getName() );
-			assert index >= 0 && index < testMethodCount;
-			return index;
-		}*/ );
-	}
-
-	private static <T> Optional<Comparator<T>> addComparator( Optional<Comparator<T>> comparator, Comparator<T> additionalComparator )
-	{
-		return Optional.of( comparator.map( additionalComparator::thenComparing ).orElse( additionalComparator ) );
 	}
 
 	private void collectTestMethodsRecursive( Class<?> javaClass, int derivationDepth, Collection<JunitTestMethod> mutableJunitTestMethods, //
@@ -123,9 +135,7 @@ class JunitTestClass extends TestClass
 					Log.warning( "Test method " + javaClass.getName() + "." + javaMethod.getName() + " should accept no arguments and return void." );
 					continue;
 				}
-				Optional<ProjectType> declaringProjectType = projectType.projectModule.tryGetProjectTypeByName( javaClass.getTypeName() );
-				int methodIndex = declaringProjectType.map( t -> t.getMethodIndex( javaMethod.getName() ) ).orElse( 0 );
-				JunitTestMethod junitTestMethod = new JunitTestMethod( this, javaMethod, ignored, derivationDepth, methodIndex );
+				JunitTestMethod junitTestMethod = getJunitTestMethod( javaClass, derivationDepth, javaMethod );
 				Kit.collection.add( mutableJunitTestMethods, junitTestMethod );
 			}
 			else if( isBefore )
@@ -149,6 +159,13 @@ class JunitTestClass extends TestClass
 		}
 	}
 
+	private JunitTestMethod getJunitTestMethod( Class<?> javaClass, int derivationDepth, Method javaMethod )
+	{
+		ProjectType declaringProjectType = projectType.projectModule.projectStructure.getProjectTypeByName( javaClass.getTypeName() );
+		int methodIndex = declaringProjectType.getMethodIndex( javaMethod.getName() );
+		return new JunitTestMethod( this, javaMethod, ignored, derivationDepth, methodIndex );
+	}
+
 	private static boolean isOfSuitableSignature( Method javaMethod )
 	{
 		if( javaMethod.getParameterCount() != 0 )
@@ -165,7 +182,7 @@ class JunitTestClass extends TestClass
 
 	@Override public Collection<TestMethod> testMethods()
 	{
-		return testMethods.stream().map( c -> (TestMethod)c ).collect( Collectors.toList() );
+		return List.copyOf( testMethods );
 	}
 
 	@Override public String toString()

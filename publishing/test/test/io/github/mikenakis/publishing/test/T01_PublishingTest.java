@@ -7,9 +7,6 @@ import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.kit.ref.Ref;
 import io.github.mikenakis.lifetime.Mortal;
 import io.github.mikenakis.publishing.bespoke.Publisher;
-import io.github.mikenakis.testkit.TestKit;
-import io.github.mikenakis.tyraki.exceptions.DuplicateKeyException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -79,19 +76,6 @@ public class T01_PublishingTest
 				publisher.allSubscribers().invoke(); //2
 			} );
 			assert issueCount.value == 2;
-		} );
-	}
-
-	@Ignore
-	@Test public void subscribing_twice_fails()
-	{
-		Mortal.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
-		{
-			Ref<Integer> issueCount = Ref.of( 0 );
-			Procedure0 subscriber = new Subscriber( issueCount );
-			Mortal.tryWith( publisher.addSubscription( subscriber ), () -> //
-				TestKit.expect( DuplicateKeyException.class, () -> //
-					publisher.addSubscription( subscriber ) ) );
 		} );
 	}
 

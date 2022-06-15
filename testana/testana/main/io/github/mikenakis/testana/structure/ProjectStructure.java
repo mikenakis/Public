@@ -119,6 +119,13 @@ public final class ProjectStructure
 		return projectModuleMap.values();
 	}
 
+	public ProjectType getProjectTypeByName( String typeName )
+	{
+		List<ProjectType> projectTypes = projectModules().stream().flatMap( m -> m.tryGetProjectTypeByName( typeName ).stream() ).toList();
+		assert projectTypes.size() == 1;
+		return projectTypes.get( 0 );
+	}
+
 	public int typeCount()
 	{
 		return projectModuleMap.values().stream().map( m -> m.getProjectTypes().size() ).reduce( 0, ( a, b ) -> a + b );

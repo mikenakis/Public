@@ -49,7 +49,7 @@ public class T02_TestRunner
 		URL url = getClass().getResource( "/sample_test_resource_file.txt" );
 		assert url != null;
 		Path path = Kit.classLoading.getPathFromUrl( url );
-		List<String> lines = Kit.unchecked( () -> Files.readAllLines(path) );
+		List<String> lines = Kit.unchecked( () -> Files.readAllLines( path ) );
 		assert lines.size() == 1;
 		assert lines.get( 0 ).equals( "sample test resource content" );
 	}
@@ -67,13 +67,13 @@ public class T02_TestRunner
 	@Test public void full_run_is_full()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 		TestResult testResult = TestRunner.run( testPlan, persistence );
 		assert testResult.ignoredCount() == 0;
 		assert testResult.failureCount() == 0;
-		assert testResult.successCount() == 4;
-		assert testResult.totalCount() == 4;
+		assert testResult.successCount() == 8;
+		assert testResult.totalCount() == 8;
 		assert testResult.upToDateCount() == 0;
 	}
 

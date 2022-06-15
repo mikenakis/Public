@@ -35,7 +35,7 @@ class MethodHandleUntwiner<T>
 		{
 			MethodHandleKey<T> key = (MethodHandleKey<T>)key0;
 			MethodHandle boundMethodHandle = Kit.map.get( boundMethodHandles, key );
-			return Kit.invokeThrowableThrowingFunction( () -> boundMethodHandle.invokeExact( arguments ) );
+			return Kit.invokeThrowingFunction( () -> boundMethodHandle.invokeExact( arguments ) );
 		}
 	};
 }

@@ -11,7 +11,7 @@ public final class ConcreteMortalWrapper<T> implements MortalWrapper.Defaults<T>
 		this.delegee = delegee;
 	}
 
-	@Override public T getTarget()
+	@Override public T target()
 	{
 		return target;
 	}

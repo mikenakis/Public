@@ -102,7 +102,7 @@ public class T01_TestPlanBuilder
 		persistence.setTimeOfLastRun( T01_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T02_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T03_Test.class.getName(), T1 );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
@@ -114,7 +114,7 @@ public class T01_TestPlanBuilder
 	@Test public void Empty_Persistence_Runs_Everything()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
 		List<Node> nodes = collectNodes( testPlan );
@@ -129,7 +129,7 @@ public class T01_TestPlanBuilder
 		persistence.setTimeOfLastRun( T01_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T02_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T03_Test.class.getName(), T1 );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		setLastModifiedTime( structure, T01_Test.class, T2 );
 		setLastModifiedTime( structure, T03_Test.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
@@ -146,7 +146,7 @@ public class T01_TestPlanBuilder
 		persistence.setTimeOfLastRun( T01_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T02_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T03_Test.class.getName(), T1 );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		setLastModifiedTime( structure, T01_Test.class, T1 );
 		setLastModifiedTime( structure, T02_Test.class, T1 );
 		setLastModifiedTime( structure, T03_Test.class, T1 );
@@ -166,7 +166,7 @@ public class T01_TestPlanBuilder
 		persistence.setTimeOfLastRun( T01_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T02_Test.class.getName(), T2 );
 		persistence.setTimeOfLastRun( T03_Test.class.getName(), T2 );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		setLastModifiedTime( structure, Alice.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
@@ -183,7 +183,7 @@ public class T01_TestPlanBuilder
 		persistence.setTimeOfLastRun( T01_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T02_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T03_Test.class.getName(), T1 );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		setLastModifiedTime( structure, Alice.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
 
@@ -200,7 +200,7 @@ public class T01_TestPlanBuilder
 		persistence.setTimeOfLastRun( T01_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T02_Test.class.getName(), T1 );
 		persistence.setTimeOfLastRun( T03_Test.class.getName(), T1 );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		setLastModifiedTime( structure, Alice.class, T2 );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.ByDependency );
 
@@ -211,24 +211,40 @@ public class T01_TestPlanBuilder
 			new Node( T03_Test.class.getName(), NoRunBecauseUpToDateIntent.INSTANCE ) ) );
 	}
 
-	@Test public void Order_of_Test_Method_Execution_is_Alphabetic_By_Default()
+	@Test public void Order_of_Test_Method_Execution_is_Alphabetic_and_Backwards_By_Default()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.None );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Backwards );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
-
 		List<String> names = collectMethodNames( testPlan );
-		assert names.equals( List.of( "T01_Test.ClaireTest()", "T01_Test.ZAliceTest()", "T02_Test.ZAliceTest()", "T03_Test.test()" ) );
+		assert names.equals( List.of( T01_Test.alphaName, T01_Test.bravoName, T01_Test.charlieName, T01_Test.echoName, T01_Test.foxtrotName, T02_Test.echoName, T02_Test.foxtrotName, T03_Test.deltaName ) );
 	}
 
-	@Test public void Order_of_Test_Method_Execution_is_by_Inheritance_When_Run_Ancestors_First_Is_Enabled()
+	@Test public void Order_of_Test_Method_Execution_is_Natural_when_selected()
 	{
 		Persistence persistence = new Persistence( null, true, false );
-		ProjectStructure structure = createStructure( MethodOrdering.None, AncestryOrdering.AncestorFirst );
+		ProjectStructure structure = createStructure( MethodOrdering.Natural, AncestryOrdering.Backwards );
 		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
-
 		List<String> names = collectMethodNames( testPlan );
-		assert names.equals( List.of( "T01_Test.ZAliceTest()", "T01_Test.ClaireTest()", "T02_Test.ZAliceTest()", "T03_Test.test()" ) );
+		assert names.equals( List.of( T01_Test.alphaName, T01_Test.charlieName, T01_Test.bravoName, T01_Test.foxtrotName, T01_Test.echoName, T02_Test.foxtrotName, T02_Test.echoName, T03_Test.deltaName ) );
+	}
+
+	@Test public void Order_of_Test_Method_Execution_is_by_Inheritance_when_selected()
+	{
+		Persistence persistence = new Persistence( null, true, false );
+		ProjectStructure structure = createStructure( MethodOrdering.Alphabetic, AncestryOrdering.Normal );
+		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
+		List<String> names = collectMethodNames( testPlan );
+		assert names.equals( List.of( T01_Test.echoName, T01_Test.foxtrotName, T01_Test.alphaName, T01_Test.bravoName, T01_Test.charlieName, T02_Test.echoName, T02_Test.foxtrotName, T03_Test.deltaName ) );
+	}
+
+	@Test public void Order_of_Test_Method_Execution_is_Natural_and_by_Inheritance_when_selected()
+	{
+		Persistence persistence = new Persistence( null, true, false );
+		ProjectStructure structure = createStructure( MethodOrdering.Natural, AncestryOrdering.Normal );
+		TestPlan testPlan = TestPlanBuilder.build( persistence, structure, ModuleOrdering.None, ClassOrdering.None );
+		List<String> names = collectMethodNames( testPlan );
+		assert names.equals( List.of( T01_Test.foxtrotName, T01_Test.echoName, T01_Test.alphaName, T01_Test.charlieName, T01_Test.bravoName, T02_Test.foxtrotName, T02_Test.echoName, T03_Test.deltaName ) );
 	}
 
 	private static void setLastModifiedTime( ProjectStructure projectStructure, Class<?> javaClass, Instant lastModifiedTime )

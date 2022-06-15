@@ -10,12 +10,18 @@ import org.junit.Test;
  */
 public class T02_Test
 {
-	public static String testMethodName = T02_Test.class.getSimpleName() + ".ZAliceTest()";
-
-	@Test public void ZAliceTest()
+	public static String foxtrotShortName = "foxtrot()";
+	public static String foxtrotName = T02_Test.class.getSimpleName() + "." + foxtrotShortName;
+	@Test public void foxtrot()
 	{
 		Alice claire = new Alice( " World!" );
 		String s = claire.doYourThing( "Hello," );
 		assert s.equals( "Hello, World!" );
+	}
+
+	public static String echoShortName = "echo()";
+	public static String echoName = T02_Test.class.getSimpleName() + "." + echoShortName;
+	@Test public void echo()
+	{
 	}
 }

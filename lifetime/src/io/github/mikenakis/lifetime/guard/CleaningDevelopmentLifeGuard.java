@@ -17,7 +17,7 @@ public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 		return new CleaningDevelopmentLifeGuard( mortal, stackTrace );
 	}
 
-	private static final Cleaner cleaner = Cleaner.create(); //this must be static, or else the tests will suffer a huge performance penalty! See https://stackoverflow.com/q/46697432/773113
+	private static final Cleaner cleaner = Cleaner.create(); //PEARL: this must be static, or there will be a huge performance penalty! See https://stackoverflow.com/q/46697432/773113
 
 	private final Class<? extends Mortal> mortalClass;
 	private final Optional<StackWalker.StackFrame[]> stackTrace;

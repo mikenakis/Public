@@ -298,19 +298,29 @@ public final class Kit
 	 */
 	public static void runGarbageCollection()
 	{
-		// TODO: replace this loop of an arbitrary number of iterations with a more structured approach.
-		for( int i = 0; i < 10; i++ )
+		WeakReference<Object> ref = allocateWeakReference();
+		Runtime.getRuntime().gc();
+		Runtime.getRuntime().runFinalization();
+		for( ; ; )
 		{
-			WeakReference<Object> ref = new WeakReference<>( new Object() );
-			for( ; ; )
-			{
-				Thread.yield();
-				Runtime.getRuntime().gc();
-				Runtime.getRuntime().runFinalization();
-				if( ref.get() == null )
-					break;
-			}
+			Thread.yield();
+			if( ref.get() == null )
+				break;
 		}
+	}
+
+	private static final AtomicReference<Object> oldObjectRef = new AtomicReference<>( allocateObject() );
+
+	private static WeakReference<Object> allocateWeakReference()
+	{
+		Object newObject = allocateObject();
+		Object oldObject = oldObjectRef.getAndSet( newObject );
+		return new WeakReference<>( oldObject );
+	}
+
+	private static Object allocateObject()
+	{
+		return new Object();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -775,8 +785,8 @@ public final class Kit
 		}
 
 		/**
-		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}. The difference between this function and {@link
-		 * StringBuilder#append(Object)} is that this function treats {@link String} differently: strings are output escaped and surrounded with quotes.
+		 * Appends the string representation of an {@link Object} to a {@link StringBuilder}. The difference between this function and
+		 * {@link StringBuilder#append(Object)} is that this function treats {@link String} differently: strings are output escaped and surrounded with quotes.
 		 *
 		 * @param stringBuilder the StringBuilder to append to.
 		 * @param object        the object whose string representation is to be appended to the StringBuilder.
@@ -811,7 +821,7 @@ public final class Kit
 
 		/**
 		 * Splits a string in parts using a given character as delimiter.
-		 *
+		 * <p>
 		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
@@ -826,7 +836,7 @@ public final class Kit
 
 		/**
 		 * Splits a string in parts using a given character as delimiter.
-		 *
+		 * <p>
 		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
@@ -842,7 +852,7 @@ public final class Kit
 
 		/**
 		 * Splits a string in parts using a given character as delimiter.
-		 *
+		 * <p>
 		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
@@ -858,7 +868,7 @@ public final class Kit
 
 		/**
 		 * Splits a string in parts using a given character as delimiter.
-		 *
+		 * <p>
 		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
 		 *
 		 * @param stringToSplit the string to split.
@@ -2152,6 +2162,7 @@ public final class Kit
 		p.invoke();
 	}
 
+	//TODO: get rid of.
 	public interface ThrowableThrowingFunction<R, E extends Throwable>
 	{
 		R invoke() throws E;
@@ -2159,6 +2170,7 @@ public final class Kit
 
 	/**
 	 * Invokes a given function declared with {@code throws Throwable}.
+	 * TODO: get rid of.
 	 * <p>
 	 * PEARL: just to keep things interesting, Java does not only support checked exceptions, it even allows a method to be declared with {@code throws
 	 * Throwable}, in which case the caller is forced to somehow do something about the declared {@code Throwable}, despite the fact that {@link Throwable} is
@@ -2172,7 +2184,7 @@ public final class Kit
 	 *
 	 * @return the result of the function.
 	 */
-	public static <R, E extends Throwable> R invokeThrowableThrowingFunction( ThrowableThrowingFunction<R,E> function )
+	public static <R, E extends Throwable> R invokeThrowingFunction( ThrowableThrowingFunction<R,E> function )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowableThrowingFunction<R,RuntimeException> f = (ThrowableThrowingFunction<R,RuntimeException>)function;
 		return f.invoke();
@@ -2331,9 +2343,9 @@ public final class Kit
 		}
 
 		/**
-		 * Bhaskara I's sine approximation formula.
-		 * see <a href="https://en.wikipedia.org/wiki/Bhaskara_I%27s_sine_approximation_formula">https://en.wikipedia.org/wiki/Bhaskara_I%27s_sine_approximation_formula</a>
-		 * this is SLOWER than Math.sin() by a factor of almost 2
+		 * Bhaskara I's sine approximation formula. This is SLOWER than Math.sin() by a factor of almost 2.
+		 * <p>
+		 * see <a href="https://en.wikipedia.org/wiki/Bhaskara_I%27s_sine_approximation_formula">Wikipedia: Bhaskara I's sine approximation formula</a>
 		 */
 		public static double sin_bhaskara1( double x )
 		{
@@ -2343,9 +2355,9 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of sin(x) using Milian's method.
-		 * see <a href="https://stackoverflow.com/a/28050328/773113">https://stackoverflow.com/a/28050328/773113</a>
-		 * This version this is FASTER than Math.sin() by a factor of more than 2 and is accurate to about 1%.
+		 * Computes an approximation of sin(x) using Milian's method. This is accurate to about 1% and FASTER than Math.sin() by a factor of more than 2.
+		 * <p>
+		 * see <a href="https://stackoverflow.com/a/28050328/773113">https://stackoverflow.com/a/28050328/773113</a>.
 		 */
 		public static double sin/*_milian*/( double x )
 		{
@@ -2358,9 +2370,9 @@ public final class Kit
 		}
 
 		/**
-		 * Computes an approximation of cos(x). using Milian's method.
+		 * Computes an approximation of cos(x). using Milian's method. This is accurate to about 1% and FASTER than Math.cos() by a factor of more than 2.
+		 * <p>
 		 * see <a href="https://stackoverflow.com/a/28050328/773113">https://stackoverflow.com/a/28050328/773113</a>
-		 * this is FASTER than Math.cos() by a factor of more than 2 and is accurate to about 1%.
 		 */
 		public static double cos/*_milian*/( double x )
 		{
@@ -2987,7 +2999,7 @@ public final class Kit
 				resultRef.value = function0.invoke();
 				countDownLatch.countDown();
 			} );
-			for( ;; )
+			for( ; ; )
 			{
 				if( unchecked( () -> countDownLatch.await( postAndWaitTimeout.toMillis(), TimeUnit.MILLISECONDS ) ) )
 					break;

@@ -3,8 +3,10 @@ package io.github.mikenakis.publishing.anycall;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.MethodKey;
+import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.lifetime.AbstractMortalCoherent;
+import io.github.mikenakis.lifetime.guard.LifeGuard;
 import io.github.mikenakis.tyraki.MutableCollection;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;
 
@@ -22,12 +24,15 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 		return new AnycallPublisher<>( coherence );
 	}
 
+	private final LifeGuard lifeGuard = LifeGuard.of( this );
 	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( coherence ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
 
 	private AnycallPublisher( Coherence coherence )
 	{
 		super( coherence );
 	}
+
+	@Override protected LifeGuard lifeGuard() { return lifeGuard; }
 
 	public AnycallSubscription<T> addSubscription( Anycall<T> subscriber )
 	{
@@ -50,9 +55,11 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 		if( subscriptions.nonEmpty() )
 		{
 			Log.warning( subscriptions.size() + "  subscriptions still open: " );
-			for( var subscription : subscriptions )
-				Log.warning( "    " + subscription );
-			subscriptions.clear(); //forget them so that their lifeguards will raise warnings
+			for( AnycallSubscription<T> subscription : subscriptions )
+				Log.warning( "    " + Kit.identityString( subscription ) + ": " + subscription.toString() );
+			//forget them and run garbage collection so that their lifeguards will raise warnings
+			subscriptions.clear();
+			Kit.runGarbageCollection();
 		}
 		super.onClose();
 	}
