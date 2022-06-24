@@ -3,8 +3,9 @@ package io.github.mikenakis.publishing.bespoke;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.IntertwineFactory;
-import io.github.mikenakis.lifetime.AbstractMortalCoherent;
-import io.github.mikenakis.lifetime.guard.LifeGuard;
+import io.github.mikenakis.live.AbstractMortalCoherent;
+import io.github.mikenakis.live.Live;
+import io.github.mikenakis.live.guard.LifeGuard;
 import io.github.mikenakis.publishing.anycall.AnycallPublisher;
 import io.github.mikenakis.publishing.anycall.AnycallSubscription;
 
@@ -33,15 +34,15 @@ public final class Publisher<T> extends AbstractMortalCoherent
 		entwiner = IntertwineFactory.instance.getIntertwine( interfaceType ).newEntwiner( anycallPublisher.allSubscribers() );
 	}
 
-	public Subscription<T> addSubscription( T subscriber )
+	public Live<Subscription<T>> addSubscription( T subscriber )
 	{
 		assert mustBeWritableAssertion();
 		Anycall<T> untwiner = IntertwineFactory.instance.getIntertwine( interfaceType ).newUntwiner( subscriber );
-		AnycallSubscription<T> anycallSubscription = anycallPublisher.addSubscription( untwiner );
-		return new Subscription<>( this, subscriber, anycallSubscription );
+		Live<AnycallSubscription<T>> anycallSubscription = anycallPublisher.addSubscription( untwiner );
+		return Subscription.of( this, subscriber, anycallSubscription );
 	}
 
-	public AnycallSubscription<T> addAnycallSubscription( Anycall<T> subscriber )
+	public Live<AnycallSubscription<T>> addAnycallSubscription( Anycall<T> subscriber )
 	{
 		return anycallPublisher.addSubscription( subscriber );
 	}

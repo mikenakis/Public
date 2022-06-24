@@ -6,7 +6,7 @@ import io.github.mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.BooleanFunction2;
-import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Objects;

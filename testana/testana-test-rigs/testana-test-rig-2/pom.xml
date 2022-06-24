@@ -27,7 +27,6 @@
 			<groupId>mikenakis</groupId>
 			<artifactId>testkit</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>

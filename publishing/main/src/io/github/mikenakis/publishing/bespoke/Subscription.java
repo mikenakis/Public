@@ -1,7 +1,9 @@
 package io.github.mikenakis.publishing.bespoke;
 
 import io.github.mikenakis.coherence.AbstractCoherent;
-import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.coherence.Coherent;
+import io.github.mikenakis.live.Live;
+import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.publishing.anycall.AnycallSubscription;
 
 /**
@@ -9,32 +11,41 @@ import io.github.mikenakis.publishing.anycall.AnycallSubscription;
  *
  * @author michael.gr
  */
-public class Subscription<T> extends AbstractCoherent implements Mortal.Defaults
+public interface Subscription<T> extends Coherent
 {
-	private final Publisher<T> publisher;
-	private final T subscriber;
-	private final AnycallSubscription<T> anycallSubscription;
-
-	Subscription( Publisher<T> publisher, T subscriber, AnycallSubscription<T> anycallSubscription )
+	static <T> Live<Subscription<T>> of( Publisher<T> publisher, T subscriber, Live<AnycallSubscription<T>> anycallSubscription )
 	{
-		super( publisher.coherence() );
-		this.publisher = publisher;
-		this.subscriber = subscriber;
-		this.anycallSubscription = anycallSubscription;
-	}
+		class Implementation extends AbstractCoherent implements Subscription<T>, Mortal.Defaults
+		{
+			private final Publisher<T> publisher;
+			private final T subscriber;
+			private final Live<AnycallSubscription<T>> anycallSubscription;
 
-	@Override public String toString()
-	{
-		return super.toString() + " publisher: " + publisher + " subscriber: " + subscriber;
-	}
+			private Implementation( Publisher<T> publisher, T subscriber, Live<AnycallSubscription<T>> anycallSubscription )
+			{
+				super( publisher.coherence() );
+				this.publisher = publisher;
+				this.subscriber = subscriber;
+				this.anycallSubscription = anycallSubscription;
+			}
 
-	@Override public boolean mustBeAliveAssertion()
-	{
-		return anycallSubscription.mustBeAliveAssertion();
-	}
+			@Override public String toString()
+			{
+				return super.toString() + " publisher: " + publisher + " subscriber: " + subscriber;
+			}
 
-	@Override public void close()
-	{
-		anycallSubscription.close();
+			@Override public boolean mustBeAliveAssertion()
+			{
+				return anycallSubscription.mustBeAliveAssertion();
+			}
+
+			@Override public void close()
+			{
+				anycallSubscription.close();
+			}
+		}
+
+		var result = new Implementation( publisher, subscriber, anycallSubscription );
+		return Live.of( result, result::close );
 	}
 }

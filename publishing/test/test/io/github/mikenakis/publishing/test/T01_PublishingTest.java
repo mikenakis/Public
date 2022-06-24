@@ -5,7 +5,7 @@ import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.kit.ref.Ref;
-import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.publishing.bespoke.Publisher;
 import org.junit.Test;
 

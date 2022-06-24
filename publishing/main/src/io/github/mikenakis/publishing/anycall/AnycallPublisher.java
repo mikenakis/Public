@@ -5,8 +5,9 @@ import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.MethodKey;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.logging.Log;
-import io.github.mikenakis.lifetime.AbstractMortalCoherent;
-import io.github.mikenakis.lifetime.guard.LifeGuard;
+import io.github.mikenakis.live.AbstractMortalCoherent;
+import io.github.mikenakis.live.Live;
+import io.github.mikenakis.live.guard.LifeGuard;
 import io.github.mikenakis.tyraki.MutableCollection;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;
 
@@ -34,12 +35,12 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 
 	@Override protected LifeGuard lifeGuard() { return lifeGuard; }
 
-	public AnycallSubscription<T> addSubscription( Anycall<T> subscriber )
+	public Live<AnycallSubscription<T>> addSubscription( Anycall<T> subscriber )
 	{
 		assert mustBeAliveAssertion();
 		assert mustBeWritableAssertion();
-		var subscription = new AnycallSubscription<>( this, subscriber );
-		subscriptions.add( subscription );
+		var subscription = AnycallSubscription.of( this, subscriber );
+		subscriptions.add( subscription.target() );
 		return subscription;
 	}
 
@@ -73,7 +74,7 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 
 	private Optional<Object> anycall( MethodKey<T> key, Object[] arguments )
 	{
-		for( Anycall<T> subscriber : subscriptions.map( subscription -> subscription.subscriber ).toList() )
+		for( Anycall<T> subscriber : subscriptions.map( subscription -> subscription.subscriber() ).toList() )
 			//Kit.trySwallow( () -> // TODO: revise the purposefulness of trySwallow() here. (Or everywhere, for that matter.)
 			{
 				Object result = subscriber.anycall( key, arguments );

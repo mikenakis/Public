@@ -3,7 +3,7 @@ package io.github.mikenakis.tyraki;
 import io.github.mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
-import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.tyraki.immutable.ImmutableCollections;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;
 

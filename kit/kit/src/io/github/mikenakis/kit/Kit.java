@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
+import java.lang.management.ManagementFactory;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
@@ -294,19 +295,21 @@ public final class Kit
 	/**
 	 * Runs a full garbage collection.
 	 * <p>
-	 * Adapted from <a href="https://stackoverflow.com/a/6915221/773113">Stack Overflow: Forcing Garbage Collection in Java?</a>
+	 * From <a href="https://stackoverflow.com/a/72694056/773113">Stack Overflow: How to force garbage collection in Java?</a>
 	 */
 	public static void runGarbageCollection()
 	{
-		WeakReference<Object> ref = allocateWeakReference();
-		Runtime.getRuntime().gc();
-		Runtime.getRuntime().runFinalization();
-		for( ; ; )
-		{
-			Thread.yield();
-			if( ref.get() == null )
-				break;
-		}
+	    long freeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+	    for( ; ; )
+	    {
+	        Runtime.getRuntime().gc();
+	        Runtime.getRuntime().runFinalization();
+	        unchecked( () -> Thread.sleep( 100 ) );
+	        long newFreeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+	        if( newFreeMemory == freeMemory )
+	            break;
+	        freeMemory = newFreeMemory;
+	    }
 	}
 
 	private static final AtomicReference<Object> oldObjectRef = new AtomicReference<>( allocateObject() );

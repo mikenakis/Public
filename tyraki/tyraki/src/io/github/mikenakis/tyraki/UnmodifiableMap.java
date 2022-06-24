@@ -5,7 +5,7 @@ import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure1;
-import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
 import io.github.mikenakis.tyraki.exceptions.KeyNotFoundException;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;

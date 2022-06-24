@@ -1,8 +1,8 @@
 package io.github.mikenakis.publishing.suppress;
 
 import io.github.mikenakis.coherence.Coherence;
-import io.github.mikenakis.lifetime.AbstractMortalCoherent;
-import io.github.mikenakis.lifetime.guard.LifeGuard;
+import io.github.mikenakis.live.AbstractMortalCoherent;
+import io.github.mikenakis.live.guard.LifeGuard;
 
 public final class Suppression extends AbstractMortalCoherent
 {

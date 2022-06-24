@@ -15,6 +15,7 @@
 	<modules>
 		<module>implementation</module>
 		<module>interface</module>
+		<module>test</module>
 	</modules>
 
 </project>

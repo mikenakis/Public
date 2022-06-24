@@ -7,7 +7,6 @@
 		<groupId>mikenakis</groupId>
 		<artifactId>public-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>buffer</artifactId>
 	<version>1.0-SNAPSHOT</version>
@@ -22,21 +21,18 @@
 			<groupId>mikenakis</groupId>
 			<artifactId>kit</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>mikenakis</groupId>
 			<artifactId>coherence-interface</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>mikenakis</groupId>
 			<artifactId>coherence-implementation</artifactId>
 			<version>1.0-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>

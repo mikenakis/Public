@@ -5,7 +5,7 @@ import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.functional.Function1;
-import io.github.mikenakis.lifetime.Mortal;
+import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
 import io.github.mikenakis.tyraki.immutable.ImmutableCollections;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;

@@ -6,9 +6,9 @@ import io.github.mikenakis.coherence.FreezableCoherence;
 import io.github.mikenakis.coherence.implementation.exceptions.MustBeReadableException;
 import io.github.mikenakis.coherence.implementation.exceptions.MustBeWritableException;
 import io.github.mikenakis.kit.Kit;
-import io.github.mikenakis.lifetime.AbstractMortalCoherent;
-import io.github.mikenakis.lifetime.guard.LifeGuard;
-import io.github.mikenakis.lifetime.guard.MustBeAliveException;
+import io.github.mikenakis.live.AbstractMortalCoherent;
+import io.github.mikenakis.live.guard.LifeGuard;
+import io.github.mikenakis.live.guard.MustBeAliveException;
 
 public final class ConcreteFreezableCoherence extends AbstractMortalCoherent implements FreezableCoherence, ImmutabilitySelfAssessable
 {
