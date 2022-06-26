@@ -43,11 +43,11 @@ public class T01_PublishingTest
 	{
 		Mortal.tryWith( Publisher.of( coherence, Procedure0.class ), publisher -> //
 		{
-			publisher.allSubscribers().invoke();
+			publisher.target().allSubscribers().invoke();
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
-			Mortal.tryWith( publisher.addSubscription( subscriber ), subscription -> { } );
-			publisher.allSubscribers().invoke();
+			Mortal.tryWith( publisher.target().addSubscription( subscriber ), subscription -> { } );
+			publisher.target().allSubscribers().invoke();
 			assert issueCount.value == 0;
 		} );
 	}
@@ -58,8 +58,8 @@ public class T01_PublishingTest
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
-			Mortal.tryWith( publisher.addSubscription( subscriber ), () -> //
-				publisher.allSubscribers().invoke() );
+			Mortal.tryWith( publisher.target().addSubscription( subscriber ), () -> //
+				publisher.target().allSubscribers().invoke() );
 			assert issueCount.value == 1;
 		} );
 	}
@@ -70,10 +70,10 @@ public class T01_PublishingTest
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
-			Mortal.tryWith( publisher.addSubscription( subscriber ), () -> //
+			Mortal.tryWith( publisher.target().addSubscription( subscriber ), () -> //
 			{
-				publisher.allSubscribers().invoke(); //1
-				publisher.allSubscribers().invoke(); //2
+				publisher.target().allSubscribers().invoke(); //1
+				publisher.target().allSubscribers().invoke(); //2
 			} );
 			assert issueCount.value == 2;
 		} );
@@ -85,9 +85,9 @@ public class T01_PublishingTest
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
-			Mortal.tryWith( publisher.addSubscription( subscriber ), () -> //
-				Mortal.tryWith( publisher.addSubscription( subscriber ), () -> //
-					publisher.allSubscribers().invoke() ) );
+			Mortal.tryWith( publisher.target().addSubscription( subscriber ), () -> //
+				Mortal.tryWith( publisher.target().addSubscription( subscriber ), () -> //
+					publisher.target().allSubscribers().invoke() ) );
 			assert issueCount.value == 2;
 		} );
 	}
@@ -98,11 +98,11 @@ public class T01_PublishingTest
 		{
 			Ref<Integer> issueCount = Ref.of( 0 );
 			Procedure0 subscriber = new Subscriber( issueCount );
-			Mortal.tryWith( publisher.addSubscription( subscriber ), () -> //
+			Mortal.tryWith( publisher.target().addSubscription( subscriber ), () -> //
 			{
-				publisher.allSubscribers().invoke(); //1
+				publisher.target().allSubscribers().invoke(); //1
 				Kit.runGarbageCollection();
-				publisher.allSubscribers().invoke(); //2
+				publisher.target().allSubscribers().invoke(); //2
 				assert issueCount.value == 2;
 			} );
 		} );

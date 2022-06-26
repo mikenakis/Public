@@ -57,7 +57,7 @@ public abstract class Try<T>
 	public abstract T orElse( T value );
 	public abstract Try<T> orElseTry( FailableFunction0<T> f );
 	public abstract <X extends Throwable> T orElseThrow( Supplier<? extends X> exceptionSupplier ) throws X;
-	public abstract T orElseThrow() throws Throwable;
+	public abstract T orElseThrow();
 	public abstract T get();
 	public abstract boolean isSuccess();
 	public boolean isFailure() { return !isSuccess(); }
@@ -222,9 +222,9 @@ public abstract class Try<T>
 			throw exceptionSupplier.get();
 		}
 
-		@Override public T orElseThrow() throws Throwable
+		@Override public T orElseThrow()
 		{
-			throw e;
+			throw Kit.sneakyException( e );
 		}
 
 		@Override public T get()

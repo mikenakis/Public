@@ -110,55 +110,55 @@ public final class BufferBuilder extends AbstractCoherent
 		value[index] = ch;
 	}
 
-	public BufferBuilder append( Object obj )
+	public BufferBuilder appendObjectText( Object obj )
 	{
 		assert mustBeWritableAssertion();
-		return append( String.valueOf( obj ) );
+		return appendStringText( String.valueOf( obj ) );
 	}
 
-	public BufferBuilder append( String str )
+	public BufferBuilder appendStringText( String str )
 	{
 		assert mustBeWritableAssertion();
-		return append( str, StandardCharsets.UTF_8 );
+		return appendStringText( str, StandardCharsets.UTF_8 );
 	}
 
-	public BufferBuilder append( String str, Charset charset )
+	public BufferBuilder appendStringText( String str, Charset charset )
 	{
 		assert mustBeWritableAssertion();
 		Buffer buffer = Buffer.of( str, charset );
-		append( buffer );
+		appendBuffer( buffer );
 		return this;
 	}
 
-	public BufferBuilder append( Buffer buffer )
+	public BufferBuilder appendBuffer( Buffer buffer )
 	{
 		assert mustBeWritableAssertion();
-		return append( buffer, 0, buffer.size() );
+		return appendBytes( buffer, 0, buffer.size() );
 	}
 
-	public BufferBuilder append( byte[] str )
+	public BufferBuilder appendBytes( byte[] bytes )
 	{
 		assert mustBeWritableAssertion();
-		int len = str.length;
+		int len = bytes.length;
 		ensureCapacityInternal( count + len );
-		System.arraycopy( str, 0, value, count, len );
+		System.arraycopy( bytes, 0, value, count, len );
 		count += len;
 		return this;
 	}
 
-	public BufferBuilder append( char[] str )
+	public BufferBuilder appendText( char[] str )
 	{
 		assert mustBeWritableAssertion();
-		return append( str, StandardCharsets.UTF_8 );
+		return appendText( str, StandardCharsets.UTF_8 );
 	}
 
-	public BufferBuilder append( char[] str, Charset charset )
+	public BufferBuilder appendText( char[] str, Charset charset )
 	{
 		assert mustBeWritableAssertion();
-		return append( Buffer.of( str, charset ) );
+		return appendBuffer( Buffer.of( str, charset ) );
 	}
 
-	public BufferBuilder append( byte[] bytes, int offset, int len )
+	public BufferBuilder appendText( byte[] bytes, int offset, int len )
 	{
 		assert mustBeWritableAssertion();
 		if( len > 0 )
@@ -168,7 +168,7 @@ public final class BufferBuilder extends AbstractCoherent
 		return this;
 	}
 
-	public BufferBuilder append( Buffer buffer, int offset, int len )
+	public BufferBuilder appendBytes( Buffer buffer, int offset, int len )
 	{
 		assert mustBeWritableAssertion();
 		if( len > 0 )
@@ -178,13 +178,13 @@ public final class BufferBuilder extends AbstractCoherent
 		return this;
 	}
 
-	public BufferBuilder append( char[] str, int offset, int len )
+	public BufferBuilder appendText( char[] str, int offset, int len )
 	{
 		assert mustBeWritableAssertion();
-		return append( Buffer.of( str ), offset, len );
+		return appendBytes( Buffer.of( str ), offset, len );
 	}
 
-	public BufferBuilder append( boolean b )
+	public BufferBuilder appendBooleanText( boolean b )
 	{
 		assert mustBeWritableAssertion();
 		//noinspection IfStatementWithIdenticalBranches
@@ -208,7 +208,7 @@ public final class BufferBuilder extends AbstractCoherent
 		return this;
 	}
 
-	public BufferBuilder append( byte b )
+	public BufferBuilder appendByte( byte b )
 	{
 		assert mustBeWritableAssertion();
 		ensureCapacityInternal( count + 1 );
@@ -216,42 +216,42 @@ public final class BufferBuilder extends AbstractCoherent
 		return this;
 	}
 
-	public BufferBuilder append( char c )
+	public BufferBuilder appendCharText( char c )
 	{
 		assert mustBeWritableAssertion();
 		char[] chars = { c };
-		return append( chars );
+		return appendText( chars );
 	}
 
-	public BufferBuilder append( int i )
+	public BufferBuilder appendIntText( int i )
 	{
 		assert mustBeWritableAssertion();
 		String s = Integer.toString( i );
-		append( s );
+		appendStringText( s );
 		return this;
 	}
 
-	public BufferBuilder append( long l )
+	public BufferBuilder appendLongText( long l )
 	{
 		assert mustBeWritableAssertion();
 		String s = Long.toString( l );
-		append( s );
+		appendStringText( s );
 		return this;
 	}
 
-	public BufferBuilder append( float f )
+	public BufferBuilder appendFloatText( float f )
 	{
 		assert mustBeWritableAssertion();
 		String s = Float.toString( f );
-		append( s );
+		appendStringText( s );
 		return this;
 	}
 
-	public BufferBuilder append( double d )
+	public BufferBuilder appendDoubleText( double d )
 	{
 		assert mustBeWritableAssertion();
 		String s = Double.toString( d );
-		append( s );
+		appendStringText( s );
 		return this;
 	}
 

@@ -102,10 +102,15 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure1<? super C> tryProcedure )
 	{
-		try( mortal )
+		//noinspection TryFinallyCanBeTryWithResources
+		try
 		{
 			Debug.boundary( () -> //
 				tryProcedure.invoke( mortal ) );
+		}
+		finally
+		{
+			mortal.close();
 		}
 	}
 

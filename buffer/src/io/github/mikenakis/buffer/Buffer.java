@@ -1,6 +1,5 @@
 package io.github.mikenakis.buffer;
 
-import io.github.mikenakis.kit.Dyad;
 import io.github.mikenakis.kit.Kit;
 
 import java.nio.charset.Charset;
@@ -8,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * A Buffer. Similar to {@link String}, but containing bytes instead of characters.
@@ -18,7 +16,8 @@ import java.util.Optional;
 //@Immutable
 public final class Buffer implements Comparable<Buffer>
 {
-	public static final Buffer EMPTY = new Buffer( new byte[0] );
+	private static final byte[] arrayOfZeroBytes = new byte[0];
+	public static final Buffer EMPTY = new Buffer( arrayOfZeroBytes );
 
 	//@Stable
 	private final byte[] bytes;
@@ -46,10 +45,7 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( String content )
 	{
-		if( content.isEmpty() )
-			return EMPTY;
-		byte[] bytes = content.getBytes( StandardCharsets.UTF_8 );
-		return new Buffer( bytes );
+		return of( content, StandardCharsets.UTF_8 );
 	}
 
 	public static Buffer of( String content, Charset charset )
@@ -124,10 +120,15 @@ public final class Buffer implements Comparable<Buffer>
 	@Override public int compareTo( Buffer other )
 	{
 		int commonLength = Math.min( bytes.length, other.bytes.length );
-		int d = Kit.bytes.compare( bytes, 0, other.bytes, 0, commonLength );
+		int d = compareTo( other, commonLength );
 		if( d != 0 )
 			return d;
 		return Integer.compare( bytes.length, other.bytes.length );
+	}
+
+	public int compareTo( Buffer other, int commonLength )
+	{
+		return Kit.bytes.compare( bytes, 0, other.bytes, 0, commonLength );
 	}
 
 	@Deprecated @Override public boolean equals( Object other )
@@ -156,7 +157,23 @@ public final class Buffer implements Comparable<Buffer>
 
 	public byte[] getBytes()
 	{
+		if( bytes.length == 0 )
+			return bytes;
 		return Arrays.copyOf( bytes, bytes.length );
+	}
+
+	public byte[] getBytes( int offset, int length )
+	{
+		if( length == 0 )
+			return arrayOfZeroBytes;
+		return Arrays.copyOfRange( bytes, offset, offset + length );
+	}
+
+	public Buffer subset( int offset, int length )
+	{
+		if( length == 0 )
+			return EMPTY;
+		return of( Arrays.copyOfRange( bytes, offset, offset + length ) );
 	}
 
 	public void copyBytes( byte[] destination )
@@ -378,51 +395,6 @@ public final class Buffer implements Comparable<Buffer>
 		return split( delimiterAsBuffer, false );
 	}
 
-	public Dyad<Buffer,Optional<Buffer>> splitInTwo( byte delimiter, boolean trim )
-	{
-		return splitInTwo( of( delimiter ), trim );
-	}
-
-	/**
-	 * Splits the {@link Buffer} in two parts on a given delimiter.  A part may be empty if the {@link Buffer} starts or ends with the delimiter. The second part will be {@code
-	 * null} if the {@link Buffer} did not contain the delimiter.
-	 *
-	 * @param delimiter the delimiter to split on.
-	 * @param trim      whether white should be trimmed from each part.
-	 *
-	 * @return a {@link Dyad} containing the parts on either side of the delimiter.
-	 */
-	public Dyad<Buffer,Optional<Buffer>> splitInTwo( Buffer delimiter, boolean trim )
-	{
-		assert !delimiter.isEmpty();
-		assert !(trim && delimiter.isWhitespace());
-
-		int h = 0;
-		int k = bytes.length;
-		if( trim )
-		{
-			h = skipWhitespaceForward( h, k );
-			k = skipWhitespaceBackward( h, k );
-		}
-
-		int i = indexOf( delimiter, h );
-		if( i == -1 || i >= k )
-		{
-			Buffer firstPart = subBuffer( h, k );
-			return Dyad.of( firstPart, Optional.empty() );
-		}
-
-		int j = i + delimiter.bytes.length;
-
-		if( trim )
-		{
-			i = skipWhitespaceBackward( h, i );
-			j = skipWhitespaceForward( j, k );
-		}
-
-		return Dyad.of( subBuffer( h, i ), Optional.of( subBuffer( j, k ) ) );
-	}
-
 	public Buffer trim()
 	{
 		int start = skipWhitespaceForward( 0, bytes.length );
@@ -438,29 +410,14 @@ public final class Buffer implements Comparable<Buffer>
 		return true;
 	}
 
-	public int skipWhitespaceForward()
-	{
-		return skipWhitespaceForward( 0, bytes.length );
-	}
-
-	public int skipWhitespaceForward( int end )
-	{
-		return skipWhitespaceForward( 0, end );
-	}
-
-	public int skipWhitespaceForward( int start, int end )
+	private int skipWhitespaceForward( int start, int end )
 	{
 		while( start < end && Kit.bytes.isWhitespace( bytes[start] ) )
 			start++;
 		return start;
 	}
 
-	public int skipWhitespaceBackward( int start )
-	{
-		return skipWhitespaceBackward( start, bytes.length );
-	}
-
-	public int skipWhitespaceBackward( int start, int end )
+	private int skipWhitespaceBackward( int start, int end )
 	{
 		while( end > start && Kit.bytes.isWhitespace( bytes[end - 1] ) )
 			end--;
@@ -482,6 +439,11 @@ public final class Buffer implements Comparable<Buffer>
 	public void copyTo( int arrayOffset, byte[] destinationBytes, int offset, int length )
 	{
 		System.arraycopy( bytes, arrayOffset, destinationBytes, offset, length );
+	}
+
+	public void copyTo( int arrayOffset, byte[] destinationBytes )
+	{
+		System.arraycopy( bytes, arrayOffset, destinationBytes, 0, size() );
 	}
 
 	public String toHexString()
