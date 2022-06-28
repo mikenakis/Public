@@ -1,7 +1,7 @@
 package io.github.mikenakis.bytecode.exceptions;
 
 import io.github.mikenakis.bytecode.model.AnnotationValue;
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 /**
  * "Invalid {@link AnnotationValue} Tag" exception.

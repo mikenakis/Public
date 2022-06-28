@@ -1,6 +1,6 @@
 package io.github.mikenakis.clio.parsers;
 
-import io.github.mikenakis.kit.GenericException;
+import io.github.mikenakis.kit.exceptions.GenericException;
 import io.github.mikenakis.kit.Kit;
 
 import java.util.Optional;

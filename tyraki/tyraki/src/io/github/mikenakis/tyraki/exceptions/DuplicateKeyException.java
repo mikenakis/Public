@@ -1,6 +1,6 @@
 package io.github.mikenakis.tyraki.exceptions;
 
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 /**
  * 'Duplicate Key' {@link UncheckedException}.

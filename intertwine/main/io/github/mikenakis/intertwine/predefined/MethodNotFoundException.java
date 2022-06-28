@@ -2,7 +2,7 @@ package io.github.mikenakis.intertwine.predefined;
 
 import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Intertwine;
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 /**
  * 'Method Not Found' {@link UncheckedException}.

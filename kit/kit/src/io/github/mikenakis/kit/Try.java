@@ -1,5 +1,6 @@
 package io.github.mikenakis.kit;
 
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure1;
 

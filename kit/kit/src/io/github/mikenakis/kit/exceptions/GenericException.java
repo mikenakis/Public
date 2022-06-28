@@ -1,4 +1,6 @@
-package io.github.mikenakis.kit;
+package io.github.mikenakis.kit.exceptions;
+
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 /**
  * A generic (as in, "general purpose") exception.

@@ -1,6 +1,6 @@
 package io.github.mikenakis.tyraki.mutable;
 
-import io.github.mikenakis.kit.GenericException;
+import io.github.mikenakis.kit.exceptions.GenericException;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.MutableEnumerator;

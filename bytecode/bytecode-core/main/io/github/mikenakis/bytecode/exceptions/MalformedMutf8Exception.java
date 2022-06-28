@@ -1,6 +1,6 @@
 package io.github.mikenakis.bytecode.exceptions;
 
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 /**
  * "Malformed MUTF8" exception.

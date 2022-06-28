@@ -1,6 +1,6 @@
 package io.github.mikenakis.testkit;
 
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 import java.util.Optional;
 

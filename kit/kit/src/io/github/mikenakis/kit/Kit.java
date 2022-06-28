@@ -7,6 +7,13 @@ import io.github.mikenakis.kit.collections.MappingIterable;
 import io.github.mikenakis.kit.collections.OptionalsFlatMappingIterable;
 import io.github.mikenakis.kit.collections.UnmodifiableIterable;
 import io.github.mikenakis.kit.collections.UnmodifiableIterator;
+import io.github.mikenakis.kit.exceptions.CountMustBeNonNegativeException;
+import io.github.mikenakis.kit.exceptions.OffsetMustBeNonNegativeException;
+import io.github.mikenakis.kit.exceptions.CountMustBePositiveException;
+import io.github.mikenakis.kit.exceptions.OffsetMustBeLessThanSizeException;
+import io.github.mikenakis.kit.exceptions.OffsetMustNotExceedSizeException;
+import io.github.mikenakis.kit.exceptions.OffsetPlusCountMustNotExceedSizeException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 import io.github.mikenakis.kit.functional.BooleanFunction1;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
@@ -340,14 +347,18 @@ public final class Kit
 
 		public static int compare( byte[] aBytes, int aOffset, byte[] bBytes, int bOffset, int length )
 		{
-			//return Arrays.compare( aBytes, aOffset, aOffset + length, bBytes, bOffset, bOffset + length );
-			for( int i = 0; i < length; i++ )
-			{
-				int difference = aBytes[aOffset + i] - bBytes[bOffset + i];
-				if( difference != 0 )
-					return difference;
-			}
-			return 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert aOffset >= 0 : new OffsetMustBeNonNegativeException( aOffset );
+			assert aOffset <= aBytes.length : new OffsetMustNotExceedSizeException( aOffset, aBytes.length );
+			assert aOffset + length <= aBytes.length : new OffsetPlusCountMustNotExceedSizeException( aOffset, length, aBytes.length );
+			return Arrays.compare( aBytes, aOffset, aOffset + length, bBytes, bOffset, bOffset + length );
+//			for( int i = 0; i < length; i++ )
+//			{
+//				int difference = aBytes[aOffset + i] - bBytes[bOffset + i];
+//				if( difference != 0 )
+//					return difference;
+//			}
+//			return 0;
 		}
 
 		public static int compare( byte[] aBytes, byte[] bBytes )
@@ -361,9 +372,10 @@ public final class Kit
 
 		public static int indexOf( byte[] data, int offset, int length, byte byteToFind )
 		{
-			assert offset >= 0;
-			assert offset < data.length;
-			assert length >= 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
+			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
+			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			int end = offset + length;
 			for( int i = offset; i < end; i++ )
 				if( data[i] == byteToFind )
@@ -373,9 +385,10 @@ public final class Kit
 
 		public static int lastIndexOf( byte[] data, int offset, int length, byte byteToFind )
 		{
-			assert offset >= 0;
-			assert offset < data.length;
-			assert length >= 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
+			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
+			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			int end = offset + length;
 			for( int i = end - 1; i >= offset; i-- )
 				if( data[i] == byteToFind )
@@ -385,9 +398,10 @@ public final class Kit
 
 		public static int indexOfAnyOf( byte[] data, int offset, int length, byte[] bytes )
 		{
-			assert offset >= 0;
-			assert offset < data.length;
-			assert length >= 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
+			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
+			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			int end = offset + length;
 			for( int i = offset; i < end; i++ )
 			{
@@ -400,9 +414,10 @@ public final class Kit
 
 		public static int indexOf( byte[] data, int offset, int length, byte[] pattern )
 		{
-			assert offset >= 0;
-			assert offset <= data.length;
-			assert length >= 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
+			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
+			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			if( length < pattern.length )
 				return -1;
 			for( ; ; )
@@ -421,9 +436,10 @@ public final class Kit
 
 		public static int lastIndexOf( byte[] data, int offset, int length, byte[] pattern )
 		{
-			assert offset >= 0;
-			assert offset < data.length;
-			assert length >= 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
+			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
+			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			if( length < pattern.length )
 				return -1;
 			for( ; ; )
@@ -442,9 +458,10 @@ public final class Kit
 
 		public static int indexOfAnyOf( byte[] data, int offset, int length, byte[][] patterns )
 		{
-			assert offset >= 0;
-			assert offset < data.length;
-			assert length >= 0;
+			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
+			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
+			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			byte[] firstBytes = new byte[patterns.length];
 			for( int i = 0; i < firstBytes.length; i++ )
 				firstBytes[i] = patterns[i][0]; //TODO: eliminate duplicates
@@ -541,71 +558,6 @@ public final class Kit
 					case ' ', '\t', '\n', '\r' -> true;
 					default -> false;
 				};
-		}
-
-		public static class ArgumentsException extends UncheckedException
-		{
-			public final byte[] buffer;
-			public final int offset;
-			public final int count;
-
-			ArgumentsException( byte[] buffer, int offset, int count )
-			{
-				this.buffer = buffer;
-				this.offset = offset;
-				this.count = count;
-			}
-		}
-
-		public static class NegativeOffsetException extends ArgumentsException
-		{
-			public NegativeOffsetException( byte[] buffer, int index, int count )
-			{
-				super( buffer, index, count );
-			}
-		}
-
-		public static class NonPositiveCountException extends ArgumentsException
-		{
-			public NonPositiveCountException( byte[] buffer, int index, int count )
-			{
-				super( buffer, index, count );
-			}
-		}
-
-		public static class OffsetOutOfRangeException extends ArgumentsException
-		{
-			public OffsetOutOfRangeException( byte[] buffer, int index, int count )
-			{
-				super( buffer, index, count );
-			}
-		}
-
-		public static class OffsetPlusCountOutOfRangeException extends ArgumentsException
-		{
-			public OffsetPlusCountOutOfRangeException( byte[] buffer, int index, int count )
-			{
-				super( buffer, index, count );
-			}
-		}
-
-		public static Optional<ArgumentsException> validateArguments( byte[] bytes, int offset, int count )
-		{
-			if( !(count > 0) )
-				return Optional.of( new NonPositiveCountException( bytes, offset, count ) );
-			if( !(offset >= 0) )
-				return Optional.of( new NegativeOffsetException( bytes, offset, count ) );
-			if( !(offset < bytes.length) )
-				return Optional.of( new OffsetOutOfRangeException( bytes, offset, count ) );
-			if( !(offset + count <= bytes.length) )
-				return Optional.of( new OffsetPlusCountOutOfRangeException( bytes, offset, count ) );
-			return Optional.empty();
-		}
-
-		public static boolean validArgumentsAssertion( byte[] bytes, int offset, int count )
-		{
-			validateArguments( bytes, offset, count ).ifPresent( e -> { throw e; } );
-			return true;
 		}
 
 		public static char charFromBytes( byte[] bytes )
@@ -2039,9 +1991,9 @@ public final class Kit
 			Debug.boundary( () -> tryProcedure.invoke() );
 			return Optional.empty();
 		}
-		catch( Throwable throwable1 )
+		catch( Throwable throwable )
 		{
-			return Optional.of( throwable1 );
+			return Optional.of( throwable );
 		}
 	}
 

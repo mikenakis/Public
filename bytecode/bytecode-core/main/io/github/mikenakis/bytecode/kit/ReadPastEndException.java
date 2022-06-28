@@ -1,6 +1,6 @@
 package io.github.mikenakis.bytecode.kit;
 
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 
 /**
  * "Read Past End" exception.

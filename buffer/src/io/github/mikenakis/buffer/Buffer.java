@@ -244,7 +244,8 @@ public final class Buffer implements Comparable<Buffer>
 
 	public int indexOf( Buffer pattern, int fromIndex )
 	{
-		return Kit.bytes.indexOf( bytes, fromIndex, size() - fromIndex, pattern.bytes );
+		int length = size() - fromIndex;
+		return length == 0? -1 :Kit.bytes.indexOf( bytes, fromIndex, length, pattern.bytes );
 	}
 
 	public int lastIndexOf( Buffer pattern )

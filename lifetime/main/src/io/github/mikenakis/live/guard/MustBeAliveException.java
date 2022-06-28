@@ -1,6 +1,6 @@
 package io.github.mikenakis.live.guard;
 
-import io.github.mikenakis.kit.UncheckedException;
+import io.github.mikenakis.kit.exceptions.UncheckedException;
 import io.github.mikenakis.live.Mortal;
 
 public class MustBeAliveException extends UncheckedException

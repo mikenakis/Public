@@ -1,4 +1,6 @@
-package io.github.mikenakis.kit;
+package io.github.mikenakis.kit.exceptions;
+
+import io.github.mikenakis.kit.Kit;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
