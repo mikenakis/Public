@@ -5,6 +5,7 @@ import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.logging.Log;
+import io.github.mikenakis.live.Live;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,13 +46,13 @@ public final class Allocator extends AbstractCoherent
 		Kit.map.addOrReplace( allocationSizes, allocationKey, allocationSize );
 	}
 
-	public Allocation newAllocation( AllocationKey allocationKey )
+	public Live<Allocation> newAllocation( AllocationKey allocationKey )
 	{
 		int allocationSize = getAllocationSize( allocationKey );
 		/* TODO */
 		byte[] bytes = new byte[allocationSize];
 		Coherence coherence = ThreadLocalCoherence.instance();
-		return new Allocation( coherence, this, bytes );
+		return Allocation.of( coherence, bytes );
 	}
 
 	void release( Allocation allocation )

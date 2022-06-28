@@ -2,7 +2,6 @@ package io.github.mikenakis.buffer;
 
 import io.github.mikenakis.coherence.AbstractCoherent;
 import io.github.mikenakis.coherence.Coherence;
-import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -10,11 +9,6 @@ import java.util.Arrays;
 
 public final class BufferBuilder extends AbstractCoherent
 {
-	public static BufferBuilder of()
-	{
-		return of( ThreadLocalCoherence.instance() );
-	}
-
 	public static BufferBuilder of( Coherence coherence )
 	{
 		return of( coherence, 16 );

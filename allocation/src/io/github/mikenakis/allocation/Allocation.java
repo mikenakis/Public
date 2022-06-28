@@ -1,7 +1,9 @@
 package io.github.mikenakis.allocation;
 
 import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.live.AbstractMortalCoherent;
+import io.github.mikenakis.live.Live;
 import io.github.mikenakis.live.guard.LifeGuard;
 
 /**
@@ -9,29 +11,38 @@ import io.github.mikenakis.live.guard.LifeGuard;
  *
  * @author michael.gr
  */
-public final class Allocation extends AbstractMortalCoherent
+public interface Allocation extends Coherent
 {
-	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	@Override protected LifeGuard lifeGuard() { return lifeGuard; }
-	private final Allocator allocator;
-	private final byte[] bytes;
-
-	Allocation( Coherence coherence, Allocator allocator, byte[] bytes )
+	static Live<Allocation> of( Coherence coherence, byte[] bytes )
 	{
-		super( coherence );
-		this.allocator = allocator;
-		this.bytes = bytes;
+		final class Implementation extends AbstractMortalCoherent implements Allocation
+		{
+			private final LifeGuard lifeGuard = LifeGuard.of( this );
+			@Override protected LifeGuard lifeGuard() { return lifeGuard; }
+			private final byte[] bytes;
+
+			private Implementation( Coherence coherence, byte[] bytes )
+			{
+				super( coherence );
+				this.bytes = bytes;
+			}
+
+			@Override protected void onClose()
+			{
+				Allocator.instance().release( this );
+				super.onClose();
+			}
+
+			@Override public byte[] bytes()
+			{
+				assert mustBeWritableAssertion();
+				return bytes;
+			}
+		}
+
+		var result = new Implementation( coherence, bytes );
+		return Live.of( result, result::close );
 	}
 
-	@Override protected void onClose()
-	{
-		allocator.release( this );
-		super.onClose();
-	}
-
-	public byte[] bytes()
-	{
-		assert mustBeWritableAssertion();
-		return bytes;
-	}
+	byte[] bytes();
 }
