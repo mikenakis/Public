@@ -1,6 +1,7 @@
 package io.github.mikenakis.kit;
 
 import io.github.mikenakis.kit.functional.Function1;
+import io.github.mikenakis.kit.functional.Procedure1;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -61,8 +62,8 @@ public abstract class Try<T>
 	public abstract T get();
 	public abstract boolean isSuccess();
 	public boolean isFailure() { return !isSuccess(); }
-	public abstract <E extends Throwable> Try<T> onSuccess( FailableProcedure1<T,E> action ) throws E;
-	public abstract <E extends Throwable> Try<T> onFailure( FailableProcedure1<Throwable,E> action ) throws E;
+	public abstract Try<T> onSuccess( Procedure1<T> action );
+	public abstract Try<T> onFailure( Procedure1<Throwable> action );
 	public abstract Try<T> filter( Predicate<T> predicate );
 	public abstract Optional<T> toOptional();
 	public abstract Throwable throwable();
@@ -143,9 +144,9 @@ public abstract class Try<T>
 			return true;
 		}
 
-		@Override public <E extends Throwable> Try<T> onSuccess( FailableProcedure1<T,E> action ) throws E
+		@Override public Try<T> onSuccess( Procedure1<T> action )
 		{
-			action.accept( value );
+			action.invoke( value );
 			return this;
 		}
 
@@ -159,7 +160,7 @@ public abstract class Try<T>
 			return Optional.ofNullable( value );
 		}
 
-		@Override public <E extends Throwable> Try<T> onFailure( FailableProcedure1<Throwable,E> action )
+		@Override public Try<T> onFailure( Procedure1<Throwable> action )
 		{
 			return this;
 		}
@@ -237,7 +238,7 @@ public abstract class Try<T>
 			return false;
 		}
 
-		@Override public <E extends Throwable> Try<T> onSuccess( FailableProcedure1<T,E> action )
+		@Override public Try<T> onSuccess( Procedure1<T> action )
 		{
 			return this;
 		}
@@ -252,9 +253,9 @@ public abstract class Try<T>
 			return Optional.empty();
 		}
 
-		@Override public <E extends Throwable> Try<T> onFailure( FailableProcedure1<Throwable,E> action ) throws E
+		@Override public Try<T> onFailure( Procedure1<Throwable> action )
 		{
-			action.accept( e );
+			action.invoke( e );
 			return this;
 		}
 
