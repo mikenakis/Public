@@ -62,10 +62,15 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function1<R,? super C> tryFunction )
 	{
-		try( mortal )
+		//noinspection TryFinallyCanBeTryWithResources
+		try
 		{
 			return Debug.boundary( () -> //
 				tryFunction.invoke( mortal ) );
+		}
+		finally
+		{
+			mortal.close();
 		}
 	}
 
@@ -85,9 +90,15 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function0<R> tryFunction )
 	{
-		try( mortal )
+		//noinspection TryFinallyCanBeTryWithResources
+		try
 		{
-			return Debug.boundary( () -> tryFunction.invoke() );
+			return Debug.boundary( () -> //
+				tryFunction.invoke() );
+		}
+		finally
+		{
+			mortal.close();
 		}
 	}
 
@@ -127,10 +138,15 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure0 tryProcedure )
 	{
-		try( mortal )
+		//noinspection TryFinallyCanBeTryWithResources
+		try
 		{
 			Debug.boundary( () -> //
 				tryProcedure.invoke() );
+		}
+		finally
+		{
+			mortal.close();
 		}
 	}
 
