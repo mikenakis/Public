@@ -2,9 +2,9 @@ package io.github.mikenakis.tyraki;
 
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
-import io.github.mikenakis.kit.exceptions.GenericException;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import io.github.mikenakis.kit.exceptions.GenericException;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Function2;

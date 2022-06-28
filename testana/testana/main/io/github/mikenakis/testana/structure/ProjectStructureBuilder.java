@@ -1,8 +1,8 @@
 package io.github.mikenakis.testana.structure;
 
 import io.github.mikenakis.debug.Debug;
-import io.github.mikenakis.kit.exceptions.GenericException;
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.exceptions.GenericException;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.testana.StructureSettings;
 import io.github.mikenakis.testana.TestEngine;

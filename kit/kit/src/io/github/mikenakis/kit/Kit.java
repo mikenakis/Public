@@ -9,8 +9,6 @@ import io.github.mikenakis.kit.collections.UnmodifiableIterable;
 import io.github.mikenakis.kit.collections.UnmodifiableIterator;
 import io.github.mikenakis.kit.exceptions.CountMustBeNonNegativeException;
 import io.github.mikenakis.kit.exceptions.OffsetMustBeNonNegativeException;
-import io.github.mikenakis.kit.exceptions.CountMustBePositiveException;
-import io.github.mikenakis.kit.exceptions.OffsetMustBeLessThanSizeException;
 import io.github.mikenakis.kit.exceptions.OffsetMustNotExceedSizeException;
 import io.github.mikenakis.kit.exceptions.OffsetPlusCountMustNotExceedSizeException;
 import io.github.mikenakis.kit.exceptions.UncheckedException;

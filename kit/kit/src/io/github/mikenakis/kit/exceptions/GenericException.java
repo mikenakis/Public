@@ -1,7 +1,5 @@
 package io.github.mikenakis.kit.exceptions;
 
-import io.github.mikenakis.kit.exceptions.UncheckedException;
-
 /**
  * A generic (as in, "general purpose") exception.
  * Normally this should never be used; as I have already explained elsewhere, (<a href="https://softwareengineering.stackexchange.com/a/278958/41811">https://softwareengineering.stackexchange.com/a/278958/41811</a>)
