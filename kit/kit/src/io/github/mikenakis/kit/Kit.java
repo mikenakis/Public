@@ -7,7 +7,7 @@ import io.github.mikenakis.kit.collections.MappingIterable;
 import io.github.mikenakis.kit.collections.OptionalsFlatMappingIterable;
 import io.github.mikenakis.kit.collections.UnmodifiableIterable;
 import io.github.mikenakis.kit.collections.UnmodifiableIterator;
-import io.github.mikenakis.kit.exceptions.CountMustBeNonNegativeException;
+import io.github.mikenakis.kit.exceptions.LengthMustBeNonNegativeException;
 import io.github.mikenakis.kit.exceptions.OffsetMustBeNonNegativeException;
 import io.github.mikenakis.kit.exceptions.OffsetMustNotExceedSizeException;
 import io.github.mikenakis.kit.exceptions.OffsetPlusCountMustNotExceedSizeException;
@@ -345,7 +345,7 @@ public final class Kit
 
 		public static int compare( byte[] aBytes, int aOffset, byte[] bBytes, int bOffset, int length )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert aOffset >= 0 : new OffsetMustBeNonNegativeException( aOffset );
 			assert aOffset <= aBytes.length : new OffsetMustNotExceedSizeException( aOffset, aBytes.length );
 			assert aOffset + length <= aBytes.length : new OffsetPlusCountMustNotExceedSizeException( aOffset, length, aBytes.length );
@@ -370,7 +370,7 @@ public final class Kit
 
 		public static int indexOf( byte[] data, int offset, int length, byte byteToFind )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
 			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
@@ -383,7 +383,7 @@ public final class Kit
 
 		public static int lastIndexOf( byte[] data, int offset, int length, byte byteToFind )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
 			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
@@ -396,7 +396,7 @@ public final class Kit
 
 		public static int indexOfAnyOf( byte[] data, int offset, int length, byte[] bytes )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
 			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
@@ -412,7 +412,7 @@ public final class Kit
 
 		public static int indexOf( byte[] data, int offset, int length, byte[] pattern )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
 			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
@@ -434,7 +434,7 @@ public final class Kit
 
 		public static int lastIndexOf( byte[] data, int offset, int length, byte[] pattern )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
 			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
@@ -456,7 +456,7 @@ public final class Kit
 
 		public static int indexOfAnyOf( byte[] data, int offset, int length, byte[][] patterns )
 		{
-			assert length >= 0 : new CountMustBeNonNegativeException( length );
+			assert length >= 0 : new LengthMustBeNonNegativeException( length );
 			assert offset >= 0 : new OffsetMustBeNonNegativeException( offset );
 			assert offset <= data.length : new OffsetMustNotExceedSizeException( offset, data.length );
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
