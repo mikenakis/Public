@@ -3,6 +3,7 @@ package io.github.mikenakis.live;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
+import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.kit.functional.Procedure1;
@@ -34,6 +35,16 @@ public interface Live<T> extends Mortal
 	static <R, T> R tryGetWith( Live<T> live, Function1<R,? super T> function )
 	{
 		return Mortal.tryGetWith( live, o -> function.invoke( o.target() ) );
+	}
+
+	static <T> void tryWith( Live<T> live, Procedure0 procedure )
+	{
+		Mortal.tryWith( live, o -> procedure.invoke() );
+	}
+
+	static <R, T> R tryGetWith( Live<T> live, Function0<R> function )
+	{
+		return Mortal.tryGetWith( live, o -> function.invoke() );
 	}
 
 	T target();
