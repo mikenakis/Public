@@ -21,11 +21,6 @@ public abstract class Try<T>
 		R get() throws Throwable;
 	}
 
-	public interface FailableProcedure1<T, E extends Throwable>
-	{
-		void accept( T t ) throws E;
-	}
-
 	public static <U> Try<U> success( U x )
 	{
 		return new Success<>( x );
@@ -68,6 +63,8 @@ public abstract class Try<T>
 	public abstract Try<T> filter( Predicate<T> predicate );
 	public abstract Optional<T> toOptional();
 	public abstract Throwable throwable();
+
+	public abstract <U> Try<U> mapFailure();
 
 	private static class Success<T> extends Try<T>
 	{
@@ -170,6 +167,11 @@ public abstract class Try<T>
 		{
 			throw new AssertionError();
 		}
+
+		@Override public <U> Try<U> mapFailure()
+		{
+			throw new AssertionError();
+		}
 	}
 
 	private static class Failure<T> extends Try<T>
@@ -263,6 +265,12 @@ public abstract class Try<T>
 		@Override public Throwable throwable()
 		{
 			return e;
+		}
+
+		@Override public <U> Try<U> mapFailure()
+		{
+			@SuppressWarnings( "unchecked" ) Try<U> result = (Try<U>)this;
+			return result;
 		}
 	}
 }
