@@ -19,7 +19,7 @@ public abstract class Suppressor extends AbstractCoherent implements Suppressabl
 
 	@Override public Suppression newSuppression()
 	{
-		return new Suppression( coherence, this );
+		return new Suppression( coherence(), this );
 	}
 
 	@Override public void incrementSuppressionCount()

@@ -26,7 +26,7 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 	}
 
 	private final LifeGuard lifeGuard = LifeGuard.of( this );
-	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( coherence ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
+	private final MutableCollection<AnycallSubscription<T>> subscriptions = MutableCollections.of( coherence() ).newIdentityLinkedHashSet(); // NOTE: monstrous heisenbug would be caused by `newIdentityHashSet()` here.
 
 	private AnycallPublisher( Coherence coherence )
 	{

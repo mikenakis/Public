@@ -22,7 +22,7 @@ abstract class AbstractMutableEnumerable<E> extends MutableCollectionsSubject im
 
 	@Override public boolean mustBeImmutableAssertion()
 	{
-		return coherence instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
+		return coherence() instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
 	}
 
 	@Override public final int hashCode()

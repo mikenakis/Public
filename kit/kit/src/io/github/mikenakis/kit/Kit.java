@@ -418,6 +418,8 @@ public final class Kit
 			assert offset + length <= data.length : new OffsetPlusCountMustNotExceedSizeException( offset, length, data.length );
 			if( length < pattern.length )
 				return -1;
+			if( pattern.length == 0 )
+				return 0;
 			for( ; ; )
 			{
 				int i = indexOf( data, offset, length - pattern.length + 1, pattern[0] );

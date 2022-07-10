@@ -17,20 +17,18 @@ import io.github.mikenakis.publishing.anycall.AnycallSubscription;
  */
 public interface Publisher<T> extends Coherent
 {
-	static <TT> Live<Publisher<TT>> of( Coherence coherence, Class<TT> interfaceType )
+	static <T> Live<Publisher<T>> of( Coherence coherence, Class<T> interfaceType )
 	{
-		final class Implementation<T> extends AbstractMortalCoherent implements Publisher<T>
+		final class Implementation extends AbstractMortalCoherent implements Publisher<T>
 		{
 			private final LifeGuard lifeGuard = LifeGuard.of( this, true );
 			@Override protected LifeGuard lifeGuard() { return lifeGuard; }
-			private final Class<T> interfaceType;
 			private final T entwiner;
 			private final AnycallPublisher<T> anycallPublisher = AnycallPublisher.of( coherence );
 
-			private Implementation( Coherence coherence, Class<T> interfaceType )
+			private Implementation()
 			{
 				super( coherence );
-				this.interfaceType = interfaceType;
 				entwiner = IntertwineFactory.instance.getIntertwine( interfaceType ).newEntwiner( anycallPublisher.allSubscribers() );
 			}
 
@@ -70,7 +68,7 @@ public interface Publisher<T> extends Coherent
 			}
 		}
 
-		var result = new Implementation<>( coherence, interfaceType );
+		var result = new Implementation();
 		return Live.of( result, result::close );
 	}
 

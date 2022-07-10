@@ -33,7 +33,7 @@ public final class ConcreteFreezableCoherence extends AbstractMortalCoherent imp
 
 	@Override public String toString()
 	{
-		return "parent: " + coherence + "; isFrozen: " + isFrozen();
+		return "parent: " + coherence() + "; isFrozen: " + isFrozen();
 	}
 
 	@Override public boolean isFrozen()
@@ -55,12 +55,12 @@ public final class ConcreteFreezableCoherence extends AbstractMortalCoherent imp
 
 	@Override public boolean mustBeReadableAssertion()
 	{
-		return Kit.assertion( () -> isFrozen() || coherence.mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
+		return Kit.assertion( () -> isFrozen() || coherence().mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
 	}
 
 	@Override public boolean mustBeWritableAssertion()
 	{
-		return Kit.assertion( () -> !isFrozen() && coherence.mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
+		return Kit.assertion( () -> !isFrozen() && coherence().mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
 	}
 
 	@Override public boolean isImmutable()

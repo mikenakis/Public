@@ -55,7 +55,7 @@ public class CallSuppressor<N> extends Suppressor
 	@Override protected void onSuppress()
 	{
 		assert queue.isEmpty();
-		queue = Optional.of( MutableCollections.of( coherence ).newArrayList() );
+		queue = Optional.of( MutableCollections.of( coherence() ).newArrayList() );
 		entryPoint = entwiner;
 	}
 

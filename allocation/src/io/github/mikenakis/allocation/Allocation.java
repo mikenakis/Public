@@ -1,10 +1,9 @@
 package io.github.mikenakis.allocation;
 
+import io.github.mikenakis.coherence.AbstractCoherent;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.Coherent;
-import io.github.mikenakis.live.AbstractMortalCoherent;
 import io.github.mikenakis.live.Live;
-import io.github.mikenakis.live.guard.LifeGuard;
 
 /**
  * Represents a memory allocation.
@@ -13,24 +12,20 @@ import io.github.mikenakis.live.guard.LifeGuard;
  */
 public interface Allocation extends Coherent
 {
+	byte[] bytes();
+
 	static Live<Allocation> of( Coherence coherence, byte[] bytes )
 	{
-		final class Implementation extends AbstractMortalCoherent implements Allocation
+		final class Implementation extends AbstractCoherent implements Allocation
 		{
-			private final LifeGuard lifeGuard = LifeGuard.of( this );
-			@Override protected LifeGuard lifeGuard() { return lifeGuard; }
-			private final byte[] bytes;
-
-			private Implementation( Coherence coherence, byte[] bytes )
+			private Implementation()
 			{
 				super( coherence );
-				this.bytes = bytes;
 			}
 
-			@Override protected void onClose()
+			private void close()
 			{
 				Allocator.instance().release( this );
-				super.onClose();
 			}
 
 			@Override public byte[] bytes()
@@ -40,9 +35,7 @@ public interface Allocation extends Coherent
 			}
 		}
 
-		var result = new Implementation( coherence, bytes );
+		var result = new Implementation();
 		return Live.of( result, result::close );
 	}
-
-	byte[] bytes();
 }

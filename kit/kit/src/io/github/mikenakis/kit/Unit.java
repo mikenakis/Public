@@ -7,7 +7,7 @@ public class Unit
 	@SuppressWarnings( "InstantiationOfUtilityClass" ) public static final Unit instance = new Unit();
 	private Unit() { }
 
-	public static Unit map( Procedure0 procedure )
+	public static Unit fromVoid( Procedure0 procedure )
 	{
 		procedure.invoke();
 		return instance;

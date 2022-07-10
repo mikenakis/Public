@@ -90,7 +90,7 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 
 	@Override public boolean mustBeImmutableAssertion()
 	{
-		return coherence instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
+		return coherence() instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
 	}
 
 	@Override public boolean equals( Object other )

@@ -16,17 +16,13 @@ public interface AnycallSubscription<T> extends Coherent
 {
 	static <T> Live<AnycallSubscription<T>> of( AnycallPublisher<T> publisher, Anycall<T> subscriber )
 	{
-		final class Implementation<TT> extends AbstractCoherent implements AnycallSubscription<TT>, Mortal.Defaults
+		final class Implementation extends AbstractCoherent implements AnycallSubscription<T>, Mortal.Defaults
 		{
 			private final LifeGuard lifeGuard = LifeGuard.of( this, true );
-			private final AnycallPublisher<TT> publisher;
-			private final Anycall<TT> subscriber;
 
-			private Implementation( AnycallPublisher<TT> publisher, Anycall<TT> subscriber )
+			private Implementation()
 			{
 				super( publisher.coherence() );
-				this.publisher = publisher;
-				this.subscriber = subscriber;
 			}
 
 			@Override public boolean mustBeAliveAssertion()
@@ -60,9 +56,9 @@ public interface AnycallSubscription<T> extends Coherent
 				return lifeGuard.toString();
 			}
 
-			@Override public Anycall<TT> subscriber() { return subscriber; }
+			@Override public Anycall<T> subscriber() { return subscriber; }
 		}
-		var result = new Implementation<>( publisher, subscriber );
+		var result = new Implementation();
 		return Live.of( result, result::close );
 	}
 

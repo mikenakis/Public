@@ -23,7 +23,7 @@ public interface TemporaryCoherence extends Coherent, Coherence.Defaults
 		{
 			private final LifeGuard lifeGuard = LifeGuard.of( this );
 
-			private Implementation( Coherence parentCoherence )
+			private Implementation()
 			{
 				super( parentCoherence );
 			}
@@ -56,7 +56,7 @@ public interface TemporaryCoherence extends Coherent, Coherence.Defaults
 			}
 		}
 
-		var result = new Implementation( parentCoherence );
+		var result = new Implementation();
 		return Live.of( result, result, result::close );
 	}
 }

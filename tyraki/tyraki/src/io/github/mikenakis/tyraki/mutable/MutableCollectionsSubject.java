@@ -22,6 +22,6 @@ public abstract class MutableCollectionsSubject extends AbstractCoherent impleme
 
 	@Override public boolean isImmutable()
 	{
-		return coherence instanceof FreezableCoherence freezableCoherence && freezableCoherence.isFrozen();
+		return coherence() instanceof FreezableCoherence freezableCoherence && freezableCoherence.isFrozen();
 	}
 }

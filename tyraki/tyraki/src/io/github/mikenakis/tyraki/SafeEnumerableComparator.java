@@ -31,7 +31,7 @@ public class SafeEnumerableComparator<R> extends AbstractCoherent
 	private final BooleanFunction2<R,R> valueComparator;
 	private final BooleanFunction2<R,R> identityComparator;
 	private final Hasher<R> identityHasher;
-	private final MutableCollection<MyComparison> comparisons = MutableCollections.of( coherence ).newLinkedHashSet();
+	private final MutableCollection<MyComparison> comparisons = MutableCollections.of( coherence() ).newLinkedHashSet();
 
 	private SafeEnumerableComparator( Coherence coherence, BooleanFunction2<R,R> valueComparator, BooleanFunction2<R,R> identityComparator, Hasher<R> identityHasher )
 	{

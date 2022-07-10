@@ -5,7 +5,7 @@ package io.github.mikenakis.coherence;
  */
 public abstract class AbstractCoherent implements Coherent
 {
-	protected final Coherence coherence;
+	private final Coherence coherence;
 
 	protected AbstractCoherent( Coherence coherence )
 	{
