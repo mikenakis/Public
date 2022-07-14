@@ -13,12 +13,12 @@ public final class BufferBuilderOutputStream extends OutputStream
 
 	@Override public void write( int b )
 	{
-		bufferBuilder.appendByte( (byte)b );
+		bufferBuilder.append( (byte)b );
 	}
 
 	@Override public void write( byte[] bytes, int off, int len )
 	{
-		bufferBuilder.appendText( bytes, off, len );
+		bufferBuilder.append( bytes, off, len );
 	}
 
 	@Override public String toString()

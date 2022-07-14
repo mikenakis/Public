@@ -1,6 +1,7 @@
 package io.github.mikenakis.kit;
 
 import io.github.mikenakis.kit.exceptions.UncheckedException;
+import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure1;
 
@@ -16,11 +17,6 @@ import java.util.function.Supplier;
  */
 public abstract class Try<T>
 {
-	public interface FailableFunction0<R>
-	{
-		R get() throws Throwable;
-	}
-
 	public static <U> Try<U> success( U x )
 	{
 		return new Success<>( x );
@@ -31,11 +27,12 @@ public abstract class Try<T>
 		return new Failure<>( e );
 	}
 
-	public static <U> Try<U> ofFailable( FailableFunction0<U> f )
+	public static <U> Try<U> of( Function0<U> f )
 	{
 		try
 		{
-			return success( f.get() );
+			U payload = f.invoke();
+			return success( payload );
 		}
 		catch( Throwable t )
 		{
@@ -48,11 +45,13 @@ public abstract class Try<T>
 	}
 
 	public abstract <U> Try<U> map( Function1<? extends U,? super T> f );
+	public abstract Try<T> mapFailure( Function1<Throwable,Throwable> f );
 	public abstract <U> Try<U> flatMap( Function1<Try<U>,? super T> f );
 	public abstract T recover( Function<? super Throwable,T> f );
 	public abstract Try<T> recoverWith( Function1<Try<T>,? super Throwable> f );
 	public abstract T orElse( T value );
-	public abstract Try<T> orElseTry( FailableFunction0<T> f );
+	public abstract T orElseGet( Function0<T> provider );
+	public abstract Try<T> orElseTry( Function0<T> f );
 	public abstract <X extends Throwable> T orElseThrow( Supplier<? extends X> exceptionSupplier ) throws X;
 	public abstract T orElseThrow();
 	public abstract T get();
@@ -104,7 +103,12 @@ public abstract class Try<T>
 			return this.value;
 		}
 
-		@Override public Try<T> orElseTry( FailableFunction0<T> f )
+		@Override public T orElseGet( Function0<T> provider )
+		{
+			return value;
+		}
+
+		@Override public Try<T> orElseTry( Function0<T> f )
 		{
 			assert f != null;
 			return this;
@@ -129,12 +133,18 @@ public abstract class Try<T>
 		{
 			try
 			{
-				return new Success<>( f.invoke( value ) );
+				U payload = f.invoke( value );
+				return success( payload );
 			}
 			catch( Throwable t )
 			{
-				return Try.failure( t );
+				return failure( t );
 			}
+		}
+
+		@Override public Try<T> mapFailure( Function1<Throwable,Throwable> f )
+		{
+			return this;
 		}
 
 		@Override public boolean isSuccess()
@@ -189,6 +199,12 @@ public abstract class Try<T>
 			return Try.failure( e );
 		}
 
+		@Override public Try<T> mapFailure( Function1<Throwable,Throwable> f )
+		{
+			Throwable newThrowable = f.invoke( e );
+			return Try.failure( newThrowable );
+		}
+
 		@Override public <U> Try<U> flatMap( Function1<Try<U>,? super T> f )
 		{
 			return Try.failure( e );
@@ -216,9 +232,14 @@ public abstract class Try<T>
 			return value;
 		}
 
-		@Override public Try<T> orElseTry( FailableFunction0<T> f )
+		@Override public T orElseGet( Function0<T> provider )
 		{
-			return Try.ofFailable( f );
+			return provider.invoke();
+		}
+
+		@Override public Try<T> orElseTry( Function0<T> f )
+		{
+			return Try.of( f );
 		}
 
 		@Override public <X extends Throwable> T orElseThrow( Supplier<? extends X> exceptionSupplier ) throws X

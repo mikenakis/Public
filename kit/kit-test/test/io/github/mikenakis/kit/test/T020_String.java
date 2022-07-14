@@ -39,18 +39,18 @@ public class T020_String
 	@Test
 	public void split_works()
 	{
-		assert List.of( Kit.string.splitAtCharacter( "", '-' ) ).equals( List.of() );
-		assert List.of( Kit.string.splitAtCharacter( "-", '-' ) ).equals( List.of( "" ) ); //equals( List.of( "", "" ) );
-		assert List.of( Kit.string.splitAtCharacter( "a", '-' ) ).equals( List.of( "a" ) );
-		assert List.of( Kit.string.splitAtCharacter( "a-", '-' ) ).equals( List.of( "a" ) ); //List.of( "a", "" ) );
-		assert List.of( Kit.string.splitAtCharacter( "-b", '-' ) ).equals( List.of( "", "b" ) );
-		assert List.of( Kit.string.splitAtCharacter( "a-b", '-' ) ).equals( List.of( "a", "b" ) );
-		assert List.of( Kit.string.splitAtCharacter( " ", '-', true ) ).equals( List.of( "" ) );
-		assert List.of( Kit.string.splitAtCharacter( " - ", '-', true ) ).equals( List.of( "", "" ) );
-		assert List.of( Kit.string.splitAtCharacter( " a ", '-', true ) ).equals( List.of( "a" ) );
-		assert List.of( Kit.string.splitAtCharacter( " a - ", '-', true ) ).equals( List.of( "a", "" ) );
-		assert List.of( Kit.string.splitAtCharacter( " - b ", '-', true ) ).equals( List.of( "", "b" ) );
-		assert List.of( Kit.string.splitAtCharacter( " a - b ", '-', true ) ).equals( List.of( "a", "b" ) );
-		assert List.of( Kit.string.splitAtCharacter( "a-b-c", '-', 2 ) ).equals( List.of( "a", "b-c" ) );
+		assert List.of( Kit.string.split( "", '-' ) ).equals( List.of() );
+		assert List.of( Kit.string.split( "-", '-' ) ).equals( List.of( "" ) ); //equals( List.of( "", "" ) );
+		assert List.of( Kit.string.split( "a", '-' ) ).equals( List.of( "a" ) );
+		assert List.of( Kit.string.split( "a-", '-' ) ).equals( List.of( "a" ) ); //List.of( "a", "" ) );
+		assert List.of( Kit.string.split( "-b", '-' ) ).equals( List.of( "", "b" ) );
+		assert List.of( Kit.string.split( "a-b", '-' ) ).equals( List.of( "a", "b" ) );
+		assert List.of( Kit.string.split( " ", '-', true ) ).equals( List.of( "" ) );
+		assert List.of( Kit.string.split( " - ", '-', true ) ).equals( List.of( "", "" ) );
+		assert List.of( Kit.string.split( " a ", '-', true ) ).equals( List.of( "a" ) );
+		assert List.of( Kit.string.split( " a - ", '-', true ) ).equals( List.of( "a", "" ) );
+		assert List.of( Kit.string.split( " - b ", '-', true ) ).equals( List.of( "", "b" ) );
+		assert List.of( Kit.string.split( " a - b ", '-', true ) ).equals( List.of( "a", "b" ) );
+		assert List.of( Kit.string.split( "a-b-c", '-', 2 ) ).equals( List.of( "a", "b-c" ) );
 	}
 }

@@ -784,9 +784,9 @@ public final class Kit
 		 *
 		 * @return An array of {@link String}. If the delimiter is not found, the array will contain a single element, which will be the entire source string.
 		 */
-		public static String[] splitAtCharacter( String stringToSplit, char delimiter )
+		public static String[] split( String stringToSplit, char delimiter )
 		{
-			return splitAtCharacter( stringToSplit, delimiter, Integer.MAX_VALUE );
+			return split( stringToSplit, delimiter, Integer.MAX_VALUE );
 		}
 
 		/**
@@ -800,9 +800,9 @@ public final class Kit
 		 *
 		 * @return An array of {@link String} containing the parts of the string.
 		 */
-		public static String[] splitAtCharacter( String stringToSplit, char delimiter, int maximum )
+		public static String[] split( String stringToSplit, char delimiter, int maximum )
 		{
-			return splitAtCharacter( stringToSplit, delimiter, maximum, false );
+			return split( stringToSplit, delimiter, maximum, false );
 		}
 
 		/**
@@ -816,9 +816,9 @@ public final class Kit
 		 *
 		 * @return An array of {@link String} containing the parts of the string.
 		 */
-		public static String[] splitAtCharacter( String stringToSplit, char delimiter, boolean trim )
+		public static String[] split( String stringToSplit, char delimiter, boolean trim )
 		{
-			return splitAtCharacter( stringToSplit, delimiter, Integer.MAX_VALUE, trim );
+			return split( stringToSplit, delimiter, Integer.MAX_VALUE, trim );
 		}
 
 		/**
@@ -833,7 +833,71 @@ public final class Kit
 		 *
 		 * @return An array of {@link String} containing the parts of the string.
 		 */
-		public static String[] splitAtCharacter( String stringToSplit, char delimiter, int maximum, boolean trim )
+		public static String[] split( String stringToSplit, char delimiter, int maximum, boolean trim )
+		{
+			return split( stringToSplit, "" + delimiter, maximum, trim );
+		}
+
+		/**
+		 * Splits a string in parts using a given string as delimiter.
+		 * <p>
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 *
+		 * @param stringToSplit the string to split.
+		 * @param delimiter     the delimiter.
+		 *
+		 * @return An array of {@link String}. If the delimiter is not found, the array will contain a single element, which will be the entire source string.
+		 */
+		public static String[] split( String stringToSplit, String delimiter )
+		{
+			return split( stringToSplit, delimiter, Integer.MAX_VALUE );
+		}
+
+		/**
+		 * Splits a string in parts using a given string as delimiter.
+		 * <p>
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 *
+		 * @param stringToSplit the string to split.
+		 * @param delimiter     the delimiter.
+		 * @param maximum       the maximum number of parts to return. If this number is reached, the last returned part will be the remainder of the string.
+		 *
+		 * @return An array of {@link String} containing the parts of the string.
+		 */
+		public static String[] split( String stringToSplit, String delimiter, int maximum )
+		{
+			return split( stringToSplit, delimiter, maximum, false );
+		}
+
+		/**
+		 * Splits a string in parts using a given string as delimiter.
+		 * <p>
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 *
+		 * @param stringToSplit the string to split.
+		 * @param delimiter     the delimiter.
+		 * @param trim          whether whitespace before and after each part should be trimmed.
+		 *
+		 * @return An array of {@link String} containing the parts of the string.
+		 */
+		public static String[] split( String stringToSplit, String delimiter, boolean trim )
+		{
+			return split( stringToSplit, delimiter, Integer.MAX_VALUE, trim );
+		}
+
+		/**
+		 * Splits a string in parts using a given string as delimiter.
+		 * <p>
+		 * Corrects Java's insanity of only offering versions of this function that work with regular expressions.
+		 *
+		 * @param stringToSplit the string to split.
+		 * @param delimiter     the delimiter.
+		 * @param maximum       the maximum number of parts to return. If this number is reached, the last returned part will be the remainder of the string.
+		 * @param trim          whether whitespace before and after each part should be trimmed.
+		 *
+		 * @return An array of {@link String} containing the parts of the string.
+		 */
+		public static String[] split( String stringToSplit, String delimiter, int maximum, boolean trim )
 		{
 			assert maximum >= 2;
 			Collection<String> result = new ArrayList<>();
@@ -858,7 +922,7 @@ public final class Kit
 				}
 				String current = stringToSplit.substring( start, end );
 				result.add( current );
-				position++;
+				position += delimiter.length();
 			}
 			return result.toArray( String[]::new );
 		}
@@ -1122,6 +1186,11 @@ public final class Kit
 			}
 			return 0;
 		}
+
+		public static Try<Integer> tryParseInteger( String text ) { return Try.of( () -> Integer.parseInt( text ) ); }
+		public static Try<Long> tryParseLong( String text ) { return Try.of( () -> Long.parseLong( text ) ); }
+		public static Try<Float> tryParseFloat( String text ) { return Try.of( () -> Float.parseFloat( text ) ); }
+		public static Try<Double> tryParseDouble( String text ) { return Try.of( () -> Double.parseDouble( text ) ); }
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2566,6 +2635,16 @@ public final class Kit
 			return newArray;
 		}
 
+		public static <T> T[] subArray( T[] array, int offset, int length )
+		{
+			assert 0 <= offset && offset < array.length;
+			assert length >= 0;
+			assert offset + length <= array.length;
+			T[] newArray = newArrayLike( array, length );
+			System.arraycopy( array, offset, newArray, 0, length );
+			return newArray;
+		}
+
 		/**
 		 * Checks whether an array contains a given element.
 		 */
@@ -2589,7 +2668,13 @@ public final class Kit
 
 		private static <T> T[] newArrayLike( T[] array, int length )
 		{
-			@SuppressWarnings( "unchecked" ) T[] result = (T[])Array.newInstance( array.getClass().getComponentType(), length );
+			Class<T> elementClass = uncheckedClassCast( array.getClass().getComponentType() );
+			return newArray( elementClass, length );
+		}
+
+		public static <T> T[] newArray( Class<T> elementClass, int length )
+		{
+			@SuppressWarnings( "unchecked" ) T[] result = (T[])Array.newInstance( elementClass, length );
 			return result;
 		}
 

@@ -136,7 +136,7 @@ public final class ByteCodeHelpers
 	{
 		if( name.isEmpty() )
 			return false;
-		for( String part : Kit.string.splitAtCharacter( name, '/' ) )
+		for( String part : Kit.string.split( name, '/' ) )
 			if( !isValidInternalNamePart( part ) )
 				return false;
 		return true;

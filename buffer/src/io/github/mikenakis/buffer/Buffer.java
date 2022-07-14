@@ -33,14 +33,14 @@ public final class Buffer implements Comparable<Buffer>
 	{
 		byte[] bytes = new byte[1];
 		bytes[0] = content;
-		return new Buffer( bytes );
+		return of( bytes );
 	}
 
 	public static Buffer of( char content )
 	{
-		byte[] bytes = new byte[1];
-		bytes[0] = (byte)content;
-		return new Buffer( bytes );
+		char[] chars = new char[1];
+		chars[0] = content;
+		return of( chars );
 	}
 
 	public static Buffer of( String content )
@@ -50,35 +50,22 @@ public final class Buffer implements Comparable<Buffer>
 
 	public static Buffer of( String content, Charset charset )
 	{
-		if( content.isEmpty() )
-			return EMPTY;
-		byte[] bytes = content.getBytes( charset );
-		return new Buffer( bytes );
+		return of( content.getBytes( charset ) );
 	}
 
 	public static Buffer of( char[] content )
 	{
-		if( content.length == 0 )
-			return EMPTY;
-		byte[] bytes = new String( content ).getBytes( StandardCharsets.UTF_8 );
-		return new Buffer( bytes );
+		return of( content, StandardCharsets.UTF_8 );
 	}
 
 	public static Buffer of( char[] content, Charset charset )
 	{
-		if( content.length == 0 )
-			return EMPTY;
-		byte[] bytes = new String( content ).getBytes( charset );
-		return new Buffer( bytes );
+		return of( new String( content ), charset );
 	}
 
 	public static Buffer of( byte[] content )
 	{
-		if( content.length == 0 )
-			return EMPTY;
-		byte[] ownBytes = new byte[content.length];
-		System.arraycopy( content, 0, ownBytes, 0, content.length );
-		return new Buffer( ownBytes );
+		return of( content, 0, content.length );
 	}
 
 	public static Buffer of( byte[] content, int offset, int length )

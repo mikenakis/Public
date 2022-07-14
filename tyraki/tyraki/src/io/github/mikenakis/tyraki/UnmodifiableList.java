@@ -119,6 +119,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 		return onArray( arrayOfElements ); //ConversionCollections.newArrayWrapper( arrayOfElements );
 	}
 
+	static <E> UnmodifiableList<E> onArray( E[] arrayOfElements, int offset, int length )
+	{
+		arrayOfElements = Kit.array.subArray( arrayOfElements, offset, length );
+		return ConversionCollections.newArrayWrapper( arrayOfElements );
+	}
+
 	static <E> UnmodifiableList<E> onArray( E[] arrayOfElements )
 	{
 		return ConversionCollections.newArrayWrapper( arrayOfElements );
