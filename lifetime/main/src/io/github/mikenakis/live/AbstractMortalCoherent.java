@@ -21,7 +21,6 @@ public abstract class AbstractMortalCoherent extends AbstractCoherent implements
 		assert mustBeAliveAssertion();
 		assert mustBeWritableAssertion();
 		onClose();
-		lifeGuard().close();
 	}
 
 	@Override public boolean mustBeAliveAssertion()
@@ -44,6 +43,7 @@ public abstract class AbstractMortalCoherent extends AbstractCoherent implements
 
 	protected void onClose()
 	{
+		lifeGuard().close();
 	}
 
 	@Override public String toString()

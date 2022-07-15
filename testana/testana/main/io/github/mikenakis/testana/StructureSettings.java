@@ -1,9 +1,9 @@
 package io.github.mikenakis.testana;
 
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.Unit;
 import io.github.mikenakis.kit.logging.Log;
 
-import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,11 +41,11 @@ public class StructureSettings
 		assert Kit.path.isAbsoluteNormalized( configurationPathName );
 		if( configurationPathName.toFile().exists() )
 		{
-			Kit.uncheckedTryWith( () -> Files.newBufferedReader( configurationPathName ), ( BufferedReader reader ) -> //
+			Kit.uncheckedTryWith( Kit.unchecked( () -> Files.newBufferedReader( configurationPathName ) ), reader -> //
 			{
 				for( ; ; )
 				{
-					String line = reader.readLine();
+					String line = Kit.unchecked( () -> reader.readLine() );
 					if( line == null )
 						break;
 					int i = line.indexOf( '#' );
@@ -71,6 +71,7 @@ public class StructureSettings
 							break;
 					}
 				}
+				return Unit.instance;
 			} );
 		}
 		for( Map.Entry<Path,ExcludedDirectoryEntry> entry : excludedDirectoryEntryFromPathMap.entrySet() )

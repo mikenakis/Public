@@ -19,13 +19,13 @@ public final class BufferBuilder extends AbstractCoherent
 		return new BufferBuilder( coherence, capacity );
 	}
 
-	private byte[] value;
+	private byte[] bytes;
 	private int count;
 
 	private BufferBuilder( Coherence coherence, int capacity )
 	{
 		super( coherence );
-		value = new byte[capacity];
+		bytes = new byte[capacity];
 		count = 0;
 	}
 
@@ -35,10 +35,16 @@ public final class BufferBuilder extends AbstractCoherent
 		return count;
 	}
 
+	public boolean isEmpty()
+	{
+		assert mustBeReadableAssertion();
+		return count == 0;
+	}
+
 	public int getCapacity()
 	{
 		assert mustBeReadableAssertion();
-		return value.length;
+		return bytes.length;
 	}
 
 	public void ensureCapacity( int minimumCapacity )
@@ -51,13 +57,13 @@ public final class BufferBuilder extends AbstractCoherent
 	private void ensureCapacityInternal( int minimumCapacity )
 	{
 		// overflow-conscious code
-		if( minimumCapacity - value.length > 0 )
+		if( minimumCapacity - bytes.length > 0 )
 			expandCapacity( minimumCapacity );
 	}
 
 	private void expandCapacity( int minimumCapacity )
 	{
-		int newCapacity = value.length * 2 + 2;
+		int newCapacity = bytes.length * 2 + 2;
 		if( newCapacity - minimumCapacity < 0 )
 			newCapacity = minimumCapacity;
 		if( newCapacity < 0 )
@@ -66,14 +72,14 @@ public final class BufferBuilder extends AbstractCoherent
 				throw new OutOfMemoryError();
 			newCapacity = Integer.MAX_VALUE;
 		}
-		value = Arrays.copyOf( value, newCapacity );
+		bytes = Arrays.copyOf( bytes, newCapacity );
 	}
 
 	public void trimToSize()
 	{
 		assert mustBeWritableAssertion();
-		if( count < value.length )
-			value = Arrays.copyOf( value, count );
+		if( count < bytes.length )
+			bytes = Arrays.copyOf( bytes, count );
 	}
 
 	public void setLength( int newLength )
@@ -82,7 +88,7 @@ public final class BufferBuilder extends AbstractCoherent
 		assert newLength >= 0 : new IndexOutOfBoundsException( Integer.toString( newLength ) );
 		ensureCapacityInternal( newLength );
 		if( count < newLength )
-			Arrays.fill( value, count, newLength, (byte)0 );
+			Arrays.fill( bytes, count, newLength, (byte)0 );
 		count = newLength;
 	}
 
@@ -97,7 +103,7 @@ public final class BufferBuilder extends AbstractCoherent
 		if( length > 0 )
 		{
 			ensureCapacityInternal( count + length );
-			System.arraycopy( bytes, offset, value, count, length );
+			System.arraycopy( bytes, offset, this.bytes, count, length );
 			count += length;
 		}
 		return this;
@@ -109,7 +115,7 @@ public final class BufferBuilder extends AbstractCoherent
 		if( length > 0 )
 		{
 			ensureCapacityInternal( count + length );
-			buffer.copyBytes( offset, value, count, length );
+			buffer.copyBytes( offset, bytes, count, length );
 			count += length;
 		}
 		return this;
@@ -126,23 +132,21 @@ public final class BufferBuilder extends AbstractCoherent
 	{
 		assert mustBeWritableAssertion();
 		ensureCapacityInternal( count + 1 );
-		value[count++] = b;
+		bytes[count++] = b;
 		return this;
 	}
 
 	public BufferBuilder delete( int start, int end )
 	{
 		assert mustBeWritableAssertion();
-		if( start < 0 )
-			throw new StringIndexOutOfBoundsException( start );
+		assert start >= 0 : new StringIndexOutOfBoundsException( start );
 		if( end > count )
 			end = count;
-		if( start > end )
-			throw new StringIndexOutOfBoundsException();
+		assert start <= end : new StringIndexOutOfBoundsException();
 		int len = end - start;
 		if( len > 0 )
 		{
-			System.arraycopy( value, start + len, value, start, count - end );
+			System.arraycopy( bytes, start + len, bytes, start, count - end );
 			count -= len;
 		}
 		return this;
@@ -151,9 +155,8 @@ public final class BufferBuilder extends AbstractCoherent
 	public BufferBuilder deleteCharAt( int index )
 	{
 		assert mustBeWritableAssertion();
-		if( (index < 0) || (index >= count) )
-			throw new StringIndexOutOfBoundsException( index );
-		System.arraycopy( value, index + 1, value, index, count - index - 1 );
+		assert (index >= 0) && (index < count) : new StringIndexOutOfBoundsException( index );
+		System.arraycopy( bytes, index + 1, bytes, index, count - index - 1 );
 		count--;
 		return this;
 	}
@@ -177,10 +180,24 @@ public final class BufferBuilder extends AbstractCoherent
 		int newCount = count + len - (end - start);
 		ensureCapacityInternal( newCount );
 
-		System.arraycopy( value, end, value, start + len, count - end );
-		buffer.copyBytes( value, start );
+		System.arraycopy( bytes, end, bytes, start + len, count - end );
+		buffer.copyBytes( bytes, start );
 		count = newCount;
 		return this;
+	}
+
+	public Buffer subBuffer( int beginIndex )
+	{
+		return subBuffer( beginIndex, size() );
+	}
+
+	public Buffer subBuffer( int beginIndex, int endIndex )
+	{
+		assert mustBeReadableAssertion();
+		assert beginIndex >= 0;
+		assert beginIndex <= endIndex;
+		assert endIndex <= count;
+		return Buffer.of( bytes, beginIndex, endIndex - beginIndex );
 	}
 
 	public String substring( int start )
@@ -192,7 +209,7 @@ public final class BufferBuilder extends AbstractCoherent
 	public String substring( int start, int end )
 	{
 		assert mustBeReadableAssertion();
-		return new String( value, start, end - start );
+		return new String( bytes, start, end - start );
 	}
 
 	public BufferBuilder insert( int index, byte[] str, int offset, int len )
@@ -204,8 +221,8 @@ public final class BufferBuilder extends AbstractCoherent
 		assert len >= 0 : new IndexOutOfBoundsException( Integer.toString( len ) );
 		assert offset <= str.length - len : new IndexOutOfBoundsException( "offset " + offset + ", len " + len + ", str.length " + str.length );
 		ensureCapacityInternal( count + len );
-		System.arraycopy( value, index, value, index + len, count - index );
-		System.arraycopy( str, offset, value, index, len );
+		System.arraycopy( bytes, index, bytes, index + len, count - index );
+		System.arraycopy( str, offset, bytes, index, len );
 		count += len;
 		return this;
 	}
@@ -223,8 +240,8 @@ public final class BufferBuilder extends AbstractCoherent
 		assert offset <= count;
 		int len = str.length;
 		ensureCapacityInternal( count + len );
-		System.arraycopy( value, offset, value, offset + len, count - offset );
-		System.arraycopy( str, 0, value, offset, len );
+		System.arraycopy( bytes, offset, bytes, offset + len, count - offset );
+		System.arraycopy( str, 0, bytes, offset, len );
 		count += len;
 		return this;
 	}
@@ -252,8 +269,8 @@ public final class BufferBuilder extends AbstractCoherent
 		assert end <= buffer.size();
 		int len = end - start;
 		ensureCapacityInternal( count + len );
-		System.arraycopy( value, dstOffset, value, dstOffset + len, count - dstOffset );
-		buffer.copyBytes( start, value, dstOffset, len );
+		System.arraycopy( bytes, dstOffset, bytes, dstOffset + len, count - dstOffset );
+		buffer.copyBytes( start, bytes, dstOffset, len );
 		count += len;
 		return this;
 	}
@@ -268,8 +285,8 @@ public final class BufferBuilder extends AbstractCoherent
 	{
 		assert mustBeWritableAssertion();
 		ensureCapacityInternal( count + 1 );
-		System.arraycopy( value, offset, value, offset + 1, count - offset );
-		value[offset] = b;
+		System.arraycopy( bytes, offset, bytes, offset + 1, count - offset );
+		bytes[offset] = b;
 		count += 1;
 		return this;
 	}
@@ -297,13 +314,13 @@ public final class BufferBuilder extends AbstractCoherent
 	public int indexOf( Buffer pattern )
 	{
 		assert mustBeReadableAssertion();
-		return Buffer.indexOf( value, pattern );
+		return Buffer.indexOf( bytes, 0, count, pattern );
 	}
 
 	public int lastIndexOf( Buffer pattern )
 	{
 		assert mustBeReadableAssertion();
-		return Buffer.lastIndexOf( value, pattern );
+		return Buffer.lastIndexOf( bytes, 0, count, pattern );
 	}
 
 	public BufferBuilder reverse()
@@ -313,27 +330,32 @@ public final class BufferBuilder extends AbstractCoherent
 		for( int j = (n - 1) >> 1; j >= 0; j-- )
 		{
 			int k = n - j;
-			byte cj = value[j];
-			byte ck = value[k];
-			value[j] = ck;
-			value[k] = cj;
+			byte cj = bytes[j];
+			byte ck = bytes[k];
+			bytes[j] = ck;
+			bytes[k] = cj;
 		}
 		return this;
 	}
 
 	@Override public String toString()
 	{
-		return new String( value, 0, count );
+		return new String( bytes, 0, count );
 	}
 
 	public Buffer toBuffer()
 	{
 		assert mustBeReadableAssertion();
-		return Buffer.of( value, 0, count );
+		return Buffer.of( bytes, 0, count );
 	}
 
 	public int size()
 	{
 		return count;
+	}
+
+	public void clear()
+	{
+		count = 0;
 	}
 }

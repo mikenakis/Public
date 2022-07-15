@@ -1,6 +1,7 @@
 package io.github.mikenakis.testana;
 
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.Unit;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.testana.kit.structured.json.JsonReader;
 import io.github.mikenakis.testana.kit.structured.json.JsonWriter;
@@ -64,20 +65,16 @@ public final class Persistence
 		{
 			if( !Files.exists( persistencePathName ) )
 				return;
-			try
-			{
-				load( persistencePathName );
-			}
-			catch( Throwable exception )
-			{
-				Log.warning( "Failed to load persistence due to " + exception.getClass() + (exception.getMessage() == null ? "" : ": " + exception.getMessage()) );
-			}
+			Kit.tryCatchWithoutBoundary( () -> load() ) //
+				.map( Kit::mapAssertionErrorToCause ) //
+				.ifPresent( throwable -> //
+					Log.warning( "Failed to load persistence due to " + throwable.getClass().getName() + (throwable.getMessage() == null ? "" : ": " + throwable.getMessage()) ) );
 		}
 	}
 
-	private void load( Path persistencePathName )
+	private void load()
 	{
-		Kit.uncheckedTryWith( () -> Files.newBufferedReader( persistencePathName ), bufferedReader -> //
+		Kit.uncheckedTryWith( Kit.unchecked( () -> Files.newBufferedReader( persistencePathName ) ), bufferedReader -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonReader );
@@ -96,6 +93,7 @@ public final class Persistence
 				} );
 				entryFromNameMap.putAll( mutableMap );
 			} );
+			return Unit.instance;
 		} );
 	}
 
@@ -107,17 +105,16 @@ public final class Persistence
 	public void save()
 	{
 		/**
-		 * PEARL: Files.newBufferedWriter() disregards the fact that BufferedWriter's close() method does not close the contained OutputStreamWriter!
-		 *        Files.newBufferedWriter() returns a new BufferedWriter which writes to a new OutputStreamWriter which writes to a new OutputStream.
-		 *        The OutputStreamWriter's close() method contains a call to the contained OutputStream's close() method; however, BufferedWriter's close()
-		 *        method does not contain a call to the contained OutputStreamWriter's close() method!  Therefore, when the BufferedWriter gets closed, neither
-		 *        the contained OutputStreamWriter nor the contained OutputStream get closed, so the OutputStream remains open until it gets garbage-collected!
-		 *        (This has been observed in JDK 17.)
+		 * PEARL: {@link Files#newBufferedWriter(Path, java.nio.file.OpenOption...)} memory-leaks an OutputStreamWriter and an OutputStream!
+		 *        The method {@link Files#newBufferedWriter(Path, java.nio.file.OpenOption...)} creates a new OutputStream, passes it to a new
+		 *        OutputStreamWriter, and passes that to a new {@link BufferedWriter}, which it returns to us. When we close the returned
+		 *        {@link BufferedWriter}, it does not close the contained {@link OutputStreamWriter}! This means that the contained OutputStream does
+		 *        not get closed either, so, they both remain open until they get finalized! (This has been observed in JDK 17.)
 		 *        Thus, we have to refrain from invoking Files.newBufferedWriter() and instead create the BufferedWriter and the OutputStreamWriter ourselves,
 		 *        so that we can make sure they both get closed.
 		 */
-		Kit.uncheckedTryWith( () -> new OutputStreamWriter( Files.newOutputStream( persistencePathName ), StandardCharsets.UTF_8 ), outputStreamWriter -> //
-			Kit.uncheckedTryWith( () -> new BufferedWriter( outputStreamWriter, 32 * 1024 ), writer -> //
+		Kit.uncheckedTryWith( Kit.unchecked( () -> new OutputStreamWriter( Files.newOutputStream( persistencePathName ), StandardCharsets.UTF_8 ) ), outputStreamWriter -> //
+			Kit.uncheckedTryWith( new BufferedWriter( outputStreamWriter, 32 * 1024 ), writer -> //
 			{
 				JsonWriter jsonWriter = new JsonWriter( writer, true, true );
 				StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
@@ -141,6 +138,7 @@ public final class Persistence
 						} ) );
 					}
 				} );
+				return Unit.instance;
 			} ) );
 		dirty = false;
 	}

@@ -18,9 +18,7 @@ import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.kit.functional.Procedure1;
 import io.github.mikenakis.kit.functional.ThrowingFunction0;
-import io.github.mikenakis.kit.functional.ThrowingFunction1;
 import io.github.mikenakis.kit.functional.ThrowingProcedure0;
-import io.github.mikenakis.kit.functional.ThrowingProcedure1;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.kit.ref.Ref;
 
@@ -2003,67 +2001,33 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Debugging helpers (try-catch, try-finally, etc.)
 
-	public static void trySwallow( Procedure0 procedure0 )
-	{
-		tryCatch( procedure0, Log::error );
-	}
-
 	/**
-	 * Performs a debugger-friendly {@code try-catch} which returns a result.
+	 * Performs a {@code try-catch} and returns any caught {@link Throwable}.
 	 *
-	 * @param tryFunction   the function to be invoked in the 'try' block.
-	 * @param catchFunction the function to handle any throwable thrown.
-	 * @param <R>           the type of result returned.
-	 *
-	 * @return the result of the try-function or catch-function.
+	 * @param procedure the procedure to be invoked in the 'try' block.
 	 */
-	public static <R> R tryGetCatch( Function0<R> tryFunction, ThrowingFunction1<R,Throwable,Throwable> catchFunction )
+	public static Optional<Throwable> tryCatchWithoutBoundary( Procedure0 procedure )
 	{
 		try
 		{
-			return Debug.boundary( () -> tryFunction.invoke() );
-		}
-		catch( Throwable throwable )
-		{
-			uncheckedThrowable( () -> catchFunction.invoke( throwable ) );
-			return null;
-		}
-	}
-
-	/**
-	 * Performs a debugger-friendly {@code try-catch} which does not return a result.
-	 *
-	 * @param tryProcedure   the procedure to be invoked in the 'try' block.
-	 * @param catchProcedure the handler to receive any throwable thrown.
-	 */
-	public static void tryCatch( Procedure0 tryProcedure, ThrowingProcedure1<Throwable,Throwable> catchProcedure )
-	{
-		try
-		{
-			Debug.boundary( () -> tryProcedure.invoke() );
-		}
-		catch( Throwable throwable )
-		{
-			uncheckedThrowable( () -> catchProcedure.invoke( throwable ) );
-		}
-	}
-
-	/**
-	 * Performs a debugger-friendly {@code try-catch} and returns any caught {@link Throwable}.
-	 *
-	 * @param tryProcedure the procedure to be invoked in the 'try' block.
-	 */
-	public static Optional<Throwable> tryCatch( Procedure0 tryProcedure )
-	{
-		try
-		{
-			Debug.boundary( () -> tryProcedure.invoke() );
+			procedure.invoke();
 			return Optional.empty();
 		}
 		catch( Throwable throwable )
 		{
 			return Optional.of( throwable );
 		}
+	}
+
+	/**
+	 * Performs a debugger-friendly {@code try-catch} and returns any caught {@link Throwable}.
+	 *
+	 * @param procedure the procedure to be invoked in the 'try' block.
+	 */
+	public static Optional<Throwable> tryCatch( Procedure0 procedure )
+	{
+		return tryCatchWithoutBoundary( () ->
+			Debug.boundary( () -> procedure.invoke() ) );
 	}
 
 	/**
@@ -2077,9 +2041,25 @@ public final class Kit
 	 */
 	public static <R> R tryFinally( Function0<R> tryFunction, Procedure0 finallyHandler )
 	{
+		return tryFinallyWithoutBoundary( () -> //
+			Debug.boundary( () -> tryFunction.invoke() ), //
+			finallyHandler );
+	}
+
+	/**
+	 * Performs a debugger-friendly {@code try-finally} that returns a result.
+	 *
+	 * @param tryFunction    the function to be invoked in the 'try' block.
+	 * @param finallyHandler the handler to be invoked after the try-function.
+	 * @param <R>            the type of the result.
+	 *
+	 * @return the result of the try-function.
+	 */
+	public static <R> R tryFinallyWithoutBoundary( Function0<R> tryFunction, Procedure0 finallyHandler )
+	{
 		try
 		{
-			return Debug.boundary( () -> tryFunction.invoke() );
+			return tryFunction.invoke();
 		}
 		finally
 		{
@@ -2102,46 +2082,6 @@ public final class Kit
 		finally
 		{
 			finallyHandler.invoke();
-		}
-	}
-
-	/**
-	 * Performs a debugger-friendly try-catch-and-transform that does not return a value.
-	 *
-	 * @param tryProcedure the {@link Procedure0} to invoke as the try-block.
-	 * @param transformer  a function to transform the caught {@link Throwable} into another {@link Throwable}.
-	 * @param <T>          the type of the transformed {@link Throwable}
-	 */
-	public static <T extends Throwable> void tryTransform( Procedure0 tryProcedure, Function1<T,Throwable> transformer )
-	{
-		try
-		{
-			Debug.boundary( () -> tryProcedure.invoke() );
-		}
-		catch( Throwable throwable )
-		{
-			T wrappedThrowable = transformer.invoke( throwable );
-			throw sneakyException( wrappedThrowable );
-		}
-	}
-
-	/**
-	 * Performs a debugger-friendly try-catch-and-transform that returns a value.
-	 *
-	 * @param tryFunction the {@link Function0} to invoke as the try-block and return its result.
-	 * @param transformer a function to transform the caught {@link Throwable} into another {@link Throwable}.
-	 * @param <T>         the type of the transformed {@link Throwable}
-	 */
-	public static <R, T extends Throwable> R tryGetTransform( Function0<R> tryFunction, Function1<T,Throwable> transformer )
-	{
-		try
-		{
-			return Debug.boundary( () -> tryFunction.invoke() );
-		}
-		catch( Throwable throwable )
-		{
-			T wrappedThrowable = transformer.invoke( throwable );
-			throw sneakyException( wrappedThrowable );
 		}
 	}
 
@@ -2180,12 +2120,6 @@ public final class Kit
 		p.invoke();
 	}
 
-	private static <E extends Throwable> void uncheckedThrowable( ThrowingProcedure0<E> throwingProcedure )
-	{
-		@SuppressWarnings( "unchecked" ) ThrowingProcedure0<RuntimeException> p = (ThrowingProcedure0<RuntimeException>)throwingProcedure;
-		p.invoke();
-	}
-
 	//TODO: get rid of.
 	public interface ThrowableThrowingFunction<R, E extends Throwable>
 	{
@@ -2218,34 +2152,12 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <C extends AutoCloseable, R, E extends Exception> R uncheckedTryGetWith( ThrowingFunction0<C,E> autoCloseableFactory, //
-		ThrowingFunction1<R,C,E> tryFunction )
+	public static <R,C extends AutoCloseable> R uncheckedTryWith( C autoCloseable, Function1<R,C> tryFunction )
 	{
-		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
-		C autoCloseable = f.invoke();
-		try
-		{
-			return Debug.boundary( () -> unchecked( () -> tryFunction.invoke( autoCloseable ) ) );
-		}
-		finally
-		{
-			unchecked( autoCloseable::close );
-		}
-	}
-
-	/**
-	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
-	 * exception.
-	 */
-	public static <C extends AutoCloseable, E extends Exception> void uncheckedTryWith( ThrowingFunction0<C,E> autoCloseableFactory, //
-		ThrowingProcedure1<C,E> tryProcedure )
-	{
-		@SuppressWarnings( "unchecked" ) ThrowingFunction0<C,RuntimeException> f = (ThrowingFunction0<C,RuntimeException>)autoCloseableFactory;
-		C autoCloseable = f.invoke();
 		assert autoCloseable != null;
 		try
 		{
-			Debug.boundary( () -> unchecked( () -> tryProcedure.invoke( autoCloseable ) ) );
+			return tryFunction.invoke( autoCloseable );
 		}
 		finally
 		{
@@ -3032,7 +2944,7 @@ public final class Kit
 
 		public static <R> R postAndWait( Procedure1<Procedure0> poster, Function0<R> function0 )
 		{
-			Ref<R> resultRef = Ref.of( null );
+			Ref<R> resultRef = Ref.of();
 			CountDownLatch countDownLatch = new CountDownLatch( 1 );
 			poster.invoke( () -> //
 			{
@@ -3246,5 +3158,12 @@ public final class Kit
 		{
 			throw sneakyException( throwableFactory.invoke( throwable ) );
 		}
+	}
+
+	public static Throwable mapAssertionErrorToCause( Throwable throwable )
+	{
+		while( throwable instanceof AssertionError && throwable.getCause() != null )
+			throwable = throwable.getCause();
+		return throwable;
 	}
 }

@@ -1,6 +1,7 @@
 package io.github.mikenakis.kit;
 
 import io.github.mikenakis.kit.functional.Procedure0;
+import io.github.mikenakis.kit.logging.Log;
 
 public class Multicaster0
 {
@@ -35,6 +36,7 @@ public class Multicaster0
 	public void invoke()
 	{
 		for( Procedure0 procedure : procedures )
-			Kit.tryCatch( procedure, throwable -> throwable.printStackTrace( System.err ) );
+			Kit.tryCatch( procedure ) //
+				.ifPresent( Log::error );
 	}
 }

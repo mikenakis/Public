@@ -24,16 +24,9 @@ public final class TestKit
 	{
 		Throwable caughtThrowable = invokeAndCatch( procedure );
 		assert caughtThrowable != null : new ExceptionExpectedException( expectedThrowableClass );
-		caughtThrowable = unwrap( caughtThrowable );
+		caughtThrowable = Kit.mapAssertionErrorToCause( caughtThrowable );
 		assert caughtThrowable.getClass() == expectedThrowableClass : new ExceptionDiffersFromExpectedException( expectedThrowableClass, caughtThrowable );
 		return expectedThrowableClass.cast( caughtThrowable );
-	}
-
-	private static Throwable unwrap( Throwable throwable )
-	{
-		while( throwable instanceof AssertionError && throwable.getCause() != null )
-			throwable = throwable.getCause();
-		return throwable;
 	}
 
 	private static Throwable invokeAndCatch( Procedure0 procedure )

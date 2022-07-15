@@ -39,22 +39,20 @@ public class ClassDumpMain
 			System.exit( -1 );
 		}
 
-		Kit.tryCatch( () ->
-		{
-			run( loop.get(), outputFileName.get(), sourcesDirectory.get(), binariesDirectory.get(), className.get(), skipOptionalAttributes.get() );
-			System.exit( 0 );
-		}, throwable ->	handleThrowable( throwable, clio.programName ) );
-	}
-
-	private static void handleThrowable( Throwable throwable, String programName )
-	{
-		if( throwable instanceof AssertionError assertionError && assertionError.getCause() != null )
-			throwable = assertionError.getCause();
-		if( throwable instanceof ApplicationException applicationException )
-			System.err.println( programName + ": " + applicationException.getMessage() );
-		else
-			Log.error( throwable );
-		System.exit( 1 );
+		Kit.tryCatch( () -> //
+			{
+				run( loop.get(), outputFileName.get(), sourcesDirectory.get(), binariesDirectory.get(), className.get(), skipOptionalAttributes.get() );
+				System.exit( 0 );
+			} ) //
+			.map( Kit::mapAssertionErrorToCause ) //
+			.ifPresent( throwable -> //
+			{
+				if( throwable instanceof ApplicationException applicationException )
+					System.err.println( clio.programName + ": " + applicationException.getMessage() );
+				else
+					Log.error( throwable );
+				System.exit( 1 );
+			} );
 	}
 
 	private ClassDumpMain()

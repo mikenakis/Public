@@ -1,6 +1,7 @@
 package io.github.mikenakis.swapi;
 
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.Unit;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.swapi.modeling.TextRow;
 import io.github.mikenakis.swapi.modeling.TextTable;
@@ -14,7 +15,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.net.HttpURLConnection;
@@ -109,8 +109,8 @@ public final class SwapiLoader
 		if( Kit.get( true ) )
 		{
 			ClassLoader classloader = SwapiLoader.class.getClassLoader();
-			Kit.uncheckedTryWith( () -> Kit.classLoading.getResourceAsStream( classloader, entityTypeName + ".txt" ), ( InputStream inputStream ) -> //
-				Kit.uncheckedTryWith( () -> new InputStreamReader( inputStream ), ( InputStreamReader inputStreamReader ) -> //
+			Kit.uncheckedTryWith( Kit.classLoading.getResourceAsStream( classloader, entityTypeName + ".txt" ), inputStream -> //
+				Kit.uncheckedTryWith( new InputStreamReader( inputStream ), inputStreamReader -> //
 					readFromFile( inputStreamReader, mutableObjects ) ) );
 		}
 		else
@@ -121,7 +121,7 @@ public final class SwapiLoader
 			File file = path.toAbsolutePath().toFile();
 			if( file.exists() )
 			{
-				Kit.uncheckedTryWith( () -> new FileReader( file ), ( InputStreamReader inputStreamReader ) -> //
+				Kit.uncheckedTryWith( Kit.unchecked( () -> new FileReader( file ) ), inputStreamReader -> //
 					readFromFile( inputStreamReader, mutableObjects ) );
 			}
 			else
@@ -135,22 +135,26 @@ public final class SwapiLoader
 		return Collections.unmodifiableCollection( mutableObjects );
 	}
 
-	private static void readFromFile( InputStreamReader inputStreamReader, Collection<JSONObject> mutableObjects ) throws IOException
+	private static Unit readFromFile( InputStreamReader inputStreamReader, Collection<JSONObject> mutableObjects )
 	{
-		try( BufferedReader reader = new BufferedReader( inputStreamReader ) )
+		Kit.unchecked( () -> //
 		{
-			for( ; ; )
+			try( BufferedReader reader = new BufferedReader( inputStreamReader ) )
 			{
-				String line = reader.readLine();
-				if( line == null )
-					break;
-				line = line.trim();
-				if( line.startsWith( "#" ) )
-					continue;
-				JSONObject jsonObject = new JSONObject( line );
-				Kit.collection.add( mutableObjects, jsonObject );
+				for( ; ; )
+				{
+					String line = reader.readLine();
+					if( line == null )
+						break;
+					line = line.trim();
+					if( line.startsWith( "#" ) )
+						continue;
+					JSONObject jsonObject = new JSONObject( line );
+					Kit.collection.add( mutableObjects, jsonObject );
+				}
 			}
-		}
+		} );
+		return Unit.instance;
 	}
 
 	private static void writeIntoFile( File file, String comment, Collection<JSONObject> jsonObjects ) throws IOException

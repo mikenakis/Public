@@ -1,5 +1,6 @@
 package io.github.mikenakis.kit;
 
+import io.github.mikenakis.debug.Debug;
 import io.github.mikenakis.kit.exceptions.UncheckedException;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
@@ -28,6 +29,20 @@ public abstract class Try<T>
 	}
 
 	public static <U> Try<U> of( Function0<U> f )
+	{
+		try
+		{
+			U payload = Debug.boundary( () -> //
+				f.invoke() );
+			return success( payload );
+		}
+		catch( Throwable t )
+		{
+			return failure( t );
+		}
+	}
+
+	public static <U> Try<U> ofWithoutBoundary( Function0<U> f )
 	{
 		try
 		{
@@ -131,15 +146,8 @@ public abstract class Try<T>
 
 		@Override public <U> Try<U> map( Function1<? extends U,? super T> f )
 		{
-			try
-			{
-				U payload = f.invoke( value );
-				return success( payload );
-			}
-			catch( Throwable t )
-			{
-				return failure( t );
-			}
+			return Try.of( () -> //
+				f.invoke( value ) );
 		}
 
 		@Override public Try<T> mapFailure( Function1<Throwable,Throwable> f )
@@ -181,6 +189,11 @@ public abstract class Try<T>
 		@Override public <U> Try<U> mapFailure()
 		{
 			throw new AssertionError();
+		}
+
+		@Override public String toString()
+		{
+			return "Success: " + Kit.string.of( value );
 		}
 	}
 
@@ -292,6 +305,11 @@ public abstract class Try<T>
 		{
 			@SuppressWarnings( "unchecked" ) Try<U> result = (Try<U>)this;
 			return result;
+		}
+
+		@Override public String toString()
+		{
+			return "Failure: " + e.getClass().getName() + " : " + e.getMessage();
 		}
 	}
 }

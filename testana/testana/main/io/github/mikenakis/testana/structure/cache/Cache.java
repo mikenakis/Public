@@ -1,6 +1,7 @@
 package io.github.mikenakis.testana.structure.cache;
 
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.Unit;
 import io.github.mikenakis.testana.discovery.OutputDirectory;
 import io.github.mikenakis.testana.discovery.OutputFile;
 import io.github.mikenakis.testana.kit.structured.json.JsonReader;
@@ -13,8 +14,6 @@ import io.github.mikenakis.testana.structure.ProjectModule;
 import io.github.mikenakis.testana.structure.ProjectStructure;
 import io.github.mikenakis.testana.structure.ProjectType;
 
-import java.io.BufferedReader;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +34,7 @@ public class Cache
 
 	public static Cache fromFile( Path cachePathName )
 	{
-		Map<String,CacheModule> modules = Kit.uncheckedTryGetWith( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ), ( BufferedReader bufferedReader ) -> //
+		Map<String,CacheModule> modules = Kit.uncheckedTryWith( Kit.unchecked( () -> Files.newBufferedReader( cachePathName, StandardCharsets.UTF_8 ) ), bufferedReader -> //
 		{
 			JsonReader jsonReader = new JsonReader( bufferedReader, true );
 			StructuredReader rootReader = new JsonStructuredReader( jsonReader );
@@ -100,7 +99,7 @@ public class Cache
 				} );
 				return Collections.unmodifiableMap( modules1 );
 			} );
-		});
+		} );
 		Instant instant = Kit.unchecked( () -> Files.getLastModifiedTime( cachePathName ) ).toInstant();
 		return new Cache( instant, modules );
 	}
@@ -160,7 +159,7 @@ public class Cache
 
 	public void save( Path path )
 	{
-		Kit.uncheckedTryWith( () -> Files.newBufferedWriter( path ), ( Writer writer ) -> //
+		Kit.uncheckedTryWith( Kit.unchecked( () -> Files.newBufferedWriter( path ) ), writer -> //
 		{
 			JsonWriter jsonWriter = new JsonWriter( writer, true, true );
 			StructuredWriter rootWriter = new JsonStructuredWriter( jsonWriter, JsonWriter.Mode.Object );
@@ -210,6 +209,7 @@ public class Cache
 					} );
 				}
 			} );
+			return Unit.instance;
 		} );
 	}
 

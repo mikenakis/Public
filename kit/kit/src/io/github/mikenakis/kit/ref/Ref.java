@@ -9,6 +9,11 @@ package io.github.mikenakis.kit.ref;
  */
 public class Ref<T>
 {
+	public static <T> Ref<T> of()
+	{
+		return of( null );
+	}
+
 	public static <T> Ref<T> of( T value )
 	{
 		return new Ref<>( value );
