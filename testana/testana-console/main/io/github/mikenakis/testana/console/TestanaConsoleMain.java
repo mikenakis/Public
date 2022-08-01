@@ -34,8 +34,8 @@ import java.util.function.Supplier;
 /**
  * Testana Launcher.
  * <p>
- * Make sure to run with `Working Directory = $PROJECT_DIR$` and `Before launch: Build Project`
- * (not just `Before launch: Build` because that would only build dependent modules, and testana does not dependent on your modules.)
+ * Make sure to run with `Working Directory = $PROJECT_DIR$` and `Before launch: Build Project` (not just `Before launch: Build` because that would only build
+ * dependent modules, and testana does not dependent on your modules.)
  *
  * @author michael.gr
  */
