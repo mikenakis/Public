@@ -1,21 +1,16 @@
-■ ByteCodeType version = 61.0, accessFlags = [super], this = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, super = java.lang.Object
+■ ByteCodeType version = 63.0, accessFlags = [super], this = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] java.util.function.Supplier
 ├─■ extraTypes: 0 items
-├─■ fields: 2 items
-│ ├─■ [0] ByteCodeField accessFlags = [final], prototype = int i
-│ │ └─■ attributeSet: 0 items
-│ └─■ [1] ByteCodeField accessFlags = [final, synthetic], prototype = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface this$0
+├─■ fields: 1 items
+│ └─■ [0] ByteCodeField accessFlags = [final], prototype = int i
 │   └─■ attributeSet: 0 items
 ├─■ methods: 3 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface, int )
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 3
-│ │   │ ├─■ instructions: 9 entries
+│ │   │ ├─■ instructions: 6 entries
 │ │   │ │ ├─■ L102: // {
-│ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface$1Inner.this$0
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ ├─■ L103: // this.i = i;

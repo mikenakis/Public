@@ -669,6 +669,9 @@ public final class ByteCodePrinter
 
 	private static Twig twigFromStackMapFrame( Labeler labeler, Optional<StackMapFrame> previousFrame, StackMapFrame frame )
 	{
+		//IntellijIdea blooper: good code red: Currently, (August 2022) IntellijIdea does not know anything about JDK 19, and it is not smart enough to
+		//figure out that feature-wise it must be a superset of the last JDK that it knows, which is JDK 17.
+		//As a result, it marks the following code with "Patterns in switch are not supported at language level '19'", which is just plain wrong.
 		return switch( frame )
 			{
 				case ChopStackMapFrame ignored -> twigFromChopStackMapFrame( frame.asChopStackMapFrame(), previousFrame, labeler );
@@ -1163,14 +1166,14 @@ public final class ByteCodePrinter
 		{
 			ValueConstant valueConstant = loadConstantInstruction.getValue();
 			return switch( valueConstant.tag )
-			{
-				case Constant.tag_Integer -> String.valueOf( valueConstant.asIntegerValueConstant().value );
-				case Constant.tag_Float -> String.valueOf( valueConstant.asFloatValueConstant().value );
-				case Constant.tag_Long -> String.valueOf( valueConstant.asLongValueConstant().value );
-				case Constant.tag_Double -> String.valueOf( valueConstant.asDoubleValueConstant().value );
-				case Constant.tag_String -> Kit.string.escapeForJava( valueConstant.asStringValueConstant().stringValue() );
-				default -> throw new AssertionError();
-			};
+				{
+					case Constant.tag_Integer -> String.valueOf( valueConstant.asIntegerValueConstant().value );
+					case Constant.tag_Float -> String.valueOf( valueConstant.asFloatValueConstant().value );
+					case Constant.tag_Long -> String.valueOf( valueConstant.asLongValueConstant().value );
+					case Constant.tag_Double -> String.valueOf( valueConstant.asDoubleValueConstant().value );
+					case Constant.tag_String -> Kit.string.escapeForJava( valueConstant.asStringValueConstant().stringValue() );
+					default -> throw new AssertionError();
+				};
 		}
 		else
 		{

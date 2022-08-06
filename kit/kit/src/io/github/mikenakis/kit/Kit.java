@@ -306,7 +306,6 @@ public final class Kit
 	    for( ; ; )
 	    {
 	        Runtime.getRuntime().gc();
-	        Runtime.getRuntime().runFinalization();
 	        unchecked( () -> Thread.sleep( 100 ) );
 	        long newFreeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
 	        if( newFreeMemory == freeMemory )

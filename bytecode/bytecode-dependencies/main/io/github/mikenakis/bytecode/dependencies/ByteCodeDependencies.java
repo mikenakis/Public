@@ -270,7 +270,8 @@ public final class ByteCodeDependencies
 	{
 		switch( constantValueAttribute.valueConstant.tag )
 		{
-			case Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, Constant.tag_String -> { /* nothing to do */ }
+			case Constant.tag_Mutf8, Constant.tag_Integer, Constant.tag_Float, Constant.tag_Long, Constant.tag_Double, Constant.tag_String ->
+			{ /* nothing to do */ }
 			default -> throw new AssertionError( constantValueAttribute.valueConstant );
 		}
 	}
@@ -375,6 +376,9 @@ public final class ByteCodeDependencies
 		if( !includeSignatureDependencies )
 			return;
 		ObjectSignature parsedSignature = SignatureParser.make().parseFieldSig( signature );
+		//IntellijIdea blooper: good code red: Currently, (August 2022) IntellijIdea does not know anything about JDK 19, and it is not smart enough to
+		//figure out that feature-wise it must be a superset of the last JDK that it knows, which is JDK 17.
+		//As a result, it marks the following code with "Patterns in switch are not supported at language level '19'", which is just plain wrong.
 		switch( parsedSignature )
 		{
 			case ClassSignature classSignature -> visitClassSignature( classSignature );
@@ -410,6 +414,9 @@ public final class ByteCodeDependencies
 	private void visitTypeSignature( TypeSignature typeSignature )
 	{
 		assert includeSignatureDependencies;
+		//IntellijIdea blooper: good code red: Currently, (August 2022) IntellijIdea does not know anything about JDK 19, and it is not smart enough to
+		//figure out that feature-wise it must be a superset of the last JDK that it knows, which is JDK 17.
+		//As a result, it marks the following code with "Patterns in switch are not supported at language level '19'", which is just plain wrong.
 		switch( typeSignature )
 		{
 			case ArrayTypeSignature arrayTypeSignature -> visitArrayTypeSignature( arrayTypeSignature );
@@ -442,6 +449,9 @@ public final class ByteCodeDependencies
 	private void visitSignatureTypeTree( TypeTree typeTree )
 	{
 		assert includeSignatureDependencies;
+		//IntellijIdea blooper: good code red: Currently, (August 2022) IntellijIdea does not know anything about JDK 19, and it is not smart enough to
+		//figure out that feature-wise it must be a superset of the last JDK that it knows, which is JDK 17.
+		//As a result, it marks the following code with "Patterns in switch are not supported at language level '19'", which is just plain wrong.
 		switch( typeTree )
 		{
 			case VoidDescriptor voidDescriptor -> Kit.get( voidDescriptor );
@@ -533,38 +543,10 @@ public final class ByteCodeDependencies
 			case Constant.tag_Class -> visitTypeDescriptor( constant.asClassConstant().typeDescriptor() );
 			case Constant.tag_MethodType -> visitMethodDescriptor( constant.asMethodTypeConstant().methodDescriptor() );
 			case Constant.tag_String -> { /* nothing to do */ }
-			case Constant.tag_MethodHandle -> //
-				{
-					DirectMethodHandleDesc directMethodHandleDesc = constant.asMethodHandleConstant().directMethodHandleDesc();
-					visitDirectMethodHandleDesc( directMethodHandleDesc );
-				}
+			case Constant.tag_MethodHandle -> visitDirectMethodHandleDesc( constant.asMethodHandleConstant().directMethodHandleDesc() );
 			default -> throw new AssertionError( constant );
 		}
 	}
-
-	//DirectMethodHandleDesc java.lang.constant.ConstantDescs.ofCallsiteBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
-	//DirectMethodHandleDesc java.lang.constant.ConstantDescs.ofConstantBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
-	//DirectMethodHandleDesc java.lang.constant.MethodHandleDesc.of( DirectMethodHandleDesc.Kind kind, ClassDesc owner, String name, String lookupDescriptor );
-	//DirectMethodHandleDesc java.lang.constant.MethodHandleDesc.ofMethod( DirectMethodHandleDesc.Kind kind, ClassDesc owner, String name, MethodTypeDesc lookupMethodType );
-	//DirectMethodHandleDesc java.lang.constant.MethodHandleDesc.ofConstructor( ClassDesc owner, ClassDesc... paramTypes );
-	//DirectMethodHandleDesc java.lang.constant.MethodHandleDesc.ofField( DirectMethodHandleDesc.Kind kind, ClassDesc owner, String fieldName, ClassDesc fieldType );
-	//ClassDesc java.lang.constant.ClassDesc.ofDescriptor( String descriptor );
-	//ClassDesc java.lang.constant.ClassDesc.of( String name );
-	//ClassDesc java.lang.constant.ClassDesc.of( String packageName, String className );
-	//MethodTypeDesc java.lang.constant.MethodTypeDesc.of( ClassDesc returnDesc, ClassDesc... paramDescs );
-	//MethodTypeDesc java.lang.constant.MethodTypeDesc.ofDescriptor( String descriptor );
-	//DynamicCallSiteDesc java.lang.constant.DynamicCallSiteDesc.of( DirectMethodHandleDesc bootstrapMethod, MethodTypeDesc invocationType );
-	//DynamicCallSiteDesc java.lang.constant.DynamicCallSiteDesc.of( DirectMethodHandleDesc bootstrapMethod, String invocationName, MethodTypeDesc invocationType, ConstantDesc... bootstrapArgs );
-	//DynamicCallSiteDesc java.lang.constant.DynamicCallSiteDesc.of( DirectMethodHandleDesc bootstrapMethod,String invocationName,MethodTypeDesc invocationType );
-	//DynamicConstantDesc<T> java.lang.constant.DynamicConstantDesc.of( DirectMethodHandleDesc bootstrapMethod );
-	//DynamicConstantDesc<T> java.lang.constant.DynamicConstantDesc.of( DirectMethodHandleDesc bootstrapMethod, ConstantDesc... bootstrapArgs );
-	//DynamicConstantDesc<T> java.lang.constant.DynamicConstantDesc.ofNamed( DirectMethodHandleDesc bootstrapMethod, String constantName, ClassDesc constantType, ConstantDesc... bootstrapArgs );
-	//DynamicConstantDesc<T> java.lang.constant.DynamicConstantDesc.ofCanonical( DirectMethodHandleDesc bootstrapMethod, String constantName, ClassDesc constantType, ConstantDesc[] bootstrapArgs );
-	//java.lang.constant.Constable.
-	//java.lang.constant.DirectMethodHandleDesc.
-	//java.lang.constant.ConstantDesc.
-	//java.lang.constant.ConstantDescs.ofConstantBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
-	//java.lang.constant.ConstantDescs.ofCallsiteBootstrap( ClassDesc owner, String name, ClassDesc returnType, ClassDesc... paramTypes );
 
 	private void visitDescriptorTypeDescriptor( TypeDescriptor typeDescriptor )
 	{

@@ -28,10 +28,7 @@ public interface LifeGuard extends Mortal
 		if( !Kit.areAssertionsEnabled() )
 			return ProductionLifeGuard.instance;
 		Optional<StackWalker.StackFrame[]> stackTrace = collectStackTrace( framesToSkip + 1, collectStackTrace );
-		if( Kit.get( true ) )
-			return CleaningDevelopmentLifeGuard.of( mortal, stackTrace );
-		else
-			return FinalizingDevelopmentLifeGuard.of( mortal, stackTrace );
+		return CleaningDevelopmentLifeGuard.of( mortal, stackTrace );
 	}
 
 	private static Optional<StackWalker.StackFrame[]> collectStackTrace( int framesToSkip, boolean collectStackTrace )

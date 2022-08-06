@@ -27,7 +27,7 @@ public final class Class4ExtendingClass3 extends Class3ImplementingInterface imp
 
 	@Override public long getLong( Class3ImplementingInterface class3ImplementingInterface )
 	{
-		return Thread.currentThread().getId();
+		return Thread.currentThread().threadId();
 	}
 
 	public void testMethodHandle()

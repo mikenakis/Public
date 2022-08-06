@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface, super = java.lang.Object
+■ ByteCodeType version = 63.0, accessFlags = [public, super, abstract], this = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface1
 ├─■ extraTypes: 0 items
@@ -310,14 +310,15 @@
 │ ├─■ [7] ByteCodeMethod accessFlags = [public], prototype = java.lang.String toString()
 │ │ └─■ attributes: 1 items
 │ │   └─■ [0] CodeAttribute maxStack = 2, maxLocals = 1
-│ │     ├─■ instructions: 7 entries
+│ │     ├─■ instructions: 8 entries
 │ │     │ ├─■ L91: // return getClass().getName() + " " + enum1;
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.Class java.lang.Object.getClass()
 │ │     │ ├─■         INVOKEVIRTUAL reference = Plain; java.lang.String java.lang.Class.getName()
 │ │     │ ├─■         ALOAD 0
 │ │     │ ├─■         GETFIELD io.github.mikenakis.bytecode.test.model.Enum1 io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface.enum1
-│ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, io.github.mikenakis.bytecode.test.model.Enum1 )
+│ │     │ ├─■         INVOKESTATIC reference = Plain; java.lang.String java.lang.String.valueOf( java.lang.Object )
+│ │     │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( java.lang.String, java.lang.String )
 │ │     │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "\x01 \x01" )
 │ │     │ └─■         ARETURN
 │ │     ├─■ exceptionInfos: 0 items

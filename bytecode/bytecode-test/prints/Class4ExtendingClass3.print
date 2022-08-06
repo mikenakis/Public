@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, final, super], this = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, super = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface
+■ ByteCodeType version = 63.0, accessFlags = [public, final, super], this = io.github.mikenakis.bytecode.test.model.Class4ExtendingClass3, super = io.github.mikenakis.bytecode.test.model.Class3ImplementingInterface
 ├─■ interfaces: 1 items
 │ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface2
 ├─■ extraTypes: 0 items
@@ -54,9 +54,9 @@
 │ │ └─■ attributes: 2 items
 │ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
 │ │   │ ├─■ instructions: 3 entries
-│ │   │ │ ├─■ L30: // return Thread.currentThread().getId();
+│ │   │ │ ├─■ L30: // return Thread.currentThread().threadId();
 │ │   │ │ ├─■         INVOKESTATIC reference = Plain; java.lang.Thread java.lang.Thread.currentThread()
-│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; long java.lang.Thread.getId()
+│ │   │ │ ├─■         INVOKEVIRTUAL reference = Plain; long java.lang.Thread.threadId()
 │ │   │ │ └─■         LRETURN
 │ │   │ ├─■ exceptionInfos: 0 items
 │ │   │ └─■ attributeSet: 2 items

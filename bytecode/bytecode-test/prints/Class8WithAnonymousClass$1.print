@@ -1,19 +1,14 @@
-■ ByteCodeType version = 61.0, accessFlags = [super], this = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, super = java.lang.Object
+■ ByteCodeType version = 63.0, accessFlags = [super], this = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1, super = java.lang.Object
 ├─■ interfaces: 1 items
 │ └─■ [0] io.github.mikenakis.bytecode.test.model.Interface1
 ├─■ extraTypes: 0 items
-├─■ fields: 1 items
-│ └─■ [0] ByteCodeField accessFlags = [final, synthetic], prototype = io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass this$0
-│   └─■ attributeSet: 0 items
+├─■ fields: 0 items
 ├─■ methods: 3 items
 │ ├─■ [0] ByteCodeMethod accessFlags = [], prototype = void <init>( io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass )
 │ │ └─■ attributes: 2 items
-│ │   ├─■ [0] CodeAttribute maxStack = 2, maxLocals = 2
-│ │   │ ├─■ instructions: 6 entries
+│ │   ├─■ [0] CodeAttribute maxStack = 1, maxLocals = 2
+│ │   │ ├─■ instructions: 3 entries
 │ │   │ │ ├─■ L12: // {
-│ │   │ │ ├─■         ALOAD 0
-│ │   │ │ ├─■         ALOAD 1
-│ │   │ │ ├─■         PUTFIELD io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass io.github.mikenakis.bytecode.test.model.Class8WithAnonymousClass$1.this$0
 │ │   │ │ ├─■         ALOAD 0
 │ │   │ │ ├─■         INVOKESPECIAL reference = Plain; void java.lang.Object.<init>()
 │ │   │ │ └─■         RETURN

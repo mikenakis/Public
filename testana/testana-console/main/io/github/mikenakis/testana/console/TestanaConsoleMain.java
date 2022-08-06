@@ -24,6 +24,10 @@ import io.github.mikenakis.testana.test_engines.junit.JunitTestEngine;
 import io.github.mikenakis.testana.testplan.TestPlan;
 import io.github.mikenakis.testana.testplan.TestPlanBuilder;
 
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -117,6 +121,9 @@ public class TestanaConsoleMain
 		ProjectStructure.ShowOption showStructureOption, TestPlan.ShowOption showTestPlanOption, boolean noRun, boolean noSave, //
 		ModuleOrdering moduleOrdering, ClassOrdering classOrdering, MethodOrdering methodOrdering, AncestryOrdering ancestryOrdering )
 	{
+		//magical incantation necessary as of JDK 18+ to generate UTF-8 output under Windows. Alternatively, use the -Dstdout.encoding=UTF-8 VM option.
+		System.setOut( new PrintStream( new FileOutputStream( FileDescriptor.out ), true, StandardCharsets.UTF_8 ) );
+
 		StructureSettings structureSettings = new StructureSettings();
 		structureSettings.load( sourceDirectory, configurationPathName );
 

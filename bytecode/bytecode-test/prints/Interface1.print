@@ -1,4 +1,4 @@
-■ ByteCodeType version = 61.0, accessFlags = [public, interface, abstract], this = io.github.mikenakis.bytecode.test.model.Interface1, super = java.lang.Object
+■ ByteCodeType version = 63.0, accessFlags = [public, interface, abstract], this = io.github.mikenakis.bytecode.test.model.Interface1, super = java.lang.Object
 ├─■ interfaces: 0 items
 ├─■ extraTypes: 0 items
 ├─■ fields: 0 items
