@@ -1,6 +1,7 @@
 package io.github.mikenakis.publishing.anycall;
 
 import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.debug.Debug;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.MethodKey;
 import io.github.mikenakis.kit.Kit;
@@ -75,11 +76,20 @@ public final class AnycallPublisher<T> extends AbstractMortalCoherent
 	private Optional<Object> anycall( MethodKey<T> key, Object[] arguments )
 	{
 		for( Anycall<T> subscriber : subscriptions.map( subscription -> subscription.subscriber() ).toList() )
-			//Kit.trySwallow( () -> // TODO: revise the purposefulness of trySwallow() here. (Or everywhere, for that matter.)
+		{
+			try
 			{
-				Object result = subscriber.anycall( key, arguments );
-				assert result == null;
-			} //);
+				Debug.boundary( () -> //
+				{
+					Object result = subscriber.anycall( key, arguments );
+					assert result == null;
+				} );
+			}
+			catch( Throwable throwable )
+			{
+				Log.error( throwable );
+			}
+		}
 		return Optional.empty();
 	}
 

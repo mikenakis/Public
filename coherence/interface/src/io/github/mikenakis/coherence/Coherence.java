@@ -2,6 +2,7 @@ package io.github.mikenakis.coherence;
 
 /**
  * An assertion-only abstraction of a state of coherence, indicating whether it is permissible to read or write.
+ * Not to be confused with Cohesion, see <a href="https://en.wikipedia.org/wiki/Cohesion_(computer_science)">Wikipedia: Cohesion</a>
  */
 public interface Coherence
 {
