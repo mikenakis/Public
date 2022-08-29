@@ -6,7 +6,7 @@
     <selectedOptions>
       <option name="environmentVariables" visible="false" />
     </selectedOptions>
-    <option name="VM_PARAMETERS" value="-enableassertions --enable-preview" />
+    <option name="VM_PARAMETERS" value="-enableassertions --enable-preview -Dstdout.encoding=UTF-8" />
     <extension name="coverage" track_test_folders="true" runner="jacoco">
       <pattern>
         <option name="PATTERN" value="mikenakis.*" />
