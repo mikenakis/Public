@@ -12,6 +12,7 @@ import io.github.mikenakis.kit.exceptions.OffsetMustBeNonNegativeException;
 import io.github.mikenakis.kit.exceptions.OffsetMustNotExceedSizeException;
 import io.github.mikenakis.kit.exceptions.OffsetPlusCountMustNotExceedSizeException;
 import io.github.mikenakis.kit.exceptions.UncheckedException;
+import io.github.mikenakis.kit.functional.BooleanFunction0;
 import io.github.mikenakis.kit.functional.BooleanFunction1;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
@@ -302,16 +303,16 @@ public final class Kit
 	 */
 	public static void runGarbageCollection()
 	{
-	    long freeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
-	    for( ; ; )
-	    {
-	        Runtime.getRuntime().gc();
-	        unchecked( () -> Thread.sleep( 100 ) );
-	        long newFreeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
-	        if( newFreeMemory == freeMemory )
-	            break;
-	        freeMemory = newFreeMemory;
-	    }
+		long freeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+		for( ; ; )
+		{
+			Runtime.getRuntime().gc();
+			unchecked( () -> Thread.sleep( 100 ) );
+			long newFreeMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+			if( newFreeMemory == freeMemory )
+				break;
+			freeMemory = newFreeMemory;
+		}
 	}
 
 	private static final AtomicReference<Object> oldObjectRef = new AtomicReference<>( allocateObject() );
@@ -2025,7 +2026,7 @@ public final class Kit
 	 */
 	public static Optional<Throwable> tryCatch( Procedure0 procedure )
 	{
-		return tryCatchWithoutBoundary( () ->
+		return tryCatchWithoutBoundary( () -> //
 			Debug.boundary( () -> procedure.invoke() ) );
 	}
 
@@ -2041,7 +2042,7 @@ public final class Kit
 	public static <R> R tryFinally( Function0<R> tryFunction, Procedure0 finallyHandler )
 	{
 		return tryFinallyWithoutBoundary( () -> //
-			Debug.boundary( () -> tryFunction.invoke() ), //
+				Debug.boundary( () -> tryFunction.invoke() ), //
 			finallyHandler );
 	}
 
@@ -2126,14 +2127,13 @@ public final class Kit
 	}
 
 	/**
-	 * Invokes a given function declared with {@code throws Throwable}.
-	 * TODO: get rid of.
+	 * Invokes a given function declared with {@code throws Throwable}. TODO: get rid of.
 	 * <p>
-	 * PEARL: just to keep things interesting, Java does not only support checked exceptions, it even allows a method to be declared with {@code throws
-	 * Throwable}, in which case the caller is forced to somehow do something about the declared {@code Throwable}, despite the fact that {@link Throwable} is
-	 * not a checked exception. And sure enough, the JDK makes use of this weird feature in at least a few places that I am aware of, e.g. in {@code
-	 * MethodHandle.invoke()} and {@code MethodHandle.invokeExact()}. The following method allows us to invoke methods declared with {@code throws Throwable}
-	 * without having to handle or in any other way deal with the {@code Throwable}.
+	 * PEARL: just to keep things interesting, Java does not only support checked exceptions, it even allows a method to be declared with
+	 * {@code throws Throwable}, in which case the caller is forced to somehow do something about the declared {@code Throwable}, despite the fact that
+	 * {@link Throwable} is not a checked exception. And sure enough, the JDK makes use of this weird feature in at least a few places that I am aware of, e.g.
+	 * in {@code MethodHandle.invoke()} and {@code MethodHandle.invokeExact()}. The following method allows us to invoke methods declared with
+	 * {@code throws Throwable} without having to handle or in any other way deal with the {@code Throwable}.
 	 *
 	 * @param function the {@link ThrowableThrowingFunction} to invoke.
 	 * @param <R>      the type of result returned by the function.
@@ -2151,7 +2151,7 @@ public final class Kit
 	 * Performs a {@code try-with-resources} with Java's lame {@link AutoCloseable} interface whose {@link AutoCloseable#close()} method declares a checked
 	 * exception.
 	 */
-	public static <R,C extends AutoCloseable> R uncheckedTryWith( C autoCloseable, Function1<R,C> tryFunction )
+	public static <R, C extends AutoCloseable> R uncheckedTryWith( C autoCloseable, Function1<R,C> tryFunction )
 	{
 		assert autoCloseable != null;
 		try
@@ -3146,7 +3146,17 @@ public final class Kit
 		return primitiveInfo.type;
 	}
 
-	public static boolean assertion( Function0<Boolean> nestedAssertion, Function1<Throwable,Throwable> throwableFactory )
+	/**
+	 * Performs an assertion, and if it fails, wraps the generated throwable in a new throwable created by a given factory.
+	 * <p>
+	 * Necessary for situations where we want to chain assertions (`assert someOtherAssertion()`) and also wrap the thrown exceptions, because the `assert`
+	 * keyword does not expect the assertion-expression to throw, so it does not try to catch any exception thrown by it. Thus, the construct `assert
+	 * someOtherAssertion() : new SomeNewException();` does not work: the exception thrown within `someOtherAssertion()` will not be wrapped with
+	 * SomeNewException.
+	 * <p>
+	 * With this function, we can say `assert Kit.assertion( nestedAssertion, cause -> new SomeNewException( cause ) ); return true;`
+	 */
+	public static boolean assertion( BooleanFunction0 nestedAssertion, Function1<Throwable,Throwable> throwableFactory )
 	{
 		try
 		{
@@ -3155,7 +3165,10 @@ public final class Kit
 		}
 		catch( Throwable throwable )
 		{
-			throw sneakyException( throwableFactory.invoke( throwable ) );
+			while( throwable instanceof AssertionError assertionError && assertionError.getCause() != null )
+				throwable = assertionError.getCause();
+			throwable = throwableFactory.invoke( throwable );
+			throw new AssertionError( throwable );
 		}
 	}
 

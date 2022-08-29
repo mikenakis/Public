@@ -44,7 +44,8 @@ public final class ConcreteFreezableCoherence extends AbstractMortalCoherent imp
 	@Override public boolean mustBeAliveAssertion()
 	{
 		assert mustBeReadableAssertion();
-		return Kit.assertion( super::mustBeAliveAssertion, cause -> new MustBeAliveException( getClass(), cause ) );
+		assert Kit.assertion( super::mustBeAliveAssertion, cause -> new MustBeAliveException( getClass(), cause ) );
+		return true;
 	}
 
 	@Override protected void onClose()
@@ -55,12 +56,14 @@ public final class ConcreteFreezableCoherence extends AbstractMortalCoherent imp
 
 	@Override public boolean mustBeReadableAssertion()
 	{
-		return Kit.assertion( () -> isFrozen() || coherence().mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
+		assert Kit.assertion( () -> isFrozen() || coherence().mustBeReadableAssertion(), cause -> new MustBeReadableException( this, cause ) );
+		return true;
 	}
 
 	@Override public boolean mustBeWritableAssertion()
 	{
-		return Kit.assertion( () -> !isFrozen() && coherence().mustBeWritableAssertion(), cause -> new MustBeWritableException( this, cause ) );
+		assert !isFrozen() && coherence().mustBeWritableAssertion() : new MustBeWritableException( this );
+		return true;
 	}
 
 	@Override public boolean isImmutable()

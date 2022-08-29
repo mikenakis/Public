@@ -91,7 +91,12 @@ public interface UnmodifiableMap<K, V>
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Binding<K,V>... bindings )
 	{
-		return newHashMap( map -> map.addAll( UnmodifiableCollection.of( bindings ) ) );
+		return newLinkedHashMap( UnmodifiableCollection.of( bindings ) );
+	}
+
+	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( UnmodifiableCollection<Binding<K,V>> bindings )
+	{
+		return newLinkedHashMap( map -> map.addAll( bindings ) );
 	}
 
 	static <K, V> UnmodifiableArrayHashMap<K,V> newIdentityArrayHashMap( Procedure1<MutableArrayHashMap<K,V>> populator )

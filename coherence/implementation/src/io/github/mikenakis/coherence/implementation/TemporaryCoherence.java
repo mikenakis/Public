@@ -42,12 +42,14 @@ public interface TemporaryCoherence extends Coherent, Coherence.Defaults
 
 			@Override public boolean mustBeReadableAssertion()
 			{
-				return Kit.assertion( this::mustBeAliveAssertion, cause -> new MustBeReadableException( this, cause ) );
+				assert Kit.assertion( this::mustBeAliveAssertion, cause -> new MustBeReadableException( this, cause ) );
+				return true;
 			}
 
 			@Override public boolean mustBeWritableAssertion()
 			{
-				return Kit.assertion( this::mustBeAliveAssertion, cause -> new MustBeWritableException( this, cause ) );
+				assert Kit.assertion( this::mustBeAliveAssertion, cause -> new MustBeWritableException( this, cause ) );
+				return true;
 			}
 
 			@Override public String toString()
