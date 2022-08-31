@@ -120,11 +120,13 @@ public abstract class MutableListTest<T> extends MutableCollectionTest<T>
 		T b = newElement();
 		T c = newElement();
 		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
-		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 0, a ) );
-		list.add( a );
-		list.add( b );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 1, a ) );
+		list.replaceAt( 0, a );
+		assert list.equalsList( UnmodifiableList.of( a ) );
+		list.replaceAt( 1, b );
+		assert list.equalsList( UnmodifiableList.of( a, b ) );
 		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( -1, a ) );
-		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 2, a ) );
+		TestKit.expect( ArrayIndexOutOfBoundsException.class, () -> list.replaceAt( 3, a ) );
 		list.replaceAt( 1, c );
 		assert list.equalsList( UnmodifiableList.of( a, c ) );
 		list.replaceAt( 0, b );

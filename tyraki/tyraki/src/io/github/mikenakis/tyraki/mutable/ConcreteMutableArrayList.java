@@ -95,8 +95,14 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 	@Override public void replaceAt( int index, E element )
 	{
 		assert mustBeWritableAssertion();
-		//modificationCount++;
+		if( index == size )
+		{
+			add( element );
+			return;
+		}
+		assert index < size : new ArrayIndexOutOfBoundsException( index );
 		elementData[index] = element;
+		modificationCount++;
 	}
 
 	@Override public void insertAt( int index, E element )

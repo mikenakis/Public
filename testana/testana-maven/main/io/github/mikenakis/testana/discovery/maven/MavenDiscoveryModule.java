@@ -126,7 +126,7 @@ final class MavenDiscoveryModule extends DiscoveryModule
 						Path jarPathName = dependencyModulePathInLocalRepository.resolve( buildJarFileName( mavenDependency ) );
 						if( !Files.exists( jarPathName ) )
 						{
-							assert false; //does this happen?
+							Log.warning( "Jar file " + jarPathName + " does not exist." );
 							continue; //this has been observed, for example, with commons-logging:commons-logging:1.0.4 depending on logkit:logkit:1.0.1 which consists of nothing but a pom.
 						}
 						assert jarPathName != null;

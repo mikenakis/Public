@@ -185,7 +185,7 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 	 * Adds or replaces a key-value pair.  If the key does not already exist in the map, a new key-value pair is added.  If the key already exists in the map, the associated value
 	 * is replaced with the given value.
 	 */
-	void addOrReplace( K key, V value );
+	boolean addOrReplace( K key, V value );
 
 	V computeIfAbsent( K key, Function1<? extends V,? super K> mappingFunction );
 
@@ -271,12 +271,13 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 			add( key4, value4 );
 		}
 
-		@Override default void addOrReplace( K key, V value )
+		@Override default boolean addOrReplace( K key, V value )
 		{
 			assert key != null;
 			if( tryAdd( key, value ).isEmpty() )
-				return;
+				return true;
 			replaceValue( key, value );
+			return false;
 		}
 
 		@Override default V computeIfAbsent( K key, Function1<? extends V,? super K> mappingFunction )
