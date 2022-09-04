@@ -3,6 +3,7 @@ package io.github.mikenakis.kit.exceptions;
 import io.github.mikenakis.kit.Kit;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,9 +36,15 @@ public class UncheckedException extends RuntimeException
 		//NOTE: we are not adding the message of the base class because we have not set a value to it, so super.getMessage() would return the message of the
 		// cause exception, which is useless, since there will be a "caused by" message anyway.
 		return Arrays.stream( getClass().getFields() ) //
-			.filter( field -> UncheckedException.class.isAssignableFrom( field.getDeclaringClass() ) ) //
+			.filter( field -> Kit.reflect.isInstanceMember( field ) ) //
+			.filter( field -> isNotMemberOfSuper( field ) ) //
 			.map( field -> field.getName() + "=" + fieldValueToString( field ) ) //
 			.collect( Collectors.joining( "; " ) );
+	}
+
+	private static boolean isNotMemberOfSuper( Member field )
+	{
+		return UncheckedException.class.isAssignableFrom( field.getDeclaringClass() );
 	}
 
 	private String fieldValueToString( Field field )

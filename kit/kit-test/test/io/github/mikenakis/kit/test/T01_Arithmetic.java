@@ -56,7 +56,12 @@ public class T01_Arithmetic
 		double t2 = benchmark.measure( Benchmarkable.of( () -> (int)Kit.math.mod1( π ) ) );
 		double r = t1 / t2;
 		Log.info( String.format( Locale.ROOT, "Jdk %%: %f nanoseconds;  Kit.mod1(): %f nanoseconds (%.2f times faster)\n", //
-			Kit.time.nanosecondsFromSeconds( t1 ), Kit.time.nanosecondsFromSeconds( t2 ), r ) );
+			nanosecondsFromSeconds( t1 ), nanosecondsFromSeconds( t2 ), r ) );
 		assert r > 2; //r has been observed to be as low as 2.89 on CircleCI
+	}
+
+	private static double nanosecondsFromSeconds( double seconds )
+	{
+		return seconds * 1e9;
 	}
 }

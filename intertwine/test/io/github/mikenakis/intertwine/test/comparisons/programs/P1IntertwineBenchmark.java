@@ -58,16 +58,11 @@ public final class P1IntertwineBenchmark
 	private void runBenchmark( PrintStream out, String prefix, Procedure0 runnable )
 	{
 		Kit.runGarbageCollection();
-		double t0 = timeSeconds();
+		double t0 = Kit.time.timeSeconds();
 		for( int i = 0; i < iterations; i++ )
 			runnable.invoke();
-		double d = timeSeconds() - t0;
+		double d = Kit.time.timeSeconds() - t0;
 		out.printf( "%s : %d iterations %8.4fs\n", prefix, iterations, d );
-	}
-
-	private static double timeSeconds()
-	{
-		return System.nanoTime() * 1e-9;
 	}
 
 	abstract static class MyBenchmarkable

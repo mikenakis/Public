@@ -66,6 +66,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -1942,15 +1943,27 @@ public final class Kit
 
 	public static final class time
 	{
-		private static final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ).withZone( ZoneId.systemDefault() );
+		private static final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss", Locale.ROOT ).withZone( ZoneId.systemDefault() );
 
 		/**
-		 * Obtains a time coordinate in seconds, from some arbitrary origin, with as much precision as the underlying architecture allows.
+		 * Obtains the current time coordinate in seconds, from some arbitrary origin, with as much precision as the underlying architecture allows.
 		 */
 		public static double timeSeconds()
 		{
-			//return System.currentTimeMillis() * 1e-3;
-			return System.nanoTime() * 1e-9;
+			return timeSeconds( false );
+		}
+
+		/**
+		 * Obtains the current time coordinate optionally after waiting until the next discrete moment in time.
+		 * See {@link #timeSeconds()}
+		 */
+		public static double timeSeconds( boolean waitForNextDiscreteMoment )
+		{
+			long nanos = System.nanoTime();
+			if( waitForNextDiscreteMoment )
+				for( long temp = nanos; nanos == temp; )
+					nanos = System.nanoTime();
+			return nanos * 1e-9;
 		}
 
 		/**
@@ -1959,7 +1972,7 @@ public final class Kit
 		 *
 		 * @param instant the {@link Instant} to convert.
 		 *
-		 * @return the local time represented by the instant as a ISO-8601-ish string.
+		 * @return the local time represented by the instant as an ISO-8601-ish string.
 		 */
 		public static String localTimeString( Instant instant )
 		{
@@ -1967,34 +1980,32 @@ public final class Kit
 		}
 
 		/**
-		 * Creates an instant at a specific year, month, day, hour, minute, second, and millisecond UTC. PEARL: Java makes it surprisingly difficult to create
-		 * an {@link Instant} at a specific point in time. This function does it.
+		 * Creates an {@link Instant} at a specific year, month, day, hour, minute, second, and millisecond UTC.
+		 * <p>
+		 * PEARL: Java makes it surprisingly difficult to create an {@link Instant} at a specific point in time. This function does it.
 		 */
 		public static Instant createInstant( int year, int month, int day, int hour, int minute, int second, int millisecond )
 		{
 			return ZonedDateTime.of( year, month, day, hour, minute, second, millisecond * 1000 * 1000, ZoneOffset.UTC ).toInstant();
 		}
 
+		/**
+		 * Creates a {@link Duration} from a given {@code double} number of seconds.
+		 * <p>
+		 * PEARL: Java makes it surprisingly difficult to create a {@link Duration} from a given {@code double} number of seconds. This function does it.
+		 */
 		public static Duration durationFromSeconds( double seconds )
 		{
-			long s = (long)seconds;
+			long s = (long)Math.floor( seconds );
 			long n = (long)((seconds - s) * 1e9);
 			return Duration.ofSeconds( s, n );
 		}
 
 		public static double secondsFromDuration( Duration duration )
 		{
-			return duration.toNanos() * 1e-9;
-		}
-
-		public static double nanosecondsFromSeconds( double seconds )
-		{
-			return seconds * 1e9;
-		}
-
-		public static double secondsFromNanoseconds( double nanoseconds )
-		{
-			return nanoseconds * 1e-9;
+			long s = duration.toSeconds();
+			long n = duration.toNanosPart();
+			return s + (n * 1e-9);
 		}
 	}
 
@@ -2183,6 +2194,16 @@ public final class Kit
 				if( annotation.annotationType().getName().equals( annotationName ) )
 					return true;
 			return false;
+		}
+
+		public static boolean isInstanceMember( Member field )
+		{
+			return !isStaticMember( field );
+		}
+
+		public static boolean isStaticMember( Member field )
+		{
+			return Modifier.isStatic( field.getModifiers() );
 		}
 	}
 
