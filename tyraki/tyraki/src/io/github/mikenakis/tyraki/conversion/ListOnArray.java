@@ -1,6 +1,9 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.ImmutabilityCoherence;
 import io.github.mikenakis.coherence.exceptions.MustBeFrozenException;
+import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableList;
@@ -14,6 +17,7 @@ import io.github.mikenakis.tyraki.UnmodifiableList;
  */
 final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements UnmodifiableList.Defaults<E>
 {
+	private final Coherence coherence;
 	private final E[] array;
 	private final boolean frozen;
 
@@ -22,6 +26,7 @@ final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements 
 		super( equalityComparator );
 		this.array = array;
 		this.frozen = frozen;
+		coherence = frozen ? ImmutabilityCoherence.instance : ThreadLocalCoherence.instance();
 	}
 
 	@Override public boolean mustBeImmutableAssertion()
@@ -48,5 +53,10 @@ final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
 	{
 		return new EnumeratorOnList<>( this );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return coherence;
 	}
 }

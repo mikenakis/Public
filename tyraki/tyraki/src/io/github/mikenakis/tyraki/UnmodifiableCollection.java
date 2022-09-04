@@ -27,8 +27,7 @@ import java.util.function.Predicate;
  */
 public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 {
-	@SafeVarargs
-	@SuppressWarnings( "varargs" ) //for -Xlint
+	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <T> UnmodifiableCollection<T> ofChained( UnmodifiableCollection<T>... arrayOfCollections )
 	{
 		UnmodifiableCollection<UnmodifiableCollection<T>> collections = UnmodifiableList.onArray( arrayOfCollections );
@@ -50,8 +49,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 */
 	static <T> UnmodifiableCollection<T> downCast( UnmodifiableCollection<? extends T> collection )
 	{
-		@SuppressWarnings( "unchecked" )
-		UnmodifiableCollection<T> result = (UnmodifiableCollection<T>)collection;
+		@SuppressWarnings( "unchecked" ) UnmodifiableCollection<T> result = (UnmodifiableCollection<T>)collection;
 		return result;
 	}
 
@@ -73,7 +71,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		return UnmodifiableList.onArray( arrayOfElements );
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Obtains an item in this {@link UnmodifiableCollection}.
@@ -81,9 +79,9 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 * @param element the item to find.
 	 *
 	 * @return a matching element from the {@link UnmodifiableCollection} or {@link Optional#empty()} if no such item exists.
-	 *
-	 * Note: if items have reference semantics, then any returned item will be identical to the one passed as a parameter.
-	 * However, if items have object semantics, the returned item may be a different instance from the parameter, though comparing equally to it.
+	 * 	<p>
+	 * 	Note: if items have reference semantics, then any returned item will be identical to the one passed as a parameter. However, if items have object
+	 * 	semantics, the returned item may be a different instance from the parameter, though comparing equally to it.
 	 */
 	Optional<E> tryGet( E element );
 
@@ -112,7 +110,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 */
 	int size();
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Checks whether this {@link UnmodifiableCollection} is empty.
@@ -133,7 +131,8 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	 *
 	 * @param other an {@link UnmodifiableEnumerable} with items to check for containment.
 	 *
-	 * @return {@code true} if this {@link UnmodifiableCollection} contains any of the items in the given {@link UnmodifiableEnumerable}; {@code false} otherwise.
+	 * @return {@code true} if this {@link UnmodifiableCollection} contains any of the items in the given {@link UnmodifiableEnumerable}; {@code false}
+	 * 	otherwise.
 	 */
 	boolean containsAny( UnmodifiableEnumerable<? extends E> other );
 
@@ -220,7 +219,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 
 	UnmodifiableList<E> sorted( Comparator<? super E> comparator );
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Default methods for {@link UnmodifiableCollection}.
@@ -263,8 +262,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 
 		@Override default E[] toArrayOfObject()
 		{
-			@SuppressWarnings( { "unchecked", "SuspiciousArrayCast" } )
-			E[] array = (E[])new Object[size()];
+			@SuppressWarnings( { "unchecked", "SuspiciousArrayCast" } ) E[] array = (E[])new Object[size()];
 			int index = 0;
 			for( E element : this )
 				array[index++] = element;
@@ -282,10 +280,10 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 
 		/**
 		 * Checks whether this {@link UnmodifiableCollection} is equal to the given {@link UnmodifiableCollection}.
-		 *
-		 * PEARL: hibernate collections do not properly implement equals(). From a comment in org.hibernate.collection.internal.PersistentBag.java: "Bag does not respect the
-		 * collection API and do an JVM instance comparison to do the equals. The semantic is broken not to have to initialize a collection for a simple equals() operation."
-		 * (Jerks!)
+		 * <p>
+		 * PEARL: hibernate collections do not properly implement equals(). From a comment in org.hibernate.collection.internal.PersistentBag.java: "Bag does
+		 * not respect the collection API and do an JVM instance comparison to do the equals. The semantic is broken not to have to initialize a collection for
+		 * a simple equals() operation." (Jerks!)
 		 *
 		 * @param other the {@link UnmodifiableCollection} to compare against.
 		 *
@@ -336,11 +334,13 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		}
 
 		/**
-		 * Creates a new {@link UnmodifiableCollection} representing each element of this {@link UnmodifiableCollection} converted by a given {@link Function1}.
+		 * Creates a new {@link UnmodifiableCollection} representing each element of this {@link UnmodifiableCollection} converted by a given
+		 * {@link Function1}.
 		 *
 		 * @param converter the {@link Function1} invoked to convert each element.
 		 *
-		 * @return a new {@link UnmodifiableCollection} representing each element of this {@link UnmodifiableCollection} converted by the given {@link Function1}.
+		 * @return a new {@link UnmodifiableCollection} representing each element of this {@link UnmodifiableCollection} converted by the given
+		 *    {@link Function1}.
 		 */
 		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter )
 		{
@@ -352,15 +352,13 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 			return map( converter, t -> Kit.fail(), equalityComparator );
 		}
 
-		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter,
-			Function1<Optional<? extends E>,? super T> reverter )
+		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter )
 		{
 			EqualityComparator<T> equalityComparator = new PartiallyConvertingEqualityComparator<>( reverter );
 			return map( converter, reverter, equalityComparator );
 		}
 
-		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter,
-			Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
+		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter, EqualityComparator<? super T> equalityComparator )
 		{
 			return ConversionCollections.newConvertingCollection( this, converter, reverter, equalityComparator );
 		}
@@ -410,7 +408,7 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Default methods for decorating {@link UnmodifiableCollection}.
@@ -451,20 +449,18 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Canary class.
 	 * <p>
-	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
-	 * earliest point possible, and not when compiling some derived class.
+	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the
+	 * compiler at the earliest point possible, and not when compiling some derived class.
 	 */
-	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
-		@Override public UnmodifiableCollection<E> getDecoratedUnmodifiableCollection()
-		{
-			return this;
-		}
+		@Override public UnmodifiableCollection<E> getDecoratedUnmodifiableCollection() { return this; }
 	}
 }

@@ -629,9 +629,6 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	@SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
-		@Override public UnmodifiableList<E> getDecoratedUnmodifiableList()
-		{
-			return this;
-		}
+		@Override public UnmodifiableList<E> getDecoratedUnmodifiableList() { return this; }
 	}
 }

@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 
 import java.util.function.Predicate;
@@ -42,5 +43,10 @@ class FilteringEnumerator<E> extends AbstractUnmodifiableEnumerator<E>
 	{
 		while( !enumeratorToFilter.isFinished() && !predicate.test( enumeratorToFilter.current() ) )
 			enumeratorToFilter.moveNext();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumeratorToFilter.coherence();
 	}
 }

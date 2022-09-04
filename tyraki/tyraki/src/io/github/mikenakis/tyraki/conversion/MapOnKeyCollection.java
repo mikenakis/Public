@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.functional.Function1;
@@ -60,6 +61,11 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 		{
 			return collection.newUnmodifiableEnumerator().map( key -> new MyBinding( key ) );
 		}
+
+		@Override public Coherence coherence()
+		{
+			return collection.coherence();
+		}
 	}
 
 	private final UnmodifiableCollection<K> collection;
@@ -68,6 +74,7 @@ class MapOnKeyCollection<K, V> extends AbstractMap<K,V>
 
 	MapOnKeyCollection( UnmodifiableCollection<K> collection, Function1<? extends V,? super K> converter )
 	{
+		super( collection.coherence() );
 		assert collection != null;
 		assert converter != null;
 		assert !collection.containsDuplicates();

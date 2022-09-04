@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
@@ -97,6 +98,11 @@ class ChainingSet<E> extends ChainingCollection<E>
 				}
 				break;
 			}
+		}
+
+		@Override public Coherence coherence()
+		{
+			return set.coherence();
 		}
 	}
 }

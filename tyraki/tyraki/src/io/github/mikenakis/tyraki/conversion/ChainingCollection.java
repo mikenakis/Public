@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
@@ -25,6 +26,14 @@ class ChainingCollection<E> extends AbstractUnmodifiableCollection<E>
 	{
 		super( equalityComparator );
 		this.collectionsToChain = collectionsToChain.toList();
+		assert collectionsMustBeCoherentAssertion( this.collectionsToChain );
+	}
+
+	private static <E> boolean collectionsMustBeCoherentAssertion( UnmodifiableCollection<UnmodifiableCollection<E>> collections )
+	{
+		for( UnmodifiableCollection<E> collection : collections )
+			assert collection.coherence().mustBeReadableAssertion();
+		return true;
 	}
 
 	@Override public boolean mustBeImmutableAssertion()
@@ -64,5 +73,10 @@ class ChainingCollection<E> extends AbstractUnmodifiableCollection<E>
 		for( UnmodifiableCollection<? super E> collection : collectionsToChain )
 			sum += collection.getModificationCount();
 		return sum;
+	}
+
+	@Override public Coherence coherence()
+	{
+		return collectionsToChain.coherence();
 	}
 }

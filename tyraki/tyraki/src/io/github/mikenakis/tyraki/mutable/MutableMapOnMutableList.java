@@ -1,8 +1,8 @@
 package io.github.mikenakis.tyraki.mutable;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
-import io.github.mikenakis.tyraki.AbstractEnumerator;
 import io.github.mikenakis.tyraki.Binding;
 import io.github.mikenakis.tyraki.MapEntry;
 import io.github.mikenakis.tyraki.MutableCollection;
@@ -45,7 +45,7 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 		}
 	}
 
-	private class MyEnumerator extends AbstractEnumerator<Binding<Integer,V>> implements MutableEnumerator.Defaults<Binding<Integer,V>>
+	private class MyEnumerator implements MutableEnumerator.Defaults<Binding<Integer,V>>
 	{
 		int index = 0;
 		boolean deleted = false;
@@ -78,6 +78,11 @@ final class MutableMapOnMutableList<V> extends AbstractMutableMap<Integer,V>
 			assert !deleted;
 			values.removeAt( index );
 			deleted = true;
+		}
+
+		@Override public Coherence coherence()
+		{
+			return MutableMapOnMutableList.this.coherence();
 		}
 	}
 

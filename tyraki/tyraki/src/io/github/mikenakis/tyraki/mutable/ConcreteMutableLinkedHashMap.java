@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.mutable;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -327,6 +328,11 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()
 		{
 			return currentNode == null ? "finished!" : modificationCount == hashTable.getModificationCount()? Objects.toString( currentNode ) : "concurrent modification!";
+		}
+
+		@Override public Coherence coherence()
+		{
+			return ConcreteMutableLinkedHashMap.this.coherence();
 		}
 	}
 }

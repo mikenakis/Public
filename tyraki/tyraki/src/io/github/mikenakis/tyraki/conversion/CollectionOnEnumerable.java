@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
@@ -12,7 +13,6 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 {
 	private final UnmodifiableEnumerable<K> enumerable;
 	private final EqualityComparator<K> equalityComparator;
-	private int modificationCount;
 
 	CollectionOnEnumerable( UnmodifiableEnumerable<K> enumerable, EqualityComparator<K> equalityComparator )
 	{
@@ -27,14 +27,12 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 
 	@Override public int size()
 	{
-		modificationCount++;
 		return enumerable.countElements();
 	}
 
 	@Override public Optional<K> tryGet( K item )
 	{
 		assert item != null;
-		modificationCount++;
 		for( K element : enumerable )
 			if( equalityComparator.equals( item, element ) )
 				return Optional.of( element );
@@ -43,7 +41,7 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 
 	@Override public int getModificationCount()
 	{
-		return modificationCount;
+		return 0;
 	}
 
 	@Override public UnmodifiableEnumerator<K> newUnmodifiableEnumerator()
@@ -72,7 +70,6 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 	@Override public int hashCode()
 	{
 		//noinspection NonFinalFieldReferencedInHashCode
-		modificationCount++;
 		return enumerable.hashCode();
 	}
 
@@ -81,5 +78,10 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 		var builder = new StringBuilder();
 		builder.append( size() ).append( " elements" );
 		return builder.toString();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumerable.coherence();
 	}
 }

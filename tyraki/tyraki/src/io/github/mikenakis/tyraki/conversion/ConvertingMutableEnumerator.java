@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.MutableEnumerator;
@@ -44,8 +45,11 @@ final class ConvertingMutableEnumerator<T, F> implements MutableEnumerator.Defau
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		var builder = new StringBuilder();
-		unmodifiableEnumeratorToStringBuilder( builder );
-		return builder.toString();
+		return unmodifiableEnumeratorToString();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumeratorToConvert.coherence();
 	}
 }

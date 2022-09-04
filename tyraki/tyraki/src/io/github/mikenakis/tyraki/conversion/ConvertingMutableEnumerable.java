@@ -17,11 +17,6 @@ final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumera
 		this.converter = converter;
 	}
 
-	@Override public Coherence coherence()
-	{
-		return enumerable.coherence();
-	}
-
 	@Override public boolean mustBeImmutableAssertion()
 	{
 		return enumerable.mustBeImmutableAssertion();
@@ -42,5 +37,10 @@ final class ConvertingMutableEnumerable<T,F> extends AbstractUnmodifiableEnumera
 	@Override public int getModificationCount()
 	{
 		return enumerable.getModificationCount();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumerable.coherence();
 	}
 }

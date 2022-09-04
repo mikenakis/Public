@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableMap;
@@ -39,5 +40,10 @@ final class MapValuesCollection<K, V> extends AbstractUnmodifiableCollection<V>
 	@Override public UnmodifiableEnumerator<V> newUnmodifiableEnumerator()
 	{
 		return map.entries().newUnmodifiableEnumerator().map( kvBinding -> kvBinding.getValue() );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return map.coherence();
 	}
 }

@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Kit;
@@ -22,7 +23,7 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<UnmodifiableList<E>>
+public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<UnmodifiableList<E>>, Coherent
 {
 	/**
 	 * Down-casts to an ancestral type.
@@ -420,7 +421,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	 *
 	 * @author michael.gr
 	 */
-	interface Defaults<E> extends UnmodifiableEnumerable<E>
+	interface Defaults<E> extends UnmodifiableEnumerable<E>, Coherent.Defaults
 	{
 		@Override default UnmodifiableList<E> toList()
 		{
@@ -741,9 +742,14 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	interface Decorator<E> extends Defaults<E>
+	interface Decorator<E> extends Defaults<E>, Coherent.Decorator
 	{
 		UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable();
+
+		@Override default Coherent decoratedCoherent()
+		{
+			return getDecoratedUnmodifiableEnumerable();
+		}
 
 		@Override default boolean mustBeImmutableAssertion()
 		{
@@ -776,9 +782,6 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	@SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
-		@Override public UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable()
-		{
-			return this;
-		}
+		@Override public UnmodifiableEnumerable<E> getDecoratedUnmodifiableEnumerable() { return this; }
 	}
 }

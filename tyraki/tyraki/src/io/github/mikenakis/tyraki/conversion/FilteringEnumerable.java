@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.tyraki.DebugView;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
@@ -40,5 +41,10 @@ class FilteringEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 	@Override public int getModificationCount()
 	{
 		return enumerable.getModificationCount();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumerable.coherence();
 	}
 }

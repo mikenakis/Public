@@ -12,6 +12,10 @@ import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
  */
 abstract class AbstractUnmodifiableEnumerable<E> implements UnmodifiableEnumerable.Defaults<E>
 {
+	protected AbstractUnmodifiableEnumerable()
+	{
+	}
+
 	@Deprecated @Override public boolean equals( Object other )
 	{
 		if( other instanceof UnmodifiableEnumerable )

@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -18,9 +19,9 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface UnmodifiableMap<K, V>
+public interface UnmodifiableMap<K, V> extends Coherent
 {
-	static <K,V> UnmodifiableMap<K,V> of()
+	static <K, V> UnmodifiableMap<K,V> of()
 	{
 		return UnmodifiableArrayMap.of();
 	}
@@ -66,7 +67,7 @@ public interface UnmodifiableMap<K, V>
 
 	static <K, V> UnmodifiableArrayMap<K,V> newArrayMap( Procedure1<MutableArrayMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newArrayMap, populator  );
+		return newUnmodifiableMap( MutableCollections::newArrayMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayMap<K,V> newArrayMap( Binding<K,V>... bindings )
@@ -358,9 +359,14 @@ public interface UnmodifiableMap<K, V>
 	 *
 	 * @author michael.gr
 	 */
-	interface Decorator<K, V> extends Defaults<K,V>
+	interface Decorator<K, V> extends Defaults<K,V>, Coherent.Decorator
 	{
 		UnmodifiableMap<K,V> getDecoratedUnmodifiableMap();
+
+		@Override default Coherent decoratedCoherent()
+		{
+			return getDecoratedUnmodifiableMap();
+		}
 
 		@Override default boolean mustBeImmutableAssertion()
 		{
@@ -405,16 +411,13 @@ public interface UnmodifiableMap<K, V>
 	/**
 	 * Canary class.
 	 * <p>
-	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
-	 * earliest point possible, and not when compiling some derived class.
+	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the
+	 * compiler at the earliest point possible, and not when compiling some derived class.
 	 */
 	@ExcludeFromJacocoGeneratedReport
 	@SuppressWarnings( "unused" )
 	final class Canary<K, V> implements Decorator<K,V>
 	{
-		@Override public UnmodifiableMap<K,V> getDecoratedUnmodifiableMap()
-		{
-			return this;
-		}
+		@Override public UnmodifiableMap<K,V> getDecoratedUnmodifiableMap() { return this; }
 	}
 }

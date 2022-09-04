@@ -16,8 +16,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 abstract class AbstractUnmodifiableCollection<E> extends AbstractUnmodifiableEnumerable<E> implements UnmodifiableCollection.Defaults<E>
 {
-	@SuppressWarnings( { "unused", "FieldNamingConvention" } )
-	protected final DebugView _debugView = DebugView.create( () -> this );
+	@SuppressWarnings( { "unused", "FieldNamingConvention" } ) protected final DebugView _debugView = DebugView.create( () -> this );
 
 	private final EqualityComparator<? super E> equalityComparator;
 
@@ -41,8 +40,7 @@ abstract class AbstractUnmodifiableCollection<E> extends AbstractUnmodifiableEnu
 		return false;
 	}
 
-	@ExcludeFromJacocoGeneratedReport @OverridingMethodsMustInvokeSuper
-	@Override public final String toString()
+	@ExcludeFromJacocoGeneratedReport @OverridingMethodsMustInvokeSuper @Override public final String toString()
 	{
 		return size() + " elements";
 	}

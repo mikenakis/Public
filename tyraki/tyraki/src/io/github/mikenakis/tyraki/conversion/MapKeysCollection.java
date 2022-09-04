@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.AbstractCoherent;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
@@ -8,13 +9,14 @@ import io.github.mikenakis.tyraki.UnmodifiableMap;
 
 import java.util.Optional;
 
-class MapKeysCollection<K, V> implements UnmodifiableCollection.Defaults<K>
+class MapKeysCollection<K, V> extends AbstractCoherent implements UnmodifiableCollection.Defaults<K>
 {
 	private final UnmodifiableMap<K,V> map;
 	private final EqualityComparator<? super K> keyEqualityComparator;
 
 	MapKeysCollection( UnmodifiableMap<K,V> map, EqualityComparator<? super K> keyEqualityComparator )
 	{
+		super( map.coherence() );
 		this.map = map;
 		this.keyEqualityComparator = keyEqualityComparator;
 	}

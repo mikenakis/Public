@@ -1,5 +1,7 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.AbstractCoherent;
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -7,16 +9,15 @@ import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
  *
  * @author michael.gr
  */
-public abstract class AbstractEnumerator<E> implements UnmodifiableEnumerator.Defaults<E>
+public abstract class AbstractEnumerator<E> extends AbstractCoherent implements UnmodifiableEnumerator.Defaults<E>
 {
-	protected AbstractEnumerator()
+	protected AbstractEnumerator( Coherence coherence )
 	{
+		super( coherence );
 	}
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
-		var builder = new StringBuilder();
-		unmodifiableEnumeratorToStringBuilder( builder );
-		return builder.toString();
+		return unmodifiableEnumeratorToString();
 	}
 }

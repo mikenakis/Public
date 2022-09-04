@@ -31,6 +31,11 @@ import java.util.Optional;
  */
 final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 {
+	@Override public Coherence coherence()
+	{
+		return NullaryCoherence.instance;
+	}
+
 	private final class MyEntries implements MutableCollection.Defaults<Binding<K,V>>
 	{
 		final EqualityComparator<Binding<K,V>> bindingEqualityComparator = new BindingEqualityComparator<>( DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );
@@ -41,7 +46,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 
 		@Override public Coherence coherence()
 		{
-			return NullaryCoherence.instance;
+			return LegacyMutableMapOnJavaMap.this.coherence();
 		}
 
 		@Override public boolean mustBeImmutableAssertion()

@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.mutable;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.Queue;
@@ -185,6 +186,11 @@ final class LinkedQueue<E> extends MutableCollectionsSubject implements Queue.De
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()
 		{
 			return currentNode == null ? "finished!" : modificationCount == LinkedQueue.this.modificationCount ? Objects.toString( currentNode ) : "concurrent modification!";
+		}
+
+		@Override public Coherence coherence()
+		{
+			return LinkedQueue.this.coherence();
 		}
 	}
 }

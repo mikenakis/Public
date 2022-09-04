@@ -1,5 +1,8 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.ImmutabilityCoherence;
+import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 
@@ -34,8 +37,14 @@ final class SingleElementEnumerable<E> implements UnmodifiableEnumerable.Default
 		return true;
 	}
 
+	@Override public Coherence coherence()
+	{
+		return ImmutabilityCoherence.instance;
+	}
+
 	static final class MyEnumerator<E> extends AbstractUnmodifiableEnumerator<E>
 	{
+		private final Coherence coherence = ThreadLocalCoherence.instance();
 		private E element;
 
 		MyEnumerator( E element )
@@ -59,6 +68,11 @@ final class SingleElementEnumerable<E> implements UnmodifiableEnumerable.Default
 			assert !isFinished();
 			element = null;
 			return this;
+		}
+
+		@Override public Coherence coherence()
+		{
+			return coherence;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
@@ -65,6 +66,11 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 		{
 			return collection.newUnmodifiableEnumerator().map( value -> new MyBinding( value ) );
 		}
+
+		@Override public Coherence coherence()
+		{
+			return MapOnValueCollection.this.coherence();
+		}
 	}
 
 	private final UnmodifiableCollection<V> collection;
@@ -73,6 +79,7 @@ class MapOnValueCollection<K, V> extends AbstractMap<K,V>
 
 	MapOnValueCollection( UnmodifiableCollection<V> collection, Function1<? extends K,? super V> converter )
 	{
+		super( collection.coherence() );
 		assert !collection.containsDuplicates();
 		EqualityComparator<? super K> keyEqualityComparator = DefaultEqualityComparator.getInstance();
 		EqualityComparator<? super V> valueEqualityComparator = DefaultEqualityComparator.getInstance();

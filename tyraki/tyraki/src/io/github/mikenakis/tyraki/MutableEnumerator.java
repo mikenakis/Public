@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
 
@@ -42,6 +43,11 @@ public interface MutableEnumerator<T> extends UnmodifiableEnumerator<T>
 	interface Decorator<E> extends Defaults<E>, UnmodifiableEnumerator.Decorator<E>
 	{
 		@Override MutableEnumerator<E> getDecoratedUnmodifiableEnumerator();
+
+		@Override default Coherent decoratedCoherent()
+		{
+			return getDecoratedUnmodifiableEnumerator();
+		}
 
 		@Override default void deleteCurrent()
 		{

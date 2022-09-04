@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.Binding;
@@ -57,7 +58,17 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 					index++;
 					return this;
 				}
+
+				@Override public Coherence coherence()
+				{
+					return IndexingMapOnList.this.coherence();
+				}
 			};
+		}
+
+		@Override public Coherence coherence()
+		{
+			return IndexingMapOnList.this.coherence();
 		}
 	}
 
@@ -66,6 +77,7 @@ class IndexingMapOnList<V> extends AbstractMap<Integer,V>
 
 	IndexingMapOnList( UnmodifiableList<V> list )
 	{
+		super( list.coherence() );
 		assert list != null;
 		this.list = list;
 		entries = new MyEntriesCollection( DefaultEqualityComparator.getInstance(), DefaultEqualityComparator.getInstance() );

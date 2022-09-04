@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.TotalConverterWithIndex;
@@ -70,5 +71,10 @@ class ConvertingList<T, F> extends AbstractList<T>
 		if( from.isEmpty() )
 			return -1;
 		return list.indexOf( from.get() );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return list.coherence();
 	}
 }

@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableList;
 
@@ -38,5 +39,10 @@ class EnumeratorOnList<E> extends AbstractUnmodifiableEnumerator<E>
 		assert !isFinished() : new NoSuchElementException();
 		index++;
 		return this;
+	}
+
+	@Override public Coherence coherence()
+	{
+		return list.coherence();
 	}
 }

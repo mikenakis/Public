@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.tyraki.UnmodifiableList;
 
 import java.util.Optional;
@@ -54,5 +55,10 @@ final class ReversingList<T> extends AbstractList<T>
 		if( index != -1 )
 			index = size() - 1 - index;
 		return index;
+	}
+
+	@Override public Coherence coherence()
+	{
+		return listToConvert.coherence();
 	}
 }

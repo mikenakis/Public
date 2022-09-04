@@ -1,5 +1,8 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.Coherent;
+import io.github.mikenakis.coherence.ImmutabilityCoherence;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
@@ -11,38 +14,21 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface UnmodifiableEnumerator<E>
+public interface UnmodifiableEnumerator<E> extends Coherent
 {
 	static <T, U extends T> UnmodifiableEnumerator<T> downCast( UnmodifiableEnumerator<U> enumerator )
 	{
-		@SuppressWarnings( "unchecked" )
-		UnmodifiableEnumerator<T> result = (UnmodifiableEnumerator<T>)enumerator;
+		@SuppressWarnings( "unchecked" ) UnmodifiableEnumerator<T> result = (UnmodifiableEnumerator<T>)enumerator;
 		return result;
 	}
 
 	UnmodifiableEnumerator<Object> EMPTY = new Defaults<>()
 	{
-		@Override public boolean isFinished()
-		{
-			return true;
-		}
-
-		@Override public Object current()
-		{
-			assert false;
-			return null;
-		}
-
-		@Override public UnmodifiableEnumerator<Object> moveNext()
-		{
-			assert false;
-			return null;
-		}
-
-		@ExcludeFromJacocoGeneratedReport @Override public String toString()
-		{
-			return "empty";
-		}
+		@Override public Coherence coherence() { return ImmutabilityCoherence.instance; }
+		@Override public boolean isFinished() { return true; }
+		@Override public Object current() { throw new IllegalStateException(); }
+		@Override public UnmodifiableEnumerator<Object> moveNext() { throw new IllegalStateException(); }
+		@ExcludeFromJacocoGeneratedReport @Override public String toString() { return "empty"; }
 	};
 
 	/**
@@ -123,10 +109,16 @@ public interface UnmodifiableEnumerator<E>
 				stringBuilder.append( "current: " ).append( current() );
 		}
 
+		default String unmodifiableEnumeratorToString()
+		{
+			var builder = new StringBuilder();
+			unmodifiableEnumeratorToStringBuilder( builder );
+			return builder.toString();
+		}
+
 		@Override default <U extends E> UnmodifiableEnumerator<U> upCast()
 		{
-			@SuppressWarnings( "unchecked" )
-			UnmodifiableEnumerator<U> result = (UnmodifiableEnumerator<U>)this;
+			@SuppressWarnings( "unchecked" ) UnmodifiableEnumerator<U> result = (UnmodifiableEnumerator<U>)this;
 			return result;
 		}
 
@@ -143,9 +135,14 @@ public interface UnmodifiableEnumerator<E>
 	 *
 	 * @author michael.gr
 	 */
-	interface Decorator<E> extends Defaults<E>
+	interface Decorator<E> extends Defaults<E>, Coherent.Decorator
 	{
 		UnmodifiableEnumerator<E> getDecoratedUnmodifiableEnumerator();
+
+		@Override default Coherent decoratedCoherent()
+		{
+			return getDecoratedUnmodifiableEnumerator();
+		}
 
 		@Override default boolean isFinished()
 		{
@@ -171,16 +168,14 @@ public interface UnmodifiableEnumerator<E>
 
 	/**
 	 * Canary class.
-	 *
-	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
-	 * earliest point possible, and not when compiling some derived class.
+	 * <p>
+	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the
+	 * compiler at the earliest point possible, and not when compiling some derived class.
 	 */
-	@ExcludeFromJacocoGeneratedReport @SuppressWarnings( "unused" )
+	@ExcludeFromJacocoGeneratedReport
+	@SuppressWarnings( "unused" )
 	final class Canary<E> implements Decorator<E>
 	{
-		@Override public UnmodifiableEnumerator<E> getDecoratedUnmodifiableEnumerator()
-		{
-			throw new AssertionError();
-		}
+		@Override public UnmodifiableEnumerator<E> getDecoratedUnmodifiableEnumerator() { throw new AssertionError(); }
 	}
 }

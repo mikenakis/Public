@@ -1,5 +1,7 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.ImmutabilityCoherence;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
@@ -38,5 +40,10 @@ final class EnumeratorOnFunction<E> extends AbstractUnmodifiableEnumerator<E>
 	{
 		current = nextElementProducer.invoke( current.orElseThrow() );
 		return this;
+	}
+
+	@Override public Coherence coherence()
+	{
+		return ImmutabilityCoherence.instance;
 	}
 }

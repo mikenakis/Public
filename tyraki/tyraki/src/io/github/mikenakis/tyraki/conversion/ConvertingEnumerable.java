@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.functional.Function2;
 import io.github.mikenakis.tyraki.TotalConverterWithIndex;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
@@ -40,5 +41,10 @@ final class ConvertingEnumerable<T, F> extends AbstractUnmodifiableEnumerable<T>
 	@Override public int getModificationCount()
 	{
 		return enumerable.getModificationCount();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return  enumerable.coherence() ;
 	}
 }

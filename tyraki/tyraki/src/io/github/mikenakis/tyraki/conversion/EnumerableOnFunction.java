@@ -1,5 +1,7 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.ImmutabilityCoherence;
 import io.github.mikenakis.kit.functional.Function0;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
@@ -38,5 +40,10 @@ final class EnumerableOnFunction<E> implements UnmodifiableEnumerable.Defaults<E
 	@Override public int getModificationCount()
 	{
 		return 0;
+	}
+
+	@Override public Coherence coherence()
+	{
+		return ImmutabilityCoherence.instance;
 	}
 }

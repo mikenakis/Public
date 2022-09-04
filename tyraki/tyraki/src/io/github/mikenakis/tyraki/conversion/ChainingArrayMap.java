@@ -24,10 +24,19 @@ class ChainingArrayMap<K, V> extends AbstractMap<K,V> implements UnmodifiableArr
 
 	ChainingArrayMap( UnmodifiableCollection<UnmodifiableArrayMap<K,V>> mapsToChain )
 	{
+		super( mapsToChain.coherence() );
+		assert mapsMustBeCoherentAssertion( mapsToChain );
 		this.mapsToChain = mapsToChain.toList();
 		entries = ConversionCollections.newChainingList( this.mapsToChain.map( UnmodifiableArrayMap::entries ) );
 		keys = ConversionCollections.newChainingArraySet( this.mapsToChain.map( UnmodifiableArrayMap::keys ) );
 		values = ConversionCollections.newChainingList( this.mapsToChain.map( UnmodifiableArrayMap::values ) );
+	}
+
+	private boolean mapsMustBeCoherentAssertion( UnmodifiableCollection<UnmodifiableArrayMap<K,V>> maps )
+	{
+		for( var map : maps )
+			assert map.coherence().mustBeReadableAssertion();
+		return true;
 	}
 
 	@Override public boolean mustBeImmutableAssertion()

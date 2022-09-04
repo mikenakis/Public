@@ -1,7 +1,6 @@
 package io.github.mikenakis.tyraki;
 
 import io.github.mikenakis.coherence.Coherence;
-import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
@@ -17,7 +16,7 @@ import java.util.function.Predicate;
  *
  * @author michael.gr
  */
-public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>, Coherent
+public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>
 {
 	/**
 	 * Down-casts to an ancestral type.
@@ -220,7 +219,7 @@ public interface MutableEnumerable<E> extends UnmodifiableEnumerable<E>, Coheren
 
 	/**
 	 * Canary class.
-	 *
+	 * <p>
 	 * This is a concrete class to make sure that if there are problems with the interface making it impossible to inherit from, they will be caught by the compiler at the
 	 * earliest point possible, and not when compiling some derived class.
 	 */

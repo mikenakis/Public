@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.functional.Function1;
 
 class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
@@ -26,6 +27,11 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 	@Override public int getModificationCount()
 	{
 		return primaryEnumerable.getModificationCount();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return primaryEnumerable.coherence();
 	}
 
 	private static class MyEnumerator<T, E> implements UnmodifiableEnumerator.Defaults<T>
@@ -75,6 +81,11 @@ class FlatteningEnumerable<T, E> implements UnmodifiableEnumerable.Defaults<T>
 				if( !secondaryEnumerator.isFinished() )
 					return secondaryEnumerator;
 			}
+		}
+
+		@Override public Coherence coherence()
+		{
+			return primaryEnumerator.coherence();
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package io.github.mikenakis.tyraki;
 
+import io.github.mikenakis.coherence.AbstractCoherent;
+import io.github.mikenakis.coherence.ImmutabilityCoherence;
+import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Kit;
@@ -14,7 +17,7 @@ import java.util.Optional;
  *
  * @author michael.gr
  */
-public final class IntegerSeriesList implements UnmodifiableList.Defaults<Integer>
+public final class IntegerSeriesList extends AbstractCoherent implements UnmodifiableList.Defaults<Integer>
 {
 	private final int length;
 
@@ -25,6 +28,7 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 	 */
 	public IntegerSeriesList( int length )
 	{
+		super( ImmutabilityCoherence.instance );
 		this.length = length;
 	}
 
@@ -75,7 +79,7 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 
 	@Override public UnmodifiableEnumerator<Integer> newUnmodifiableEnumerator()
 	{
-		return new UnmodifiableEnumerator.Defaults<>()
+		return new AbstractEnumerator<>( ThreadLocalCoherence.instance() )
 		{
 			private int index;
 
@@ -95,13 +99,6 @@ public final class IntegerSeriesList implements UnmodifiableList.Defaults<Intege
 				assert !isFinished() : new NoSuchElementException();
 				index++;
 				return this;
-			}
-
-			@ExcludeFromJacocoGeneratedReport @Override public String toString()
-			{
-				var builder = new StringBuilder();
-				unmodifiableEnumeratorToStringBuilder( builder );
-				return builder.toString();
 			}
 		};
 	}

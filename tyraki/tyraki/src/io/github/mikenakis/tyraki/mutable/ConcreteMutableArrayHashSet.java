@@ -2,7 +2,6 @@ package io.github.mikenakis.tyraki.mutable;
 
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
-import io.github.mikenakis.tyraki.AbstractEnumerator;
 import io.github.mikenakis.tyraki.MutableArrayHashSet;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.MutableHashSet;
@@ -140,7 +139,7 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 		return list.get( index );
 	}
 
-	private final class MyEnumerator extends AbstractEnumerator<E> implements MutableEnumerator.Decorator<E>
+	private final class MyEnumerator implements MutableEnumerator.Decorator<E>
 	{
 		final MutableEnumerator<E> decoree;
 
@@ -160,6 +159,11 @@ final class ConcreteMutableArrayHashSet<E> extends AbstractMutableCollection<E> 
 		@Override public MutableEnumerator<E> getDecoratedUnmodifiableEnumerator()
 		{
 			return decoree;
+		}
+
+		@Override public String toString()
+		{
+			return unmodifiableEnumeratorToString();
 		}
 	}
 }

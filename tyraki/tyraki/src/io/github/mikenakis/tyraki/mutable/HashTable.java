@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.mutable;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.exceptions.GenericException;
@@ -311,6 +312,11 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 		@ExcludeFromJacocoGeneratedReport @Override public String toString()
 		{
 			return currentNode == null ? "finished!" : modificationCount == hashTable.modificationCount ? "concurrent modification!" : Objects.toString( currentNode );
+		}
+
+		@Override public Coherence coherence()
+		{
+			return hashTable.coherence();
 		}
 	}
 

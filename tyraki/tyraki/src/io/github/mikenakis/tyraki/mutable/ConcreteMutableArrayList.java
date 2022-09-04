@@ -1,7 +1,8 @@
 package io.github.mikenakis.tyraki.mutable;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
-import io.github.mikenakis.tyraki.AbstractEnumerator;
+import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 
@@ -153,7 +154,7 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 		return new MyEnumerator();
 	}
 
-	final class MyEnumerator extends AbstractEnumerator<E> implements MutableEnumerator.Defaults<E>
+	final class MyEnumerator implements MutableEnumerator.Defaults<E>
 	{
 		private int expectedModCount;
 		private int index;
@@ -206,6 +207,16 @@ final class ConcreteMutableArrayList<E> extends AbstractMutableList<E>
 				index++;
 			}
 			return this;
+		}
+
+		@Override public Coherence coherence()
+		{
+			return ConcreteMutableArrayList.this.coherence();
+		}
+
+		@ExcludeFromJacocoGeneratedReport @Override public String toString()
+		{
+			return unmodifiableEnumeratorToString();
 		}
 	}
 

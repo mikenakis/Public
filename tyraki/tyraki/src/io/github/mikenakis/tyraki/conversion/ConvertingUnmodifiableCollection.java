@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
@@ -57,5 +58,10 @@ class ConvertingUnmodifiableCollection<T, F> extends AbstractUnmodifiableCollect
 		Optional<? extends F> from = reverter.invoke( element );
 		Optional<F> foundItem = from.flatMap( f -> collection.tryGet( f ) );
 		return foundItem.map( i -> converter.invoke( i ) );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return collection.coherence();
 	}
 }

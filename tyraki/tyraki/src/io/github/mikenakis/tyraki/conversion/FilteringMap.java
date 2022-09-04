@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.Binding;
 import io.github.mikenakis.tyraki.MapEntry;
@@ -33,6 +34,11 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 		{
 			return new FilteringEnumerator<>( map.entries().newUnmodifiableEnumerator(), predicate );
 		}
+
+		@Override public Coherence coherence()
+		{
+			return FilteringMap.this.coherence();
+		}
 	}
 
 	private final UnmodifiableMap<K,V> map;
@@ -45,6 +51,7 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 
 	FilteringMap( UnmodifiableMap<K,V> map, Predicate<Binding<K,V>> predicate )
 	{
+		super( map.coherence() );
 		this.map = map;
 		this.predicate = predicate;
 		entries = new MyEntriesCollection( map.keys().getEqualityComparator(), map.values().getEqualityComparator() );
@@ -79,8 +86,7 @@ final class FilteringMap<K, V> extends AbstractMap<K,V>
 	{
 		assert k != null;
 		Optional<V> existingValueOption = map.tryGet( k );
-		return existingValueOption.map( existingValue ->
-		{
+		return existingValueOption.map( existingValue -> {
 			Binding<K,V> binding = MapEntry.of( k, existingValue ); //TODO this looks wrong.
 			if( !predicate.test( binding ) )
 				return null;

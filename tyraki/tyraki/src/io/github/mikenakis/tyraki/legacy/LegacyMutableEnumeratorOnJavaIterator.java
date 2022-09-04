@@ -1,5 +1,7 @@
 package io.github.mikenakis.tyraki.legacy;
 
+import io.github.mikenakis.coherence.Coherence;
+import io.github.mikenakis.coherence.NullaryCoherence;
 import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
@@ -63,5 +65,10 @@ final class LegacyMutableEnumeratorOnJavaIterator<E> implements MutableEnumerato
 		iterator.remove();
 		deleted = true;
 		modCountIncrementer.invoke();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return NullaryCoherence.instance;
 	}
 }

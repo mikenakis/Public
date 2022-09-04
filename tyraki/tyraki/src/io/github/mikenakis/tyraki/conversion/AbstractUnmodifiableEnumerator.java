@@ -12,6 +12,10 @@ import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
  */
 abstract class AbstractUnmodifiableEnumerator<E> implements UnmodifiableEnumerator.Defaults<E>
 {
+	AbstractUnmodifiableEnumerator()
+	{
+	}
+
 	@ExcludeFromJacocoGeneratedReport @Override public String toString()
 	{
 		var builder = new StringBuilder();

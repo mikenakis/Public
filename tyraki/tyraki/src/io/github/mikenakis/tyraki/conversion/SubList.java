@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.tyraki.UnmodifiableList;
 
 /**
@@ -45,5 +46,10 @@ final class SubList<T> extends AbstractList<T>
 	@Override public T get( int index )
 	{
 		return list.get( startOffset + index );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return list.coherence();
 	}
 }

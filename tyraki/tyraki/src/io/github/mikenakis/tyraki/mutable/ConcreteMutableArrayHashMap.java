@@ -2,7 +2,7 @@ package io.github.mikenakis.tyraki.mutable;
 
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
-import io.github.mikenakis.tyraki.AbstractEnumerator;
+import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.Binding;
 import io.github.mikenakis.tyraki.MapEntry;
 import io.github.mikenakis.tyraki.MutableArrayHashMap;
@@ -72,7 +72,7 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 			return keyEnumerator.map( k -> MapEntry.of( k, map.get( k ) ) );
 		}
 
-		private final class MyUnmodifiableEnumerator extends AbstractEnumerator<K> implements UnmodifiableEnumerator.Decorator<K>
+		private final class MyUnmodifiableEnumerator implements UnmodifiableEnumerator.Decorator<K>
 		{
 			final UnmodifiableEnumerator<K> decoree;
 
@@ -85,9 +85,14 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 			{
 				return decoree;
 			}
+
+			@ExcludeFromJacocoGeneratedReport @Override public String toString()
+			{
+				return unmodifiableEnumeratorToString();
+			}
 		}
 
-		private final class MyMutableEnumerator extends AbstractEnumerator<K> implements MutableEnumerator.Decorator<K>
+		private final class MyMutableEnumerator implements MutableEnumerator.Decorator<K>
 		{
 			final MutableEnumerator<K> decoree;
 
@@ -108,6 +113,11 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 			{
 				return decoree;
 			}
+
+			@ExcludeFromJacocoGeneratedReport @Override public String toString()
+			{
+				return unmodifiableEnumeratorToString();
+			}
 		}
 	}
 
@@ -117,8 +127,7 @@ final class ConcreteMutableArrayHashMap<K, V> extends AbstractMutableMap<K,V> im
 	private final MutableList<V> values;
 	private final MyEntries entries;
 
-	ConcreteMutableArrayHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher,
-		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
+	ConcreteMutableArrayHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, Hasher<? super K> keyHasher, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );
 		this.keyHasher = keyHasher;

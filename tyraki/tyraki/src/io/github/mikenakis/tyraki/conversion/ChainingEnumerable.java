@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.tyraki.DebugView;
 import io.github.mikenakis.tyraki.UnmodifiableCollection;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerable;
@@ -24,7 +25,15 @@ final class ChainingEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 	 */
 	ChainingEnumerable( UnmodifiableCollection<UnmodifiableEnumerable<E>> enumerablesToChain )
 	{
-		this.enumerablesToChain = enumerablesToChain;
+		this.enumerablesToChain = enumerablesToChain.toList();
+		assert enumerablesMustBeCoherentAssertion( this.enumerablesToChain );
+	}
+
+	private static <E> boolean enumerablesMustBeCoherentAssertion( Iterable<UnmodifiableEnumerable<E>> enumerables )
+	{
+		for( var enumerable : enumerables )
+			assert enumerable.coherence().mustBeReadableAssertion();
+		return true;
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
@@ -43,6 +52,11 @@ final class ChainingEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 	@Override public boolean mustBeImmutableAssertion()
 	{
 		return enumerablesToChain.mustBeImmutableAssertion() && enumerablesToChain.trueForAll( e -> e.mustBeImmutableAssertion() );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumerablesToChain.coherence();
 	}
 
 	private static final class MyEnumerator<E> extends AbstractUnmodifiableEnumerator<E>
@@ -89,6 +103,11 @@ final class ChainingEnumerable<E> extends AbstractUnmodifiableEnumerable<E>
 			if( enumerator.isFinished() )
 				loadNextEnumerator();
 			return this;
+		}
+
+		@Override public Coherence coherence()
+		{
+			return enumerablesToChain.coherence();
 		}
 	}
 }

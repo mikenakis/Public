@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.tyraki.Binding;
@@ -55,6 +56,11 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 		{
 			return map.entries().newUnmodifiableEnumerator().map( sourceBinding -> new MyBinding( sourceBinding ) );
 		}
+
+		@Override public Coherence coherence()
+		{
+			return KeyConvertingMap.this.coherence();
+		}
 	}
 
 	private final UnmodifiableMap<SK,V> map;
@@ -64,6 +70,7 @@ class KeyConvertingMap<TK, SK, V> extends AbstractMap<TK,V>
 
 	KeyConvertingMap( UnmodifiableMap<SK,V> map, Function1<? extends TK,? super SK> converter, Function1<Optional<? extends SK>,? super TK> reverter )
 	{
+		super( map.coherence() );
 		assert converter != null;
 		assert reverter != null;
 		this.map = map;

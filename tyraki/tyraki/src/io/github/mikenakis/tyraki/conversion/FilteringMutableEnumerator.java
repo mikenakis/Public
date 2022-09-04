@@ -1,5 +1,6 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.tyraki.MutableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
@@ -58,5 +59,10 @@ final class FilteringMutableEnumerator<E> implements MutableEnumerator.Defaults<
 	{
 		while( !enumeratorToFilter.isFinished() && !predicate.test( enumeratorToFilter.current() ) )
 			enumeratorToFilter.moveNext();
+	}
+
+	@Override public Coherence coherence()
+	{
+		return enumeratorToFilter.coherence();
 	}
 }

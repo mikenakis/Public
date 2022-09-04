@@ -23,18 +23,13 @@ class ConvertingMutableCollection<T, F> extends AbstractUnmodifiableCollection<T
 	private final Function1<? extends T,? super F> converter;
 	private final Function1<F,? super T> reverter;
 
-	ConvertingMutableCollection( MutableCollection<F> collection, Function1<? extends T,? super F> converter, Function1<F,? super T> reverter,
+	ConvertingMutableCollection( MutableCollection<F> collection, Function1<? extends T,? super F> converter, Function1<F,? super T> reverter, //
 		EqualityComparator<? super T> equalityComparator )
 	{
 		super( equalityComparator );
 		this.collection = collection;
 		this.converter = converter;
 		this.reverter = reverter;
-	}
-
-	@Override public Coherence coherence()
-	{
-		return collection.coherence();
 	}
 
 	@Override public boolean mustBeImmutableAssertion()
@@ -81,5 +76,10 @@ class ConvertingMutableCollection<T, F> extends AbstractUnmodifiableCollection<T
 	{
 		MutableEnumerator<F> mutableEnumerator = collection.newMutableEnumerator();
 		return new ConvertingMutableEnumerator<>( mutableEnumerator, converter );
+	}
+
+	@Override public Coherence coherence()
+	{
+		return collection.coherence();
 	}
 }
