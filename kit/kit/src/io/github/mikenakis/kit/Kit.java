@@ -84,7 +84,7 @@ import java.util.stream.StreamSupport;
 @SuppressWarnings( "NewClassNamingConvention" )
 public final class Kit
 {
-	private static final Duration postAndWaitTimeout = Duration.ofSeconds( 1 );
+	private static final Duration postAndWaitTimeout = Duration.ofSeconds( 2 );
 
 	public static final byte[] ARRAY_OF_ZERO_BYTES = new byte[0];
 	public static final Object[] ARRAY_OF_ZERO_OBJECTS = new Object[0];

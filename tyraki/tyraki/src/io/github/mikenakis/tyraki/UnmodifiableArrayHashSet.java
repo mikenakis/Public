@@ -27,8 +27,7 @@ public interface UnmodifiableArrayHashSet<E> extends UnmodifiableArraySet<E>, Un
 			return of();
 		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableArrayHashSet<E> mutableSet = mutableCollections.newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
+			MutableArrayHashSet<E> mutableSet = MutableCollections.of( coherence ).newArrayHashSet( items.size(), fillFactor, hasher, equalityComparator );
 			mutableSet.addAll( items );
 			return mutableSet;
 		} );

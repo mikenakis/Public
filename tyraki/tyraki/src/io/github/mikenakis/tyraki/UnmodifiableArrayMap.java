@@ -26,8 +26,7 @@ public interface UnmodifiableArrayMap<K, V> extends UnmodifiableMap<K,V>
 			return of();
 		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableArrayMap<K,V> mutableMap = mutableCollections.newArrayMap();
+			MutableArrayMap<K,V> mutableMap = MutableCollections.of( coherence ).newArrayMap();
 			mutableMap.addAll( bindings );
 			return mutableMap;
 		} );

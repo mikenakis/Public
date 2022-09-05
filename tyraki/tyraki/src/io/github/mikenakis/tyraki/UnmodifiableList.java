@@ -74,8 +74,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			MutableList<E> mutableList = MutableCollections.of( coherence ).newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
 			return mutableList;
 		} );
@@ -87,8 +86,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 			return of();
 		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableList<E> mutableList = mutableCollections.newArrayList( elements.size(), equalityComparator );
+			MutableList<E> mutableList = MutableCollections.of( coherence ).newArrayList( elements.size(), equalityComparator );
 			mutableList.addAll( elements );
 			return mutableList;
 		} );

@@ -105,8 +105,7 @@ public interface UnmodifiableArrayHashMap<K, V> extends UnmodifiableHashMap<K,V>
 			return ImmutableCollections.emptyArrayHashMap();
 		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
 		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			MutableArrayHashMap<K,V> mutableMap = mutableCollections.newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
+			MutableArrayHashMap<K,V> mutableMap = MutableCollections.of( coherence ).newArrayHashMap( bindings.size(), fillFactor, keyHasher, //
 				keyEqualityComparator, valueEqualityComparator );
 			mutableMap.addAll( bindings );
 			return mutableMap;
