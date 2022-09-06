@@ -177,7 +177,7 @@ final class ConcreteMutableTreeMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return keyComparator.compare( key, other.key ) == 0;
 		}
 
-		@Override public boolean equals( Object o )
+		@Deprecated @Override public boolean equals( Object o )
 		{
 			if( o instanceof ConcreteMutableTreeMap<?,?>.Item )
 			{

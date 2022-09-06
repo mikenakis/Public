@@ -240,7 +240,7 @@ class ConcreteMutableLinkedHashMap<K, V> extends AbstractMutableMap<K,V> impleme
 			return true;
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
 			if( other instanceof ConcreteMutableLinkedHashMap<?,?>.Node )
 			{

@@ -54,7 +54,7 @@ public abstract class ReferenceConstant extends Constant
 	@Deprecated @Override public final ReferenceConstant asReferenceConstant() { return this; }
 	@ExcludeFromJacocoGeneratedReport @Override public final String toString() { return "declaringType = " + declaringTypeConstant + ", nameAndDescriptor = " + nameAndDescriptorConstant; }
 	@Deprecated @Override public final boolean equals( Object other ) { return other instanceof ReferenceConstant kin && equals( kin ); }
-	public boolean equals( ReferenceConstant other ) { return declaringTypeConstant.equalsClassConstant( other.declaringTypeConstant ) && nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ); }
+	public boolean equals( ReferenceConstant other ) { return declaringTypeConstant.equals( other.declaringTypeConstant ) && nameAndDescriptorConstant.equals( other.nameAndDescriptorConstant ); }
 	@Override public final int hashCode() { return Objects.hash( tag, declaringTypeConstant, nameAndDescriptorConstant ); }
 
 	@Override public final void intern( Interner interner )

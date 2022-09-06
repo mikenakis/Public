@@ -258,9 +258,7 @@ public final class Kit
 	public static SourceLocation getSourceLocation( int numberOfFramesToSkip )
 	{
 		StackWalker.StackFrame stackFrame = getStackFrame( numberOfFramesToSkip + 1 );
-		SourceLocation sourceLocation = SourceLocation.fromStackFrame( stackFrame );
-		assert sourceLocation.stringRepresentation().equals( stackFrame.toString() ); //TODO: why did this have to be disabled?
-		return sourceLocation;
+		return SourceLocation.fromStackFrame( stackFrame );
 	}
 
 	public static String stringFromThrowable( Throwable throwable )
@@ -2013,32 +2011,21 @@ public final class Kit
 	// Debugging helpers (try-catch, try-finally, etc.)
 
 	/**
-	 * Performs a {@code try-catch} and returns any caught {@link Throwable}.
-	 *
-	 * @param procedure the procedure to be invoked in the 'try' block.
-	 */
-	public static Optional<Throwable> tryCatchWithoutBoundary( Procedure0 procedure )
-	{
-		try
-		{
-			procedure.invoke();
-			return Optional.empty();
-		}
-		catch( Throwable throwable )
-		{
-			return Optional.of( throwable );
-		}
-	}
-
-	/**
 	 * Performs a debugger-friendly {@code try-catch} and returns any caught {@link Throwable}.
 	 *
 	 * @param procedure the procedure to be invoked in the 'try' block.
 	 */
 	public static Optional<Throwable> tryCatch( Procedure0 procedure )
 	{
-		return tryCatchWithoutBoundary( () -> //
-			Debug.boundary( () -> procedure.invoke() ) );
+		try
+		{
+			Debug.boundary( () -> procedure.invoke() );
+			return Optional.empty();
+		}
+		catch( Throwable throwable )
+		{
+			return Optional.of( throwable );
+		}
 	}
 
 	/**
@@ -2052,25 +2039,9 @@ public final class Kit
 	 */
 	public static <R> R tryFinally( Function0<R> tryFunction, Procedure0 finallyHandler )
 	{
-		return tryFinallyWithoutBoundary( () -> //
-				Debug.boundary( () -> tryFunction.invoke() ), //
-			finallyHandler );
-	}
-
-	/**
-	 * Performs a debugger-friendly {@code try-finally} that returns a result.
-	 *
-	 * @param tryFunction    the function to be invoked in the 'try' block.
-	 * @param finallyHandler the handler to be invoked after the try-function.
-	 * @param <R>            the type of the result.
-	 *
-	 * @return the result of the try-function.
-	 */
-	public static <R> R tryFinallyWithoutBoundary( Function0<R> tryFunction, Procedure0 finallyHandler )
-	{
 		try
 		{
-			return tryFunction.invoke();
+			return Debug.boundary( () -> tryFunction.invoke() );
 		}
 		finally
 		{

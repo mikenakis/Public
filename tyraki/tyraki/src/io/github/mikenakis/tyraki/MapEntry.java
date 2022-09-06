@@ -72,7 +72,7 @@ public class MapEntry<K, V> implements Binding<K,V>
 		return true;
 	}
 
-	@Override public boolean equals( Object obj )
+	@Deprecated @Override public boolean equals( Object obj )
 	{
 		if( obj == null )
 			return false;

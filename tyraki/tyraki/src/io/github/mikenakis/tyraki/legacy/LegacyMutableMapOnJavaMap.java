@@ -199,18 +199,13 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return DefaultEqualityComparator.getInstance();
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
-			if( other == this )
-				return true;
-			if( other == null )
-				return false;
 			if( other instanceof UnmodifiableCollection )
 			{
 				@SuppressWarnings( "unchecked" ) UnmodifiableCollection<K> otherAsUnmodifiableCollection = (UnmodifiableCollection<K>)other;
 				return equalsCollection( otherAsUnmodifiableCollection );
 			}
-			assert false;
 			return false;
 		}
 
@@ -312,18 +307,13 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 			return DefaultEqualityComparator.getInstance();
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
-			if( other == this )
-				return true;
-			if( other == null )
-				return false;
 			if( other instanceof UnmodifiableCollection )
 			{
 				@SuppressWarnings( "unchecked" ) UnmodifiableCollection<V> otherAsUnmodifiableCollection = (UnmodifiableCollection<V>)other;
 				return equalsCollection( otherAsUnmodifiableCollection );
 			}
-			assert false;
 			return false;
 		}
 
@@ -435,7 +425,7 @@ final class LegacyMutableMapOnJavaMap<K, V> implements MutableMap.Defaults<K,V>
 		} );
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
 		return other instanceof UnmodifiableMap<?,?> kin && equals( kin );
 	}

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 /**
  * Key Referencing (Strong/Soft/Weak) Hash Map.
- *
+ * <p>
  * TODO: need to expunge stale entries every once in a while! TODO: research the reference queue that can be passed to the constructor of WeakReference!
  *
  * @author michael.gr
@@ -50,7 +50,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( obj -> Objects.nonNull( obj ) );
 		}
 
-		private final Function1<Binding<K,V>,Node> converter = node ->
+		private final Function1<Binding<K,V>,Node> converter = node -> //
 		{
 			K key = node.keyReference.get();
 			if( key == null )
@@ -68,7 +68,7 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 	private final MutableCollection<V> values;
 	private final MyEntries entries;
 
-	KeyReferencingHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, ReferencingMethod referencingMethod,
+	KeyReferencingHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, ReferencingMethod referencingMethod, //
 		Hasher<? super K> keyHasher, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );
@@ -238,18 +238,13 @@ final class KeyReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implemen
 			return keyEquals( otherKey );
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
-			if( other == this )
-				return true;
-			if( other == null )
-				return false;
 			if( other instanceof KeyReferencingHashMap<?,?>.Node )
 			{
 				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)other;
 				return equals( otherNode );
 			}
-			assert false;
 			return false;
 		}
 

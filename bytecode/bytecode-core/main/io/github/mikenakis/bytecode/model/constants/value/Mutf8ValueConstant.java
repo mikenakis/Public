@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * Represents the JVMS::CONSTANT_Utf8_info structure.
- *
+ * <p>
  * Note: "MUTF8" stands for "Modified UTF8"
  *
  * @author michael.gr
@@ -75,7 +75,7 @@ public final class Mutf8ValueConstant extends ValueConstant
 	{
 		if( _stringValue != null && other._stringValue != null )
 			return stringValue().equals( other.stringValue() );
-		return buffer().equalsBuffer( other.buffer() );
+		return buffer().equals( other.buffer() );
 	}
 
 	private static String stringFromBuffer( Buffer buffer )

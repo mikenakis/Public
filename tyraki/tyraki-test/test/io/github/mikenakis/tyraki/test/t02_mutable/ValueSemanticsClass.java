@@ -25,7 +25,7 @@ public final class ValueSemanticsClass
 		return true;
 	}
 
-	@Override public boolean equals( Object other ) { return other instanceof ValueSemanticsClass kin && equals( kin ); }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof ValueSemanticsClass kin && equals( kin ); }
 	@Override public int hashCode() { return Integer.hashCode( value ); }
 	@Override public String toString() { return "{" + getClass().getSimpleName() + " " + value + "}"; }
 }

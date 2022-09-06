@@ -54,16 +54,13 @@ class CollectionOnEnumerable<K> implements UnmodifiableCollection.Defaults<K>
 		return equalityComparator;
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
-		if( other == null )
-			return false;
 		if( other instanceof UnmodifiableCollection )
 		{
 			@SuppressWarnings( "unchecked" ) UnmodifiableCollection<K> otherAsUnmodifiableCollection = (UnmodifiableCollection<K>)other;
 			return equalsCollection( otherAsUnmodifiableCollection );
 		}
-		assert false; //does this ever happen?
 		return false;
 	}
 

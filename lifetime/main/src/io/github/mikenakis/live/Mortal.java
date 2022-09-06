@@ -62,6 +62,7 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function1<R,? super C> tryFunction )
 	{
+		//We specifically avoid try-with-resources in order to keep the call to close() visible so that we can place a breakpoint on it.
 		//noinspection TryFinallyCanBeTryWithResources
 		try
 		{
@@ -90,6 +91,7 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal, R> R tryGetWith( C mortal, Function0<R> tryFunction )
 	{
+		//We specifically avoid try-with-resources in order to keep the call to close() visible so that we can place a breakpoint on it.
 		//noinspection TryFinallyCanBeTryWithResources
 		try
 		{
@@ -113,6 +115,7 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure1<? super C> tryProcedure )
 	{
+		//We specifically avoid try-with-resources in order to keep the call to close() visible so that we can place a breakpoint on it.
 		//noinspection TryFinallyCanBeTryWithResources
 		try
 		{
@@ -138,6 +141,7 @@ public interface Mortal extends AutoCloseable, Coherent
 	 */
 	static <C extends Mortal> void tryWith( C mortal, Procedure0 tryProcedure )
 	{
+		//We specifically avoid try-with-resources in order to keep the call to close() visible so that we can place a breakpoint on it.
 		//noinspection TryFinallyCanBeTryWithResources
 		try
 		{

@@ -24,12 +24,9 @@ public final class RunBecauseDependenciesModifiedIntent extends RunIntent
 			this.modifiedTime = modifiedTime;
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
-			if( other instanceof Entry )
-				return equals( (Entry)other );
-			assert false;
-			return false;
+			return other instanceof Entry kin && equals( kin );
 		}
 
 		@Override public int hashCode()

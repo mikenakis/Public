@@ -18,7 +18,7 @@ import java.util.Optional;
 
 /**
  * Value Referencing (Strong/Soft/Weak) Hash Map.
- *
+ * <p>
  * TODO: need to expunge stale entries every once in a while! TODO: research the reference queue that can be passed to the constructor of WeakReference!
  *
  * @author michael.gr
@@ -49,7 +49,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 			return hashTable.newUnmodifiableEnumerator().map( converter ).filter( k -> k != null );
 		}
 
-		private final Function1<Binding<K,V>,Node> converter = node ->
+		private final Function1<Binding<K,V>,Node> converter = node -> //
 		{
 			V value = node.valueReference.get();
 			if( value == null )
@@ -67,8 +67,8 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 	private final MutableCollection<V> values;
 	private final MyEntries entries;
 
-	ValueReferencingHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, ReferencingMethod referencingMethod, Hasher<? super K> keyHasher,
-		EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
+	ValueReferencingHashMap( MutableCollections mutableCollections, int initialCapacity, float fillFactor, ReferencingMethod referencingMethod, //
+		Hasher<? super K> keyHasher, EqualityComparator<? super K> keyEqualityComparator, EqualityComparator<? super V> valueEqualityComparator )
 	{
 		super( mutableCollections );
 		this.keyHasher = keyHasher;
@@ -252,7 +252,7 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 			return true;
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
 			if( other instanceof ValueReferencingHashMap<?,?>.Node )
 			{
@@ -261,11 +261,9 @@ final class ValueReferencingHashMap<K, V> extends AbstractMutableMap<K,V> implem
 			}
 			if( other instanceof Binding<?,?> )
 			{
-				@SuppressWarnings( "unchecked" )
-				Binding<K,V> otherBinding = (Binding<K,V>)other;
+				@SuppressWarnings( "unchecked" ) Binding<K,V> otherBinding = (Binding<K,V>)other;
 				return equals( otherBinding );
 			}
-			assert false;
 			return false;
 		}
 

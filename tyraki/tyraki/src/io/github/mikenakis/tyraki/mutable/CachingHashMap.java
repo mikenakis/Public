@@ -48,14 +48,9 @@ final class CachingHashMap<K, V> extends AbstractMutableMap<K,V> implements Muta
 			return value;
 		}
 
-		@Override public boolean equals( Object o )
+		@SuppressWarnings( "unchecked" ) @Deprecated @Override public boolean equals( Object o )
 		{
-			if( this == o )
-				return true;
-			if( o == null || getClass() != o.getClass() )
-				return false;
-			@SuppressWarnings( "unchecked" ) Item other = (Item)o;
-			return equals( other );
+			return o instanceof CachingHashMap<?, ?>.Item kin && equals( (CachingHashMap<K, V>.Item)kin );
 		}
 
 		public boolean equals( Item item )

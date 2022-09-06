@@ -138,7 +138,7 @@ final class ConcreteMutableTreeSet<T> extends AbstractMutableCollection<T> imple
 			return equalityComparator.equals( element, other.element );
 		}
 
-		@Override public boolean equals( Object o )
+		@Deprecated @Override public boolean equals( Object o )
 		{
 			if( o instanceof ConcreteMutableTreeSet<?>.Item )
 			{

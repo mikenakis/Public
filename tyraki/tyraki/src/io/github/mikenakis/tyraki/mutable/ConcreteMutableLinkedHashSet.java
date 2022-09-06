@@ -157,7 +157,7 @@ final class ConcreteMutableLinkedHashSet<E> extends AbstractMutableCollection<E>
 			return equalityComparator.equals( element, otherNode.element );
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
 			if( other instanceof ConcreteMutableLinkedHashSet<?>.Node )
 			{

@@ -32,16 +32,13 @@ abstract class LegacyAbstractMutableCollection<E> implements MutableCollection.D
 		return equalityComparator;
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
-		if( other == null )
-			return false;
 		if( other instanceof UnmodifiableCollection )
 		{
 			@SuppressWarnings( "unchecked" ) UnmodifiableCollection<E> otherAsUnmodifiableCollection = (UnmodifiableCollection<E>)other;
 			return equalsCollection( otherAsUnmodifiableCollection );
 		}
-		assert false;
 		return false;
 	}
 

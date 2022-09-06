@@ -93,7 +93,7 @@ abstract class AbstractMutableMap<K, V> extends MutableCollectionsSubject implem
 		return coherence() instanceof FreezableCoherence freezableCoherence && freezableCoherence.mustBeFrozenAssertion();
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
 		return other instanceof UnmodifiableMap<?,?> kin && equals( kin );
 	}

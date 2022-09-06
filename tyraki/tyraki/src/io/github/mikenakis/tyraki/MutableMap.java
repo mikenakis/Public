@@ -51,7 +51,7 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 	 * @param value the new value for the binding.
 	 *
 	 * @return {@code true} if the key already existed in the map; {@code false} if the key did not already exist in the map.
-	 *
+	 * 	<p>
 	 * 	NOTE: this method will return {@code true} even if the new value was the same as the old value.
 	 */
 	boolean tryReplaceValue( K key, V value );
@@ -182,8 +182,8 @@ public interface MutableMap<K, V> extends UnmodifiableMap<K,V>
 	void add( K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4 );
 
 	/**
-	 * Adds or replaces a key-value pair.  If the key does not already exist in the map, a new key-value pair is added.  If the key already exists in the map, the associated value
-	 * is replaced with the given value.
+	 * Adds or replaces a key-value pair.  If the key does not already exist in the map, a new key-value pair is added.  If the key already exists in the map,
+	 * the associated value is replaced with the given value.
 	 */
 	boolean addOrReplace( K key, V value );
 

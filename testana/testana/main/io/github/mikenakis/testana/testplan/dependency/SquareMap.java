@@ -23,12 +23,9 @@ public class SquareMap<X,Y,V>
 			this.y = y;
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
-			if( this == other )
-				return true;
-			assert getClass() == other.getClass();
-			return equals( (Key<?,?>)other );
+			return other instanceof Key<?,?> kin && equals( kin );
 		}
 
 		public boolean equals( Key<?,?> key )

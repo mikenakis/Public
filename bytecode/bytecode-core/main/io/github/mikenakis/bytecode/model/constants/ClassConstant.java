@@ -87,8 +87,8 @@ public final class ClassConstant extends Constant
 	public ArrayTypeDescriptor arrayTypeDescriptor() { return ByteCodeHelpers.arrayTypeDescriptorFromDescriptorString( internalNameOrDescriptorStringConstant.stringValue() ); }
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return internalNameOrDescriptorStringConstant == null? "(uninitialized)" : internalNameOrDescriptorStringConstant.stringValue(); }
 	@Deprecated @Override public ClassConstant asClassConstant() { return this; }
-	@Override public boolean equals( Object other ) { return other instanceof ClassConstant kin && equalsClassConstant( kin ); }
-	public boolean equalsClassConstant( ClassConstant other ) { return internalNameOrDescriptorStringConstant.equals( other.internalNameOrDescriptorStringConstant ); }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof ClassConstant kin && equals( kin ); }
+	public boolean equals( ClassConstant other ) { return internalNameOrDescriptorStringConstant.equals( other.internalNameOrDescriptorStringConstant ); }
 	@Override public int hashCode() { return Objects.hash( tag, internalNameOrDescriptorStringConstant ); }
 	public String internalNameOrDescriptorString() { return internalNameOrDescriptorStringConstant.stringValue(); }
 

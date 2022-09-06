@@ -4,7 +4,6 @@ import io.github.mikenakis.coherence.AbstractCoherent;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import io.github.mikenakis.kit.Hasher;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.BooleanFunction2;
 import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;
@@ -71,12 +70,9 @@ public class SafeEnumerableComparator<R> extends AbstractCoherent
 			this.elementB = elementB;
 		}
 
-		@Override public boolean equals( Object other )
+		@SuppressWarnings( "unchecked" ) @Deprecated @Override public boolean equals( Object other )
 		{
-			if( getClass() == other.getClass() )
-				return equals( Kit.upCast( other ) );
-			assert false;
-			return false;
+			return other instanceof SafeEnumerableComparator<?>.MyComparison kin && equals( (SafeEnumerableComparator<R>.MyComparison)kin );
 		}
 
 		public boolean equals( MyComparison other )

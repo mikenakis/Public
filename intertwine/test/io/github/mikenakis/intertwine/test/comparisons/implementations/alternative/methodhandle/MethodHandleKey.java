@@ -50,11 +50,9 @@ class MethodHandleKey<T> implements MethodKey<T>
 		return methodPrototype.asString();
 	}
 
-	@Override public boolean equals( Object o )
+	@Deprecated @Override public boolean equals( Object o )
 	{
-		if( this == o ) return true;
-		if( o == null || getClass() != o.getClass() ) return false;
-		return equals( (MethodHandleKey<?>)o );
+		return o instanceof MethodHandleKey<?> kin && equals( kin );
 	}
 
 	public boolean equals( MethodHandleKey<?> that )

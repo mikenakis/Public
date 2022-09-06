@@ -41,18 +41,9 @@ public class Dyad<A, B>
 		return true;
 	}
 
-	@Override public boolean equals( Object obj )
+	@SuppressWarnings( "unchecked" ) @Deprecated @Override public boolean equals( Object obj )
 	{
-		if( obj == null )
-			return false;
-		if( obj instanceof Dyad )
-		{
-			@SuppressWarnings( "unchecked" )
-			Dyad<A,B> other = (Dyad<A,B>)obj;
-			return equals( other.a, other.b );
-		}
-		assert false;
-		return false;
+		return obj instanceof Dyad<?,?> kin && equals( (Dyad<A,B>)kin );
 	}
 
 	@Override public int hashCode()

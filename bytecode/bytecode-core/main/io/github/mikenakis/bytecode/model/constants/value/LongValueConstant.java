@@ -39,7 +39,7 @@ public final class LongValueConstant extends ValueConstant
 
 	@ExcludeFromJacocoGeneratedReport @Override public String toString() { return value + "L"; }
 	@Deprecated @Override public LongValueConstant asLongValueConstant() { return this; }
-	@Override public boolean equals( Object other ) { return other instanceof LongValueConstant kin && value == kin.value; }
+	@Deprecated @Override public boolean equals( Object other ) { return other instanceof LongValueConstant kin && equals( kin ); }
 	public boolean equals( LongValueConstant other ) { return value == other.value; }
 	@Override public int hashCode() { return Objects.hash( tag, value ); }
 

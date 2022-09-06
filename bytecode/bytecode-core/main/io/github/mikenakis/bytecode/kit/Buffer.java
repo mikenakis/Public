@@ -114,13 +114,10 @@ public class Buffer
 
 	@Override public boolean equals( Object other )
 	{
-		if( other instanceof Buffer )
-			return equalsBuffer( (Buffer)other );
-		assert false;
-		return false;
+		return other instanceof Buffer kin && equals( kin );
 	}
 
-	public boolean equalsBuffer( Buffer other )
+	public boolean equals( Buffer other )
 	{
 		if( length != other.length )
 			return false;

@@ -19,12 +19,14 @@ public class Alpha //NOTE: the JSON mapper requires that this be public!
 		b = new Beta( other.b );
 	}
 
-	@Override public boolean equals( Object otherAsObject )
+	@Deprecated @Override public boolean equals( Object otherAsObject )
 	{
 		assert this != otherAsObject;
-		if( otherAsObject == null || getClass() != otherAsObject.getClass() )
-			return false;
-		Alpha other = (Alpha)otherAsObject;
+		return otherAsObject instanceof Alpha kin && equals( kin );
+	}
+
+	public boolean equals( Alpha other )
+	{
 		return Objects.equals( s, other.s ) && Objects.equals( b, other.b );
 	}
 

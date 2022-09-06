@@ -65,10 +65,14 @@ public final class Persistence
 		{
 			if( !Files.exists( persistencePathName ) )
 				return;
-			Kit.tryCatchWithoutBoundary( () -> load() ) //
-				.map( Kit::mapAssertionErrorToCause ) //
-				.ifPresent( throwable -> //
-					Log.warning( "Failed to load persistence due to " + throwable.getClass().getName() + (throwable.getMessage() == null ? "" : ": " + throwable.getMessage()) ) );
+			try
+			{
+				load();
+			}
+			catch( Throwable throwable )
+			{
+				Log.warning( "Failed to load persistence due to " + throwable.getClass().getName() + (throwable.getMessage() == null ? "" : ": " + throwable.getMessage()) );
+			}
 		}
 	}
 

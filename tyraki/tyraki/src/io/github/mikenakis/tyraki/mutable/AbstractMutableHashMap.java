@@ -144,7 +144,7 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 			return true;
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
 			if( other instanceof Node<?,?> otherNode )
 				return equals( otherNode );
@@ -154,7 +154,6 @@ abstract class AbstractMutableHashMap<K, V> extends AbstractMutableMap<K,V> impl
 				Binding<K,V> otherBinding = (Binding<K,V>)other;
 				return equals( otherBinding );
 			}
-			assert false;
 			return false;
 		}
 

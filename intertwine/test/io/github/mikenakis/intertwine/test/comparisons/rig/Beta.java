@@ -16,12 +16,14 @@ public class Beta //NOTE: the JSON mapper requires that this be public!
 		this( other.s );
 	}
 
-	@Override public boolean equals( Object otherAsObject )
+	@Deprecated @Override public boolean equals( Object otherAsObject )
 	{
 		assert this != otherAsObject;
-		if( otherAsObject == null || getClass() != otherAsObject.getClass() )
-			return false;
-		Beta other = (Beta)otherAsObject;
+		return otherAsObject instanceof Beta kin && equals( kin );
+	}
+
+	public boolean equals( Beta other )
+	{
 		return Objects.equals( s, other.s );
 	}
 

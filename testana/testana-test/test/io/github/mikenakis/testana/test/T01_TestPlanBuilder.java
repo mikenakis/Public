@@ -58,12 +58,9 @@ public class T01_TestPlanBuilder
 			this.intention = intention;
 		}
 
-		@Override public boolean equals( Object other )
+		@Deprecated @Override public boolean equals( Object other )
 		{
-			if( other instanceof Node )
-				return equals( (Node)other );
-			assert false;
-			return false;
+			return other instanceof Node kin && equals( kin );
 		}
 
 		@Override public int hashCode()

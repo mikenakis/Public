@@ -52,14 +52,13 @@ class MapKeysCollection<K, V> extends AbstractCoherent implements UnmodifiableCo
 		return keyEqualityComparator;
 	}
 
-	@Override public boolean equals( Object other )
+	@Deprecated @Override public boolean equals( Object other )
 	{
 		if( other instanceof UnmodifiableCollection )
 		{
 			@SuppressWarnings( "unchecked" ) UnmodifiableCollection<K> otherAsUnmodifiableCollection = (UnmodifiableCollection<K>)other;
 			return equalsCollection( otherAsUnmodifiableCollection );
 		}
-		assert false; //does this ever happen?
 		return false;
 	}
 

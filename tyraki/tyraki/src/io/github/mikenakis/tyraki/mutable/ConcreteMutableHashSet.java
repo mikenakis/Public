@@ -122,15 +122,9 @@ final class ConcreteMutableHashSet<E> extends AbstractMutableCollection<E> imple
 			return equalityComparator.equals( element, other.element );
 		}
 
-		@Override public boolean equals( Object o )
+		@SuppressWarnings( "unchecked" ) @Deprecated @Override public boolean equals( Object o )
 		{
-			if( o instanceof ConcreteMutableHashSet<?>.Node )
-			{
-				@SuppressWarnings( "unchecked" ) Node otherNode = (Node)o;
-				return equals( otherNode );
-			}
-			assert false;
-			return false;
+			return o instanceof ConcreteMutableHashSet<?>.Node kin && equals( (ConcreteMutableHashSet<E>.Node)kin );
 		}
 
 		@SuppressWarnings( "NonFinalFieldReferencedInHashCode" )
