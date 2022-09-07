@@ -67,6 +67,9 @@ public class UncheckedException extends RuntimeException
 
 	@SuppressWarnings( "EmptyMethod" ) @Override public final String toString()
 	{
-		return super.toString();
+		//PEARL: the constructor of AssertionError begins by calling `toString()` on the cause exception, and the default `toString()` of `Throwable` invokes
+		//       `getLocalizedMessage()` (which is another PEARL of its own, but never mind) which invokes `getMessage()`. This means that `getMessage()` will
+		//       always be invoked once as soon as the exception is thrown. We don't want this, so yield a bogus message.
+		return getClass().getName(); //super.toString();
 	}
 }

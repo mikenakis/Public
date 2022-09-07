@@ -83,10 +83,6 @@ public class Benchmark
 		clockGranularityNanoseconds = Math.max( clockResolutionNanoseconds, clockReadOverheadNanoseconds );
 	}
 
-	/**
-	 * This is the ideal batch duration. It is chosen so that the granularity of the clock does not affect the measurement.
-	 */
-	private static final double idealBatchDurationNanoseconds = clockGranularityNanoseconds * 10000;
 	private final double accuracy;
 	private final int sampleGroupSize;
 	private final Unpredictability unpredictability = new Unpredictability();
