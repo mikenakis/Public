@@ -241,18 +241,21 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Stacks, Stack Traces, Source code locations
 
-	private static final StackWalker stackWalker = StackWalker.getInstance( EnumSet.noneOf( StackWalker.Option.class ) ); // StackWalker.Option.RETAIN_CLASS_REFERENCE );
+	private static StackWalker getStackWalker()
+	{
+		return StackWalker.getInstance( EnumSet.noneOf( StackWalker.Option.class ) ); // StackWalker.Option.RETAIN_CLASS_REFERENCE );;
+	}
 
 	public static StackWalker.StackFrame getStackFrame( int numberOfFramesToSkip )
 	{
 		assert numberOfFramesToSkip > 0;
-		return stackWalker.walk( s -> s.skip( numberOfFramesToSkip + 1 ).limit( 1 ).reduce( null, ( a, b ) -> b ) ); //TODO: simplify
+		return getStackWalker().walk( s -> iterator.getSingleElement( s.skip( numberOfFramesToSkip + 1 ).limit( 1 ).iterator() ) );
 	}
 
 	public static StackWalker.StackFrame[] getStackTrace( int numberOfFramesToSkip )
 	{
 		assert numberOfFramesToSkip > 0;
-		return stackWalker.walk( s -> s.skip( numberOfFramesToSkip + 1 ).toArray( StackWalker.StackFrame[]::new ) ); //TODO: simplify
+		return getStackWalker().walk( s -> s.skip( numberOfFramesToSkip + 1 ).toArray( StackWalker.StackFrame[]::new ) );
 	}
 
 	public static SourceLocation getSourceLocation( int numberOfFramesToSkip )
@@ -1528,6 +1531,14 @@ public final class Kit
 				list.add( iterator.next() );
 			return list;
 		}
+
+		public static <T> T getSingleElement( Iterator<T> iterator )
+		{
+			assert iterator.hasNext(); //no elements
+			T result = iterator.next();
+			assert !iterator.hasNext(); //more than one element
+			return result;
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1952,8 +1963,7 @@ public final class Kit
 		}
 
 		/**
-		 * Obtains the current time coordinate optionally after waiting until the next discrete moment in time.
-		 * See {@link #timeSeconds()}
+		 * Obtains the current time coordinate optionally after waiting until the next discrete moment in time. See {@link #timeSeconds()}
 		 */
 		public static double timeSeconds( boolean waitForNextDiscreteMoment )
 		{
