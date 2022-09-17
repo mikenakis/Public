@@ -233,7 +233,7 @@
 │     │ │ ├─■         ILOAD 2
 │     │ │ ├─■         ILOAD 3
 │     │ │ ├─■         INVOKEDYNAMIC prototype = java.lang.String makeConcatWithConstants( int, int, int )
-│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "a=\x01, b=\x01, c=\x01" )
+│     │ │ │ └─■                 bootstrapMethod: BootstrapMethod methodHandle = MethodHandleDesc[STATIC/StringConcatFactory::makeConcatWithConstants(MethodHandles$Lookup,String,MethodType,String,Object[])CallSite] arguments: StringValueConstant( "a=\u0001, b=\u0001, c=\u0001" )
 │     │ │ ├─■         INVOKEVIRTUAL reference = Plain; void java.io.PrintStream.println( java.lang.String )
 │     │ │ ├─■ L74: // }
 │     │ │ └─■         RETURN

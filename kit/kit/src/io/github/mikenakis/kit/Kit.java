@@ -78,6 +78,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -719,7 +720,7 @@ public final class Kit
 				return;
 			}
 			stringBuilder.append( quote );
-			for( char c : s.toCharArray() )
+			for( int c : iterable.fromStream( s.codePoints() ) )
 			{
 				if( c == '"' )
 					stringBuilder.append( "\\\"" );
@@ -729,12 +730,10 @@ public final class Kit
 					stringBuilder.append( "\\n" );
 				else if( c == '\t' )
 					stringBuilder.append( "\\t" );
-				else if( c < 32 )
-					stringBuilder.append( String.format( "\\x%02x", (int)c ) );
-				else if( !Character.isDefined( c ) )
-					stringBuilder.append( String.format( "\\u%04x", (int)c ) );
+				else if( Character.isISOControl( c ) || !Character.isDefined( c ) || !Character.isValidCodePoint( c ) )
+					stringBuilder.append( String.format( "\\u%04x", c ) );
 				else
-					stringBuilder.append( c );
+					stringBuilder.appendCodePoint( c );
 			}
 			stringBuilder.append( quote );
 		}
@@ -1405,6 +1404,11 @@ public final class Kit
 		public static <T> Iterable<T> fromStream( Stream<T> stream )
 		{
 			return stream::iterator;
+		}
+
+		public static Iterable<Integer> fromStream( IntStream intStream )
+		{
+			return intStream::iterator;
 		}
 
 		public static <T> boolean trueForAll( Iterable<T> iterable, Predicate<T> predicate )
