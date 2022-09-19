@@ -105,15 +105,4 @@ public final class TestKit
 		String content2 = readFile( path2 );
 		return content1.equals( content2 );
 	}
-
-	public static String getMethodName()
-	{
-		return getMethodName( 1 );
-	}
-
-	public static String getMethodName( int framesToSkip )
-	{
-		StackWalker.StackFrame stackFrame = Kit.getStackFrame( framesToSkip + 1 );
-		return stackFrame.getMethodName();
-	}
 }

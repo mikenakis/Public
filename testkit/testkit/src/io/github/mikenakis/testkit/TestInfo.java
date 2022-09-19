@@ -16,8 +16,7 @@ public class TestInfo
 
 	public static TestInfo of( Class<?> testClass, String testSourceRoot, int framesToSkip )
 	{
-		StackWalker.StackFrame stackFrame = Kit.getStackFrame( framesToSkip + 1 );
-		String testMethodName = stackFrame.getMethodName();
+		String testMethodName = Kit.getSourceLocation( framesToSkip + 1 ).methodName();
 		return new TestInfo( testSourceRoot, testClass, testMethodName );
 	}
 

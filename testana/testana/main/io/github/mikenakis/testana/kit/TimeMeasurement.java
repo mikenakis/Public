@@ -9,6 +9,7 @@ import java.util.Locale;
 
 /**
  * Measures and reports the time it took to perform an operation.
+ * <p>
  * NOTE: this is just a report of the duration of a single operation, it is not a benchmark!
  *
  * @author michael.gr

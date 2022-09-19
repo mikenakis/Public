@@ -3,10 +3,12 @@ package io.github.mikenakis.live.guard;
 import io.github.mikenakis.coherence.AbstractCoherent;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.debug.Debug;
+import io.github.mikenakis.kit.SourceLocation;
 import io.github.mikenakis.kit.logging.Log;
 import io.github.mikenakis.live.Mortal;
 
-import java.util.Optional;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Development {@link LifeGuard}.
@@ -17,7 +19,7 @@ public abstract class DevelopmentLifeGuard extends AbstractCoherent implements L
 {
 	public interface LifetimeErrorHandler
 	{
-		void invoke( Class<? extends Mortal> mortalClass, Optional<StackWalker.StackFrame[]> stackTrace );
+		void invoke( Class<? extends Mortal> mortalClass, Collection<SourceLocation> stackTrace );
 	}
 
 	private static LifetimeErrorHandler lifetimeErrorHandler = DevelopmentLifeGuard::defaultLifetimeErrorHandler;
@@ -41,23 +43,15 @@ public abstract class DevelopmentLifeGuard extends AbstractCoherent implements L
 		DevelopmentLifeGuard.lifetimeErrorHandler = lifetimeErrorHandler;
 	}
 
-	private static void defaultLifetimeErrorHandler( Class<?> mortalClass, Optional<StackWalker.StackFrame[]> allocationStackTrace )
+	private static void defaultLifetimeErrorHandler( Class<?> mortalClass, Collection<SourceLocation> allocationStackTrace )
 	{
-		String stackTraceText = allocationStackTrace.map( DevelopmentLifeGuard::stackFramesToString ).orElse( "Collection of allocation stack trace is not enabled for this class." );
+		String stackTraceText = allocationStackTrace.isEmpty() ? "Collection of allocation stack trace is not enabled for this class." : allocationStackTrace.stream().map( DevelopmentLifeGuard::sourceLocationToString ).collect( Collectors.joining() );
 		Log.debug( "Mortal is still alive: " + mortalClass + "\n" + stackTraceText );
 		Debug.breakPoint();
 	}
 
-	private static String stackFramesToString( StackWalker.StackFrame[] stackFrames )
+	private static String sourceLocationToString( SourceLocation stackFrame )
 	{
-		//NOTE: we should not do anything fancy here, because we may be invoked from within finalize()
-		var builder = new StringBuilder();
-		for( StackWalker.StackFrame stackFrame : stackFrames )
-		{
-			builder.append( "\tat " );
-			builder.append( stackFrame );
-			builder.append( '\n' );
-		}
-		return builder.toString();
+		return "\tat " + stackFrame.stringRepresentation() + "\n";
 	}
 }

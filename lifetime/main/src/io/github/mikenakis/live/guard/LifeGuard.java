@@ -3,10 +3,9 @@ package io.github.mikenakis.live.guard;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.live.Mortal;
 
-import java.util.Optional;
-
 /**
  * Object lifetime guard (for classes implementing {@link Mortal}).
+ * <p>
  * See <a href="https://blog.michael.gr/2021/01/object-lifetime-awareness.html">https://blog.michael.gr/2021/01/object-lifetime-awareness.html</a>
  *
  * @author michael.gr
@@ -27,18 +26,9 @@ public interface LifeGuard extends Mortal
 	{
 		if( !Kit.areAssertionsEnabled() )
 			return ProductionLifeGuard.instance;
-		Optional<StackWalker.StackFrame[]> stackTrace = collectStackTrace( framesToSkip + 1, collectStackTrace );
-		return CleaningDevelopmentLifeGuard.of( mortal, stackTrace );
-	}
-
-	private static Optional<StackWalker.StackFrame[]> collectStackTrace( int framesToSkip, boolean collectStackTrace )
-	{
-		if( !collectStackTrace )
-			return Optional.empty();
-		return Optional.of( Kit.getStackTrace( framesToSkip + 1 ) );
+		return CleaningDevelopmentLifeGuard.of( framesToSkip + 1, mortal, collectStackTrace );
 	}
 
 	interface Defaults extends LifeGuard, Mortal.Defaults
-	{
-	}
+	{ }
 }

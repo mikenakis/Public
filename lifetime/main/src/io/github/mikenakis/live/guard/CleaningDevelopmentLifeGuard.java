@@ -1,9 +1,12 @@
 package io.github.mikenakis.live.guard;
 
+import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.SourceLocation;
 import io.github.mikenakis.live.Mortal;
 
 import java.lang.ref.Cleaner;
-import java.util.Optional;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A {@link DevelopmentLifeGuard} which makes use of the 'Cleaner' class of Java 9
@@ -12,19 +15,20 @@ import java.util.Optional;
  */
 public final class CleaningDevelopmentLifeGuard extends DevelopmentLifeGuard
 {
-	public static LifeGuard of( Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
+	public static LifeGuard of( int framesToSkip, Mortal mortal, boolean collectStackTrace )
 	{
+		Collection<SourceLocation> stackTrace = collectStackTrace ? Kit.getAllSourceLocations( framesToSkip + 1 ) : List.of();
 		return new CleaningDevelopmentLifeGuard( mortal, stackTrace );
 	}
 
 	private static final Cleaner cleaner = Cleaner.create(); //PEARL: this must be static, or there will be a huge performance penalty! See https://stackoverflow.com/q/46697432/773113
 
 	private final Class<? extends Mortal> mortalClass;
-	private final Optional<StackWalker.StackFrame[]> stackTrace;
+	private final Collection<SourceLocation> stackTrace;
 	private boolean closed;
 	private final Cleaner.Cleanable cleanable;
 
-	private CleaningDevelopmentLifeGuard( @SuppressWarnings( "TypeMayBeWeakened" ) Mortal mortal, Optional<StackWalker.StackFrame[]> stackTrace )
+	private CleaningDevelopmentLifeGuard( @SuppressWarnings( "TypeMayBeWeakened" ) Mortal mortal, Collection<SourceLocation> stackTrace )
 	{
 		super( mortal.coherence() );
 		this.stackTrace = stackTrace;

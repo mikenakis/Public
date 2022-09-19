@@ -3,6 +3,7 @@ package io.github.mikenakis.coherence.test;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.SourceLocation;
 import io.github.mikenakis.live.AbstractMortalCoherent;
 import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.live.guard.DevelopmentLifeGuard;
@@ -13,7 +14,6 @@ import org.junit.Test;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -53,7 +53,7 @@ public class T04_LifeGuard
 	{
 		Kit.runGarbageCollection();
 		Collection<Class<? extends Mortal>> mortalClasses = new ConcurrentLinkedQueue<>();
-		DevelopmentLifeGuard.setLifetimeErrorHandler( ( Class<? extends Mortal> mortalClass, Optional<StackWalker.StackFrame[]> stackTrace ) -> //
+		DevelopmentLifeGuard.setLifetimeErrorHandler( ( Class<? extends Mortal> mortalClass, Collection<SourceLocation> stackTrace ) -> //
 		{
 			/* PEARL: if an exception is thrown here, the JVM will silently swallow it! */
 			mortalClasses.add( mortalClass );

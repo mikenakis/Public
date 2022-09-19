@@ -28,7 +28,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
 import java.lang.management.ManagementFactory;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -242,27 +241,26 @@ public final class Kit
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Stacks, Stack Traces, Source code locations
 
+	/**
+	 * PEARL: In java it is impossible to obtain the caller file name and line number without first obtaining a stack trace, and obtaining a stack trace is
+	 * preposterously slow. TODO: compare the performance of Thread.currentThread().getStackTrace() and StackWalker.walk()
+	 */
+
 	private static StackWalker getStackWalker()
 	{
-		return StackWalker.getInstance( EnumSet.noneOf( StackWalker.Option.class ) ); // StackWalker.Option.RETAIN_CLASS_REFERENCE );;
+		return StackWalker.getInstance( EnumSet.noneOf( StackWalker.Option.class ) ); // StackWalker.Option.RETAIN_CLASS_REFERENCE );
 	}
 
-	public static StackWalker.StackFrame getStackFrame( int numberOfFramesToSkip )
+	public static Collection<SourceLocation> getAllSourceLocations( int numberOfFramesToSkip )
 	{
 		assert numberOfFramesToSkip > 0;
-		return getStackWalker().walk( s -> iterator.getSingleElement( s.skip( numberOfFramesToSkip + 1 ).limit( 1 ).iterator() ) );
-	}
-
-	public static StackWalker.StackFrame[] getStackTrace( int numberOfFramesToSkip )
-	{
-		assert numberOfFramesToSkip > 0;
-		return getStackWalker().walk( s -> s.skip( numberOfFramesToSkip + 1 ).toArray( StackWalker.StackFrame[]::new ) );
+		return getStackWalker().walk( s -> s.skip( numberOfFramesToSkip + 1 ).map( StackWalkerStackFrameSourceLocation::of ).toList() );
 	}
 
 	public static SourceLocation getSourceLocation( int numberOfFramesToSkip )
 	{
-		StackWalker.StackFrame stackFrame = getStackFrame( numberOfFramesToSkip + 1 );
-		return SourceLocation.fromStackFrame( stackFrame );
+		assert numberOfFramesToSkip > 0;
+		return getStackWalker().walk( s -> StackWalkerStackFrameSourceLocation.of( s.skip( numberOfFramesToSkip + 1 ).findFirst().orElseThrow() ) );
 	}
 
 	public static String stringFromThrowable( Throwable throwable )
@@ -283,13 +281,14 @@ public final class Kit
 		return stringWriter.toString();
 	}
 
-	public static boolean assertWeakly( boolean value )
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public static boolean weakAssertion( boolean value )
 	{
-		if( areAssertionsEnabled() && !value )
+		if( !value )
 		{
-			Log.message( Log.Level.ERROR, 1, "Assertion failure" );
+			Log.message( Log.Level.ERROR, 1, "Weak Assertion failure" );
 			Debug.breakPoint();
-			return false;
 		}
 		return true;
 	}
@@ -316,20 +315,6 @@ public final class Kit
 				break;
 			freeMemory = newFreeMemory;
 		}
-	}
-
-	private static final AtomicReference<Object> oldObjectRef = new AtomicReference<>( allocateObject() );
-
-	private static WeakReference<Object> allocateWeakReference()
-	{
-		Object newObject = allocateObject();
-		Object oldObject = oldObjectRef.getAndSet( newObject );
-		return new WeakReference<>( oldObject );
-	}
-
-	private static Object allocateObject()
-	{
-		return new Object();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
