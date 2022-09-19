@@ -317,6 +317,31 @@ public final class Kit
 		}
 	}
 
+	public static int combineHashCodes( int c1, int c2 )
+	{
+		int result = 1;
+		result = 31 * result + c1;
+		result = 31 * result + c2;
+		return result;
+	}
+
+	public static int combineHashCodes( int c1, int c2, int c3 )
+	{
+		int result = 1;
+		result = 31 * result + c1;
+		result = 31 * result + c2;
+		result = 31 * result + c3;
+		return result;
+	}
+
+	public static int combineHashCodes( int... cs )
+	{
+		int result = 1;
+		for( int c : cs )
+			result = 31 * result + c;
+		return result;
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Bytes stuff
 
