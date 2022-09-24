@@ -2103,7 +2103,7 @@ public final class Kit
 	 * @param <E>              the type of checked exception declared by the {@link ThrowingFunction0}.
 	 * @param <R>              the type of the result.
 	 */
-	public static <R, E extends Exception> R unchecked( ThrowingFunction0<R,E> throwingFunction )
+	public static <R, E extends Throwable> R unchecked( ThrowingFunction0<R,E> throwingFunction )
 	{
 		@SuppressWarnings( "unchecked" ) ThrowingFunction0<R,RuntimeException> f = (ThrowingFunction0<R,RuntimeException>)throwingFunction;
 		return f.invoke();
@@ -2913,34 +2913,13 @@ public final class Kit
 			assert ok;
 		}
 
-		public static void synchronize( Object lock, Procedure0 procedure )
-		{
-			//noinspection SynchronizationOnLocalVariableOrMethodParameter
-			synchronized( lock )
-			{
-				Debug.boundary( () -> procedure.invoke() );
-			}
-		}
-
+		//TODO: we might have to get rid of this, since project loom does not support virtual thread switching when using synchronization.
 		public static <T> T synchronize( Object lock, Function0<T> function )
 		{
 			//noinspection SynchronizationOnLocalVariableOrMethodParameter
 			synchronized( lock )
 			{
 				return Debug.boundary( () -> function.invoke() );
-			}
-		}
-
-		public static void lock( Lock lock, Procedure0 procedure )
-		{
-			lock.lock();
-			try
-			{
-				Debug.boundary( () -> procedure.invoke() );
-			}
-			finally
-			{
-				lock.unlock();
 			}
 		}
 

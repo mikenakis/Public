@@ -8,7 +8,7 @@ package io.github.mikenakis.kit.functional;
  *
  * @author Mike Nakis (michael.gr)
  */
-public interface ThrowingFunction0<R, E extends Exception>
+public interface ThrowingFunction0<R, E extends Throwable>
 {
 	R invoke() throws E;
 }

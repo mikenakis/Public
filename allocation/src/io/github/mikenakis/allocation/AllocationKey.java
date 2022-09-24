@@ -1,6 +1,7 @@
 package io.github.mikenakis.allocation;
 
 import io.github.mikenakis.kit.Kit;
+import io.github.mikenakis.kit.Unit;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +29,10 @@ public final class AllocationKey
 	private static boolean uniqueAssertion( String name )
 	{
 		Kit.sync.synchronize( allocationKeys, () -> //
-			Kit.collection.add( allocationKeys, name ) );
+		{
+			Kit.collection.add( allocationKeys, name );
+			return Unit.instance;
+		} );
 		return true;
 	}
 }
