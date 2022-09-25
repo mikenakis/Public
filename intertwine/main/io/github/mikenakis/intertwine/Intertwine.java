@@ -24,7 +24,7 @@ public interface Intertwine<T>
 	Collection<MethodKey<T>> keys();
 
 	/**
-	 * Obtains a key given the zero-based index of the method. (Useful only if binary compatibility is guaranteed or it has somehow been negotiated.)
+	 * Obtains a key given the zero-based index of the method. (Useful only if binary compatibility is guaranteed, or it has somehow been negotiated.)
 	 */
 	MethodKey<T> keyByIndex( int id );
 

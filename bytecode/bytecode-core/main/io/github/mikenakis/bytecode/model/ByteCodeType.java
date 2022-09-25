@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
 /**
@@ -50,11 +52,12 @@ public final class ByteCodeType
 {
 	private static final int MAGIC = 0xCAFEBABE;
 
+	private static final Lock lock = new ReentrantLock();
 	private static final Map<Class<?>,ByteCodeType> byteCodeTypesByClass = new HashMap<>();
 
 	public static ByteCodeType read( Class<?> jvmClass )
 	{
-		return Kit.sync.synchronize( byteCodeTypesByClass, () -> //
+		return Kit.sync.lock( lock, () -> //
 			byteCodeTypesByClass.computeIfAbsent( jvmClass, c -> read0( c ) ) );
 	}
 

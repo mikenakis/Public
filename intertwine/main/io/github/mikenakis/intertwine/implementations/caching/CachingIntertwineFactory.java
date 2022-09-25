@@ -6,6 +6,8 @@ import io.github.mikenakis.kit.Kit;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Delegates {@link Intertwine} creation to another {@link IntertwineFactory} and caches the results, so that for each interface type, the other
@@ -21,6 +23,7 @@ import java.util.Map;
 public final class CachingIntertwineFactory implements IntertwineFactory
 {
 	private final IntertwineFactory delegee;
+	private final Lock lock = new ReentrantLock();
 	private final Map<Class<?>,Intertwine<?>> cache = new LinkedHashMap<>();
 
 	public CachingIntertwineFactory( IntertwineFactory delegee )
@@ -53,7 +56,7 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		/**
 		 * first, lock the cache only for as long as it takes to check whether the requested {@link Intertwine} has already been cached; if so, we are done.
 		 */
-		Intertwine<T> existingIntertwine = Kit.sync.synchronize( cache, () ->
+		Intertwine<T> existingIntertwine = Kit.sync.lock( lock, () ->
 		{
 			@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
 			return result;
@@ -71,7 +74,7 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		 * {@link Intertwine} has already been cached by now; if so, then discard the newly created instance and return the cached one.
 		 * Otherwise, cache the new instance and return it.
 		 */
-		return Kit.sync.synchronize( cache, () ->
+		return Kit.sync.lock( lock, () ->
 		{
 			@SuppressWarnings( "unchecked" ) Intertwine<T> existing = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
 			if( existing != null )

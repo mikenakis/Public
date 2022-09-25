@@ -7,14 +7,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ByteCodeClassLoader extends ClassLoader
 {
+	private static final Lock lock = new ReentrantLock();
 	private static final Map<ClassLoader,ByteCodeClassLoader> byteCodeClassLoadersByParent = new IdentityHashMap<>();
 
 	public static <T> Class<T> load( ClassLoader parentClassLoader, ByteCodeType byteCodeType )
 	{
-		ByteCodeClassLoader byteCodeClassLoader = Kit.sync.synchronize( byteCodeClassLoadersByParent, () -> //
+		ByteCodeClassLoader byteCodeClassLoader = Kit.sync.lock( lock, () -> //
 			byteCodeClassLoadersByParent.computeIfAbsent( parentClassLoader, c -> new ByteCodeClassLoader( c ) ) );
 		return byteCodeClassLoader.load0( byteCodeType );
 	}

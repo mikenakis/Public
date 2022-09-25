@@ -2913,16 +2913,6 @@ public final class Kit
 			assert ok;
 		}
 
-		//TODO: we might have to get rid of this, since project loom does not support virtual thread switching when using synchronization.
-		public static <T> T synchronize( Object lock, Function0<T> function )
-		{
-			//noinspection SynchronizationOnLocalVariableOrMethodParameter
-			synchronized( lock )
-			{
-				return Debug.boundary( () -> function.invoke() );
-			}
-		}
-
 		public static <T> T lock( Lock lock, Function0<T> function )
 		{
 			lock.lock();

@@ -5,6 +5,8 @@ import io.github.mikenakis.kit.Unit;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * {@link Allocation} Key.
@@ -24,13 +26,14 @@ public final class AllocationKey
 
 	@Override public String toString() { return "\"" + name + "\""; }
 
+	private static final Lock lock = new ReentrantLock();
 	private static final Set<String> allocationKeys = Kit.areAssertionsEnabled() ? new HashSet<>() : null;
 
 	private static boolean uniqueAssertion( String name )
 	{
-		Kit.sync.synchronize( allocationKeys, () -> //
+		Kit.sync.lock( lock, () -> //
 		{
-			Kit.collection.add( allocationKeys, name );
+			Kit.collection.add( allocationKeys, name ); //will fail if the key already exists.
 			return Unit.instance;
 		} );
 		return true;
