@@ -36,7 +36,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +110,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private CompilingKey<T>[] buildArrayOfKey( List<MethodPrototype> methodPrototypes )
 	{
+//		int[] index = new int[1];
+//		return methodPrototypes.stream().map( methodPrototype -> new CompilingKey<>( this, methodPrototype, index[0]++ ) ).toList();
 		// PEARL: IntellijIdea blooper: IntellijIdea thinks that the following code only needs the "unchecked" suppression.
 		// Javac thinks differently.
 		// In order to keep Javac happy, the raw-types suppression must be added,
@@ -128,14 +129,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return interfaceType;
 	}
 
-	@Override public Collection<MethodKey<T>> keys()
+	@Override public List<MethodKey<T>> keys()
 	{
 		return List.of( keys );
-	}
-
-	@Override public MethodKey<T> keyByIndex( int index )
-	{
-		return keys[index];
 	}
 
 	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )

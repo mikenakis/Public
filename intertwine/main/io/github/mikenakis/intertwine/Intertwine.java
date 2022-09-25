@@ -2,7 +2,7 @@ package io.github.mikenakis.intertwine;
 
 import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Creates Entwiners and Untwiners for a given interface; provides mapping between method {@link MethodKey}s indexes, and prototype strings.
@@ -21,12 +21,7 @@ public interface Intertwine<T>
 	/**
 	 * Gets all the keys of the interface.
 	 */
-	Collection<MethodKey<T>> keys();
-
-	/**
-	 * Obtains a key given the zero-based index of the method. (Useful only if binary compatibility is guaranteed, or it has somehow been negotiated.)
-	 */
-	MethodKey<T> keyByIndex( int id );
+	List<MethodKey<T>> keys();
 
 	/**
 	 * Obtains a {@link MethodKey} given a {@link MethodPrototype}.

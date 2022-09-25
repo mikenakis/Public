@@ -8,7 +8,6 @@ import io.github.mikenakis.kit.Kit;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,7 +32,7 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		this.interfaceType = interfaceType;
 		Method[] methods = interfaceType.getMethods();
-		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( methods[i], i ) ).collect( Collectors.toList());
+		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( methods[i], i ) ).toList();
 		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
@@ -49,14 +48,9 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 		return interfaceType;
 	}
 
-	@Override public Collection<MethodKey<T>> keys()
+	@Override public List<MethodKey<T>> keys()
 	{
-		return Kit.collection.downCast( keys );
-	}
-
-	@Override public MethodKey<T> keyByIndex( int index )
-	{
-		return keys.get( index );
+		return List.copyOf( keys );
 	}
 
 	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )

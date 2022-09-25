@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -83,14 +82,9 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		return FooInterface.class;
 	}
 
-	@Override public Collection<MethodKey<FooInterface>> keys()
+	@Override public List<MethodKey<FooInterface>> keys()
 	{
 		return List.of( keys );
-	}
-
-	@Override public MethodKey<FooInterface> keyByIndex( int index )
-	{
-		return keys[index];
 	}
 
 	@Override public MethodKey<FooInterface> keyByMethodPrototype( MethodPrototype methodPrototype )
@@ -303,7 +297,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		code.LDC( methodPrototype.parameterCount() ); //push method-argument-count
 		code.ANEWARRAY( TerminalTypeDescriptor.of( Object.class ) ); //pop method-argument-count, push new Object[method-argument-count]
 
-		for( int argumentIndex = 0;  argumentIndex < methodPrototype.parameterCount();  argumentIndex++ )
+		for( int argumentIndex = 0; argumentIndex < methodPrototype.parameterCount(); argumentIndex++ )
 		{
 			code.DUP(); //pop Object[], push Object[], Object[]
 			code.LDC( argumentIndex ); //push argumentIndex

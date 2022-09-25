@@ -8,7 +8,6 @@ import io.github.mikenakis.intertwine.test.comparisons.rig.FooInterface;
 import io.github.mikenakis.kit.Kit;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,7 +26,7 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 
 	HandwrittenIntertwine()
 	{
-		Method[] methods = FooInterface.class.getMethods() ;
+		Method[] methods = FooInterface.class.getMethods();
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( i, methods[i] ) ).toArray( HandwrittenKey[]::new );
 		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 	}
@@ -43,14 +42,9 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 		return FooInterface.class;
 	}
 
-	@Override public Collection<MethodKey<FooInterface>> keys()
+	@Override public List<MethodKey<FooInterface>> keys()
 	{
-		return Kit.collection.downCast( List.of( keys ) );
-	}
-
-	@Override public MethodKey<FooInterface> keyByIndex( int index )
-	{
-		return keys[index];
+		return List.of( keys );
 	}
 
 	@Override public MethodKey<FooInterface> keyByMethodPrototype( MethodPrototype methodPrototype )

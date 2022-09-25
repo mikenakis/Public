@@ -10,7 +10,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +35,7 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		this.interfaceType = interfaceType;
 		MethodHandles.Lookup lookup = MethodHandles.publicLookup().in( interfaceType );
 		Method[] methods = interfaceType.getMethods();
-		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( lookup, methods[i], i ) ).collect( Collectors.toList());
+		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( lookup, methods[i], i ) ).toList();
 		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
@@ -53,14 +52,9 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		return interfaceType;
 	}
 
-	@Override public Collection<MethodKey<T>> keys()
+	@Override public List<MethodKey<T>> keys()
 	{
-		return Kit.collection.downCast( keys );
-	}
-
-	@Override public MethodKey<T> keyByIndex( int index )
-	{
-		return keys.get( index );
+		return List.copyOf( keys );
 	}
 
 	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )

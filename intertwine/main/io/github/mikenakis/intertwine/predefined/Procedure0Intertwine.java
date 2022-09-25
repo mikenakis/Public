@@ -8,7 +8,6 @@ import io.github.mikenakis.java_type_model.MethodDescriptor;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.Procedure0;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -86,14 +85,9 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return Procedure0.class;
 	}
 
-	@Override public Collection<MethodKey<Procedure0>> keys()
+	@Override public List<MethodKey<Procedure0>> keys()
 	{
 		return keys;
-	}
-
-	@Override public MethodKey<Procedure0> keyByIndex( int index )
-	{
-		return keys.get( index );
 	}
 
 	@Override public MethodKey<Procedure0> keyByMethodPrototype( MethodPrototype methodPrototype )

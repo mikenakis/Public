@@ -9,7 +9,6 @@ import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.Procedure0;
 import io.github.mikenakis.kit.functional.Procedure2;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -87,14 +86,9 @@ public class Procedure2Intertwine implements Intertwine<Procedure2<Object,Object
 		return Kit.uncheckedClassCast( Procedure2.class );
 	}
 
-	@Override public Collection<MethodKey<Procedure2<Object,Object>>> keys()
+	@Override public List<MethodKey<Procedure2<Object,Object>>> keys()
 	{
 		return keys;
-	}
-
-	@Override public MethodKey<Procedure2<Object,Object>> keyByIndex( int index )
-	{
-		return keys.get( index );
 	}
 
 	@Override public MethodKey<Procedure2<Object,Object>> keyByMethodPrototype( MethodPrototype methodPrototype )
