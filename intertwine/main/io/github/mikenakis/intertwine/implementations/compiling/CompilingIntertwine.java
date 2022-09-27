@@ -52,13 +52,13 @@ import java.util.stream.Stream;
  */
 class CompilingIntertwine<T> implements Intertwine<T>
 {
-	private static final String dummySourceFileName = "DummySourceFile.java";
+	private static final String dummySourceFileName = DummySourceFile.class.getSimpleName() + ".java";
 
 	private final Class<? super T> interfaceType;
 	private final TerminalTypeDescriptor interfaceTypeDescriptor;
 	private final List<MethodPrototype> interfaceMethodPrototypes;
-	private final CompilingKey<T>[] keys;
-	private final Map<MethodPrototype,CompilingKey<T>> keysByPrototype;
+	private final CompilingIntertwineMethodKey<T>[] keys;
+	private final Map<MethodPrototype,CompilingIntertwineMethodKey<T>> keysByPrototype;
 	private Optional<Constructor<T>> entwinerConstructor = Optional.empty();
 	private Optional<Constructor<Anycall<T>>> untwinerConstructor = Optional.empty();
 
@@ -66,7 +66,6 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	{
 		assert interfaceType.isInterface();
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
-		//this.classLoader = classLoader;
 		this.interfaceType = interfaceType;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		interfaceTypeDescriptor = interfaceByteCodeType.typeDescriptor();
@@ -108,7 +107,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return true;
 	}
 
-	private CompilingKey<T>[] buildArrayOfKey( List<MethodPrototype> methodPrototypes )
+	private CompilingIntertwineMethodKey<T>[] buildArrayOfKey( List<MethodPrototype> methodPrototypes )
 	{
 //		int[] index = new int[1];
 //		return methodPrototypes.stream().map( methodPrototype -> new CompilingKey<>( this, methodPrototype, index[0]++ ) ).toList();
@@ -118,9 +117,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		// but then IntellijIdea thinks that raw-types is redundant and complains about it,
 		// so we need to also suppress the "redundant suppression" inspection of IntellijIdea.
 		//noinspection RedundantSuppression
-		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingKey<T>[] result = IntStream.range( 0, methodPrototypes.size() ) //
-			.mapToObj( i -> new CompilingKey<>( this, methodPrototypes.get( i ), i ) ) //
-			.toArray( CompilingKey[]::new );
+		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingIntertwineMethodKey<T>[] result = IntStream.range( 0, methodPrototypes.size() ) //
+			.mapToObj( i -> new CompilingIntertwineMethodKey<>( this, methodPrototypes.get( i ), i ) ) //
+			.toArray( CompilingIntertwineMethodKey[]::new );
 		return result;
 	}
 
@@ -157,10 +156,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		ByteCodeType entwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( getClass().getPackageName() + "." + className ), //
-			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
+			Optional.of( TerminalTypeDescriptor.of( Entwiner.class ) ), //
 			List.of( interfaceTypeDescriptor ) );
 		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "keys", FieldDescriptor.of( CompilingKey[].class ) ) );
+			FieldPrototype.of( "keys", FieldDescriptor.of( CompilingIntertwineMethodKey[].class ) ) );
 		entwinerByteCodeType.fields.add( keysField );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			FieldPrototype.of( "exitPoint", FieldDescriptor.of( Anycall.class ) ) );
@@ -176,7 +175,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			save( className, entwinerByteCodeType );
 
 		Class<T> entwinerClass = ByteCodeClassLoader.load( interfaceType.getClassLoader(), entwinerByteCodeType );
-		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingKey[].class, Anycall.class ) );
+		return Kit.unchecked( () -> entwinerClass.getDeclaredConstructor( CompilingIntertwineMethodKey[].class, Anycall.class ) );
 	}
 
 	///TODO perhaps also somehow generate debug information so that IntellijIdea can step into (or through) the entwiner?
@@ -249,7 +248,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		CodeAttribute code = CodeAttribute.of( 2, 3 );
 		byteCodeMethod.attributeSet.addAttribute( code );
 		code.ALOAD( 0 );
-		code.INVOKESPECIAL( objectConstructorMethodReference() );
+		code.INVOKESPECIAL( constructorMethodReference( Entwiner.class ) );
 		code.ALOAD( 0 );
 		code.ALOAD( 1 );
 		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
@@ -267,7 +266,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		ByteCodeType untwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( getClass().getPackageName() + "." + className ), //
-			Optional.of( TerminalTypeDescriptor.of( Object.class ) ), //
+			Optional.of( TerminalTypeDescriptor.of( Untwiner.class ) ), //
 			List.of( TerminalTypeDescriptor.of( Anycall.class ) ) );
 		untwinerByteCodeType.fields.add( exitPointField );
 		addUntwinerInitMethod( untwinerByteCodeType, interfaceTypeDescriptor, exitPointField );
@@ -290,7 +289,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		CodeAttribute code = CodeAttribute.of( 2, 2 );
 		byteCodeMethod.attributeSet.addAttribute( code );
 		code.ALOAD( 0 );
-		code.INVOKESPECIAL( objectConstructorMethodReference() );
+		code.INVOKESPECIAL( constructorMethodReference( Untwiner.class ) );
 		code.ALOAD( 0 );
 		code.ALOAD( 1 );
 		code.PUTFIELD( FieldReference.of( untwinerByteCodeType.typeDescriptor(), exitPointField.prototype() ) );
@@ -310,10 +309,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.attributeSet.addAttribute( stackMapTableAttribute );
 
 		code.ALOAD( 1 );
-		code.CHECKCAST( TypeDescriptor.of( CompilingKey.class ) );
+		code.CHECKCAST( TypeDescriptor.of( CompilingIntertwineMethodKey.class ) );
 		code.ASTORE( 3 );
 		code.ALOAD( 3 );
-		code.GETFIELD( FieldReference.of( CompilingKey.class, FieldPrototype.of( "index", int.class ) ) );
+		code.GETFIELD( FieldReference.of( CompilingIntertwineMethodKey.class, FieldPrototype.of( "index", int.class ) ) );
 		TableSwitchInstruction tableSwitchInstruction = code.TABLESWITCH( 0 );
 
 		int methodCount = methodPrototypes.size();
@@ -322,7 +321,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			Instruction instruction = addUntwinerSwitchCase( untwinerByteCodeType, code, interfaceTypeDescriptor, methodPrototypes.get( methodIndex ) );
 			tableSwitchInstruction.targetInstructions.add( instruction );
 			if( methodIndex == 0 )
-				stackMapTableAttribute.addAppendFrame( instruction, ObjectVerificationType.of( TypeDescriptor.of( CompilingKey.class ) ) );
+				stackMapTableAttribute.addAppendFrame( instruction, ObjectVerificationType.of( TypeDescriptor.of( CompilingIntertwineMethodKey.class ) ) );
 			else
 				stackMapTableAttribute.addSameFrame( instruction );
 		}
@@ -482,9 +481,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		new PrimitiveTypeInfo( double.class, Double.class, doubleBoxingMethod, doubleUnboxingMethod, CodeAttribute::DLOAD, CodeAttribute::DRETURN )      //
 	).collect( Collectors.toMap( p -> PrimitiveTypeDescriptor.of( p.primitiveType ), p -> p ) );
 
-	private static MethodReference objectConstructorMethodReference()
+	private static MethodReference constructorMethodReference( Class<?> jvmClass )
 	{
-		return MethodReference.of( MethodReferenceKind.Plain, Object.class, MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) );
+		return MethodReference.of( MethodReferenceKind.Plain, jvmClass, MethodPrototype.of( "<init>", MethodDescriptor.of( void.class ) ) );
 	}
 
 	private static MethodPrototype untwinerInitMethodPrototype( TerminalTypeDescriptor interfaceTypeDescriptor )

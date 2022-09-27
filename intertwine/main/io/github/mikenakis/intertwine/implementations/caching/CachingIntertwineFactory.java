@@ -1,5 +1,6 @@
 package io.github.mikenakis.intertwine.implementations.caching;
 
+import io.github.mikenakis.debug.Debug;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.IntertwineFactory;
 import io.github.mikenakis.kit.Kit;
@@ -70,7 +71,7 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		Intertwine<T> intertwine = delegee.getIntertwine( interfaceType );
 
 		/**
-		 * Once the requested {@link Intertwine} has been created, lock the cache again, and first check whether another instance of the requested
+		 * Now that the requested {@link Intertwine} has been created, lock the cache again, and first check whether another instance of the requested
 		 * {@link Intertwine} has already been cached by now; if so, then discard the newly created instance and return the cached one.
 		 * Otherwise, cache the new instance and return it.
 		 */
@@ -78,7 +79,10 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		{
 			@SuppressWarnings( "unchecked" ) Intertwine<T> existing = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
 			if( existing != null )
+			{
+				Debug.breakPoint(); //If this ever happens, I would like to see it.
 				return existing;
+			}
 			Kit.map.add( cache, interfaceType, intertwine );
 			return intertwine;
 		} );

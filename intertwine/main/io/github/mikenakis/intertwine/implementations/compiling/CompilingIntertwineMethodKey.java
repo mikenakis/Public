@@ -6,18 +6,18 @@ import io.github.mikenakis.intertwine.MethodKey;
 
 /**
  * A {@link MethodKey} for the {@link CompilingIntertwine}.
- *
- * NOTE: the class and field 'index' must both be public in order to be accessible by compiled untwiner
+ * <p>
+ * NOTE: both this class and its field 'index' must be public in order to be accessible by compiled untwiners.
  *
  * @author michael.gr
  */
-public class CompilingKey<T> implements MethodKey<T>
+public class CompilingIntertwineMethodKey<T> implements MethodKey<T>
 {
 	private final CompilingIntertwine<T> intertwine;
 	final MethodPrototype methodPrototype;
 	public final int index;
 
-	CompilingKey( CompilingIntertwine<T> intertwine, MethodPrototype methodPrototype, int index )
+	CompilingIntertwineMethodKey( CompilingIntertwine<T> intertwine, MethodPrototype methodPrototype, int index )
 	{
 		this.intertwine = intertwine;
 		this.methodPrototype = methodPrototype;
