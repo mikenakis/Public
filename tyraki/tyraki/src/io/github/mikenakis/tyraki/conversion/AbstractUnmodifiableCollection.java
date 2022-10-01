@@ -36,7 +36,7 @@ abstract class AbstractUnmodifiableCollection<E> extends AbstractUnmodifiableEnu
 			return equalsCollection( Kit.upCast( other ) );
 		if( other instanceof UnmodifiableEnumerable )
 			return equalsEnumerable( Kit.upCast( other ) );
-		assert false;
+		//assert false;
 		return false;
 	}
 

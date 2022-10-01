@@ -41,31 +41,31 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	static <E> UnmodifiableList<E> from( UnmodifiableCollection<E> collection )
 	{
 		E[] array = ConversionCollections.arrayOfObjectFromIterable( collection, collection.size() );
-		return ConversionCollections.newArrayWrapper( array );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( array );
 	}
 
 	static <E> UnmodifiableList<E> from( Iterable<E> iterable )
 	{
 		E[] array = ConversionCollections.arrayOfObjectFromIterable( iterable, 0 );
-		return ConversionCollections.newArrayWrapper( array );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( array );
 	}
 
 	static <E> UnmodifiableList<E> from( Iterable<E> iterable, int length )
 	{
 		E[] array = ConversionCollections.arrayOfObjectFromIterable( iterable, length );
-		return ConversionCollections.newArrayWrapper( array );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( array );
 	}
 
 	static <E> UnmodifiableList<E> from( Iterable<E> iterable, EqualityComparator<? super E> equalityComparator )
 	{
 		E[] array = ConversionCollections.arrayOfObjectFromIterable( iterable, 0 );
-		return ConversionCollections.newArrayWrapper( array, equalityComparator, true );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( array, equalityComparator );
 	}
 
 	static <E> UnmodifiableList<E> from( Iterable<E> iterable, int length, EqualityComparator<? super E> equalityComparator )
 	{
 		E[] array = ConversionCollections.arrayOfObjectFromIterable( iterable, length );
-		return ConversionCollections.newArrayWrapper( array, equalityComparator, true );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( array, equalityComparator );
 	}
 
 	static <E> UnmodifiableList<E> from( UnmodifiableCollection<E> elements, EqualityComparator<? super E> equalityComparator )
@@ -108,30 +108,30 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <E> UnmodifiableList<E> of( E... arrayOfElements )
 	{
-		return onArray( arrayOfElements );
+		return onArray( Kit.array.clone( arrayOfElements ) );
 	}
 
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	private static <E> UnmodifiableList<E> of0( E... arrayOfElements )
 	{
-		return onArray( arrayOfElements ); //ConversionCollections.newArrayWrapper( arrayOfElements );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( arrayOfElements );
 	}
 
 	static <E> UnmodifiableList<E> onArray( E[] arrayOfElements, int offset, int length )
 	{
-		arrayOfElements = Kit.array.subArray( arrayOfElements, offset, length );
-		return ConversionCollections.newArrayWrapper( arrayOfElements );
+		var subArray = Kit.array.subArray( arrayOfElements, offset, length );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( subArray );
 	}
 
 	static <E> UnmodifiableList<E> onArray( E[] arrayOfElements )
 	{
-		return ConversionCollections.newArrayWrapper( arrayOfElements );
+		return ConversionCollections.newImmutableWrapperOfArray( arrayOfElements );
 	}
 
 	static UnmodifiableList<Integer> onArray( int... arrayOfInt )
 	{
-		Integer[] arrayOfInteger = ConversionCollections.newArray( arrayOfInt );
-		return ConversionCollections.newArrayWrapper( arrayOfInteger );
+		Integer[] arrayOfInteger = ConversionCollections.newIntegerArray( arrayOfInt );
+		return ConversionCollections.newImmutableWrapperOfImmutableArray( arrayOfInteger );
 	}
 
 	private static <E, L extends UnmodifiableList<E>> L newUnmodifiableList( Function1<L,MutableCollections> factory, Procedure1<L> populator )

@@ -1,9 +1,8 @@
 package io.github.mikenakis.tyraki.conversion;
 
+import io.github.mikenakis.bathyscaphe.annotations.InvariableArray;
 import io.github.mikenakis.coherence.Coherence;
 import io.github.mikenakis.coherence.ImmutabilityCoherence;
-import io.github.mikenakis.coherence.exceptions.MustBeFrozenException;
-import io.github.mikenakis.coherence.implementation.ThreadLocalCoherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.tyraki.UnmodifiableEnumerator;
 import io.github.mikenakis.tyraki.UnmodifiableList;
@@ -15,23 +14,18 @@ import io.github.mikenakis.tyraki.UnmodifiableList;
  *
  * @author michael.gr
  */
-final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements UnmodifiableList.Defaults<E>
+final class ImmutableListOnArray<E> extends AbstractUnmodifiableCollection<E> implements UnmodifiableList.Defaults<E>
 {
-	private final Coherence coherence;
-	private final E[] array;
-	private final boolean frozen;
+	@InvariableArray private final E[] array;
 
-	ListOnArray( EqualityComparator<? super E> equalityComparator, E[] array, boolean frozen )
+	ImmutableListOnArray( EqualityComparator<? super E> equalityComparator, E[] array )
 	{
 		super( equalityComparator );
 		this.array = array;
-		this.frozen = frozen;
-		coherence = frozen ? ImmutabilityCoherence.instance : ThreadLocalCoherence.instance();
 	}
 
 	@Override public boolean mustBeImmutableAssertion()
 	{
-		assert frozen : new MustBeFrozenException( null );
 		return true;
 	}
 
@@ -47,7 +41,7 @@ final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements 
 
 	@Override public int getModificationCount()
 	{
-		return 0; //hope nobody has actually modified the array!
+		return 0;
 	}
 
 	@Override public UnmodifiableEnumerator<E> newUnmodifiableEnumerator()
@@ -57,6 +51,6 @@ final class ListOnArray<E> extends AbstractUnmodifiableCollection<E> implements 
 
 	@Override public Coherence coherence()
 	{
-		return coherence;
+		return ImmutabilityCoherence.instance;
 	}
 }

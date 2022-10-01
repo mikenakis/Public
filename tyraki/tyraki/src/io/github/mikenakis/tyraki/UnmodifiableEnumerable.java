@@ -53,7 +53,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	static <T> UnmodifiableEnumerable<T> of( T e0, T... arrayOfElements )
 	{
-		return of( e0 ).chained( ConversionCollections.newArrayWrapper( arrayOfElements ) );
+		return of( e0 ).chained( ConversionCollections.newImmutableWrapperOfArray( arrayOfElements ) );
 	}
 
 	static <T> UnmodifiableEnumerable<T> of( T firstElement, Function1<Optional<T>,T> nextElementProducer )
@@ -427,7 +427,7 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		@Override default UnmodifiableList<E> toList()
 		{
 			E[] elements = toArrayOfObject();
-			return ConversionCollections.newArrayWrapper( elements, true );
+			return ConversionCollections.newImmutableWrapperOfImmutableArray( elements );
 		}
 
 		@Override default int calculateHashCode()

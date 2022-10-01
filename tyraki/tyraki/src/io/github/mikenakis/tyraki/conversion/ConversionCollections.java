@@ -141,7 +141,7 @@ public final class ConversionCollections
 	@SuppressWarnings( "varargs" ) //for -Xlint
 	public static <T> UnmodifiableEnumerable<T> newChainingEnumerableOf( UnmodifiableEnumerable<T>... arrayOfEnumerables )
 	{
-		var enumerables = newArrayWrapper( arrayOfEnumerables );
+		var enumerables = newImmutableWrapperOfArray( arrayOfEnumerables );
 		return newChainingEnumerable( enumerables );
 	}
 
@@ -173,7 +173,7 @@ public final class ConversionCollections
 	@SafeVarargs @SuppressWarnings( "varargs" ) //for -Xlint
 	public static <T> UnmodifiableCollection<T> newChainingCollectionOf( UnmodifiableCollection<T>... arrayOfCollections )
 	{
-		var wrappedCollections = newArrayWrapper( arrayOfCollections );
+		var wrappedCollections = newImmutableWrapperOfArray( arrayOfCollections );
 		return newChainingCollection( wrappedCollections );
 	}
 
@@ -298,7 +298,7 @@ public final class ConversionCollections
 	@SuppressWarnings( "varargs" ) //for -Xlint
 	public static <T> UnmodifiableCollection<T> newChainingSetOf( UnmodifiableCollection<T>... arrayOfCollections )
 	{
-		var collectionOfCollections = newArrayWrapper( arrayOfCollections );
+		UnmodifiableList<UnmodifiableCollection<T>> collectionOfCollections = newImmutableWrapperOfArray( arrayOfCollections );
 		return newChainingSet( collectionOfCollections );
 	}
 
@@ -330,7 +330,7 @@ public final class ConversionCollections
 	@SuppressWarnings( "varargs" ) //for -Xlint
 	public static <T> UnmodifiableList<T> newChainingListOf( UnmodifiableList<T>... arrayOfLists )
 	{
-		var collectionOfLists = newArrayWrapper( arrayOfLists );
+		UnmodifiableList<UnmodifiableList<T>> collectionOfLists = newImmutableWrapperOfArray( arrayOfLists );
 		return newChainingList( collectionOfLists );
 	}
 
@@ -541,25 +541,22 @@ public final class ConversionCollections
 		return new SingleElementEnumerable<>( element );
 	}
 
-	public static <E> UnmodifiableList<E> newArrayWrapper( E[] array )
+	public static <E> UnmodifiableList<E> newImmutableWrapperOfImmutableArray( E[] array )
 	{
-		return newArrayWrapper( array, false );
+		return newImmutableWrapperOfImmutableArray( array, DefaultEqualityComparator.getInstance() );
 	}
 
-	public static <E> UnmodifiableList<E> newArrayWrapper( E[] array, boolean frozen )
+	public static <E> UnmodifiableList<E> newImmutableWrapperOfArray( E[] array )
 	{
-		assert array != null;
-		if( array.length == 0 )
-			return UnmodifiableList.of();
-		EqualityComparator<? super E> equalityComparator = DefaultEqualityComparator.getInstance();
-		return newArrayWrapper( array, equalityComparator, frozen );
+		E[] clone = Kit.array.clone( array );
+		return newImmutableWrapperOfImmutableArray( clone );
 	}
 
-	public static <E> UnmodifiableList<E> newArrayWrapper( E[] array, EqualityComparator<? super E> equalityComparator, boolean frozen )
+	public static <E> UnmodifiableList<E> newImmutableWrapperOfImmutableArray( E[] array, EqualityComparator<? super E> equalityComparator )
 	{
 		if( array.length == 0 )
 			return UnmodifiableList.of();
-		return new ListOnArray<>( equalityComparator, array, frozen );
+		return new ImmutableListOnArray<>( equalityComparator, array );
 	}
 
 	public static <K, V> UnmodifiableCollection<K> newUnmodifiableMapKeysCollection( UnmodifiableMap<K,V> map, EqualityComparator<? super K> keyEqualityComparator )
@@ -601,7 +598,7 @@ public final class ConversionCollections
 	@SuppressWarnings( "varargs" ) //for -Xlint
 	public static <K, V> UnmodifiableMap<K,V> newChainingMapOf( UnmodifiableMap<K,V>... mapsToChain )
 	{
-		var collectionOfMaps = newArrayWrapper( mapsToChain );
+		UnmodifiableList<UnmodifiableMap<K,V>> collectionOfMaps = newImmutableWrapperOfArray( mapsToChain );
 		return newChainingMap( collectionOfMaps );
 	}
 
@@ -609,7 +606,7 @@ public final class ConversionCollections
 	@SuppressWarnings( "varargs" ) //for -Xlint
 	public static <K, V> UnmodifiableArrayMap<K,V> newChainingArrayMapOf( UnmodifiableArrayMap<K,V>... mapsToChain )
 	{
-		var collectionOfMaps = newArrayWrapper( mapsToChain );
+		UnmodifiableList<UnmodifiableArrayMap<K,V>> collectionOfMaps = newImmutableWrapperOfArray( mapsToChain );
 		return newChainingArrayMap( collectionOfMaps );
 	}
 
@@ -645,7 +642,7 @@ public final class ConversionCollections
 		return newElements;
 	}
 
-	public static Integer[] newArray( int[] array )
+	public static Integer[] newIntegerArray( int[] array )
 	{
 		Integer[] arrayOfInteger = new Integer[array.length];
 		for( int i = 0; i < arrayOfInteger.length; i++ )
