@@ -74,9 +74,17 @@ class JunitTestMethod extends TestMethod
 		assert method.getReturnType() == Void.TYPE;
 		assert method.getParameterCount() == 0;
 		assert !Modifier.isStatic( method.getModifiers() );
-		MethodHandle handle = Kit.unchecked( () -> junitTestClass.junitTestEngine.lookup.unreflect( method ) );
-		Object returnValue = Kit.invokeThrowingFunction( () -> handle.invoke( instance ) );
-		assert returnValue == null; //a method handle of a method with return type void is always expected to return null.
+		if( Kit.get( false ) ) //with the following code, if the test method fails, the debugger will break inside Method.invoke()
+		{
+			Object returnValue = Kit.unchecked( () -> method.invoke( instance ) );
+			assert returnValue == null; //a method with return type void is always expected to return null.
+		}
+		else //with the following code, if the test method fails, the debugger will break at the point of failure, but if we drop the frame of the test method and step-into, the JVM hangs.
+		{
+			MethodHandle handle = Kit.unchecked( () -> junitTestClass.junitTestEngine.lookup.unreflect( method ) );
+			Object returnValue = Kit.invokeThrowingFunction( () -> handle.invoke( instance ) );
+			assert returnValue == null; //a method handle of a method with return type void is always expected to return null.
+		}
 	}
 
 	//TODO: this functionality is not junit-specific, it belongs to testana, so move it out of here and put it higher up the call tree, in the test runner.
