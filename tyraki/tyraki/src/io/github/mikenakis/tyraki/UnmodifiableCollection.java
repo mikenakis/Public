@@ -3,10 +3,13 @@ package io.github.mikenakis.tyraki;
 import io.github.mikenakis.kit.DefaultComparator;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
+import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
+import io.github.mikenakis.kit.functional.Procedure1;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
+import io.github.mikenakis.tyraki.mutable.MutableCollections;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -69,6 +72,21 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 	static <E> UnmodifiableCollection<E> of( E... arrayOfElements )
 	{
 		return UnmodifiableList.onArray( arrayOfElements );
+	}
+
+	static <E> UnmodifiableCollection<E> newHashSet( Procedure1<MutableCollection<E>> populator )
+	{
+		return newHashSet( ObjectHasher.INSTANCE, DefaultEqualityComparator.getInstance(), populator );
+	}
+
+	static <E> UnmodifiableCollection<E> newHashSet( Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator, Procedure1<MutableCollection<E>> populator )
+	{
+		return Helper.populate( mutableCollections -> mutableCollections.newHashSet( hasher, equalityComparator ), populator );
+	}
+
+	static <E> UnmodifiableCollection<E> newIdentityLinkedHashSet( Procedure1<MutableCollection<E>> populator )
+	{
+		return Helper.populate( MutableCollections::newIdentityLinkedHashSet, populator );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

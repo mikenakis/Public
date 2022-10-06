@@ -3,6 +3,7 @@ package io.github.mikenakis.tyraki;
 import io.github.mikenakis.coherence.Coherent;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
+import io.github.mikenakis.kit.Hasher;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.exceptions.GenericException;
@@ -314,6 +315,20 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 	UnmodifiableEnumerable<E> chained( UnmodifiableEnumerable<E> other );
 
 	/**
+	 * Obtains the distinct elements of this {@link UnmodifiableEnumerable}.
+	 *
+	 * @return a new {@link UnmodifiableCollection} containing only distinct elements of this {@link UnmodifiableEnumerable}.
+	 */
+	UnmodifiableCollection<E> distinct();
+
+	/**
+	 * Obtains the distinct elements of this {@link UnmodifiableEnumerable} where distinctness is determined by a supplied {@link Hasher} and {@link EqualityComparator}.
+	 *
+	 * @return a new {@link UnmodifiableCollection} containing only distinct elements of this {@link UnmodifiableEnumerable}.
+	 */
+	UnmodifiableCollection<E> distinct( Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator );
+
+	/**
 	 * Converts this {@link UnmodifiableEnumerable} to an array of Object.
 	 *
 	 * @return an array of Object.
@@ -603,6 +618,21 @@ public interface UnmodifiableEnumerable<E> extends Iterable<E>, Comparable<Unmod
 		@Override default UnmodifiableEnumerable<E> chained( UnmodifiableEnumerable<E> other )
 		{
 			return ConversionCollections.newChainingEnumerableOf( this, other );
+		}
+
+		@Override default UnmodifiableCollection<E> distinct()
+		{
+			return distinct( ObjectHasher.INSTANCE, DefaultEqualityComparator.getInstance() );
+		}
+
+		@Override default UnmodifiableCollection<E> distinct( Hasher<? super E> hasher, EqualityComparator<? super E> equalityComparator )
+		{
+			UnmodifiableCollection<E> set = UnmodifiableCollection.newHashSet( hasher, equalityComparator, mutableCollection -> //
+			{
+				for( E element : this )
+					mutableCollection.tryAdd( element );
+			} );
+			return set.toList();
 		}
 
 		@Override default E[] toArrayOfObject()

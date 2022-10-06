@@ -1,12 +1,10 @@
 package io.github.mikenakis.tyraki;
 
 import io.github.mikenakis.coherence.Coherent;
-import io.github.mikenakis.coherence.implementation.ConcreteFreezableCoherence;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure1;
-import io.github.mikenakis.live.Mortal;
 import io.github.mikenakis.tyraki.conversion.ConversionCollections;
 import io.github.mikenakis.tyraki.exceptions.KeyNotFoundException;
 import io.github.mikenakis.tyraki.mutable.MutableCollections;
@@ -44,20 +42,9 @@ public interface UnmodifiableMap<K, V> extends Coherent
 		return result;
 	}
 
-	private static <K, V, M extends UnmodifiableMap<K,V>> M newUnmodifiableMap( Function1<M,MutableCollections> factory, Procedure1<M> populator )
-	{
-		return Mortal.tryGetWith( ConcreteFreezableCoherence.create(), coherence -> //
-		{
-			MutableCollections mutableCollections = MutableCollections.of( coherence );
-			M map = factory.invoke( mutableCollections );
-			populator.invoke( map );
-			return map;
-		} );
-	}
-
 	static <K, V> UnmodifiableHashMap<K,V> newHashMap( Procedure1<MutableHashMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newHashMap, populator );
+		return Helper.populate( MutableCollections::newHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newHashMap( Binding<K,V>... bindings )
@@ -67,7 +54,7 @@ public interface UnmodifiableMap<K, V> extends Coherent
 
 	static <K, V> UnmodifiableArrayMap<K,V> newArrayMap( Procedure1<MutableArrayMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newArrayMap, populator );
+		return Helper.populate( MutableCollections::newArrayMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayMap<K,V> newArrayMap( Binding<K,V>... bindings )
@@ -77,7 +64,7 @@ public interface UnmodifiableMap<K, V> extends Coherent
 
 	static <K, V> UnmodifiableArrayHashMap<K,V> newArrayHashMap( Procedure1<MutableArrayHashMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newArrayHashMap, populator );
+		return Helper.populate( MutableCollections::newArrayHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayHashMap<K,V> newArrayHashMap( Binding<K,V>... bindings )
@@ -87,7 +74,7 @@ public interface UnmodifiableMap<K, V> extends Coherent
 
 	static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Procedure1<MutableHashMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newLinkedHashMap, populator );
+		return Helper.populate( MutableCollections::newLinkedHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newLinkedHashMap( Binding<K,V>... bindings )
@@ -102,7 +89,7 @@ public interface UnmodifiableMap<K, V> extends Coherent
 
 	static <K, V> UnmodifiableArrayHashMap<K,V> newIdentityArrayHashMap( Procedure1<MutableArrayHashMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newIdentityArrayHashMap, populator );
+		return Helper.populate( MutableCollections::newIdentityArrayHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableArrayMap<K,V> newIdentityArrayHashMap( Binding<K,V>... bindings )
@@ -112,7 +99,7 @@ public interface UnmodifiableMap<K, V> extends Coherent
 
 	static <K, V> UnmodifiableHashMap<K,V> newIdentityHashMap( Procedure1<MutableHashMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newIdentityHashMap, populator );
+		return Helper.populate( MutableCollections::newIdentityHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newIdentityHashMap( Binding<K,V>... bindings )
@@ -122,7 +109,7 @@ public interface UnmodifiableMap<K, V> extends Coherent
 
 	static <K, V> UnmodifiableHashMap<K,V> newIdentityLinkedHashMap( Procedure1<MutableHashMap<K,V>> populator )
 	{
-		return newUnmodifiableMap( MutableCollections::newIdentityLinkedHashMap, populator );
+		return Helper.populate( MutableCollections::newIdentityLinkedHashMap, populator );
 	}
 
 	@SuppressWarnings( "varargs" ) @SafeVarargs static <K, V> UnmodifiableHashMap<K,V> newIdentityLinkedHashMap( Binding<K,V>... bindings )
