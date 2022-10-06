@@ -115,7 +115,7 @@ public final class HashTable<K, T extends HashNode<K,T>> extends AbstractMutable
 	private Bucket<K,T>[] buckets;
 	private int hashNodeCount = 0;
 
-	public HashTable( MutableCollections mutableCollections, Hasher<? super K> keyHasher, int initialCapacity, float fillFactor )
+	HashTable( MutableCollections mutableCollections, Hasher<? super K> keyHasher, int initialCapacity, float fillFactor )
 	{
 		super( mutableCollections );
 		assert fillFactor >= 0.1 && fillFactor <= 1.0;

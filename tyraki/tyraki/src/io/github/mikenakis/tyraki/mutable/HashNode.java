@@ -10,7 +10,7 @@ public abstract class HashNode<K, T extends HashNode<K,T>>
 	T prev;
 	T next;
 
-	protected HashNode()
+	HashNode()
 	{
 	}
 

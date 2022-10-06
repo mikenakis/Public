@@ -49,8 +49,6 @@ import org.eclipse.aether.resolution.DependencyResult;
 import org.eclipse.aether.spi.connector.RepositoryConnectorFactory;
 import org.eclipse.aether.spi.connector.transport.TransporterFactory;
 import org.eclipse.aether.spi.locator.ServiceLocator;
-import org.eclipse.aether.transport.file.FileTransporterFactory;
-import org.eclipse.aether.transport.http.HttpTransporterFactory;
 import org.eclipse.aether.transport.wagon.WagonTransporterFactory;
 import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.repository.AuthenticationBuilder;
@@ -332,8 +330,6 @@ final class MavenHelper
 			}
 		} );
 		locator.addService( RepositoryConnectorFactory.class, BasicRepositoryConnectorFactory.class );
-		locator.addService( TransporterFactory.class, FileTransporterFactory.class );
-		locator.addService( TransporterFactory.class, HttpTransporterFactory.class );
 		locator.addService( TransporterFactory.class, WagonTransporterFactory.class );
 		locator.addService( ProjectBuildingHelper.class, DefaultProjectBuildingHelper.class );
 		locator.addService( ProjectBuilder.class, DefaultProjectBuilder.class );
