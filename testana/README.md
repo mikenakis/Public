@@ -1,6 +1,6 @@
-# mikenakis-testana
+# Testana
 
-#### A command-line utility for running only those tests that actually need to run.
+#### A command-line utility for running tests by order of dependency and for only running tests that actually need to run.
 
 <p align="center">
 <img title="mikenakis-testana logo" src="mikenakis-testana.svg" width="256"/><br/>
@@ -12,28 +12,42 @@ and <a href="https://thenounproject.com/term/crash/1175057/">Jan Pleva</a>.<br/>
 Used under <a href="https://creativecommons.org/licenses/by/3.0/us/">CC BY License.</a>
 </p>
 
-## What is mikenakis-testana? 
+## What is Testana? 
 
-Testana is a utility for running JUnit-compatible tests in Maven-based Java projects, offering some amazing features, the most important being that every time you make some changes to your code and run Testana, it detects which tests need to run, and runs only those tests, saving you tons of time. 
+Testana is a utility for running tests, offering some very useful features that are missing from existing testing frameworks. Currently, JUnit-compatible tests in Maven-based Java projects are supported.
 
-Note: in this document the term project refers to the topmost (most-encompassing) organizational entity of your source code, while the term module refers to the smaller organizational entity that produces a single library or a single executable. This is IntelliJ IDEA terminology. In Eclipse the corresponding terms are workspace and project. In Visual Studio the corresponding terms are solution and project. 
+## What does Testana do? 
 
-## What does mikenakis-testana do? 
+- Testana runs only the subset of tests that actually need to run, based on the last successful run time of each test class, and whether its dependencies have changed or not. 
+- Testana runs test classes by order of dependency, so that the tests of the most dependent-upon modules run first, tests of modules that depend on those run next, and so on. Thus, Testana facilitates **_Incremental Integration Testing_** (see https://blog.michael.gr/2022/10/incremental-integration-testing.html) 
+- Testana runs the test methods within each class is the order in which they appear in the source file, otherwise known as **_Natural Method Order_**.
 
-- You launch Testana each time you want to run any tests in your project.
-- In the general case you do not need to supply any arguments, you just have to run it on the root of your source folder tree, and it figures out the rest. So, you can just bind it to a key and have all your testing needs covered with the press of a button.
-- Testana figures out which tests need to run by:
-  - Scanning the entire source tree for module description files. Note that this does not take much time, because directory recursion stops as soon as a module description file has been found, and these files tend to be high up in the source tree.
-  - Parsing the module description files to obtain all the output directories. (Currently, maven is supported.)
-  - Loading classes from the output directories and analyzing bytecode in order to:
-    - Discover which ones are test classes. 
-    - Determine the dependencies of each test class. (Recursively, so that transitive dependencies are included, too.)
-  - Checking the timestamp of each class file to see if it has been modified since last run time of any tests that depend on it.
-- Testana then only runs the tests that need to run and remembers their last run times.
-- Testana selects which tests to run from among all tests of all modules in your entire project, thus guaranteeing that any and all tests that need to run will run. 
-- Testana runs your test classes in order of dependency, meaning that classes that are most dependent upon will be tested first, and classes that depend upon those will be tested next, and so on until everything has been tested.
-- Testana runs the methods of a test class in their natural order, which is the order in which the methods appear in the source file. (Duh!) 
-- If you have a test class that inherits from another test class, Testana will run the test methods of the ancestor first. 
+## How does Testana work? 
+             
+Note: in this document the term _**project**_ refers to the topmost (most-encompassing) organizational entity of your source code, while the term _**module**_ refers to the smaller organizational entity that produces a single library or a single executable. This is IntelliJ IDEA terminology. In Eclipse the corresponding terms are workspace and project. In Visual Studio the corresponding terms are solution and project.
+
+You launch Testana each time you want to run any tests in your project. In the general case you do not need to supply any arguments, you just have to run it on the root of your source folder tree, and it figures out the rest.
+
+Testana does the following:
+
+- Scans the entire source tree for module description files.
+  - Currently, maven is supported.
+  - Note that this scan does not take much time, because directory recursion stops as soon as a module description file has been found, and these files tend to be high up in the source tree.
+- Parses the module description files in order to discover all output directories.
+  - Testana makes use of the `com.apache.maven` library to accomplish this, and since the interface of this library is so insanely complicated as to be virtually unusable, Testana also makes use of `com.eclipse.aether` in order to work with `com.apache.maven`. 
+- Loads all classes from the output directories and analyzes bytecode in order to:
+  - Determine the dependencies of each test class. (Recursively, so that transitive dependencies are included.)
+  - Discover which classes are test classes.
+    - Currently, JUnit is supported.
+- Checks the timestamp of each class file to see if it has been modified since last run time of any tests that depend on it.
+- Runs the tests.
+  - Selecting which tests to run from among all tests of all modules in your entire project, thus guaranteeing that any and all tests that need to run will run. 
+  - Running only the tests that need to run, based on the last successful run time of each test, and on whether any of its dependencies have changed.
+  - Running the test classes in order of dependency.
+    - This means that classes that are most dependent upon will be tested first, and classes that depend upon those will be tested next, and so on until everything has been tested.
+  - Running the methods of a test class in their natural order, which is the order in which the methods appear in the source file. 
+  - Running ancestor test methods first, and descendant test methods next, in cases where a test class inherits from another test class.
+- Testana then remembers the last successful run time of each test, so as to be able to determine whether this test should run next time Testana is launched. 
 
 ## Why should I care about running only the tests that need to run? 
 
@@ -67,7 +81,9 @@ Under JUnit, the order of execution of packages and classes within a package app
 
 Alphabetic order of execution is not particularly useful. For example, in an alphabetic list of packages, `util` comes near the end, so it is usually tested last, and yet `util` tends to be a package that depends on no other packages, while most other packages depend on it, so if tests of other packages succeed, and yet tests of `util` fail, it can only be due to pure accident. It would be very nice to see `util` being tested first, so that if there is something wrong with it, then we know that we can stop testing: there is no point in testing packages that depend on a failing package.
 
-Testana addresses this problem by executing test classes in order of dependency, which means that classes with no dependencies will be tested first, classes that depend upon them will be tested next, and so on until everything has been tested. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located. 
+Testana addresses this problem by executing test classes in order of dependency, which means that classes with no dependencies will be tested first, classes that depend upon them will be tested next, and so on until everything has been tested. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located.
+
+For more information about this way of testing, see [michael.gr - Incremental Integration Testing](https://blog.michael.gr/2022/10/incremental-integration-testing.html)
 
 ## Why should I care about running test methods in natural order? 
 
