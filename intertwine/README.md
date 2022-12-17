@@ -3,7 +3,7 @@
 A framework for converting back and forth between any interface and the _Normal Form of Interfaces_, which is a single-method interface of the form `Object anycall( MethodKey key, Object[] arguments )`.
 
 <p align="center">
-<img title="mikenakis:intertwine logo" src="mikenakis-intertwine.svg" width="256"/><br/>
+<img title="mikenakis:intertwine logo" src="intertwine-logo.svg" width="256"/><br/>
 The mikenakis:intertwine logo<br/>
 </p>
 
