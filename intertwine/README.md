@@ -9,9 +9,9 @@ The mikenakis:intertwine logo<br/>
 
 ## Description
 
-For a full explanation of what Intertwine is, what problem it solves, and how it solves it, please read this post on my blog: [michael.gr - Intertwine](https://blog.michael.gr/2022/12/intertwine.html)  
+For a full explanation of what Intertwine is, what problem it solves, and how it solves it, please read this post on my blog: [michael.gr - Intertwine](https://blog.michael.gr/2022/12/intertwine.html)
 
-Note that the blog post was originally written for the C# implementation of Intertwine, but the Java implementation is newer, and therefore more advanced, so there are some differences, which are explained below. The following text assumes that you have already read the blog post and that you fully understand it.   
+The following text assumes that you have already read the blog post and that you fully understand it.
 
 In Java, the normal form of interface method invocations is the following single-method (functional) interface:
 
