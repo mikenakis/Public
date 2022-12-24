@@ -1,6 +1,6 @@
 # Intertwine<br/><sup><sup><sub>Normalizing Interface Invocations</sup></sup></sub>
 
-<style>body {text-align: justify}</style>
+<div style="text-align: justify">
 
 A framework for automatically converting method invocations of any programmatic interface into a single-method _**normal form**_ and converting back to invocations of the original interface.
 
@@ -37,3 +37,4 @@ However, when I write code for myself, I use _**my very own™**_ coding style.
 More information: [michael.gr - On Coding Style](https://blog.michael.gr/2018/04/on-coding-style.html)
 
 ■
+</div>
