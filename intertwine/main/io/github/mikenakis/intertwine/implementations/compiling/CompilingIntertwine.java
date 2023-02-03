@@ -94,8 +94,6 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	{
 		if( Modifier.isStatic( method.getModifiers() ) )
 			return false; //skip static methods
-		if( !Modifier.isAbstract( method.getModifiers() ) )
-			return false; //skip default methods
 		assert Modifier.isPublic( method.getModifiers() );
 		assert !Modifier.isFinal( method.getModifiers() );
 		assert !Modifier.isNative( method.getModifiers() );
@@ -156,17 +154,15 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			TerminalTypeDescriptor.of( getClass().getPackageName() + "." + className ), //
 			Optional.of( TerminalTypeDescriptor.of( Entwiner.class ) ), //
 			List.of( interfaceTypeDescriptor ) );
-		ByteCodeField keysField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "keys", FieldDescriptor.of( CompilingIntertwineMethodKey[].class ) ) );
-		entwinerByteCodeType.fields.add( keysField );
-		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
-			FieldPrototype.of( "exitPoint", FieldDescriptor.of( Anycall.class ) ) );
-		entwinerByteCodeType.fields.add( exitPointField );
-		addEntwinerInitMethod( entwinerByteCodeType, keysField, exitPointField );
+		FieldPrototype keysFieldPrototype = FieldPrototype.of( "keys", FieldDescriptor.of( CompilingIntertwineMethodKey[].class ) ); // FieldPrototype.of( Kit.unchecked( () -> Entwiner.class.getField( "keys" ) ) );
+		entwinerByteCodeType.fields.add( ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), keysFieldPrototype ) );
+		FieldPrototype exitPointFieldPrototype = FieldPrototype.of( "exitPoint", FieldDescriptor.of( Anycall.class ) );
+		entwinerByteCodeType.fields.add( ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), exitPointFieldPrototype ) );
+		addEntwinerInitMethod( entwinerByteCodeType, keysFieldPrototype, exitPointFieldPrototype );
 		int maxArgumentCount = maxArgumentCount( interfaceMethods );
 		int methodCount = interfaceMethods.size();
 		for( int methodIndex = 0; methodIndex < methodCount; methodIndex++ )
-			addEntwinerInterfaceMethod( entwinerByteCodeType, maxArgumentCount, keysField, exitPointField, methodIndex, interfaceMethods.get( methodIndex ) );
+			addEntwinerInterfaceMethod( entwinerByteCodeType, maxArgumentCount, keysFieldPrototype, exitPointFieldPrototype, methodIndex, interfaceMethods.get( methodIndex ) );
 		entwinerByteCodeType.attributeSet.addAttribute( SourceFileAttribute.of( dummySourceFileName ) );
 
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
@@ -177,8 +173,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	}
 
 	///TODO perhaps also somehow generate debug information so that IntellijIdea can step into (or through) the entwiner?
-	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, int maxMethodArgumentCount, ByteCodeField keysField, //
-		ByteCodeField exitPointField, int interfaceMethodIndex, Method interfaceMethod )
+	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, int maxMethodArgumentCount, FieldPrototype keysFieldPrototype, //
+		FieldPrototype exitPointFieldPrototype, int interfaceMethodIndex, Method interfaceMethod )
 	{
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), interfaceMethod );
 		entwinerByteCodeType.methods.add( byteCodeMethod );
@@ -186,10 +182,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		byteCodeMethod.attributeSet.addAttribute( code );
 
 		code.ALOAD( 0 ); //push this
-		code.GETFIELD( FieldReference.of( entwinerByteCodeType.typeDescriptor(), exitPointField.prototype() ) ); //pop this, push this->exitPoint
+		code.GETFIELD( FieldReference.of( entwinerByteCodeType.typeDescriptor(), exitPointFieldPrototype ) ); //pop this, push this->exitPoint
 
 		code.ALOAD( 0 ); //push this
-		code.GETFIELD( FieldReference.of( entwinerByteCodeType.typeDescriptor(), keysField.prototype() ) ); //pop this, push keys
+		code.GETFIELD( FieldReference.of( entwinerByteCodeType.typeDescriptor(), keysFieldPrototype ) ); //pop this, push keys
 		code.LDC( interfaceMethodIndex ); //push methodIndex
 		code.AALOAD(); //pop methodIndex, pop keys, push keys[methodIndex]
 
@@ -237,12 +233,12 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.attributeSet.addAttribute( LineNumberTableAttribute.of( List.of( LineNumberTableEntry.of( code.instructions.all().get( 0 ), 1 ) ) ) );
 	}
 
-	private static void addEntwinerInitMethod( ByteCodeType byteCodeType, ByteCodeField keysField, ByteCodeField exitPointField )
+	private static void addEntwinerInitMethod( ByteCodeType byteCodeType, FieldPrototype keysFieldPrototype, FieldPrototype exitPointFieldPrototype )
 	{
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( //
 			ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), //
 			MethodPrototype.of( "<init>", //
-				MethodDescriptor.of( TypeDescriptor.of( void.class ), keysField.descriptor().typeDescriptor, TypeDescriptor.of( Anycall.class ) ) ) );
+				MethodDescriptor.of( TypeDescriptor.of( void.class ), keysFieldPrototype.descriptor.typeDescriptor, TypeDescriptor.of( Anycall.class ) ) ) );
 		byteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 2, 3 );
 		byteCodeMethod.attributeSet.addAttribute( code );
@@ -250,10 +246,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.INVOKESPECIAL( constructorMethodReference( Entwiner.class ) );
 		code.ALOAD( 0 );
 		code.ALOAD( 1 );
-		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), keysField.prototype() ) );
+		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), keysFieldPrototype ) );
 		code.ALOAD( 0 );
 		code.ALOAD( 2 );
-		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointField.prototype() ) );
+		code.PUTFIELD( FieldReference.of( byteCodeType.typeDescriptor(), exitPointFieldPrototype ) );
 		code.RETURN();
 	}
 

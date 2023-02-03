@@ -3,8 +3,15 @@ package io.github.mikenakis.bytecode.model.descriptors;
 import io.github.mikenakis.java_type_model.FieldDescriptor;
 import io.github.mikenakis.java_type_model.TypeDescriptor;
 
+import java.lang.reflect.Field;
+
 public final class FieldPrototype
 {
+	public static FieldPrototype of( Field field )
+	{
+		return of( field.getName(), field.getType() );
+	}
+
 	public static FieldPrototype of( String fieldName, Class<?> fieldType )
 	{
 		return of( fieldName, TypeDescriptor.of( fieldType ) );
