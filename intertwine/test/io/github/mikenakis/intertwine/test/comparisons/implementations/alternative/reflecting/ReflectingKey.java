@@ -1,6 +1,5 @@
 package io.github.mikenakis.intertwine.test.comparisons.implementations.alternative.reflecting;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
 
@@ -15,14 +14,12 @@ class ReflectingKey<T> implements MethodKey<T>
 {
 	private final ReflectingIntertwine<T> intertwine;
 	final Method method;
-	final MethodPrototype methodPrototype;
 	final int index;
 
-	ReflectingKey( ReflectingIntertwine<T> intertwine, Method method, MethodPrototype methodPrototype, int index )
+	ReflectingKey( ReflectingIntertwine<T> intertwine, Method method, int index )
 	{
 		this.intertwine = intertwine;
 		this.method = method;
-		this.methodPrototype = methodPrototype;
 		this.index = index;
 	}
 
@@ -36,8 +33,8 @@ class ReflectingKey<T> implements MethodKey<T>
 		return index;
 	}
 
-	@Override public MethodPrototype methodPrototype()
+	@Override public Method method()
 	{
-		return methodPrototype;
+		return method;
 	}
 }

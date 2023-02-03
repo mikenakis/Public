@@ -1,6 +1,5 @@
 package io.github.mikenakis.intertwine.test.comparisons.implementations.alternative.methodhandle;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
@@ -25,7 +24,6 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 {
 	private final Class<? super T> interfaceType;
 	final List<MethodHandleKey<T>> keys;
-	private final Map<MethodPrototype,MethodHandleKey<T>> keysByPrototype;
 	private final Map<Method,MethodHandleKey<T>> keysByMethod;
 
 	MethodHandleIntertwine( Class<? super T> interfaceType )
@@ -36,15 +34,13 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		MethodHandles.Lookup lookup = MethodHandles.publicLookup().in( interfaceType );
 		Method[] methods = interfaceType.getMethods();
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( lookup, methods[i], i ) ).toList();
-		keysByPrototype = keys.stream().collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 		keysByMethod = keys.stream().collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
 	private MethodHandleKey<T> createKey( MethodHandles.Lookup lookup, Method method, int index )
 	{
-		MethodPrototype methodPrototype = MethodPrototype.of( method );
 		MethodHandle methodHandle = Kit.unchecked( () -> lookup.unreflect( method ) );
-		return new MethodHandleKey<>( this, method, methodPrototype, methodHandle, index );
+		return new MethodHandleKey<>( this, method, methodHandle, index );
 	}
 
 	@Override public Class<? super T> interfaceType()
@@ -57,9 +53,9 @@ class MethodHandleIntertwine<T> implements Intertwine<T>
 		return List.copyOf( keys );
 	}
 
-	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<T> keyByMethod( Method method )
 	{
-		return Kit.map.get( keysByPrototype, methodPrototype );
+		return Kit.map.get( keysByMethod, method );
 	}
 
 	@Override public T newEntwiner( Anycall<T> exitPoint )

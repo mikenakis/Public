@@ -1,7 +1,6 @@
 package io.github.mikenakis.intertwine;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
-
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -24,9 +23,9 @@ public interface Intertwine<T>
 	List<MethodKey<T>> keys();
 
 	/**
-	 * Obtains a {@link MethodKey} given a {@link MethodPrototype}.
+	 * Obtains a {@link MethodKey} given a {@link Method}.
 	 */
-	MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype );
+	MethodKey<T> keyByMethod( Method method );
 
 	/**
 	 * Creates a new implementation of the target interface which delegates to the given instance of {@link Anycall}.

@@ -1,9 +1,9 @@
 package io.github.mikenakis.intertwine;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
+import java.lang.reflect.Method;
 
 /**
- * Identifies a method of an interface.
+ * Represents a method of an interface.
  *
  * @author michael.gr
  */
@@ -15,12 +15,12 @@ public interface MethodKey<T>
 	Intertwine<T> intertwine();
 
 	/**
-	 * Gets the index of this {@link MethodKey}.
+	 * Gets the index of the method represented by this {@link MethodKey}.
 	 */
 	int methodIndex();
 
 	/**
-	 * Gets the {@link MethodPrototype} of this {@link MethodKey}.
+	 * Gets the {@link Method} represented by this {@link MethodKey}.
 	 */
-	MethodPrototype methodPrototype();
+	Method method();
 }

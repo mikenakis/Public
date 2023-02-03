@@ -16,7 +16,7 @@ public class AnycallToObjectExchange<T> implements Anycall<T>
 
 	@Override public Object anycall( MethodKey<T> key, Object[] arguments )
 	{
-		AnycallRequest anycallRequest = new AnycallRequest( key.methodPrototype(), arguments );
+		AnycallRequest anycallRequest = new AnycallRequest( key.method(), arguments );
 		AnycallResponse anycallResponse = objectExchange.doExchange( anycallRequest );
 		if( !anycallResponse.success )
 			throw Kit.sneakyException( anycallResponse.throwable() );

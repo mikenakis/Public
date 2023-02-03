@@ -1,6 +1,5 @@
 package io.github.mikenakis.intertwine.test.comparisons.implementations.alternative.methodhandle;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
 
@@ -17,15 +16,13 @@ class MethodHandleKey<T> implements MethodKey<T>
 {
 	private final MethodHandleIntertwine<T> intertwine;
 	final Method method;
-	final MethodPrototype methodPrototype;
 	final MethodHandle methodHandle;
 	final int index;
 
-	MethodHandleKey( MethodHandleIntertwine<T> intertwine, Method method, MethodPrototype methodPrototype, MethodHandle methodHandle, int index )
+	MethodHandleKey( MethodHandleIntertwine<T> intertwine, Method method, MethodHandle methodHandle, int index )
 	{
 		this.intertwine = intertwine;
 		this.method = method;
-		this.methodPrototype = methodPrototype;
 		this.methodHandle = methodHandle;
 		this.index = index;
 	}
@@ -40,14 +37,14 @@ class MethodHandleKey<T> implements MethodKey<T>
 		return index;
 	}
 
-	@Override public MethodPrototype methodPrototype()
+	@Override public Method method()
 	{
-		return methodPrototype;
+		return method;
 	}
 
 	@Override public String toString()
 	{
-		return methodPrototype.asString();
+		return method.toString();
 	}
 
 	@Deprecated @Override public boolean equals( Object o )
@@ -58,15 +55,13 @@ class MethodHandleKey<T> implements MethodKey<T>
 	public boolean equals( MethodHandleKey<?> that )
 	{
 		assert intertwine == that.intertwine; //this probably means that you forgot to make use of the caching intertwine factory.
-		return method.equals( that.method ) &&
-			methodPrototype.equals( that.methodPrototype ) &&
-			methodHandle.equals( that.methodHandle );
+		return method.equals( that.method ) && methodHandle.equals( that.methodHandle );
 	}
 
 	@Override public int hashCode()
 	{
 		//NOTE: we intentionally refrain from including the methodHandle in the hash, so that two keys that only differ by methodHandle will have
 		//      the same hashCode, so equals() will eventually be called to check whether they are equal.  (See the equals() method.)
-		return Objects.hash( method, methodPrototype/*, methodHandle*/ );
+		return Objects.hash( method /*, methodHandle*/ );
 	}
 }

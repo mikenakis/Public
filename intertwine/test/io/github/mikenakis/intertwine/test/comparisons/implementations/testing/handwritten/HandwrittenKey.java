@@ -1,9 +1,10 @@
 package io.github.mikenakis.intertwine.test.comparisons.implementations.testing.handwritten;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
 import io.github.mikenakis.intertwine.test.comparisons.rig.FooInterface;
+
+import java.lang.reflect.Method;
 
 /**
  * A {@link MethodKey} for the {@link HandwrittenIntertwine}.
@@ -14,13 +15,13 @@ class HandwrittenKey implements MethodKey<FooInterface>
 {
 	private final HandwrittenIntertwine intertwine;
 	final int index;
-	final MethodPrototype methodPrototype;
+	final Method method;
 
-	HandwrittenKey( HandwrittenIntertwine intertwine, int index, MethodPrototype methodPrototype )
+	HandwrittenKey( HandwrittenIntertwine intertwine, int index, Method method )
 	{
 		this.intertwine = intertwine;
 		this.index = index;
-		this.methodPrototype = methodPrototype;
+		this.method = method;
 	}
 
 	@Override public final Intertwine<FooInterface> intertwine()
@@ -33,8 +34,8 @@ class HandwrittenKey implements MethodKey<FooInterface>
 		return index;
 	}
 
-	@Override public MethodPrototype methodPrototype()
+	@Override public Method method()
 	{
-		return methodPrototype;
+		return method;
 	}
 }

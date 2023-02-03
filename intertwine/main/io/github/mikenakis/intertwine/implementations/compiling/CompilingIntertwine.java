@@ -22,7 +22,6 @@ import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
 import io.github.mikenakis.java_type_model.FieldDescriptor;
 import io.github.mikenakis.java_type_model.MethodDescriptor;
-import io.github.mikenakis.java_type_model.PrimitiveTypeDescriptor;
 import io.github.mikenakis.java_type_model.TerminalTypeDescriptor;
 import io.github.mikenakis.java_type_model.TypeDescriptor;
 import io.github.mikenakis.kit.Kit;
@@ -31,11 +30,14 @@ import io.github.mikenakis.kit.functional.Function2;
 import io.github.mikenakis.kit.logging.Log;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -56,9 +58,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private final Class<? super T> interfaceType;
 	private final TerminalTypeDescriptor interfaceTypeDescriptor;
-	private final List<MethodPrototype> interfaceMethodPrototypes;
+	private final List<Method> interfaceMethods;
 	private final CompilingIntertwineMethodKey<T>[] keys;
-	private final Map<MethodPrototype,CompilingIntertwineMethodKey<T>> keysByPrototype;
+	private final Map<Method,CompilingIntertwineMethodKey<T>> keysByMethod;
 	private Optional<Constructor<T>> entwinerConstructor = Optional.empty();
 	private Optional<Constructor<Anycall<T>>> untwinerConstructor = Optional.empty();
 
@@ -69,56 +71,52 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		this.interfaceType = interfaceType;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		interfaceTypeDescriptor = interfaceByteCodeType.typeDescriptor();
-		interfaceMethodPrototypes = getInterfaceMethodPrototypes( interfaceType.getClassLoader(), interfaceByteCodeType );
-		keys = buildArrayOfKey( interfaceMethodPrototypes );
-		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
+		interfaceMethods = getInterfaceMethods( interfaceType );
+		keys = buildArrayOfKey( interfaceMethods );
+		keysByMethod = Stream.of( keys ).collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
-	private static List<MethodPrototype> getInterfaceMethodPrototypes( ClassLoader classLoader, ByteCodeType interfaceByteCodeType )
+	private static List<Method> getInterfaceMethods( Class<?> interfaceType )
 	{
-		Set<MethodPrototype> methodPrototypes = new LinkedHashSet<>();
-		getInterfaceMethodPrototypes( classLoader, interfaceByteCodeType, methodPrototypes );
-		return methodPrototypes.stream().toList();
+		Set<Method> methods = new LinkedHashSet<>();
+		getInterfaceMethodsRecursively( interfaceType, methods );
+		return methods.stream().toList();
 	}
 
-	private static void getInterfaceMethodPrototypes( ClassLoader classLoader, ByteCodeType interfaceByteCodeType, Set<MethodPrototype> methodPrototypes )
+	private static void getInterfaceMethodsRecursively( Class<?> interfaceType, Set<Method> methods )
 	{
-		interfaceByteCodeType.interfaces().forEach( superInterfaceTypeDescriptor -> //
-		{
-			Class<?> superInterfaceType = Kit.unchecked( () -> classLoader.loadClass( superInterfaceTypeDescriptor.typeName ) );
-			ByteCodeType superInterfaceByteCodeType = ByteCodeType.read( superInterfaceType );
-			getInterfaceMethodPrototypes( classLoader, superInterfaceByteCodeType, methodPrototypes );
-		} );
-		interfaceByteCodeType.methods.stream().filter( CompilingIntertwine::isInterfaceMethod ).map( ByteCodeMethod::prototype ).forEach( p -> Kit.collection.addOrReplace( methodPrototypes, p ) );
+		for( Class<?> superInterfaceType : interfaceType.getInterfaces() )
+			getInterfaceMethodsRecursively( superInterfaceType, methods );
+		Arrays.stream( interfaceType.getMethods() ).filter( CompilingIntertwine::isInterfaceMethod ).forEach( p -> Kit.collection.addOrReplace( methods, p ) );
 	}
 
-	private static boolean isInterfaceMethod( ByteCodeMethod interfaceMethod )
+	private static boolean isInterfaceMethod( Method method )
 	{
-		if( interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Static ) )
+		if( Modifier.isStatic( method.getModifiers() ) )
 			return false; //skip static methods
-		if( !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Abstract ) )
+		if( !Modifier.isAbstract( method.getModifiers() ) )
 			return false; //skip default methods
-		assert interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Public );
-		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Final );
-		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Native );
-		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Synchronized ); // ?
-		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Synthetic ); // ?
-		assert !interfaceMethod.modifiers.contains( ByteCodeMethod.Modifier.Bridge ); // ?
+		assert Modifier.isPublic( method.getModifiers() );
+		assert !Modifier.isFinal( method.getModifiers() );
+		assert !Modifier.isNative( method.getModifiers() );
+		assert !Modifier.isSynchronized( method.getModifiers() );
+		assert !method.isSynthetic();
+		assert !method.isBridge();
 		return true;
 	}
 
-	private CompilingIntertwineMethodKey<T>[] buildArrayOfKey( List<MethodPrototype> methodPrototypes )
+	private CompilingIntertwineMethodKey<T>[] buildArrayOfKey( List<Method> methods )
 	{
 //		int[] index = new int[1];
-//		return methodPrototypes.stream().map( methodPrototype -> new CompilingKey<>( this, methodPrototype, index[0]++ ) ).toList();
+//		return methods.stream().map( method -> new CompilingKey<>( this, method, index[0]++ ) ).toList();
 		// PEARL: IntellijIdea blooper: IntellijIdea thinks that the following code only needs the "unchecked" suppression.
 		// Javac thinks differently.
 		// In order to keep Javac happy, the raw-types suppression must be added,
 		// but then IntellijIdea thinks that raw-types is redundant and complains about it,
 		// so we need to also suppress the "redundant suppression" inspection of IntellijIdea.
 		//noinspection RedundantSuppression
-		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingIntertwineMethodKey<T>[] result = IntStream.range( 0, methodPrototypes.size() ) //
-			.mapToObj( i -> new CompilingIntertwineMethodKey<>( this, methodPrototypes.get( i ), i ) ) //
+		@SuppressWarnings( { "unchecked", "rawtypes" } ) CompilingIntertwineMethodKey<T>[] result = IntStream.range( 0, methods.size() ) //
+			.mapToObj( i -> new CompilingIntertwineMethodKey<>( this, methods.get( i ), i ) ) //
 			.toArray( CompilingIntertwineMethodKey[]::new );
 		return result;
 	}
@@ -133,9 +131,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return List.of( keys );
 	}
 
-	@Override public MethodKey<T> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<T> keyByMethod( Method method )
 	{
-		return Kit.map.get( keysByPrototype, methodPrototype );
+		return Kit.map.get( keysByMethod, method );
 	}
 
 	@Override public T newEntwiner( Anycall<T> exitPoint )
@@ -165,10 +163,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			FieldPrototype.of( "exitPoint", FieldDescriptor.of( Anycall.class ) ) );
 		entwinerByteCodeType.fields.add( exitPointField );
 		addEntwinerInitMethod( entwinerByteCodeType, keysField, exitPointField );
-		int maxArgumentCount = maxArgumentCount( interfaceMethodPrototypes );
-		int methodCount = interfaceMethodPrototypes.size();
+		int maxArgumentCount = maxArgumentCount( interfaceMethods );
+		int methodCount = interfaceMethods.size();
 		for( int methodIndex = 0; methodIndex < methodCount; methodIndex++ )
-			addEntwinerInterfaceMethod( entwinerByteCodeType, maxArgumentCount, keysField, exitPointField, methodIndex, interfaceMethodPrototypes.get( methodIndex ) );
+			addEntwinerInterfaceMethod( entwinerByteCodeType, maxArgumentCount, keysField, exitPointField, methodIndex, interfaceMethods.get( methodIndex ) );
 		entwinerByteCodeType.attributeSet.addAttribute( SourceFileAttribute.of( dummySourceFileName ) );
 
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
@@ -180,9 +178,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	///TODO perhaps also somehow generate debug information so that IntellijIdea can step into (or through) the entwiner?
 	private static void addEntwinerInterfaceMethod( ByteCodeType entwinerByteCodeType, int maxMethodArgumentCount, ByteCodeField keysField, //
-		ByteCodeField exitPointField, int interfaceMethodIndex, MethodPrototype interfaceMethodPrototype )
+		ByteCodeField exitPointField, int interfaceMethodIndex, Method interfaceMethod )
 	{
-		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), interfaceMethodPrototype );
+		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), interfaceMethod );
 		entwinerByteCodeType.methods.add( byteCodeMethod );
 		CodeAttribute code = CodeAttribute.of( 5 + maxMethodArgumentCount, 1 + maxMethodArgumentCount );
 		byteCodeMethod.attributeSet.addAttribute( code );
@@ -195,43 +193,44 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.LDC( interfaceMethodIndex ); //push methodIndex
 		code.AALOAD(); //pop methodIndex, pop keys, push keys[methodIndex]
 
-		code.LDC( interfaceMethodPrototype.parameterCount() ); //push method-parameter-count
+		code.LDC( interfaceMethod.getParameterCount() ); //push method-parameter-count
 		code.ANEWARRAY( TerminalTypeDescriptor.of( Object.class ) ); //pop method-parameter-count, push new Object[]
 
-		for( int parameterIndex = 0; parameterIndex < interfaceMethodPrototype.parameterCount(); parameterIndex++ )
+		Parameter[] parameters = interfaceMethod.getParameters();
+		for( int parameterIndex = 0; parameterIndex < parameters.length; parameterIndex++ )
 		{
-			TypeDescriptor parameterTypeDescriptor = interfaceMethodPrototype.descriptor.parameterTypeDescriptors.get( parameterIndex );
+			Class<?> parameterType = parameters[parameterIndex].getType();
 			code.DUP(); //pop Object[], push Object[], Object[]
 			code.LDC( parameterIndex ); //push parameterIndex
-			if( parameterTypeDescriptor.isPrimitive() )
+			if( parameterType.isPrimitive() )
 			{
-				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, parameterTypeDescriptor );
-				primitiveTypeInfo.loadInstructionFactory.invoke( code, 1 + getBogusJvmArgumentIndex( interfaceMethodPrototype, parameterIndex ) );
+				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByType, parameterType );
+				primitiveTypeInfo.loadInstructionFactory.invoke( code, 1 + getBogusJvmArgumentIndex( interfaceMethod, parameterIndex ) );
 				code.INVOKESTATIC( primitiveTypeInfo.boxingMethod );
 			}
 			else
-				code.ALOAD( 1 + getBogusJvmArgumentIndex( interfaceMethodPrototype, parameterIndex ) ); //push parameter (from parameters[parameterIndex])
+				code.ALOAD( 1 + getBogusJvmArgumentIndex( interfaceMethod, parameterIndex ) ); //push parameter (from parameters[parameterIndex])
 			code.AASTORE(); //pop parameter, pop parameterIndex, pop Object[], set Object[parameterIndex] = parameter
 		}
 
 		code.INVOKEINTERFACE( Anycall.methodReference(), 3 );
 
-		TypeDescriptor returnTypeDescriptor = interfaceMethodPrototype.descriptor.returnTypeDescriptor;
-		if( returnTypeDescriptor.equals( TypeDescriptor.of( void.class ) ) )
+		Class<?> returnType = interfaceMethod.getReturnType();
+		if( returnType.equals( void.class ) )
 		{
 			code.POP();
 			code.RETURN();
 		}
-		else if( returnTypeDescriptor.isPrimitive() )
+		else if( returnType.isPrimitive() )
 		{
-			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, returnTypeDescriptor );
+			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByType, returnType );
 			code.CHECKCAST( TypeDescriptor.of( primitiveTypeInfo.wrapperType ) );
 			code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
 			primitiveTypeInfo.returnInstructionFactory.invoke( code );
 		}
 		else
 		{
-			code.CHECKCAST( interfaceMethodPrototype.descriptor.returnTypeDescriptor );
+			code.CHECKCAST( TypeDescriptor.of( returnType ) );
 			code.ARETURN();
 		}
 
@@ -270,7 +269,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 			List.of( TerminalTypeDescriptor.of( Anycall.class ) ) );
 		untwinerByteCodeType.fields.add( exitPointField );
 		addUntwinerInitMethod( untwinerByteCodeType, interfaceTypeDescriptor, exitPointField );
-		addUntwinerAnycallMethod( untwinerByteCodeType, interfaceTypeDescriptor, interfaceMethodPrototypes, maxArgumentCount( interfaceMethodPrototypes ) );
+		addUntwinerAnycallMethod( untwinerByteCodeType, interfaceTypeDescriptor, interfaceMethods, maxArgumentCount( interfaceMethods ) );
 		untwinerByteCodeType.attributeSet.addAttribute( SourceFileAttribute.of( dummySourceFileName ) );
 
 		if( Kit.areAssertionsEnabled() && Kit.get( false ) )
@@ -298,7 +297,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	//TODO perhaps also somehow generate debug information so that IntellijIdea can step into (or through) the untwiner?
 	private static void addUntwinerAnycallMethod( ByteCodeType untwinerByteCodeType, TerminalTypeDescriptor interfaceTypeDescriptor, //
-		List<MethodPrototype> methodPrototypes, int maxArgumentCount )
+		List<Method> methods, int maxArgumentCount )
 	{
 		ByteCodeMethod byteCodeMethod = ByteCodeMethod.of( ByteCodeMethod.modifierEnum.of( ByteCodeMethod.Modifier.Public ), Anycall.methodPrototype() );
 		untwinerByteCodeType.methods.add( byteCodeMethod );
@@ -315,10 +314,10 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.GETFIELD( FieldReference.of( CompilingIntertwineMethodKey.class, FieldPrototype.of( "index", int.class ) ) );
 		TableSwitchInstruction tableSwitchInstruction = code.TABLESWITCH( 0 );
 
-		int methodCount = methodPrototypes.size();
+		int methodCount = methods.size();
 		for( int methodIndex = 0; methodIndex < methodCount; methodIndex++ )
 		{
-			Instruction instruction = addUntwinerSwitchCase( untwinerByteCodeType, code, interfaceTypeDescriptor, methodPrototypes.get( methodIndex ) );
+			Instruction instruction = addUntwinerSwitchCase( untwinerByteCodeType, code, interfaceTypeDescriptor, methods.get( methodIndex ) );
 			tableSwitchInstruction.targetInstructions.add( instruction );
 			if( methodIndex == 0 )
 				stackMapTableAttribute.addAppendFrame( instruction, ObjectVerificationType.of( TypeDescriptor.of( CompilingIntertwineMethodKey.class ) ) );
@@ -333,39 +332,39 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		code.attributeSet.addAttribute( LineNumberTableAttribute.of( List.of( LineNumberTableEntry.of( code.instructions.all().get( 0 ), 1 ) ) ) );
 	}
 
-	private static Instruction addUntwinerSwitchCase( ByteCodeType untwinerByteCodeType, CodeAttribute code, //
-		TerminalTypeDescriptor interfaceTypeDescriptor, MethodPrototype interfaceMethodPrototype )
+	private static Instruction addUntwinerSwitchCase( ByteCodeType untwinerByteCodeType, CodeAttribute code, TerminalTypeDescriptor interfaceTypeDescriptor, //
+		Method interfaceMethod )
 	{
 		Instruction firstInstruction = code.ALOAD( 0 );
 		code.GETFIELD( FieldReference.of( untwinerByteCodeType.typeDescriptor(), untwinerExitPointFieldPrototype( interfaceTypeDescriptor ) ) );
-		List<TypeDescriptor> parameterTypeDescriptors = interfaceMethodPrototype.descriptor.parameterTypeDescriptors;
-		for( int parameterIndex = 0; parameterIndex < parameterTypeDescriptors.size(); parameterIndex++ )
+		Parameter[] parameterTypes = interfaceMethod.getParameters();
+		for( int parameterIndex = 0; parameterIndex < parameterTypes.length; parameterIndex++ )
 		{
-			TypeDescriptor parameterTypeDescriptor = parameterTypeDescriptors.get( parameterIndex );
+			Class<?> parameterType = parameterTypes[parameterIndex].getType();
 			code.ALOAD( 2 );
 			code.LDC( parameterIndex );
 			code.AALOAD();
-			if( parameterTypeDescriptor.isPrimitive() )
+			if( parameterType.isPrimitive() )
 			{
-				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, parameterTypeDescriptor );
+				PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByType, parameterType );
 				code.CHECKCAST( TypeDescriptor.of( primitiveTypeInfo.wrapperType ) );
 				code.INVOKEVIRTUAL( primitiveTypeInfo.unboxingMethod );
 			}
 			else
 			{
-				code.CHECKCAST( parameterTypeDescriptor );
+				code.CHECKCAST( TypeDescriptor.of( parameterType ) );
 			}
 		}
-		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, interfaceTypeDescriptor, interfaceMethodPrototype ), //
-			1 + getBogusJvmArgumentCount( interfaceMethodPrototype ) );
-		TypeDescriptor returnType = interfaceMethodPrototype.descriptor.returnTypeDescriptor;
-		if( returnType == TypeDescriptor.of( void.class ) )
+		code.INVOKEINTERFACE( MethodReference.of( MethodReferenceKind.Interface, interfaceTypeDescriptor, MethodPrototype.of( interfaceMethod ) ), //
+			1 + getBogusJvmArgumentCount( interfaceMethod ) );
+		Class<?> returnType = interfaceMethod.getReturnType();
+		if( returnType == void.class )
 		{
 			code.ACONST_NULL();
 		}
 		else if( returnType.isPrimitive() )
 		{
-			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByTypeDescriptor, returnType );
+			PrimitiveTypeInfo primitiveTypeInfo = Kit.map.get( primitiveTypeInfosByType, returnType );
 			code.INVOKESTATIC( primitiveTypeInfo.boxingMethod );
 		}
 		else
@@ -381,22 +380,22 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return FieldPrototype.of( "exitPoint", FieldDescriptor.of( interfaceTypeDescriptor ) );
 	}
 
-	private static int getBogusJvmArgumentCount( MethodPrototype methodPrototype )
+	private static int getBogusJvmArgumentCount( Method method )
 	{
-		return getBogusJvmArgumentIndex( methodPrototype, methodPrototype.parameterCount() );
+		return getBogusJvmArgumentIndex( method, method.getParameterCount() );
 	}
 
-	private static int getBogusJvmArgumentIndex( MethodPrototype methodPrototype, int argumentIndex )
+	private static int getBogusJvmArgumentIndex( Method method, int argumentIndex )
 	{
+		Parameter[] parameters = method.getParameters();
 		int count = 0;
 		for( int i = 0; i < argumentIndex; i++ )
 		{
-			TypeDescriptor parameterTypeDescriptor = methodPrototype.descriptor.parameterTypeDescriptors.get( i );
+			Class<?> parameterType = parameters[i].getType();
 			count++;
-			if( parameterTypeDescriptor.isPrimitive() )
+			if( parameterType.isPrimitive() )
 			{
-				Class<?> jvmClass = parameterTypeDescriptor.asPrimitiveTypeDescriptor().jvmClass;
-				if( jvmClass == double.class || jvmClass == long.class )
+				if( parameterType == double.class || parameterType == long.class )
 					count++;
 			}
 		}
@@ -470,7 +469,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		}
 	}
 
-	private static final Map<TypeDescriptor,PrimitiveTypeInfo> primitiveTypeInfosByTypeDescriptor = Stream.of( //
+	private static final Map<Class<?>,PrimitiveTypeInfo> primitiveTypeInfosByType = Stream.of( //
 		new PrimitiveTypeInfo( boolean.class, Boolean.class, booleanBoxingMethod, booleanUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN ), //
 		new PrimitiveTypeInfo( byte.class, Byte.class, byteBoxingMethod, byteUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN ),             //
 		new PrimitiveTypeInfo( char.class, Character.class, charBoxingMethod, charUnboxingMethod, CodeAttribute::ILOAD, CodeAttribute::IRETURN ),        //
@@ -479,7 +478,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		new PrimitiveTypeInfo( float.class, Float.class, floatBoxingMethod, floatUnboxingMethod, CodeAttribute::FLOAD, CodeAttribute::FRETURN ),         //
 		new PrimitiveTypeInfo( long.class, Long.class, longBoxingMethod, longUnboxingMethod, CodeAttribute::LLOAD, CodeAttribute::LRETURN ),             //
 		new PrimitiveTypeInfo( double.class, Double.class, doubleBoxingMethod, doubleUnboxingMethod, CodeAttribute::DLOAD, CodeAttribute::DRETURN )      //
-	).collect( Collectors.toMap( p -> PrimitiveTypeDescriptor.of( p.primitiveType ), p -> p ) );
+	).collect( Collectors.toMap( p -> p.primitiveType, p -> p ) );
 
 	private static MethodReference constructorMethodReference( Class<?> jvmClass )
 	{
@@ -491,11 +490,11 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return MethodPrototype.of( "<init>", MethodDescriptor.of( TypeDescriptor.of( void.class ), interfaceTypeDescriptor ) );
 	}
 
-	private static int maxArgumentCount( Iterable<MethodPrototype> methodPrototypes )
+	private static int maxArgumentCount( Iterable<Method> methods )
 	{
 		int max = 0;
-		for( MethodPrototype methodPrototype : methodPrototypes )
-			max = Math.max( max, getBogusJvmArgumentCount( methodPrototype ) );
+		for( Method method : methods )
+			max = Math.max( max, getBogusJvmArgumentCount( method ) );
 		return max;
 	}
 

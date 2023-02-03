@@ -1,8 +1,9 @@
 package io.github.mikenakis.intertwine.implementations.compiling;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
+
+import java.lang.reflect.Method;
 
 /**
  * A {@link MethodKey} for the {@link CompilingIntertwine}.
@@ -14,18 +15,18 @@ import io.github.mikenakis.intertwine.MethodKey;
 public class CompilingIntertwineMethodKey<T> implements MethodKey<T>
 {
 	private final CompilingIntertwine<T> intertwine;
-	final MethodPrototype methodPrototype;
+	final Method method;
 	public final int index;
 
-	CompilingIntertwineMethodKey( CompilingIntertwine<T> intertwine, MethodPrototype methodPrototype, int index )
+	CompilingIntertwineMethodKey( CompilingIntertwine<T> intertwine, Method method, int index )
 	{
 		this.intertwine = intertwine;
-		this.methodPrototype = methodPrototype;
+		this.method = method;
 		this.index = index;
 	}
 
 	@Override public final Intertwine<T> intertwine() { return intertwine; }
 	@Override public int methodIndex() { return index; }
-	@Override public MethodPrototype methodPrototype() { return methodPrototype; }
-	@Override public String toString() { return "#" + index + ": " + methodPrototype; }
+	@Override public Method method() { return method; }
+	@Override public String toString() { return "#" + index + ": " + method; }
 }

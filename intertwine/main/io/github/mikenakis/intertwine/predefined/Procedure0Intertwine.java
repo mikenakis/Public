@@ -1,13 +1,12 @@
 package io.github.mikenakis.intertwine.predefined;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
-import io.github.mikenakis.java_type_model.MethodDescriptor;
 import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.functional.Procedure0;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -55,13 +54,13 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		};
 	}
 
-	private static final MethodPrototype invokeMethodPrototype = MethodPrototype.of( "invoke", MethodDescriptor.of( void.class ) );
+	private static final Method invokeMethod = Kit.unchecked( () -> Procedure0.class.getMethod( "invoke" ) );
 	private final List<MethodKey<Procedure0>> keys;
 	private final MethodKey<Procedure0> key = new MethodKey<>()
 	{
-		@Override public MethodPrototype methodPrototype()
+		@Override public Method method()
 		{
-			return invokeMethodPrototype;
+			return invokeMethod;
 		}
 
 		@Override public int methodIndex()
@@ -90,9 +89,9 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return keys;
 	}
 
-	@Override public MethodKey<Procedure0> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<Procedure0> keyByMethod( Method method )
 	{
-		assert methodPrototype.equals( invokeMethodPrototype ) : new MethodNotFoundException( this, methodPrototype );
+		assert method.equals( invokeMethod ) : new MethodNotFoundException( this, method );
 		return key;
 	}
 

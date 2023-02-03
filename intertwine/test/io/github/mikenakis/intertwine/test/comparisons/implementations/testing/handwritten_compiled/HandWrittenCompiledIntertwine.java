@@ -46,7 +46,6 @@ import java.util.stream.Stream;
 class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 {
 	private final HandWrittenCompiledKey[] keys;
-	private final Map<MethodPrototype,HandWrittenCompiledKey> keysByPrototype;
 	private final Map<Method,HandWrittenCompiledKey> keysByMethod;
 	private static Optional<Class<FooInterface>> cachedEntwinerClass = Optional.empty(); //we have to cache the entwiner class because we create it, and a class cannot be redefined.
 	private static Optional<Class<Anycall<FooInterface>>> cachedUntwinerClass = Optional.empty(); //we have to cache the untwiner class because we create it, and a class cannot be redefined.
@@ -57,7 +56,6 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( FooInterface.class );
 		List<ByteCodeMethod> byteCodeMethods = interfaceByteCodeType.methods;
 		keys = IntStream.range( 0, byteCodeMethods.size() ).mapToObj( i -> createKey( i, byteCodeMethods.get( i ), FooInterface.class ) ).toArray( HandWrittenCompiledKey[]::new );
-		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
 		keysByMethod = Stream.of( keys ).collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
@@ -66,7 +64,7 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		MethodPrototype methodPrototype = byteCodeMethod.prototype();//.of( method );
 		Class<?>[] parameterTypes = methodPrototype.descriptor.parameterTypeDescriptors.stream().<Class<?>>map( d -> classFromTypeDescriptor( d ) ).toArray( Class<?>[]::new );
 		Method reflectionMethod = Kit.unchecked( () -> interfaceClass.getMethod( methodPrototype.methodName, parameterTypes ) );
-		return new HandWrittenCompiledKey( this, reflectionMethod, methodPrototype, methodIndex );
+		return new HandWrittenCompiledKey( this, reflectionMethod, methodIndex );
 	}
 
 	private static Class<?> classFromTypeDescriptor( TypeDescriptor typeDescriptor )
@@ -87,9 +85,9 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		return List.of( keys );
 	}
 
-	@Override public MethodKey<FooInterface> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<FooInterface> keyByMethod( Method method )
 	{
-		return Kit.map.get( keysByPrototype, methodPrototype );
+		return Kit.map.get( keysByMethod, method );
 	}
 
 	/*

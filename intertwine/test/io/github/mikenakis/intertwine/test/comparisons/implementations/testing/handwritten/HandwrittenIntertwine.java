@@ -1,6 +1,5 @@
 package io.github.mikenakis.intertwine.test.comparisons.implementations.testing.handwritten;
 
-import io.github.mikenakis.bytecode.model.descriptors.MethodPrototype;
 import io.github.mikenakis.intertwine.Anycall;
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.MethodKey;
@@ -15,26 +14,25 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Hand-written {@link Intertwine} for a specific interface: {@link FooInterface}.
+ * Handwritten {@link Intertwine} for a specific interface: {@link FooInterface}.
  *
  * @author michael.gr
  */
 class HandwrittenIntertwine implements Intertwine<FooInterface>
 {
 	private final HandwrittenKey[] keys;
-	private final Map<MethodPrototype,HandwrittenKey> keysByPrototype;
+	private final Map<Method,HandwrittenKey> keysByMethod;
 
 	HandwrittenIntertwine()
 	{
 		Method[] methods = FooInterface.class.getMethods();
 		keys = IntStream.range( 0, methods.length ).mapToObj( i -> createKey( i, methods[i] ) ).toArray( HandwrittenKey[]::new );
-		keysByPrototype = Stream.of( keys ).collect( Collectors.toMap( k -> k.methodPrototype, k -> k ) );
+		keysByMethod = Stream.of( keys ).collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
 	private HandwrittenKey createKey( int index, Method method )
 	{
-		MethodPrototype methodPrototype = MethodPrototype.of( method );
-		return new HandwrittenKey( this, index, methodPrototype );
+		return new HandwrittenKey( this, index, method );
 	}
 
 	@Override public Class<FooInterface> interfaceType()
@@ -47,9 +45,9 @@ class HandwrittenIntertwine implements Intertwine<FooInterface>
 		return List.of( keys );
 	}
 
-	@Override public MethodKey<FooInterface> keyByMethodPrototype( MethodPrototype methodPrototype )
+	@Override public MethodKey<FooInterface> keyByMethod( Method method )
 	{
-		return Kit.map.get( keysByPrototype, methodPrototype );
+		return Kit.map.get( keysByMethod, method );
 	}
 
 	@Override public FooInterface newEntwiner( Anycall<FooInterface> exitPoint )
