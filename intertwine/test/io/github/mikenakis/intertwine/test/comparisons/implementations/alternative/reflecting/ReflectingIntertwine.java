@@ -20,11 +20,11 @@ import java.util.stream.IntStream;
  */
 class ReflectingIntertwine<T> implements Intertwine<T>
 {
-	private final Class<? super T> interfaceType;
+	private final Class<T> interfaceType;
 	private final List<ReflectingKey<T>> keys;
 	private final Map<Method,ReflectingKey<T>> keysByMethod;
 
-	ReflectingIntertwine( Class<? super T> interfaceType )
+	ReflectingIntertwine( Class<T> interfaceType )
 	{
 		assert interfaceType.isInterface();
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
@@ -39,9 +39,14 @@ class ReflectingIntertwine<T> implements Intertwine<T>
 		return new ReflectingKey<>( this, method, index );
 	}
 
-	@Override public Class<? super T> interfaceType()
+	@Override public Class<T> interfaceType()
 	{
 		return interfaceType;
+	}
+
+	@Override public boolean implementsDefaultMethods()
+	{
+		return false;
 	}
 
 	@Override public List<MethodKey<T>> keys()

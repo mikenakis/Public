@@ -86,6 +86,11 @@ public class Procedure1Intertwine implements Intertwine<Procedure1<Object>>
 		return Kit.uncheckedClassCast( Procedure1.class );
 	}
 
+	@Override public boolean implementsDefaultMethods()
+	{
+		return false;
+	}
+
 	@Override public List<MethodKey<Procedure1<Object>>> keys()
 	{
 		return keys;

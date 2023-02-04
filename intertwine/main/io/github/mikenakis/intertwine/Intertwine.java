@@ -15,7 +15,12 @@ public interface Intertwine<T>
 	/**
 	 * Gets the type of the interface.
 	 */
-	Class<? super T> interfaceType();
+	Class<T> interfaceType();
+
+	/**
+	 * Specifies whether default methods are implemented or not.
+	 */
+	boolean implementsDefaultMethods();
 
 	/**
 	 * Gets all the keys of the interface.

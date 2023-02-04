@@ -20,6 +20,12 @@ public final class TestKit
 {
 	private TestKit() { }
 
+	@SuppressWarnings( "unused" ) public static <T extends Throwable> T expectNOT( @SuppressWarnings( "unused" ) Class<T> expectedThrowableClass, Procedure0 procedure )
+	{
+		procedure.invoke();
+		return Kit.get( null );
+	}
+
 	public static <T extends Throwable> T expect( Class<T> expectedThrowableClass, Procedure0 procedure )
 	{
 		Throwable caughtThrowable = invokeAndCatch( procedure );

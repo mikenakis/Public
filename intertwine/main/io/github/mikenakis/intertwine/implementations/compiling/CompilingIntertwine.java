@@ -56,7 +56,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 {
 	private static final String dummySourceFileName = DummySourceFile.class.getSimpleName() + ".java";
 
-	private final Class<? super T> interfaceType;
+	private final Class<T> interfaceType;
+	private final boolean implementDefaultMethods;
 	private final TerminalTypeDescriptor interfaceTypeDescriptor;
 	private final List<Method> interfaceMethods;
 	private final CompilingIntertwineMethodKey<T>[] keys;
@@ -64,33 +65,34 @@ class CompilingIntertwine<T> implements Intertwine<T>
 	private Optional<Constructor<T>> entwinerConstructor = Optional.empty();
 	private Optional<Constructor<Anycall<T>>> untwinerConstructor = Optional.empty();
 
-	CompilingIntertwine( Class<? super T> interfaceType )
+	CompilingIntertwine( Class<T> interfaceType, boolean implementDefaultMethods )
 	{
 		assert interfaceType.isInterface();
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		this.interfaceType = interfaceType;
+		this.implementDefaultMethods = implementDefaultMethods;
 		ByteCodeType interfaceByteCodeType = ByteCodeType.read( interfaceType );
 		interfaceTypeDescriptor = interfaceByteCodeType.typeDescriptor();
-		interfaceMethods = getInterfaceMethods( interfaceType );
+		interfaceMethods = getInterfaceMethods( interfaceType, implementDefaultMethods );
 		keys = buildArrayOfKey( interfaceMethods );
 		keysByMethod = Stream.of( keys ).collect( Collectors.toMap( k -> k.method, k -> k ) );
 	}
 
-	private static List<Method> getInterfaceMethods( Class<?> interfaceType )
+	private static List<Method> getInterfaceMethods( Class<?> interfaceType, boolean implementDefaultMethods )
 	{
 		Set<Method> methods = new LinkedHashSet<>();
-		getInterfaceMethodsRecursively( interfaceType, methods );
+		getInterfaceMethodsRecursively( interfaceType, methods, implementDefaultMethods );
 		return methods.stream().toList();
 	}
 
-	private static void getInterfaceMethodsRecursively( Class<?> interfaceType, Set<Method> methods )
+	private static void getInterfaceMethodsRecursively( Class<?> interfaceType, Set<Method> methods, boolean implementDefaultMethods )
 	{
 		for( Class<?> superInterfaceType : interfaceType.getInterfaces() )
-			getInterfaceMethodsRecursively( superInterfaceType, methods );
-		Arrays.stream( interfaceType.getMethods() ).filter( CompilingIntertwine::isInterfaceMethod ).forEach( p -> Kit.collection.addOrReplace( methods, p ) );
+			getInterfaceMethodsRecursively( superInterfaceType, methods, implementDefaultMethods );
+		Arrays.stream( interfaceType.getMethods() ).filter( method -> isInterfaceMethod( method, implementDefaultMethods ) ).forEach( p -> Kit.collection.addOrReplace( methods, p ) );
 	}
 
-	private static boolean isInterfaceMethod( Method method )
+	private static boolean isInterfaceMethod( Method method, boolean implementDefaultMethods )
 	{
 		if( Modifier.isStatic( method.getModifiers() ) )
 			return false; //skip static methods
@@ -100,6 +102,8 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		assert !Modifier.isSynchronized( method.getModifiers() );
 		assert !method.isSynthetic();
 		assert !method.isBridge();
+		if( !Modifier.isAbstract( method.getModifiers() ) ) //if this is a default method
+			return implementDefaultMethods;
 		return true;
 	}
 
@@ -119,9 +123,14 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		return result;
 	}
 
-	@Override public Class<? super T> interfaceType()
+	@Override public Class<T> interfaceType()
 	{
 		return interfaceType;
+	}
+
+	@Override public boolean implementsDefaultMethods()
+	{
+		return implementDefaultMethods;
 	}
 
 	@Override public List<MethodKey<T>> keys()
@@ -148,7 +157,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private Constructor<T> createEntwinerClassAndGetConstructor()
 	{
-		String className = "Entwiner_" + identifierFromTypeName( interfaceType );
+		String className = "Entwiner_" + identifierFromTypeName( interfaceType, implementDefaultMethods );
 		ByteCodeType entwinerByteCodeType = ByteCodeType.of( //
 			ByteCodeType.modifierEnum.of( ByteCodeType.Modifier.Public, ByteCodeType.Modifier.Final, ByteCodeType.Modifier.Super ), //
 			TerminalTypeDescriptor.of( getClass().getPackageName() + "." + className ), //
@@ -255,7 +264,7 @@ class CompilingIntertwine<T> implements Intertwine<T>
 
 	private Constructor<Anycall<T>> createUntwinerClassAndGetConstructor()
 	{
-		String className = "Untwiner_" + identifierFromTypeName( interfaceType );
+		String className = "Untwiner_" + identifierFromTypeName( interfaceType, implementDefaultMethods );
 		ByteCodeField exitPointField = ByteCodeField.of( ByteCodeField.modifierEnum.of( ByteCodeField.Modifier.Private, ByteCodeField.Modifier.Final ), //
 			untwinerExitPointFieldPrototype( interfaceTypeDescriptor ) );
 		ByteCodeType untwinerByteCodeType = ByteCodeType.of( //
@@ -415,9 +424,9 @@ class CompilingIntertwine<T> implements Intertwine<T>
 		Log.debug( "saved bytes: " + path );
 	}
 
-	private static String identifierFromTypeName( Class<?> type )
+	private static String identifierFromTypeName( Class<?> type, boolean implementDefaultMethods )
 	{
-		return type.getName().replace( ".", "_" ).replace( "$", "_" );
+		return type.getName().replace( ".", "_" ).replace( "$", "_" ) + (implementDefaultMethods? "_with_defaults" : "_without_defaults" );
 	}
 
 	private static final MethodReference byteBoxingMethod = MethodReference.of( MethodReferenceKind.Plain, Byte.class, MethodPrototype.of( "valueOf", MethodDescriptor.of( Byte.class, byte.class ) ) );

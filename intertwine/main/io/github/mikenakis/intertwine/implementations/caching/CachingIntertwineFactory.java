@@ -23,9 +23,10 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public final class CachingIntertwineFactory implements IntertwineFactory
 {
+	private record Key<T>( Class<T> interfaceType, boolean implementInterfaceMethods ){}
 	private final IntertwineFactory delegee;
 	private final Lock lock = new ReentrantLock();
-	private final Map<Class<?>,Intertwine<?>> cache = new LinkedHashMap<>();
+	private final Map<Key<?>,Intertwine<?>> cache = new LinkedHashMap<>();
 
 	public CachingIntertwineFactory( IntertwineFactory delegee )
 	{
@@ -37,14 +38,17 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 	 *
 	 * @param intertwine the {@link Intertwine} to add.
 	 */
-	public void add( Intertwine<?> intertwine )
+	public <T> void add( Intertwine<T> intertwine )
 	{
-		Kit.map.add( cache, intertwine.interfaceType(), intertwine );
+		Key<T> key = new Key<>( intertwine.interfaceType(), intertwine.implementsDefaultMethods() );
+		Kit.map.add( cache, key, intertwine );
 	}
 
-	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
+	@Override public <T> Intertwine<T> getIntertwine( Class<T> interfaceType, boolean implementDefaultMethods )
 	{
 		assert interfaceType.isInterface();
+
+		Key<T> key = new Key<>( interfaceType, implementDefaultMethods );
 
 		/**
 		 * Note: we could lock the cache just once, and use {@link Map#computeIfAbsent(Object, java.util.function.Function)};
@@ -59,7 +63,7 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		 */
 		Intertwine<T> existingIntertwine = Kit.sync.lock( lock, () ->
 		{
-			@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
+			@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)Kit.map.tryGet( cache, key );
 			return result;
 		} );
 		if( existingIntertwine != null )
@@ -68,7 +72,7 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		/**
 		 * Then, and while the cache is _not_ locked, invoke the other {@link IntertwineFactory} to create the requested {@link Intertwine}.
 		 */
-		Intertwine<T> intertwine = delegee.getIntertwine( interfaceType );
+		Intertwine<T> intertwine = delegee.getIntertwine( interfaceType, implementDefaultMethods );
 
 		/**
 		 * Now that the requested {@link Intertwine} has been created, lock the cache again, and first check whether another instance of the requested
@@ -77,13 +81,13 @@ public final class CachingIntertwineFactory implements IntertwineFactory
 		 */
 		return Kit.sync.lock( lock, () ->
 		{
-			@SuppressWarnings( "unchecked" ) Intertwine<T> existing = (Intertwine<T>)Kit.map.tryGet( cache, interfaceType );
+			@SuppressWarnings( "unchecked" ) Intertwine<T> existing = (Intertwine<T>)Kit.map.tryGet( cache, key );
 			if( existing != null )
 			{
 				Debug.breakPoint(); //If this ever happens, I would like to see it.
 				return existing;
 			}
-			Kit.map.add( cache, interfaceType, intertwine );
+			Kit.map.add( cache, key, intertwine );
 			return intertwine;
 		} );
 	}

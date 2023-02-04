@@ -19,10 +19,11 @@ public class HandwrittenIntertwineFactory implements IntertwineFactory
 	{
 	}
 
-	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
+	@Override public <T> Intertwine<T> getIntertwine( Class<T> interfaceType, boolean implementDefaultMethods )
 	{
 		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
 		assert interfaceType == FooInterface.class;
+		assert !implementDefaultMethods;
 		@SuppressWarnings( "unchecked" ) Intertwine<T> result = (Intertwine<T>)new HandwrittenIntertwine();
 		return result;
 	}

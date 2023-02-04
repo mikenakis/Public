@@ -18,10 +18,16 @@ public interface IntertwineFactory
 	/**
 	 * Gets an {@link Intertwine} for a given interface.
 	 *
-	 * @param interfaceType the {@link Class} of the interface.
-	 * @param <T>           the type of the class of the interface.
+	 * @param interfaceType           the {@link Class} of the interface.
+	 * @param implementDefaultMethods whether to implement default methods or not.
+	 * @param <T>                     the type of the class of the interface.
 	 *
 	 * @return an {@link Intertwine} for the given interface.
 	 */
-	<T> Intertwine<T> getIntertwine( Class<? super T> interfaceType );
+	<T> Intertwine<T> getIntertwine( Class<T> interfaceType, boolean implementDefaultMethods );
+
+	default <T> Intertwine<T> getIntertwine( Class<T> interfaceType )
+	{
+		return getIntertwine( interfaceType, false );
+	}
 }

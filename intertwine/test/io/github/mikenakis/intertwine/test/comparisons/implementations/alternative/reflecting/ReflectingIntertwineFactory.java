@@ -2,6 +2,9 @@ package io.github.mikenakis.intertwine.test.comparisons.implementations.alternat
 
 import io.github.mikenakis.intertwine.Intertwine;
 import io.github.mikenakis.intertwine.IntertwineFactory;
+import io.github.mikenakis.intertwine.test.comparisons.rig.FooInterface;
+
+import java.lang.reflect.Modifier;
 
 /**
  * A {@link IntertwineFactory} for {@link ReflectingIntertwine}.
@@ -16,8 +19,11 @@ public class ReflectingIntertwineFactory implements IntertwineFactory
 	{
 	}
 
-	@Override public <T> Intertwine<T> getIntertwine( Class<? super T> interfaceType )
+	@Override public <T> Intertwine<T> getIntertwine( Class<T> interfaceType, boolean implementDefaultMethods )
 	{
+		assert Modifier.isPublic( interfaceType.getModifiers() ) : new IllegalAccessException();
+		assert interfaceType == FooInterface.class;
+		assert !implementDefaultMethods;
 		return new ReflectingIntertwine<>( interfaceType );
 	}
 }

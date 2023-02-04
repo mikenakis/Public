@@ -84,6 +84,11 @@ public class Procedure0Intertwine implements Intertwine<Procedure0>
 		return Procedure0.class;
 	}
 
+	@Override public boolean implementsDefaultMethods()
+	{
+		return false;
+	}
+
 	@Override public List<MethodKey<Procedure0>> keys()
 	{
 		return keys;

@@ -37,7 +37,7 @@ public class CallSuppressor<N> extends Suppressor
 	private N entryPoint;
 	private Optional<MutableCollection<QueueEntry<N>>> queue = Optional.empty();
 
-	public CallSuppressor( Coherence coherence, IntertwineFactory intertwineFactory, Class<? super N> interfaceType, N delegee )
+	public CallSuppressor( Coherence coherence, IntertwineFactory intertwineFactory, Class<N> interfaceType, N delegee )
 	{
 		super( coherence );
 		this.delegee = delegee;

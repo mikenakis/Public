@@ -80,6 +80,11 @@ class HandWrittenCompiledIntertwine implements Intertwine<FooInterface>
 		return FooInterface.class;
 	}
 
+	@Override public boolean implementsDefaultMethods()
+	{
+		return false;
+	}
+
 	@Override public List<MethodKey<FooInterface>> keys()
 	{
 		return List.of( keys );
