@@ -36,7 +36,6 @@ import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.writing.WritingLocationMap;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -125,8 +124,8 @@ public abstract class Attribute
 	public abstract boolean isKnown();
 	public boolean isOptional() { return false; }
 
-	@ExcludeFromJacocoGeneratedReport public UnknownAttribute /**/ asUnknownAttribute /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public KnownAttribute   /**/ asKnownAttribute   /**/() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public UnknownAttribute /**/ asUnknownAttribute /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public KnownAttribute   /**/ asKnownAttribute   /**/() { throw new AssertionError(); }
 
 	public abstract void intern( Interner interner );
 	public abstract void write( BufferWriter bufferWriter, WritingConstantPool constantPool, Optional<WritingLocationMap> locationMap );

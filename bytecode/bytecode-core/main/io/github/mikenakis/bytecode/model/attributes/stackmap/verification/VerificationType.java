@@ -8,7 +8,6 @@ import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.writing.WritingLocationMap;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -68,9 +67,9 @@ public abstract class VerificationType
 		this.tag = tag;
 	}
 
-	@ExcludeFromJacocoGeneratedReport public ObjectVerificationType asObjectVerificationType() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public SimpleVerificationType asSimpleVerificationType() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public UninitializedVerificationType asUninitializedVerificationType() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ObjectVerificationType asObjectVerificationType() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public SimpleVerificationType asSimpleVerificationType() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public UninitializedVerificationType asUninitializedVerificationType() { throw new AssertionError(); }
 	@ExcludeFromJacocoGeneratedReport @Override @OverridingMethodsMustInvokeSuper public String toString() { return "tag = " + tagName( tag ); }
 
 	public abstract void intern( Interner interner );

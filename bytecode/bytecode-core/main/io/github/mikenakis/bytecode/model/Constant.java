@@ -20,7 +20,6 @@ import io.github.mikenakis.bytecode.model.constants.value.StringValueConstant;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingBootstrapPool;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -74,21 +73,21 @@ public abstract class Constant
 		this.tag = tag;
 	}
 
-	@ExcludeFromJacocoGeneratedReport public ValueConstant             /**/ asValueConstant             /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public Mutf8ValueConstant        /**/ asMutf8ValueConstant        /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public IntegerValueConstant      /**/ asIntegerValueConstant      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public FloatValueConstant        /**/ asFloatValueConstant        /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LongValueConstant         /**/ asLongValueConstant         /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public DoubleValueConstant       /**/ asDoubleValueConstant       /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ClassConstant             /**/ asClassConstant             /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public StringValueConstant       /**/ asStringValueConstant       /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ReferenceConstant         /**/ asReferenceConstant         /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public FieldReferenceConstant    /**/ asFieldReferenceConstant    /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MethodReferenceConstant   /**/ asMethodReferenceConstant   /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public NameAndDescriptorConstant /**/ asNameAndDescriptorConstant /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MethodHandleConstant      /**/ asMethodHandleConstant      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MethodTypeConstant        /**/ asMethodTypeConstant        /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InvokeDynamicConstant     /**/ asInvokeDynamicConstant     /**/() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public ValueConstant             /**/ asValueConstant             /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public Mutf8ValueConstant        /**/ asMutf8ValueConstant        /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public IntegerValueConstant      /**/ asIntegerValueConstant      /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public FloatValueConstant        /**/ asFloatValueConstant        /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public LongValueConstant         /**/ asLongValueConstant         /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public DoubleValueConstant       /**/ asDoubleValueConstant       /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public ClassConstant             /**/ asClassConstant             /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public StringValueConstant       /**/ asStringValueConstant       /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public ReferenceConstant         /**/ asReferenceConstant         /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public FieldReferenceConstant    /**/ asFieldReferenceConstant    /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public MethodReferenceConstant   /**/ asMethodReferenceConstant   /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public NameAndDescriptorConstant /**/ asNameAndDescriptorConstant /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public MethodHandleConstant      /**/ asMethodHandleConstant      /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public MethodTypeConstant        /**/ asMethodTypeConstant        /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public InvokeDynamicConstant     /**/ asInvokeDynamicConstant     /**/() { throw new AssertionError(); }
 
 	@Override public abstract boolean equals( Object other );
 	@Override public abstract int hashCode();

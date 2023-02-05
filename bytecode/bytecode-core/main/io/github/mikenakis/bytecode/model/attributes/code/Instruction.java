@@ -21,7 +21,6 @@ import io.github.mikenakis.bytecode.reading.ReadingConstantPool;
 import io.github.mikenakis.bytecode.reading.ReadingLocationMap;
 import io.github.mikenakis.bytecode.writing.InstructionWriter;
 import io.github.mikenakis.bytecode.writing.Interner;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 /**
@@ -136,22 +135,22 @@ public abstract class Instruction
 		this.groupTag = groupTag;
 	}
 
-	@ExcludeFromJacocoGeneratedReport public BranchInstruction            /**/ asBranchInstruction            /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ConditionalBranchInstruction /**/ asConditionalBranchInstruction /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ClassReferencingInstruction  /**/ asClassReferencingInstruction  /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public FieldReferencingInstruction  /**/ asFieldReferencingInstruction  /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public IIncInstruction              /**/ asIIncInstruction              /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InvokeDynamicInstruction     /**/ asInvokeDynamicInstruction     /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public InvokeInterfaceInstruction   /**/ asInvokeInterfaceInstruction   /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LocalVariableInstruction     /**/ asLocalVariableInstruction     /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LookupSwitchInstruction      /**/ asLookupSwitchInstruction      /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MethodReferencingInstruction /**/ asMethodReferencingInstruction /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public MultiANewArrayInstruction    /**/ asMultiANewArrayInstruction    /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public NewPrimitiveArrayInstruction /**/ asNewPrimitiveArrayInstruction /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public OperandlessInstruction       /**/ asOperandlessInstruction       /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TypedOperandlessInstruction  /**/ asTypedOperandlessInstruction  /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TableSwitchInstruction       /**/ asTableSwitchInstruction       /**/() { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LoadConstantInstruction      /**/ asLoadConstantInstruction      /**/() { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public BranchInstruction            /**/ asBranchInstruction            /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public ConditionalBranchInstruction /**/ asConditionalBranchInstruction /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public ClassReferencingInstruction  /**/ asClassReferencingInstruction  /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public FieldReferencingInstruction  /**/ asFieldReferencingInstruction  /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public IIncInstruction              /**/ asIIncInstruction              /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public InvokeDynamicInstruction     /**/ asInvokeDynamicInstruction     /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public InvokeInterfaceInstruction   /**/ asInvokeInterfaceInstruction   /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public LocalVariableInstruction     /**/ asLocalVariableInstruction     /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public LookupSwitchInstruction      /**/ asLookupSwitchInstruction      /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public MethodReferencingInstruction /**/ asMethodReferencingInstruction /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public MultiANewArrayInstruction    /**/ asMultiANewArrayInstruction    /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public NewPrimitiveArrayInstruction /**/ asNewPrimitiveArrayInstruction /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public OperandlessInstruction       /**/ asOperandlessInstruction       /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public TypedOperandlessInstruction  /**/ asTypedOperandlessInstruction  /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public TableSwitchInstruction       /**/ asTableSwitchInstruction       /**/() { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public LoadConstantInstruction      /**/ asLoadConstantInstruction      /**/() { throw new AssertionError(); }
 
 	@Override public final int hashCode() { return super.hashCode(); }
 	@Override public final boolean equals( Object other ) { return this == other; }

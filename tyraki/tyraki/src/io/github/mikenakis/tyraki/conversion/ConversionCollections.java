@@ -425,7 +425,7 @@ public final class ConversionCollections
 	 */
 	public static <TK, V, SK> UnmodifiableMap<TK,V> newKeyConvertingAndFilteringMap( UnmodifiableMap<SK,V> map, Function1<? extends TK,? super SK> converter )
 	{
-		return newKeyConvertingMap( map, converter, t -> Kit.fail() );
+		return newKeyConvertingMap( map, converter, t -> { throw new AssertionError(); } );
 	}
 
 	/**
@@ -459,7 +459,7 @@ public final class ConversionCollections
 	 */
 	public static <K, TV, SV> UnmodifiableMap<K,TV> newValueConvertingAndFilteringMap( UnmodifiableMap<K,SV> map, Function1<? extends TV,? super SV> tvFromSvConverter )
 	{
-		return newValueConvertingAndFilteringMap( map, tvFromSvConverter, t -> Kit.fail() );
+		return newValueConvertingAndFilteringMap( map, tvFromSvConverter, t -> { throw new AssertionError(); } );
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

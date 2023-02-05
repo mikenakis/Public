@@ -506,12 +506,12 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 
 		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter )
 		{
-			return map( converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
+			return map( converter, t -> { throw new AssertionError(); }, DefaultEqualityComparator.getInstance() );
 		}
 
 		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator )
 		{
-			return map( converter, t -> Kit.fail(), equalityComparator );
+			return map( converter, t -> { throw new AssertionError(); }, equalityComparator );
 		}
 
 		@Override default <T> UnmodifiableList<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter )
@@ -526,7 +526,7 @@ public interface UnmodifiableList<E> extends UnmodifiableCollection<E>
 
 		@Override default <T> UnmodifiableList<T> mapWithIndex( TotalConverterWithIndex<? extends T,? super E> converter )
 		{
-			return ConversionCollections.newConvertingList( this, converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
+			return ConversionCollections.newConvertingList( this, converter, t -> { throw new AssertionError(); }, DefaultEqualityComparator.getInstance() );
 		}
 
 		@Override default <T> UnmodifiableList<T> flatMapList( Function1<UnmodifiableList<T>,E> multiplier )

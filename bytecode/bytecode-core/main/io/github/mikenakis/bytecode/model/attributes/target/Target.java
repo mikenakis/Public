@@ -5,7 +5,6 @@ import io.github.mikenakis.bytecode.kit.BufferWriter;
 import io.github.mikenakis.bytecode.writing.Interner;
 import io.github.mikenakis.bytecode.writing.WritingConstantPool;
 import io.github.mikenakis.bytecode.writing.WritingLocationMap;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 
 import java.util.Optional;
@@ -65,16 +64,16 @@ public abstract class Target // "target_info" in jvms-4.7.20.1
 			};
 	}
 
-	@ExcludeFromJacocoGeneratedReport public CatchTarget              /**/ asCatchTarget()              /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public EmptyTarget              /**/ asEmptyTarget()              /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public FormalParameterTarget    /**/ asFormalParameterTarget()    /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public LocalVariableTarget      /**/ asLocalVariableTarget()      /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public OffsetTarget             /**/ asOffsetTarget()             /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public SupertypeTarget          /**/ asSupertypeTarget()          /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public ThrowsTarget             /**/ asThrowsTarget()             /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TypeArgumentTarget       /**/ asTypeArgumentTarget()       /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TypeParameterBoundTarget /**/ asTypeParameterBoundTarget() /**/ { return Kit.fail(); }
-	@ExcludeFromJacocoGeneratedReport public TypeParameterTarget      /**/ asTypeParameterTarget()      /**/ { return Kit.fail(); }
+	@ExcludeFromJacocoGeneratedReport public CatchTarget              /**/ asCatchTarget()              /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public EmptyTarget              /**/ asEmptyTarget()              /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public FormalParameterTarget    /**/ asFormalParameterTarget()    /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public LocalVariableTarget      /**/ asLocalVariableTarget()      /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public OffsetTarget             /**/ asOffsetTarget()             /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public SupertypeTarget          /**/ asSupertypeTarget()          /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public ThrowsTarget             /**/ asThrowsTarget()             /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public TypeArgumentTarget       /**/ asTypeArgumentTarget()       /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public TypeParameterBoundTarget /**/ asTypeParameterBoundTarget() /**/ { throw new AssertionError(); }
+	@ExcludeFromJacocoGeneratedReport public TypeParameterTarget      /**/ asTypeParameterTarget()      /**/ { throw new AssertionError(); }
 
 	public final int tag;
 

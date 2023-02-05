@@ -4,7 +4,6 @@ import io.github.mikenakis.kit.DefaultComparator;
 import io.github.mikenakis.kit.DefaultEqualityComparator;
 import io.github.mikenakis.kit.EqualityComparator;
 import io.github.mikenakis.kit.Hasher;
-import io.github.mikenakis.kit.Kit;
 import io.github.mikenakis.kit.annotations.ExcludeFromJacocoGeneratedReport;
 import io.github.mikenakis.kit.functional.Function1;
 import io.github.mikenakis.kit.functional.Procedure1;
@@ -362,12 +361,12 @@ public interface UnmodifiableCollection<E> extends UnmodifiableEnumerable<E>
 		 */
 		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter )
 		{
-			return map( converter, t -> Kit.fail(), DefaultEqualityComparator.getInstance() );
+			return map( converter, t -> { throw new AssertionError(); }, DefaultEqualityComparator.getInstance() );
 		}
 
 		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, EqualityComparator<? super T> equalityComparator )
 		{
-			return map( converter, t -> Kit.fail(), equalityComparator );
+			return map( converter, t -> { throw new AssertionError(); }, equalityComparator );
 		}
 
 		@Override default <T> UnmodifiableCollection<T> map( Function1<? extends T,? super E> converter, Function1<Optional<? extends E>,? super T> reverter )

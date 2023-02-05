@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /**
  * Represents a set of values of a {@link FlagEnum}.
- *
+ * <p>
  * See {@link FlagEnum}.
  *
  * @param <E>
@@ -96,7 +96,7 @@ public class FlagSet<E extends Enum<E>>
 
 	@Deprecated @Override public boolean equals( Object other )
 	{
-		return other instanceof FlagSet<?> kin ? equals( kin ) : Kit.fail();
+		return other instanceof FlagSet<?> kin && equals( kin );
 	}
 
 	@Override public int hashCode()
@@ -106,6 +106,7 @@ public class FlagSet<E extends Enum<E>>
 
 	public boolean equals( FlagSet<?> other )
 	{
-		return flagEnum == other.flagEnum ? bits == other.bits : Kit.fail();
+		assert flagEnum == other.flagEnum;
+		return bits == other.bits;
 	}
 }

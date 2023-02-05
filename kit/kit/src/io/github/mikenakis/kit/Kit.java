@@ -138,19 +138,6 @@ public final class Kit
 	}
 
 	/**
-	 * Functional assertion failure; for when you want to throw, but the compiler expects you to return something.
-	 *
-	 * @param <T> the type of value to return
-	 *
-	 * @return does not return.
-	 */
-	public static <T> T fail()
-	{
-		assert false;
-		return null;
-	}
-
-	/**
 	 * Up-casts the generic parameter of an {@link Optional}.
 	 *
 	 * @param source the {@link Optional} to up-cast.

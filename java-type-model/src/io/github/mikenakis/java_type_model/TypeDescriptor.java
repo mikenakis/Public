@@ -1,7 +1,5 @@
 package io.github.mikenakis.java_type_model;
 
-import io.github.mikenakis.kit.Kit;
-
 /**
  * Represents a type.
  *
@@ -29,9 +27,9 @@ public abstract class TypeDescriptor
 	public abstract boolean isArray();
 	public abstract boolean isPrimitive();
 	public abstract boolean isTerminal();
-	public ArrayTypeDescriptor asArrayTypeDescriptor() { return Kit.fail(); }
-	public PrimitiveTypeDescriptor asPrimitiveTypeDescriptor() { return Kit.fail(); }
-	public TerminalTypeDescriptor asTerminalTypeDescriptor() { return Kit.fail(); }
+	public ArrayTypeDescriptor asArrayTypeDescriptor() { throw new AssertionError(); }
+	public PrimitiveTypeDescriptor asPrimitiveTypeDescriptor() { throw new AssertionError(); }
+	public TerminalTypeDescriptor asTerminalTypeDescriptor() { throw new AssertionError(); }
 	@Override public abstract boolean equals( Object other );
 	@Override public abstract int hashCode();
 }
