@@ -99,7 +99,7 @@ The Artifact Repository is on Repsy: https://repo.repsy.io/mvn/mikenakis/mikenak
 ## Home page
 
 The home page of the project is here:
-[michael.gr - GitHub project: mikenakis-classdump](https://blog.michael.gr/2018/04/github-project-classdump.html)
+[michael.gr - GitHub project: mikenakis-classdump](https://blog.michael.gr/post/2018-04-github-project-classdump/)
 (Though it just points to this README.md file.)
 
 ## License
@@ -107,7 +107,7 @@ The home page of the project is here:
 This creative work is explicitly published under ***No License***. 
 This means that I remain the exclusive copyright holder of this creative work, 
 and you may not do anything with it other than view its source code and admire it. 
-More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
+More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/post/2018-04-open-source-but-no-license/)
 
 If you would like to do anything with this creative work, contact me.
 
@@ -116,4 +116,4 @@ If you would like to do anything with this creative work, contact me.
 When I write code as part of a team of developers, I use the teams' coding style.  
 But when I write code for myself, I use _**my very own™**_ coding style.
 
-More information: [michael.gr - On Coding Style](https://blog.michael.gr/2018/04/on-coding-style.html)
+More information: [michael.gr - On Coding Style](https://blog.michael.gr/post/2018-04-on-coding-style/)

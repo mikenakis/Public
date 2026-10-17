@@ -19,7 +19,7 @@ Testana is a utility for running tests, offering some very useful features that 
 ## What does Testana do? 
 
 - Testana runs only the subset of tests that actually need to run, based on the last successful run time of each test class, and whether its dependencies have changed or not. 
-- Testana runs test classes by order of dependency, so that the tests of the most dependent-upon modules run first, tests of modules that depend on those run next, and so on. Thus, Testana facilitates **_Incremental Integration Testing_** (see https://blog.michael.gr/2022/10/incremental-integration-testing.html) 
+- Testana runs test classes by order of dependency, so that the tests of the most dependent-upon modules run first, tests of modules that depend on those run next, and so on. Thus, Testana facilitates **_Incremental Integration Testing_** (see https://blog.michael.gr/post/2022-10-incremental-integration-testing/) 
 - Testana runs the test methods within each class is the order in which they appear in the source file, otherwise known as **_Natural Method Order_**.
 
 ## How does Testana work? 
@@ -83,7 +83,7 @@ Alphabetic order of execution is not particularly useful. For example, in an alp
 
 Testana addresses this problem by executing test classes in order of dependency, which means that classes with no dependencies will be tested first, classes that depend upon them will be tested next, and so on until everything has been tested. This generally means that as soon as you see a test failure you can stop running the tests, because the most fundamental class with a defect has already been located.
 
-For more information about this way of testing, see [michael.gr - Incremental Integration Testing](https://blog.michael.gr/2022/10/incremental-integration-testing.html)
+For more information about this way of testing, see [michael.gr - Incremental Integration Testing](https://blog.michael.gr/post/2022-10-incremental-integration-testing/)
 
 ## Why should I care about running test methods in natural order? 
 
@@ -95,7 +95,7 @@ To give an example, it is completely pointless to be told that my `search-for-it
 
 Finally, another very simple, very straightforward, and very important reason for wanting the test methods to be executed in natural order is because seeing the test method names listed in any other order is **_brainfuck._**
 
-A related rant can be found here: [michael.gr - On JUnit's random order of test method execution](https://blog.michael.gr/2018/04/random-order-of-tests.html)
+A related rant can be found here: [michael.gr - On JUnit's random order of test method execution](https://blog.michael.gr/post/2018-04-random-order-of-tests/)
 
 ## Why should I care for running test methods of ancestors first? 
 
@@ -151,7 +151,7 @@ The Artifact Repository is on Repsy: https://repo.repsy.io/mvn/mikenakis/mikenak
 This creative work is explicitly published under ***No License***. 
 This means that I remain the exclusive copyright holder of this creative work, 
 and you may not do anything with it other than view its source code and admire it. 
-More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
+More information here: [michael.gr - Open Source but No License.](https://blog.michael.gr/post/2018-04-open-source-but-no-license/)
 
 If you would like to do anything with this creative work, contact me.
 
@@ -160,12 +160,12 @@ If you would like to do anything with this creative work, contact me.
 When I write code as part of a team of developers, I use the teams' coding style.  
 But when I write code for myself, I use _**my very own™**_ coding style.
 
-More information: [michael.gr - On Coding Style](https://blog.michael.gr/2018/04/on-coding-style.html)
+More information: [michael.gr - On Coding Style](https://blog.michael.gr/post/2018-04-on-coding-style/)
 
 ## Home page
 
 The home page of the project is:
-[michael.gr - GitHub project: mikenakis-testana](https://blog.michael.gr/2018/04/github-project-mikenakis-testana.html) 
+[michael.gr - GitHub project: mikenakis-testana](https://blog.michael.gr/post/2024-10-testana/) 
 (Though it just points back to this README.md file)
 
 

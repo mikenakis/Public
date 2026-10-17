@@ -6,7 +6,7 @@ import io.github.mikenakis.live.Mortal;
 /**
  * Object lifetime guard (for classes implementing {@link Mortal}).
  * <p>
- * See <a href="https://blog.michael.gr/2021/01/object-lifetime-awareness.html">https://blog.michael.gr/2021/01/object-lifetime-awareness.html</a>
+ * See <a href="https://blog.michael.gr/post/2020-12-27-object-lifetime-awareness/">https://blog.michael.gr/post/2020-12-27-object-lifetime-awareness/</a>
  *
  * @author michael.gr
  */

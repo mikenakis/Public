@@ -8,4 +8,4 @@ and you may not do anything with it other than view its source code and admire i
 
 If you would like to do anything more with it, please contact me.
 
-More information: [michael.gr - Open Source but No License](https://blog.michael.gr/2018/04/open-source-but-no-license.html)
+More information: [michael.gr - Open Source but No License](https://blog.michael.gr/post/2018-04-open-source-but-no-license/)

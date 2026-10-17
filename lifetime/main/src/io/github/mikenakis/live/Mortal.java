@@ -19,7 +19,7 @@ import io.github.mikenakis.kit.functional.Procedure1;
  * <p>
  * Normally this should be called {@code LifetimeAware}, but that's too long, so we just call it {@code Mortal}.
  * <p>
- * See <a href="https://blog.michael.gr/2021/01/object-lifetime-awareness.html">michael.gr - Object Lifetime Awareness</a>
+ * See <a href="https://blog.michael.gr/post/2020-12-27-object-lifetime-awareness/">michael.gr - Object Lifetime Awareness</a>
  * <p>
  * PEARL: the {@code try-with-resources} clause of Java has several problems:
  * <p>
